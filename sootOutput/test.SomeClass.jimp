@@ -1,0 +1,71 @@
+public class test.SomeClass extends java.lang.Object
+{
+    public static test.SomeClass$Class1 class1At;
+    public static test.SomeClass$Class2 class2At;
+
+    public void <init>()
+    {
+        test.SomeClass r0;
+        test.SomeClass$Class1 $r2;
+
+        r0 := @this;
+
+        specialinvoke r0.<init>();
+
+        $r2 = new test.SomeClass$Class1;
+
+        specialinvoke $r2.<init>();
+
+        test.SomeClass.class1At = $r2;
+
+        return;
+    }
+
+    public static void main(java.lang.String[])
+    {
+        java.lang.String[] r0;
+        int i0;
+        test.SomeClass $r4;
+        test.SomeClass$Class1 $r5, $r7;
+        test.SomeClass$Class2 $r6;
+
+        r0 := @parameter0;
+
+        $r4 = new test.SomeClass;
+
+        specialinvoke $r4.<init>();
+
+        $r5 = new test.SomeClass$Class1;
+
+        specialinvoke $r5.<init>();
+
+        $r6 = new test.SomeClass$Class2;
+
+        specialinvoke $r6.<init>();
+
+        test.SomeClass.class2At = $r6;
+
+        $r7 = test.SomeClass.class1At;
+
+        i0 = $r7.intAt;
+
+        return;
+    }
+
+    public test.SomeClass$Class2 crazyMethod()
+    {
+        test.SomeClass r0;
+        test.SomeClass$Class1 $r1;
+        test.SomeClass$Class2 $r2;
+
+        r0 := @this;
+
+        $r1 = test.SomeClass.class1At;
+
+        $r1.intAt = 5;
+
+        $r2 = test.SomeClass.class2At;
+
+        return $r2;
+    }
+}

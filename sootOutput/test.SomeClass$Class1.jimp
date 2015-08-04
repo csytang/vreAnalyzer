@@ -1,0 +1,27 @@
+public class test.SomeClass$Class1 extends java.lang.Object
+{
+    public int intAt;
+    public static test.SomeClass$Class2 cls;
+
+    public void <init>()
+    {
+        test.SomeClass$Class1 r0;
+        test.SomeClass$Class2 $r1, $r2;
+
+        r0 := @this;
+
+        specialinvoke r0.<init>();
+
+        $r1 = new test.SomeClass$Class2;
+
+        specialinvoke $r1.<init>();
+
+        test.SomeClass$Class1.cls = $r1;
+
+        $r2 = test.SomeClass$Class1.cls;
+
+        $r2.intAt = 4;
+
+        return;
+    }
+}
