@@ -119,6 +119,7 @@ public class ContextTransitionTable<SootMethod,CFGNode,PointsToGraph> {
 		}
 		
 		// Ensure memory allocated for call-site index
+		@SuppressWarnings("unchecked")
 		Context<SootMethod,CFGNode,PointsToGraph> source = (Context<SootMethod, CFGNode, PointsToGraph>) callSite.getCallingContext();
 		if (callSitesOfContexts.containsKey(source) == false) {
 			callSitesOfContexts.put(source, new HashSet<CallSite>());

@@ -26,10 +26,6 @@ package vreAnalyzer;
  * 
  */
 /**
- * BUGs:
-<<<<<<< HEAD:src/vreAnalyzer/changing_log.java
- * track 1. error {@link DefUseEnvironmentChecking} 错误比较方法 逻辑错误 暂时停止 [fixed]
-=======
  * track 1. error {@link DefUseEnvironmentChecking} 错误比较方法 逻辑错误 暂时停止
 >>>>>>> origin/master:src/vreAnalyzer/changing_log.java
  * 

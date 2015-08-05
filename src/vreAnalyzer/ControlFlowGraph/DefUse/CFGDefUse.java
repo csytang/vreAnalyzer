@@ -172,7 +172,7 @@ public class CFGDefUse extends CFG {
 				// create uses for all local/field/array accesses
 				List<Branch> outBrs = n.getOutBranches();
 				
-				List useBoxes = s.getUseBoxes();
+				List<ValueBox> useBoxes = s.getUseBoxes();
 				
 				ArrayList<Use> uses = new ArrayList<Use>();
 				
@@ -182,7 +182,7 @@ public class CFGDefUse extends CFG {
 				CallSite cs = sTag.getCallSite();
 				
 				// Iterate the usebox of this DefUse CFGNode to add all uses to it
-				for (Iterator itUse = useBoxes.iterator(); itUse.hasNext(); ) {
+				for (Iterator<ValueBox> itUse = useBoxes.iterator(); itUse.hasNext(); ) {
 					// For a  value use
 					Value useV = ((ValueBox) itUse.next()).getValue();
 					
@@ -277,7 +277,7 @@ public class CFGDefUse extends CFG {
 			if (!(s instanceof IdentityStmt) || isEntryCFG || allowParmsRetUseDefs ||
 					(isInstanceInit && ((Local)((IdentityStmt)s).getLeftOp()).getName().equals("this")))
 			{
-				List defBoxes = s.getDefBoxes();
+				List<ValueBox> defBoxes = s.getDefBoxes();
 				ArrayList<Def> defs = new ArrayList<Def>();
 				if (!defBoxes.isEmpty()) {
 					assert defBoxes.size() == 1;
@@ -328,7 +328,7 @@ public class CFGDefUse extends CFG {
 				}
 				// add special defs: constant return values
 				if (s instanceof ReturnStmt) {
-					List useBoxes = ((ReturnStmt)s).getUseBoxes();
+					List<ValueBox> useBoxes = ((ReturnStmt)s).getUseBoxes();
 					if (!useBoxes.isEmpty()) {
 						assert useBoxes.size() == 1;
 						Value vRet = ((ValueBox)useBoxes.iterator().next()).getValue();

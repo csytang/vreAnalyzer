@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import Patch.Hadoop.HubClassParser;
 import soot.PackManager;
 import soot.SceneTransformer;
 import soot.Transform;
@@ -20,7 +21,7 @@ import vreAnalyzer.Util.Options.reusableMode;
 
 public class vreHadoop extends SceneTransformer{
 	
-	private static boolean verbose = true;
+	
 	
 	public static void main(String[]args) throws ConflictModelExpection{
 		// All input command list
@@ -74,8 +75,6 @@ public class vreHadoop extends SceneTransformer{
 		// Run Soot
 		soot.Main.main(filtersootArgs);
 		
-		
-		
 	}
 	
 	/**
@@ -85,7 +84,6 @@ public class vreHadoop extends SceneTransformer{
 	protected void internalTransform(String arg0, Map<String, String> arg1) {
 		// TODO Auto-generated method stub
 		System.out.println("vreHadoop's internal transform[Start]");
-		System.out.println("Create interprocedural program flow graph, including call graph and control flow[Start]");
 		
 		try {
 			ProgramFlowBuilder.createInstance();
@@ -96,18 +94,14 @@ public class vreHadoop extends SceneTransformer{
 
 		PointsToAnalysis.inst().doAnalysis();
 		
-		
-		System.out.println("Interprocedural program flow graph [Finish]");
 		// Finish
 		System.out.println("vreHadoop's internal transform[Done]");
 		
 		// Display Reusable Result
-		if(Options.getMode()==reusableMode.Normal)
-		{
-			if(verbose){
-				System.out.println("Currently in Normal reusable mode, the result is:");
-			}
+		if(Options.getMode()==reusableMode.Normal){
 			NormalPipelines.inst().findCommonAssetsandReset();
+		}else if(Options.getMode()==reusableMode.Hadoop){
+			HubClassParser.inst(ProgramFlowBuilder.inst().getEntryClass()).Parse();
 		}
 	}
 }

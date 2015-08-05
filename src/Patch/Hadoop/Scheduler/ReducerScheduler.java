@@ -1,17 +1,13 @@
-package vreAnalyzer.Reuse.Scheduler;
+package Patch.Hadoop.Scheduler;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import soot.AnySubType;
-import soot.ArrayType;
 import soot.Body;
 import soot.Local;
-import soot.NullType;
 import soot.PatchingChain;
 import soot.PrimType;
-import soot.RefLikeType;
 import soot.RefType;
 import soot.Scene;
 import soot.SootClass;
@@ -22,7 +18,6 @@ import soot.Unit;
 import soot.UnitBox;
 import soot.Value;
 import soot.ValueBox;
-
 import soot.jimple.ArrayRef;
 import soot.jimple.Constant;
 import soot.jimple.FieldRef;
@@ -32,16 +27,10 @@ import soot.util.Chain;
 import vreAnalyzer.ControlFlowGraph.CFG;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
+import vreAnalyzer.Reuse.Scheduler.Scheduler;
 import vreAnalyzer.Util.SootUtilities;
 
-
-public class NormalScheduler implements Scheduler{
-	
-	// Only one scheduler 
-
-	
-
-	
+public class ReducerScheduler implements Scheduler{
 	private boolean verbose = true;
 	private SootClass integratedClass;
 	
@@ -53,54 +42,25 @@ public class NormalScheduler implements Scheduler{
 	private SootMethod othermethod;
 	private SootMethod srcmethod;
 	private SootMethod method;
-	
-
 	/**
 	 *  Here we keep the src name as original, when there is a name conflict, we change the name in others 
 	 */
 	private Map<Object,Object>bindings = null;
 	
-
-	public NormalScheduler(SootMethod srcMethod, SootMethod otherMethod, CFGNode[] reusable){
-		bindings = new HashMap<Object,Object>();
-		src = srcMethod.getDeclaringClass();
-		other = otherMethod.getDeclaringClass();
-		this.othermethod = otherMethod;
-		this.srcmethod = srcMethod;
-		reusableIndex = reusable;	
-		
+	public ReducerScheduler(SootMethod srcMethod, SootMethod otherMethod,
+			CFGNode[] commons){
+		// TODO Auto-generated constructor stub
+				bindings = new HashMap<Object,Object>();
+				src = srcMethod.getDeclaringClass();
+				other = otherMethod.getDeclaringClass();
+				this.othermethod = otherMethod;
+				this.srcmethod = srcMethod;
+				reusableIndex = commons;	
 	}
 	
 
-	
-	
-	
-	
-	/**
-	 * TODO:
-	 * ****IMPORTANT******* classCopy();
-	 * 1. change the this statement to current class/ new statement to current class (finish)
-	 *  + Field reference
-	 *  + 
-	 * 2. ensure only one this and return statement (finish)
-	 * 3. schedule all execution order (check, if needed)
-	 * 4. process return statement (void return is processed) - including the parameter, receiver and so forth (finish)
-	 * 5. All dependences
-	 * 6. 
-	 * 7.
-	 * Checkout:
-	 * 1. Only one this statement, and one return statement
-	 * 2. 
-	 * 3. 
-	 * 
-	 * 
-	 * 
-	 * @param src
-	 * @param other
-	 * @param reusableIndex
-	 * @return
-	 */
-	public void SootMethodIntegrate(){
+	public void SootMethodIntegrate() {
+
 		
 		
 		// 0. Create a integrated class based on these two class
@@ -352,71 +312,70 @@ public class NormalScheduler implements Scheduler{
 		
 		
 		
+		
 	}
-	
 
-	public void MethodCleanUp(){
+	public SootClass SootClassInUpdate() {
+		// TODO Auto-generated method stub
+		// 4. Wrap all other methods in src
+				for(SootMethod sm:src.getMethods()){
+					if(sm != this.srcmethod){
+						integratedClass.addMethod(SootUtilities.methodClone(sm));
+						SootUtilities.changeTypesInMethods(integratedClass,src,integratedClass);
+					}
+				}
+				
+				// 4. Wrap all other methods in other
+				for(SootMethod sm:other.getMethods()){
+					if(sm != this.othermethod){
+						integratedClass.addMethod(SootUtilities.methodClone(sm));
+						SootUtilities.changeTypesInMethods(integratedClass,other,integratedClass);
+					}
+				}
 
+				// 5. Clean this class up
+				/**
+				 *  5.1 
+				 *  5.2 
+				 *  5.3
+				 *  5.4
+				 *  5.5
+				 *  
+				 */
+				
+				
+				
+				return this.integratedClass;
+	}
+
+	public void MethodCleanUp() {
+		// TODO Auto-generated method stub
 		// After you clean this, check it again
 		
-		Body methodBody = method.retrieveActiveBody();
-		Chain<Local> locals = methodBody.getLocals();
-		PatchingChain<Unit>integratedUnits = methodBody.getUnits();
-		Iterator<Unit> unitIt = integratedUnits.iterator();
-		
-		if(verbose){
-			System.out.println("Class fields\n");
-			for(SootField field:integratedClass.getFields()){
-				System.out.println(field);
-			}
-			
-			System.out.println("All locals:\n");
-			for(Local loc:locals){
-				System.out.println(loc);
-			}
-			
-			System.out.print("All statement in method:\t"+method.getName()+"\n");
-			integratedUnits = methodBody.getUnits();
-			unitIt = integratedUnits.iterator();
-			while(unitIt.hasNext()){
-				Stmt st = (Stmt)unitIt.next();
-				System.out.println("\t|"+st.toString());
-			}
-		}
-		
+				Body methodBody = method.retrieveActiveBody();
+				Chain<Local> locals = methodBody.getLocals();
+				PatchingChain<Unit>integratedUnits = methodBody.getUnits();
+				Iterator<Unit> unitIt = integratedUnits.iterator();
+				
+				if(verbose){
+					System.out.println("Class fields\n");
+					for(SootField field:integratedClass.getFields()){
+						System.out.println(field);
+					}
+					
+					System.out.println("All locals:\n");
+					for(Local loc:locals){
+						System.out.println(loc);
+					}
+					
+					System.out.print("All statement in method:\t"+method.getName()+"\n");
+					integratedUnits = methodBody.getUnits();
+					unitIt = integratedUnits.iterator();
+					while(unitIt.hasNext()){
+						Stmt st = (Stmt)unitIt.next();
+						System.out.println("\t|"+st.toString());
+					}
+				}
 	}
-	
-	public SootClass SootClassInUpdate(){
-		// 4. Wrap all other methods in src
-		for(SootMethod sm:src.getMethods()){
-			if(sm != this.srcmethod){
-				integratedClass.addMethod(SootUtilities.methodClone(sm));
-				SootUtilities.changeTypesInMethods(integratedClass,src,integratedClass);
-			}
-		}
-		
-		// 4. Wrap all other methods in other
-		for(SootMethod sm:other.getMethods()){
-			if(sm != this.othermethod){
-				integratedClass.addMethod(SootUtilities.methodClone(sm));
-				SootUtilities.changeTypesInMethods(integratedClass,other,integratedClass);
-			}
-		}
 
-		// 5. Clean this class up
-		/**
-		 *  5.1 
-		 *  5.2 
-		 *  5.3
-		 *  5.4
-		 *  5.5
-		 *  
-		 */
-		
-		
-		
-		return this.integratedClass;
-	}
-	
-}	
-
+}

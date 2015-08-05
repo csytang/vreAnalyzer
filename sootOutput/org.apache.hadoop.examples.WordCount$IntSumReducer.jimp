@@ -1,0 +1,96 @@
+public class org.apache.hadoop.examples.WordCount$IntSumReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+    private org.apache.hadoop.io.IntWritable result;
+
+    public void <init>()
+    {
+        org.apache.hadoop.examples.WordCount$IntSumReducer r0;
+        org.apache.hadoop.io.IntWritable $r1;
+
+        r0 := @this;
+
+        specialinvoke r0.<init>();
+
+        $r1 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r1.<init>();
+
+        r0.result = $r1;
+
+        return;
+    }
+
+    public void reduce(org.apache.hadoop.io.Text, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.hadoop.examples.WordCount$IntSumReducer r0;
+        org.apache.hadoop.io.Text r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        java.util.Iterator r4;
+        org.apache.hadoop.io.IntWritable r5, $r6, $r7;
+        boolean $z0;
+        java.lang.Object $r8;
+        int $i0, i1;
+
+        r0 := @this;
+
+        r1 := @parameter0;
+
+        r2 := @parameter1;
+
+        r3 := @parameter2;
+
+        i1 = 0;
+
+        r4 = r2.iterator();
+
+     label1:
+        $z0 = r4.hasNext();
+
+        if $z0 == 0 goto label2;
+
+        $r8 = r4.next();
+
+        r5 = (org.apache.hadoop.io.IntWritable) $r8;
+
+        $i0 = r5.get();
+
+        i1 = i1 + $i0;
+
+        goto label1;
+
+     label2:
+        $r6 = r0.result;
+
+        $r6.set(i1);
+
+        $r7 = r0.result;
+
+        r3.write(r1, $r7);
+
+        return;
+    }
+
+    public volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.hadoop.examples.WordCount$IntSumReducer r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.hadoop.io.Text $r4;
+
+        r0 := @this;
+
+        r1 := @parameter0;
+
+        r2 := @parameter1;
+
+        r3 := @parameter2;
+
+        $r4 = (org.apache.hadoop.io.Text) r1;
+
+        r0.reduce($r4, r2, r3);
+
+        return;
+    }
+}

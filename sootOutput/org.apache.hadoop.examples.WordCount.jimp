@@ -1,0 +1,117 @@
+public class org.apache.hadoop.examples.WordCount extends java.lang.Object
+{
+
+    public void <init>()
+    {
+        org.apache.hadoop.examples.WordCount r0;
+
+        r0 := @this;
+
+        specialinvoke r0.<init>();
+
+        return;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0, r2;
+        org.apache.hadoop.conf.Configuration $r4;
+        org.apache.hadoop.util.GenericOptionsParser $r5;
+        int $i0, $i1, $i2, $i3, $i4, i5;
+        org.apache.hadoop.mapreduce.Job $r6;
+        org.apache.hadoop.fs.Path $r7, $r9;
+        java.lang.String $r8, $r10;
+        boolean $z0;
+        java.io.PrintStream $r11;
+        byte $b6;
+
+        r0 := @parameter0;
+
+        $r4 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r4.<init>();
+
+        $r5 = new org.apache.hadoop.util.GenericOptionsParser;
+
+        specialinvoke $r5.<init>($r4, r0);
+
+        r2 = $r5.getRemainingArgs();
+
+        $i0 = lengthof r2;
+
+        if $i0 >= 2 goto label1;
+
+        $r11 = java.lang.System.err;
+
+        $r11.println("Usage: wordcount <in> [<in>...] <out>");
+
+        java.lang.System.exit(2);
+
+     label1:
+        $r6 = new org.apache.hadoop.mapreduce.Job;
+
+        specialinvoke $r6.<init>($r4, "word count");
+
+        $r6.setJarByClass(class "org/apache/hadoop/examples/WordCount");
+
+        $r6.setMapperClass(class "org/apache/hadoop/examples/WordCount$TokenizerMapper");
+
+        $r6.setCombinerClass(class "org/apache/hadoop/examples/WordCount$IntSumReducer");
+
+        $r6.setReducerClass(class "org/apache/hadoop/examples/WordCount$IntSumReducer");
+
+        $r6.setOutputKeyClass(class "org/apache/hadoop/io/Text");
+
+        $r6.setOutputValueClass(class "org/apache/hadoop/io/IntWritable");
+
+        i5 = 0;
+
+     label2:
+        $i1 = lengthof r2;
+
+        $i2 = $i1 - 1;
+
+        if i5 >= $i2 goto label3;
+
+        $r9 = new org.apache.hadoop.fs.Path;
+
+        $r10 = r2[i5];
+
+        specialinvoke $r9.<init>($r10);
+
+        org.apache.hadoop.mapreduce.lib.input.FileInputFormat.addInputPath($r6, $r9);
+
+        i5 = i5 + 1;
+
+        goto label2;
+
+     label3:
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        $i3 = lengthof r2;
+
+        $i4 = $i3 - 1;
+
+        $r8 = r2[$i4];
+
+        specialinvoke $r7.<init>($r8);
+
+        org.apache.hadoop.mapreduce.lib.output.FileOutputFormat.setOutputPath($r6, $r7);
+
+        $z0 = $r6.waitForCompletion(1);
+
+        if $z0 == 0 goto label4;
+
+        $b6 = 0;
+
+        goto label5;
+
+     label4:
+        $b6 = 1;
+
+     label5:
+        java.lang.System.exit($b6);
+
+        return;
+    }
+}

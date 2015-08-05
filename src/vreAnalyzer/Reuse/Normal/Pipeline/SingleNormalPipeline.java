@@ -2,7 +2,6 @@ package vreAnalyzer.Reuse.Normal.Pipeline;
 
 import soot.SootClass;
 import soot.SootMethod;
-import vreAnalyzer.Context.Context;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Util.Util;
 
@@ -12,7 +11,6 @@ public class SingleNormalPipeline {
 	private SootMethod constructor;
 
 	
-	private static boolean verbose = true;
 	public SingleNormalPipeline(SootClass appClass) {
 		// TODO Auto-generated constructor stub
 		app = appClass;
@@ -23,7 +21,6 @@ public class SingleNormalPipeline {
 	}
 	public CFGNode[] getCommonAsset(SingleNormalPipeline other) {
 		SootMethod otherMethod = other.getSootMethod();
-		Context otherallcontext = null;
 		return Util.getCommonAsset(constructor, otherMethod); 
 
 	}

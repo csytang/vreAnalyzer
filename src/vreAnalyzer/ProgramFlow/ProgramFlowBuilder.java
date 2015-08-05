@@ -9,9 +9,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import soot.FastHierarchy;
+import soot.RefType;
 import soot.Scene;
 import soot.SootClass;
 import soot.SootMethod;
+import soot.Type;
 import vreAnalyzer.ControlFlowGraph.CFG;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.Elements.CFGNode;
@@ -32,6 +36,8 @@ public class ProgramFlowBuilder {
 	public static ProgramFlowBuilder inst() { return cgSingleton; }
 	
 	private List<SootClass> appClasses = null;
+	
+	
 	/** All application concrete methods, reachable or not */
 	private List<SootMethod> allAppMethods = null;
 	private List<SootMethod> entryMethods = null;
@@ -96,18 +102,14 @@ public class ProgramFlowBuilder {
 	 * @throws EntryNotFoundException
 	 */
 	private void initMethods() throws EntryNotFoundException{
-		List<SootMethod> appMethods = getAppConcreteMethods();
-		List<SootMethod> entryMethods = findEntryAppMethods();
-		
-		
+		this.allAppMethods = getAppConcreteMethods();
+		this.entryMethods = findEntryAppMethods();
+		 
 		
 		// Init MethodNode to CFG mapping
 		mToCFG = new HashMap<SootMethod,CFG>();
 		
 		allCFGs = new LinkedList<CFG>();
-		
-		this.entryMethods = entryMethods;
-		this.allAppMethods = appMethods;
 		
 		
 		// Purely intraprocedural initialization
@@ -198,6 +200,20 @@ public class ProgramFlowBuilder {
 		// TODO Auto-generated method stub
 		return this.mToCFG.get(mNodeAppCallee);
 	}
+	
+	
+	public SootClass findAppClassByNameAndSuper(String name,SootClass superClass){
+		
+		FastHierarchy fhierarchy = Scene.v().getOrMakeFastHierarchy();
+		
+		for(SootClass ap:appClasses){
+			if(ap.getName().equals(name) &&
+					fhierarchy.isSubclass(ap, superClass)){
+				return ap;
+			}
+		}
+		return null;
+	}
 	//////////////////////////////////////////////////////////////
 
 	
@@ -224,19 +240,7 @@ public class ProgramFlowBuilder {
 						}
 					}
 					
-					// detect reusable asset in hadoop mode
-					else if(mode == reusableMode.Hadoop){
-						if(appClass.hasSuperclass()){
-							// Mapper/Reducer part
-							/**
-							if(MapReduceUtil.isMapperClass(appClass)){
-								MapperPipelines.inst().createNewSingleMapper(appClass);
-							}else if(MapReduceUtil.isReducerClass(appClass)){
-								ReducerPipelines.inst().createNewSingleReducer(appClass);
-							}
-							**/
-						}
-					}
+					// Other models has been redirected to other patch code 
 				}
 				
 				appClasses.add(appClass);
@@ -245,6 +249,10 @@ public class ProgramFlowBuilder {
 		
 		return appClasses;
 	}
+	/** Gets/creates collection of all application classes */
+	
+	
+	
 	
 	/** Gets/creates collection of all concrete methods (i.e., methods with a body) in application classes */
 	public List<SootMethod> getAppConcreteMethods() {
@@ -328,6 +336,20 @@ public class ProgramFlowBuilder {
 		public EntryNotFoundException(String msg) { super(msg); }
 	}
 
+	public SootClass getEntryClass() {
+		// TODO Auto-generated method stub
+		return entryMethods.get(0).getDeclaringClass();
+	}
+
+	public SootClass findLibClassByName(String string) {
+		// TODO Auto-generated method stub
+		for (Iterator<SootClass> itCls = Scene.v().getLibraryClasses().iterator();itCls.hasNext();){
+			SootClass libClass = itCls.next();
+			if(libClass.getName().equals(string))
+				return libClass;
+		}
+		return null;
+	}
 	
 	
 }

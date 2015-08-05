@@ -2,7 +2,6 @@ package vreAnalyzer.Reuse.Normal.Pipeline;
 
 import java.util.LinkedList;
 import java.util.List;
-
 import soot.SootClass;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Reuse.Scheduler.NormalScheduler;
@@ -21,10 +20,8 @@ public class NormalPipelines {
 	private boolean verbose = true;
 	
 	
-	private CFGNode[] commons = null;
 	
-	private SingleNormalPipeline src;
-	private SingleNormalPipeline other;
+	
 	
 	public NormalPipelines(){
 		pipes = new LinkedList<SingleNormalPipeline>();
@@ -48,6 +45,12 @@ public class NormalPipelines {
 		pipes.add(singpi);
 	}
 	public void findCommonAssetsandReset(){
+		if(pipes.size()<=1){
+			System.err.println("WARNING!! Less than 2 classes detected, not adapted to detect reuse");
+			return;
+		}
+		SingleNormalPipeline src = null,other= null;
+		CFGNode[] commons = null;
 		for(int i = 0;i < pipes.size();i++){
 			for(int j = i+1; j < pipes.size();j++){
 				src = pipes.get(i);
@@ -62,13 +65,13 @@ public class NormalPipelines {
 					System.out.println("StartIndex and EndIndex in \t"+other.getSootClass().getName()+"\t is");
 					System.out.println("Start:\t"+commons[2].toString()+"\t|\tEnd:\t"+commons[3].toString());
 				}
-			}
+			
 			NormalScheduler normalScheduler = new NormalScheduler(src.getSootMethod(),other.getSootMethod(),commons);
 		
 			normalScheduler.SootMethodIntegrate();
 			normalScheduler.MethodCleanUp();
 			normalScheduler.SootClassInUpdate();
-
+			}
 		}
 	}
 	

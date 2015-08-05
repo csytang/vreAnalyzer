@@ -1,21 +1,18 @@
 package vreAnalyzer.Elements;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import soot.SootMethod;
 import vreAnalyzer.Context.Context;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.PointsTo.PointsToGraph;
-import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 
 public class CallSite implements Comparable<CallSite>{
 	/////////////////////Fields/////////////////////////
 	private Location loc;
 	private List<SootMethod> mAppCallees;
 	private Context callingContext;
-	private SootMethod mNode;
 	private CFGNode cfgNode;
 	// Mapping to MethodNode 
 	
@@ -33,7 +30,6 @@ public class CallSite implements Comparable<CallSite>{
 		this.loc = loc;
 		this.mAppCallees = sortedAppTgts;
 		this.mLibCallees = sortedLibTgts;
-		this.mNode = mNode;
 		this.cfgNode = cfgNode;
 
 		

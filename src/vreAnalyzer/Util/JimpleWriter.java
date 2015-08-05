@@ -95,7 +95,7 @@ public class JimpleWriter extends SceneTransformer implements HasPhaseOptions {
         String outputDirectory = PhaseOptions.getString(options,
                 "outputDirectory");
 
-        for (Iterator classes = Scene.v().getApplicationClasses().iterator(); classes
+        for (Iterator<SootClass> classes = Scene.v().getApplicationClasses().iterator(); classes
                 .hasNext();) {
             SootClass theClass = (SootClass) classes.next();
 

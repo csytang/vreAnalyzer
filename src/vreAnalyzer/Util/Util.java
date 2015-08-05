@@ -40,11 +40,7 @@ import soot.jimple.internal.JReturnStmt;
 import soot.jimple.internal.JReturnVoidStmt;
 import soot.util.NumberedString;
 import vreAnalyzer.Context.Context;
-
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
-
-import vreAnalyzer.ControlFlowGraph.CFG;
-
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
@@ -151,12 +147,12 @@ public class Util {
 		// TODO store (cache) all subclasses in Class Tag
 		List<SootClass> subclasses = new ArrayList<SootClass>();
 		FastHierarchy hierarchy = Scene.v().getOrMakeFastHierarchy();
-		for (Iterator itSubCls = hierarchy.getSubclassesOf(cls).iterator(); itSubCls.hasNext(); ) {
+		for (Iterator<SootClass> itSubCls = hierarchy.getSubclassesOf(cls).iterator(); itSubCls.hasNext(); ) {
 			SootClass subCls = (SootClass) itSubCls.next();
 			subclasses.add(subCls);
 			subclasses.addAll(getAllSubtypes(subCls));
 		}
-		for (Iterator itSubCls = hierarchy.getAllImplementersOfInterface(cls).iterator(); itSubCls.hasNext(); ) {
+		for (Iterator<SootClass> itSubCls = hierarchy.getAllImplementersOfInterface(cls).iterator(); itSubCls.hasNext(); ) {
 			SootClass subCls = (SootClass) itSubCls.next();
 			subclasses.add(subCls);
 			subclasses.addAll(getAllSubtypes(subCls));
