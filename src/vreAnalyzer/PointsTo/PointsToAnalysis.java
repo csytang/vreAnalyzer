@@ -696,10 +696,12 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 		if (targets == null) {
 			targets = getDummyTarget();	
 			CallSite srcCallSite = callStmt.getCallSite();
-			srcCallSite.setCallingContext(callerContext);
-			this.contextTransitions.addTransition(srcCallSite, null);
-			if (verbose) {
-				System.out.println("[DEF] X" + callerContext + " -> DEFAULT " + ie.getMethod());
+			if(srcCallSite!=null){
+				srcCallSite.setCallingContext(callerContext);
+				this.contextTransitions.addTransition(srcCallSite, null);
+				if (verbose) {
+					System.out.println("[DEF] X" + callerContext + " -> DEFAULT " + ie.getMethod());
+				}
 			}
 		} 
 		

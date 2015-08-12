@@ -46,7 +46,7 @@ public class MethodTag implements Tag {
 	private HashSet<SootMethod> allCalleeMethods = new HashSet<SootMethod>();
 	
 	// App caller methods
-	private HashSet<SootMethod> appCallerMethods = new HashSet<SootMethod>();
+	//private HashSet<SootMethod> appCallerMethods = new HashSet<SootMethod>();
 	
 	// No Lib caller methods, cus application method cannot be invoked by lib method
 	
@@ -55,7 +55,7 @@ public class MethodTag implements Tag {
 	
 	private Map<Stmt,CallSite> stmtToCallSite = new HashMap<Stmt,CallSite>();
 	
-	private ArrayList<CallSite> callers = new ArrayList<CallSite>();
+	
 	
 	private boolean verbose = false;
 	///////////////////////////////////////////////////////////
@@ -110,9 +110,7 @@ public class MethodTag implements Tag {
 	////////////////////////Member Functions/////////////////
 	public SootMethod getSootMethod() {return this.sm;}
 	public Local[] getFormalParams() { return this.formalParams; }
-	public void addCallerSite(CallSite cs) { callers.add(cs);}
-	public void addCallerMethed(SootMethod mNode){this.appCallerMethods.add(mNode);}
-	public HashSet<SootMethod> getAllCallerMethods(){return this.appCallerMethods;}
+	
 	public HashSet<SootMethod> getAllCalleeMethods(){return this.allCalleeMethods;}
 	public String toString() {return this.sm.toString();}
 	public CallSite stmtgetCallSite(Stmt stmt){return this.stmtToCallSite.get(stmt);}
@@ -253,18 +251,26 @@ public class MethodTag implements Tag {
 
 	/** 
 	 * Asks statements to compute call information and return call site, if any 
+	 * 
 	 * */
 	public void initCallSites() {
 		// TODO Init call site and set call relation for current method
 		
 		for (Iterator itStmt = stmtList.iterator(); itStmt.hasNext(); ) {
+			// 1. This statement contains a method invocation
 			Stmt s =  (Stmt) itStmt.next();
 			StmtTag sTag = (StmtTag) s.getTag(StmtTag.TAG_NAME);
 			
-			// Make statement find its call targets, create call branches, and provide call site
-			CallSite cs = sTag.initCallSite();
+			// 2. Make statement find its call targets, create call branches, and provide call site
+			CallSite cs = null;
+			try {
+				cs = sTag.initCallSite();
+			} catch (Throwable e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
-			// Store call site provided by this statement, but only if not in catch block
+			// 3. Store call site provided by this statement, but only if not in catch block
 			if (!sTag.isInCatchBlock() && cs != null) {
 				// Add this call site to callSite
 				callSites.add(cs);		
@@ -277,40 +283,18 @@ public class MethodTag implements Tag {
 				if(verbose){
 					System.out.println("Stmt:\t"+s.toString()+"'s callees are");
 					if(!allCalleeMethods.isEmpty()){
-						Iterator itcallee = allCalleeMethods.iterator();
+						Iterator<SootMethod> itcallee = allCalleeMethods.iterator();
 						while(itcallee.hasNext()){
 							SootMethod appCallee = (SootMethod) itcallee.next();
 							System.out.println("\t  Callee:\t"+appCallee.toString());
 						}
 					}
-					else
-					{
+					else{
 						System.err.println("Warning no callee found");
 					}
 					System.out.println();
 				}
 				// FINISH
-				// Add this method to callees' caller sites set
-				Iterator<SootMethod>itmCallee=cs.getAllCallees().iterator();
-				while (itmCallee.hasNext()) {
-					SootMethod mCallee = itmCallee.next();
-					
-					// Check whether it is a application method, otherwise no need to add its callersite
-					if(ProgramFlowBuilder.inst().getAppConcreteMethods().contains(mCallee)){
-						((MethodTag) mCallee.getTag(MethodTag.TAG_NAME)).addCallerSite(cs);
-						((MethodTag) mCallee.getTag(MethodTag.TAG_NAME)).addCallerMethed(this.sm);
-						//DEBUG
-						if(verbose){
-							MethodTag mCalleeTag = (MethodTag) mCallee.getTag(MethodTag.TAG_NAME);
-							Iterator itcaller = mCalleeTag.getAllCallerMethods().iterator();
-							while(itcaller.hasNext()){
-								SootMethod appCaller = (SootMethod) itcaller.next();
-							 	System.out.println(mCallee+"'s \t Application Caller:\t"+appCaller.toString());
-							}
-						}
-						//FINSIH
-					}
-				}
 			}			
 		}
 	}

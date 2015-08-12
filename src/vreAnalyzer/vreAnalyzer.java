@@ -3,23 +3,14 @@ package vreAnalyzer;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-
-import Patch.Hadoop.HubClassParser;
 import soot.PackManager;
-import soot.SceneTransformer;
 import soot.Transform;
-import vreAnalyzer.PointsTo.PointsToAnalysis;
-import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
-import vreAnalyzer.ProgramFlow.ProgramFlowBuilder.EntryNotFoundException;
-import vreAnalyzer.Reuse.Normal.Pipeline.NormalPipelines;
 import vreAnalyzer.Util.ConflictModelExpection;
 import vreAnalyzer.Util.Options;
-import vreAnalyzer.Util.Options.reusableMode;
 
 
 
-public class vreHadoop extends SceneTransformer{
+public class vreAnalyzer{
 	
 	
 	
@@ -65,43 +56,17 @@ public class vreHadoop extends SceneTransformer{
 		String[] filtersootArgs = Options.parseFilterArgs(argsArray);
 				
 		// Internal transfer
-		PackManager.v().getPack("wjtp").add(new Transform("wjtp.mt", new vreHadoop()));
+		PackManager.v().getPack("wjtp").add(new Transform("wjtp.mt", new vreAnalyzerInternalTransform()));
 				
-		System.out.print("vreHadoop args to Soot: ");
+		System.out.print("[vreAnalyzer] vreAnalyzer args to Soot: ");
 		for (String s : filtersootArgs)
 			System.out.print(s + " ");
 		System.out.println();
-				
+		
 		// Run Soot
 		soot.Main.main(filtersootArgs);
 		
 	}
 	
-	/**
-	 * Internal transform, customized for own purpose
-	 */
-	@Override
-	protected void internalTransform(String arg0, Map<String, String> arg1) {
-		// TODO Auto-generated method stub
-		System.out.println("vreHadoop's internal transform[Start]");
-		
-		try {
-			ProgramFlowBuilder.createInstance();
-		} catch (EntryNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		PointsToAnalysis.inst().doAnalysis();
-		
-		// Finish
-		System.out.println("vreHadoop's internal transform[Done]");
-		
-		// Display Reusable Result
-		if(Options.getMode()==reusableMode.Normal){
-			NormalPipelines.inst().findCommonAssetsandReset();
-		}else if(Options.getMode()==reusableMode.Hadoop){
-			HubClassParser.inst(ProgramFlowBuilder.inst().getEntryClass()).Parse();
-		}
-	}
+	
 }

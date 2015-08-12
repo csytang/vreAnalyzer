@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
+
 import soot.ArrayType;
 import soot.FastHierarchy;
 import soot.Local;
@@ -42,17 +44,17 @@ import soot.util.NumberedString;
 import vreAnalyzer.Context.Context;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
+import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.PointsTo.PointsToGraph;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
-
 import vreAnalyzer.Reuse.Checking.PointsToDefUseChecking;
 
 
 public class Util {
 	
-	
+	static boolean verbose = false;
 	///////////////////////////Functional methods//////////////////////////////////
 	//Whether a statement is a return statement
 	public static boolean isReturnStmt(Stmt s) {
@@ -75,6 +77,15 @@ public class Util {
 		return v instanceof StaticInvokeExpr;
 	}
 	
+	/**
+	 * This method will find the specific call target with the given call expression
+	 * @param instInvExpr
+	 * @param mAppTgts
+	 * @param mLibTgts
+	 * @return
+	 * bug report:
+	 * inner class
+	 */
 	public static boolean getConcreteCallTargets(InstanceInvokeExpr instInvExpr,
 			Set<SootMethod> mAppTgts, Set<SootMethod> mLibTgts) {
 		// TODO  get class of method ref; we start searching from this class
@@ -82,20 +93,25 @@ public class Util {
 		
 		// Starting class
 		SootClass cls = mref.declaringClass(); 
-		
 		// Signature to search for
 		final NumberedString subsignature = mref.getSubSignature(); 
 		
-		/** CASE 1: Object is of declared class type or inherited from some superclass
+		/** 
+		 * CASE 1: Object is of declared class type or inherited from some superclass
 		 *         find first superclass, starting from current cls, that declares method; there HAS to be such a class
 		 * note that if cls is interface, superclass if java.lang.Object
 		 * note that we don't check if there is indeed an interface declaring the method; we assume this is the case if no superclass declares it
+		 * 情況1: Object是從一種聲明的類類型或者繼承自聲明的類類型
+		 * 方法：從本類開始向上檢索 一定會搜索到這個類
+		 * 注意：如果cls是一種藉口的話
+		 *
 		 */
-		while (!cls.declaresMethod(subsignature) && cls.hasSuperclass())
+		while ((!cls.declaresMethod(subsignature)) && cls.hasSuperclass())
 			cls = cls.getSuperclass(); // Never an interface
 		
 		// Now, method might not be in superclass, or might be abstract; in that case, it's not a target
-		SootMethod m;
+		SootMethod m = null;
+		
 		if (cls.declaresMethod(subsignature)) {
 			m = cls.getMethod(subsignature);
 			if (!m.isAbstract()) {
@@ -108,15 +124,21 @@ public class Util {
 					
 			}
 		}
-		// (only for virtual/interface calls)
-		// CASE 2: object's actual type is a subclass; any subclass declaring the method is a possible target
-		//         we have to check all superclasses of implementers, because starting cls might be interface
-		if (instInvExpr instanceof VirtualInvokeExpr || instInvExpr instanceof InterfaceInvokeExpr) {
+		/**
+		 *  (only for virtual/interface calls)
+		 *  CASE 2: object's actual type is a subclass; any subclass declaring the method is a possible target
+		 *  we have to check all superclasses of implementers, because starting cls might be interface
+		 */
+		List<SootClass> allSubclasses;
+		if (instInvExpr instanceof VirtualInvokeExpr||instInvExpr instanceof InterfaceInvokeExpr) {
+			
 			cls = mref.declaringClass(); // start again from declaring class
-			List<SootClass> allSubclasses = getAllSubtypes(cls);
+			
+			allSubclasses = getAllSubtypes(cls);
 			for (SootClass subCls : allSubclasses) {
 				m = getMethodInClassOrSuperclass(subCls, subsignature);
 				if (m != null && !m.isAbstract()) {
+				
 					if (m.getDeclaringClass().isApplicationClass()){
 						mAppTgts.add(m); // add app method
 					}
@@ -125,7 +147,48 @@ public class Util {
 					}
 				}
 			}
+			
+			
+			if(mLibTgts.isEmpty() && mAppTgts.isEmpty()){
+				System.err.println("[vreAnalyzer] Warnning!! Unsafe target setting");
+				boolean detected = false;
+				
+				cls = mref.declaringClass();
+				Stack<SootClass>superClassAndInterfaces = new Stack<SootClass>();
+				superClassAndInterfaces.push(cls);
+				while (!superClassAndInterfaces.isEmpty()){
+						cls = superClassAndInterfaces.pop();
+						
+						for(SootClass sm:cls.getInterfaces()){
+							superClassAndInterfaces.push(sm);
+							
+							if(sm.declaresMethod(subsignature)){
+								m = sm.getMethod(subsignature);
+								
+								if(sm.isApplicationClass()){
+									mAppTgts.add(m);
+								}
+								else{
+									mLibTgts.add(m);
+								}
+								detected = true;
+								break;
+							}
+						}
+						if(!detected){
+							cls = cls.getSuperclass();
+						}else
+							break;
+				}
+				
+			}
+			
+			
+			
+			
+			
 		}
+		
 				
 		return !mLibTgts.isEmpty();
 		
@@ -142,11 +205,14 @@ public class Util {
 	}
 	
 	
-	/** Returns the transitive closure of subinterfaces and subclasses of given class or interface (excluding given class). */
+	/** 
+	 * Returns the transitive closure of subinterfaces and subclasses of given class or interface (excluding given class).
+	 *  */
 	public static List<SootClass> getAllSubtypes(SootClass cls) {
 		// TODO store (cache) all subclasses in Class Tag
 		List<SootClass> subclasses = new ArrayList<SootClass>();
 		FastHierarchy hierarchy = Scene.v().getOrMakeFastHierarchy();
+		//subclasses.add(cls);
 		for (Iterator<SootClass> itSubCls = hierarchy.getSubclassesOf(cls).iterator(); itSubCls.hasNext(); ) {
 			SootClass subCls = (SootClass) itSubCls.next();
 			subclasses.add(subCls);

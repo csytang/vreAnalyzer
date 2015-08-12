@@ -123,10 +123,9 @@ public class CFG {
 			// Binding the CFGNode to callsite,if any
 			if(s.hasTag(CallSiteTag.TAG_NAME)){
 				// Get the CallSite along with this statement and set the created CFGNode to this CallSite 
-				mNodeTag.stmtgetCallSite(s).setCFGNode(n);
-			
+				if(mNodeTag.stmtgetCallSite(s)!=null)
+					mNodeTag.stmtgetCallSite(s).setCFGNode(n);
 			}
-			
 			
 			nodes.add(n);
 			stmtToCFGNode.put(s, n);

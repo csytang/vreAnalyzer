@@ -7,21 +7,11 @@ import java.util.Map;
 import soot.Body;
 import soot.Local;
 import soot.PatchingChain;
-import soot.PrimType;
-import soot.RefType;
-import soot.Scene;
 import soot.SootClass;
 import soot.SootField;
-import soot.SootFieldRef;
 import soot.SootMethod;
 import soot.Unit;
 import soot.UnitBox;
-import soot.Value;
-import soot.ValueBox;
-import soot.jimple.ArrayRef;
-import soot.jimple.Constant;
-import soot.jimple.FieldRef;
-import soot.jimple.IdentityStmt;
 import soot.jimple.Stmt;
 import soot.util.Chain;
 import vreAnalyzer.ControlFlowGraph.CFG;
@@ -31,7 +21,7 @@ import vreAnalyzer.Reuse.Scheduler.Scheduler;
 import vreAnalyzer.Util.SootUtilities;
 
 public class ReducerScheduler implements Scheduler{
-	private boolean verbose = true;
+	private boolean verbose = false;
 	private SootClass integratedClass;
 	
 	
@@ -42,6 +32,7 @@ public class ReducerScheduler implements Scheduler{
 	private SootMethod othermethod;
 	private SootMethod srcmethod;
 	private SootMethod method;
+	
 	/**
 	 *  Here we keep the src name as original, when there is a name conflict, we change the name in others 
 	 */
@@ -58,7 +49,9 @@ public class ReducerScheduler implements Scheduler{
 				reusableIndex = commons;	
 	}
 	
-
+	/**
+	 * Rewrite this method
+	 */
 	public void SootMethodIntegrate() {
 
 		
@@ -78,8 +71,8 @@ public class ReducerScheduler implements Scheduler{
 		if(reusableIndex!=null && reusableIndex.length==4){
 			
 		
-
-			method = SootUtilities.searchForMethodByName(integratedClass,srcmethod.getName());
+			method = integratedClass.getMethod(srcmethod.getSubSignature());
+			//method = SootUtilities.searchForMethodByName(integratedClass,srcmethod.getName());
 			Body methodBody = method.retrieveActiveBody();
 			bindings.putAll(SootUtilities.setBodyContentsFrom(methodBody,othermethod.retrieveActiveBody()));
 
@@ -105,7 +98,7 @@ public class ReducerScheduler implements Scheduler{
 						break;
 					}
 				}
-				methodBody.getLocals().add(otherlocalShadow);
+				
 			}
 			
 			if(verbose){
@@ -139,7 +132,7 @@ public class ReducerScheduler implements Scheduler{
 			CFG othermethodCFG = ProgramFlowBuilder.inst().getCFG(othermethod);
 			// Write all contents before [Start] in src
 			int srcStart = srcmethodCFG.getIndexId(reusableIndex[0]);
-			//int srcEnd = srcmethodCFG.getIndexId(reusableIndex[1]);
+			int srcEnd = srcmethodCFG.getIndexId(reusableIndex[1]);
 			int otherStart = othermethodCFG.getIndexId(reusableIndex[2]);
 			int otherEnd = othermethodCFG.getIndexId(reusableIndex[3]);
 
@@ -158,8 +151,15 @@ public class ReducerScheduler implements Scheduler{
 					
 					for(UnitBox box:stmtClone.getUnitBoxes()){
 						Unit newObject, oldObject = box.getUnit();
-						if((newObject = (Unit)  bindings.get(oldObject)) != null )
-			                box.setUnit(newObject);
+						if((newObject = (Unit)  bindings.get(oldObject)) != null ){
+							
+							// Add used local to all localset;
+							if(oldObject instanceof Local){
+								methodBody.getLocals().add((Local) bindings.get(oldObject));
+							}
+							
+							box.setUnit(newObject);
+						}
 						
 					}
 					methodBody.getUnits().addFirst(stmtClone);
@@ -167,100 +167,7 @@ public class ReducerScheduler implements Scheduler{
 			}
 			
 			
-			boolean shouldbeInsert = false;
-			PatchingChain<Unit> methodUnits = methodBody.getUnits();
 			
-			Object[] methodUnitArray = methodUnits.toArray();
-			
-			/**
-			 *  Check common asset in other class
-			 *  We do this checking for following reasons:
-			 *  1. The whole method in src has been copied to integrated method, but we can only ensure that the using of pointers are fully 
-			 *  implemented with checking, but when we use a non pointer case,it cannot ensured and somewhat change the circumstance.
-			 *  
-			 *  ** Check the UseBox, if this time use is assigning a different value to this field, we should detect it.
-			 *  It may include following cases (All types expect point2 can cover):
-			 *  (1) Using of PrimType
-			 *  (2) Using of RefLikeType
-			 *  (3) 
-			 *  
-			 *  
-			 *  
-			 *  2. 
-			 */
-			for(int i = otherStart;i < otherEnd;i++){
-					CFGNode cfgotherNode = othermethodCFG.getNodes().get(i);
-					int index = i-otherStart+srcStart;
-					
-					
-					// Special node does not need to write in program
-					if(!cfgotherNode.isSpecial()){
-						Stmt stmtClone = (Stmt) cfgotherNode.getStmt().clone();
-						if(verbose)
-						{
-							System.out.println("A stmt "+othermethod.getName()+"\t"+stmtClone.toString());
-							System.out.println();
-						}
-						shouldbeInsert = false;
-						if (!(stmtClone instanceof IdentityStmt)) {
-							for(ValueBox vbox:stmtClone.getUseAndDefBoxes()){
-								Value key = vbox.getValue();
-								// 如果是常量, 变量  等等  插入一个 赋值语句 使得不要影响 context
-								// 使用in method type change中的方法重写
-								
-								/**
-								 * 检查是否可以从CFGDefUse上直接获取信息
-								 * 
-								 */
-								
-								if(key instanceof FieldRef){
-									FieldRef r = (FieldRef) key;
-			                        SootFieldRef fieldRef = r.getFieldRef();
-			                        if(fieldRef.type() instanceof PrimType){
-			                        	SootField refField = other.getFieldByName(fieldRef.name());
-			                        	if(bindings.containsKey(refField)){
-			                        		SootField rmapfield = (SootField) bindings.get(r.getField());
-			                        		r.setFieldRef(Scene.v().makeFieldRef(
-			                        				rmapfield.getDeclaringClass(),
-			                        				rmapfield.getName(), RefType.v(integratedClass),
-			                        				rmapfield.isStatic()));
-			                
-											vbox.setValue(r);
-											shouldbeInsert = true;
-			                        	}
-			                        }
-								}else if(key instanceof Local){
-									Local r = (Local) key;
-									if(bindings.containsKey(r)){
-		                        		Local rmapfield = (Local) bindings.get(r);
-										vbox.setValue(rmapfield);
-										shouldbeInsert = true;
-		                        	}
-										
-								}else if(key instanceof ArrayRef){
-									ArrayRef r = (ArrayRef)key;
-									if(bindings.containsKey(r)){
-										ArrayRef rmapfield = (ArrayRef) bindings.get(r);
-										vbox.setValue(rmapfield);
-										shouldbeInsert = true;
-		                        	}
-								}else if(key instanceof Constant){
-									
-								}
-								else
-									break;
-							}
-						}
-						if(shouldbeInsert){
-							if(verbose){
-								System.out.println("Find one should insert203");
-								System.out.println("Add a new statement:\t"+stmtClone);
-							}
-							methodBody.getUnits().insertAfter(stmtClone, (Unit)methodUnitArray[index]);
-						}
-						
-					}
-			}
 			
 			// Write other part follows common area
 			for(int i  = otherEnd;i < othermethodCFG.getNodes().size();i++){
@@ -275,77 +182,42 @@ public class ReducerScheduler implements Scheduler{
 					
 					for(UnitBox box:stmtClone.getUnitBoxes()){
 						Unit newObject, oldObject = box.getUnit();
-						if((newObject = (Unit)  bindings.get(oldObject)) != null )
-			                box.setUnit(newObject);
+						if((newObject = (Unit)  bindings.get(oldObject)) != null ){
+			             
+							// Add used local to all localset;
+							if(oldObject instanceof Local){
+								methodBody.getLocals().add((Local) bindings.get(oldObject));
+							}
+							
+							box.setUnit(newObject);
+						}
 						
 					}
 					methodBody.getUnits().add(stmtClone);
 				}
 			}
-			
-			
-			
-			//SootUtilities.changeTypesInMethods(integratedClass,other,integratedClass);
-			
-			
-			// Clean up
-	        
-	        
-	        
-	        
-
-			PatchingChain<Unit>integratedUnits = methodBody.getUnits();
-			Iterator<Unit> unitIt = integratedUnits.iterator();
-
-			if(verbose){
-				System.out.print("All statement in method:\t"+method.getName()+"\n");
-				integratedUnits = methodBody.getUnits();
-				unitIt = integratedUnits.iterator();
-				while(unitIt.hasNext()){
-					Stmt st = (Stmt)unitIt.next();
-					System.out.println("\t|"+st.toString());
-				}
-			}
 		
-			
 		}
 		
-		
-		
-		
+	
 	}
 
 	public SootClass SootClassInUpdate() {
 		// TODO Auto-generated method stub
 		// 4. Wrap all other methods in src
-				for(SootMethod sm:src.getMethods()){
-					if(sm != this.srcmethod){
-						integratedClass.addMethod(SootUtilities.methodClone(sm));
-						SootUtilities.changeTypesInMethods(integratedClass,src,integratedClass);
-					}
-				}
 				
-				// 4. Wrap all other methods in other
-				for(SootMethod sm:other.getMethods()){
-					if(sm != this.othermethod){
-						integratedClass.addMethod(SootUtilities.methodClone(sm));
-						SootUtilities.changeTypesInMethods(integratedClass,other,integratedClass);
-					}
-				}
+		// 4. Wrap all other methods in other
+		for(SootMethod sm:other.getMethods()){
+			if(sm != this.othermethod && !integratedClass.declaresMethod(sm.getSubSignature())){
+				integratedClass.addMethod(SootUtilities.methodClone(sm));
+				SootUtilities.changeTypesInMethods(integratedClass,other,integratedClass);
+			}
+		}
 
-				// 5. Clean this class up
-				/**
-				 *  5.1 
-				 *  5.2 
-				 *  5.3
-				 *  5.4
-				 *  5.5
-				 *  
-				 */
+		// 5. Clean this class up	
 				
 				
-				
-				return this.integratedClass;
+		return this.integratedClass;
 	}
 
 	public void MethodCleanUp() {

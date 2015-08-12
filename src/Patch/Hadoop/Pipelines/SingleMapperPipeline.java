@@ -3,15 +3,19 @@ package Patch.Hadoop.Pipelines;
 import soot.Modifier;
 import soot.SootClass;
 import soot.SootMethod;
+import soot.Value;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Util.Util;
 
 public class SingleMapperPipeline {
 	SootMethod mapper;
+	SootMethod setup;
 	SootClass mapperClass;
+	Value job;
 	
-	public SingleMapperPipeline(SootClass appClass) {
+	public SingleMapperPipeline(Value key,SootClass appClass) {
 		// TODO Auto-generated constructor stub
+		job = key;
 		mapperClass = appClass;
 		assert(mapperClass.getSuperclass().getName().equals("org.apache.hadoop.mapreduce.Mapper"));
 		for(SootMethod sm:appClass.getMethods()){
@@ -20,12 +24,21 @@ public class SingleMapperPipeline {
 			if(sm.isConcrete() && 
 					sm.getName().equals("map") &&
 					sm.getModifiers()==Modifier.PUBLIC){
-				mapper = sm;
-				break;
+				mapper = sm;				
+			}
+			
+			else if(sm.isConcrete() && 
+					sm.getName().equals("setup") &&
+					sm.getModifiers()==Modifier.PUBLIC){
+				ConfigurePipelines.inst().createNewConfigurePipeline(job, appClass,sm);
 			}
 		}
+		
+		
 	}
-
+	
+	
+	
 	public SootMethod getSootMethod() {
 		// TODO Auto-generated method stub
 		return mapper;
@@ -33,6 +46,7 @@ public class SingleMapperPipeline {
 
 	public CFGNode[] getCommonAsset(SingleMapperPipeline other) {
 		// TODO Auto-generated method stub
+		
 		SootMethod otherMethod = other.getSootMethod();
 		return Util.getCommonAsset(mapper, otherMethod); 
 	}
@@ -41,5 +55,8 @@ public class SingleMapperPipeline {
 		// TODO Auto-generated method stub
 		return mapperClass;
 	}
-
+	
+	public Object getJob(){
+		return job;
+	}
 }

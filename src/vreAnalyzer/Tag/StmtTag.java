@@ -83,8 +83,9 @@ public class StmtTag implements Tag{
 	//////////////Analysis////////////////////////////////////////
 	/**
 	 * @return Call site describing call performed in this stmt; null if this stmt is not a call
+	 * @throws Exception 
 	 */
-	public CallSite initCallSite() {
+	public CallSite initCallSite() throws Throwable  {
 		// TODO Auto-generated method stub
 		Stmt sThis = loc.getStmt();
 		if (sThis.containsInvokeExpr()) {
@@ -105,11 +106,14 @@ public class StmtTag implements Tag{
 				Set<SootMethod> mLibTgts = new HashSet<SootMethod>();
 				
 				// Find and set the concrete call target
+				
+				
 				Util.getConcreteCallTargets(instInvExpr, mAppTgts, mLibTgts);
+				
 				
 				if (mAppTgts.isEmpty() && mLibTgts.isEmpty()) {
 					// TODO: See why this happens
-					System.out.println("WARNING: no app or lib calls found for call site: " + loc);
+					System.err.println("ERROR!!!: no app or lib call target found for call site: " + loc);
 				}
 				
 				// Create call site, storing it in field

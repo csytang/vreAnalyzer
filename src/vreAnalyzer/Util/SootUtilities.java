@@ -93,7 +93,7 @@ import soot.util.HashChain;
 public class SootUtilities {
 
 	
-	static boolean verbose = true;
+	static boolean verbose = false;
 
 	public static List copyFields(SootClass newClass, SootClass oldClass,Map<SootField,SootField> fieldMap) {
         List list = new LinkedList();
@@ -274,8 +274,8 @@ public class SootUtilities {
         while (fields.hasNext()) {
             SootField existField = (SootField) fields.next();
             Type type = existField.getType();
-
-            System.out.println("field with type " + type);
+            if(verbose)
+            	System.out.println("field with type " + type);
             if (type instanceof RefType) {
                 SootClass refClass = ((RefType) type).getSootClass();
 
@@ -314,8 +314,10 @@ public class SootUtilities {
      */
     public static void changeTypesInMethods(SootClass theClass,
             SootClass oldClass, SootClass newClass) {
-        System.out.println("fixing references on " + theClass);
-        System.out.println("replacing " + oldClass + " with " + newClass);
+    	if(verbose){
+    		System.out.println("[vreAnalyzer] fixing references on " + theClass);
+    		System.out.println("[vreAnalyzer] replacing " + oldClass + " with " + newClass);
+    	}
         ArrayList methodList = new ArrayList(theClass.getMethods());
 
         for (Iterator methods = methodList.iterator(); methods.hasNext();) {
@@ -466,7 +468,8 @@ public class SootUtilities {
                         // Fix up the method invokes.
                         InvokeExpr r = (InvokeExpr) value;
                         SootMethodRef methodRef = r.getMethodRef();
-                        System.out.println("invoke = " + r);
+                        if(verbose)
+                        	System.out.println("[vreAnalyzer] invoke = " + r);
 
                         List newParameterTypes = new LinkedList();
                         for (Iterator i = methodRef.parameterTypes().iterator(); i
@@ -474,14 +477,16 @@ public class SootUtilities {
                             Type type = (Type) i.next();
                             if (type instanceof RefType
                                     && ((RefType) type).getSootClass() == oldClass) {
-                                System.out.println("matchedParameter = "
+                            	if(verbose)
+                            		System.out.println("[vreAnalyzer] matchedParameter = "
                                         + newClass);
                                 newParameterTypes.add(RefType.v(newClass));
                             } else if (type instanceof RefType
                                     && ((RefType) type).getSootClass()
                                     .getName()
                                     .startsWith(oldClass.getName())) {
-                                System.out.println("matchedParameter = "
+                            	if(verbose)
+                            		System.out.println("[vreAnalyzer] matchedParameter = "
                                         + newClass);
                                 SootClass changeClass = _getInnerClassCopy(
                                         oldClass,
@@ -866,6 +871,14 @@ public class SootUtilities {
      *  then a RuntimeException is thrown that includes the names of
      *  all possible methods for that class at that level.
      */
+    /**
+     * It is unsafe for multiple same-name methods
+     * @deprecated
+     * @param theClass
+     * @param name
+     * @return
+     */
+    /**
     public static SootMethod searchForMethodByName(SootClass theClass,
             String name) {
         if (theClass == null) {
@@ -887,7 +900,8 @@ public class SootUtilities {
                         SootMethod method = (SootMethod) methods.next();
                         if (commaNeeded) {
                             // Add a comma after the first method
-                            results.append(", ");
+                            results.append(", "
+                            		+ "\n");
                         } else {
                             commaNeeded = true;
                         }
@@ -910,7 +924,7 @@ public class SootUtilities {
         throw new RuntimeException("Method " + name + " not found in class "
                 + previousClass);
     }
-
+     **/
    
 
     ///////////////////////////////////////////////////////////////////
@@ -929,7 +943,7 @@ public class SootUtilities {
 
             if (newClass.declaresFieldByName(oldField.getName())) {
                 // FIXME
-                throw new RuntimeException("Field " + oldField
+                throw new RuntimeException("[vreAnalyzer] Field " + oldField
                         + " cannot be folded into " + newClass
                         + " because its name is the same as "
                         + newClass.getFieldByName(oldField.getName()));

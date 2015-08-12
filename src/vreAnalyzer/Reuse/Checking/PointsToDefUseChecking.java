@@ -4,12 +4,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
 import soot.Local;
 import soot.SootMethod;
 import soot.jimple.AnyNewExpr;
-import soot.jimple.Ref;
-import soot.jimple.ThisRef;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
 import vreAnalyzer.ControlFlowGraph.DefUse.Use.Use;
@@ -17,7 +14,6 @@ import vreAnalyzer.PointsTo.PointsToGraph;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 
 public class PointsToDefUseChecking {
-	private static boolean verbose = false;
 	/**
 	 *  Rigid Mode is {@link PointsToGraph} equals 
 	 * @param curr
@@ -32,14 +28,7 @@ public class PointsToDefUseChecking {
 		if (!(obj instanceof PointsToGraph))
 			return false;
 		PointsToGraph otherPointsTo = (PointsToGraph) obj;
-		if(verbose){
-			System.out.println();
-			System.out.println("Compare points to graph");
-			System.out.println(currPointsTo.toString());
-			System.out.println("-------AND------------");
-			System.out.println(obj.toString());
-			System.out.println();
-		}
+		
 		
 		/////////////////////Def and Use//////////////////////////
 		List<Use>srcCurrAllUses = new LinkedList<Use>();
@@ -62,8 +51,6 @@ public class PointsToDefUseChecking {
 
 		if (currroots == null) {
 			if (otherroots != null){
-				if(verbose)
-					System.out.println("return false@52");
 				return false;
 			}
 		}
