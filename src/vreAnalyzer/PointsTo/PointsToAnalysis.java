@@ -86,8 +86,8 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 	
 	public PointsToAnalysis() {
 		super(true);
-		this.freeResultsOnTheFly = true;
-		this.verbose = false;
+		this.freeResultsOnTheFly = false;
+		this.verbose = true;
 		
 		// Create an empty analysis stack
 		this.analysisStack = new Stack<Context<SootMethod,CFGNode,PointsToGraph>>();
@@ -209,7 +209,8 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 					
 					// Mark this context as analysed at least once.
 					context.markAnalysed();
-
+					
+					/**
 					// Add return nodes to stack (only if there were callers).
 					Set<CallSite> callersSet =  contextTransitions.getCallers(context);
 					if (callersSet != null) {
@@ -227,9 +228,13 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 							// and if not, push it on to the stack.
 							if (!analysisStack.contains(callingContext)) {
 								analysisStack.push(callingContext);
+								if (!contexts.containsKey(callingContext.getMethod())) {
+									contexts.put((SootMethod) callingContext.getMethod(), new LinkedList<Context<SootMethod,CFGNode,PointsToGraph>>());
+								}
 							}
 						}
 					}
+					**/
 					
 					
 					// Free memory on-the-fly if not needed
@@ -293,7 +298,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 	 * @param context the context to initialise
 	 * @param entryValue the data flow value at the entry of this method
 	 */
-
+	
 	private void initContext(Context<SootMethod, CFGNode, PointsToGraph> context,PointsToGraph entryValue) {
 		// TODO Auto-generated method stub
 		// Initialise the MAIN context
@@ -324,6 +329,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 		analysisStack.add(context);
 		
 	}
+	
 	
 	/**
 	 * Performs operations on points-to graphs depending on the statement inside
@@ -529,8 +535,8 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 			}
 		}
 		 else if (stmt instanceof InvokeStmt) {
-			 if(verbose){
-					System.out.println("一个InvokeStmt");
+			if(verbose){
+				System.out.println("一个InvokeStmt");
 			}
 			// INVOKE without a return
 			InvokeExpr expr = stmt.getInvokeExpr();
@@ -595,7 +601,6 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 				NewArrayExpr argsExpr = new JNewArrayExpr(Scene.v().getRefType("java.lang.String"), IntConstant.v(0));
 				entryValue.assignNew(argsLocal, argsExpr);
 				entryValue.setFieldConstant(argsLocal, PointsToGraph.ARRAY_FIELD, PointsToGraph.STRING_CONST);
-				
 			}
 			
 			
@@ -874,6 +879,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 	 * <p>If the instance variable points to a summary node, then the returned
 	 * value is <tt>null</tt> signifying a <em>default</em> call-site.</p>
 	 */
+	
 	private Set<SootMethod> getTargets(SootMethod callerMethod, CFGNode callStmtNode, InvokeExpr ie, PointsToGraph ptg) {
 		Set<SootMethod> targets = new HashSet<SootMethod>();
 		SootMethod invokedMethod = ie.getMethod();
@@ -922,7 +928,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 				}
 			}
 			if (targets.isEmpty()) {
-				System.err.println("Warning! Null call at: " + callStmt+ " in " + callerMethod);
+				System.err.println("Warning! Null call target at:" + callStmt+ " in " + callerMethod);
 			}
 			return targets;
 		}

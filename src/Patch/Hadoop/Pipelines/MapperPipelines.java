@@ -12,12 +12,12 @@ public class MapperPipelines {
 	
 	// Singleton
 	private static MapperPipelines instance;
-	Map<Value,SingleMapperPipeline>mapPips;
+	Map<Object,SingleMapperPipeline>mapPips;
 	
 	
 	
 	public MapperPipelines(){
-		mapPips = new HashMap<Value,SingleMapperPipeline>();
+		mapPips = new HashMap<Object,SingleMapperPipeline>();
 	}
 	
 	public static MapperPipelines inst(){
@@ -26,11 +26,11 @@ public class MapperPipelines {
 		return instance;
 	}
 	
-	public void createNewSingleMap(Value job,SootClass appClass) {
+	public void createNewSingleMap(Object job,SootClass appClass) {
 		SingleMapperPipeline mp = new SingleMapperPipeline(job,appClass);
 		mapPips.put(job,mp);
 	}
-	public SingleMapperPipeline getMapperPipeline(Value job){
+	public SingleMapperPipeline getMapperPipeline(Object job){
 		return mapPips.get(job);
 	}
 	

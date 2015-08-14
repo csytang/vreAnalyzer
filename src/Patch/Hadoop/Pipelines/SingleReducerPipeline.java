@@ -11,9 +11,9 @@ public class SingleReducerPipeline {
 
 	SootMethod reduce;
 	SootClass reduceClass;
-	Value job;
+	Object job;
 	
-	public SingleReducerPipeline(Value key,SootClass appClass) {
+	public SingleReducerPipeline(Object key,SootClass appClass) {
 		// TODO Auto-generated constructor stub
 		job = key;
 		reduceClass = appClass;

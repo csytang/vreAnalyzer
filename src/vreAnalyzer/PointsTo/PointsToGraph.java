@@ -665,6 +665,10 @@ public class PointsToGraph {
 	 */
 	public void setFieldNew(Local lhs, SootField field, AnyNewExpr allocSite) {		
 		// You can't set field of a non-existent variable.
+		
+		if(!roots.containsKey(lhs))
+			return;
+		
 		assert_tmp (roots.containsKey(lhs));
 		
 		// Create this node in the heap, if it doesn't already exist

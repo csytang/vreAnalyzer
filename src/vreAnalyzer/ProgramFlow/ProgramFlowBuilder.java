@@ -11,11 +11,9 @@ import java.util.Map;
 import java.util.Set;
 
 import soot.FastHierarchy;
-import soot.RefType;
 import soot.Scene;
 import soot.SootClass;
 import soot.SootMethod;
-import soot.Type;
 import vreAnalyzer.ControlFlowGraph.CFG;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.Elements.CFGNode;
@@ -291,8 +289,9 @@ public class ProgramFlowBuilder {
 				}
 				catch (Exception e) { }
 			}
-			if (entryMethods.isEmpty())
+			if (entryMethods.isEmpty()){
 				throw new EntryNotFoundException("No 'main' found in app classes");
+			}
 		}
 		
 		// Given entry class's 'main' is the first entry method in list

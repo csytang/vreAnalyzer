@@ -9,21 +9,21 @@ import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
 public class JobExternalConfigurePipelines {
 
 	private static JobExternalConfigurePipelines instance;
-	Map<Value,SingleJobExternalConfigurePipeline>pipes;
+	Map<Object,SingleJobExternalConfigurePipeline>pipes;
 	public JobExternalConfigurePipelines(){
-		pipes = new HashMap<Value,SingleJobExternalConfigurePipeline>();
+		pipes = new HashMap<Object,SingleJobExternalConfigurePipeline>();
 	}
 	public static JobExternalConfigurePipelines inst(){
 		if(instance==null)
 			instance = new JobExternalConfigurePipelines();
 		return instance;
 	}
-	public void createNewJobExternalConfigurePipeline(Value job,SootMethod appMethod,NodeDefUses nodedefuse) {
+	public void createNewJobExternalConfigurePipeline(Object job,SootMethod appMethod,NodeDefUses nodedefuse) {
 		SingleJobExternalConfigurePipeline ecp = new SingleJobExternalConfigurePipeline(job,appMethod,nodedefuse);
 		pipes.put(job,ecp);
 	}
 
-	public SingleJobExternalConfigurePipeline getEnConfigurePipeline(Value value) {
+	public SingleJobExternalConfigurePipeline getEnConfigurePipeline(Object value) {
 		// TODO Auto-generated method stub
 		return pipes.get(value);
 	}

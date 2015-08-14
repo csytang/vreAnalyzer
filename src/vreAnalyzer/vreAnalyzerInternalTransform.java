@@ -2,7 +2,7 @@ package vreAnalyzer;
 
 import java.util.Map;
 
-import Patch.Hadoop.HubClassParser;
+import Patch.Hadoop.ProjectParser;
 import soot.SceneTransformer;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
@@ -26,19 +26,22 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 					e.printStackTrace();
 				}
 				System.out.println("[vreAnalyzer] Program flow build[Finish]");
+				
 				System.out.println("[vreAnalyzer] Points to graph build[Start]");
 				PointsToAnalysis.inst().doAnalysis();
 				System.out.println("[vreAnalyzer] Points to graph build[Finish]");
 				// Finish
+				
 				System.out.println("[vreAnalyzer] Internal transform[Finish]");
 				
 				// Display Reusable Result by checking the mode
 				if(Options.getMode()==reusableMode.Normal){
 					NormalPipelines.inst().findCommonAssetsandReset();
 				}else if(Options.getMode()==reusableMode.Hadoop){
-					HubClassParser.inst(ProgramFlowBuilder.inst().getEntryClass()).Parse();
-					HubClassParser.inst().showCommons();
+					ProjectParser.inst().ClassParser();
+					ProjectParser.inst().showCommons();
 				}
+				
 		
 	}
 

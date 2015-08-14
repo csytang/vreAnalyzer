@@ -13,13 +13,10 @@ public class ConfigurePipelines {
 	
 	// Singleton
 	private static ConfigurePipelines instance;
-	Map<Value,SingleConfigurePipeline>configPips;
-	private boolean verbose = true;
-	
-	
+	Map<Object,SingleConfigurePipeline>configPips;	
 	
 	public ConfigurePipelines(){
-		configPips = new HashMap<Value,SingleConfigurePipeline>();
+		configPips = new HashMap<Object,SingleConfigurePipeline>();
 	}
 	
 	public static ConfigurePipelines inst(){
@@ -28,12 +25,12 @@ public class ConfigurePipelines {
 		return instance;
 	}
 	
-	public void createNewConfigurePipeline(Value job,SootClass appClass,SootMethod appMethod) {
+	public void createNewConfigurePipeline(Object job,SootClass appClass,SootMethod appMethod) {
 		SingleConfigurePipeline mp = new SingleConfigurePipeline(job,appClass,appMethod);
 		configPips.put(job,mp);
 	}
 
-	public SingleConfigurePipeline getConfigurePipeline(Value value) {
+	public SingleConfigurePipeline getConfigurePipeline(Object value) {
 		// TODO Auto-generated method stub
 		return configPips.get(value);
 	}

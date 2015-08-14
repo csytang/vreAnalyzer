@@ -44,7 +44,6 @@ import soot.util.NumberedString;
 import vreAnalyzer.Context.Context;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
-import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.PointsTo.PointsToGraph;
@@ -228,9 +227,9 @@ public class Util {
 	
 	
 	public static Context containsBeforeAfterValue(CFGNode currcfg,List<Context<SootMethod, CFGNode, PointsToGraph>> currContexts){
-		for(Context thiscontextit:currContexts){
-			if(thiscontextit.getValueAfter(currcfg)!=null && thiscontextit.getValueAfter(currcfg)!=null){
-				return thiscontextit;
+		for(Context cuurcontextit:currContexts){
+			if(cuurcontextit.getValueAfter(currcfg)!=null && cuurcontextit.getValueAfter(currcfg)!=null){
+				return cuurcontextit;
 			}
 		}
 		return null;
@@ -285,6 +284,7 @@ public class Util {
 		return ae1.getBase().equals(ae2.getBase()) && ae1.getIndex().equals(ae2.getIndex());
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static CFGNode[]getCommonAsset(SootMethod src,SootMethod other){
 		// Obtain all contexts
 		
@@ -302,44 +302,52 @@ public class Util {
 		CFGNode exitOther = otherCFG.EXIT;
 		Context otherallcontext = Util.containsBeforeAfterValue(exitOther,otherContexts);
 		
-						
+					
 		// Use lattice to compare
 		List<CFGNode>thiscfgNodes = thisCFG.getNodes();
 		List<CFGNode>othercfgNodes = otherCFG.getNodes();
 		int m = thiscfgNodes.size();
 		int n = othercfgNodes.size();
-		int max = -1;
-		int x=0,y=0;
-		int[][] lattice = new int[m+1][n+1];
-		for(int i = 1;i <= m;++i) lattice[i][0] = 0;
-		for(int j = 1;j <= n;++j) lattice[0][j] = 0;
+		
+		boolean findStartPoint = false;
+		// get start and end index
+		int thisStartIndex = 0;
+		int thisEndIndex = 0;
+		int otherStartIndex = 0;
+		int otherEndIndex = 0;
 		int i,j;
 		for(i = 1;i <= m;++i){
 			for(j = 1;j <=n;++j){
 				NodeDefUses otherCurr = (NodeDefUses) othercfgNodes.get(j-1);
 				NodeDefUses thisCurr = (NodeDefUses) thiscfgNodes.get(i-1);
-				
-				
 				if(PointsToDefUseChecking.P2DefUseGroughEquals((PointsToGraph) thisallcontext.getValueBefore(thisCurr), otherallcontext.getValueBefore(otherCurr), src, other, thisCurr, otherCurr)
-					&& PointsToDefUseChecking.P2DefUseGroughEquals((PointsToGraph) thisallcontext.getValueAfter(thisCurr), otherallcontext.getValueAfter(otherCurr), src, other, thisCurr, otherCurr))
+					)
 					{
-						lattice[i][j] = lattice[i-1][j-1]+1;
-				}else
-					lattice[i][j] = 0;
-				if(lattice[i][j]>max){
-					max = lattice[i][j];
-					x = i;
-					y = j;
-				}
+					    thisStartIndex = i-1;
+						otherStartIndex = j-1;
+						findStartPoint = true;
+						break;
+			        }
 			}
-			
+			if(findStartPoint)
+				break;
+		}
+		i = thisStartIndex+1;
+		j = otherStartIndex+1;
+		while(i<=m && j<=n){
+			NodeDefUses otherCurr = (NodeDefUses) othercfgNodes.get(j-1);
+			NodeDefUses thisCurr = (NodeDefUses) thiscfgNodes.get(i-1);
+			if(PointsToDefUseChecking.P2DefUseGroughEquals((PointsToGraph) thisallcontext.getValueBefore(thisCurr), otherallcontext.getValueBefore(otherCurr), src, other, thisCurr, otherCurr)
+				){
+				thisEndIndex = i-1;
+				otherEndIndex = j-1;
+				i++;
+				j++;
+			}else
+				break;
 		}
 		
-		// get start and end index
-		int thisStartIndex = x-max;
-		int thisEndIndex = x-1;
-		int otherStartIndex = y-max;
-		int otherEndIndex = y-1;
+		
 		// extend existing scope to large if there is no context change   
 
 		commonIndex[0] = thiscfgNodes.get(thisStartIndex);
@@ -347,12 +355,9 @@ public class Util {
 		commonIndex[2] = othercfgNodes.get(otherStartIndex);
 		commonIndex[3] = othercfgNodes.get(otherEndIndex);
 						
-		if(max<=0){		
-			return null;
-		}
-		else{
-			return commonIndex;
-		}
+		
+		return commonIndex;
+		
 		
 	}
 	

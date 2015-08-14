@@ -17,24 +17,15 @@
  */
 package vreAnalyzer.SootPresentation;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import soot.Scene;
 import soot.SootMethod;
-import soot.Unit;
-import soot.jimple.toolkits.callgraph.Edge;
-import soot.toolkits.graph.DirectedGraph;
 import soot.toolkits.graph.ExceptionalUnitGraph;
 import vreAnalyzer.ControlFlowGraph.CFG;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.PointsTo.ProgramRepresentation;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
-import vreAnalyzer.Tag.MethodTag;
 
 
 /**
@@ -64,13 +55,10 @@ public class DefaultJimpleRepresentation implements ProgramRepresentation<SootMe
 	 */
 	@Override
 	public List<SootMethod> getEntryPoints() {
-		/*
-		List<MethodNode> entrypoints = new LinkedList<MethodNode>();
-		for(SootMethod sm:ProgramFlowBuilder.inst().getEntryMethods()){
-			entrypoints.add(ProgramFlowBuilder.inst().mapToMethodNode(sm));
-		}
-		return entrypoints;*/
+		
+		
 		return ProgramFlowBuilder.inst().getAppConcreteMethods();
+		//return ProgramFlowBuilder.inst().getEntryMethods();
 	}
 
 	/**

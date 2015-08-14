@@ -19,7 +19,6 @@ import soot.tagkit.AttributeValueException;
 import soot.tagkit.Tag;
 import vreAnalyzer.Elements.CallSite;
 import vreAnalyzer.Elements.Location;
-import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.Util.Util;
 
 public class MethodTag implements Tag {

@@ -7,15 +7,15 @@ public class WordCount2$IntSumReducer extends org.apache.hadoop.mapreduce.Reduce
         WordCount2$IntSumReducer r0;
         org.apache.hadoop.io.IntWritable $r1;
 
-        r0 := @this;
+        r0 := @this: WordCount2$IntSumReducer;
 
-        specialinvoke r0.<init>();
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
 
         $r1 = new org.apache.hadoop.io.IntWritable;
 
-        specialinvoke $r1.<init>();
+        specialinvoke $r1.<org.apache.hadoop.io.IntWritable: void <init>()>();
 
-        r0.result = $r1;
+        r0.<WordCount2$IntSumReducer: org.apache.hadoop.io.IntWritable result> = $r1;
 
         return;
     }
@@ -32,41 +32,41 @@ public class WordCount2$IntSumReducer extends org.apache.hadoop.mapreduce.Reduce
         java.lang.Object $r6;
         int $i0, i1;
 
-        r0 := @this;
+        r0 := @this: WordCount2$IntSumReducer;
 
-        r1 := @parameter0;
+        r1 := @parameter0: org.apache.hadoop.io.Text;
 
-        r2 := @parameter1;
+        r2 := @parameter1: java.lang.Iterable;
 
-        r3 := @parameter2;
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
 
         i1 = 0;
 
-        r5 = r2.iterator();
+        r5 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
 
         goto label2;
 
      label1:
-        $r6 = r5.next();
+        $r6 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
 
         r4 = (org.apache.hadoop.io.IntWritable) $r6;
 
-        $i0 = r4.get();
+        $i0 = virtualinvoke r4.<org.apache.hadoop.io.IntWritable: int get()>();
 
         i1 = i1 + $i0;
 
      label2:
-        $z0 = r5.hasNext();
+        $z0 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
 
         if $z0 != 0 goto label1;
 
-        $r7 = r0.result;
+        $r7 = r0.<WordCount2$IntSumReducer: org.apache.hadoop.io.IntWritable result>;
 
-        $r7.set(i1);
+        virtualinvoke $r7.<org.apache.hadoop.io.IntWritable: void set(int)>(i1);
 
-        $r8 = r0.result;
+        $r8 = r0.<WordCount2$IntSumReducer: org.apache.hadoop.io.IntWritable result>;
 
-        r3.write(r1, $r8);
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r8);
 
         return;
     }
@@ -79,13 +79,13 @@ public class WordCount2$IntSumReducer extends org.apache.hadoop.mapreduce.Reduce
         org.apache.hadoop.mapreduce.Reducer$Context r3, $r4;
         org.apache.hadoop.io.Text $r6;
 
-        r0 := @this;
+        r0 := @this: WordCount2$IntSumReducer;
 
-        r1 := @parameter0;
+        r1 := @parameter0: java.lang.Object;
 
-        r2 := @parameter1;
+        r2 := @parameter1: java.lang.Iterable;
 
-        r3 := @parameter2;
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
 
         $r6 = (org.apache.hadoop.io.Text) r1;
 
@@ -93,7 +93,7 @@ public class WordCount2$IntSumReducer extends org.apache.hadoop.mapreduce.Reduce
 
         $r4 = (org.apache.hadoop.mapreduce.Reducer$Context) r3;
 
-        r0.reduce($r6, $r5, $r4);
+        virtualinvoke r0.<WordCount2$IntSumReducer: void reduce(org.apache.hadoop.io.Text,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r6, $r5, $r4);
 
         return;
     }

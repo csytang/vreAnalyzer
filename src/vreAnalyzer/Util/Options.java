@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class Options {
 	private static String entryClassName = null; // default: find unique 'main' in program
-	
+	private static boolean processJar = false;
 	/** Indicates the behavior of a call model: 'this' is defined and args (including 'this) are used, or only args are used, or no def nor use. */
 	public static enum DUModelBehavior { DEF_USES_ALL, USES_ALL, NONE };
 	
@@ -130,7 +130,13 @@ public class Options {
 			}
 			else if (arg.equals("-process-dir")) {
 				// OVERRIDE of soot option; soot seems to fail with -process-dir in many cases
-				dirProc.processDir(args[++argIdx]);
+				if(!args[argIdx+1].endsWith("jar")){
+					dirProc.processDir(args[++argIdx]);
+					processJar = false;
+				}else{
+					processJar = true;
+					argsSoot.add(arg);
+				}
 			}
 			else
 			{
@@ -147,12 +153,19 @@ public class Options {
 		}
 	
 		// add -process-dir classes at the end of soot options
-		argsSoot.addAll(dirProc.getClassNames());
-		
-		//argsSoot.add("–allow-phantom-refs");
-		for(String single: dirProc.getClassNames()){
-			if(single.endsWith(entryClassName)){
-				entryClassName = single;
+		if(!processJar){
+			argsSoot.addAll(dirProc.getClassNames());
+			//argsSoot.add("–allow-phantom-refs");
+			if(entryClassName!=null){
+				for(String single: dirProc.getClassNames()){
+					if(single.endsWith(entryClassName)){
+						if(single.indexOf(entryClassName)==0)
+							entryClassName = single;
+						else if((single.charAt(single.indexOf(entryClassName)-1))=='.'||
+								(single.charAt(single.indexOf(entryClassName)-1))=='$')
+							entryClassName = single;
+					}
+				}
 			}
 		}
 		

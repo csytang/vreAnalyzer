@@ -13,11 +13,11 @@ public class SingleJobExternalConfigurePipeline {
 	SootMethod setup;
 	SootMethod sourceMethod;
 	
-	Value job;
+	Object job;
 	List<NodeDefUses>settings;
-	boolean verbose = true;
+	boolean verbose = false;
 	
-	public SingleJobExternalConfigurePipeline(Value job,
+	public SingleJobExternalConfigurePipeline(Object job,
 			SootMethod appMethod,NodeDefUses use) {
 		// TODO Auto-generated constructor stub
 		this.job = job;
@@ -52,7 +52,8 @@ public class SingleJobExternalConfigurePipeline {
 					System.out.println("Same:\t"+curr.toString()+"\n\t"+other.toString());
 				}
 			}else{
-				System.out.println("Not Same:\t"+curr.toString()+"\n\t"+other.toString());
+				if(verbose)
+					System.out.println("Not Same:\t"+curr.toString()+"\n\t"+other.toString());
 			}
 		}
 		

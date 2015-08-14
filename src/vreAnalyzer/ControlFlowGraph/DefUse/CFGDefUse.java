@@ -54,7 +54,7 @@ import vreAnalyzer.Util.Options;
 
 public class CFGDefUse extends CFG {
 
-	private boolean verbose = false;
+	private boolean verbose = true;
 	
 	
 	/** Simple comparator based on toString, to just order variables canonically. */

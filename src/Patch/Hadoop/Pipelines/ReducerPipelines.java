@@ -8,11 +8,11 @@ import soot.Value;
 public class ReducerPipelines {
 		// Singleton
 		private static ReducerPipelines instance;
-		Map<Value,SingleReducerPipeline>reducePips;
+		Map<Object,SingleReducerPipeline>reducePips;
 		
 		
 		public ReducerPipelines(){
-			reducePips = new HashMap<Value,SingleReducerPipeline>();
+			reducePips = new HashMap<Object,SingleReducerPipeline>();
 		}
 		
 		public static ReducerPipelines inst(){
@@ -21,12 +21,12 @@ public class ReducerPipelines {
 			return instance;
 		}
 		
-		public void createNewSingleReducer(Value key,SootClass appClass) {
+		public void createNewSingleReducer(Object key,SootClass appClass) {
 			SingleReducerPipeline re = new SingleReducerPipeline(key,appClass);
 			reducePips.put(key,re);
 		}
 
-		public SingleReducerPipeline getReducerPipeline(Value key) {
+		public SingleReducerPipeline getReducerPipeline(Object key) {
 			// TODO Auto-generated method stub
 			return this.reducePips.get(key);
 		}

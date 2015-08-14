@@ -3,6 +3,7 @@ package vreAnalyzer;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
 import soot.PackManager;
 import soot.Transform;
 import vreAnalyzer.Util.ConflictModelExpection;
@@ -16,8 +17,8 @@ public class vreAnalyzer{
 	
 	public static void main(String[]args) throws ConflictModelExpection{
 		// All input command list
-		@SuppressWarnings("unchecked")
-		List<String>sootArgs = new LinkedList(Arrays.asList(args));
+		
+		List<String>sootArgs = new LinkedList<String>(Arrays.asList(args));
 				
 		// Enable whole program mode
 		sootArgs.add("-W");
@@ -25,7 +26,8 @@ public class vreAnalyzer{
 		sootArgs.add("-p");
 		sootArgs.add("wjop");
 		sootArgs.add("enabled:true");
-			
+		
+		sootArgs.add("-allow-phantom-refs");
 		// Enable points-to analysis
 		sootArgs.add("-p");
 		sootArgs.add("cg");
@@ -45,7 +47,7 @@ public class vreAnalyzer{
 		
 		// Output
 		sootArgs.add("-f");
-		sootArgs.add("j");
+		sootArgs.add("jimple");
 		//sootArgs.add("class");
 		
 		

@@ -11,9 +11,9 @@ public class SingleMapperPipeline {
 	SootMethod mapper;
 	SootMethod setup;
 	SootClass mapperClass;
-	Value job;
+	Object job;
 	
-	public SingleMapperPipeline(Value key,SootClass appClass) {
+	public SingleMapperPipeline(Object key,SootClass appClass) {
 		// TODO Auto-generated constructor stub
 		job = key;
 		mapperClass = appClass;

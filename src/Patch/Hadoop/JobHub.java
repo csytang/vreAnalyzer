@@ -14,9 +14,10 @@ public class JobHub {
 	private Value inputPath;
 	private Value outputPath;
 	
+	private Object job;
 	
-	public JobHub(){
-		
+	public JobHub(Object job){
+		this.job = job;
 	}
 	public void setMapperClass(SootClass mp){
 		this.mapperClass = mp;
@@ -43,8 +44,10 @@ public class JobHub {
 	public SootClass getReducerClass(){
 		return this.reducerClass;
 	}
-	
-	
+
+	public String getJobName(){
+		return job.toString();
+	}
 	public void setCombinerClass(SootClass combiner) {
 		// TODO Auto-generated method stub
 		combinerClass = combiner;
