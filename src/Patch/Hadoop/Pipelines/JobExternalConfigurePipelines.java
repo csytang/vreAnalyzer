@@ -3,7 +3,6 @@ package Patch.Hadoop.Pipelines;
 import java.util.HashMap;
 import java.util.Map;
 import soot.SootMethod;
-import soot.Value;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
 
 public class JobExternalConfigurePipelines {

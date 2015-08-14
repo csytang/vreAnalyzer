@@ -58,7 +58,7 @@ public class DefaultJimpleRepresentation implements ProgramRepresentation<SootMe
 		
 		
 		return ProgramFlowBuilder.inst().getAppConcreteMethods();
-		//return ProgramFlowBuilder.inst().getEntryMethods();
+		
 	}
 
 	/**

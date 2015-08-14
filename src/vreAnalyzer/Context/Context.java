@@ -2,7 +2,6 @@ package vreAnalyzer.Context;
 
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -128,13 +127,6 @@ public class Context<SootMethod,CFGNode,PointsToGraph> implements soot.Context, 
 				return numbers.get(u) - numbers.get(v);
 			}
 		});
-		
-		
-		
-		Iterator<CFGNode> cfgit = orderedNodes.iterator();
-		while(cfgit.hasNext()){
-			this.workList.add(cfgit.next());
-		}
 		
 	}
 

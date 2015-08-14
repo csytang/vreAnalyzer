@@ -86,7 +86,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 	
 	public PointsToAnalysis() {
 		super(true);
-		this.freeResultsOnTheFly = false;
+		this.freeResultsOnTheFly = true;
 		this.verbose = true;
 		
 		// Create an empty analysis stack
@@ -209,8 +209,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 					
 					// Mark this context as analysed at least once.
 					context.markAnalysed();
-					
-					/**
+
 					// Add return nodes to stack (only if there were callers).
 					Set<CallSite> callersSet =  contextTransitions.getCallers(context);
 					if (callersSet != null) {
@@ -228,13 +227,9 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 							// and if not, push it on to the stack.
 							if (!analysisStack.contains(callingContext)) {
 								analysisStack.push(callingContext);
-								if (!contexts.containsKey(callingContext.getMethod())) {
-									contexts.put((SootMethod) callingContext.getMethod(), new LinkedList<Context<SootMethod,CFGNode,PointsToGraph>>());
-								}
 							}
 						}
 					}
-					**/
 					
 					
 					// Free memory on-the-fly if not needed
@@ -298,7 +293,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 	 * @param context the context to initialise
 	 * @param entryValue the data flow value at the entry of this method
 	 */
-	
+
 	private void initContext(Context<SootMethod, CFGNode, PointsToGraph> context,PointsToGraph entryValue) {
 		// TODO Auto-generated method stub
 		// Initialise the MAIN context
@@ -329,7 +324,6 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 		analysisStack.add(context);
 		
 	}
-	
 	
 	/**
 	 * Performs operations on points-to graphs depending on the statement inside

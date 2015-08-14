@@ -1,12 +1,8 @@
 package Patch.Hadoop.Pipelines;
-
-
 import java.util.HashMap;
 import java.util.Map;
-
 import soot.SootClass;
 import soot.SootMethod;
-import soot.Value;
 
 
 public class ConfigurePipelines {

@@ -302,52 +302,55 @@ public class ProjectParser {
 						
 						
 				// Get the common asset of other configuration
-				Map<NodeDefUses,NodeDefUses> commonEx = srcJobexConfigure.getCommonAsset(otherJobexConfigure);
-				if(verbose){
-					if(commonEx.size()==0)
-						System.out.println("No common parts in extra-configue");
-					else{
-						System.out.println("The common parts in extra configuration are:");
-						for(Map.Entry<NodeDefUses, NodeDefUses>entry : commonEx.entrySet()){
-							System.out.println("Node in src:\t|"+entry.getKey().toString()+"\n Node in other:\t|"+entry.getValue().toString());
+				if(srcJobexConfigure!=null){
+					Map<NodeDefUses,NodeDefUses> commonEx = srcJobexConfigure.getCommonAsset(otherJobexConfigure);
+					if(verbose){
+						if(commonEx.isEmpty())
+							System.out.println("No common parts in extra-configue");
+						else{
+							System.out.println("The common parts in extra configuration are:");
+							for(Map.Entry<NodeDefUses, NodeDefUses>entry : commonEx.entrySet()){
+								System.out.println("Node in src:\t|"+entry.getKey().toString()+"\n Node in other:\t|"+entry.getValue().toString());
+							}
 						}
 					}
 				}
-						
-				// Get the common asset of configuration
-				CFGNode[] configcommons = srcConfigure.getCommonAsset(otherConfigure);
-				if(verbose){
-					SootClass configure = jobtoHub.get(indextoJob.get(i)).getConfigureClass();
-					SootClass otherconfigure = jobtoHub.get(indextoJob.get(j)).getConfigureClass();
-					System.out.println("StartIndex and EndIndex Configuration in \t"+configure.getName()+"\t is");
-					System.out.println("Start:\t"+configcommons[0].toString()+"\t|\tEnd:\t"+configcommons[1].toString());
-					System.out.println("StartIndex and EndIndex Configuration in \t"+otherconfigure.getName()+"\t is");
-					System.out.println("Start:\t"+configcommons[2].toString()+"\t|\tEnd:\t"+configcommons[3].toString());
+				if(srcConfigure!=null){		
+					// Get the common asset of configuration
+					CFGNode[] configcommons = srcConfigure.getCommonAsset(otherConfigure);
+					if(verbose){
+						SootClass configure = jobtoHub.get(indextoJob.get(i)).getConfigureClass();
+						SootClass otherconfigure = jobtoHub.get(indextoJob.get(j)).getConfigureClass();
+						System.out.println("StartIndex and EndIndex Configuration in \t"+configure.getName()+"\t is");
+						System.out.println("Start:\t"+configcommons[0].toString()+"\t|\tEnd:\t"+configcommons[1].toString());
+						System.out.println("StartIndex and EndIndex Configuration in \t"+otherconfigure.getName()+"\t is");
+						System.out.println("Start:\t"+configcommons[2].toString()+"\t|\tEnd:\t"+configcommons[3].toString());
+					}
+				}
+				if(srcMapper!=null){
+					// Get the common asset of mapper
+					CFGNode[] mappercommons = srcMapper.getCommonAsset(otherMapper);
+					if(verbose){
+						SootClass mapper = jobtoHub.get(indextoJob.get(i)).getMapperClass();
+						SootClass othermapper = jobtoHub.get(indextoJob.get(j)).getMapperClass();
+						System.out.println("StartIndex and EndIndex Map in \t"+mapper.getName()+"\t is");
+						System.out.println("Start:\t"+mappercommons[0].toString()+"\t|\tEnd:\t"+mappercommons[1].toString());
+						System.out.println("StartIndex and EndIndex Map in \t"+othermapper.getName()+"\t is");
+						System.out.println("Start:\t"+mappercommons[2].toString()+"\t|\tEnd:\t"+mappercommons[3].toString());
+					}
 				}
 						
-						
-				// Get the common asset of mapper
-				CFGNode[] mappercommons = srcMapper.getCommonAsset(otherMapper);
-				if(verbose){
-					SootClass mapper = jobtoHub.get(indextoJob.get(i)).getMapperClass();
-					SootClass othermapper = jobtoHub.get(indextoJob.get(j)).getMapperClass();
-					System.out.println("StartIndex and EndIndex Map in \t"+mapper.getName()+"\t is");
-					System.out.println("Start:\t"+mappercommons[0].toString()+"\t|\tEnd:\t"+mappercommons[1].toString());
-					System.out.println("StartIndex and EndIndex Map in \t"+othermapper.getName()+"\t is");
-					System.out.println("Start:\t"+mappercommons[2].toString()+"\t|\tEnd:\t"+mappercommons[3].toString());
-				}
-						
-						
-						
-				// Get the common asset of reduce
-				CFGNode[] reducercommons = srcReducer.getCommonAsset(otherReducer);
-				if(verbose){
-					SootClass reducer = jobtoHub.get(indextoJob.get(i)).getReducerClass();
-					SootClass otherreducer = jobtoHub.get(indextoJob.get(j)).getReducerClass();
-					System.out.println("StartIndex and EndIndex Map in \t"+reducer.getName()+"\t is");
-					System.out.println("Start:\t"+reducercommons[0].toString()+"\t|\tEnd:\t"+reducercommons[1].toString());
-					System.out.println("StartIndex and EndIndex Map in \t"+otherreducer.getName()+"\t is");
-					System.out.println("Start:\t"+reducercommons[2].toString()+"\t|\tEnd:\t"+reducercommons[3].toString());
+				if(srcReducer!=null){		
+					// Get the common asset of reduce
+					CFGNode[] reducercommons = srcReducer.getCommonAsset(otherReducer);
+					if(verbose){
+						SootClass reducer = jobtoHub.get(indextoJob.get(i)).getReducerClass();
+						SootClass otherreducer = jobtoHub.get(indextoJob.get(j)).getReducerClass();
+						System.out.println("StartIndex and EndIndex Map in \t"+reducer.getName()+"\t is");
+						System.out.println("Start:\t"+reducercommons[0].toString()+"\t|\tEnd:\t"+reducercommons[1].toString());
+						System.out.println("StartIndex and EndIndex Map in \t"+otherreducer.getName()+"\t is");
+						System.out.println("Start:\t"+reducercommons[2].toString()+"\t|\tEnd:\t"+reducercommons[3].toString());
+					}
 				}
 				if(verbose)
 					System.out.println("Finish comparing job: #"+i+" with #"+j+":");

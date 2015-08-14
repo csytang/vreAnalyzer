@@ -35,13 +35,14 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 				System.out.println("[vreAnalyzer] Internal transform[Finish]");
 				
 				// Display Reusable Result by checking the mode
+				/**
 				if(Options.getMode()==reusableMode.Normal){
 					NormalPipelines.inst().findCommonAssetsandReset();
 				}else if(Options.getMode()==reusableMode.Hadoop){
 					ProjectParser.inst().ClassParser();
 					ProjectParser.inst().showCommons();
 				}
-				
+				**/
 		
 	}
 

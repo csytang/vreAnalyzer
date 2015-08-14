@@ -228,7 +228,7 @@ public class Util {
 	
 	public static Context containsBeforeAfterValue(CFGNode currcfg,List<Context<SootMethod, CFGNode, PointsToGraph>> currContexts){
 		for(Context cuurcontextit:currContexts){
-			if(cuurcontextit.getValueAfter(currcfg)!=null && cuurcontextit.getValueAfter(currcfg)!=null){
+			if(cuurcontextit.getValueBefore(currcfg)!=null && cuurcontextit.getValueAfter(currcfg)!=null){
 				return cuurcontextit;
 			}
 		}

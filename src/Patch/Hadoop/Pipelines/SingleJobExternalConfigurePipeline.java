@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import soot.SootMethod;
-import soot.Value;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
 
 public class SingleJobExternalConfigurePipeline {
@@ -40,6 +39,8 @@ public class SingleJobExternalConfigurePipeline {
 	public Map<NodeDefUses,NodeDefUses> getCommonAsset(SingleJobExternalConfigurePipeline otherJobexConfigure) {
 		// TODO Auto-generated method stub
 		Map<NodeDefUses,NodeDefUses>commons = new HashMap<NodeDefUses,NodeDefUses>();
+		if(otherJobexConfigure==null || this.settings== null)
+			return commons;
 		List<NodeDefUses>othersettings = otherJobexConfigure.extractSettings();
 		
 		for(int i = 0;i< this.settings.size();i++){

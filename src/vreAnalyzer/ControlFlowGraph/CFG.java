@@ -266,7 +266,7 @@ public class CFG {
 	}
 	public void tranverseCurrent(CFGNode curr){
 		System.out.println(curr);
-		if(curr.toString()=="EX"){
+		if((curr.toString()).equals("EX")){
 			return;
 		}else{
 			if(!curr.getSuccs().isEmpty()){
