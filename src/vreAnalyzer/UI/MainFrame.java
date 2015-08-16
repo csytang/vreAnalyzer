@@ -1,7 +1,6 @@
 package vreAnalyzer.UI;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -26,37 +25,45 @@ import javax.swing.JSeparator;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 public class MainFrame extends JFrame {
-
+	
+	private static MainFrame instance;
 	private JPanel contentPane;
 	private JTextField textField;
-
+	private Set<File>target;
+	private Set<File>supporingjars;
+	private Set<File>sources;
+	
+	
+	
 	/**
 	 * Launch the application.
 	 */
+
+
+	
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainFrame frame = new MainFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		inst();
 	}
 
 	/**
 	 * Create the frame.
 	 */
+	public static MainFrame inst(){
+		if(instance==null){
+			instance = new MainFrame();
+		}
+		return instance;
+	}
 	public MainFrame() {
 		setTitle("vreAnalyzer");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 720);
-		
+		setLocationRelativeTo(null);
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
@@ -66,7 +73,8 @@ public class MainFrame extends JFrame {
 		JMenuItem mntmNew = new JMenuItem("New...");
 		mntmNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new NewProjectPanel();
+				NewProjectPanel npp = new NewProjectPanel(instance);
+				npp.setLocationRelativeTo(instance);
 			}
 		});
 		mnFile.add(mntmNew);
@@ -104,12 +112,7 @@ public class MainFrame extends JFrame {
 		JMenuItem mntmAbout = new JMenuItem("About");
 		mntmAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					new About();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				About.inst(instance);
 			}
 		});
 		mnHelp.add(mntmAbout);
@@ -180,6 +183,23 @@ public class MainFrame extends JFrame {
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
 		tabbedPane.addTab("Statistics", null, scrollPane_2, null);
+		setVisible(true);
 	}
-
+	
+	public void setTargets(Set<File>targets){
+		this.target = targets;
+	}
+	
+	public void setSupporingJars(Set<File>support){
+		this.supporingjars = support;
+	}
+	public void setSourceCode(Set<File>source){
+		this.sources = source;
+	}
+	
+	public void generateSootCommand(){
+		String sootCommand = "";
+		
+	}
+	
 }

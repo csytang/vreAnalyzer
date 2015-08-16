@@ -55,10 +55,8 @@ public class DefaultJimpleRepresentation implements ProgramRepresentation<SootMe
 	 */
 	@Override
 	public List<SootMethod> getEntryPoints() {
-		
-		
 		return ProgramFlowBuilder.inst().getAppConcreteMethods();
-		
+		//return ProgramFlowBuilder.inst().getEntryMethods();
 	}
 
 	/**

@@ -118,7 +118,7 @@ public class Context<SootMethod,CFGNode,PointsToGraph> implements soot.Context, 
 			num++;
 		}
 		
-		numbers.put(orderedNodes.get(orderedNodes.size()-1), Integer.MAX_VALUE);
+		numbers.put(null, Integer.MAX_VALUE);
 		
 		// Now, create a sorted set with a comparator created on-the-fly using
 		// the total order.
@@ -127,7 +127,9 @@ public class Context<SootMethod,CFGNode,PointsToGraph> implements soot.Context, 
 				return numbers.get(u) - numbers.get(v);
 			}
 		});
-		
+	    for(vreAnalyzer.Elements.CFGNode cf:controlFlowGraph.getNodes()){
+	    	this.workList.add((CFGNode) cf);
+	    }
 	}
 
 	/**
@@ -143,19 +145,7 @@ public class Context<SootMethod,CFGNode,PointsToGraph> implements soot.Context, 
 	}
 
 	
-	/**
-	 * Destroys all data flow information associated with the nodes
-	 * of this context.
-	 */
-	public void freeMemory() {
-		
-		inValues = null;
-		outValues = null;
-		controlFlowGraph = null;
-		workList = null;
-		freeContexts.add(this);
 	
-	}
 
 	/** 
 	 * Returns a reference to the control flow graph of this context's method. 

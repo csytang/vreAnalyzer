@@ -88,10 +88,6 @@ public class ProgramFlowBuilder {
 		cgSingleton.initMethods();
 		cgSingleton.analyzeCFGs();
 		
-		
-		// DEBUG staff
-		// cgSingleton.printCFGs();
-		// FINISH
 	}
 	
 	
@@ -258,6 +254,7 @@ public class ProgramFlowBuilder {
 			allAppMethods = new ArrayList<SootMethod>();
 			List<SootClass> appClasses = getAppClasses();
 			for (SootClass cls : appClasses) {
+				
 				for (Iterator<SootMethod> itMthd = cls.getMethods().iterator(); itMthd.hasNext();) {
 					SootMethod m = itMthd.next();
 					if (!m.isAbstract() && m.toString().indexOf(": java.lang.Class class$") == -1){

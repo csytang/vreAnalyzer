@@ -1,7 +1,9 @@
 package vreAnalyzer.UI;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.Frame;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,21 +18,23 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import javax.swing.JDialog;
 import javax.swing.JTabbedPane;
 import javax.swing.JScrollPane;
 import javax.swing.JEditorPane;
 import javax.swing.WindowConstants;
 
-public class About extends JFrame {
+public class About extends JDialog {
 
 	private JPanel contentPane;
-	
+	private static About instance;
 	
 	/**
 	 * Create the frame.
 	 * @throws IOException 
 	 */
-	public About() throws IOException {
+	public About(JFrame parent) throws IOException {
+		super(parent,true);
 		setTitle("About vreAnalyzer alpha");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 600, 530);
@@ -45,7 +49,7 @@ public class About extends JFrame {
 		JButton btnOk = new JButton("OK");
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
+				dispose();
 			}
 		});
 		panel.add(btnOk);
@@ -114,7 +118,9 @@ public class About extends JFrame {
 			
 		});
 		scrollPane_2.setViewportView(editorPane_2);
+		setLocationRelativeTo(null);
 		setVisible(true);
+		
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 	}
 	
@@ -144,6 +150,19 @@ public class About extends JFrame {
 	    } catch (URISyntaxException e) {
 	        e.printStackTrace();
 	    }
+	}
+
+	public static About inst(JFrame parent) {
+		// TODO Auto-generated method stub
+		if(instance==null){
+			try {
+				instance = new About(parent);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return instance;
 	}
 
 }
