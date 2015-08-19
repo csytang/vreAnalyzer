@@ -39,8 +39,10 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 		if(Options.getMode()==reusableMode.Normal){
 			NormalPipelines.inst().findCommonAssetsandReset();
 		}else if(Options.getMode()==reusableMode.Hadoop){
+			
 			ProjectParser.inst().ClassParser();
 			ProjectParser.inst().showCommons();
+			
 		}
 		
 	}

@@ -44,6 +44,7 @@ public class MethodTag implements Tag {
 	// All callee methods (including lib and app)
 	private HashSet<SootMethod> allCalleeMethods = new HashSet<SootMethod>();
 	
+	
 	// App caller methods
 	//private HashSet<SootMethod> appCallerMethods = new HashSet<SootMethod>();
 	
@@ -51,7 +52,7 @@ public class MethodTag implements Tag {
 	
 	/** For now, doesn't includes call sites in catch blocks */
 	private ArrayList<CallSite> callSites = new ArrayList<CallSite>(); // holds all call sites inside method, which represent call locations and callees
-	
+	private ArrayList<CallSite> callerSites = new ArrayList<CallSite>();// holds all caller site to this method;
 	private Map<Stmt,CallSite> stmtToCallSite = new HashMap<Stmt,CallSite>();
 	
 	
@@ -113,6 +114,7 @@ public class MethodTag implements Tag {
 	public HashSet<SootMethod> getAllCalleeMethods(){return this.allCalleeMethods;}
 	public String toString() {return this.sm.toString();}
 	public CallSite stmtgetCallSite(Stmt stmt){return this.stmtToCallSite.get(stmt);}
+	public void addCallerSite(CallSite callersite){this.callerSites.add(callersite);}
 	//////////////////////////////////////////////////////////
 	
 	///////////////////////Analysis////////////////////////////
@@ -277,7 +279,9 @@ public class MethodTag implements Tag {
 				// Add the map from Stmt to the callsite
 				stmtToCallSite.put(s,cs);
 				allCalleeMethods.addAll(cs.getAllCallees());
-				
+				for(SootMethod callee:cs.getAllCallees()){
+					((MethodTag) sm.getTag(MethodTag.TAG_NAME)).addCallerSite(cs);
+				}
 				// DEBUG
 				if(verbose){
 					System.out.println("Stmt:\t"+s.toString()+"'s callees are");
@@ -308,6 +312,11 @@ public class MethodTag implements Tag {
 	public byte[] getValue() throws AttributeValueException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public List<CallSite> getAllCallerSites() {
+		// TODO Auto-generated method stub
+		return callerSites;
 	}
 
 	

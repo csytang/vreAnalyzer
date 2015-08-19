@@ -17,16 +17,19 @@ import soot.SootField;
 import soot.SootMethod;
 import soot.Value;
 import soot.ValueBox;
+import soot.jimple.ClassConstant;
 import soot.jimple.FieldRef;
 import soot.jimple.IdentityStmt;
 import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
-import soot.util.Chain;
+import vreAnalyzer.Context.Context;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
-import vreAnalyzer.ControlFlowGraph.DefUse.Use.Use;
 import vreAnalyzer.Elements.CFGNode;
+import vreAnalyzer.PointsTo.PointsToAnalysis;
+import vreAnalyzer.PointsTo.PointsToGraph;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
+import vreAnalyzer.Util.Util;
 	
 public class ProjectParser {
 	
@@ -36,7 +39,7 @@ public class ProjectParser {
 	private SootClass sootcls = null;
 	private CFGDefUse cfggraph;
 	private boolean verbose = true;
-	
+	private Context allcontext = null;
 	/* 
 	 * Store all jobs that defined in the main method,
 	 * including locals and fields 
@@ -60,6 +63,9 @@ public class ProjectParser {
 		// run all the application methods
 		for(SootMethod sm:ProgramFlowBuilder.inst().getAppConcreteMethods()){
 			cfggraph = (CFGDefUse) ProgramFlowBuilder.inst().getCFG(sm);
+			CFGNode exitNode = cfggraph.EXIT;
+			List<Context<SootMethod,CFGNode,PointsToGraph>> currContexts = PointsToAnalysis.inst().getContexts(sm);
+			allcontext = Util.containsBeforeAfterValue(exitNode,currContexts);			
 			sootcls = sm.getDeclaringClass();
 			sootmethodBody = sm.retrieveActiveBody();
 			sootmethod = sm;
@@ -70,7 +76,6 @@ public class ProjectParser {
 		// 1. Get the CFG
 		int index = 0;
 		List<CFGNode> allnodes = cfggraph.getNodes();
-		
 		// 2.0 Find mapper and reducer in lib class set
 		SootClass libMapper = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Mapper");
 		SootClass libReducer = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Reducer");
@@ -103,40 +108,94 @@ public class ProjectParser {
 									// Set a Mapper;
 									if(invokeExpr.getMethod().getName().equals("setMapperClass")){ 
 										
-										String mapper = invokeExpr.getArg(0).toString();
-										mapper = mapper.substring(mapper.indexOf("\"")+1, mapper.lastIndexOf("\""));
-										mapper = mapper.replaceAll("/", ".");
-										// Get lib Class for this setting
-										SootClass appMapper = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(mapper, libMapper);			
-										
+										SootClass appMapper = null;
+										Value argu0 = invokeExpr.getArg(0);
+										if(key.equals(argu0)){
+											// Setting by local or fields
+											Value mapperValue = invokeExpr.getArg(1);
+											if(mapperValue instanceof ClassConstant){
+												String className = ((ClassConstant) mapperValue).getValue();
+												className = className.replaceAll("/", ".");
+												appMapper = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(className,libMapper);
+											}else{
+												PointsToGraph p2g = (PointsToGraph) allcontext.getValueAfter(cfgNode);
+												appMapper = ProgramFlowBuilder.inst().findAppClassByNewExpr(cfgNode,argu0,sootmethod,p2g.getRoots().get(mapperValue),libMapper);
+											}
+										}else if(invokeExpr.getArgCount()==1){
+											if(sootmethod.getActiveBody().getLocals().contains(argu0)){
+												PointsToGraph p2g = (PointsToGraph) allcontext.getValueAfter(cfgNode);
+												appMapper = ProgramFlowBuilder.inst().findAppClassByNewExpr(cfgNode,argu0,sootmethod,p2g.getRoots().get(argu0),libMapper);
+											}else{
+												String mapper = argu0.toString();
+												// Setting by straight name
+												mapper = mapper.substring(mapper.indexOf("\"")+1, mapper.lastIndexOf("\""));
+												mapper = mapper.replaceAll("/", ".");
+												// Get lib Class for this setting
+												appMapper = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(mapper, libMapper);
+											}
+										}
 										jobtoHub.get(key).setMapperClass(appMapper);
-										MapperPipelines.inst().createNewSingleMap(key,appMapper);
-									}
+										MapperPipelines.inst().createNewSingleMap(key,appMapper);									}
 									
 									// Set a Reducer;
 									else if(invokeExpr.getMethod().getName().equals("setReducerClass")){
 										
-										String reducer = invokeExpr.getArg(0).toString();									
-										reducer = reducer.substring(reducer.indexOf("\"")+1, reducer.lastIndexOf("\""));
-										reducer = reducer.replaceAll("/", ".");
-										// Get lib Class for this setting
-										SootClass appReducer = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(reducer, libReducer);
-																		
-										jobtoHub.get(key).setReducerClass(appReducer);
+										SootClass appReducer = null;
+										Value argu0 = invokeExpr.getArg(0);
+										if(key.equals(argu0)){
+											Value reducerValue = invokeExpr.getArg(1);
+											if(reducerValue instanceof ClassConstant){
+												String className = ((ClassConstant) reducerValue).getValue();
+												className = className.replaceAll("/", ".");
+												appReducer = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(className,libReducer);
+											}else{
+												PointsToGraph p2g = (PointsToGraph) allcontext.getValueAfter(cfgNode);
+												appReducer = ProgramFlowBuilder.inst().findAppClassByNewExpr(cfgNode,argu0,sootmethod,p2g.getRoots().get(reducerValue),libReducer);
+											}
+										}else if(invokeExpr.getArgCount()==1){
+											if(sootmethod.getActiveBody().getLocals().contains(argu0)){
+												PointsToGraph p2g = (PointsToGraph) allcontext.getValueAfter(cfgNode);
+												appReducer = ProgramFlowBuilder.inst().findAppClassByNewExpr(cfgNode,argu0,sootmethod,p2g.getRoots().get(argu0),libReducer);
+											}else{
+												String reducer = argu0.toString();
+												reducer = reducer.substring(reducer.indexOf("\"")+1, reducer.lastIndexOf("\""));
+												reducer = reducer.replaceAll("/", ".");
+												// Get lib Class for this setting
+												appReducer = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(reducer, libReducer);
+											}
+										}	
+										jobtoHub.get(key).setReducerClass(appReducer);							
 										ReducerPipelines.inst().createNewSingleReducer(key,appReducer);
 									}
 									
 									// set a combiner
 									else if(invokeExpr.getMethod().getName().equals("setCombinerClass")){
-										String combiner = invokeExpr.getArg(0).toString();									
-										combiner = combiner.substring(combiner.indexOf("\"")+1, combiner.lastIndexOf("\""));
-										combiner = combiner.replaceAll("/", ".");
-										// Get lib Class for this setting
-										// Get lib Class for this setting
-										SootClass appCombiner = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(combiner, libReducer);
-																		
+										SootClass appCombiner = null;
+										Value argu0 = invokeExpr.getArg(0);
+										if(key.equals(argu0)){
+											Value combineValue = invokeExpr.getArg(1);
+											if(combineValue instanceof ClassConstant){
+												String className = ((ClassConstant) combineValue).getValue();
+												className = className.replaceAll("/", ".");
+												appCombiner = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(className,libReducer);
+											}else{
+												PointsToGraph p2g = (PointsToGraph) allcontext.getValueAfter(cfgNode);
+												appCombiner = ProgramFlowBuilder.inst().findAppClassByNewExpr(cfgNode,argu0,sootmethod,p2g.getRoots().get(combineValue), libReducer);
+											}
+										}else if(invokeExpr.getArgCount()==1){
+											if(sootmethod.getActiveBody().getLocals().contains(argu0)){
+												PointsToGraph p2g = (PointsToGraph) allcontext.getValueAfter(cfgNode);
+												appCombiner = ProgramFlowBuilder.inst().findAppClassByNewExpr(cfgNode,argu0,sootmethod,p2g.getRoots().get(argu0),libReducer);
+											}else{
+												String combiner = invokeExpr.getArg(0).toString();									
+												combiner = combiner.substring(combiner.indexOf("\"")+1, combiner.lastIndexOf("\""));
+												combiner = combiner.replaceAll("/", ".");
+												// Get lib Class for this setting
+												// Get lib Class for this setting
+												appCombiner = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(combiner, libReducer);							
+											}
+										}
 										jobtoHub.get(key).setCombinerClass(appCombiner);
-										
 										
 									}
 									
@@ -174,99 +233,152 @@ public class ProjectParser {
 								}
 							}
 						}
-					}
-					for(ValueBox vbox:stmt.getUseAndDefBoxes()){
-						Value key = vbox.getValue();
-						// Here, we get rid of jimple temporary local
-						if(key.getType().toString().equals("org.apache.hadoop.mapreduce.Job") &&
-								!key.toString().startsWith("$") &&
-								(sootmethodBody.getLocals().contains(key))){
-							if(!jobtoHub.containsKey(key)){
-								jobtoHub.put(key, new JobHub(key));
-								indextoJob.put(index,key);
-								index++;
+					}else{
+						for(ValueBox vbox:stmt.getUseAndDefBoxes()){
+							Value key = vbox.getValue();
+							// Here, we get rid of jimple temporary local
+							if(key.getType().toString().equals("org.apache.hadoop.mapreduce.Job") &&
+									!key.toString().startsWith("$") &&
+									(sootmethodBody.getLocals().contains(key))){
+								if(!jobtoHub.containsKey(key)){
+									jobtoHub.put(key, new JobHub(key));
+									indextoJob.put(index,key);
+									index++;
+									
+								}
+								
+								// Find embedded mapper setting and reducer setting
+								if(stmt.containsInvokeExpr()){
+									
+									InvokeExpr invokeExpr = stmt.getInvokeExpr();
+									
+									// Set a Mapper;
+									if(invokeExpr.getMethod().getName().equals("setMapperClass")){ 
+										SootClass appMapper = null;
+										Value argu0 = invokeExpr.getArg(0);
+										if(key.equals(argu0)){
+											// Setting by local or fields
+											Value mapperValue = invokeExpr.getArg(1);
+											if(mapperValue instanceof ClassConstant){
+												String className = ((ClassConstant) mapperValue).getValue();
+												className = className.replaceAll("/", ".");
+												appMapper = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(className,libMapper);
+											}else{
+												PointsToGraph p2g = (PointsToGraph) allcontext.getValueAfter(cfgNode);
+												appMapper = ProgramFlowBuilder.inst().findAppClassByNewExpr(cfgNode,mapperValue,sootmethod,p2g.getRoots().get(mapperValue),libMapper);
+											}
+										}else if(invokeExpr.getArgCount()==1){
+											if(sootmethod.getActiveBody().getLocals().contains(argu0)){
+												PointsToGraph p2g = (PointsToGraph) allcontext.getValueAfter(cfgNode);
+												appMapper = ProgramFlowBuilder.inst().findAppClassByNewExpr(cfgNode,argu0,sootmethod,p2g.getRoots().get(argu0),libMapper);
+											}else{
+												String mapper = argu0.toString();
+												// Setting by straight name		
+												mapper = mapper.substring(mapper.indexOf("\"")+1, mapper.lastIndexOf("\""));
+												mapper = mapper.replaceAll("/", ".");
+												// Get lib Class for this setting
+												appMapper = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(mapper, libMapper);
+											}
+										}
+										jobtoHub.get(key).setMapperClass(appMapper);
+										MapperPipelines.inst().createNewSingleMap(key,appMapper);
+									}
+									
+									// Set a Reducer;
+									else if(invokeExpr.getMethod().getName().equals("setReducerClass")){
+										SootClass appReducer = null;
+										Value argu0 = invokeExpr.getArg(0);
+										if(key.equals(argu0)){
+											Value reducerValue = invokeExpr.getArg(1);
+											if(reducerValue instanceof ClassConstant){
+												String className = ((ClassConstant) reducerValue).getValue();
+												className = className.replaceAll("/", ".");
+												appReducer = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(className,libReducer);
+											}else{
+												PointsToGraph p2g = (PointsToGraph) allcontext.getValueAfter(cfgNode);
+												appReducer = ProgramFlowBuilder.inst().findAppClassByNewExpr(cfgNode,reducerValue,sootmethod,p2g.getRoots().get(reducerValue),libReducer);
+											}
+										}else if(invokeExpr.getArgCount()==1){
+											if(sootmethod.getActiveBody().getLocals().contains(argu0)){
+												PointsToGraph p2g = (PointsToGraph) allcontext.getValueAfter(cfgNode);
+												appReducer = ProgramFlowBuilder.inst().findAppClassByNewExpr(cfgNode,argu0,sootmethod,p2g.getRoots().get(argu0),libReducer);
+											}else{
+												String reducer = argu0.toString();
+												reducer = reducer.substring(reducer.indexOf("\"")+1, reducer.lastIndexOf("\""));
+												reducer = reducer.replaceAll("/", ".");
+												// Get lib Class for this setting
+												appReducer = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(reducer, libReducer);
+											}
+										}	
+										jobtoHub.get(key).setReducerClass(appReducer);							
+										ReducerPipelines.inst().createNewSingleReducer(key,appReducer);
+									}
+									
+									// set a combiner
+									else if(invokeExpr.getMethod().getName().equals("setCombinerClass")){
+										SootClass appCombiner = null;
+										Value argu0 = invokeExpr.getArg(0);
+										if(key.equals(argu0)){
+											Value combineValue = invokeExpr.getArg(1);
+											if(combineValue instanceof ClassConstant){
+												String className = ((ClassConstant) combineValue).getValue();
+												className = className.replaceAll("/", ".");
+												appCombiner = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(className,libReducer);
+											}else{
+												PointsToGraph p2g = (PointsToGraph) allcontext.getValueAfter(cfgNode);
+												appCombiner = ProgramFlowBuilder.inst().findAppClassByNewExpr(cfgNode,combineValue,sootmethod,p2g.getRoots().get(combineValue), libReducer);
+											}
+										}else if(invokeExpr.getArgCount()==1){
+											if(sootmethod.getActiveBody().getLocals().contains(argu0)){
+												PointsToGraph p2g = (PointsToGraph) allcontext.getValueAfter(cfgNode);
+												appCombiner = ProgramFlowBuilder.inst().findAppClassByNewExpr(cfgNode,argu0,sootmethod,p2g.getRoots().get(argu0),libReducer);
+											}else{
+												String combiner = invokeExpr.getArg(0).toString();									
+												combiner = combiner.substring(combiner.indexOf("\"")+1, combiner.lastIndexOf("\""));
+												combiner = combiner.replaceAll("/", ".");
+												// Get lib Class for this setting
+												// Get lib Class for this setting
+												appCombiner = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(combiner, libReducer);							
+											}
+										}
+										jobtoHub.get(key).setCombinerClass(appCombiner);
+									}
+									
+									// skip these settings for now
+									else if(invokeExpr.getMethod().getName().equals("setJarByClass")||
+											invokeExpr.getMethod().getName().equals("waitForCompletion")||
+											invokeExpr.getMethod().getName().equals("setOutputKeyClass")||
+											invokeExpr.getMethod().getName().equals("setOutputValueClass")){
+										continue;
+									}
+									
+									// Set the input path 
+									else if(invokeExpr.getMethod().getName().equals("addInputPath")){
+										// there are two argus: 
+										// (1) the job
+										// (2) the path
+										Value input = (Value) invokeExpr.getArg(1);
+										jobtoHub.get(key).setInputPath(input);
+									}
+									
+									// Set the output path
+									else if(invokeExpr.getMethod().getName().equals("setOutputPath")){
+										// there are two argus: 
+										// (1) the job
+										// (2) the path
+										Value output = (Value) invokeExpr.getArg(1);
+										jobtoHub.get(key).setOutPath(output);
+									}// Other settings of this job
+									else{
+										if(JobExternalConfigurePipelines.inst().getEnConfigurePipeline(key)==null)
+											JobExternalConfigurePipelines.inst().createNewJobExternalConfigurePipeline(key, sootmethod, cfgNode);
+										else
+											JobExternalConfigurePipelines.inst().getEnConfigurePipeline(key).addSettingNode(cfgNode);
+									}
+								}
+								
 								
 							}
-							
-							// Find embedded mapper setting and reducer setting
-							if(stmt.containsInvokeExpr()){
-								
-								InvokeExpr invokeExpr = stmt.getInvokeExpr();
-								
-								// Set a Mapper;
-								if(invokeExpr.getMethod().getName().equals("setMapperClass")){ 
-									
-									String mapper = invokeExpr.getArg(0).toString();
-									mapper = mapper.substring(mapper.indexOf("\"")+1, mapper.lastIndexOf("\""));
-									mapper = mapper.replaceAll("/", ".");
-									// Get lib Class for this setting
-									SootClass appMapper = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(mapper, libMapper);			
-									
-									jobtoHub.get(key).setMapperClass(appMapper);
-									MapperPipelines.inst().createNewSingleMap(key,appMapper);
-								}
-								
-								// Set a Reducer;
-								else if(invokeExpr.getMethod().getName().equals("setReducerClass")){
-									
-									String reducer = invokeExpr.getArg(0).toString();									
-									reducer = reducer.substring(reducer.indexOf("\"")+1, reducer.lastIndexOf("\""));
-									reducer = reducer.replaceAll("/", ".");
-									// Get lib Class for this setting
-									SootClass appReducer = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(reducer, libReducer);
-																	
-									jobtoHub.get(key).setReducerClass(appReducer);
-									ReducerPipelines.inst().createNewSingleReducer(key,appReducer);
-								}
-								
-								// set a combiner
-								else if(invokeExpr.getMethod().getName().equals("setCombinerClass")){
-									String combiner = invokeExpr.getArg(0).toString();									
-									combiner = combiner.substring(combiner.indexOf("\"")+1, combiner.lastIndexOf("\""));
-									combiner = combiner.replaceAll("/", ".");
-									// Get lib Class for this setting
-									// Get lib Class for this setting
-									SootClass appCombiner = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(combiner, libReducer);
-																	
-									jobtoHub.get(key).setCombinerClass(appCombiner);
-									
-									
-								}
-								
-								// skip these settings for now
-								else if(invokeExpr.getMethod().getName().equals("setJarByClass")||
-										invokeExpr.getMethod().getName().equals("waitForCompletion")||
-										invokeExpr.getMethod().getName().equals("setOutputKeyClass")||
-										invokeExpr.getMethod().getName().equals("setOutputValueClass")){
-									continue;
-								}
-								
-								// Set the input path 
-								else if(invokeExpr.getMethod().getName().equals("addInputPath")){
-									// there are two argus: 
-									// (1) the job
-									// (2) the path
-									Value input = (Value) invokeExpr.getArg(1);
-									jobtoHub.get(key).setInputPath(input);
-								}
-								
-								// Set the output path
-								else if(invokeExpr.getMethod().getName().equals("setOutputPath")){
-									// there are two argus: 
-									// (1) the job
-									// (2) the path
-									Value output = (Value) invokeExpr.getArg(1);
-									jobtoHub.get(key).setOutPath(output);
-								}// Other settings of this job
-								else{
-									if(JobExternalConfigurePipelines.inst().getEnConfigurePipeline(key)==null)
-										JobExternalConfigurePipelines.inst().createNewJobExternalConfigurePipeline(key, sootmethod, cfgNode);
-									else
-										JobExternalConfigurePipelines.inst().getEnConfigurePipeline(key).addSettingNode(cfgNode);
-								}
-							}
-							
-							
 						}
 					}
 				}

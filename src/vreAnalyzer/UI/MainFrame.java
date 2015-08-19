@@ -27,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 
 public class MainFrame extends JFrame {
@@ -89,6 +90,11 @@ public class MainFrame extends JFrame {
 		mnFile.add(separator);
 		
 		JMenuItem mntmConfiguration = new JMenuItem("Input Configure");
+		mntmConfiguration.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				InputConfigure.inst(instance);
+			}
+		});
 		mnFile.add(mntmConfiguration);
 		
 		JMenu mnEdit = new JMenu("Edit");
@@ -196,9 +202,31 @@ public class MainFrame extends JFrame {
 	public void setSourceCode(Set<File>source){
 		this.sources = source;
 	}
-	
+	/**
+	 * 
+	 * -cp "/Users/tangchris/Desktop/bin/:
+	 * /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/rt.jar:
+	 * /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/jce.jar:
+	 * /Users/tangchris/hadoop_jars/mapreduce/*:/Users/tangchris/hadoop_jars/hdfs/*:
+	 * /Users/tangchris/hadoop_jars/yarn/*:/Users/tangchris/hadoop_jars/common/*:/Users/tangchris/otherjars/*"  
+	 * -hadoop -process-dir "/Users/tangchris/Desktop/bin/"  -entry:WordCount2
+	 * 
+	 */
 	public void generateSootCommand(){
-		String sootCommand = "";
+		Set<String>sootCommand = new HashSet<String>();
+		// 1. cp
+		sootCommand.add("-cp");
+		
+		// 2. all classes
+		String cproot = "";
+		for(File sub:supporingjars){
+			cproot+=sub.getAbsolutePath();
+			cproot+=":";
+		}
+		cproot = cproot.substring(0, cproot.length()-1);
+		sootCommand.add(cproot);
+		
+		// 3. all 
 		
 	}
 	

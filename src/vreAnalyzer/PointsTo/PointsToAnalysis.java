@@ -41,9 +41,7 @@ import soot.jimple.internal.JNewArrayExpr;
 import vreAnalyzer.Context.Context;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Elements.CallSite;
-import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.SootPresentation.DefaultJimpleRepresentation;
-import vreAnalyzer.Tag.StmtTag;
 
 
 public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode,PointsToGraph>{
@@ -103,7 +101,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 		// TODO Auto-generated method stub
 		
 		// Initialise the MAIN context
-		System.out.println("Methods size:"+programRepresentation().getEntryPoints().size());
+		
 		for (SootMethod entryPoint : programRepresentation().getEntryPoints()) {
 			Context<SootMethod,CFGNode,PointsToGraph> context = new Context<SootMethod,CFGNode,PointsToGraph>(entryPoint, programRepresentation().getControlFlowGraph(entryPoint));
 			
@@ -111,19 +109,19 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 			
 			initContext(context, boundaryInformation);
 		}
-		System.out.println("Stack size is:"+analysisStack.size());
+		
 		// Stack-of-work-lists data flow analysis.
 		while (!analysisStack.isEmpty()) {
 			// Get the context at the top of the stack.
 			Context<SootMethod,CFGNode,PointsToGraph> context = analysisStack.peek();
 			
-			System.out.println("The size of Stack is:\t"+analysisStack.size());
+			
 			// Either analyse the next pending unit or pop out of the method
 			if (!context.getWorkList().isEmpty()) {
 				// work-list contains items; So the next unit to analyse.
 				CFGNode unit = context.getWorkList().pollFirst();//Remove the first to analysis
 				if (unit.toString()!="EX") {
-					System.out.println("Currently processing Node:\t"+unit.toString()+"\tin method:\t"+unit.getMethod().toString());
+					
 					// Compute the IN data flow value (only for non-entry units).
 					List<CFGNode> predecessors = unit.getPreds();
 					
@@ -166,7 +164,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 				else{
 					// NULL unit, which means the end of the method.
 					assert (context.getWorkList().isEmpty());
-					System.out.println("Finish processing");
+					
 					// Exit flow value is the merge of the OUTs of the tail nodes.
 					PointsToGraph exitFlow = topValue();
 					for (CFGNode tail : context.getControlFlowGraph().getTails()) {
