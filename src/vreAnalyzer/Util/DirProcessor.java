@@ -19,8 +19,6 @@ public class DirProcessor {
 	private void processDirHelper(String dirPath, String clsPathPrefix) {
 		// open dir
 		File dir = new File(dirPath);
-		assert dir.isDirectory();
-		
 		String[] files = dir.list();
 		for (String fname : files) {
 			String fullName = clsPathPrefix.isEmpty()? fname : clsPathPrefix + "." + fname;

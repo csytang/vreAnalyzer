@@ -20,10 +20,18 @@ import javax.swing.WindowConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JSeparator;
+
+import vreAnalyzer.vreAnalyzerCommandLine;
+import vreAnalyzer.Util.ConflictModelExpection;
 
 public class NewProjectPanel extends JDialog {
 
@@ -43,12 +51,24 @@ public class NewProjectPanel extends JDialog {
 	private JButton button_3;
 	private JButton btnNewButton;
 	private JButton btnAnalyze;
-
+	private boolean runFromConfigWizard = false;
+	private static NewProjectPanel instance;
+	private List<String>sootCommandsFromWizard = new LinkedList<String>();
+	public static NewProjectPanel inst(JFrame parent){
+		if(instance==null){
+			instance = new NewProjectPanel(parent);
+		}
+		return instance;
+	}
+	public static NewProjectPanel inst(){
+		return instance;
+	}
 	
 	/**
 	 * Create the frame.
 	 */
 	public NewProjectPanel(JFrame parent) {
+		
 		super(parent,true);
 		setTitle("New Project");
 		
@@ -99,7 +119,8 @@ public class NewProjectPanel extends JDialog {
 				JFileChooser fc = new JFileChooser();
 				fc.setMultiSelectionEnabled(true);
 				FileFilter type = new ExtensionFilter("Java class/jar:.jar or .class",new String[]{".jar",".class"});
-				fc.setFileFilter(type);
+				fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				fc.addChoosableFileFilter(type);
 				int returnValue = fc.showOpenDialog(null);
 				if(returnValue==JFileChooser.APPROVE_OPTION){
 					File[] selectedFiles = fc.getSelectedFiles();
@@ -154,6 +175,7 @@ public class NewProjectPanel extends JDialog {
 				JFileChooser fc = new JFileChooser();
 				fc.setMultiSelectionEnabled(true);
 				FileFilter type = new ExtensionFilter("Java class/jar:.jar or .class",new String[]{".jar",".class"});
+				fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				fc.setFileFilter(type);
 				int returnValue = fc.showOpenDialog(null);
 				if(returnValue==JFileChooser.APPROVE_OPTION){
@@ -207,6 +229,7 @@ public class NewProjectPanel extends JDialog {
 				JFileChooser fc = new JFileChooser();
 				fc.setMultiSelectionEnabled(true);
 				FileFilter type2 = new ExtensionFilter("Java source:.java",new String[]{".java"});
+				fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				fc.setFileFilter(type2);
 				int returnValue = fc.showOpenDialog(null);
 				if(returnValue==JFileChooser.APPROVE_OPTION){
@@ -265,44 +288,92 @@ public class NewProjectPanel extends JDialog {
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnAnalyze, 0, SpringLayout.EAST, textField);
 		btnAnalyze.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(runFromConfigWizard){
+					dispose();
+					// 1. Run the command first to extract the directory, supporting jars 
+					// 2. Set the MainFrame for binding purpose
+					for(int i = 0;i < sootCommandsFromWizard.size();i++){
+						String command = sootCommandsFromWizard.get(i);
+						if(command.equals("-process-dir")){
+							String targets = sootCommandsFromWizard.get(1+i);
+							List<File>targetList = new ArrayList<File>();
+							targetList.add(new File(targets));
+							MainFrame.inst().setTargets(targetList);
+						}
+					}
+				}
 				// Add the selected source directory to main panel
-				
-				// 1. jar/directory to be process
-				Set<File>target = new HashSet<File>();
-				DefaultListModel targetList = (DefaultListModel) jarLists.getModel();
-				for(int i = 0;i < targetList.size();i++){
-					target.add((File) targetList.getElementAt(i));
+				else{
+					// 1. jar/directory to be process
+					List<File>target = new LinkedList<File>();
+					DefaultListModel targetList = (DefaultListModel) jarLists.getModel();
+					for(int i = 0;i < targetList.size();i++){
+						target.add((File) targetList.getElementAt(i));
+					}
+					
+					// 2. cp supporting jars
+					List<File>supporingjars = new LinkedList<File>();
+					DefaultListModel supportList = (DefaultListModel) dependingjarLists.getModel();
+					for(int i = 0;i < supportList.size();i++){
+						supporingjars.add((File) supportList.getElementAt(i));
+					}
+					
+					// 3. sources
+					List<File>sources = new LinkedList<File>();
+					DefaultListModel sourceList = (DefaultListModel) javasource.getModel();
+					for(int i = 0;i < sourceList.size();i++){
+						sources.add((File) sourceList.getElementAt(i));
+					}
+					MainFrame.inst().setTargets(target);
+					MainFrame.inst().setSupporingJars(supporingjars);
+					MainFrame.inst().setSourceCode(sources);
+					dispose();
+					MainFrame.inst().generateSootCommand();
+					MainFrame.inst().loadSourceCode();
 				}
-				
-				// 2. cp supporting jars
-				Set<File>supporingjars = new HashSet<File>();
-				DefaultListModel supportList = (DefaultListModel) dependingjarLists.getModel();
-				for(int i = 0;i < supportList.size();i++){
-					supporingjars.add((File) supportList.getElementAt(i));
-				}
-				
-				// 3. sources
-				Set<File>sources = new HashSet<File>();
-				DefaultListModel sourceList = (DefaultListModel) javasource.getModel();
-				for(int i = 0;i < sourceList.size();i++){
-					sources.add((File) sourceList.getElementAt(i));
-				}
-				
-				MainFrame.inst().setTargets(target);
-				MainFrame.inst().setSupporingJars(supporingjars);
-				MainFrame.inst().setSourceCode(sources);
-				MainFrame.inst().generateSootCommand();
-				dispose();
+				// 4. binding the class to java source code
+				MainFrame.inst().bindSource();
+				run();
 			}
 		});
+		
 		contentPane.add(btnAnalyze);
+		
+		JButton btnConfigureWizard = new JButton("Configure Wizard");
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnConfigureWizard, -6, SpringLayout.NORTH, separator);
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnConfigureWizard, 0, SpringLayout.EAST, btnRemove);
+		btnConfigureWizard.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ConfigureWizard.inst(instance);
+				btnAnalyze.setEnabled(true);
+				runFromConfigWizard = true;
+			}
+		});
+		contentPane.add(btnConfigureWizard);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);	
-		//textField.setColumns(10);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);	
 		setVisible(true);
 	}
 	
-	
+	public void run(){
+		Thread thread = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				try {
+					new vreAnalyzerCommandLine(MainFrame.inst().getCommand());
+				} catch (ConflictModelExpection e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+           
+            	
+		});
+		thread.start();
+			
+	}
 	public class ExtensionFilter extends FileFilter {
 	    private String extensions[];
 
@@ -324,11 +395,11 @@ public class NewProjectPanel extends JDialog {
 	      int count = extensions.length;
 	      String path = file.getAbsolutePath();
 	      for (int i = 0; i < count; i++) {
-	        String ext = extensions[i];
-	        if (path.endsWith(ext)
-	            && (path.charAt(path.length() - ext.length()) == '.')) {
-	          return true;
-	        }
+		        String ext = extensions[i];
+		        if (path.endsWith(ext)
+		            && (path.charAt(path.length() - ext.length()) == '.')) {
+		          return true;
+		        }
 	      }
 	      return false;
 	    }
@@ -337,6 +408,8 @@ public class NewProjectPanel extends JDialog {
 	      return (description == null ? extensions[0] : description);
 	    }
 	  }
-	
-	
+	public void setWizardCommand(String text) {
+		// TODO Auto-generated method stub
+		sootCommandsFromWizard = (List<String>) new HashSet<String>(Arrays.asList(text.split(" ")));
+	}
 }

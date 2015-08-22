@@ -42,19 +42,35 @@ public class SingleJobExternalConfigurePipeline {
 		if(otherJobexConfigure==null || this.settings== null)
 			return commons;
 		List<NodeDefUses>othersettings = otherJobexConfigure.extractSettings();
-		
-		for(int i = 0;i< this.settings.size();i++){
-			NodeDefUses curr = this.settings.get(i);
-			NodeDefUses other = othersettings.get(i);
-			if(curr.getUsedVars().equals(other.getUsedVars())){
-				commons.put(curr, other);
-				if(verbose)
-				{
-					System.out.println("Same:\t"+curr.toString()+"\n\t"+other.toString());
+		if(othersettings.size()>this.settings.size()){
+			for(int i = 0;i< this.settings.size();i++){
+				NodeDefUses curr = this.settings.get(i);
+				NodeDefUses other = othersettings.get(i);
+				if(curr.getUsedVars().equals(other.getUsedVars())){
+					commons.put(curr, other);
+					if(verbose)
+					{
+						System.out.println("Same:\t"+curr.toString()+"\n\t"+other.toString());
+					}
+				}else{
+					if(verbose)
+						System.out.println("Not Same:\t"+curr.toString()+"\n\t"+other.toString());
 				}
-			}else{
-				if(verbose)
-					System.out.println("Not Same:\t"+curr.toString()+"\n\t"+other.toString());
+			}
+		}else{
+			for(int i = 0;i< othersettings.size();i++){
+				NodeDefUses curr = this.settings.get(i);
+				NodeDefUses other = othersettings.get(i);
+				if(curr.getUsedVars().equals(other.getUsedVars())){
+					commons.put(curr, other);
+					if(verbose)
+					{
+						System.out.println("Same:\t"+curr.toString()+"\n\t"+other.toString());
+					}
+				}else{
+					if(verbose)
+						System.out.println("Not Same:\t"+curr.toString()+"\n\t"+other.toString());
+				}
 			}
 		}
 		

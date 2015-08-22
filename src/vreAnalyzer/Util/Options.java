@@ -130,7 +130,7 @@ public class Options {
 			}
 			else if (arg.equals("-process-dir")) {
 				// OVERRIDE of soot option; soot seems to fail with -process-dir in many cases
-				if(!args[argIdx+1].endsWith("jar")){
+				if(!args[argIdx+1].endsWith(".jar")){
 					dirProc.processDir(args[++argIdx]);
 					processJar = false;
 				}else{

@@ -3,6 +3,7 @@ package vreAnalyzer;
 import java.util.Map;
 
 import Patch.Hadoop.ProjectParser;
+import soot.G;
 import soot.SceneTransformer;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;

@@ -37,7 +37,6 @@ import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.PointsTo.PointsToGraph;
 import vreAnalyzer.Reuse.Normal.Pipeline.NormalPipelines;
 import vreAnalyzer.Tag.MethodTag;
-import vreAnalyzer.Tag.StmtTag;
 import vreAnalyzer.Util.Options;
 import vreAnalyzer.Util.Util;
 import vreAnalyzer.Util.Options.reusableMode;
@@ -371,8 +370,7 @@ public class ProgramFlowBuilder {
 		// TODO Auto-generated method stub
 		FastHierarchy fhierarchy = Scene.v().getOrMakeFastHierarchy();
 		//DEBUG
-		System.out.println("FIND APP CLASS BY NEW EXPR:\t\t|"+curr.toString());
-		System.out.println("Var is:\t"+vi.toString());
+		
 		assert(curr.getStmt().containsInvokeExpr());
 		Stmt currStmt = curr.getStmt();
 		InvokeExpr ie = currStmt.getInvokeExpr();
@@ -414,19 +412,30 @@ public class ProgramFlowBuilder {
 											
 											// 2. Get the caller of this method
 											MethodTag smTag = (MethodTag) sm.getTag(MethodTag.TAG_NAME);
+											Value remotecallvi = null;
+											CFGNode callerCFGNode = null;
+											Stmt callerStmt = null;
+											SootMethod callerMethod = null;
+											InvokeExpr callerie = null;
 											
 											// We just need to get one is sufficient, since we only need it class name
-											CallSite callerSite = ((List<CallSite>) smTag.getAllCallerSites()).get(0);
-											// DEBUG
-											System.out.println("Method is:\t\t|"+sm.getName());
-											// FINISH
+											for(CallSite callerSite:((List<CallSite>) smTag.getAllCallerSites())){
+												// DEBUG
+												System.out.println("Method is:\t\t|"+sm.getName()+"\t in class\t"+sm.getDeclaringClass().getName());
+												// FINISH
+												// 3. Caller method information
+												callerCFGNode = callerSite.getCallNode();										
+												callerStmt = callerCFGNode.getStmt();
+												System.out.println("Caller stmt is:\t"+callerStmt.toString());
+												callerMethod = callerCFGNode.getMethod();
+												System.out.println("Caller Method is:\t\t|"+callerMethod.getName()+"\t in class\t"+callerMethod.getDeclaringClass().getName());
+												callerie = callerStmt.getInvokeExpr();
+												if(callerie.getArgCount()>=index){
+													remotecallvi = callerie.getArg(index);
+													break;
+												}
+											}
 											
-											// 3. Caller method information
-											CFGNode callerCFGNode = callerSite.getCallNode();										
-											Stmt callerStmt = callerCFGNode.getStmt();
-											InvokeExpr callerie = callerStmt.getInvokeExpr();
-											Value remotecallvi = callerie.getArg(index);
-											SootMethod callerMethod = callerCFGNode.getMethod();
 											
 											// 4. Find the class inside the caller method
 											CFGDefUse cfggraph = (CFGDefUse) ProgramFlowBuilder.inst().getCFG(sm);
@@ -496,20 +505,47 @@ public class ProgramFlowBuilder {
 											
 											// 1. Get the index of this parRef
 											int index = parRef.getIndex();
-											Type refType = parRef.getType();
+											
 											
 											// 2. Get the caller of this method
 											MethodTag smTag = (MethodTag) sm.getTag(MethodTag.TAG_NAME);
+											Value remotecallvi = null;
+											CFGNode callerCFGNode = null;
+											Stmt callerStmt = null;
+											SootMethod callerMethod = null;
+											InvokeExpr callerie = null;
 											
 											// We just need to get one is sufficient, since we only need it class name
-											CallSite callerSite = ((List<CallSite>) smTag.getAllCallerSites()).get(0);
-											
-											// 3. Caller method information
-											CFGNode callerCFGNode = callerSite.getCallNode();										
-											Stmt callerStmt = callerCFGNode.getStmt();
-											InvokeExpr callerie = callerStmt.getInvokeExpr();
-											Value remotecallvi = callerie.getArg(index);
-											SootMethod callerMethod = callerCFGNode.getMethod();
+											for(CallSite callerSite:((List<CallSite>) smTag.getAllCallerSites())){
+												// DEBUG
+												System.out.println("Method is:\t\t|"+sm.getName()+"\t in class\t"+sm.getDeclaringClass().getName());
+												// FINISH
+												// 3. Caller method information
+												callerCFGNode = callerSite.getCallNode();										
+												callerStmt = callerCFGNode.getStmt();
+												System.out.println("Caller stmt is:\t"+callerStmt.toString());
+												callerMethod = callerCFGNode.getMethod();
+												System.out.println("Caller Method is:\t\t|"+callerMethod.getName()+"\t in class\t"+callerMethod.getDeclaringClass().getName());
+												callerie = callerStmt.getInvokeExpr();
+												if(callerie.getArgCount()>=index){
+													remotecallvi = callerie.getArg(index);
+													break;
+												}
+											}
+											CallSite callerSite = (CallSite) ((List<CallSite>) smTag.getAllCallerSites().get(0));
+											while(remotecallvi==null&&
+													callerSite!=null){
+												callerCFGNode = callerSite.getCallNode();										
+												callerStmt = callerCFGNode.getStmt();
+												callerie = callerStmt.getInvokeExpr();
+												callerMethod = callerCFGNode.getMethod();
+												if(callerie.getArgCount()>=index){
+													remotecallvi = callerie.getArg(index);
+													break;
+												}
+												smTag = (MethodTag) callerMethod.getTag(MethodTag.TAG_NAME);
+												callerSite = (CallSite) ((List<CallSite>) smTag.getAllCallerSites().get(0));
+											}
 											
 											// 4. Find the class inside the caller method
 											CFGDefUse cfggraph = (CFGDefUse) ProgramFlowBuilder.inst().getCFG(sm);

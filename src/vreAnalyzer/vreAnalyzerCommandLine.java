@@ -4,18 +4,33 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import soot.G;
 import soot.PackManager;
 import soot.Transform;
+import vreAnalyzer.UI.MainFrame;
 import vreAnalyzer.Util.ConflictModelExpection;
 import vreAnalyzer.Util.Options;
 
 
 
-public class vreAnalyzer{
+public class vreAnalyzerCommandLine{
 	
-	
-	
+	private static vreAnalyzerCommandLine instance;
+	public static vreAnalyzerCommandLine inst(String[]args){
+		if(instance==null){
+			try {
+				instance = new vreAnalyzerCommandLine(args);
+			} catch (ConflictModelExpection e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return instance;
+	}
 	public static void main(String[]args) throws ConflictModelExpection{
+		new vreAnalyzerCommandLine(args);
+	}
+	public vreAnalyzerCommandLine(String[]args) throws ConflictModelExpection{
 		// All input command list
 		
 		List<String>sootArgs = new LinkedList<String>(Arrays.asList(args));
@@ -59,10 +74,12 @@ public class vreAnalyzer{
 				
 		// Internal transfer
 		PackManager.v().getPack("wjtp").add(new Transform("wjtp.mt", new vreAnalyzerInternalTransform()));
-				
+	
 		System.out.print("[vreAnalyzer] vreAnalyzer args to Soot: ");
-		for (String s : filtersootArgs)
-			System.out.print(s + " ");
+		for (String s : filtersootArgs){
+				System.out.print(s + " ");
+		}
+		
 		System.out.println();
 		
 		// Run Soot

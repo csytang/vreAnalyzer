@@ -3,6 +3,7 @@ package Patch.Hadoop;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import Patch.Hadoop.Pipelines.ConfigurePipelines;
 import Patch.Hadoop.Pipelines.JobExternalConfigurePipelines;
 import Patch.Hadoop.Pipelines.MapperPipelines;
@@ -20,8 +21,10 @@ import soot.ValueBox;
 import soot.jimple.ClassConstant;
 import soot.jimple.FieldRef;
 import soot.jimple.IdentityStmt;
+import soot.jimple.InterfaceInvokeExpr;
 import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
+import soot.jimple.VirtualInvokeExpr;
 import vreAnalyzer.Context.Context;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
@@ -107,7 +110,12 @@ public class ProjectParser {
 									
 									// Set a Mapper;
 									if(invokeExpr.getMethod().getName().equals("setMapperClass")){ 
-										
+										if(invokeExpr instanceof InterfaceInvokeExpr||
+												invokeExpr instanceof VirtualInvokeExpr){
+											jobtoHub.remove(key);
+											index--;
+											return;
+										}
 										SootClass appMapper = null;
 										Value argu0 = invokeExpr.getArg(0);
 										if(key.equals(argu0)){
@@ -139,7 +147,12 @@ public class ProjectParser {
 									
 									// Set a Reducer;
 									else if(invokeExpr.getMethod().getName().equals("setReducerClass")){
-										
+										if(invokeExpr instanceof InterfaceInvokeExpr||
+												invokeExpr instanceof VirtualInvokeExpr){
+											jobtoHub.remove(key);
+											index--;
+											return;
+										}
 										SootClass appReducer = null;
 										Value argu0 = invokeExpr.getArg(0);
 										if(key.equals(argu0)){
@@ -170,6 +183,12 @@ public class ProjectParser {
 									
 									// set a combiner
 									else if(invokeExpr.getMethod().getName().equals("setCombinerClass")){
+										if(invokeExpr instanceof InterfaceInvokeExpr||
+												invokeExpr instanceof VirtualInvokeExpr){
+											jobtoHub.remove(key);
+											index--;
+											return;
+										}
 										SootClass appCombiner = null;
 										Value argu0 = invokeExpr.getArg(0);
 										if(key.equals(argu0)){
@@ -254,6 +273,12 @@ public class ProjectParser {
 									
 									// Set a Mapper;
 									if(invokeExpr.getMethod().getName().equals("setMapperClass")){ 
+										if(invokeExpr instanceof InterfaceInvokeExpr||
+												invokeExpr instanceof VirtualInvokeExpr){
+											jobtoHub.remove(key);
+											index--;
+											return;
+										}
 										SootClass appMapper = null;
 										Value argu0 = invokeExpr.getArg(0);
 										if(key.equals(argu0)){
@@ -286,6 +311,12 @@ public class ProjectParser {
 									
 									// Set a Reducer;
 									else if(invokeExpr.getMethod().getName().equals("setReducerClass")){
+										if(invokeExpr instanceof InterfaceInvokeExpr||
+												invokeExpr instanceof VirtualInvokeExpr){
+											jobtoHub.remove(key);
+											index--;
+											return;
+										}
 										SootClass appReducer = null;
 										Value argu0 = invokeExpr.getArg(0);
 										if(key.equals(argu0)){
@@ -316,6 +347,12 @@ public class ProjectParser {
 									
 									// set a combiner
 									else if(invokeExpr.getMethod().getName().equals("setCombinerClass")){
+										if(invokeExpr instanceof InterfaceInvokeExpr||
+												invokeExpr instanceof VirtualInvokeExpr){
+											jobtoHub.remove(key);
+											index--;
+											return;
+										}
 										SootClass appCombiner = null;
 										Value argu0 = invokeExpr.getArg(0);
 										if(key.equals(argu0)){
@@ -402,7 +439,7 @@ public class ProjectParser {
 			SingleMapperPipeline srcMapper = MapperPipelines.inst().getMapperPipeline(indextoJob.get(i));
 			SingleReducerPipeline srcReducer = ReducerPipelines.inst().getReducerPipeline(indextoJob.get(i));
 			SingleConfigurePipeline srcConfigure = ConfigurePipelines.inst().getConfigurePipeline(indextoJob.get(i));
-			SingleJobExternalConfigurePipeline srcJobexConfigure = JobExternalConfigurePipelines.inst().getEnConfigurePipeline(indextoJob.get(i));
+			//SingleJobExternalConfigurePipeline srcJobexConfigure = JobExternalConfigurePipelines.inst().getEnConfigurePipeline(indextoJob.get(i));
 					
 			for(int j = i+1; j < jobtoHub.keySet().size();j++){
 				if(verbose)
@@ -410,9 +447,9 @@ public class ProjectParser {
 				SingleMapperPipeline otherMapper = MapperPipelines.inst().getMapperPipeline(indextoJob.get(j));
 				SingleReducerPipeline otherReducer = ReducerPipelines.inst().getReducerPipeline(indextoJob.get(j));
 				SingleConfigurePipeline otherConfigure = ConfigurePipelines.inst().getConfigurePipeline(indextoJob.get(j));
-				SingleJobExternalConfigurePipeline otherJobexConfigure = JobExternalConfigurePipelines.inst().getEnConfigurePipeline(indextoJob.get(j));
+				//SingleJobExternalConfigurePipeline otherJobexConfigure = JobExternalConfigurePipelines.inst().getEnConfigurePipeline(indextoJob.get(j));
 						
-						
+				/**
 				// Get the common asset of other configuration
 				if(srcJobexConfigure!=null){
 					Map<NodeDefUses,NodeDefUses> commonEx = srcJobexConfigure.getCommonAsset(otherJobexConfigure);
@@ -427,6 +464,7 @@ public class ProjectParser {
 						}
 					}
 				}
+				**/
 				if(srcConfigure!=null){		
 					// Get the common asset of configuration
 					CFGNode[] configcommons = srcConfigure.getCommonAsset(otherConfigure);
