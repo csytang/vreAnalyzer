@@ -9,12 +9,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import soot.FastHierarchy;
 import soot.Scene;
 import soot.SootClass;
 import soot.SootMethod;
-import soot.Type;
 import soot.Value;
 import soot.jimple.AnyNewExpr;
 import soot.jimple.AssignStmt;
@@ -377,79 +375,78 @@ public class ProgramFlowBuilder {
 		if(ie instanceof VirtualInvokeExpr||ie instanceof InterfaceInvokeExpr){
 			CFGDefUse cfg  = (CFGDefUse) ProgramFlowBuilder.inst().getCFG(sm);
 			for(CFGNode cfgNode:cfg.getNodes()){
-						NodeDefUses duNode = (NodeDefUses)cfgNode;
-						if(cfgNode.isSpecial())
+					NodeDefUses duNode = (NodeDefUses)cfgNode;
+					if(cfgNode.isSpecial())
 							continue;
-						// Selection end at the entry points; we just search one define before this
-						List<Variable>alldefuses= duNode.getDefinedVars();
-						alldefuses.addAll(duNode.getUsedVars());
-						for(Variable var:alldefuses){
-							
-							if(var.getValue().equals(vi)){
-								Stmt st = duNode.getStmt();
-								if(st instanceof AssignStmt){
-									Value Lop = ((AssignStmt) st).getLeftOp();
-									Value Rop = ((AssignStmt) st).getRightOp();
-									if(Lop.equals(vi)){
-										//System.out.println("Right OP is:\t"+Rop);
-										if(Rop instanceof ClassConstant){
-											String className = ((ClassConstant) Rop).getValue();
-											className = className.replaceAll("/", ".");
-											return findAppClassByNameAndSuper(className,superCls);
-										}
-									}
-								}else if(st instanceof IdentityStmt){
-									// If this value is obtained from input parameter
-									Value Lop = ((IdentityStmt) st).getLeftOp();
-									Value Rop = ((IdentityStmt) st).getRightOp();
-									if(Lop.equals(vi)){
-										if(Rop instanceof ParameterRef){
-											ParameterRef parRef = (ParameterRef)Rop;
-											
-											// 1. Get the index of this parRef
-											int index = parRef.getIndex();
-											
-											
-											// 2. Get the caller of this method
-											MethodTag smTag = (MethodTag) sm.getTag(MethodTag.TAG_NAME);
-											Value remotecallvi = null;
-											CFGNode callerCFGNode = null;
-											Stmt callerStmt = null;
-											SootMethod callerMethod = null;
-											InvokeExpr callerie = null;
-											
-											// We just need to get one is sufficient, since we only need it class name
-											for(CallSite callerSite:((List<CallSite>) smTag.getAllCallerSites())){
-												// DEBUG
-												System.out.println("Method is:\t\t|"+sm.getName()+"\t in class\t"+sm.getDeclaringClass().getName());
-												// FINISH
-												// 3. Caller method information
-												callerCFGNode = callerSite.getCallNode();										
-												callerStmt = callerCFGNode.getStmt();
-												System.out.println("Caller stmt is:\t"+callerStmt.toString());
-												callerMethod = callerCFGNode.getMethod();
-												System.out.println("Caller Method is:\t\t|"+callerMethod.getName()+"\t in class\t"+callerMethod.getDeclaringClass().getName());
-												callerie = callerStmt.getInvokeExpr();
-												if(callerie.getArgCount()>=index){
-													remotecallvi = callerie.getArg(index);
-													break;
-												}
-											}
-											
-											
-											// 4. Find the class inside the caller method
-											CFGDefUse cfggraph = (CFGDefUse) ProgramFlowBuilder.inst().getCFG(sm);
-											CFGNode exitNode = cfggraph.EXIT;
-											List<Context<SootMethod,CFGNode,PointsToGraph>> currContexts = PointsToAnalysis.inst().getContexts(callerMethod);
-											Context allcontext = Util.containsBeforeAfterValue(exitNode,currContexts);	
-											PointsToGraph p2g = (PointsToGraph) allcontext.getValueAfter(callerCFGNode);
-											
-											
-											return findAppClassByNewExpr(callerCFGNode,remotecallvi,callerMethod,p2g.getRoots().get(remotecallvi),superCls);
-										}
+					// Selection end at the entry points; we just search one define before this
+					List<Variable>alldefuses= duNode.getDefinedVars();
+					alldefuses.addAll(duNode.getUsedVars());
+					for(Variable var:alldefuses){	
+						if(var.getValue().equals(vi)){
+							Stmt st = duNode.getStmt();
+							if(st instanceof AssignStmt){
+								Value Lop = ((AssignStmt) st).getLeftOp();
+								Value Rop = ((AssignStmt) st).getRightOp();
+								if(Lop.equals(vi)){
+									//System.out.println("Right OP is:\t"+Rop);
+									if(Rop instanceof ClassConstant){
+										String className = ((ClassConstant) Rop).getValue();
+										className = className.replaceAll("/", ".");
+										return findAppClassByNameAndSuper(className,superCls);
 									}
 								}
-								else if(st instanceof DefinitionStmt){
+							}else if(st instanceof IdentityStmt){
+								// If this value is obtained from input parameter
+								Value Lop = ((IdentityStmt) st).getLeftOp();
+								Value Rop = ((IdentityStmt) st).getRightOp();
+								if(Lop.equals(vi)){
+									if(Rop instanceof ParameterRef){
+										ParameterRef parRef = (ParameterRef)Rop;
+											
+										// 1. Get the index of this parRef
+										int index = parRef.getIndex();
+											
+											
+										// 2. Get the caller of this method
+										MethodTag smTag = (MethodTag) sm.getTag(MethodTag.TAG_NAME);
+										Value remotecallvi = null;
+										CFGNode callerCFGNode = null;
+										Stmt callerStmt = null;
+										SootMethod callerMethod = null;
+										InvokeExpr callerie = null;
+											
+											// We just need to get one is sufficient, since we only need it class name
+										for(CallSite callerSite:((List<CallSite>) smTag.getAllCallerSites())){
+											// DEBUG
+											System.out.println("Method is:\t\t|"+sm.getName()+"\t in class\t"+sm.getDeclaringClass().getName());
+											// FINISH
+											// 3. Caller method information
+											callerCFGNode = callerSite.getCallNode();										
+											callerStmt = callerCFGNode.getStmt();
+											System.out.println("Caller stmt is:\t"+callerStmt.toString());
+											callerMethod = callerCFGNode.getMethod();
+											System.out.println("Caller Method is:\t\t|"+callerMethod.getName()+"\t in class\t"+callerMethod.getDeclaringClass().getName());
+											callerie = callerStmt.getInvokeExpr();
+											if(callerie.getArgCount()>=index){
+												remotecallvi = callerie.getArg(index);
+												break;
+											}
+										}
+											
+											
+										// 4. Find the class inside the caller method
+										CFGDefUse cfggraph = (CFGDefUse) ProgramFlowBuilder.inst().getCFG(sm);
+										CFGNode exitNode = cfggraph.EXIT;
+										List<Context<SootMethod,CFGNode,PointsToGraph>> currContexts = PointsToAnalysis.inst().getContexts(callerMethod);
+										Context allcontext = Util.containsBeforeAfterValue(exitNode,currContexts);	
+										PointsToGraph p2g = (PointsToGraph) allcontext.getValueAfter(callerCFGNode);
+											
+											
+										return findAppClassByNewExpr(callerCFGNode,remotecallvi,callerMethod,p2g.getRoots().get(remotecallvi),superCls);
+									}
+								}
+							}
+							else if(st instanceof DefinitionStmt){
 									Value Lop = ((DefinitionStmt) st).getLeftOp();
 									Value Rop = ((DefinitionStmt) st).getRightOp();
 									if(Lop.equals(vi)){
@@ -460,7 +457,7 @@ public class ProgramFlowBuilder {
 											return findAppClassByNameAndSuper(className,superCls);
 										}
 									}
-								}
+							}
 								
 							}
 						}

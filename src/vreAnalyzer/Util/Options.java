@@ -37,7 +37,7 @@ public class Options {
 	
 	private static boolean allowParmsRetUseDefs = false;
 	
-	private static DUModelBehavior duModelBehavior = DUModelBehavior.DEF_USES_ALL; // by default : safest assumption
+	private static DUModelBehavior duModelBehavior = DUModelBehavior.NONE; // by default : safest assumption
 	
 	public Options(){
 		

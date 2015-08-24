@@ -27,7 +27,7 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 			e.printStackTrace();
 		}
 		System.out.println("[vreAnalyzer] Program flow build[Finish]");
-				
+		/**	
 		System.out.println("[vreAnalyzer] Points to graph build[Start]");
 		PointsToAnalysis.inst().doAnalysis();
 		System.out.println("[vreAnalyzer] Points to graph build[Finish]");
@@ -45,6 +45,7 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 			ProjectParser.inst().showCommons();
 			
 		}
+		**/
 		
 	}
 

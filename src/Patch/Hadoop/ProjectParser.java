@@ -110,12 +110,7 @@ public class ProjectParser {
 									
 									// Set a Mapper;
 									if(invokeExpr.getMethod().getName().equals("setMapperClass")){ 
-										if(invokeExpr instanceof InterfaceInvokeExpr||
-												invokeExpr instanceof VirtualInvokeExpr){
-											jobtoHub.remove(key);
-											index--;
-											return;
-										}
+										
 										SootClass appMapper = null;
 										Value argu0 = invokeExpr.getArg(0);
 										if(key.equals(argu0)){
@@ -147,12 +142,7 @@ public class ProjectParser {
 									
 									// Set a Reducer;
 									else if(invokeExpr.getMethod().getName().equals("setReducerClass")){
-										if(invokeExpr instanceof InterfaceInvokeExpr||
-												invokeExpr instanceof VirtualInvokeExpr){
-											jobtoHub.remove(key);
-											index--;
-											return;
-										}
+										
 										SootClass appReducer = null;
 										Value argu0 = invokeExpr.getArg(0);
 										if(key.equals(argu0)){
@@ -183,12 +173,7 @@ public class ProjectParser {
 									
 									// set a combiner
 									else if(invokeExpr.getMethod().getName().equals("setCombinerClass")){
-										if(invokeExpr instanceof InterfaceInvokeExpr||
-												invokeExpr instanceof VirtualInvokeExpr){
-											jobtoHub.remove(key);
-											index--;
-											return;
-										}
+										
 										SootClass appCombiner = null;
 										Value argu0 = invokeExpr.getArg(0);
 										if(key.equals(argu0)){
@@ -273,12 +258,7 @@ public class ProjectParser {
 									
 									// Set a Mapper;
 									if(invokeExpr.getMethod().getName().equals("setMapperClass")){ 
-										if(invokeExpr instanceof InterfaceInvokeExpr||
-												invokeExpr instanceof VirtualInvokeExpr){
-											jobtoHub.remove(key);
-											index--;
-											return;
-										}
+										
 										SootClass appMapper = null;
 										Value argu0 = invokeExpr.getArg(0);
 										if(key.equals(argu0)){
@@ -311,12 +291,7 @@ public class ProjectParser {
 									
 									// Set a Reducer;
 									else if(invokeExpr.getMethod().getName().equals("setReducerClass")){
-										if(invokeExpr instanceof InterfaceInvokeExpr||
-												invokeExpr instanceof VirtualInvokeExpr){
-											jobtoHub.remove(key);
-											index--;
-											return;
-										}
+										
 										SootClass appReducer = null;
 										Value argu0 = invokeExpr.getArg(0);
 										if(key.equals(argu0)){
@@ -347,12 +322,7 @@ public class ProjectParser {
 									
 									// set a combiner
 									else if(invokeExpr.getMethod().getName().equals("setCombinerClass")){
-										if(invokeExpr instanceof InterfaceInvokeExpr||
-												invokeExpr instanceof VirtualInvokeExpr){
-											jobtoHub.remove(key);
-											index--;
-											return;
-										}
+										
 										SootClass appCombiner = null;
 										Value argu0 = invokeExpr.getArg(0);
 										if(key.equals(argu0)){

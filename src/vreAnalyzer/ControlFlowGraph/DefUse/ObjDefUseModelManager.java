@@ -9,12 +9,16 @@ import java.util.Map;
 
 
 
+
+
 import soot.NullType;
 import soot.RefLikeType;
 import soot.Scene;
+import soot.SootMethod;
 import soot.Value;
 import soot.jimple.InvokeExpr;
 import soot.jimple.Jimple;
+import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.Util.Options;
 
 /** Provides objects defined and used at modeled method calls, for specific methods. */
@@ -180,16 +184,7 @@ public class ObjDefUseModelManager {
 		/// CONVENTION: new expressions SHOULD NOT define object; ctors define object for the first time
 		///             In this way, uses can be associated to defined object at the same node
 		
-		// my own reporter classes
-		sigToModel.put("<change.ChainReporter: void __link()>", EmptyModel.inst);
-		sigToModel.put("<change.ChangeReporter: void __link()>", EmptyModel.inst);
-		sigToModel.put("<change.SPAReporter: void __link()>", EmptyModel.inst);
-		sigToModel.put("<change.StateReporter: void __link()>", EmptyModel.inst);
-		sigToModel.put("<profile.BranchReporter: void __link()>", EmptyModel.inst);
-		sigToModel.put("<profile.CommonReporter: void __link()>", EmptyModel.inst);
-		sigToModel.put("<profile.DUAReporter: void __link()>", EmptyModel.inst);
-		sigToModel.put("<profile.PathReporter: void __link()>", EmptyModel.inst);
-		sigToModel.put("<profile.TimeReporter: void __link()>", EmptyModel.inst);
+		
 		// java library classes
 		sigToModel.put("<java.io.PrintStream: void println(int)>", DefThisUseThisModel.inst); // uses and modifies stream (this) object
 		sigToModel.put("<java.io.PrintStream: void println(java.lang.String)>", DefThisUseThisArgModel.inst); // uses and modifies stream (this) object, and uses arg
@@ -242,6 +237,7 @@ public class ObjDefUseModelManager {
 	 *  Does *not* include any argument-string automatically created from raw-string constant (because it occurs outside and before lib call).
 	 *  Primitive parameters are *not* used or defined (only referred obj, if param is a ref). */
 	public static List<Value> getInternalObjDefs(InvokeExpr invExp) {
+		SootMethod method = invExp.getMethod();
 		final String tgtMtd = invExp.getMethod().toString();
 		
 		AbstractDefUseModel duModel = getCreateSigToModelMap().get(tgtMtd);
@@ -251,8 +247,12 @@ public class ObjDefUseModelManager {
 				System.out.println("Warning: using default def model for initializer " + tgtMtd);
 				return DefThisUseAllArgsModel.inst.getDefs(invExp);
 			}
-			
-			System.out.println("Warning: def model not found for " + tgtMtd + "; using " + Options.duModelBehavior() + " behavior");
+			if(!ProgramFlowBuilder.inst().getAppConcreteMethods().contains(method)){
+				// Library method 
+				
+				
+			}
+			System.err.println("Warning: def model not found for " + tgtMtd + "; using " + Options.duModelBehavior() + " behavior");
 			switch (Options.duModelBehavior()) {
 				case DEF_USES_ALL: return DefThisUseThisAllArgsModel.inst.getDefs(invExp);
 				case USES_ALL: return UseAllArgsModel.inst.getDefs(invExp);
