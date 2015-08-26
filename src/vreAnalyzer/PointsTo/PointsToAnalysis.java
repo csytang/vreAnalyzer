@@ -65,7 +65,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 	private static final SootMethod DUMMY_METHOD = new SootMethod("DUMMY_METHOD", Collections.EMPTY_LIST, Scene.v().getObjectType());
 	
 	// A stack holds all context to analysis
-
+	private boolean verbose = true;
 	protected Stack<Context<SootMethod,CFGNode,PointsToGraph>> analysisStack;
 	
 	///////////////////////////////////////////////////////////////////
@@ -83,7 +83,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 	public PointsToAnalysis() {
 		super();
 		
-		this.verbose = true;
+		this.verbose = false;
 		// Create an empty analysis stack
 		this.analysisStack = new Stack<Context<SootMethod,CFGNode,PointsToGraph>>();
 		// No classes statically initialised yet
@@ -120,6 +120,8 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 			if (!context.getWorkList().isEmpty()) {
 				// work-list contains items; So the next unit to analyse.
 				CFGNode unit = context.getWorkList().pollFirst();//Remove the first to analysis
+				if(verbose)
+					System.out.println("Stmt:"+unit.toString());
 				if (unit.toString()!="EX") {
 					
 					// Compute the IN data flow value (only for non-entry units).
@@ -131,7 +133,10 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 						
 						// Initialise IN to the OUT value of the first predecessor
 						PointsToGraph in = context.getValueAfter(predIterator.next());
-						
+						if(verbose){
+							System.out.println("In P2Graph is");
+							System.out.println(in);
+						}
 						// Then, merge OUT of remaining predecessors with the
 						// intermediate IN value
 						while (predIterator.hasNext()) {
@@ -158,6 +163,13 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 					}
 					// Set the OUT value
 					context.setValueAfter(unit, out);
+					
+					if(verbose){
+						System.out.println("Out P2Graph is");
+						System.out.println(out);
+						System.out.println("------------------------");
+					}
+						
 					
 				
 				}
@@ -229,9 +241,16 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 
 		// Now, initialise entry points with a copy of the given entry flow.
 		context.setEntryValue(copy(entryValue));
+		context.setValueBefore(context.getControlFlowGraph().ENTRY, null);
+		context.setValueAfter(context.getControlFlowGraph().ENTRY, copy(entryValue));
 		for (CFGNode unit : context.getControlFlowGraph().getHeads()) {
 			context.setValueBefore(unit, copy(entryValue));
 			// Add entry points to work-list
+			if(verbose){
+				System.out.println("Set value before:\t"+unit+"\tis");
+				System.out.println(entryValue);
+			}
+			context.getWorkList().add(unit);
 		}
 
 		// Add this new context to the given method's mapping.
@@ -475,8 +494,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 				entryValue.assign(local, null);
 			}
 		}
-		
-		
+
 		if(!entryMethod.getActiveBody().getParameterLocals().isEmpty()){
 			// if main method 
 			if(entryMethod == Scene.v().getMainMethod()){
@@ -485,14 +503,12 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 				entryValue.assignNew(argsLocal, argsExpr);
 				entryValue.setFieldConstant(argsLocal, PointsToGraph.ARRAY_FIELD, PointsToGraph.STRING_CONST);
 			}
+			/**
+			for(int i = 0;i < entryMethod.getActiveBody().getParameterLocals().size();i++){
+				Local argsLocal = entryMethod.getActiveBody().getParameterLocal(i);
+			}
+			**/
 		}
-		for(int i = 0;i <= entryMethod.getActiveBody().getParameterLocals().size();i++){
-			Local argsLocal = entryMethod.getActiveBody().getParameterLocal(i);
-			
-			entryValue.assignNew(argsLocal, argsExpr);
-		}
-		Local argsLocal = entryMethod.getActiveBody().getParameterLocal(0);
-		
 		
 		return entryValue;
 	}

@@ -3,6 +3,7 @@ package vreAnalyzer;
 import java.util.Map;
 
 import soot.SceneTransformer;
+import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder.EntryNotFoundException;
 
@@ -24,7 +25,7 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 		System.out.println("[vreAnalyzer] Program flow build[Finish]");
 		
 		System.out.println("[vreAnalyzer] Points to graph build[Start]");
-		
+		PointsToAnalysis.inst().doAnalysis();
 		System.out.println("[vreAnalyzer] Points to graph build[Finish]");
 		// Finish
 				

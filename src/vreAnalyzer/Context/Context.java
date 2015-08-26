@@ -128,7 +128,8 @@ public class Context<SootMethod,CFGNode,PointsToGraph> implements soot.Context, 
 			}
 		});
 	    for(vreAnalyzer.Elements.CFGNode cf:controlFlowGraph.getNodes()){
-	    	this.workList.add((CFGNode) cf);
+	    	if(!cf.toString().equals("EN"))
+	    		this.workList.add((CFGNode) cf);
 	    }
 	}
 

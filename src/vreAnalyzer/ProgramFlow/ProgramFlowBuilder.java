@@ -13,21 +13,8 @@ import soot.FastHierarchy;
 import soot.Scene;
 import soot.SootClass;
 import soot.SootMethod;
-import soot.Value;
-import soot.jimple.AnyNewExpr;
-import soot.jimple.AssignStmt;
-import soot.jimple.ClassConstant;
-import soot.jimple.DefinitionStmt;
-import soot.jimple.IdentityStmt;
-import soot.jimple.InterfaceInvokeExpr;
-import soot.jimple.InvokeExpr;
-import soot.jimple.ParameterRef;
-import soot.jimple.Stmt;
-import soot.jimple.VirtualInvokeExpr;
 import vreAnalyzer.ControlFlowGraph.CFG;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
-import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
-import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Elements.CallSite;
 
@@ -353,5 +340,10 @@ public class ProgramFlowBuilder {
 				return libClass;
 		}
 		return null;
+	}
+
+	public List<CFG> getCFGs() {
+		// TODO Auto-generated method stub
+		return allCFGs;
 	}
 }

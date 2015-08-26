@@ -78,7 +78,10 @@ public class Options {
 			 */
 			else if(arg.startsWith("-entry:")){
 				entryClassName = new String(arg).substring("-entry:".length());
+				
 				System.out.println("Specified main entry class is '" + entryClassName + "'");
+				argsSoot.add("-main-class");
+				argsSoot.add(entryClassName);
 			}
 			else if (arg.startsWith("-dumodel:")) {
 				String value = arg.substring("-dumodel:".length());
