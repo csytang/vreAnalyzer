@@ -81,7 +81,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 	}
 	
 	public PointsToAnalysis() {
-		super(true);
+		super();
 		
 		this.verbose = true;
 		// Create an empty analysis stack
@@ -486,6 +486,14 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 				entryValue.setFieldConstant(argsLocal, PointsToGraph.ARRAY_FIELD, PointsToGraph.STRING_CONST);
 			}
 		}
+		for(int i = 0;i <= entryMethod.getActiveBody().getParameterLocals().size();i++){
+			Local argsLocal = entryMethod.getActiveBody().getParameterLocal(i);
+			
+			entryValue.assignNew(argsLocal, argsExpr);
+		}
+		Local argsLocal = entryMethod.getActiveBody().getParameterLocal(0);
+		
+		
 		return entryValue;
 	}
 	
@@ -598,10 +606,11 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 			CallSite srcCallSite = callStmt.getCallSite();
 			if(srcCallSite!=null){
 				srcCallSite.setCallingContext(callerContext);
-				this.contextTransitions.addTransition(srcCallSite, null);
+				this.contextTransitions.addTransition(srcCallSite, callerContext);
 				if (verbose) {
 					System.out.println("[DEF] X" + callerContext + " -> DEFAULT " + ie.getMethod());
 				}
+				
 			}
 			
 		} 

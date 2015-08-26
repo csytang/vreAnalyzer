@@ -47,9 +47,7 @@ public  class NodeDefUses extends CFGNode {
 		for (Use u : cfgDU.getArrayElemUses())
 			if (u.getN() == this)
 				varsSet.add(u.getVar());
-		for (Use u : cfgDU.getLibObjUses())
-			if (u.getN() == this)
-				varsSet.add(u.getVar());
+		
 		
 		List<Variable> sortedVarsList = new ArrayList<Variable>(varsSet);
 		Collections.sort(sortedVarsList, new VariableComparator());
@@ -73,9 +71,7 @@ public  class NodeDefUses extends CFGNode {
 		for (Def d : cfgDU.getArrayElemDefs())
 			if (d.getN() == this)
 				varsSet.add(d.getVar());
-		for (Def d : cfgDU.getLibObjDefs())
-			if (d.getN() == this)
-				varsSet.add(d.getVar());
+		
 		
 		List<Variable> sortedVarsList = new ArrayList<Variable>(varsSet);
 		Collections.sort(sortedVarsList, new VariableComparator());

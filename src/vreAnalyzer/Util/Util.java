@@ -41,14 +41,10 @@ import soot.jimple.internal.JRetStmt;
 import soot.jimple.internal.JReturnStmt;
 import soot.jimple.internal.JReturnVoidStmt;
 import soot.util.NumberedString;
-import vreAnalyzer.Context.Context;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
 import vreAnalyzer.Elements.CFGNode;
-import vreAnalyzer.PointsTo.PointsToAnalysis;
-import vreAnalyzer.PointsTo.PointsToGraph;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
-import vreAnalyzer.Reuse.Checking.PointsToDefUseChecking;
 
 
 public class Util {
@@ -82,9 +78,8 @@ public class Util {
 	 * @param mAppTgts
 	 * @param mLibTgts
 	 * @return
-	 * bug report:
-	 * inner class
 	 */
+	
 	public static boolean getConcreteCallTargets(InstanceInvokeExpr instInvExpr,
 			Set<SootMethod> mAppTgts, Set<SootMethod> mLibTgts) {
 		// TODO  get class of method ref; we start searching from this class
@@ -95,7 +90,7 @@ public class Util {
 		// Signature to search for
 		final NumberedString subsignature = mref.getSubSignature(); 
 		
-		/** 
+		/* 
 		 * CASE 1: Object is of declared class type or inherited from some superclass
 		 *         find first superclass, starting from current cls, that declares method; there HAS to be such a class
 		 * note that if cls is interface, superclass if java.lang.Object
@@ -103,8 +98,8 @@ public class Util {
 		 * 情況1: Object是從一種聲明的類類型或者繼承自聲明的類類型
 		 * 方法：從本類開始向上檢索 一定會搜索到這個類
 		 * 注意：如果cls是一種藉口的話
-		 *
 		 */
+		
 		while ((!cls.declaresMethod(subsignature)) && cls.hasSuperclass())
 			cls = cls.getSuperclass(); // Never an interface
 		
@@ -123,7 +118,10 @@ public class Util {
 					
 			}
 		}
-		/**
+		if(!mLibTgts.isEmpty() || !mAppTgts.isEmpty()){
+				return true;
+		}
+		/*
 		 *  (only for virtual/interface calls)
 		 *  CASE 2: object's actual type is a subclass; any subclass declaring the method is a possible target
 		 *  we have to check all superclasses of implementers, because starting cls might be interface
@@ -149,7 +147,7 @@ public class Util {
 			
 			
 			if(mLibTgts.isEmpty() && mAppTgts.isEmpty()){
-				System.err.println("[vreAnalyzer] Warnning!! Unsafe target setting");
+				
 				boolean detected = false;
 				
 				cls = mref.declaringClass();
@@ -165,13 +163,15 @@ public class Util {
 								m = sm.getMethod(subsignature);
 								
 								if(sm.isApplicationClass()){
+									System.out.println("[vreAnalyzer] Warnning!! for invoke\t"+instInvExpr.toString() +"\tUnsafe app target setting to:\t"+m.getName());
 									mAppTgts.add(m);
 								}
 								else{
+									System.out.println("[vreAnalyzer] Warnning!! for invoke\t"+instInvExpr.toString() +"\tUnsafe lib target setting to:\t"+m.getName());
 									mLibTgts.add(m);
 								}
 								detected = true;
-								break;
+								return true;
 							}
 						}
 						if(!detected){
@@ -181,15 +181,11 @@ public class Util {
 				}
 				
 			}
-			
-			
-			
-			
-			
 		}
 		
-				
-		return !mLibTgts.isEmpty();
+		
+		return (!mLibTgts.isEmpty() || !mAppTgts.isEmpty());
+		
 		
 	}
 	
@@ -225,15 +221,7 @@ public class Util {
 		return subclasses;
 	}
 	
-	
-	public static Context containsBeforeAfterValue(CFGNode currcfg,List<Context<SootMethod, CFGNode, PointsToGraph>> currContexts){
-		for(Context cuurcontextit:currContexts){
-			if(cuurcontextit.getValueBefore(currcfg)!=null && cuurcontextit.getValueAfter(currcfg)!=null){
-				return cuurcontextit;
-			}
-		}
-		return null;
-	}
+
 	
 	/** A value represents a var if it's a constant, local, field ref (for field itself), or array elem ref (any element in it).
 	 *  Takes 'must' param to distinguish between 'just possibly equal' and 'definitely equal' values (a distinction for fields and array elem refs). 
@@ -284,82 +272,7 @@ public class Util {
 		return ae1.getBase().equals(ae2.getBase()) && ae1.getIndex().equals(ae2.getIndex());
 	}
 	
-	@SuppressWarnings("unchecked")
-	public static CFGNode[]getCommonAsset(SootMethod src,SootMethod other){
-		// Obtain all contexts
-		
-		CFGNode[] commonIndex = new CFGNode[4];
-		List<Context<SootMethod,CFGNode,PointsToGraph>> currContexts = PointsToAnalysis.inst().getContexts(src);
-		List<Context<SootMethod,CFGNode,PointsToGraph>> otherContexts = PointsToAnalysis.inst().getContexts(other);
-				
-		CFGDefUse thisCFG = (CFGDefUse) ProgramFlowBuilder.inst().getCFG(src);
-		CFGDefUse otherCFG = (CFGDefUse) ProgramFlowBuilder.inst().getCFG(other);
-		// Iterate these cfgs and compare the context
-		
-		CFGNode exitThis = thisCFG.EXIT;
-		Context thisallcontext = Util.containsBeforeAfterValue(exitThis,currContexts);
-		
-		CFGNode exitOther = otherCFG.EXIT;
-		Context otherallcontext = Util.containsBeforeAfterValue(exitOther,otherContexts);
-		
-					
-		// Use lattice to compare
-		List<CFGNode>thiscfgNodes = thisCFG.getNodes();
-		List<CFGNode>othercfgNodes = otherCFG.getNodes();
-		int m = thiscfgNodes.size();
-		int n = othercfgNodes.size();
-		
-		boolean findStartPoint = false;
-		// get start and end index
-		int thisStartIndex = 0;
-		int thisEndIndex = 0;
-		int otherStartIndex = 0;
-		int otherEndIndex = 0;
-		int i,j;
-		for(i = 1;i <= m;++i){
-			for(j = 1;j <=n;++j){
-				NodeDefUses otherCurr = (NodeDefUses) othercfgNodes.get(j-1);
-				NodeDefUses thisCurr = (NodeDefUses) thiscfgNodes.get(i-1);
-				if(PointsToDefUseChecking.P2DefUseGroughEquals((PointsToGraph) thisallcontext.getValueBefore(thisCurr), otherallcontext.getValueBefore(otherCurr), src, other, thisCurr, otherCurr)
-					)
-					{
-					    thisStartIndex = i-1;
-						otherStartIndex = j-1;
-						findStartPoint = true;
-						break;
-			        }
-			}
-			if(findStartPoint)
-				break;
-		}
-		i = thisStartIndex+1;
-		j = otherStartIndex+1;
-		while(i<=m && j<=n){
-			NodeDefUses otherCurr = (NodeDefUses) othercfgNodes.get(j-1);
-			NodeDefUses thisCurr = (NodeDefUses) thiscfgNodes.get(i-1);
-			if(PointsToDefUseChecking.P2DefUseGroughEquals((PointsToGraph) thisallcontext.getValueBefore(thisCurr), otherallcontext.getValueBefore(otherCurr), src, other, thisCurr, otherCurr)
-				){
-				thisEndIndex = i-1;
-				otherEndIndex = j-1;
-				i++;
-				j++;
-			}else
-				break;
-		}
-		
-		
-		// extend existing scope to large if there is no context change   
-
-		commonIndex[0] = thiscfgNodes.get(thisStartIndex);
-		commonIndex[1] = thiscfgNodes.get(thisEndIndex);
-		commonIndex[2] = othercfgNodes.get(otherStartIndex);
-		commonIndex[3] = othercfgNodes.get(otherEndIndex);
-						
-		
-		return commonIndex;
-		
-		
-	}
+	
 	
 	/** Hash code for Value representing a variable if it's a constant, local, field ref (for field itself), or array elem ref (for all elements of array of that type).
 	 *  Hash codes are equal for two values iff the two values must be equal, as per {@link #valuesEqual(Value, Value, boolean)} with must=true. */

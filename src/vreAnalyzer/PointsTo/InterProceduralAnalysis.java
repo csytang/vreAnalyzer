@@ -72,7 +72,6 @@ public abstract class InterProceduralAnalysis<SootMethod,CFGNode,PointsToGraph> 
 	 * <tt>true</tt> if the direction of analysis is backward, or <tt>false</tt>
 	 * if it is forward.
 	 */
-	protected final boolean reverse;
 
 	/**
 	 * A flag, if set, directs the analysis to free memory storing
@@ -97,7 +96,6 @@ public abstract class InterProceduralAnalysis<SootMethod,CFGNode,PointsToGraph> 
 	 * <p>The default value for this flag is <tt>false</tt>.</p>
 	 * 
 	 */
-	protected boolean freeResultsOnTheFly;
 	
 	/**
 	 * Whether to print information about contexts.
@@ -110,10 +108,9 @@ public abstract class InterProceduralAnalysis<SootMethod,CFGNode,PointsToGraph> 
 	 * @param reverse <tt>true</tt> if the analysis is in the reverse direction,
 	 *            <tt>false</tt> if it is in the forward direction
 	 */
-	public InterProceduralAnalysis(boolean reverse) {
+	public InterProceduralAnalysis() {
 
 		// Set direction
-		this.reverse = reverse;
 
 		// Initialise map of methods to contexts.
 		contexts = new HashMap<SootMethod,List<Context<SootMethod,CFGNode,PointsToGraph>>>();
@@ -197,21 +194,14 @@ public abstract class InterProceduralAnalysis<SootMethod,CFGNode,PointsToGraph> 
 			return null;
 		}
 		// Otherwise, look for a context in this method's list with the given value.
-		if (reverse) {
-			// Backward flow, so check for EXIT FLOWS
-			for (Context<SootMethod,CFGNode,PointsToGraph> context : contexts.get(method)) {
-				if (value.equals(context.getExitValue())) {
-					return context;
-				}
-			}
-		} else {
+	
 			// Forward flow, so check for ENTRY FLOWS
-			for (Context<SootMethod,CFGNode,PointsToGraph> context : contexts.get(method)) {
+		for (Context<SootMethod,CFGNode,PointsToGraph> context : contexts.get(method)) {
 				if (value.equals(context.getEntryValue())) {
 					return context;
 				}
-			}
 		}
+		
 		// If nothing found return null.
 		return null;
 	}

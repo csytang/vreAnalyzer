@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import soot.Local;
 import soot.RefType;
 import soot.Scene;
@@ -21,14 +20,12 @@ import soot.jimple.AssignStmt;
 import soot.jimple.Constant;
 import soot.jimple.FieldRef;
 import soot.jimple.IdentityStmt;
-import soot.jimple.IntConstant;
 import soot.jimple.InvokeExpr;
 import soot.jimple.InvokeStmt;
 import soot.jimple.Jimple;
 import soot.jimple.NewArrayExpr;
 import soot.jimple.ReturnStmt;
 import soot.jimple.Stmt;
-import soot.jimple.StringConstant;
 import vreAnalyzer.ControlFlowGraph.Branch;
 import vreAnalyzer.ControlFlowGraph.CFG;
 import vreAnalyzer.ControlFlowGraph.DefUse.Def.ConstCSParamDef;
@@ -39,7 +36,6 @@ import vreAnalyzer.ControlFlowGraph.DefUse.Use.CSReturnedVarCUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.Use.CUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.Use.PUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.Use.Use;
-import vreAnalyzer.ControlFlowGraph.DefUse.Variable.ObjVariable;
 import vreAnalyzer.ControlFlowGraph.DefUse.Variable.StdVariable;
 import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
@@ -73,9 +69,6 @@ public class CFGDefUse extends CFG {
 	protected List<Use> arrElemUses = new ArrayList<Use>();
 	protected List<Def> arrElemDefs = new ArrayList<Def>();
 	/** All uses of class/static and instance (lib) objects. */
-	protected List<Use> libObjUses = new ArrayList<Use>();
-	/** All defs of class/static and instance (lib) objects. */
-	protected List<Def> libObjDefs = new ArrayList<Def>();
 	/** Uses of values returned from app method called from this CFG */
 	protected Map<CFGNode,Use> callRetUses = new HashMap<CFGNode, Use>();
 	/** Special defs of constant arguments to app method calls from this CFG */
@@ -101,8 +94,7 @@ public class CFGDefUse extends CFG {
 	public List<Def> getFieldDefs() { return fieldDefs; }
 	public List<Use> getArrayElemUses() { return arrElemUses; }
 	public List<Def> getArrayElemDefs() { return arrElemDefs; }
-	public List<Use> getLibObjUses() { return libObjUses; }
-	public List<Def> getLibObjDefs() { return libObjDefs; }
+	
 	public List<Def> getConstDefs() { return new ArrayList<Def>(argConstDefs.isEmpty()? retConstDefs : argConstDefs); }
 	
 	
@@ -242,11 +234,7 @@ public class CFGDefUse extends CFG {
 								assert s instanceof InvokeStmt; // call that ignores returned value
 						}
 					}
-					if (cs.hasLibCallees()) {
-						// special uses occurring *inside* library call
-						for (Value valObjUse : ObjDefUseModelManager.getInternalObjUses(invExpr))
-							libObjUses.add(new CUse(new ObjVariable(valObjUse, n), n));
-					}
+					
 				}
 				
 				// add to CFG all uses in this node, obtaining incremental new ids
@@ -312,19 +300,8 @@ public class CFGDefUse extends CFG {
 							++argIdx;
 						}
 					}
-					if (cs.hasLibCallees()) {
-						// objects (potentially) defined (modified) *inside* lib call
-						for (Value valObjDef : ObjDefUseModelManager.getInternalObjDefs(invExpr))
-							libObjDefs.add(new Def(new ObjVariable(valObjDef, n), n));
-					}
-					// Special defs of java.lang.String objects created automatically because of raw-string parameters "..."
-					// These strings are created *before* call (need to explicitly define) and *outside* call (not created by lib model)
-					for (Object arg : invExpr.getArgs()) {
-						// represents actual java.lang.String that gets created, not the ref var that is the parameter itself
-						// TODO: def of auto-string obj actually occurs *before* call (model puts it first? what about app call?)
-						if (arg instanceof StringConstant)
-							libObjDefs.add(new Def(new ObjVariable((StringConstant)arg, n), n));
-					}
+					
+					
 				}
 				// add special defs: constant return values
 				if (s instanceof ReturnStmt) {
@@ -341,8 +318,7 @@ public class CFGDefUse extends CFG {
 				if (s instanceof AssignStmt) {
 					Value vRight = ((AssignStmt)s).getRightOp();
 					if (vRight instanceof NewArrayExpr) {
-						// define array object
-						libObjDefs.add(new Def(new ObjVariable(vRight, n), n));
+						
 						// create definition for ANY elem in this array (and, for now, for all elems of array-elem's type)
 						Value vSize = ((NewArrayExpr)vRight).getSize();
 						arrElemDefs.add(new Def(new StdVariable(Jimple.v().newArrayRef(((AssignStmt)s).getLeftOp(), vSize)), n));
@@ -369,22 +345,14 @@ public class CFGDefUse extends CFG {
 				// def: array itself (local is already defined in code); use local as base of array ref (i.e., array elem)
 				NodeDefUses nDUArgArrParam = (NodeDefUses) nodes.get(1); // first id stmt: args := @parameter0: java.lang.String[]
 				RefType typeStr = Scene.v().getRefType("java.lang.String");
-				libObjDefs.add(new Def(  // need to create array object ourselves (actual array created by JVM before entry to 'main')
-						new ObjVariable(Jimple.v().newNewArrayExpr(typeStr, IntConstant.v(1)), nDUArgArrParam), // dim 1 shouldn't matter
-						nDUArgArrParam)); // occurs at very first id stmt: args := @parameter0: java.lang.String[]
-				// def: elements of 'args' array (i.e., String objects)
-				libObjDefs.add(new Def(
-						new ObjVariable(Jimple.v().newNewExpr(typeStr), nDUArgArrParam),
-						nDUArgArrParam)); // occurs at very first id stmt: args := @parameter0: java.lang.String[]
+				
 			}
 			
 			// def: static field System.out (and obj pointed by field) of type java.io.PrintStream
 			SootClass clsSystem = Scene.v().getRefType("java.lang.System").getSootClass();
 			FieldRef fldRefOut = Jimple.v().newStaticFieldRef(clsSystem.getFieldByName("out").makeRef());
 			fieldDefs.add(new Def(new StdVariable(fldRefOut), ENTRY));
-//			SootClass clsPrintStream = Scene.v().getRefType("java.io.PrintStream").getSootClass();
-			libObjDefs.add(new Def(new ObjVariable(fldRefOut, ENTRY), ENTRY));
-//					new ObjVariable(Jimple.v().newNewExpr(clsPrintStream.getType()), ENTRY), ENTRY));
+//			
 		}
 		
 		// map values to uses (in the form of bitsets)

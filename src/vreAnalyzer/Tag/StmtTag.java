@@ -22,8 +22,7 @@ import soot.tagkit.AttributeValueException;
 import soot.tagkit.Tag;
 import vreAnalyzer.Elements.CallSite;
 import vreAnalyzer.Elements.Location;
-import vreAnalyzer.PointsTo.PointsToAnalysis;
-import vreAnalyzer.PointsTo.PointsToGraph;
+
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.Util.StringBasedComparator;
 import vreAnalyzer.Util.Util;
@@ -121,7 +120,7 @@ public class StmtTag implements Tag{
 				
 				if (mAppTgts.isEmpty() && mLibTgts.isEmpty()) {
 					// TODO: See why this happens
-					System.err.println("ERROR!!!: no app or lib call target found for call site: " + loc);
+					// is fine since the is -cp jar is not processed;
 				}
 				
 				// Create call site, storing it in field
