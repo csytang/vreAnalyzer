@@ -22,8 +22,8 @@ import soot.tagkit.AttributeValueException;
 import soot.tagkit.Tag;
 import vreAnalyzer.Elements.CallSite;
 import vreAnalyzer.Elements.Location;
-
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
+import vreAnalyzer.Util.SourceLocation;
 import vreAnalyzer.Util.StringBasedComparator;
 import vreAnalyzer.Util.Util;
 
@@ -48,6 +48,7 @@ public class StmtTag implements Tag{
 	private SootMethod mNode;
 	
 	private Stmt stmt;
+	private SourceLocation locTag;
 	// Keeps reference to local call site, if any
 	private CallSite callSite = null;
 	
@@ -61,6 +62,7 @@ public class StmtTag implements Tag{
 		successorStmts = new ArrayList<Stmt>(); // will be filled later
 		stmt = s;
 		mNode = m;
+		locTag = new SourceLocation(m,s);
 		loc = new Location(m, s);
 		this.sIdx = sIdx;
 	}

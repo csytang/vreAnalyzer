@@ -1,7 +1,6 @@
 package vreAnalyzer.UI;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
@@ -31,7 +30,7 @@ public class ConfigureWizard extends JDialog {
 		return instance;
 	}
 	
-	public ConfigureWizard(NewProjectPanel owner) {
+	public ConfigureWizard(final NewProjectPanel owner) {
 		super(owner,true);
 		setTitle("Configure Wizard");
 		setBounds(100, 100, 450, 300);
@@ -56,7 +55,7 @@ public class ConfigureWizard extends JDialog {
 		sl_contentPanel.putConstraint(SpringLayout.EAST, scrollPane, 430, SpringLayout.WEST, contentPanel);
 		contentPanel.add(scrollPane);
 		
-		JTextArea textArea = new JTextArea();
+		final JTextArea textArea = new JTextArea();
 		textArea.setLineWrap(true);
 		scrollPane.setViewportView(textArea);
 		{
@@ -72,7 +71,7 @@ public class ConfigureWizard extends JDialog {
 						}
 						else{
 							MainFrame.inst().generateSootCommand(textArea.getText());
-							NewProjectPanel.inst().setWizardCommand(textArea.getText());
+							NewProjectPanel.setWizardCommand(textArea.getText());
 							dispose();
 						}
 					}

@@ -2,6 +2,7 @@ package vreAnalyzer;
 
 import java.util.Map;
 
+import Patch.Hadoop.ProjectParser;
 import soot.SceneTransformer;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
@@ -10,7 +11,6 @@ import vreAnalyzer.ProgramFlow.ProgramFlowBuilder.EntryNotFoundException;
 
 public class vreAnalyzerInternalTransform extends SceneTransformer{
 
-	@Override
 	protected void internalTransform(String arg0, Map<String, String> arg1) {
 		// TODO Auto-generated method stub
 		
@@ -33,9 +33,8 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 				
 		// Display Reusable Result by checking the mode
 		
-		
-		
-		
+		ProjectParser.inst().ClassParser();
+
 	}
 
 }

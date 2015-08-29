@@ -3,15 +3,19 @@ package vreAnalyzer.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
+import soot.MethodSource;
 import soot.SootMethod;
+import soot.Unit;
 import soot.jimple.Stmt;
 import vreAnalyzer.ControlFlowGraph.Branch;
 import vreAnalyzer.Tag.StmtTag;
+import vreAnalyzer.Util.SourceLocation;
 
 public class CFGNode {
 	
 	///////////////////////Field///////////////////////////////////
 	protected StmtTag sTag;
+	protected SourceLocation sourceLoc;
 	protected ArrayList<CFGNode> preds = new ArrayList<CFGNode>();
 	protected ArrayList<CFGNode> succs = new ArrayList<CFGNode>();
 	protected CFGNode fallThroughTgt = null;
@@ -19,6 +23,7 @@ public class CFGNode {
 	private CallSite callsite = null;
 	private SootMethod sm;
 	private ArrayList<Branch> outBranches = null; // created on demand
+	private boolean verbose = true;
 	///////////////////////////////////////////////////////////////
 	
 	////////////////////Constructor///////////////////////////////
@@ -27,6 +32,8 @@ public class CFGNode {
 		this.sTag = sTag;
 		this.isCallSite = false;
 		this.sm = sm;
+		
+		// FINISH
 	}
 	//////////////////////////////////////////////////////////////
 	

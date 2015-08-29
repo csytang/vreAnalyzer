@@ -1,5 +1,4 @@
 package vreAnalyzer.UI;
-import java.awt.BorderLayout;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,73 +12,50 @@ import java.util.Stack;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JFrame;
-import javax.swing.SpringLayout;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
 
 
-public class SourceClassBinding extends JDialog {
+public class SourceClassBinding{
 
-	private final JPanel contentPanel = new JPanel();
-	private final JProgressBar progressBar;
-	private final JLabel lblBinding;
+	
 	private static SourceClassBinding instance;
+	private int index = 0;
 	/**
 	 * Create the dialog.
 	 */
-	public static SourceClassBinding inst(JFrame parent){
+	public static SourceClassBinding inst(List<File>classes,List<File>source,File clsParent,File sourceParent){
 		if(instance==null){
-			instance = new SourceClassBinding(parent);
+			instance = new SourceClassBinding(classes,source,clsParent,sourceParent);
 		}
 		return instance;
 	}
 	public static SourceClassBinding inst(){
 		return instance;
 	}
-	public SourceClassBinding(JFrame parent) {
-		super(parent,true);
-		setTitle("Class and souce binding...");
-		setBounds(100, 100, 450, 180);
-		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		SpringLayout sl_contentPanel = new SpringLayout();
-		contentPanel.setLayout(sl_contentPanel);
-		
-		lblBinding = new JLabel("Binding:");
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, lblBinding, 34, SpringLayout.NORTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, lblBinding, 10, SpringLayout.WEST, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, lblBinding, 57, SpringLayout.NORTH, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, lblBinding, 430, SpringLayout.WEST, contentPanel);
-		contentPanel.add(lblBinding);
-		
-		progressBar = new JProgressBar();
-		sl_contentPanel.putConstraint(SpringLayout.NORTH, progressBar, 27, SpringLayout.SOUTH, lblBinding);
-		sl_contentPanel.putConstraint(SpringLayout.WEST, progressBar, 10, SpringLayout.WEST, contentPanel);
-		sl_contentPanel.putConstraint(SpringLayout.SOUTH, progressBar, 50, SpringLayout.SOUTH, lblBinding);
-		sl_contentPanel.putConstraint(SpringLayout.EAST, progressBar, 430, SpringLayout.WEST, contentPanel);
-		contentPanel.add(progressBar);
-		
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setVisible(false);
+	public SourceClassBinding(List<File>classes,List<File>source,File clsParent,File sourceParent) {
+		startdirBinding(classes,source,clsParent,sourceParent);		
 	}
 	public void startdirNameBinding(List<String>classes,ArrayList<File>source,String clsSysPathPattern,String sourceSysPathPattern){
-		setVisible(true);
-		int index = 0;
+		System.out.println("[vreHadoop] String dir NameBinding");
+		
+		index = 0;
 		int totalsize = classes.size();
+		
 		for(String clsName:classes){
+			System.out.println("Class name:"+clsName);
 			String realName = clsName.substring(0+clsSysPathPattern.length(), clsName.length()-".class".length());
+			if(realName.contains("$")){
+				realName = realName.substring(0, realName.indexOf("$"));
+			}
+		
+			
 			File result = source.get(bindarySearch(source,sourceSysPathPattern,realName,0,source.size()-1));
 			MainFrame.inst().addBinding(clsName, result);
+			 
+			System.out.println("[vreHadoop] Binding class ["+clsName+"] with source ["+result.getAbsolutePath()+"]");
 			index++;
-			lblBinding.setText("Binding: class "+realName);
-			float value = (float)index/totalsize*100;
-			progressBar.setValue((int)value);
+		
 		}
+		
 	}
 	private int bindarySearch(ArrayList<File> source,String sourceSystemPath,String value,int min, int max) {
 		// TODO Auto-generated method stub
@@ -99,7 +75,9 @@ public class SourceClassBinding extends JDialog {
 		}
 		
 	}
+	
 	public void startdirBinding(List<File>classes,List<File>source,File clsParent,File sourceParent){
+		System.out.println("[vreHadoop] Binding source code with jar/class files");
 		ArrayList<File>sortedSource = new ArrayList<File>(source);
 		Collections.sort(sortedSource,new Comparator<File>(){
 
@@ -119,7 +97,8 @@ public class SourceClassBinding extends JDialog {
 			File fi = classstack.pop();
 			if(!fi.isDirectory()){
 					if(fi.getName().endsWith(".class")){
-						String className = fi.getAbsolutePath().replace('/', '.');
+						String className = fi.getAbsolutePath();
+						
 						classNames.add(className);
 					}else if(fi.getName().endsWith(".jar")){
 						ZipInputStream zip;
@@ -128,7 +107,8 @@ public class SourceClassBinding extends JDialog {
 							for(ZipEntry entry=zip.getNextEntry();entry!=null;entry = zip.getNextEntry()){
 								if(!entry.isDirectory() &&
 										entry.getName().endsWith(".class")){
-									String className = entry.getName().replace('/', '.');
+									String className = entry.getName();
+									
 									classNames.add(className);
 								}
 							}
@@ -150,10 +130,18 @@ public class SourceClassBinding extends JDialog {
 			}
 			
 		}
-		String parentPath = clsParent.getName().replace('/', '.');
-		String parentSourcePath = sourceParent.getAbsolutePath().replace('/', '.');
+		String parentPath = clsParent.getPath();
+		if(!parentPath.endsWith("/")){
+			parentPath+="/";
+		}
+		String parentSourcePath = sourceParent.getAbsolutePath();
+		if(!parentSourcePath.endsWith("/")){
+			parentSourcePath+="/";
+		}
 		startdirNameBinding(classNames,sortedSource,parentPath,parentSourcePath);
+		
 	}
+	
 	
 	
 }

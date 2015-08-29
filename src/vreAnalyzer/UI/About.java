@@ -27,7 +27,7 @@ import javax.swing.WindowConstants;
 public class About extends JDialog {
 
 	private JPanel contentPane;
-	private static About instance;
+	private static About instance=null;
 	
 	/**
 	 * Create the frame.
@@ -119,7 +119,7 @@ public class About extends JDialog {
 		});
 		scrollPane_2.setViewportView(editorPane_2);
 		setLocationRelativeTo(null);
-		setVisible(true);
+		
 		
 		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 	}
@@ -154,14 +154,15 @@ public class About extends JDialog {
 
 	public static About inst(JFrame parent) {
 		// TODO Auto-generated method stub
-		if(instance==null){
+		if(About.instance==null){
 			try {
-				instance = new About(parent);
+				About.instance = new About(parent);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		About.instance.setVisible(true);
 		return instance;
 	}
 

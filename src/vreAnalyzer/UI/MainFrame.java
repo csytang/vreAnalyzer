@@ -33,13 +33,14 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 
 public class MainFrame extends JFrame {
@@ -59,7 +60,7 @@ public class MainFrame extends JFrame {
 	// 3. 
 	private String[]comm;
 	private static Map<String,File>classnametoSource;
-	
+	private List<File>allsourcefiles = new LinkedList<File>();
 	// 4. Output redirect
 	PrintStream printStream;
 	
@@ -126,7 +127,7 @@ public class MainFrame extends JFrame {
 		JMenuItem mntmAbout = new JMenuItem("About");
 		mntmAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				About.inst(instance);
+				About abtinstance = About.inst(instance);
 				
 			}
 		});
@@ -199,7 +200,7 @@ public class MainFrame extends JFrame {
 		// Redirect output stream
 		printStream = new PrintStream(new CustomOutputStream(textArea));
 		System.setOut(printStream);
-        System.setErr(printStream);
+        //System.setErr(printStream);
         
 		scrollPane.setViewportView(textArea);
 		
@@ -313,12 +314,13 @@ public class MainFrame extends JFrame {
 				if(subfile.exists()&&
 						subfile.getPath().endsWith(".java")){
 					DefaultMutableTreeNode fileNode = new DefaultMutableTreeNode(subfile);
+					allsourcefiles.add(subfile);
 					filelist.add(fileNode);
 				}
 			}
 		}
 		
-		JTree filefolder = new JTree(filelist);
+		final JTree filefolder = new JTree(filelist);
 		
 		filefolder.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent e){
@@ -326,7 +328,7 @@ public class MainFrame extends JFrame {
 				File selectedfile = (File)selected.getUserObject();
 				List<String> content;
 				try {
-					content = Files.readAllLines(selectedfile.toPath());
+					content = Files.readAllLines(selectedfile.toPath(),Charset.defaultCharset());
 					String allString = "";
 					for(String subcontent:content){
 						allString+=subcontent;
@@ -345,11 +347,11 @@ public class MainFrame extends JFrame {
 		upsplitPane.setLeftComponent(filefolder);
 
 	}
+	
 	public void bindSource(){
-		SourceClassBinding.inst(instance);
 		File nestedTarget = scanNested(target);
-		File nestedSource = scanNested(sources);
-		SourceClassBinding.inst().startdirBinding(target,sources,nestedTarget.getParentFile(),nestedSource.getParentFile());
+		File nestedSource = scanNested(allsourcefiles);
+		SourceClassBinding bindinginstance = SourceClassBinding.inst(target,allsourcefiles,nestedTarget,nestedSource.getParentFile());
 	}
 
 	public File scanNested(Collection<File>files){
@@ -367,7 +369,7 @@ public class MainFrame extends JFrame {
 		// TODO Auto-generated method stub
 		return comm;
 	}
-	public void writeConsole(String str){
+	public void writeConsole(final String str){
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run(){
 				textArea.append(str);

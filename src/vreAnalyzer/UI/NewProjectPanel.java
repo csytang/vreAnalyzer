@@ -21,9 +21,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -53,11 +50,12 @@ public class NewProjectPanel extends JDialog {
 	private JButton btnAnalyze;
 	private boolean runFromConfigWizard = false;
 	private static NewProjectPanel instance;
-	private List<String>sootCommandsFromWizard = new LinkedList<String>();
+	private static List<String>sootCommandsFromWizard = new LinkedList<String>();
 	public static NewProjectPanel inst(JFrame parent){
 		if(instance==null){
 			instance = new NewProjectPanel(parent);
 		}
+		instance.setVisible(true);
 		return instance;
 	}
 	public static NewProjectPanel inst(){
@@ -276,6 +274,7 @@ public class NewProjectPanel extends JDialog {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
+				instance=null;
 			}
 		});
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnNewButton, 432, SpringLayout.NORTH, contentPane);
@@ -289,18 +288,24 @@ public class NewProjectPanel extends JDialog {
 		btnAnalyze.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(runFromConfigWizard){
-					dispose();
+					
+					
 					// 1. Run the command first to extract the directory, supporting jars 
 					// 2. Set the MainFrame for binding purpose
 					for(int i = 0;i < sootCommandsFromWizard.size();i++){
 						String command = sootCommandsFromWizard.get(i);
 						if(command.equals("-process-dir")){
 							String targets = sootCommandsFromWizard.get(1+i);
+							if(targets.startsWith("\""))
+								targets = targets.substring(1);
+							if(targets.endsWith("\""))
+								targets = targets.substring(0, targets.length()-1);
 							List<File>targetList = new ArrayList<File>();
 							targetList.add(new File(targets));
 							MainFrame.inst().setTargets(targetList);
 						}
 					}
+					dispose();
 				}
 				// Add the selected source directory to main panel
 				else{
@@ -317,22 +322,24 @@ public class NewProjectPanel extends JDialog {
 					for(int i = 0;i < supportList.size();i++){
 						supporingjars.add((File) supportList.getElementAt(i));
 					}
-					
-					// 3. sources
+
+					MainFrame.inst().setTargets(target);
+					MainFrame.inst().setSupporingJars(supporingjars);
+					dispose();
+					MainFrame.inst().generateSootCommand();
+				}
+				DefaultListModel sourceList = (DefaultListModel) javasource.getModel();
+				// 4. binding the class to java source code
+				if(sourceList.size()!=0){
 					List<File>sources = new LinkedList<File>();
-					DefaultListModel sourceList = (DefaultListModel) javasource.getModel();
 					for(int i = 0;i < sourceList.size();i++){
 						sources.add((File) sourceList.getElementAt(i));
 					}
-					MainFrame.inst().setTargets(target);
-					MainFrame.inst().setSupporingJars(supporingjars);
 					MainFrame.inst().setSourceCode(sources);
-					dispose();
-					MainFrame.inst().generateSootCommand();
 					MainFrame.inst().loadSourceCode();
+					MainFrame.inst().bindSource();	
+					
 				}
-				// 4. binding the class to java source code
-				MainFrame.inst().bindSource();
 				run();
 			}
 		});
@@ -352,7 +359,7 @@ public class NewProjectPanel extends JDialog {
 		contentPane.add(btnConfigureWizard);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);	
-		setVisible(true);
+		
 	}
 	
 	public void run(){
@@ -408,8 +415,11 @@ public class NewProjectPanel extends JDialog {
 	      return (description == null ? extensions[0] : description);
 	    }
 	  }
-	public void setWizardCommand(String text) {
+	public static void setWizardCommand(String text) {
 		// TODO Auto-generated method stub
-		sootCommandsFromWizard = (List<String>) new HashSet<String>(Arrays.asList(text.split(" ")));
+		sootCommandsFromWizard = new LinkedList<String>();
+		for(String sub:text.split(" ")){
+			sootCommandsFromWizard.add(sub);
+		}
 	}
 }

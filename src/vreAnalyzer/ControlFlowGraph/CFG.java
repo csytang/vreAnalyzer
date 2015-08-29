@@ -17,6 +17,7 @@ import soot.jimple.InvokeExpr;
 import soot.jimple.InvokeStmt;
 import soot.jimple.Stmt;
 import soot.jimple.ThrowStmt;
+import soot.tagkit.SourceLnPosTag;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Elements.CFGNodeSpecial;
 import vreAnalyzer.Elements.CallSite;
@@ -117,6 +118,7 @@ public class CFG {
 		nodeIds.put(this.ENTRY, nId++);
 		for (Iterator<Unit> itStmt = pchain.iterator(); itStmt.hasNext(); ) {
 			Stmt s = (Stmt) itStmt.next();
+			
 			StmtTag sTag = (StmtTag) s.getTag(StmtTag.TAG_NAME);
 			CFGNode n = instantiateNode(sTag); // New node using factory method
 			

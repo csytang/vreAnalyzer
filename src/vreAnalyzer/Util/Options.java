@@ -50,7 +50,7 @@ public class Options {
 		String nobody = "-no-bodies-for-excluded";
 		List<String> argsSoot = new ArrayList<String>();
 		argsSoot.add(nobody);
-		DirProcessor dirProc = new DirProcessor();
+		
 		for (int argIdx = 0; argIdx < args.length; ++argIdx) {
 			String arg = args[argIdx];
 			/*
@@ -131,16 +131,7 @@ public class Options {
 				}
 				mode = reusableMode.Hadoop;
 			}
-			else if (arg.equals("-process-dir")) {
-				// OVERRIDE of soot option; soot seems to fail with -process-dir in many cases
-				if(!args[argIdx+1].endsWith(".jar")){
-					dirProc.processDir(args[++argIdx]);
-					processJar = false;
-				}else{
-					processJar = true;
-					argsSoot.add(arg);
-				}
-			}
+			
 			else
 			{
 				if (arg.equals("--help")) {
@@ -155,22 +146,7 @@ public class Options {
 			}
 		}
 	
-		// add -process-dir classes at the end of soot options
-		if(!processJar){
-			argsSoot.addAll(dirProc.getClassNames());
-			//argsSoot.add("–allow-phantom-refs");
-			if(entryClassName!=null){
-				for(String single: dirProc.getClassNames()){
-					if(single.endsWith(entryClassName)){
-						if(single.indexOf(entryClassName)==0)
-							entryClassName = single;
-						else if((single.charAt(single.indexOf(entryClassName)-1))=='.'||
-								(single.charAt(single.indexOf(entryClassName)-1))=='$')
-							entryClassName = single;
-					}
-				}
-			}
-		}
+		
 		
 		String[] filteredArgs = new String[argsSoot.size()];
 		return argsSoot.toArray(filteredArgs);

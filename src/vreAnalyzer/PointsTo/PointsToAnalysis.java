@@ -5,9 +5,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
+import soot.ArrayType;
 import soot.Local;
 import soot.RefLikeType;
 import soot.RefType;
@@ -15,6 +17,7 @@ import soot.Scene;
 import soot.SootClass;
 import soot.SootField;
 import soot.SootMethod;
+import soot.Type;
 import soot.Value;
 import soot.jimple.AnyNewExpr;
 import soot.jimple.ArrayRef;
@@ -30,7 +33,9 @@ import soot.jimple.IntConstant;
 import soot.jimple.InterfaceInvokeExpr;
 import soot.jimple.InvokeExpr;
 import soot.jimple.InvokeStmt;
+import soot.jimple.Jimple;
 import soot.jimple.NewArrayExpr;
+import soot.jimple.NewMultiArrayExpr;
 import soot.jimple.ReturnStmt;
 import soot.jimple.SpecialInvokeExpr;
 import soot.jimple.StaticFieldRef;
@@ -38,7 +43,9 @@ import soot.jimple.StaticInvokeExpr;
 import soot.jimple.Stmt;
 import soot.jimple.VirtualInvokeExpr;
 import soot.jimple.internal.JNewArrayExpr;
+import soot.jimple.internal.JNewExpr;
 import vreAnalyzer.Context.Context;
+import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Elements.CallSite;
 import vreAnalyzer.SootPresentation.DefaultJimpleRepresentation;
@@ -65,7 +72,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 	private static final SootMethod DUMMY_METHOD = new SootMethod("DUMMY_METHOD", Collections.EMPTY_LIST, Scene.v().getObjectType());
 	
 	// A stack holds all context to analysis
-	private boolean verbose = true;
+	private boolean verbose = false;
 	protected Stack<Context<SootMethod,CFGNode,PointsToGraph>> analysisStack;
 	
 	///////////////////////////////////////////////////////////////////
@@ -83,7 +90,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 	public PointsToAnalysis() {
 		super();
 		
-		this.verbose = false;
+		
 		// Create an empty analysis stack
 		this.analysisStack = new Stack<Context<SootMethod,CFGNode,PointsToGraph>>();
 		// No classes statically initialised yet
@@ -192,6 +199,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 			}
 			else {
 				// If work-list is empty, then remove it from the analysis.
+				
 				analysisStack.remove(context);
 			}
 			
@@ -200,6 +208,10 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 		// Sanity check
 		for (List<Context<SootMethod, CFGNode, PointsToGraph>> contextList : contexts.values()) {
 			for (Context context : contextList) {
+				if(verbose){
+					System.out.println("The exit points of method\t "+context.getMethod()+" \tto is:");
+					System.out.println(context.getExitValue());
+				}
 				if (context.isAnalysed() == false) {
 					System.err.println("*** ATTENTION ***: Only partial analysis of X" + context +" " + context.getMethod());
 				}
@@ -468,7 +480,40 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 
 		return out;
 	}
-		
+	public void updateSuccessPointerwithNewExprs(List<Context<SootMethod,CFGNode,PointsToGraph>> contextsList,CFGDefUse cfg,CFGNode cfgNode,Local local,JNewExpr argsExpr){
+		List<CFGNode>allnodes = cfg.getNodes();
+		int startidx = cfg.getIndexId(cfgNode);
+		for(int i = startidx;i < allnodes.size();i++){
+			CFGNode current = allnodes.get(i);
+			for(Context context:contextsList){
+				PointsToGraph p2gbefore = (PointsToGraph)context.getValueBefore(current);
+				PointsToGraph p2gafter = (PointsToGraph)context.getValueAfter(current);
+				Set<AnyNewExpr> newexprsbf = p2gbefore.getRoots().get(local);
+				if(newexprsbf==null){
+					p2gbefore.assignNew(local, argsExpr);
+				}else if(newexprsbf.size()==0){
+					p2gbefore.assignNew(local, argsExpr);
+				}
+				Set<AnyNewExpr> newexprsaf = p2gafter.getRoots().get(local);
+				if(newexprsaf==null){
+					p2gafter.assignNew(local, argsExpr);
+				}else if(newexprsaf.size()==0){
+					p2gafter.assignNew(local, argsExpr);
+				}
+			}
+		}
+		for(Context context:contextsList){
+			PointsToGraph p2exit = (PointsToGraph)context.getEntryValue();
+			Set<AnyNewExpr> exitexpr = p2exit.getRoots().get(local);
+			if(exitexpr==null){
+				p2exit.assignNew(local, argsExpr);
+				context.setExitValue(p2exit);
+			}else if(exitexpr.size()==0){
+				p2exit.assignNew(local, argsExpr);
+				context.setExitValue(p2exit);
+			}
+		}
+	}
 	public PointsToGraph topValue() {
 		return new PointsToGraph();
 	}
@@ -502,12 +547,22 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 				NewArrayExpr argsExpr = new JNewArrayExpr(Scene.v().getRefType("java.lang.String"), IntConstant.v(0));
 				entryValue.assignNew(argsLocal, argsExpr);
 				entryValue.setFieldConstant(argsLocal, PointsToGraph.ARRAY_FIELD, PointsToGraph.STRING_CONST);
+			}else{
+				for(int i = 0;i < entryMethod.getActiveBody().getParameterLocals().size();i++){
+					Local argsLocal = entryMethod.getActiveBody().getParameterLocal(i);
+					Type parameterType = entryMethod.getActiveBody().getParameterLocal(i).getType();
+					if(parameterType instanceof RefLikeType){
+						if(parameterType instanceof ArrayType){
+							NewArrayExpr argsExpr = Jimple.v().newNewArrayExpr(parameterType, IntConstant.v(0));
+							entryValue.assignNew(argsLocal, argsExpr);
+						}else{
+							RefType parameter = (RefType)parameterType;
+							JNewExpr argsExpr = new JNewExpr(parameter);
+							entryValue.assignNew(argsLocal, argsExpr);
+						}
+					}
+				}
 			}
-			/**
-			for(int i = 0;i < entryMethod.getActiveBody().getParameterLocals().size();i++){
-				Local argsLocal = entryMethod.getActiveBody().getParameterLocal(i);
-			}
-			**/
 		}
 		
 		return entryValue;

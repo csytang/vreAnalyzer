@@ -4,10 +4,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import soot.G;
 import soot.PackManager;
+import soot.PhaseOptions;
 import soot.Transform;
-import vreAnalyzer.UI.MainFrame;
 import vreAnalyzer.Util.ConflictModelExpection;
 import vreAnalyzer.Util.Options;
 
@@ -16,6 +15,7 @@ import vreAnalyzer.Util.Options;
 public class vreAnalyzerCommandLine{
 	
 	private static vreAnalyzerCommandLine instance;
+	private static boolean startfromGUI = true;
 	public static vreAnalyzerCommandLine inst(String[]args){
 		if(instance==null){
 			try {
@@ -28,7 +28,11 @@ public class vreAnalyzerCommandLine{
 		return instance;
 	}
 	public static void main(String[]args) throws ConflictModelExpection{
+		startfromGUI = false;
 		new vreAnalyzerCommandLine(args);
+	}
+	public static boolean isStartFromGUI(){
+		return startfromGUI;
 	}
 	public vreAnalyzerCommandLine(String[]args) throws ConflictModelExpection{
 		// All input command list
@@ -36,13 +40,14 @@ public class vreAnalyzerCommandLine{
 		List<String>sootArgs = new LinkedList<String>(Arrays.asList(args));
 				
 		// Enable whole program mode
+		
 		sootArgs.add("-W");
 		
 		sootArgs.add("-p");
 		sootArgs.add("wjop");
 		sootArgs.add("enabled:true");
 		
-		sootArgs.add("-allow-phantom-refs");
+		//sootArgs.add("-allow-phantom-refs");
 		// Enable points-to analysis
 		sootArgs.add("-p");
 		sootArgs.add("cg");
@@ -62,7 +67,7 @@ public class vreAnalyzerCommandLine{
 		
 		// Output
 		sootArgs.add("-f");
-		sootArgs.add("jimple");
+		sootArgs.add("none");
 		//sootArgs.add("class");
 		
 		
@@ -70,11 +75,11 @@ public class vreAnalyzerCommandLine{
 		String[]argsArray = sootArgs.toArray(new String[0]);
 				
 		// Use filter to get target commands to Soot
-		String[] filtersootArgs = Options.parseFilterArgs(argsArray);
-				
+	    String[] filtersootArgs = Options.parseFilterArgs(argsArray);
+		
 		// Internal transfer
 		PackManager.v().getPack("wjtp").add(new Transform("wjtp.mt", new vreAnalyzerInternalTransform()));
-	
+		PhaseOptions.v().setPhaseOption("tag.ln", "on");
 		System.out.print("[vreAnalyzer] vreAnalyzer args to Soot: ");
 		for (String s : filtersootArgs){
 				System.out.print(s + " ");
