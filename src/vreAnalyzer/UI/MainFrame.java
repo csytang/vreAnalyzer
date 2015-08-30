@@ -49,12 +49,12 @@ public class MainFrame extends JFrame {
 	
 	// 2. Contents
 	private JPanel contentPane;
-	private JTextField textField;
+	private final JTextField textField;
 	private List<File>target;
 	private List<File>supporingjars;
 	private List<File>sources;
 	private final JSplitPane upsplitPane;
-	private final JTextArea txtrSource;
+	private static JTextArea txtrSource=null;
 	private final JTextArea textArea;
 	
 	// 3. 
@@ -200,7 +200,7 @@ public class MainFrame extends JFrame {
 		// Redirect output stream
 		printStream = new PrintStream(new CustomOutputStream(textArea));
 		System.setOut(printStream);
-        //System.setErr(printStream);
+		System.setErr(printStream);
         
 		scrollPane.setViewportView(textArea);
 		
@@ -381,5 +381,8 @@ public class MainFrame extends JFrame {
 		if(classnametoSource==null)
 			classnametoSource = new HashMap<String,File>();
 		classnametoSource.put(className, source);
+	}
+	public static JTextArea getSrcTextArea(){
+		return txtrSource;
 	}
 }

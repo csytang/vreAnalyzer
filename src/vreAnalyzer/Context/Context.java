@@ -127,10 +127,12 @@ public class Context<SootMethod,CFGNode,PointsToGraph> implements soot.Context, 
 				return numbers.get(u) - numbers.get(v);
 			}
 		});
-	    for(vreAnalyzer.Elements.CFGNode cf:controlFlowGraph.getNodes()){
-	    	if(!cf.toString().equals("EN"))
-	    		this.workList.add((CFGNode) cf);
-	    }
+		if(controlFlowGraph!=null){
+		    for(vreAnalyzer.Elements.CFGNode cf:controlFlowGraph.getNodes()){
+		    	if(!cf.toString().equals("EN"))
+		    		this.workList.add((CFGNode) cf);
+		    }
+		}
 	}
 
 	/**

@@ -6,23 +6,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import soot.RefLikeType;
-import soot.SootClass;
-import soot.SootField;
 import soot.SootMethod;
-import soot.Value;
-import soot.jimple.DefinitionStmt;
 import soot.jimple.InstanceInvokeExpr;
 import soot.jimple.InterfaceInvokeExpr;
 import soot.jimple.InvokeExpr;
-import soot.jimple.StaticFieldRef;
 import soot.jimple.Stmt;
 import soot.jimple.VirtualInvokeExpr;
 import soot.tagkit.AttributeValueException;
 import soot.tagkit.Tag;
 import vreAnalyzer.Elements.CallSite;
 import vreAnalyzer.Elements.Location;
-import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.Util.SourceLocation;
 import vreAnalyzer.Util.StringBasedComparator;
 import vreAnalyzer.Util.Util;
@@ -77,6 +70,7 @@ public class StmtTag implements Tag{
 	public ArrayList<Stmt> getSuccessorStmts() { return successorStmts; }
 	public void addSuccessorStmt(Stmt succ) { successorStmts.add(succ); }
 	public Location getLocation() { return loc; }
+	public SourceLocation getSourceLocation(){return locTag;}
 	public int getIdxInMethod() { return sIdx; }
 	public Stmt getStatement() {return stmt; }
 	public SootMethod getSootMethod() {return mNode;}

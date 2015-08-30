@@ -2,9 +2,7 @@ package Patch.Hadoop;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import soot.ArrayType;
 import soot.Body;
 import soot.Local;
 import soot.RefLikeType;
@@ -13,23 +11,10 @@ import soot.SootClass;
 import soot.SootMethod;
 import soot.Type;
 import soot.Value;
-import soot.grimp.NewInvokeExpr;
-import soot.jimple.AnyNewExpr;
 import soot.jimple.AssignStmt;
-import soot.jimple.DynamicInvokeExpr;
-import soot.jimple.InstanceInvokeExpr;
-import soot.jimple.IntConstant;
-import soot.jimple.InterfaceInvokeExpr;
-import soot.jimple.InvokeExpr;
-import soot.jimple.Jimple;
-import soot.jimple.NewArrayExpr;
-import soot.jimple.SpecialInvokeExpr;
-import soot.jimple.StaticInvokeExpr;
 import soot.jimple.Stmt;
-import soot.jimple.VirtualInvokeExpr;
 import soot.jimple.internal.JNewExpr;
-import soot.tagkit.AbstractHost;
-import soot.tagkit.SourceLnPosTag;
+import vreAnalyzer.vreAnalyzerCommandLine;
 import vreAnalyzer.Context.Context;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
@@ -38,7 +23,6 @@ import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.PointsTo.PointsToGraph;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
-import vreAnalyzer.Util.Util;
 	
 public class ProjectParser {
 	
@@ -84,6 +68,16 @@ public class ProjectParser {
 		}
 		System.out.println("# Jobs:\t"+numjobs);
 	}
+	public void ProjectAnnotate(){
+		// Start from GUI and source is binded
+		if(vreAnalyzerCommandLine.isStartFromGUI()&&
+				vreAnalyzerCommandLine.isSourceBinding()){
+			// 1. create project annotation 
+			ProjectAnnotation proanno = new ProjectAnnotation();
+			// 2. annotate jobs
+			proanno.annotateJob();
+		}
+	}
 	public void Parse(){
 		// 1. Get the CFG
 		int index = 0;
@@ -97,20 +91,26 @@ public class ProjectParser {
 			NodeDefUses cfgNode = (NodeDefUses) allnodes.get(i);
 			if(!cfgNode.isSpecial()){
 				Stmt stmt = cfgNode.getStmt();
+				
 				// Not one assign value from this, parameter and caughtexception
 				List<Variable>useVariables = cfgNode.getUsedVars();
 				List<Variable>definedVariables = cfgNode.getDefinedVars();
+				
 				// Get the job from defined values
 				boolean containsInvokeExpr = stmt.containsInvokeExpr();
+				
 				if(!definedVariables.isEmpty()){
 					for(Variable defvar:definedVariables){	
+						
 							// If it is a define of job
 						if(defvar.getValue().getType().toString().equals("org.apache.hadoop.mapreduce.Job")&&
 								!defvar.getValue().toString().startsWith("$")){
-								// number of jobs counter
+							   // number of jobs counter
 							   //created by use standard API
 								if(containsInvokeExpr){
+									
 									if(stmt.getInvokeExpr().getMethod().getName().toString().equals("getInstance")){
+										
 										// job is created by get instance
 										Type parameterType = defvar.getValue().getType();
 										assert((parameterType instanceof RefLikeType));					
@@ -162,10 +162,10 @@ public class ProjectParser {
 				return jobvar;
 		}
 		return null;
-		
-		
 	}
-	
+	public Map<JobVariable,JobHub> getjobtoHub(){
+		return jobtoHub;
+	}
 	
 	
 }

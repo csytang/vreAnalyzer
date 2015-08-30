@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import soot.PackManager;
-import soot.PhaseOptions;
 import soot.Transform;
 import vreAnalyzer.Util.ConflictModelExpection;
 import vreAnalyzer.Util.Options;
@@ -15,10 +14,15 @@ import vreAnalyzer.Util.Options;
 public class vreAnalyzerCommandLine{
 	
 	private static vreAnalyzerCommandLine instance;
-	private static boolean startfromGUI = true;
-	public static vreAnalyzerCommandLine inst(String[]args){
+	private static boolean isstartfromGUI = true;
+	private static boolean issourceBinding = false;
+	public static vreAnalyzerCommandLine inst(){
+		return instance;
+	}
+	public static vreAnalyzerCommandLine inst(String[]args,boolean isSourceBinding){
 		if(instance==null){
 			try {
+				issourceBinding = isSourceBinding; 
 				instance = new vreAnalyzerCommandLine(args);
 			} catch (ConflictModelExpection e) {
 				// TODO Auto-generated catch block
@@ -28,11 +32,14 @@ public class vreAnalyzerCommandLine{
 		return instance;
 	}
 	public static void main(String[]args) throws ConflictModelExpection{
-		startfromGUI = false;
+		isstartfromGUI = false;
 		new vreAnalyzerCommandLine(args);
 	}
 	public static boolean isStartFromGUI(){
-		return startfromGUI;
+		return isstartfromGUI;
+	}
+	public static boolean isSourceBinding(){
+		return issourceBinding;
 	}
 	public vreAnalyzerCommandLine(String[]args) throws ConflictModelExpection{
 		// All input command list
@@ -47,7 +54,7 @@ public class vreAnalyzerCommandLine{
 		sootArgs.add("wjop");
 		sootArgs.add("enabled:true");
 		
-		//sootArgs.add("-allow-phantom-refs");
+		sootArgs.add("-allow-phantom-refs");
 		// Enable points-to analysis
 		sootArgs.add("-p");
 		sootArgs.add("cg");
@@ -78,8 +85,8 @@ public class vreAnalyzerCommandLine{
 	    String[] filtersootArgs = Options.parseFilterArgs(argsArray);
 		
 		// Internal transfer
-		PackManager.v().getPack("wjtp").add(new Transform("wjtp.mt", new vreAnalyzerInternalTransform()));
-		PhaseOptions.v().setPhaseOption("tag.ln", "on");
+		PackManager.v().getPack("wjtp").add(new Transform("wjtp.myTransformer", new vreAnalyzerInternalTransform()));
+		
 		System.out.print("[vreAnalyzer] vreAnalyzer args to Soot: ");
 		for (String s : filtersootArgs){
 				System.out.print(s + " ");

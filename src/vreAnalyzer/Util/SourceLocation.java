@@ -1,16 +1,9 @@
 package vreAnalyzer.Util;
 
-import soot.jimple.Stmt;
-import soot.tagkit.Tag;
 import soot.tagkit.Host;
-import soot.tagkit.LineNumberTag;
 import soot.tagkit.SourceLnPosTag;
-import soot.tagkit.SourceLineNumberTag;
-import soot.tagkit.SourceFileTag;
 import soot.SootMethod;
 import soot.Unit;
-
-import java.util.Collection;
 
 /**
  *   Stores which class and member a particular sooty thing belongs to, and
@@ -23,7 +16,7 @@ public class SourceLocation {
     private Host hostName;
     // If debugging information is available, these will be assigned
     public String filePath = "";
-    public int lineNumber = -1;
+    public int startlineNumber = -1;
     public int startPos = 0;
     public int endPos = 0;
     public int endlineNumber = -1;
@@ -34,11 +27,29 @@ public class SourceLocation {
         memberName = member.getName();
         hostName = h;
         SourceLnPosTag slnpt = (SourceLnPosTag) h.getTag("SourceLnPosTag");
-        if (slnpt != null) {
-            System.out.println("   @ line: " + slnpt.startLn());
+        if(slnpt!=null){
+        	startPos = slnpt.startPos();
+        	System.out.println("Start Pos:\t"+startPos);
+        	endPos = slnpt.endPos();
+        	System.out.println("End Pos:\t"+endPos);
+        	startlineNumber = slnpt.startLn();
+        	System.out.println("Start Line:\t"+startlineNumber);
+        	endlineNumber = slnpt.endLn();
+        	System.out.println("End Line:\t"+endlineNumber);
         }
     }
-
+    public int getStartLineNumber(){
+    	return startlineNumber;
+    }
+    public int getEndLineNumber(){
+    	return endlineNumber;
+    }
+    public int getStartPos(){
+    	return startPos;
+    }
+    public int getEndPos(){
+    	return endPos;
+    }
 
     
 }

@@ -1,12 +1,16 @@
 package Patch.Hadoop;
 
 
+import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 
+import Patch.Hadoop.Annotation.JobAnnotation;
 import soot.SootClass;
 import soot.Value;
 import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
+import vreAnalyzer.UI.MainFrame;
+import vreAnalyzer.UI.RandomColor;
 
 
 public class JobHub {

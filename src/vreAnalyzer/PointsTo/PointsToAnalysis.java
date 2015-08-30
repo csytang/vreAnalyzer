@@ -614,12 +614,9 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 		Context<SootMethod,CFGNode,PointsToGraph> calleeContext = getContext(method, entryValue);
 		// If not, then set 'calleeContext' to a new context with the given entry flow.
 		// if the method is lib method no need to process its context
-		
-		
-		
 		if (calleeContext == null) {
+		
 			calleeContext = new Context<SootMethod,CFGNode,PointsToGraph>(method, programRepresentation().getControlFlowGraph(method));
-			
 			if (verbose) {
 				System.out.println("[NEW] X" + callerContext + " -> X" + calleeContext + " " + method + " ");
 			}
