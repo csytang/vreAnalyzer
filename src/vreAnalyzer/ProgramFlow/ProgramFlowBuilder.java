@@ -198,7 +198,8 @@ public class ProgramFlowBuilder {
 	
 	
 	public SootClass findAppClassByNameAndSuper(String name,SootClass superClass){
-		
+		if(name.equals(superClass.getName()))
+			return superClass;
 		FastHierarchy fhierarchy = Scene.v().getOrMakeFastHierarchy();
 		
 		for(SootClass ap:appClasses){

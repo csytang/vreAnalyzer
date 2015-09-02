@@ -2,8 +2,11 @@ package Patch.Hadoop;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import soot.Body;
+import Patch.Hadoop.Job.JobHub;
+import Patch.Hadoop.Job.JobUnderstand;
+import Patch.Hadoop.Job.JobVariable;
 import soot.Local;
 import soot.RefLikeType;
 import soot.RefType;
@@ -11,10 +14,13 @@ import soot.SootClass;
 import soot.SootMethod;
 import soot.Type;
 import soot.Value;
+import soot.jimple.AnyNewExpr;
 import soot.jimple.AssignStmt;
+import soot.jimple.DefinitionStmt;
+import soot.jimple.IdentityStmt;
+import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
 import soot.jimple.internal.JNewExpr;
-import vreAnalyzer.vreAnalyzerCommandLine;
 import vreAnalyzer.Context.Context;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
@@ -23,17 +29,20 @@ import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.PointsTo.PointsToGraph;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
+import vreAnalyzer.Util.Util;
 	
 public class ProjectParser {
 	
 	public static ProjectParser instance = null;
-	private Body sootmethodBody = null;
 	private SootMethod sootmethod = null;
-	private SootClass sootcls = null;
 	private CFGDefUse cfggraph;
 	private boolean verbose = true;
 	private Context allcontext = null;
 	private static int numjobs = 0;
+	private SootClass libMapper;
+	private SootClass libReducer;
+	private SootClass cs;
+	private CFGNode exitNode;
 	private List<Context<SootMethod,CFGNode,PointsToGraph>> currContexts;
 	/* 
 	 * Store all jobs that defined in the main method,
@@ -53,38 +62,32 @@ public class ProjectParser {
 		return jobtoHub.get(job);
 	}
 	public void ClassParser(){
+		libMapper = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Mapper");
+		libReducer = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Reducer");
 		jobtoHub = new HashMap<JobVariable,JobHub>();
 		indextoJob = new HashMap<Integer,JobVariable>();// start from 1 insteadof 0
 		// run all the application methods
 		for(SootMethod sm:ProgramFlowBuilder.inst().getAppConcreteMethods()){
 			cfggraph = (CFGDefUse) ProgramFlowBuilder.inst().getCFG(sm);
-			CFGNode exitNode = cfggraph.EXIT;
+			exitNode = cfggraph.EXIT;
 			currContexts = PointsToAnalysis.inst().getContexts(sm);
-			allcontext = currContexts.get(0);	
-			sootcls = sm.getDeclaringClass();
-			sootmethodBody = sm.retrieveActiveBody();
+			allcontext = currContexts.get(0);			
 			sootmethod = sm;
+			cs = sm.getDeclaringClass();
 			Parse();
 		}
 		System.out.println("# Jobs:\t"+numjobs);
+		System.out.println("# Mappers:\t"+JobUnderstand.getNumberofMapper());
+		System.out.println("# Combiner:\t"+JobUnderstand.getNumberofCombiner());
+		System.out.println("# Reducer:\t"+JobUnderstand.getNumberofReducer());
 	}
-	public void ProjectAnnotate(){
-		// Start from GUI and source is binded
-		if(vreAnalyzerCommandLine.isStartFromGUI()&&
-				vreAnalyzerCommandLine.isSourceBinding()){
-			// 1. create project annotation 
-			ProjectAnnotation proanno = new ProjectAnnotation();
-			// 2. annotate jobs
-			proanno.annotateJob();
-		}
-	}
+	
 	public void Parse(){
 		// 1. Get the CFG
 		int index = 0;
 		List<CFGNode> allnodes = cfggraph.getNodes();
 		// 2.0 Find mapper and reducer in lib class set
-		SootClass libMapper = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Mapper");
-		SootClass libReducer = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Reducer");
+		
 				
 		// 2. Find all Jobs and associated with mapper and reducer classes
 		for(int i = 0;i < allnodes.size();i++){
@@ -93,65 +96,252 @@ public class ProjectParser {
 				Stmt stmt = cfgNode.getStmt();
 				
 				// Not one assign value from this, parameter and caughtexception
-				List<Variable>useVariables = cfgNode.getUsedVars();
 				List<Variable>definedVariables = cfgNode.getDefinedVars();
+			
 				
-				// Get the job from defined values
-				boolean containsInvokeExpr = stmt.containsInvokeExpr();
+				// If setting is from identitystmt, then 
+				if(stmt instanceof IdentityStmt){
+					continue;
+				}
 				
+				// define of job
+				// 1. update all successors of this node 
 				if(!definedVariables.isEmpty()){
 					for(Variable defvar:definedVariables){	
-						
 							// If it is a define of job
-						if(defvar.getValue().getType().toString().equals("org.apache.hadoop.mapreduce.Job")&&
-								!defvar.getValue().toString().startsWith("$")){
-							   // number of jobs counter
-							   //created by use standard API
-								if(containsInvokeExpr){
-									
-									if(stmt.getInvokeExpr().getMethod().getName().toString().equals("getInstance")){
-										
-										// job is created by get instance
+						if(defvar.getValue().getType().toString().equals("org.apache.hadoop.mapreduce.Job")){
+							   	//number of jobs counter
+							   	//created by use standard API
+							
+							if(stmt instanceof AssignStmt){
+								// created by use customized functions
+								AssignStmt assign = (AssignStmt)stmt;
+								Value left = assign.getLeftOp();//defined variable
+								Value right = assign.getRightOp(); //used variable
+								PointsToGraph p2g = (PointsToGraph)allcontext.getValueAfter(cfgNode);
+								HashMap<Local,Set<AnyNewExpr>> roots = p2g.getRoots();
+								if(right instanceof Local){
+									Local loright = (Local)right;
+									if(roots.get(loright)==null||
+											roots.get(loright).isEmpty()){
 										Type parameterType = defvar.getValue().getType();
 										assert((parameterType instanceof RefLikeType));					
 										RefType parameter = (RefType)parameterType;
 										JNewExpr argsExpr = new JNewExpr(parameter);
-										PointsToGraph p2g = (PointsToGraph)allcontext.getValueAfter(cfgNode);
-										p2g.assignNew((Local) defvar.getValue(), argsExpr);	
-										System.out.println("The points to updated!");
-										System.out.println("A job is created using standard Hadoop job API");
+										if(defvar.isLocal())
+										{
+											p2g.assignNew((Local) defvar.getValue(), argsExpr);
+											Util.updateSucceedP2G((Local)defvar.getValue(), argsExpr, cfgNode, cfggraph, allcontext);
+											p2g.assignNew(loright, argsExpr);
+											Util.updateSucceedP2G(loright, argsExpr, cfgNode, cfggraph, allcontext);
+											
+										}
+									}else{
+										if(defvar.isLocal())
+										{
+											for(AnyNewExpr argsExpr:roots.get(loright)){
+												p2g.assignNew((Local) defvar.getValue(), argsExpr);
+												Util.updateSucceedP2G((Local) defvar.getValue(), argsExpr, cfgNode, cfggraph, allcontext);
+											}
+											
+										}
 									}
-									else if(stmt instanceof AssignStmt){
-											// created by use customized functions
+								}else{
+									Type parameterType = defvar.getValue().getType();
+									assert((parameterType instanceof RefLikeType));					
+									RefType parameter = (RefType)parameterType;
+									JNewExpr argsExpr = new JNewExpr(parameter);
+									if(defvar.isLocal())
+									{
+										p2g.assignNew((Local) defvar.getValue(), argsExpr);
+										Util.updateSucceedP2G((Local) defvar.getValue(), argsExpr, cfgNode, cfggraph, allcontext);
 										
 									}
-									JobVariable jvb = new JobVariable(defvar,cfgNode);
-									
-									if(!jobtoHub.containsKey(jvb)){
-										Value defValue = defvar.getValue();
-										System.out.println("Add a job\t"+jvb+"\t @stmt"+stmt+"\t @method: "+sootmethod);
-										numjobs++;
-										JobHub jhb = new JobHub(jvb);
-										jobtoHub.put(jvb, jhb);
-										indextoJob.put(numjobs, jvb);
+								}
+								if(!defvar.getValue().toString().startsWith("$"))
+									defineJob(defvar,cfgNode,stmt);
+								else{
+									if(verbose)
+										System.out.println("Create a shadow job:\t"+defvar.getValue().toString());
+								}
+							}else if(stmt instanceof DefinitionStmt){
+								// created by use customized functions
+								DefinitionStmt defstmt = (DefinitionStmt)stmt;
+								Value left = defstmt.getLeftOp();//defined variable
+								Value right = defstmt.getRightOp(); //used variable
+								PointsToGraph p2g = (PointsToGraph)allcontext.getValueAfter(cfgNode);
+								HashMap<Local,Set<AnyNewExpr>> roots = p2g.getRoots();
+								if(right instanceof Local){
+									Local loright = (Local)right;
+									if(roots.get(loright)==null||
+											roots.get(loright).isEmpty()){
+										Type parameterType = defvar.getValue().getType();
+										assert((parameterType instanceof RefLikeType));					
+										RefType parameter = (RefType)parameterType;
+										JNewExpr argsExpr = new JNewExpr(parameter);
+										if(defvar.isLocal())
+										{
+											p2g.assignNew(loright, argsExpr);
+											Util.updateSucceedP2G(loright, argsExpr, cfgNode, cfggraph, allcontext);
+											p2g.assignNew((Local) defvar.getValue(), argsExpr);
+											Util.updateSucceedP2G((Local) defvar.getValue(), argsExpr, cfgNode, cfggraph, allcontext);
+											
+										}
+									}else{
+										if(defvar.isLocal())
+										{
+											for(AnyNewExpr argsExpr:roots.get(loright)){
+												p2g.assignNew((Local) defvar.getValue(), argsExpr);
+												Util.updateSucceedP2G((Local) defvar.getValue(), argsExpr, cfgNode, cfggraph, allcontext);
+											}
+											
+										}
+									}
+								}else{
+									Type parameterType = defvar.getValue().getType();
+									assert((parameterType instanceof RefLikeType));					
+									RefType parameter = (RefType)parameterType;
+									JNewExpr argsExpr = new JNewExpr(parameter);
+									if(defvar.isLocal())
+									{
+										p2g.assignNew((Local) defvar.getValue(), argsExpr);
+										Util.updateSucceedP2G((Local) defvar.getValue(), argsExpr, cfgNode, cfggraph, allcontext);
+										
 									}
 								}
+								if(!defvar.getValue().toString().startsWith("$"))
+									defineJob(defvar,cfgNode,stmt);
+								else{
+									if(verbose)
+										System.out.println("Create a shadow job:\t"+defvar.getValue().toString());
+								}
+							}else{
+								if(verbose)
+									System.err.println("Should create a job:\t"+defvar.getValue().toString());
+							}
+							
+							
 						}
 			
 					}
 				}
 			}
 		}
-	}
-	private boolean containJobUse(List<Variable> useVariables) {
-		// TODO Auto-generated method stub
-		for(Variable useVar:useVariables){
-			if(useVar.getValue().getType().toString().equals("org.apache.hadoop.mapreduce.Job")){
-				return true;
+		for(int i = 0;i < allnodes.size();i++){
+			NodeDefUses cfgNode = (NodeDefUses) allnodes.get(i);
+			if(!cfgNode.isSpecial()){
+				Stmt stmt = cfgNode.getStmt();
+				
+				// Not one assign value from this, parameter and caughtexception
+				List<Variable>useVariables = cfgNode.getUsedVars();
+			
+				
+				// If setting is from identitystmt, then 
+				if(stmt instanceof IdentityStmt){
+					continue;
+				}		
+				// use of the job
+				if(!useVariables.isEmpty()){
+					for(Variable usevar:useVariables){	
+						// If it is a define of job
+						if(usevar.getValue().getType().toString().equals("org.apache.hadoop.mapreduce.Job")){
+							if(stmt.containsInvokeExpr()){
+								JobHub jobinstance = getjobHub(usevar);
+								// get the invoke expression
+								if(jobinstance==null)
+									continue;
+								InvokeExpr invokeExpr = stmt.getInvokeExpr();
+								switch(invokeExpr.getMethod().getName()){
+								case "setMapperClass":{
+									// 1. setMapperClass
+									JobUnderstand.process_SetMapperClass(jobinstance, invokeExpr, cfgNode,cfggraph,libMapper);
+									break;
+								}
+								case "setCombinerClass":{
+									// 2. setCombinerClass
+									JobUnderstand.process_SetCombinerClass(jobinstance, invokeExpr, cfgNode,cfggraph,libReducer);
+									break;
+								}
+								case "setReducerClass":{
+									// 3. setReducerClass
+									JobUnderstand.process_SetReducerClass(jobinstance, invokeExpr, cfgNode,cfggraph,libReducer);
+									break;
+								}
+								case "setOutputKeyClass":{
+									// 4. setOutputKeyClass
+									break;
+								}
+								case "setOutputValueClass":{
+									// 5. setOutputValueClass
+									break;
+								}
+								case "addArchiveToClassPath":{
+									// 6. addArchiveToClassPath
+									break;
+								}
+								default:{
+									System.out.println("A stmt:\t"+stmt);
+								}
+								}
+								
+							}
+						}
+					}
+				
+				}
+				
+				
+				
+				
 			}
+		}
+	}
+	public void defineJob(Variable defvar,NodeDefUses cfgNode,Stmt stmt){
+		JobVariable jvb = new JobVariable(defvar,cfgNode);
+		if(!containjobvar(jvb)){
+			Value defValue = defvar.getValue();
+			
+			System.out.println("Add a job\t"+jvb+"\t @stmt"+stmt+"\t @method: "+sootmethod);
+			numjobs++;
+			JobHub jhb = new JobHub(jvb);
+			jobtoHub.put(jvb, jhb);
+			indextoJob.put(numjobs, jvb);
+		}
+	}
+	public JobHub getjobHub(Variable jobvar){
+		// see the pointer part, if the associated $(partial use the temperate value)
+		@SuppressWarnings("unchecked")
+		PointsToGraph p2g = (PointsToGraph)allcontext.getValueBefore(exitNode);
+		HashMap<Local,Set<AnyNewExpr>> roots = p2g.getRoots();
+		Local joblocal = (Local)jobvar.getValue();
+		Set<AnyNewExpr>jobsites  = roots.get(joblocal);
+		for(JobVariable curr:jobtoHub.keySet()){
+			if(curr.getVariable().equals(jobvar)){
+				return jobtoHub.get(curr);
+			}else if(jobvar.isLocal() && curr.getVariable().isLocal()){
+				Local currlocal = (Local)curr.getVariable().getValue();
+				Set<AnyNewExpr>currlocalsites = roots.get(currlocal);
+				if(currlocalsites==null);
+				else if(!currlocalsites.isEmpty()&&!jobsites.isEmpty()){
+					if(jobsites.containsAll(currlocalsites)||
+							currlocalsites.containsAll(jobsites)){
+						System.out.println("Find a shadow job< "+jobvar.getValue().toString()+" --> "+curr.getVariable().getValue().toString()+" >");
+						return jobtoHub.get(curr);
+					}
+				}
+			}
+		}
+		return null;
+	}
+	public boolean containjobvar(JobVariable jvb){
+		for(JobVariable curr:jobtoHub.keySet()){
+			if(curr.equals(jvb))
+				return true;
 		}
 		return false;
 	}
+	
+	
 	public JobVariable getJob(Variable vi,CFGNode cfgNode){
 		SootMethod sm = cfgNode.getMethod();
 		SootClass sc = sm.getDeclaringClass();

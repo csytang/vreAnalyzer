@@ -47,6 +47,7 @@ public class NewProjectPanel extends JDialog {
 	private JButton btnNewButton;
 	private JButton btnAnalyze;
 	private boolean runFromConfigWizard = false;
+	private boolean bindingsource = false;
 	private static NewProjectPanel instance;
 	private static List<String>sootCommandsFromWizard = new LinkedList<String>();
 	public static NewProjectPanel inst(JFrame parent){
@@ -303,7 +304,7 @@ public class NewProjectPanel extends JDialog {
 							MainFrame.inst().setTargets(targetList);
 						}
 					}
-					dispose();
+					
 				}
 				// Add the selected source directory to main panel
 				else{
@@ -323,10 +324,11 @@ public class NewProjectPanel extends JDialog {
 
 					MainFrame.inst().setTargets(target);
 					MainFrame.inst().setSupporingJars(supporingjars);
-					dispose();
+					
 					MainFrame.inst().generateSootCommand();
 				}
 				DefaultListModel sourceList = (DefaultListModel) javasource.getModel();
+				
 				// 4. binding the class to java source code
 				if(sourceList.size()!=0){
 					List<File>sources = new LinkedList<File>();
@@ -336,8 +338,10 @@ public class NewProjectPanel extends JDialog {
 					MainFrame.inst().setSourceCode(sources);
 					MainFrame.inst().loadSourceCode();
 					MainFrame.inst().bindSource();	
-					
-				}
+					bindingsource = true;
+				}else
+					bindingsource = false;
+				dispose();
 				run();
 			}
 		});
@@ -365,13 +369,7 @@ public class NewProjectPanel extends JDialog {
 
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
-				try {
-					new vreAnalyzerCommandLine(MainFrame.inst().getCommand());
-				} catch (ConflictModelExpection e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				vreAnalyzerCommandLine.inst(MainFrame.inst().getCommand(), bindingsource);
 			}
            
             	

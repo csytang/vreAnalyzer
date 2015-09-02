@@ -1,9 +1,10 @@
-package Patch.Hadoop;
+package Patch.Hadoop.Job;
 
 import java.awt.Color;
 
 import soot.SootClass;
 import soot.SootMethod;
+import vreAnalyzer.vreAnalyzerCommandLine;
 import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Tag.StmtTag;
@@ -20,7 +21,8 @@ public class JobVariable{
 		jobCFGNode = cfgNode;
 		sm = jobCFGNode.getMethod();
 		sc = sm.getDeclaringClass();
-		jobColor = RandomColor.inst().getColor();
+		if(vreAnalyzerCommandLine.isSourceBinding()&&vreAnalyzerCommandLine.isStartFromGUI())
+			jobColor = RandomColor.inst().getColor();
 	}
 	public SootClass getSootClass(){
 		return sc;
@@ -40,6 +42,7 @@ public class JobVariable{
 	@Override
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub
+		
 		if(!(obj instanceof JobVariable))
 			return false;
 		JobVariable objjobvariable = (JobVariable)obj;

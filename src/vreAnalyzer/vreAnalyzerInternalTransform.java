@@ -14,8 +14,7 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 
 	@Override
 	protected void internalTransform(String arg0, Map<String, String> arg1) {
-		// TODO Auto-generated method stub
-		// TODO Auto-generated method stub
+		
 		
 				System.out.println("[vreAnalyzer] Internal transform[Start]");
 				System.out.println("[vreAnalyzer] Program flow build[Start]");
@@ -37,7 +36,7 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 				// Display Reusable Result by checking the mode
 				
 				ProjectParser.inst().ClassParser();
-				ProjectParser.inst().ProjectAnnotate();
+				
 	}
 
 }

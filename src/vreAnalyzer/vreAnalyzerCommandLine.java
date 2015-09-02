@@ -33,6 +33,7 @@ public class vreAnalyzerCommandLine{
 	}
 	public static void main(String[]args) throws ConflictModelExpection{
 		isstartfromGUI = false;
+		issourceBinding = false;
 		new vreAnalyzerCommandLine(args);
 	}
 	public static boolean isStartFromGUI(){

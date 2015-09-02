@@ -238,7 +238,7 @@ public class MethodTag implements Tag {
 			
 			Local t = (Local) idS.getLeftOp();
 			
-			assert t.getName().equals("this") || t.getName().equals("r0") || t.getName().equals("l0");
+			//assert t.getName().equals("this") || t.getName().equals("r0") || t.getName().equals("l0");
 		}
 		Stmt s;
 		for (Iterator itS = pc.iterator(); itS.hasNext() && (s = (Stmt)itS.next()) instanceof IdentityStmt; ) {

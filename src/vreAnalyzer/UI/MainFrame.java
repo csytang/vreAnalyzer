@@ -22,6 +22,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
+import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.lang3.StringUtils;
@@ -54,7 +55,7 @@ public class MainFrame extends JFrame {
 	private List<File>supporingjars;
 	private List<File>sources;
 	private final JSplitPane upsplitPane;
-	private static JTextArea txtrSource=null;
+	private static JTextPane txtrSource=null;
 	private final JTextArea textArea;
 	
 	// 3. 
@@ -163,7 +164,7 @@ public class MainFrame extends JFrame {
 		JScrollPane scrollPane_1 = new JScrollPane();
 		panel.add(scrollPane_1, BorderLayout.CENTER);
 		
-		txtrSource = new JTextArea();
+		txtrSource = new JTextPane();
 		scrollPane_1.setViewportView(txtrSource);
 		
 		JPanel panel_1 = new JPanel();
@@ -382,7 +383,7 @@ public class MainFrame extends JFrame {
 			classnametoSource = new HashMap<String,File>();
 		classnametoSource.put(className, source);
 	}
-	public static JTextArea getSrcTextArea(){
+	public static JTextPane getSrcTextArea(){
 		return txtrSource;
 	}
 }

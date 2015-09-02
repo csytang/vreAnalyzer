@@ -21,6 +21,7 @@ import soot.SootFieldRef;
 import soot.SootMethod;
 import soot.SootMethodRef;
 import soot.Value;
+import soot.jimple.AnyNewExpr;
 import soot.jimple.ArrayRef;
 import soot.jimple.ClassConstant;
 import soot.jimple.Constant;
@@ -42,11 +43,9 @@ import soot.jimple.internal.JReturnStmt;
 import soot.jimple.internal.JReturnVoidStmt;
 import soot.util.NumberedString;
 import vreAnalyzer.Context.Context;
-import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
-import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
+import vreAnalyzer.ControlFlowGraph.CFG;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.PointsTo.PointsToGraph;
-import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 
 
 public class Util {
@@ -303,7 +302,7 @@ public class Util {
 	
 	
 	// TODO: make consistent with 'may' object equality check
-		/** Uses EXACT of possible runtime types referenced by values.
+	/** Uses EXACT of possible runtime types referenced by values.
 		 *  These types of Value can represent an object:
 		 *    1. NewExpr/NewArrayExpr (instance)
 		 *    2. InvokeExpr           (static or instance)
@@ -346,9 +345,6 @@ public class Util {
 		}
 	}
 	
-	
-	
-	
 	// TODO: make consistent with 'must' object equality check
 		/** Uses intersection of possible runtime types referenced by values.
 		 *  These types of Value can represent an object:
@@ -390,7 +386,6 @@ public class Util {
 			// now, just check for intersection of returned lists of possible target classes
 			return intersectSortedAscending(clsTargetsSorted1, clsTargetsSorted2);
 	}
-	
 	
 	/** Cache to avoid re-computing potentially large sets of types possibly referenced by a value. */
 	private static final Map<Value,List<RefLikeType>> valToRefTypes = new HashMap<Value, List<RefLikeType>>();
@@ -451,8 +446,6 @@ public class Util {
 		return typeTargets;
 	}
 	
-	
-	
 	/** Comparator based on the value returned by the {@link Object#hashCode()} method. Null references are considered the lowest possible value. */
 	public static class HashCodeComparator<T> implements Comparator<T> {
 		/** Returns a negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second, respectively. */
@@ -467,7 +460,6 @@ public class Util {
 			return (h1 < h2)? -1 : ((h1 == h2)? 0 : 1);
 		}
 	}
-
 	
 	/** Checks for intersection of lists, exploiting that the lists are (must be!) sorted in ascending order of the hashcodes of their elements. */
 	private static boolean intersectSortedAscending(List<? extends Object> l1, List<? extends Object> l2) {
@@ -503,6 +495,18 @@ public class Util {
 				else
 					return false;
 			}
+		}
+	}
+
+	public static void updateSucceedP2G(Local local,AnyNewExpr expr,CFGNode cfgNode,CFG cfg,Context allcontext){
+		List<CFGNode>allnodes = cfg.getNodes();
+		int start = allnodes.indexOf(cfgNode);
+		for(int i = start+1;i < allnodes.size();i++){
+			CFGNode curr = allnodes.get(i);
+			PointsToGraph currbf = (PointsToGraph) allcontext.getValueBefore(curr);
+			PointsToGraph curraf = (PointsToGraph) allcontext.getValueAfter(curr);
+			currbf.assignNew(local, expr);
+			curraf.assignNew(local, expr);
 		}
 	}
 
