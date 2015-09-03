@@ -10,23 +10,22 @@ import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.SpringLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JSeparator;
 
 import vreAnalyzer.vreAnalyzerCommandLine;
-import vreAnalyzer.Util.ConflictModelExpection;
 
 public class NewProjectPanel extends JDialog {
 
@@ -48,6 +47,8 @@ public class NewProjectPanel extends JDialog {
 	private JButton btnAnalyze;
 	private boolean runFromConfigWizard = false;
 	private boolean bindingsource = false;
+	protected static boolean targetSet = false;
+	protected static boolean sourceSet = false;
 	private static NewProjectPanel instance;
 	private static List<String>sootCommandsFromWizard = new LinkedList<String>();
 	public static NewProjectPanel inst(JFrame parent){
@@ -111,6 +112,7 @@ public class NewProjectPanel extends JDialog {
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnAdd, -75, SpringLayout.EAST, textField);
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnAdd, 0, SpringLayout.EAST, textField);
 		btnAdd.addActionListener(new ActionListener() {
+			// target to be analyzed
 			public void actionPerformed(ActionEvent e) {
 				// Add jar or directories to analysis
 				JFileChooser fc = new JFileChooser();
@@ -125,7 +127,10 @@ public class NewProjectPanel extends JDialog {
 					for(File f:selectedFiles){
 						((DefaultListModel)jarLists.getModel()).addElement(f);
 					}
-					btnAnalyze.setEnabled(true);
+					targetSet = true;
+					if(sourceSet == true){
+						btnAnalyze.setEnabled(true);
+					}
 				}
 			}
 		});
@@ -235,7 +240,10 @@ public class NewProjectPanel extends JDialog {
 					for(File f:selectedFiles){
 						((DefaultListModel)javasource.getModel()).addElement(f);
 					}
-					
+					sourceSet = true;
+					if(targetSet == true){
+						btnAnalyze.setEnabled(true);
+					}
 				}
 				
 				
@@ -286,28 +294,7 @@ public class NewProjectPanel extends JDialog {
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnAnalyze, 0, SpringLayout.EAST, textField);
 		btnAnalyze.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(runFromConfigWizard){
-					
-					
-					// 1. Run the command first to extract the directory, supporting jars 
-					// 2. Set the MainFrame for binding purpose
-					for(int i = 0;i < sootCommandsFromWizard.size();i++){
-						String command = sootCommandsFromWizard.get(i);
-						if(command.equals("-process-dir")){
-							String targets = sootCommandsFromWizard.get(1+i);
-							if(targets.startsWith("\""))
-								targets = targets.substring(1);
-							if(targets.endsWith("\""))
-								targets = targets.substring(0, targets.length()-1);
-							List<File>targetList = new ArrayList<File>();
-							targetList.add(new File(targets));
-							MainFrame.inst().setTargets(targetList);
-						}
-					}
-					
-				}
-				// Add the selected source directory to main panel
-				else{
+				if(!runFromConfigWizard){
 					// 1. jar/directory to be process
 					List<File>target = new LinkedList<File>();
 					DefaultListModel targetList = (DefaultListModel) jarLists.getModel();
@@ -323,12 +310,10 @@ public class NewProjectPanel extends JDialog {
 					}
 
 					MainFrame.inst().setTargets(target);
-					MainFrame.inst().setSupporingJars(supporingjars);
-					
+					MainFrame.inst().setSupporingJars(supporingjars);				
 					MainFrame.inst().generateSootCommand();
 				}
-				DefaultListModel sourceList = (DefaultListModel) javasource.getModel();
-				
+				DefaultListModel sourceList = (DefaultListModel) javasource.getModel();				
 				// 4. binding the class to java source code
 				if(sourceList.size()!=0){
 					List<File>sources = new LinkedList<File>();
@@ -354,7 +339,6 @@ public class NewProjectPanel extends JDialog {
 		btnConfigureWizard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ConfigureWizard.inst(instance);
-				btnAnalyze.setEnabled(true);
 				runFromConfigWizard = true;
 			}
 		});

@@ -1,7 +1,6 @@
 package vreAnalyzer.UI;
 
 import java.awt.BorderLayout;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -10,15 +9,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-
 import java.awt.FlowLayout;
-
-import javax.swing.AbstractListModel;
 import javax.swing.JTabbedPane;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
@@ -26,13 +21,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.JTextPane;
-import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
-
 import org.apache.commons.lang3.StringUtils;
-
 import vreAnalyzer.Text2HTML.Text2HTML;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -40,7 +31,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -212,7 +202,7 @@ public class MainFrame extends JFrame {
 		// Redirect output stream
 		printStream = new PrintStream(new CustomOutputStream(textArea));
 		System.setOut(printStream);
-		System.setErr(printStream);
+		//System.setErr(printStream);
         
 		scrollPane.setViewportView(textArea);
 		
@@ -310,11 +300,25 @@ public class MainFrame extends JFrame {
 	}
 	public void generateSootCommand(String command){
 		command = command.trim();
+		String commandtemp = "";
+		boolean getNextUnEmptyFlag = false;
 		comm = StringUtils.split(command);
 		for(int index = 0;index < comm.length;index++){
 			if(comm[index].startsWith("\"")&&
 					comm[index].endsWith("\"")){
 				comm[index] = comm[index].substring(1, comm[index].length()-1);
+			}
+			commandtemp = comm[index];
+			if(commandtemp.equals("-src-prec")){
+				getNextUnEmptyFlag = true;
+			}
+			if(getNextUnEmptyFlag==true){
+				if(!commandtemp.trim().equals("")){
+					getNextUnEmptyFlag = false;
+					if(commandtemp.equals("java")){
+						NewProjectPanel.sourceSet = true;
+					}
+				}
 			}
 		}
 		
@@ -360,8 +364,6 @@ public class MainFrame extends JFrame {
 				DefaultMutableTreeNode selected = (DefaultMutableTreeNode)filefolder.getLastSelectedPathComponent();
 				if(isLeaf(selected.getUserObject())){
 					File selectedfile = (File)selected.getUserObject();
-					
-					
 					if(selectedfile.getAbsolutePath().endsWith(".java")){
 						txtrSource.setContentType("text/plain");
 					}else if(selectedfile.getAbsolutePath().endsWith(".html")){

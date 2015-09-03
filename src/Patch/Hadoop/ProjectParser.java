@@ -1,8 +1,10 @@
 package Patch.Hadoop;
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobUnderstand;
 import Patch.Hadoop.Job.JobVariable;
@@ -28,6 +30,7 @@ import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.PointsTo.PointsToGraph;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
+import vreAnalyzer.UI.SourceClassBinding;
 import vreAnalyzer.Util.Util;
 	
 public class ProjectParser {
@@ -62,11 +65,12 @@ public class ProjectParser {
 	public JobHub getjobHub(Value job){
 		return jobtoHub.get(job);
 	}
-	public void JobAnnotate(){
+	public void annotateallJobs(){
 		for(Map.Entry<JobVariable, JobHub>entry:jobtoHub.entrySet()){
 			JobVariable job = entry.getKey();
 			JobHub jobhub = entry.getValue();
-			Patch.Hadoop.Job.JobAnnotate jobannot = new Patch.Hadoop.Job.JobAnnotate(job,null);
+			File sourceFile = SourceClassBinding.getSourceFileFromClassName(job.getSootClass().getName());
+			Patch.Hadoop.Job.JobAnnotate jobannot = new Patch.Hadoop.Job.JobAnnotate(job,sourceFile);
 		}
 	}
 	

@@ -17,7 +17,6 @@ import java.util.zip.ZipInputStream;
 
 
 public class SourceClassBinding{
-
 	private static Map<String,File>classNameToSourceFile;
 	private static SourceClassBinding instance;
 	private int index = 0;
@@ -36,6 +35,9 @@ public class SourceClassBinding{
 	public SourceClassBinding(List<File>classes,List<File>source,File clsParent,File sourceParent) {
 		classNameToSourceFile = new HashMap<String,File>();
 		startdirBinding(classes,source,clsParent,sourceParent);		
+	}
+	public static File getSourceFileFromClassName(String className){
+		return classNameToSourceFile.get(className);
 	}
 	public void startdirNameBinding(List<String>classes,ArrayList<File>source,String clsSysPathPattern,String sourceSysPathPattern){
 		System.out.println("[vreHadoop] String dir NameBinding");
