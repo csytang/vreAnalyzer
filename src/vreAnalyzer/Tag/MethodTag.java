@@ -79,8 +79,11 @@ public class MethodTag implements Tag {
 		for (Unit u : sm.retrieveActiveBody().getUnits())
 		{
 			StmtTag stnode = new StmtTag(sm,(Stmt)u,sIdx++);
+			// create source location tag for the statement
+			SourceLocationTag slnode = new SourceLocationTag(sm,u);
 			stmtList.add((Stmt)u);
 			u.addTag(stnode);
+			u.addTag(slnode);
 		}
 		
 		assert !this.stmtList.isEmpty();

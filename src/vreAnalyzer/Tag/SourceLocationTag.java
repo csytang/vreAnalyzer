@@ -1,7 +1,9 @@
-package vreAnalyzer.Util;
+package vreAnalyzer.Tag;
 
+import soot.tagkit.AttributeValueException;
 import soot.tagkit.Host;
 import soot.tagkit.SourceLnPosTag;
+import soot.tagkit.Tag;
 import soot.SootMethod;
 import soot.Unit;
 
@@ -10,7 +12,8 @@ import soot.Unit;
  * attempts to extract line number information
  * Used for debugging purposes / communicating with the user.
  */
-public class SourceLocation {
+public class SourceLocationTag implements Tag {
+	public static String TAG_NAME = "slt";
     private String className;
     private String memberName;
     private Host hostName;
@@ -22,7 +25,7 @@ public class SourceLocation {
     public int endlineNumber = -1;
     // Determine the line location of a particular Host, and glean className /
     // memberName information from the passed SootMember.
-    public SourceLocation(SootMethod member, Unit h) {
+    public SourceLocationTag(SootMethod member, Unit h) {
         className = member.getDeclaringClass().getName();
         memberName = member.getName();
         hostName = h;
@@ -50,6 +53,16 @@ public class SourceLocation {
     public int getEndPos(){
     	return endPos;
     }
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return SourceLocationTag.TAG_NAME;
+	}
+	@Override
+	public byte[] getValue() throws AttributeValueException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
     
 }

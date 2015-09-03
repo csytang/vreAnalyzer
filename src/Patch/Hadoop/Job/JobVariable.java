@@ -33,7 +33,9 @@ public class JobVariable{
 	public Variable getVariable(){
 		return jobvariable;
 	}
-	
+	public CFGNode getCFGNode(){
+		return jobCFGNode;
+	}
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub

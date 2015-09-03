@@ -336,7 +336,7 @@ public class NewProjectPanel extends JDialog {
 						sources.add((File) sourceList.getElementAt(i));
 					}
 					MainFrame.inst().setSourceCode(sources);
-					MainFrame.inst().loadSourceCode();
+					MainFrame.inst().loadSourceCodeandHTML();
 					MainFrame.inst().bindSource();	
 					bindingsource = true;
 				}else

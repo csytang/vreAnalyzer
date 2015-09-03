@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -16,7 +18,7 @@ import java.util.zip.ZipInputStream;
 
 public class SourceClassBinding{
 
-	
+	private static Map<String,File>classNameToSourceFile;
 	private static SourceClassBinding instance;
 	private int index = 0;
 	/**
@@ -32,6 +34,7 @@ public class SourceClassBinding{
 		return instance;
 	}
 	public SourceClassBinding(List<File>classes,List<File>source,File clsParent,File sourceParent) {
+		classNameToSourceFile = new HashMap<String,File>();
 		startdirBinding(classes,source,clsParent,sourceParent);		
 	}
 	public void startdirNameBinding(List<String>classes,ArrayList<File>source,String clsSysPathPattern,String sourceSysPathPattern){
@@ -49,6 +52,7 @@ public class SourceClassBinding{
 		
 			
 			File result = source.get(bindarySearch(source,sourceSysPathPattern,realName,0,source.size()-1));
+			classNameToSourceFile.put(clsName, result);
 			MainFrame.inst().addBinding(clsName, result);
 			 
 			System.out.println("[vreHadoop] Binding class ["+clsName+"] with source ["+result.getAbsolutePath()+"]");

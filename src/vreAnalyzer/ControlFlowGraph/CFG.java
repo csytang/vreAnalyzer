@@ -17,7 +17,6 @@ import soot.jimple.InvokeExpr;
 import soot.jimple.InvokeStmt;
 import soot.jimple.Stmt;
 import soot.jimple.ThrowStmt;
-import soot.tagkit.SourceLnPosTag;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Elements.CFGNodeSpecial;
 import vreAnalyzer.Elements.CallSite;
@@ -111,7 +110,7 @@ public class CFG {
 		// Patching chain of the SootMethod
 		PatchingChain<Unit> pchain = method.retrieveActiveBody().getUnits();
 		MethodTag mNodeTag = (MethodTag) method.getTag(MethodTag.TAG_NAME);
-		
+			
 		// First of all, create a node for each stmt
 		int nId = 0;
 		nodes.add(this.ENTRY);

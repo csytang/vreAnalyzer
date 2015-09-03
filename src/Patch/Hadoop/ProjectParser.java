@@ -3,7 +3,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobUnderstand;
 import Patch.Hadoop.Job.JobVariable;
@@ -39,6 +38,8 @@ public class ProjectParser {
 	private boolean verbose = true;
 	private Context allcontext = null;
 	private static int numjobs = 0;
+	
+	private static int numShadow = 0;
 	private SootClass libMapper;
 	private SootClass libReducer;
 	private SootClass cs;
@@ -61,6 +62,14 @@ public class ProjectParser {
 	public JobHub getjobHub(Value job){
 		return jobtoHub.get(job);
 	}
+	public void JobAnnotate(){
+		for(Map.Entry<JobVariable, JobHub>entry:jobtoHub.entrySet()){
+			JobVariable job = entry.getKey();
+			JobHub jobhub = entry.getValue();
+			Patch.Hadoop.Job.JobAnnotate jobannot = new Patch.Hadoop.Job.JobAnnotate(job,null);
+		}
+	}
+	
 	public void ClassParser(){
 		libMapper = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Mapper");
 		libReducer = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Reducer");
@@ -68,18 +77,20 @@ public class ProjectParser {
 		indextoJob = new HashMap<Integer,JobVariable>();// start from 1 insteadof 0
 		// run all the application methods
 		for(SootMethod sm:ProgramFlowBuilder.inst().getAppConcreteMethods()){
+			
+			sootmethod = sm;
+			cs = sm.getDeclaringClass();
 			cfggraph = (CFGDefUse) ProgramFlowBuilder.inst().getCFG(sm);
 			exitNode = cfggraph.EXIT;
 			currContexts = PointsToAnalysis.inst().getContexts(sm);
-			allcontext = currContexts.get(0);			
-			sootmethod = sm;
-			cs = sm.getDeclaringClass();
+			allcontext = currContexts.get(0);	
 			Parse();
 		}
 		System.out.println("# Jobs:\t"+numjobs);
 		System.out.println("# Mappers:\t"+JobUnderstand.getNumberofMapper());
 		System.out.println("# Combiner:\t"+JobUnderstand.getNumberofCombiner());
 		System.out.println("# Reducer:\t"+JobUnderstand.getNumberofReducer());
+		System.out.println("# Shadow:\t"+numShadow);
 	}
 	
 	public void Parse(){
@@ -253,7 +264,7 @@ public class ProjectParser {
 								InvokeExpr invokeExpr = stmt.getInvokeExpr();
 								switch(invokeExpr.getMethod().getName()){
 								case "setMapperClass":{
-									// 1. setMapperClass
+									// 1. setMapperClass									
 									JobUnderstand.process_SetMapperClass(jobinstance, invokeExpr, cfgNode,cfggraph,libMapper);
 									break;
 								}
@@ -300,7 +311,6 @@ public class ProjectParser {
 		JobVariable jvb = new JobVariable(defvar,cfgNode);
 		if(!containjobvar(jvb)){
 			Value defValue = defvar.getValue();
-			
 			System.out.println("Add a job\t"+jvb+"\t @stmt"+stmt+"\t @method: "+sootmethod);
 			numjobs++;
 			JobHub jhb = new JobHub(jvb);
@@ -318,14 +328,16 @@ public class ProjectParser {
 		for(JobVariable curr:jobtoHub.keySet()){
 			if(curr.getVariable().equals(jobvar)){
 				return jobtoHub.get(curr);
-			}else if(jobvar.isLocal() && curr.getVariable().isLocal()){
+			}
+			else if(jobvar.isLocal() && curr.getVariable().isLocal()){
 				Local currlocal = (Local)curr.getVariable().getValue();
 				Set<AnyNewExpr>currlocalsites = roots.get(currlocal);
 				if(currlocalsites==null);
 				else if(!currlocalsites.isEmpty()&&!jobsites.isEmpty()){
 					if(jobsites.containsAll(currlocalsites)||
 							currlocalsites.containsAll(jobsites)){
-						System.out.println("Find a shadow job< "+jobvar.getValue().toString()+" --> "+curr.getVariable().getValue().toString()+" >");
+						System.out.println("Find a shadow job<(shadow) "+jobvar.getValue().toString()+" --> (real)"+curr.getVariable().getValue().toString()+" >");
+						numShadow++;
 						return jobtoHub.get(curr);
 					}
 				}

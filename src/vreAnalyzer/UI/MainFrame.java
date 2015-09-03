@@ -9,6 +9,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.JTextField;
@@ -16,6 +18,7 @@ import javax.swing.JButton;
 
 import java.awt.FlowLayout;
 
+import javax.swing.AbstractListModel;
 import javax.swing.JTabbedPane;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
@@ -23,9 +26,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.JTextPane;
+import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.lang3.StringUtils;
+
+import vreAnalyzer.Text2HTML.Text2HTML;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -34,6 +40,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -43,6 +50,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+
+import javax.swing.JTable;
 
 public class MainFrame extends JFrame {
 	// 1. Instance
@@ -64,6 +73,7 @@ public class MainFrame extends JFrame {
 	private List<File>allsourcefiles = new LinkedList<File>();
 	// 4. Output redirect
 	PrintStream printStream;
+	private JTable table;
 	
 	public static void main(String[] args) {
 		classnametoSource = new HashMap<String,File>();
@@ -139,7 +149,7 @@ public class MainFrame extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		JSplitPane mainsplitPane = new JSplitPane();
-		mainsplitPane.setResizeWeight(0.6);
+		mainsplitPane.setResizeWeight(1.0);
 		mainsplitPane.setOneTouchExpandable(true);
 		mainsplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		contentPane.add(mainsplitPane);
@@ -160,6 +170,7 @@ public class MainFrame extends JFrame {
 		JPanel panel = new JPanel();
 		upsplitPane.setRightComponent(panel);
 		panel.setLayout(new BorderLayout(0, 0));
+		upsplitPane.setDividerLocation(160+upsplitPane.getInsets().left);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		panel.add(scrollPane_1, BorderLayout.CENTER);
@@ -191,7 +202,7 @@ public class MainFrame extends JFrame {
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		bottomsplitPane.setRightComponent(tabbedPane);
-		
+		bottomsplitPane.setDividerLocation(160+bottomsplitPane.getInsets().left);
 		JScrollPane scrollPane = new JScrollPane();
 		tabbedPane.addTab("Console", new ImageIcon(MainFrame.class.getResource("/image/console.png")), scrollPane, null);
 		
@@ -209,6 +220,16 @@ public class MainFrame extends JFrame {
 		
 		tabbedPane.addTab("Statistics", new ImageIcon(MainFrame.class.getResource("/image/statistics.png")), scrollPane_2, null);
 		
+		JScrollPane scrollPane_3 = new JScrollPane();
+		bottomsplitPane.setLeftComponent(scrollPane_3);
+		
+		String headers[] = {"job","color"};
+		DefaultTableModel model = new DefaultTableModel(null, headers);
+		table = new JTable(model);
+		
+		
+		 
+		scrollPane_3.setViewportView(table);
 		setVisible(true);
 
 	}
@@ -298,13 +319,16 @@ public class MainFrame extends JFrame {
 		}
 		
 	}
-	public void loadSourceCode() {
+	public void loadSourceCodeandHTML() {
 		// TODO Auto-generated method stub
 		Stack<File>sourcefiles = new Stack<File>();
 		sourcefiles.addAll(sources);
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
 		DefaultMutableTreeNode filelist = new DefaultMutableTreeNode("source_list");
+		DefaultMutableTreeNode htmllist = new DefaultMutableTreeNode("annotated_list");
 		while(!sourcefiles.isEmpty()){
 			File subfile = sourcefiles.pop();
+			
 			if(subfile.isDirectory()){
 				File[]childdir = subfile.listFiles();
 				for(File child:childdir){
@@ -314,34 +338,53 @@ public class MainFrame extends JFrame {
 				// only add .java file
 				if(subfile.exists()&&
 						subfile.getPath().endsWith(".java")){
+					String htmlfileName = subfile.getPath().substring(0, subfile.getPath().length()-".java".length());
+					htmlfileName+=".html";
+					File htmlfile = new File(htmlfileName);
+					Text2HTML t2html = new Text2HTML(subfile,htmlfile);
 					DefaultMutableTreeNode fileNode = new DefaultMutableTreeNode(subfile);
+					DefaultMutableTreeNode htmlNode = new DefaultMutableTreeNode(htmlfile);
 					allsourcefiles.add(subfile);
 					filelist.add(fileNode);
+					htmllist.add(htmlNode);
 				}
 			}
 		}
 		
-		final JTree filefolder = new JTree(filelist);
+		final JTree filefolder = new JTree(root);
+		root.add(filelist);
+		root.add(htmllist);
 		
 		filefolder.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent e){
 				DefaultMutableTreeNode selected = (DefaultMutableTreeNode)filefolder.getLastSelectedPathComponent();
-				File selectedfile = (File)selected.getUserObject();
-				List<String> content;
-				try {
-					content = Files.readAllLines(selectedfile.toPath(),Charset.defaultCharset());
-					String allString = "";
-					for(String subcontent:content){
-						allString+=subcontent;
-						allString+="\n";
+				if(isLeaf(selected.getUserObject())){
+					File selectedfile = (File)selected.getUserObject();
+					
+					
+					if(selectedfile.getAbsolutePath().endsWith(".java")){
+						txtrSource.setContentType("text/plain");
+					}else if(selectedfile.getAbsolutePath().endsWith(".html")){
+						txtrSource.setContentType("text/html");
 					}
-					txtrSource.setText(allString);
-					txtrSource.setCaretPosition(0);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
+					List<String> content;
+						
+					try {
+							content = Files.readAllLines(selectedfile.toPath(),Charset.defaultCharset());
+							String allString = "";
+							for(String subcontent:content){
+								allString+=subcontent;
+								allString+="\n";
+							}
+							
+							txtrSource.setText("");
+							txtrSource.setText(allString);
+							txtrSource.setCaretPosition(0);
+					} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+					}
+				}	
 			}
 		});
 		
@@ -354,7 +397,9 @@ public class MainFrame extends JFrame {
 		File nestedSource = scanNested(allsourcefiles);
 		SourceClassBinding bindinginstance = SourceClassBinding.inst(target,allsourcefiles,nestedTarget,nestedSource.getParentFile());
 	}
-
+	public boolean isLeaf(Object node) {
+	    return (node instanceof File);
+	}
 	public File scanNested(Collection<File>files){
 		int min = 1000;
 		File result = null;

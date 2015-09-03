@@ -9,13 +9,12 @@ import soot.Unit;
 import soot.jimple.Stmt;
 import vreAnalyzer.ControlFlowGraph.Branch;
 import vreAnalyzer.Tag.StmtTag;
-import vreAnalyzer.Util.SourceLocation;
 
 public class CFGNode {
 	
 	///////////////////////Field///////////////////////////////////
 	protected StmtTag sTag;
-	protected SourceLocation sourceLoc;
+	
 	protected ArrayList<CFGNode> preds = new ArrayList<CFGNode>();
 	protected ArrayList<CFGNode> succs = new ArrayList<CFGNode>();
 	protected CFGNode fallThroughTgt = null;

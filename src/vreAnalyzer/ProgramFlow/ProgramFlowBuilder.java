@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import soot.FastHierarchy;
 import soot.Scene;
 import soot.SootClass;
@@ -16,11 +15,8 @@ import soot.SootMethod;
 import vreAnalyzer.ControlFlowGraph.CFG;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.Elements.CFGNode;
-import vreAnalyzer.Elements.CallSite;
-
 import vreAnalyzer.Tag.MethodTag;
 import vreAnalyzer.Util.Options;
-import vreAnalyzer.Util.Util;
 import vreAnalyzer.Util.Options.reusableMode;
 
 
