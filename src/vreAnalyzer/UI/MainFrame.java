@@ -3,7 +3,6 @@ package vreAnalyzer.UI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -17,9 +16,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-
 import java.awt.FlowLayout;
-
 import javax.swing.JTabbedPane;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
@@ -28,11 +25,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
-
 import org.apache.commons.lang3.StringUtils;
-
 import vreAnalyzer.Text2HTML.Text2HTML;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -49,7 +43,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-
 import javax.swing.JTable;
 
 public class MainFrame extends JFrame {
@@ -70,10 +63,12 @@ public class MainFrame extends JFrame {
 	private String[]comm;
 	private static Map<String,File>classnametoSource;
 	private List<File>allsourcefiles = new LinkedList<File>();
+	
 	// 4. Output redirect
 	PrintStream printStream;
 	private JTable table;
 	private static Map<String,String>htmlToJava;
+	
 	public static void main(String[] args) {
 		classnametoSource = new HashMap<String,File>();
 		htmlToJava = new HashMap<String,String>();
@@ -89,8 +84,8 @@ public class MainFrame extends JFrame {
 		}
 		return instance;
 	}
+	
 	public MainFrame() {
-		
 		setTitle("vreAnalyzer");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1200, 720);
@@ -232,27 +227,21 @@ public class MainFrame extends JFrame {
 					int row, int column) {
 				// TODO Auto-generated method stub
 				Component comp = super.prepareRenderer(renderer, row, column);
-				Object value = getModel().getValueAt(row, column);
-				if(getSelectedRow() == row){
-					if(value instanceof Color){
-						comp.setBackground((Color)value);
-					}else{
-						comp.setBackground(Color.WHITE);
+				if(column==1){
+					Object color = getValueAt(row,1);
+					if(color instanceof Color){
+						Color bgcolor = (Color)color;
+						comp.setBackground(bgcolor);
 					}
-				}else{
-					if(value instanceof Color){
-						comp.setBackground((Color)value);
-					}else{
-						comp.setBackground(Color.WHITE);
-					}
+				}else if(column==0){
+					comp.setBackground(Color.white);
 				}
+				
 				return comp;
 			}
 			
 		};
 		
-		
-		 
 		scrollPane_3.setViewportView(table);
 		setVisible(true);
 
@@ -431,17 +420,19 @@ public class MainFrame extends JFrame {
 	}
 	
 	public void bindSource(){
-		/** 1. First, clean the allsourcefiles and all target files to ensure
+		
+		/** 
+		 *  1. First, clean the allsourcefiles and all target files to ensure
 		 *  (1) in target: it can only contains .jar and .class file, no directories are included;
 		 *  (2) in allsourcefile: it can only contain .java file;(is already cleaned in {@link loadSourceCodeandHTML()})
 		 */
 		List<File>purtaget = getPureClassandJar(target);
-		File nestedTarget = scanNested(purtaget);
-		int lastIndexTarget = nestedTarget.getAbsolutePath().lastIndexOf("/");
-		File nestedSource = scanNested(allsourcefiles);
-		int lastInextSource = nestedSource.getAbsolutePath().lastIndexOf("/");
-		String parentTarget = nestedTarget.getAbsolutePath().substring(0, lastIndexTarget);
-		String parentSource = nestedSource.getAbsolutePath().substring(0, lastInextSource);
+		
+		String parentSource = sources.get(0).getAbsolutePath();
+		
+		String parentTarget = target.get(0).getAbsolutePath();
+		
+		
 		SourceClassBinding bindinginstance = SourceClassBinding.inst(purtaget,allsourcefiles,parentTarget,parentSource);
 	}
 	
@@ -467,17 +458,7 @@ public class MainFrame extends JFrame {
 	public boolean isLeaf(Object node) {
 	    return (node instanceof File);
 	}
-	public File scanNested(Collection<File>files){
-		int min = 1000;
-		File result = null;
-		for(File fi:files){
-			if(StringUtils.countMatches(fi.getAbsolutePath(), "/")< min){
-				result = fi;
-				min = StringUtils.countMatches(fi.getAbsolutePath(), "/");
-			}
-		}
-		return result;
-	}
+	
 	public String[] getCommand() {
 		// TODO Auto-generated method stub
 		return comm;

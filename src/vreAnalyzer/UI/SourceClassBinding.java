@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
+
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -59,8 +59,12 @@ public class SourceClassBinding{
 				realName = realName.substring(0, realName.indexOf("$"));
 			}
 		
-			
-			File result = source.get(bindarySearch(source,sourceSysPathPattern,realName,0,source.size()-1));
+			int index = bindarySearch(source,sourceSysPathPattern,realName,0,source.size()-1);
+			if(index==-1){
+				System.err.println("Unable to find the class:\t"+clsName);
+				continue;
+			}
+			File result = source.get(index);
 			classNameToSourceFile.put(clsName, result);
 			MainFrame.inst().addBinding(clsName, result);
 			 
@@ -117,7 +121,8 @@ public class SourceClassBinding{
 					for(ZipEntry entry=zip.getNextEntry();entry!=null;entry = zip.getNextEntry()){
 						if(!entry.isDirectory() && entry.getName().endsWith(".class")){
 								String className = entry.getName();
-									
+								// 1. If one is from jar file, it should attached the original prarent file path
+;								className = clsParent+"/"+className;
 								classNames.add(className);
 							}
 					}
