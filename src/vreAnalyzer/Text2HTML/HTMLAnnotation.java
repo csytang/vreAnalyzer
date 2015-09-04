@@ -8,6 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Map;
+
+import vreAnalyzer.UI.RandomColor;
 
 public class HTMLAnnotation {
 	static Color annotateColor = null;
@@ -21,7 +24,8 @@ public class HTMLAnnotation {
 	 * @param endcolumn
 	 * @param annotatedColor
 	 */
-	public static void annotateHTML(File htmlfile,int startline,int startcolumn,int endline,int endcolumn,Color annotatedColor){
+	
+	public static void annotateHTML(File htmlfile,int startline,int startcolumn,int endline,int endcolumn,Color annotatedColor,Map<String,String> HTMLtoJava){
 		try {
 			annotateColor = annotatedColor;
 			String hex = Integer.toHexString(annotateColor.getRGB() & 0xffffff);
@@ -52,19 +56,36 @@ public class HTMLAnnotation {
 			String spanStart = "<span style=\"background-color:"+hex+"\">";
 			String spanEnd = "</span>";
 			StringBuffer buffStart = new StringBuffer(startlinecontent);
-			int startcolumninHTML = getColumnInHTML(startcolumn,startlinecontent);
+			String startjavaString = HTMLtoJava.get(startlinecontent+"<br>");
+			String substartjavaString = startjavaString.substring(startcolumn-1, startjavaString.length());
+			String starthtmlreverse = Text2HTML.txtToHtml(substartjavaString);
+			if(starthtmlreverse.endsWith("<br>")){
+				starthtmlreverse = starthtmlreverse.substring(0, starthtmlreverse.length()-"<br>".length());
+			}
+			int startcolumninHTML = startlinecontent.indexOf(starthtmlreverse);
 			int endcolumninHTML = 0;
 			buffStart.insert(startcolumninHTML, spanStart);
 			if(startline==endline){
-				endcolumninHTML = getColumnInHTML(endcolumn+spanStart.length(),startlinecontent);
+				startjavaString.substring(startcolumn-1, endcolumn);
+				starthtmlreverse = Text2HTML.txtToHtml(substartjavaString);
+				if(starthtmlreverse.endsWith("<br>")){
+					starthtmlreverse = starthtmlreverse.substring(0, starthtmlreverse.length()-"<br>".length());
+				}
+				endcolumninHTML = startcolumninHTML+starthtmlreverse.length()+spanStart.length();
 				buffStart.insert(endcolumninHTML, spanEnd);
 				htmlbyline[startline-1] = buffStart.toString();
 			}else{
-				endcolumninHTML = getColumnInHTML(endcolumn,endlinecontent);
 				StringBuffer buffEnd = new StringBuffer(endlinecontent);
+				String endjavaString = HTMLtoJava.get(endlinecontent+"<br>");
+				String subendjavaString = endjavaString.substring(endcolumn-1, endjavaString.length());
+				String endhtmlreverse = Text2HTML.txtToHtml(subendjavaString);
+				if(endhtmlreverse.endsWith("<br>")){
+					endhtmlreverse = endhtmlreverse.substring(0, endhtmlreverse.length()-"<br>".length());
+				}
+				endcolumninHTML = endlinecontent.indexOf(endhtmlreverse);
 				buffEnd.insert(endcolumninHTML, spanEnd);
 				htmlbyline[startline-1] = buffStart.toString();
-				htmlbyline[endline] = buffEnd.toString();
+				htmlbyline[endline-1] = buffEnd.toString();
 			}
 			
 			
@@ -88,64 +109,7 @@ public class HTMLAnnotation {
 		
 		
 	}
-	private static int getColumnInHTML(int startcolumn, String startlinecontent) {
-		// TODO Auto-generated method stub
-		int startcolumnInHTML = 0;
-		int columncount = 0;
-		int nbspCount = 0;
-		char[]charset = startlinecontent.toCharArray();	
-		String symbol = "";
-		String tag = "";
-		for(int i = 0;i < charset.length;i++){
-			char c = charset[i];
-			if(columncount==startcolumn)
-				break;
-			startcolumnInHTML++;
-			if(c=='&'){
-				symbol+=c;
-				while(c!=';'){
-					i++;
-					startcolumnInHTML++;
-					symbol+=c;
-				}
-				i++;
-				startcolumnInHTML++;
-				symbol+=c;
-				switch(symbol){
-				case"&lt;":{//<
-					columncount++;
-					break;
-				}
-				case "&gt;":{//>
-					columncount++;
-					break;
-				}
-				case "&amp;":{//&
-					columncount++;
-					break;
-				}
-				case "&quot;":{//"
-					columncount++;
-					break;
-				}
-				case "&nbsp;":{//
-					nbspCount++;
-					if(nbspCount==3){
-						columncount+=6;
-					}
-					break;
-				}
-				}
-			}else if(c=='<'){
-				while(c!='>'){
-					startcolumnInHTML++;
-					i++;
-					c = charset[i];
-				}
-			}
-		}
-		return startcolumnInHTML;
-	}
+
 	
 	
 	

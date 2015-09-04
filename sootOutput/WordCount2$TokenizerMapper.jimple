@@ -1,0 +1,321 @@
+public static class WordCount2$TokenizerMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private static final org.apache.hadoop.io.IntWritable one;
+    private org.apache.hadoop.io.Text word;
+    private boolean caseSensitive;
+    private java.util.Set patternsToSkip;
+    private org.apache.hadoop.conf.Configuration conf;
+    private java.io.BufferedReader fis;
+
+    static void <clinit>()
+    {
+        org.apache.hadoop.io.IntWritable temp$0;
+
+        temp$0 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke temp$0.<org.apache.hadoop.io.IntWritable: void <init>(int)>(1);
+
+        <WordCount2$TokenizerMapper: org.apache.hadoop.io.IntWritable one> = temp$0;
+
+        return;
+    }
+
+    public void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        WordCount2$TokenizerMapper this;
+        org.apache.hadoop.mapreduce.Mapper$Context context;
+        org.apache.hadoop.conf.Configuration temp$0, temp$1, temp$3, temp$5;
+        boolean temp$2, temp$4;
+        org.apache.hadoop.mapreduce.Job temp$6;
+        java.net.URI[] temp$7;
+        int temp$8, temp$9;
+        java.net.URI temp$10;
+        org.apache.hadoop.fs.Path temp$11;
+        java.lang.String temp$12, temp$13, temp$14;
+
+        this := @this: WordCount2$TokenizerMapper;
+
+        context := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        temp$0 = virtualinvoke context.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        this.<WordCount2$TokenizerMapper: org.apache.hadoop.conf.Configuration conf> = temp$0;
+
+        temp$1 = this.<WordCount2$TokenizerMapper: org.apache.hadoop.conf.Configuration conf>;
+
+        temp$2 = virtualinvoke temp$1.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("wordcount.case.sensitive", 1);
+
+        this.<WordCount2$TokenizerMapper: boolean caseSensitive> = temp$2;
+
+        temp$3 = this.<WordCount2$TokenizerMapper: org.apache.hadoop.conf.Configuration conf>;
+
+        temp$4 = virtualinvoke temp$3.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("wordcount.skip.patterns", 1);
+
+        if temp$4 == 0 goto label2;
+
+        temp$5 = this.<WordCount2$TokenizerMapper: org.apache.hadoop.conf.Configuration conf>;
+
+        temp$6 = staticinvoke <org.apache.hadoop.mapreduce.Job: org.apache.hadoop.mapreduce.Job getInstance(org.apache.hadoop.conf.Configuration)>(temp$5);
+
+        temp$7 = virtualinvoke temp$6.<org.apache.hadoop.mapreduce.Job: java.net.URI[] getCacheFiles()>();
+
+        temp$8 = 0;
+
+     label1:
+        temp$9 = lengthof temp$7;
+
+        if temp$8 >= temp$9 goto label2;
+
+        temp$10 = temp$7[temp$8];
+
+        temp$11 = new org.apache.hadoop.fs.Path;
+
+        temp$12 = virtualinvoke temp$10.<java.net.URI: java.lang.String getPath()>();
+
+        specialinvoke temp$11.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(temp$12);
+
+        temp$13 = virtualinvoke temp$11.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        temp$14 = virtualinvoke temp$13.<java.lang.String: java.lang.String toString()>();
+
+        virtualinvoke this.<WordCount2$TokenizerMapper: void parseSkipFile(java.lang.String)>(temp$14);
+
+        temp$8 = temp$8 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private final void parseSkipFile(java.lang.String)
+    {
+        WordCount2$TokenizerMapper this;
+        java.lang.String fileName, temp$3, temp$8, temp$9;
+        java.io.BufferedReader temp$0, temp$2;
+        java.io.FileReader temp$1;
+        java.util.Set temp$4;
+        java.io.IOException ioe;
+        java.io.PrintStream temp$6;
+        java.lang.StringBuffer temp$7;
+
+        this := @this: WordCount2$TokenizerMapper;
+
+        fileName := @parameter0: java.lang.String;
+
+     label1:
+        temp$0 = new java.io.BufferedReader;
+
+        temp$1 = new java.io.FileReader;
+
+        specialinvoke temp$1.<java.io.FileReader: void <init>(java.lang.String)>(fileName);
+
+        specialinvoke temp$0.<java.io.BufferedReader: void <init>(java.io.Reader)>(temp$1);
+
+        this.<WordCount2$TokenizerMapper: java.io.BufferedReader fis> = temp$0;
+
+     label2:
+        temp$2 = this.<WordCount2$TokenizerMapper: java.io.BufferedReader fis>;
+
+        temp$3 = virtualinvoke temp$2.<java.io.BufferedReader: java.lang.String readLine()>();
+
+        if temp$3 != null goto label3;
+
+        goto label5;
+
+     label3:
+        temp$4 = this.<WordCount2$TokenizerMapper: java.util.Set patternsToSkip>;
+
+        interfaceinvoke temp$4.<java.util.Set: boolean add(java.lang.Object)>(temp$3);
+
+        goto label2;
+
+     label4:
+        ioe := @caughtexception;
+
+        temp$6 = <java.lang.System: java.io.PrintStream err>;
+
+        temp$7 = new java.lang.StringBuffer;
+
+        specialinvoke temp$7.<java.lang.StringBuffer: void <init>()>();
+
+        virtualinvoke temp$7.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.Object)>("Caught exception while parsing the cached file \'");
+
+        temp$8 = staticinvoke <org.apache.hadoop.util.StringUtils: java.lang.String stringifyException(java.lang.Throwable)>(ioe);
+
+        virtualinvoke temp$7.<java.lang.StringBuffer: java.lang.StringBuffer append(java.lang.Object)>(temp$8);
+
+        temp$9 = virtualinvoke temp$7.<java.lang.StringBuffer: java.lang.String toString()>();
+
+        virtualinvoke temp$6.<java.io.PrintStream: void println(java.lang.String)>(temp$9);
+
+     label5:
+        return;
+
+        catch java.io.IOException from label1 to label4 with label4;
+    }
+
+    public void map(java.lang.Object, org.apache.hadoop.io.Text, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        WordCount2$TokenizerMapper this;
+        java.lang.Object key, temp$8;
+        org.apache.hadoop.io.Text value, temp$12, temp$14;
+        org.apache.hadoop.mapreduce.Mapper$Context context;
+        java.lang.String line, temp$0, temp$2, temp$3, temp$4, pattern, temp$9, temp$13, temp$19, temp$21;
+        boolean temp$1, temp$7, temp$11;
+        java.util.Set temp$5;
+        java.util.Iterator temp$6;
+        java.util.StringTokenizer temp$10;
+        org.apache.hadoop.io.IntWritable temp$15;
+        java.lang.Class temp$16, temp$17, temp$18;
+        WordCount2$TokenizerMapper$CountersEnum temp$20;
+        org.apache.hadoop.mapreduce.Counter temp$22;
+
+        this := @this: WordCount2$TokenizerMapper;
+
+        key := @parameter0: java.lang.Object;
+
+        value := @parameter1: org.apache.hadoop.io.Text;
+
+        context := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        temp$1 = this.<WordCount2$TokenizerMapper: boolean caseSensitive>;
+
+        if temp$1 == 0 goto label1;
+
+        temp$2 = virtualinvoke value.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        temp$0 = temp$2;
+
+        goto label2;
+
+     label1:
+        temp$3 = virtualinvoke value.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        temp$4 = virtualinvoke temp$3.<java.lang.String: java.lang.String toLowerCase()>();
+
+        temp$0 = temp$4;
+
+     label2:
+        line = temp$0;
+
+        temp$5 = this.<WordCount2$TokenizerMapper: java.util.Set patternsToSkip>;
+
+        temp$6 = interfaceinvoke temp$5.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label3:
+        temp$7 = interfaceinvoke temp$6.<java.util.Iterator: boolean hasNext()>();
+
+        if temp$7 == 0 goto label4;
+
+        temp$8 = interfaceinvoke temp$6.<java.util.Iterator: java.lang.Object next()>();
+
+        pattern = (java.lang.String) temp$8;
+
+        temp$9 = virtualinvoke line.<java.lang.String: java.lang.String replaceAll(java.lang.String,java.lang.String)>(pattern, "");
+
+        line = temp$9;
+
+        goto label3;
+
+     label4:
+        temp$10 = new java.util.StringTokenizer;
+
+        specialinvoke temp$10.<java.util.StringTokenizer: void <init>(java.lang.String)>(line);
+
+     label5:
+        temp$11 = virtualinvoke temp$10.<java.util.StringTokenizer: boolean hasMoreTokens()>();
+
+        if temp$11 == 0 goto label8;
+
+        temp$12 = this.<WordCount2$TokenizerMapper: org.apache.hadoop.io.Text word>;
+
+        temp$13 = virtualinvoke temp$10.<java.util.StringTokenizer: java.lang.String nextToken()>();
+
+        virtualinvoke temp$12.<org.apache.hadoop.io.Text: void set(java.lang.String)>(temp$13);
+
+        temp$14 = this.<WordCount2$TokenizerMapper: org.apache.hadoop.io.Text word>;
+
+        temp$15 = <WordCount2$TokenizerMapper: org.apache.hadoop.io.IntWritable one>;
+
+        interfaceinvoke context.<org.apache.hadoop.mapreduce.TaskInputOutputContext: void write(java.lang.Object,java.lang.Object)>(temp$14, temp$15);
+
+        temp$17 = <WordCount2: java.lang.Class class$WordCount2$TokenizerMapper$CountersEnum>;
+
+        if temp$17 != null goto label6;
+
+        temp$18 = staticinvoke <WordCount2: java.lang.Class class$(java.lang.String)>("WordCount2$TokenizerMapper$CountersEnum");
+
+        <WordCount2: java.lang.Class class$WordCount2$TokenizerMapper$CountersEnum> = temp$18;
+
+        temp$16 = temp$18;
+
+        goto label7;
+
+     label6:
+        temp$16 = <WordCount2: java.lang.Class class$WordCount2$TokenizerMapper$CountersEnum>;
+
+     label7:
+        temp$19 = virtualinvoke temp$16.<java.lang.Class: java.lang.String getName()>();
+
+        temp$20 = <WordCount2$TokenizerMapper$CountersEnum: WordCount2$TokenizerMapper$CountersEnum INPUT_WORDS>;
+
+        temp$21 = virtualinvoke temp$20.<WordCount2$TokenizerMapper$CountersEnum: java.lang.String toString()>();
+
+        temp$22 = virtualinvoke context.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.mapreduce.Counter getCounter(java.lang.String,java.lang.String)>(temp$19, temp$21);
+
+        interfaceinvoke temp$22.<org.apache.hadoop.mapreduce.Counter: void increment(long)>(1L);
+
+        goto label5;
+
+     label8:
+        return;
+    }
+
+    public void <init>()
+    {
+        WordCount2$TokenizerMapper this;
+        org.apache.hadoop.io.Text temp$0;
+        java.util.HashSet temp$1;
+
+        this := @this: WordCount2$TokenizerMapper;
+
+        specialinvoke this.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        temp$0 = new org.apache.hadoop.io.Text;
+
+        specialinvoke temp$0.<org.apache.hadoop.io.Text: void <init>()>();
+
+        this.<WordCount2$TokenizerMapper: org.apache.hadoop.io.Text word> = temp$0;
+
+        temp$1 = new java.util.HashSet;
+
+        specialinvoke temp$1.<java.util.HashSet: void <init>()>();
+
+        this.<WordCount2$TokenizerMapper: java.util.Set patternsToSkip> = temp$1;
+
+        return;
+    }
+
+    public volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        WordCount2$TokenizerMapper this;
+        java.lang.Object p0, p1;
+        org.apache.hadoop.mapreduce.Mapper$Context p2;
+        org.apache.hadoop.io.Text temp$0;
+
+        this := @this: WordCount2$TokenizerMapper;
+
+        p0 := @parameter0: java.lang.Object;
+
+        p1 := @parameter1: java.lang.Object;
+
+        p2 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        temp$0 = (org.apache.hadoop.io.Text) p1;
+
+        virtualinvoke this.<WordCount2$TokenizerMapper: void map(java.lang.Object,org.apache.hadoop.io.Text,org.apache.hadoop.mapreduce.Mapper$Context)>(p0, temp$0, p2);
+
+        return;
+    }
+}

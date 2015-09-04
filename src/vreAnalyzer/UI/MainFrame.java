@@ -1,6 +1,9 @@
 package vreAnalyzer.UI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -9,11 +12,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+
 import java.awt.FlowLayout;
+
 import javax.swing.JTabbedPane;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
@@ -22,8 +28,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
+
 import org.apache.commons.lang3.StringUtils;
+
 import vreAnalyzer.Text2HTML.Text2HTML;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -64,9 +73,10 @@ public class MainFrame extends JFrame {
 	// 4. Output redirect
 	PrintStream printStream;
 	private JTable table;
-	
+	private static Map<String,String>htmlToJava;
 	public static void main(String[] args) {
 		classnametoSource = new HashMap<String,File>();
+		htmlToJava = new HashMap<String,String>();
 		inst();
 	}
 
@@ -215,7 +225,31 @@ public class MainFrame extends JFrame {
 		
 		String headers[] = {"job","color"};
 		DefaultTableModel model = new DefaultTableModel(null, headers);
-		table = new JTable(model);
+		table = new JTable(model){
+
+			@Override
+			public Component prepareRenderer(TableCellRenderer renderer,
+					int row, int column) {
+				// TODO Auto-generated method stub
+				Component comp = super.prepareRenderer(renderer, row, column);
+				Object value = getModel().getValueAt(row, column);
+				if(getSelectedRow() == row){
+					if(value instanceof Color){
+						comp.setBackground((Color)value);
+					}else{
+						comp.setBackground(Color.WHITE);
+					}
+				}else{
+					if(value instanceof Color){
+						comp.setBackground((Color)value);
+					}else{
+						comp.setBackground(Color.WHITE);
+					}
+				}
+				return comp;
+			}
+			
+		};
 		
 		
 		 
@@ -347,6 +381,7 @@ public class MainFrame extends JFrame {
 					htmlfileName+=".html";
 					File htmlfile = new File(htmlfileName);
 					Text2HTML t2html = new Text2HTML(subfile,htmlfile);
+					htmlToJava.putAll(t2html.getHTMLMapping());
 					DefaultMutableTreeNode fileNode = new DefaultMutableTreeNode(subfile);
 					DefaultMutableTreeNode htmlNode = new DefaultMutableTreeNode(htmlfile);
 					allsourcefiles.add(subfile);
@@ -447,6 +482,9 @@ public class MainFrame extends JFrame {
 		// TODO Auto-generated method stub
 		return comm;
 	}
+	public Map<String,String> getHTMLToJava(){
+		return htmlToJava;
+	}
 	public void writeConsole(final String str){
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run(){
@@ -462,5 +500,8 @@ public class MainFrame extends JFrame {
 	}
 	public static JTextPane getSrcTextArea(){
 		return txtrSource;
+	}
+	public JTable getJobColorMapTable(){
+		return table;
 	}
 }

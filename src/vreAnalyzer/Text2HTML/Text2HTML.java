@@ -7,19 +7,20 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class Text2HTML {
 	
-	public static void main(String[]args){
-		
-	}
 	
+	private Map<String,String>HTMLtoJava;
 	public Text2HTML(File inputFile,File outPutFile){
 		FileReader input = null;
 		FileWriter output = null;
 		BufferedReader br = null;
 		BufferedWriter wt = null;
-		String alllines = "";
+		HTMLtoJava = new HashMap<String,String>();
 		try {
 			input = new FileReader(inputFile);
 			output = new FileWriter(outPutFile);
@@ -27,10 +28,12 @@ public class Text2HTML {
 			wt = new BufferedWriter(output);
 			String line;
 			while((line = br.readLine()) != null){				
-				alllines+=line;
-				alllines+="\n";
+				line+='\n';
+				String htmlString = txtToHtml(line);
+				HTMLtoJava.put(htmlString, line);
+				wt.write(htmlString);
 			}
-			wt.write(txtToHtml(alllines));
+			
 			input.close();
 			br.close();
 			wt.close();
@@ -43,7 +46,7 @@ public class Text2HTML {
 			e.printStackTrace();
 		}
 	}
-	public String txtToHtml(String s) {
+	public static String txtToHtml(String s) {
 	    StringBuilder builder = new StringBuilder();
 	    boolean previousWasASpace = false;
 	    for( char c : s.toCharArray() ) {
@@ -74,5 +77,8 @@ public class Text2HTML {
 	        }
 	    }
 	    return builder.toString();
+	}
+	public Map getHTMLMapping(){
+		return HTMLtoJava;
 	}
 }

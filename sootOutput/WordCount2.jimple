@@ -1,0 +1,461 @@
+public class WordCount2 extends java.lang.Object
+{
+    public static java.lang.Class class$WordCount2$TokenizerMapper$CountersEnum;
+    public static java.lang.Class class$WordCount2;
+    public static java.lang.Class class$WordCount2$TokenizerMapper;
+    public static java.lang.Class class$WordCount2$IntSumReducer;
+    public static java.lang.Class class$org$apache$hadoop$io$Text;
+    public static java.lang.Class class$org$apache$hadoop$io$IntWritable;
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] args, temp$3;
+        org.apache.hadoop.conf.Configuration temp$0, temp$1, temp$58, temp$70;
+        org.apache.hadoop.util.GenericOptionsParser temp$2;
+        int temp$4, temp$5, i, temp$46, temp$54, temp$66, temp$75, temp$88;
+        java.io.PrintStream temp$6;
+        org.apache.hadoop.mapreduce.Job temp$7, temp$26;
+        java.lang.Class temp$8, temp$9, temp$10, temp$11, temp$12, temp$13, temp$14, temp$15, temp$16, temp$17, temp$18, temp$19, temp$20, temp$21, temp$22, temp$23, temp$24, temp$25, temp$27, temp$28, temp$29, temp$30, temp$31, temp$32, temp$33, temp$34, temp$35, temp$36, temp$37, temp$38, temp$39, temp$40, temp$41, temp$42, temp$43, temp$44;
+        java.util.ArrayList temp$45;
+        java.lang.String temp$47, temp$50, temp$56, temp$59, temp$62, temp$68, temp$73, temp$78, temp$81, temp$84, temp$87;
+        boolean temp$51, temp$63, temp$89, temp$90;
+        org.apache.hadoop.fs.Path temp$52, temp$64, temp$76, temp$79, temp$82, temp$85;
+        java.net.URI temp$57, temp$69;
+        java.lang.Object temp$77, temp$80, temp$83, temp$86;
+
+        args := @parameter0: java.lang.String[];
+
+        temp$0 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke temp$0.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        temp$1 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke temp$1.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        temp$2 = new org.apache.hadoop.util.GenericOptionsParser;
+
+        specialinvoke temp$2.<org.apache.hadoop.util.GenericOptionsParser: void <init>(org.apache.hadoop.conf.Configuration,java.lang.String[])>(temp$0, args);
+
+        temp$3 = virtualinvoke temp$2.<org.apache.hadoop.util.GenericOptionsParser: java.lang.String[] getRemainingArgs()>();
+
+        temp$4 = lengthof temp$3;
+
+        if temp$4 != 2 goto label01;
+
+        temp$5 = lengthof temp$3;
+
+        if temp$5 != 4 goto label01;
+
+        temp$6 = <java.lang.System: java.io.PrintStream err>;
+
+        virtualinvoke temp$6.<java.io.PrintStream: void println(java.lang.String)>("Usage: wordcount <in> <out> [-skip skipPatternFile]");
+
+        staticinvoke <java.lang.System: void exit(int)>(2);
+
+     label01:
+        temp$7 = staticinvoke <org.apache.hadoop.mapreduce.Job: org.apache.hadoop.mapreduce.Job getInstance(org.apache.hadoop.conf.Configuration,java.lang.String)>(temp$0, "word count");
+
+        temp$9 = <WordCount2: java.lang.Class class$WordCount2>;
+
+        if temp$9 != null goto label02;
+
+        temp$10 = staticinvoke <WordCount2: java.lang.Class class$(java.lang.String)>("WordCount2");
+
+        <WordCount2: java.lang.Class class$WordCount2> = temp$10;
+
+        temp$8 = temp$10;
+
+        goto label03;
+
+     label02:
+        temp$8 = <WordCount2: java.lang.Class class$WordCount2>;
+
+     label03:
+        virtualinvoke temp$7.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(temp$8);
+
+        temp$12 = <WordCount2: java.lang.Class class$WordCount2$TokenizerMapper>;
+
+        if temp$12 != null goto label04;
+
+        temp$13 = staticinvoke <WordCount2: java.lang.Class class$(java.lang.String)>("WordCount2$TokenizerMapper");
+
+        <WordCount2: java.lang.Class class$WordCount2$TokenizerMapper> = temp$13;
+
+        temp$11 = temp$13;
+
+        goto label05;
+
+     label04:
+        temp$11 = <WordCount2: java.lang.Class class$WordCount2$TokenizerMapper>;
+
+     label05:
+        virtualinvoke temp$7.<org.apache.hadoop.mapreduce.Job: void setMapperClass(java.lang.Class)>(temp$11);
+
+        temp$15 = <WordCount2: java.lang.Class class$WordCount2$IntSumReducer>;
+
+        if temp$15 != null goto label06;
+
+        temp$16 = staticinvoke <WordCount2: java.lang.Class class$(java.lang.String)>("WordCount2$IntSumReducer");
+
+        <WordCount2: java.lang.Class class$WordCount2$IntSumReducer> = temp$16;
+
+        temp$14 = temp$16;
+
+        goto label07;
+
+     label06:
+        temp$14 = <WordCount2: java.lang.Class class$WordCount2$IntSumReducer>;
+
+     label07:
+        virtualinvoke temp$7.<org.apache.hadoop.mapreduce.Job: void setCombinerClass(java.lang.Class)>(temp$14);
+
+        temp$18 = <WordCount2: java.lang.Class class$WordCount2$IntSumReducer>;
+
+        if temp$18 != null goto label08;
+
+        temp$19 = staticinvoke <WordCount2: java.lang.Class class$(java.lang.String)>("WordCount2$IntSumReducer");
+
+        <WordCount2: java.lang.Class class$WordCount2$IntSumReducer> = temp$19;
+
+        temp$17 = temp$19;
+
+        goto label09;
+
+     label08:
+        temp$17 = <WordCount2: java.lang.Class class$WordCount2$IntSumReducer>;
+
+     label09:
+        virtualinvoke temp$7.<org.apache.hadoop.mapreduce.Job: void setReducerClass(java.lang.Class)>(temp$17);
+
+        temp$21 = <WordCount2: java.lang.Class class$org$apache$hadoop$io$Text>;
+
+        if temp$21 != null goto label10;
+
+        temp$22 = staticinvoke <WordCount2: java.lang.Class class$(java.lang.String)>("org.apache.hadoop.io.Text");
+
+        <WordCount2: java.lang.Class class$org$apache$hadoop$io$Text> = temp$22;
+
+        temp$20 = temp$22;
+
+        goto label11;
+
+     label10:
+        temp$20 = <WordCount2: java.lang.Class class$org$apache$hadoop$io$Text>;
+
+     label11:
+        virtualinvoke temp$7.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(temp$20);
+
+        temp$24 = <WordCount2: java.lang.Class class$org$apache$hadoop$io$IntWritable>;
+
+        if temp$24 != null goto label12;
+
+        temp$25 = staticinvoke <WordCount2: java.lang.Class class$(java.lang.String)>("org.apache.hadoop.io.IntWritable");
+
+        <WordCount2: java.lang.Class class$org$apache$hadoop$io$IntWritable> = temp$25;
+
+        temp$23 = temp$25;
+
+        goto label13;
+
+     label12:
+        temp$23 = <WordCount2: java.lang.Class class$org$apache$hadoop$io$IntWritable>;
+
+     label13:
+        virtualinvoke temp$7.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(temp$23);
+
+        temp$26 = staticinvoke <org.apache.hadoop.mapreduce.Job: org.apache.hadoop.mapreduce.Job getInstance(org.apache.hadoop.conf.Configuration,java.lang.String)>(temp$1, "word count");
+
+        temp$28 = <WordCount2: java.lang.Class class$WordCount2>;
+
+        if temp$28 != null goto label14;
+
+        temp$29 = staticinvoke <WordCount2: java.lang.Class class$(java.lang.String)>("WordCount2");
+
+        <WordCount2: java.lang.Class class$WordCount2> = temp$29;
+
+        temp$27 = temp$29;
+
+        goto label15;
+
+     label14:
+        temp$27 = <WordCount2: java.lang.Class class$WordCount2>;
+
+     label15:
+        virtualinvoke temp$26.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(temp$27);
+
+        temp$31 = <WordCount2: java.lang.Class class$WordCount2$TokenizerMapper>;
+
+        if temp$31 != null goto label16;
+
+        temp$32 = staticinvoke <WordCount2: java.lang.Class class$(java.lang.String)>("WordCount2$TokenizerMapper");
+
+        <WordCount2: java.lang.Class class$WordCount2$TokenizerMapper> = temp$32;
+
+        temp$30 = temp$32;
+
+        goto label17;
+
+     label16:
+        temp$30 = <WordCount2: java.lang.Class class$WordCount2$TokenizerMapper>;
+
+     label17:
+        virtualinvoke temp$26.<org.apache.hadoop.mapreduce.Job: void setMapperClass(java.lang.Class)>(temp$30);
+
+        temp$34 = <WordCount2: java.lang.Class class$WordCount2$IntSumReducer>;
+
+        if temp$34 != null goto label18;
+
+        temp$35 = staticinvoke <WordCount2: java.lang.Class class$(java.lang.String)>("WordCount2$IntSumReducer");
+
+        <WordCount2: java.lang.Class class$WordCount2$IntSumReducer> = temp$35;
+
+        temp$33 = temp$35;
+
+        goto label19;
+
+     label18:
+        temp$33 = <WordCount2: java.lang.Class class$WordCount2$IntSumReducer>;
+
+     label19:
+        virtualinvoke temp$26.<org.apache.hadoop.mapreduce.Job: void setCombinerClass(java.lang.Class)>(temp$33);
+
+        temp$37 = <WordCount2: java.lang.Class class$WordCount2$IntSumReducer>;
+
+        if temp$37 != null goto label20;
+
+        temp$38 = staticinvoke <WordCount2: java.lang.Class class$(java.lang.String)>("WordCount2$IntSumReducer");
+
+        <WordCount2: java.lang.Class class$WordCount2$IntSumReducer> = temp$38;
+
+        temp$36 = temp$38;
+
+        goto label21;
+
+     label20:
+        temp$36 = <WordCount2: java.lang.Class class$WordCount2$IntSumReducer>;
+
+     label21:
+        virtualinvoke temp$26.<org.apache.hadoop.mapreduce.Job: void setReducerClass(java.lang.Class)>(temp$36);
+
+        temp$40 = <WordCount2: java.lang.Class class$org$apache$hadoop$io$Text>;
+
+        if temp$40 != null goto label22;
+
+        temp$41 = staticinvoke <WordCount2: java.lang.Class class$(java.lang.String)>("org.apache.hadoop.io.Text");
+
+        <WordCount2: java.lang.Class class$org$apache$hadoop$io$Text> = temp$41;
+
+        temp$39 = temp$41;
+
+        goto label23;
+
+     label22:
+        temp$39 = <WordCount2: java.lang.Class class$org$apache$hadoop$io$Text>;
+
+     label23:
+        virtualinvoke temp$26.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(temp$39);
+
+        temp$43 = <WordCount2: java.lang.Class class$org$apache$hadoop$io$IntWritable>;
+
+        if temp$43 != null goto label24;
+
+        temp$44 = staticinvoke <WordCount2: java.lang.Class class$(java.lang.String)>("org.apache.hadoop.io.IntWritable");
+
+        <WordCount2: java.lang.Class class$org$apache$hadoop$io$IntWritable> = temp$44;
+
+        temp$42 = temp$44;
+
+        goto label25;
+
+     label24:
+        temp$42 = <WordCount2: java.lang.Class class$org$apache$hadoop$io$IntWritable>;
+
+     label25:
+        virtualinvoke temp$26.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(temp$42);
+
+        temp$45 = new java.util.ArrayList;
+
+        specialinvoke temp$45.<java.util.ArrayList: void <init>()>();
+
+        i = 0;
+
+     label26:
+        temp$46 = lengthof temp$3;
+
+        if i < temp$46 goto label27;
+
+        goto label31;
+
+     label27:
+        temp$47 = "-skip";
+
+        temp$50 = temp$3[i];
+
+        temp$51 = virtualinvoke temp$47.<java.lang.String: boolean equals(java.lang.Object)>(temp$50);
+
+        if temp$51 == 0 goto label28;
+
+        temp$52 = new org.apache.hadoop.fs.Path;
+
+        temp$54 = i + 1;
+
+        i = temp$54;
+
+        temp$56 = temp$3[temp$54];
+
+        specialinvoke temp$52.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(temp$56);
+
+        temp$57 = virtualinvoke temp$52.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        virtualinvoke temp$7.<org.apache.hadoop.mapreduce.Job: void addCacheFile(java.net.URI)>(temp$57);
+
+        temp$58 = virtualinvoke temp$7.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        virtualinvoke temp$58.<org.apache.hadoop.conf.Configuration: void setBoolean(java.lang.String,boolean)>("wordcount.skip.patterns", 1);
+
+        goto label30;
+
+     label28:
+        temp$59 = "-skip2";
+
+        temp$62 = temp$3[i];
+
+        temp$63 = virtualinvoke temp$59.<java.lang.String: boolean equals(java.lang.Object)>(temp$62);
+
+        if temp$63 == 0 goto label29;
+
+        temp$64 = new org.apache.hadoop.fs.Path;
+
+        temp$66 = i + 1;
+
+        i = temp$66;
+
+        temp$68 = temp$3[temp$66];
+
+        specialinvoke temp$64.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(temp$68);
+
+        temp$69 = virtualinvoke temp$64.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        virtualinvoke temp$26.<org.apache.hadoop.mapreduce.Job: void addCacheFile(java.net.URI)>(temp$69);
+
+        temp$70 = virtualinvoke temp$26.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        virtualinvoke temp$70.<org.apache.hadoop.conf.Configuration: void setBoolean(java.lang.String,boolean)>("wordcount.skip.patterns", 1);
+
+        goto label30;
+
+     label29:
+        temp$73 = temp$3[i];
+
+        interfaceinvoke temp$45.<java.util.List: boolean add(java.lang.Object)>(temp$73);
+
+     label30:
+        temp$75 = i + 1;
+
+        i = temp$75;
+
+        goto label26;
+
+     label31:
+        temp$76 = new org.apache.hadoop.fs.Path;
+
+        temp$77 = interfaceinvoke temp$45.<java.util.List: java.lang.Object get(int)>(0);
+
+        temp$78 = (java.lang.String) temp$77;
+
+        specialinvoke temp$76.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(temp$78);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void addInputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>(temp$7, temp$76);
+
+        temp$79 = new org.apache.hadoop.fs.Path;
+
+        temp$80 = interfaceinvoke temp$45.<java.util.List: java.lang.Object get(int)>(1);
+
+        temp$81 = (java.lang.String) temp$80;
+
+        specialinvoke temp$79.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(temp$81);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>(temp$7, temp$79);
+
+        temp$82 = new org.apache.hadoop.fs.Path;
+
+        temp$83 = interfaceinvoke temp$45.<java.util.List: java.lang.Object get(int)>(0);
+
+        temp$84 = (java.lang.String) temp$83;
+
+        specialinvoke temp$82.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(temp$84);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void addInputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>(temp$26, temp$82);
+
+        temp$85 = new org.apache.hadoop.fs.Path;
+
+        temp$86 = interfaceinvoke temp$45.<java.util.List: java.lang.Object get(int)>(2);
+
+        temp$87 = (java.lang.String) temp$86;
+
+        specialinvoke temp$85.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(temp$87);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>(temp$26, temp$85);
+
+        temp$89 = virtualinvoke temp$7.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if temp$89 == 0 goto label32;
+
+        temp$90 = virtualinvoke temp$26.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if temp$90 == 0 goto label32;
+
+        temp$88 = 0;
+
+        goto label33;
+
+     label32:
+        temp$88 = 1;
+
+     label33:
+        staticinvoke <java.lang.System: void exit(int)>(temp$88);
+
+        return;
+    }
+
+    public void <init>()
+    {
+        WordCount2 this;
+
+        this := @this: WordCount2;
+
+        specialinvoke this.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.Class class$(java.lang.String)
+    {
+        java.lang.String name, temp$2;
+        java.lang.Class temp$0;
+        java.lang.ClassNotFoundException e;
+        java.lang.NoClassDefFoundError temp$1;
+
+        name := @parameter0: java.lang.String;
+
+     label1:
+        temp$0 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>(name);
+
+     label2:
+        return temp$0;
+
+     label3:
+        e := @caughtexception;
+
+        temp$1 = new java.lang.NoClassDefFoundError;
+
+        temp$2 = virtualinvoke e.<java.lang.ClassNotFoundException: java.lang.String getMessage()>();
+
+        specialinvoke temp$1.<java.lang.NoClassDefFoundError: void <init>(java.lang.String)>(temp$2);
+
+        throw temp$1;
+
+        catch java.lang.ClassNotFoundException from label1 to label2 with label3;
+    }
+}

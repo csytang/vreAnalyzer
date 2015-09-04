@@ -74,6 +74,7 @@ public class ProjectParser {
 			String htmlfileName = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
 			htmlfileName+=".html";
 			File htmlFile = new File(htmlfileName);
+			@SuppressWarnings("unused")
 			Patch.Hadoop.Job.JobAnnotate jobannot = new Patch.Hadoop.Job.JobAnnotate(job,htmlFile);
 		}
 	}
