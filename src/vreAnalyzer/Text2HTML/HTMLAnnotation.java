@@ -9,16 +9,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import vreAnalyzer.UI.RandomColor;
-
 public class HTMLAnnotation {
 	static Color annotateColor = null;
 	// background <span style="background-color:red">xxx(text)</span>
 	/**
 	 * 
 	 * @param htmlfile: a html file to be annotated by color marker
-	 * @param startline
-	 * @param startcolumn: start from 0
+	 * @param startline start from 0
+	 * @param startcolumn: 
 	 * @param endline
 	 * @param endcolumn
 	 * @param annotatedColor
@@ -49,23 +47,25 @@ public class HTMLAnnotation {
 			FileWriter htmlWriter = new FileWriter(htmlfile);
 			BufferedWriter bwhtml = new BufferedWriter(htmlWriter);
 			String[] htmlbyline = allhtmlcontent.split("<br>");
-			String startlinecontent = htmlbyline[startline];
-			String endlinecontent = htmlbyline[endline];
+			String startlinecontent = htmlbyline[startline-1];
+			String endlinecontent = htmlbyline[endline-1];
 			String spanStart = "<span style=\"background-color:"+hex+"\">";
 			String spanEnd = "</span>";
 			StringBuffer buffStart = new StringBuffer(startlinecontent);
-			buffStart.insert(startcolumn, spanStart);
-			
+			int startcolumninHTML = getColumnInHTML(startcolumn,startlinecontent);
+			int endcolumninHTML = 0;
+			buffStart.insert(startcolumninHTML, spanStart);
 			if(startline==endline){
-				buffStart.insert(endcolumn+spanStart.length(), spanEnd);
-				htmlbyline[startline] = buffStart.toString();
+				endcolumninHTML = getColumnInHTML(endcolumn+spanStart.length(),startlinecontent);
+				buffStart.insert(endcolumninHTML, spanEnd);
+				htmlbyline[startline-1] = buffStart.toString();
 			}else{
+				endcolumninHTML = getColumnInHTML(endcolumn,endlinecontent);
 				StringBuffer buffEnd = new StringBuffer(endlinecontent);
-				buffEnd.insert(endcolumn, spanEnd);
-				htmlbyline[startline] = buffStart.toString();
+				buffEnd.insert(endcolumninHTML, spanEnd);
+				htmlbyline[startline-1] = buffStart.toString();
 				htmlbyline[endline] = buffEnd.toString();
 			}
-			
 			
 			
 			String line = "";
@@ -87,6 +87,64 @@ public class HTMLAnnotation {
 		}
 		
 		
+	}
+	private static int getColumnInHTML(int startcolumn, String startlinecontent) {
+		// TODO Auto-generated method stub
+		int startcolumnInHTML = 0;
+		int columncount = 0;
+		int nbspCount = 0;
+		char[]charset = startlinecontent.toCharArray();	
+		String symbol = "";
+		String tag = "";
+		for(int i = 0;i < charset.length;i++){
+			char c = charset[i];
+			if(columncount==startcolumn)
+				break;
+			startcolumnInHTML++;
+			if(c=='&'){
+				symbol+=c;
+				while(c!=';'){
+					i++;
+					startcolumnInHTML++;
+					symbol+=c;
+				}
+				i++;
+				startcolumnInHTML++;
+				symbol+=c;
+				switch(symbol){
+				case"&lt;":{//<
+					columncount++;
+					break;
+				}
+				case "&gt;":{//>
+					columncount++;
+					break;
+				}
+				case "&amp;":{//&
+					columncount++;
+					break;
+				}
+				case "&quot;":{//"
+					columncount++;
+					break;
+				}
+				case "&nbsp;":{//
+					nbspCount++;
+					if(nbspCount==3){
+						columncount+=6;
+					}
+					break;
+				}
+				}
+			}else if(c=='<'){
+				while(c!='>'){
+					startcolumnInHTML++;
+					i++;
+					c = charset[i];
+				}
+			}
+		}
+		return startcolumnInHTML;
 	}
 	
 	

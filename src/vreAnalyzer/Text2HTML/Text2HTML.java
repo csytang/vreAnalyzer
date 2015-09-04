@@ -10,6 +10,10 @@ import java.io.IOException;
 
 public class Text2HTML {
 	
+	public static void main(String[]args){
+		
+	}
+	
 	public Text2HTML(File inputFile,File outPutFile){
 		FileReader input = null;
 		FileWriter output = null;

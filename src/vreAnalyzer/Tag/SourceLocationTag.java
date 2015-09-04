@@ -31,14 +31,15 @@ public class SourceLocationTag implements Tag {
         hostName = h;
         SourceLnPosTag slnpt = (SourceLnPosTag) h.getTag("SourceLnPosTag");
         if(slnpt!=null){
+        	System.out.print("Unit:\t"+h.toString());
         	startPos = slnpt.startPos();
-        	System.out.println("Start Pos:\t"+startPos);
+        	System.out.print("[Start Pos:\t"+startPos+"]");
         	endPos = slnpt.endPos();
-        	System.out.println("End Pos:\t"+endPos);
+        	System.out.print("[End Pos:\t"+endPos+"]");
         	startlineNumber = slnpt.startLn();
-        	System.out.println("Start Line:\t"+startlineNumber);
+        	System.out.print("[Start Line:\t"+startlineNumber+"]");
         	endlineNumber = slnpt.endLn();
-        	System.out.println("End Line:\t"+endlineNumber);
+        	System.out.println("[End Line:\t"+endlineNumber+"]");
         }
     }
     public int getStartLineNumber(){

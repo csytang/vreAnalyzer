@@ -10,7 +10,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.SpringLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -256,7 +255,7 @@ public class NewProjectPanel extends JDialog {
 		button_3 = new JButton("Remove");
 		button_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DefaultListModel<File> dlm = (DefaultListModel<File>) dependingjarLists.getModel();
+				DefaultListModel<File> dlm = (DefaultListModel<File>) javasource.getModel();
 				if(javasource.getSelectedIndices().length>0){
 					int[]selectedIndices = javasource.getSelectedIndices();
 					for (int i = selectedIndices.length-1; i >=0; i--) {
@@ -322,13 +321,40 @@ public class NewProjectPanel extends JDialog {
 					}
 					MainFrame.inst().setSourceCode(sources);
 					MainFrame.inst().loadSourceCodeandHTML();
+					dispose();
 					MainFrame.inst().bindSource();	
 					bindingsource = true;
-				}else
+				}else if(runFromConfigWizard && sourceSet){
+					// 1. jar/directory to be process
+					List<File>target = new LinkedList<File>();
+					DefaultListModel targetList = (DefaultListModel) jarLists.getModel();
+					for(int i = 0;i < targetList.size();i++){
+						target.add((File) targetList.getElementAt(i));
+					}
+					MainFrame.inst().setTargets(target);
+					// set the source from the configuration wizard
+					String srcDir = getSourceDirfromWizardCommand();
+					if(srcDir.startsWith("\"")){
+						srcDir = srcDir.substring(1);
+					}
+					if(srcDir.endsWith("\"")){
+						srcDir = srcDir.substring(0, srcDir.length()-1);
+					}
+					List<File>sources = new LinkedList<File>();
+					sources.add(new File(srcDir));
+					MainFrame.inst().setSourceCode(sources);
+					MainFrame.inst().loadSourceCodeandHTML();
+					dispose();
+					MainFrame.inst().bindSource();	
+					bindingsource = true;
+				}else{ 
+					dispose();
 					bindingsource = false;
-				dispose();
+				}
 				run();
 			}
+
+			
 		});
 		
 		contentPane.add(btnAnalyze);
@@ -346,6 +372,24 @@ public class NewProjectPanel extends JDialog {
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);	
 		
+	}
+	private String getSourceDirfromWizardCommand() {
+		// TODO Auto-generated method stub
+		boolean getNextUnEmptyFlag = false;
+		for(int i = 0;i < sootCommandsFromWizard.size();i++){
+			if(sootCommandsFromWizard.get(i).equals("-process-dir")){
+				getNextUnEmptyFlag = true;
+				continue;
+			}
+			if(getNextUnEmptyFlag==true){
+				if(!sootCommandsFromWizard.get(i).trim().equals("")){
+					getNextUnEmptyFlag = false;
+					return sootCommandsFromWizard.get(i);
+				}
+			}
+		}
+		
+		return null;
 	}
 	
 	public void run(){

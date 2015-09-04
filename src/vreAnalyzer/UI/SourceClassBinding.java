@@ -23,7 +23,7 @@ public class SourceClassBinding{
 	/**
 	 * Create the dialog.
 	 */
-	public static SourceClassBinding inst(List<File>classes,List<File>source,File clsParent,File sourceParent){
+	public static SourceClassBinding inst(List<File>classes,List<File>source,String clsParent,String sourceParent){
 		if(instance==null){
 			instance = new SourceClassBinding(classes,source,clsParent,sourceParent);
 		}
@@ -32,11 +32,18 @@ public class SourceClassBinding{
 	public static SourceClassBinding inst(){
 		return instance;
 	}
-	public SourceClassBinding(List<File>classes,List<File>source,File clsParent,File sourceParent) {
+	public SourceClassBinding(List<File>classes,List<File>source,String clsParent,String sourceParent) {
 		classNameToSourceFile = new HashMap<String,File>();
 		startdirBinding(classes,source,clsParent,sourceParent);		
 	}
 	public static File getSourceFileFromClassName(String className){
+		for(Map.Entry<String, File>entry:classNameToSourceFile.entrySet()){
+			String classFullName = entry.getKey();
+			String[]subName = classFullName.split("/");
+			String name = subName[subName.length-1];
+			if(name.substring(0, name.length()-".class".length()).equals(className))
+				return entry.getValue();
+		}
 		return classNameToSourceFile.get(className);
 	}
 	public void startdirNameBinding(List<String>classes,ArrayList<File>source,String clsSysPathPattern,String sourceSysPathPattern){
@@ -82,7 +89,7 @@ public class SourceClassBinding{
 		
 	}
 	
-	public void startdirBinding(List<File>classes,List<File>source,File clsParent,File sourceParent){
+	public void startdirBinding(List<File>classes,List<File>source,String clsParent,String sourceParent){
 		System.out.println("[vreHadoop] Binding source code with jar/class files");
 		ArrayList<File>sortedSource = new ArrayList<File>(source);
 		Collections.sort(sortedSource,new Comparator<File>(){
@@ -97,54 +104,35 @@ public class SourceClassBinding{
 		});
 		
 		List<String>classNames = new LinkedList<String>();
-		Stack<File>classstack = new Stack<File>();
-		classstack.addAll(classes);
-		while(!classstack.isEmpty()){
-			File fi = classstack.pop();
-			if(!fi.isDirectory()){
-					if(fi.getName().endsWith(".class")){
-						String className = fi.getAbsolutePath();
-						
-						classNames.add(className);
-					}else if(fi.getName().endsWith(".jar")){
-						ZipInputStream zip;
-						try {
-							zip = new ZipInputStream(new FileInputStream(fi));
-							for(ZipEntry entry=zip.getNextEntry();entry!=null;entry = zip.getNextEntry()){
-								if(!entry.isDirectory() &&
-										entry.getName().endsWith(".class")){
-									String className = entry.getName();
+		
+		
+		for(File fi:classes){
+			if(fi.getAbsolutePath().endsWith(".class")){
+				String className = fi.getAbsolutePath();	
+				classNames.add(className);
+			}else if(fi.getAbsolutePath().endsWith(".jar")){
+				ZipInputStream zip;
+				try {
+					zip = new ZipInputStream(new FileInputStream(fi));
+					for(ZipEntry entry=zip.getNextEntry();entry!=null;entry = zip.getNextEntry()){
+						if(!entry.isDirectory() && entry.getName().endsWith(".class")){
+								String className = entry.getName();
 									
-									classNames.add(className);
-								}
+								classNames.add(className);
 							}
-							
-						} catch (FileNotFoundException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						
 					}
-			}else{
-				File[]fileList = fi.listFiles();
-				for(File subfile:fileList){
-					classstack.push(subfile);
+							
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
+						
 			}
-			
 		}
-		String parentPath = clsParent.getPath();
-		if(!parentPath.endsWith("/")){
-			parentPath+="/";
-		}
-		String parentSourcePath = sourceParent.getAbsolutePath();
-		if(!parentSourcePath.endsWith("/")){
-			parentSourcePath+="/";
-		}
-		startdirNameBinding(classNames,sortedSource,parentPath,parentSourcePath);
+		startdirNameBinding(classNames,sortedSource,clsParent,sourceParent);
 		
 	}
 	

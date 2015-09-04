@@ -38,7 +38,7 @@ public class ProjectParser {
 	public static ProjectParser instance = null;
 	private SootMethod sootmethod = null;
 	private CFGDefUse cfggraph;
-	private boolean verbose = true;
+	private boolean verbose = false;
 	private Context allcontext = null;
 	private static int numjobs = 0;
 	
@@ -70,7 +70,11 @@ public class ProjectParser {
 			JobVariable job = entry.getKey();
 			JobHub jobhub = entry.getValue();
 			File sourceFile = SourceClassBinding.getSourceFileFromClassName(job.getSootClass().getName());
-			Patch.Hadoop.Job.JobAnnotate jobannot = new Patch.Hadoop.Job.JobAnnotate(job,sourceFile);
+			@SuppressWarnings("unused")
+			String htmlfileName = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
+			htmlfileName+=".html";
+			File htmlFile = new File(htmlfileName);
+			Patch.Hadoop.Job.JobAnnotate jobannot = new Patch.Hadoop.Job.JobAnnotate(job,htmlFile);
 		}
 	}
 	
@@ -173,7 +177,8 @@ public class ProjectParser {
 										
 									}
 								}
-								if(!defvar.getValue().toString().startsWith("$"))
+								if(!defvar.getValue().toString().startsWith("$") &&
+										!defvar.getValue().toString().startsWith("temp$"))
 									defineJob(defvar,cfgNode,stmt);
 								else{
 									if(verbose)
@@ -224,7 +229,8 @@ public class ProjectParser {
 										
 									}
 								}
-								if(!defvar.getValue().toString().startsWith("$"))
+								if(!defvar.getValue().toString().startsWith("$") &&
+										!defvar.getValue().toString().startsWith("temp$"))
 									defineJob(defvar,cfgNode,stmt);
 								else{
 									if(verbose)

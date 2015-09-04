@@ -311,6 +311,7 @@ public class MainFrame extends JFrame {
 			commandtemp = comm[index];
 			if(commandtemp.equals("-src-prec")){
 				getNextUnEmptyFlag = true;
+				continue;
 			}
 			if(getNextUnEmptyFlag==true){
 				if(!commandtemp.trim().equals("")){
@@ -395,9 +396,38 @@ public class MainFrame extends JFrame {
 	}
 	
 	public void bindSource(){
-		File nestedTarget = scanNested(target);
+		/** 1. First, clean the allsourcefiles and all target files to ensure
+		 *  (1) in target: it can only contains .jar and .class file, no directories are included;
+		 *  (2) in allsourcefile: it can only contain .java file;(is already cleaned in {@link loadSourceCodeandHTML()})
+		 */
+		List<File>purtaget = getPureClassandJar(target);
+		File nestedTarget = scanNested(purtaget);
+		int lastIndexTarget = nestedTarget.getAbsolutePath().lastIndexOf("/");
 		File nestedSource = scanNested(allsourcefiles);
-		SourceClassBinding bindinginstance = SourceClassBinding.inst(target,allsourcefiles,nestedTarget,nestedSource.getParentFile());
+		int lastInextSource = nestedSource.getAbsolutePath().lastIndexOf("/");
+		String parentTarget = nestedTarget.getAbsolutePath().substring(0, lastIndexTarget);
+		String parentSource = nestedSource.getAbsolutePath().substring(0, lastInextSource);
+		SourceClassBinding bindinginstance = SourceClassBinding.inst(purtaget,allsourcefiles,parentTarget,parentSource);
+	}
+	
+	// get all classes and jar from given filelist, which could be a directory 
+	public List<File> getPureClassandJar(List<File>rawtarget){
+		List<File>pureclassJar = new LinkedList<File>();
+		Stack<File>classjarfilesStack = new Stack<File>();
+		classjarfilesStack.addAll(rawtarget);
+		while(!classjarfilesStack.isEmpty()){
+			File classFile = classjarfilesStack.pop();
+			if(classFile.isDirectory()){
+				File[]subclassFiles = classFile.listFiles();
+				for(File fi:subclassFiles){
+					classjarfilesStack.push(fi);
+				}
+			}else if(classFile.getAbsolutePath().endsWith(".class")||
+					classFile.getAbsolutePath().endsWith(".jar")){
+				pureclassJar.add(classFile);
+			}
+		}
+		return pureclassJar;
 	}
 	public boolean isLeaf(Object node) {
 	    return (node instanceof File);

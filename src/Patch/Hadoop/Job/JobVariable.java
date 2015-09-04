@@ -19,10 +19,13 @@ public class JobVariable{
 	public JobVariable(Variable val,CFGNode cfgNode) {
 		jobvariable = val;
 		jobCFGNode = cfgNode;
+		System.out.println("The job statement:\t"+cfgNode.getStmt().toString());
 		sm = jobCFGNode.getMethod();
 		sc = sm.getDeclaringClass();
-		if(vreAnalyzerCommandLine.isSourceBinding()&&vreAnalyzerCommandLine.isStartFromGUI())
-			jobColor = RandomColor.inst().getColor();
+		if(vreAnalyzerCommandLine.isSourceBinding()&&vreAnalyzerCommandLine.isStartFromGUI()){
+			RandomColor rcolor = new RandomColor();
+			jobColor = rcolor.getColor();
+		}
 	}
 	public SootClass getSootClass(){
 		return sc;
