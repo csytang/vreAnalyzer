@@ -115,6 +115,8 @@ public class SourceClassBinding{
 				String className = fi.getAbsolutePath();	
 				classNames.add(className);
 			}else if(fi.getAbsolutePath().endsWith(".jar")){
+				String jarPath = fi.getAbsolutePath();
+				jarPath = jarPath.substring(0, jarPath.lastIndexOf("/"));
 				ZipInputStream zip;
 				try {
 					zip = new ZipInputStream(new FileInputStream(fi));
@@ -122,7 +124,7 @@ public class SourceClassBinding{
 						if(!entry.isDirectory() && entry.getName().endsWith(".class")){
 								String className = entry.getName();
 								// 1. If one is from jar file, it should attached the original prarent file path
-;								className = clsParent+"/"+className;
+								className = jarPath+"/"+className;
 								classNames.add(className);
 							}
 					}
