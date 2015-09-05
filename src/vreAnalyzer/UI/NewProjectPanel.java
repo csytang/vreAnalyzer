@@ -314,17 +314,7 @@ public class NewProjectPanel extends JDialog {
 				}
 				DefaultListModel sourceList = (DefaultListModel) javasource.getModel();				
 				// 4. binding the class to java source code
-				if(sourceList.size()!=0){
-					List<File>sources = new LinkedList<File>();
-					for(int i = 0;i < sourceList.size();i++){
-						sources.add((File) sourceList.getElementAt(i));
-					}
-					MainFrame.inst().setSourceCode(sources);
-					MainFrame.inst().loadSourceCodeandHTML();
-					dispose();
-					MainFrame.inst().bindSource();	
-					bindingsource = true;
-				}else if(runFromConfigWizard && sourceSet){
+				if(runFromConfigWizard && sourceSet){
 					// 1. jar/directory to be process
 					List<File>target = new LinkedList<File>();
 					DefaultListModel targetList = (DefaultListModel) jarLists.getModel();
@@ -342,6 +332,16 @@ public class NewProjectPanel extends JDialog {
 					}
 					List<File>sources = new LinkedList<File>();
 					sources.add(new File(srcDir));
+					MainFrame.inst().setSourceCode(sources);
+					MainFrame.inst().loadSourceCodeandHTML();
+					dispose();
+					MainFrame.inst().bindSource();	
+					bindingsource = true;
+				}else if(sourceList.size()!=0){
+					List<File>sources = new LinkedList<File>();
+					for(int i = 0;i < sourceList.size();i++){
+						sources.add((File) sourceList.getElementAt(i));
+					}
 					MainFrame.inst().setSourceCode(sources);
 					MainFrame.inst().loadSourceCodeandHTML();
 					dispose();

@@ -37,7 +37,6 @@ import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -144,7 +143,7 @@ public class MainFrame extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		JSplitPane mainsplitPane = new JSplitPane();
-		mainsplitPane.setResizeWeight(1.0);
+		mainsplitPane.setResizeWeight(0.5);
 		mainsplitPane.setOneTouchExpandable(true);
 		mainsplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		contentPane.add(mainsplitPane);
@@ -160,7 +159,7 @@ public class MainFrame extends JFrame {
 				}
 			}
 		));
-		upsplitPane.setLeftComponent(tree);
+		
 		
 		JPanel panel = new JPanel();
 		upsplitPane.setRightComponent(panel);
@@ -190,6 +189,10 @@ public class MainFrame extends JFrame {
 		
 		JButton btnBackwardSearch = new JButton("Backward Search");
 		panel_1.add(btnBackwardSearch);
+		
+		JScrollPane scrollPane_4 = new JScrollPane();
+		scrollPane_4.setViewportView(tree);
+		upsplitPane.setLeftComponent(scrollPane_4);
 		
 		JSplitPane bottomsplitPane = new JSplitPane();
 		bottomsplitPane.setOneTouchExpandable(true);

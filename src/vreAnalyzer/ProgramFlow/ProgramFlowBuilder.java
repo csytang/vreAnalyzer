@@ -223,8 +223,7 @@ public class ProgramFlowBuilder {
 				if(Options.allowReuableChecking()){
 					
 					reusableMode mode = Options.getMode();
-					
-					
+
 					
 					// Other models has been redirected to other patch code 
 				}
