@@ -43,7 +43,7 @@ public class NewProjectPanel extends JDialog {
 	private JButton button_2;
 	private JButton button_3;
 	private JButton btnNewButton;
-	private JButton btnAnalyze;
+	protected static JButton btnAnalyze;
 	private boolean runFromConfigWizard = false;
 	private boolean bindingsource = false;
 	protected static boolean targetSet = false;

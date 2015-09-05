@@ -3,6 +3,7 @@ package vreAnalyzer.UI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -16,7 +17,9 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+
 import java.awt.FlowLayout;
+
 import javax.swing.JTabbedPane;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
@@ -25,8 +28,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
+
 import org.apache.commons.lang3.StringUtils;
+
 import vreAnalyzer.Text2HTML.Text2HTML;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -42,6 +48,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+
 import javax.swing.JTable;
 
 public class MainFrame extends JFrame {
@@ -344,6 +351,9 @@ public class MainFrame extends JFrame {
 					getNextUnEmptyFlag = false;
 					if(commandtemp.equals("java")){
 						NewProjectPanel.sourceSet = true;
+						if(NewProjectPanel.targetSet==true){
+							NewProjectPanel.btnAnalyze.setEnabled(true);
+						}
 					}
 				}
 			}
@@ -436,6 +446,7 @@ public class MainFrame extends JFrame {
 		String parentTarget = target.get(0).getAbsolutePath();
 		
 		
+		@SuppressWarnings("unused")
 		SourceClassBinding bindinginstance = SourceClassBinding.inst(purtaget,allsourcefiles,parentTarget,parentSource);
 	}
 	

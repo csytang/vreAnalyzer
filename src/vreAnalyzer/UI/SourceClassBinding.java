@@ -92,7 +92,7 @@ public class SourceClassBinding{
 		}
 		
 	}
-	
+	// start binding from source
 	public void startdirBinding(List<File>classes,List<File>source,String clsParent,String sourceParent){
 		System.out.println("[vreHadoop] Binding source code with jar/class files");
 		ArrayList<File>sortedSource = new ArrayList<File>(source);
