@@ -10,7 +10,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -23,18 +24,18 @@ public class SourceClassBinding{
 	/**
 	 * Create the dialog.
 	 */
-	public static SourceClassBinding inst(List<File>classes,List<File>source,String clsParent,String sourceParent){
+	public static SourceClassBinding inst(List<File>classes,List<File>source,String clsPattern,String sourcePattern){
 		if(instance==null){
-			instance = new SourceClassBinding(classes,source,clsParent,sourceParent);
+			instance = new SourceClassBinding(classes,source,clsPattern,sourcePattern);
 		}
 		return instance;
 	}
 	public static SourceClassBinding inst(){
 		return instance;
 	}
-	public SourceClassBinding(List<File>classes,List<File>source,String clsParent,String sourceParent) {
+	public SourceClassBinding(List<File>classes,List<File>source,String clsPattern,String sourcePattern) {
 		classNameToSourceFile = new HashMap<String,File>();
-		startdirBinding(classes,source,clsParent,sourceParent);		
+		startdirBinding(classes,source,clsPattern,sourcePattern);		
 	}
 	public static File getSourceFileFromClassName(String className){
 		for(Map.Entry<String, File>entry:classNameToSourceFile.entrySet()){
@@ -51,15 +52,25 @@ public class SourceClassBinding{
 		
 		index = 0;
 		int totalsize = classes.size();
-		
+		Pattern clsPattern = Pattern.compile(clsSysPathPattern);
 		for(String clsName:classes){
 			System.out.println("Class name:"+clsName);
-			String realName = clsName.substring(0+clsSysPathPattern.length(), clsName.length()-".class".length());
+			//String realName = clsName.substring(0+clsSysPathPattern.length(), clsName.length()-".class".length());
+			Matcher clsMatcher = clsPattern.matcher(clsName);
+			
+			// If one is not under the class pattern, we now skip it
+			if(!clsMatcher.find()){
+				continue;
+			}
+			
+			String matchedPath = clsMatcher.group(0);
+			int firstMatch = clsName.indexOf(matchedPath);
+			String realName = clsName.substring(matchedPath.length()+firstMatch, clsName.length()-".class".length());
 			if(realName.contains("$")){
 				realName = realName.substring(0, realName.indexOf("$"));
 			}
-		
-			int index = bindarySearch(source,sourceSysPathPattern,realName,0,source.size()-1);
+			
+			int index = bindarySearch(source,sourceSysPathPattern,realName,matchedPath,0,source.size()-1);
 			if(index==-1){
 				System.err.println("Unable to find the class:\t"+clsName);
 				continue;
@@ -74,7 +85,7 @@ public class SourceClassBinding{
 		}
 		
 	}
-	private int bindarySearch(ArrayList<File> source,String sourceSystemPath,String value,int min, int max) {
+	private int bindarySearch(ArrayList<File> source,String sourcePathPattern,String value,String matchedClassPath,int min, int max) {
 		// TODO Auto-generated method stub
 		if(min > max){
 			return -1;
@@ -82,18 +93,32 @@ public class SourceClassBinding{
 		int	mid = (max+min)/2;
 		
 		String path = source.get(mid).getAbsolutePath();
-		String subpath = path.substring(sourceSystemPath.length(), path.length()-".java".length());
+		
+		// 1. Use matcher
+		Pattern sourcePattern = Pattern.compile(sourcePathPattern);
+		Matcher sourceMatcher = sourcePattern.matcher(path);
+		if(!sourceMatcher.find()){
+			// 2. This file is not conformed to given pattern
+			if(path.compareTo(matchedClassPath)>0){
+				return bindarySearch(source,sourcePathPattern,value,matchedClassPath,min,mid-1);
+			}else{
+				return bindarySearch(source,sourcePathPattern,value,matchedClassPath,mid+1,max);
+			}
+		}
+		String matchedPath = sourceMatcher.group(0);
+		int firstMatch = path.indexOf(matchedPath);		
+		String subpath = path.substring(matchedPath.length()+firstMatch, path.length()-".java".length());
 		if(subpath.equals(value)){
 			return mid;
 		}else if(subpath.compareTo(value)>0){
-			return bindarySearch(source,sourceSystemPath,value,min,mid-1);
+			return bindarySearch(source,sourcePathPattern,value,matchedClassPath,min,mid-1);
 		}else{
-			return bindarySearch(source,sourceSystemPath,value,mid+1,max);
+			return bindarySearch(source,sourcePathPattern,value,matchedClassPath,mid+1,max);
 		}
 		
 	}
 	// start binding from source
-	public void startdirBinding(List<File>classes,List<File>source,String clsParent,String sourceParent){
+	public void startdirBinding(List<File>classes,List<File>source,String clsPattern,String sourcePattern){
 		System.out.println("[vreHadoop] Binding source code with jar/class files");
 		ArrayList<File>sortedSource = new ArrayList<File>(source);
 		Collections.sort(sortedSource,new Comparator<File>(){
@@ -139,7 +164,7 @@ public class SourceClassBinding{
 						
 			}
 		}
-		startdirNameBinding(classNames,sortedSource,clsParent,sourceParent);
+		startdirNameBinding(classNames,sortedSource,clsPattern,sourcePattern);
 		
 	}
 	

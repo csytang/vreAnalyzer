@@ -10,6 +10,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.SpringLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -50,6 +51,9 @@ public class NewProjectPanel extends JDialog {
 	protected static boolean sourceSet = false;
 	private static NewProjectPanel instance;
 	private static List<String>sootCommandsFromWizard = new LinkedList<String>();
+	private JTextField textField_1;
+	private JLabel label;
+	private JTextField textField_3;
 	public static NewProjectPanel inst(JFrame parent){
 		if(instance==null){
 			instance = new NewProjectPanel(parent);
@@ -69,7 +73,7 @@ public class NewProjectPanel extends JDialog {
 		super(parent,true);
 		setTitle("New Project");
 		
-		setBounds(100, 100, 600, 500);
+		setBounds(100, 100, 600, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -270,27 +274,27 @@ public class NewProjectPanel extends JDialog {
 		contentPane.add(button_3);
 		
 		JSeparator separator = new JSeparator();
-		sl_contentPane.putConstraint(SpringLayout.NORTH, separator, 46, SpringLayout.SOUTH, scrollPane_4);
-		sl_contentPane.putConstraint(SpringLayout.WEST, separator, 0, SpringLayout.WEST, lblProjectName);
-		sl_contentPane.putConstraint(SpringLayout.EAST, separator, -3, SpringLayout.EAST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.WEST, separator, 2, SpringLayout.WEST, lblProjectName);
+		sl_contentPane.putConstraint(SpringLayout.EAST, separator, 0, SpringLayout.EAST, btnRemove);
 		contentPane.add(separator);
 		
 		btnNewButton = new JButton("Cancle");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, separator, -22, SpringLayout.NORTH, btnNewButton);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, separator, -6, SpringLayout.NORTH, btnNewButton);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnNewButton, -10, SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, btnNewButton, 0, SpringLayout.EAST, scrollPane);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 				instance=null;
 			}
 		});
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnNewButton, 432, SpringLayout.NORTH, contentPane);
 		contentPane.add(btnNewButton);
 		
 		btnAnalyze = new JButton("Analyze");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnAnalyze, 0, SpringLayout.NORTH, btnNewButton);
+		sl_contentPane.putConstraint(SpringLayout.WEST, btnAnalyze, 0, SpringLayout.WEST, btnRemove);
 		btnAnalyze.setEnabled(false);
-		sl_contentPane.putConstraint(SpringLayout.NORTH, btnAnalyze, 432, SpringLayout.NORTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnNewButton, -6, SpringLayout.WEST, btnAnalyze);
-		sl_contentPane.putConstraint(SpringLayout.EAST, btnAnalyze, 0, SpringLayout.EAST, textField);
 		btnAnalyze.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!runFromConfigWizard){
@@ -311,6 +315,13 @@ public class NewProjectPanel extends JDialog {
 					MainFrame.inst().setTargets(target);
 					MainFrame.inst().setSupporingJars(supporingjars);				
 					MainFrame.inst().generateSootCommand();
+				}
+				// 3. ensure the binding pattern is set
+				if(textField_1.getText().trim().equals("") ||
+						textField_3.getText().trim().equals("")){
+					JOptionPane.showMessageDialog(null, "Please set the patterns for source and class binding","No pattern setting error",JOptionPane.WARNING_MESSAGE);
+					// show error image for null setting for pattern
+					return;
 				}
 				DefaultListModel sourceList = (DefaultListModel) javasource.getModel();				
 				// 4. binding the class to java source code
@@ -335,7 +346,7 @@ public class NewProjectPanel extends JDialog {
 					MainFrame.inst().setSourceCode(sources);
 					MainFrame.inst().loadSourceCodeandHTML();
 					dispose();
-					MainFrame.inst().bindSource();	
+					MainFrame.inst().bindSource(textField_1.getText(),textField_3.getText());	
 					bindingsource = true;
 				}else if(sourceList.size()!=0){
 					List<File>sources = new LinkedList<File>();
@@ -345,7 +356,7 @@ public class NewProjectPanel extends JDialog {
 					MainFrame.inst().setSourceCode(sources);
 					MainFrame.inst().loadSourceCodeandHTML();
 					dispose();
-					MainFrame.inst().bindSource();	
+					MainFrame.inst().bindSource(textField_1.getText(),textField_3.getText());	
 					bindingsource = true;
 				}else{ 
 					dispose();
@@ -360,7 +371,8 @@ public class NewProjectPanel extends JDialog {
 		contentPane.add(btnAnalyze);
 		
 		JButton btnConfigureWizard = new JButton("Configure Wizard");
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnConfigureWizard, -6, SpringLayout.NORTH, separator);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, btnConfigureWizard, 11, SpringLayout.SOUTH, scrollPane_4);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnConfigureWizard, 40, SpringLayout.SOUTH, scrollPane_4);
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnConfigureWizard, 0, SpringLayout.EAST, btnRemove);
 		btnConfigureWizard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -369,6 +381,30 @@ public class NewProjectPanel extends JDialog {
 			}
 		});
 		contentPane.add(btnConfigureWizard);
+		
+		JLabel lblSourceFilePath = new JLabel("Source binding pattern[source]:");
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblSourceFilePath, 0, SpringLayout.WEST, lblProjectName);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblSourceFilePath, 10, SpringLayout.SOUTH, btnConfigureWizard);
+		contentPane.add(lblSourceFilePath);
+		
+		textField_1 = new JTextField();
+		sl_contentPane.putConstraint(SpringLayout.WEST, textField_1, 26, SpringLayout.EAST, lblSourceFilePath);
+		sl_contentPane.putConstraint(SpringLayout.EAST, textField_1, -79, SpringLayout.EAST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, textField_1, 10, SpringLayout.SOUTH, btnConfigureWizard);
+		contentPane.add(textField_1);
+		textField_1.setColumns(10);
+		
+		label = new JLabel("Source binding pattern[target]:");
+		sl_contentPane.putConstraint(SpringLayout.WEST, label, 0, SpringLayout.WEST, lblProjectName);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, label,20, SpringLayout.SOUTH, lblSourceFilePath);
+		contentPane.add(label);
+		
+		textField_3 = new JTextField();
+		sl_contentPane.putConstraint(SpringLayout.NORTH, textField_3, 16, SpringLayout.SOUTH, textField_1);
+		sl_contentPane.putConstraint(SpringLayout.EAST, textField_3, 0, SpringLayout.EAST, textField_1);
+		sl_contentPane.putConstraint(SpringLayout.WEST, textField_3, 0, SpringLayout.WEST, textField_1);
+		textField_3.setColumns(10);
+		contentPane.add(textField_3);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);	
 		

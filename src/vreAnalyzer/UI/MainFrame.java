@@ -432,7 +432,7 @@ public class MainFrame extends JFrame {
 
 	}
 	
-	public void bindSource(){
+	public void bindSource(String sourcePattern,String classPattern){
 		
 		/** 
 		 *  1. First, clean the allsourcefiles and all target files to ensure
@@ -441,13 +441,9 @@ public class MainFrame extends JFrame {
 		 */
 		List<File>purtaget = getPureClassandJar(target);
 		
-		String parentSource = sources.get(0).getAbsolutePath();
-		
-		String parentTarget = target.get(0).getAbsolutePath();
-		
 		
 		@SuppressWarnings("unused")
-		SourceClassBinding bindinginstance = SourceClassBinding.inst(purtaget,allsourcefiles,parentTarget,parentSource);
+		SourceClassBinding bindinginstance = SourceClassBinding.inst(purtaget,allsourcefiles,classPattern,sourcePattern);
 	}
 	
 	// get all classes and jar from given filelist, which could be a directory 
