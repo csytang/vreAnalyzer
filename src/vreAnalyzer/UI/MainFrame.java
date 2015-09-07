@@ -64,6 +64,8 @@ public class MainFrame extends JFrame {
 	private final JSplitPane upsplitPane;
 	private static JTextPane txtrSource=null;
 	private final JTextArea textArea;
+	private JTree tree;
+	private static int textArealinecount = 0;
 	
 	// 3. 
 	private String[]comm;
@@ -159,7 +161,7 @@ public class MainFrame extends JFrame {
 		upsplitPane.setOneTouchExpandable(true);
 		mainsplitPane.setLeftComponent(upsplitPane);
 		
-		JTree tree = new JTree();
+		tree = new JTree();
 		tree.setModel(new DefaultTreeModel(
 			new DefaultMutableTreeNode("Source directory") {
 			{
@@ -216,7 +218,7 @@ public class MainFrame extends JFrame {
 		
 		// Redirect output stream
 		printStream = new PrintStream(new CustomOutputStream(textArea));
-		System.setOut(printStream);
+		//System.setOut(printStream);
 		//System.setErr(printStream);
         
 		scrollPane.setViewportView(textArea);
@@ -393,13 +395,14 @@ public class MainFrame extends JFrame {
 			}
 		}
 		
-		final JTree filefolder = new JTree(root);
+		tree = new JTree(root);
 		root.add(filelist);
 		root.add(htmllist);
 		
-		filefolder.addMouseListener(new MouseAdapter(){
+		
+		tree.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent e){
-				DefaultMutableTreeNode selected = (DefaultMutableTreeNode)filefolder.getLastSelectedPathComponent();
+				DefaultMutableTreeNode selected = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
 				if(isLeaf(selected.getUserObject())){
 					File selectedfile = (File)selected.getUserObject();
 					if(selectedfile.getAbsolutePath().endsWith(".java")){
@@ -428,7 +431,7 @@ public class MainFrame extends JFrame {
 			}
 		});
 		
-		upsplitPane.setLeftComponent(filefolder);
+		
 
 	}
 	
@@ -479,6 +482,11 @@ public class MainFrame extends JFrame {
 	public void writeConsole(final String str){
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run(){
+				textArealinecount++;
+				if(textArealinecount>=50){
+					textArealinecount=0;
+					textArea.setText("");
+				}
 				textArea.append(str);
 				textArea.setCaretPosition(textArea.getDocument().getLength());
 			}

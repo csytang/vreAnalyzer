@@ -54,7 +54,7 @@ public class SourceClassBinding{
 		int totalsize = classes.size();
 		Pattern clsPattern = Pattern.compile(clsSysPathPattern);
 		for(String clsName:classes){
-			System.out.println("Class name:"+clsName);
+			//System.out.println("Class name:"+clsName);
 			//String realName = clsName.substring(0+clsSysPathPattern.length(), clsName.length()-".class".length());
 			Matcher clsMatcher = clsPattern.matcher(clsName);
 			
@@ -70,12 +70,12 @@ public class SourceClassBinding{
 				realName = realName.substring(0, realName.indexOf("$"));
 			}
 			
-			int index = bindarySearch(source,sourceSysPathPattern,realName,matchedPath,0,source.size()-1);
-			if(index==-1){
+			File result = allSearch(source,sourceSysPathPattern,realName,matchedPath);
+			if(result==null){
 				System.err.println("Unable to find the class:\t"+clsName);
 				continue;
 			}
-			File result = source.get(index);
+			
 			classNameToSourceFile.put(clsName, result);
 			MainFrame.inst().addBinding(clsName, result);
 			 
@@ -85,36 +85,42 @@ public class SourceClassBinding{
 		}
 		
 	}
-	private int bindarySearch(ArrayList<File> source,String sourcePathPattern,String value,String matchedClassPath,int min, int max) {
+	/**
+	 * @param clsPattern :the class pattern given
+	 * @param sourcePattern: the source pattern given
+	 * @param clsName: this is extracted by our program
+	 * @return ghostName a mapping ghost name created by pattern
+	 * Pattern 1:"/Users/tangchris/Downloads/mahout/.+/src/main/java/";
+	 * Pattern 2:"/Users/tangchris/Downloads/mahout/.+/target/classes/";
+	 * 
+	 * 
+	 */
+	public String createMappingGhostByPattern(String clsPattern,String sourcePattern,String clsName){
+		String ghostName = "";
+		
+		return ghostName;
+	}
+	
+	
+	private File allSearch(ArrayList<File> source,String sourcePathPattern,String value,String matchedClassPath) {
 		// TODO Auto-generated method stub
-		if(min > max){
-			return -1;
-		}
-		int	mid = (max+min)/2;
-		
-		String path = source.get(mid).getAbsolutePath();
-		
-		// 1. Use matcher
-		Pattern sourcePattern = Pattern.compile(sourcePathPattern);
-		Matcher sourceMatcher = sourcePattern.matcher(path);
-		if(!sourceMatcher.find()){
-			// 2. This file is not conformed to given pattern
-			if(path.compareTo(matchedClassPath)>0){
-				return bindarySearch(source,sourcePathPattern,value,matchedClassPath,min,mid-1);
-			}else{
-				return bindarySearch(source,sourcePathPattern,value,matchedClassPath,mid+1,max);
+		for(File sourcefile:source){
+			String path = sourcefile.getAbsolutePath();
+			// 1. Use matcher
+			Pattern sourcePattern = Pattern.compile(sourcePathPattern);
+			Matcher sourceMatcher = sourcePattern.matcher(path);
+			if(!sourceMatcher.find()){
+				continue;
+			}
+			String matchedPath = sourceMatcher.group(0);
+			int firstMatch = path.indexOf(matchedPath);
+			String subpath = path.substring(matchedPath.length()+firstMatch, path.length()-".java".length());
+			if(subpath.equals(value)){
+				return sourcefile;
 			}
 		}
-		String matchedPath = sourceMatcher.group(0);
-		int firstMatch = path.indexOf(matchedPath);		
-		String subpath = path.substring(matchedPath.length()+firstMatch, path.length()-".java".length());
-		if(subpath.equals(value)){
-			return mid;
-		}else if(subpath.compareTo(value)>0){
-			return bindarySearch(source,sourcePathPattern,value,matchedClassPath,min,mid-1);
-		}else{
-			return bindarySearch(source,sourcePathPattern,value,matchedClassPath,mid+1,max);
-		}
+		return null;
+		
 		
 	}
 	// start binding from source
