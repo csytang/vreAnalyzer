@@ -218,7 +218,7 @@ public class MainFrame extends JFrame {
 		
 		// Redirect output stream
 		printStream = new PrintStream(new CustomOutputStream(textArea));
-		//System.setOut(printStream);
+		System.setOut(printStream);
 		//System.setErr(printStream);
         
 		scrollPane.setViewportView(textArea);
@@ -362,6 +362,7 @@ public class MainFrame extends JFrame {
 		}
 		
 	}
+	
 	public void loadSourceCodeandHTML() {
 		// TODO Auto-generated method stub
 		Stack<File>sourcefiles = new Stack<File>();
@@ -395,15 +396,20 @@ public class MainFrame extends JFrame {
 			}
 		}
 		
-		tree = new JTree(root);
+		
 		root.add(filelist);
 		root.add(htmllist);
-		
+		DefaultTreeModel treeModel = (DefaultTreeModel)tree.getModel();
+		treeModel.setRoot(root);
+		treeModel.reload();
 		
 		tree.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent e){
 				DefaultMutableTreeNode selected = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
-				if(isLeaf(selected.getUserObject())){
+				if(selected==null){
+					
+				}
+				else if(isLeaf(selected.getUserObject())){
 					File selectedfile = (File)selected.getUserObject();
 					if(selectedfile.getAbsolutePath().endsWith(".java")){
 						txtrSource.setContentType("text/plain");

@@ -79,7 +79,7 @@ public class SourceClassBinding{
 			classNameToSourceFile.put(clsName, result);
 			MainFrame.inst().addBinding(clsName, result);
 			 
-			System.out.println("[vreHadoop] Binding class ["+clsName+"] with source ["+result.getAbsolutePath()+"]");
+			//System.out.println("[vreHadoop] Binding class ["+clsName+"] with source ["+result.getAbsolutePath()+"]");
 			index++;
 		
 		}

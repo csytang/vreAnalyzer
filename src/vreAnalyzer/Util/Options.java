@@ -157,8 +157,7 @@ public class Options {
 		File directory = subclassPath;
 		File[]lists = directory.listFiles();
 		for (int i = 0; i < lists.length; i++) {
-		      if (lists[i].isFile() && lists[i].getName().endsWith(".jar")||
-		    		  lists[i].isFile() && lists[i].getName().endsWith(".class")) {
+		      if (lists[i].isFile() && lists[i].getName().endsWith(".jar")) {
 		    	  alljarPaths+=lists[i].getAbsolutePath();
 		    	  alljarPaths+=":";
 		      }else if(lists[i].isDirectory()){

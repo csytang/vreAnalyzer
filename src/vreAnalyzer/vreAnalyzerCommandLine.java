@@ -75,7 +75,7 @@ public class vreAnalyzerCommandLine{
 		
 		// Output
 		sootArgs.add("-f");
-		sootArgs.add("class");
+		sootArgs.add("none");
 		//sootArgs.add("class");
 		
 		
@@ -86,7 +86,7 @@ public class vreAnalyzerCommandLine{
 	    String[] filtersootArgs = Options.parseFilterArgs(argsArray);
 		
 		// Internal transfer
-		//PackManager.v().getPack("wjtp").add(new Transform("wjtp.myTransformer", new vreAnalyzerInternalTransform()));
+		PackManager.v().getPack("wjtp").add(new Transform("wjtp.myTransformer", new vreAnalyzerInternalTransform()));
 		
 		System.out.print("[vreAnalyzer] vreAnalyzer args to Soot: ");
 		for (String s : filtersootArgs){
