@@ -65,7 +65,7 @@ public class MainFrame extends JFrame {
 	private final JSplitPane upsplitPane;
 	private static JTextPane txtrSource=null;
 	private final JTextArea textArea;
-	private JTree tree;
+	private final JTree tree;
 	private static int textArealinecount = 0;
 	
 	// 3. 
@@ -515,5 +515,8 @@ public class MainFrame extends JFrame {
 	}
 	public JTable getJobColorMapTable(){
 		return table;
+	}
+	public JTree getTree(){
+		return tree;
 	}
 }

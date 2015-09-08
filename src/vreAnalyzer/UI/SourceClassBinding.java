@@ -42,7 +42,6 @@ public class SourceClassBinding{
 		startdirBinding(classes,source);		
 	}
 	public static File getSourceFileFromClassName(String className){
-		///////////
 		Pattern clsPattern = Pattern.compile(SourceClassBinding.clsPatternString);
 		for(Map.Entry<String, File>entry:classNameToSourceFile.entrySet()){
 			String classFullName = entry.getKey();

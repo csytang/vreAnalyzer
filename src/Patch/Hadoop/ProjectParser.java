@@ -1,9 +1,17 @@
 package Patch.Hadoop;
 import java.io.File;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreePath;
 
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobUnderstand;
@@ -31,7 +39,9 @@ import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.PointsTo.PointsToGraph;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
+import vreAnalyzer.UI.MainFrame;
 import vreAnalyzer.UI.SourceClassBinding;
+import vreAnalyzer.UI.TreeCellRender;
 import vreAnalyzer.Util.Util;
 	
 public class ProjectParser {
@@ -49,6 +59,7 @@ public class ProjectParser {
 	private SootClass cs;
 	private CFGNode exitNode;
 	private List<Context<SootMethod,CFGNode,PointsToGraph>> currContexts;
+	private List<File>allannotatedFiles = new LinkedList<File>();
 	/* 
 	 * Store all jobs that defined in the main method,
 	 * including locals and fields 
@@ -66,7 +77,19 @@ public class ProjectParser {
 	public JobHub getjobHub(Value job){
 		return jobtoHub.get(job);
 	}
+	private DefaultMutableTreeNode findTreeNode(DefaultMutableTreeNode root, String s) {
+	    @SuppressWarnings("unchecked")
+	    Enumeration<DefaultMutableTreeNode> e = root.depthFirstEnumeration();
+	    while (e.hasMoreElements()) {
+	        DefaultMutableTreeNode node = e.nextElement();
+	        if (node.toString().equalsIgnoreCase(s)) {
+	            return node;
+	        }
+	    }
+	    return null;
+	}
 	public void annotateallJobs(){
+		
 		for(Map.Entry<JobVariable, JobHub>entry:jobtoHub.entrySet()){
 			JobVariable job = entry.getKey();
 			File sourceFile = SourceClassBinding.getSourceFileFromClassName(job.getSootClass().toString());
@@ -78,8 +101,11 @@ public class ProjectParser {
 			String htmlfileName = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
 			htmlfileName+=".html";
 			File htmlFile = new File(htmlfileName);
+			allannotatedFiles.add(htmlFile);
 			Patch.Hadoop.Job.JobAnnotate jobannot = new Patch.Hadoop.Job.JobAnnotate(job,htmlFile);
 		}
+		JTree mainFrameTree = MainFrame.inst().getTree();
+		mainFrameTree.setCellRenderer(new TreeCellRender(allannotatedFiles));
 	}
 	public void Annotate(){
 		// Following will only be allowed if it is started from GUI and source is binded
