@@ -34,7 +34,7 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 				System.out.println("[vreAnalyzer] Internal transform[Finish]");
 						
 				// Display Reusable Result by checking the mode
-				ProjectParser ppr = ProjectParser.inst();
+				ProjectParser.inst().runProjectParser();
 				
 				
 				

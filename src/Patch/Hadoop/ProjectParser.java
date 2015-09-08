@@ -86,7 +86,7 @@ public class ProjectParser {
 			ProjectParser.inst().annotateallJobs();
 		}
 	}
-	public void ProjectParser(){
+	public void runProjectParser(){
 		libMapper = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Mapper");
 		libReducer = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Reducer");
 		jobtoHub = new HashMap<JobVariable,JobHub>();
