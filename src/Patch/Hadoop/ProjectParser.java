@@ -69,13 +69,15 @@ public class ProjectParser {
 	public void annotateallJobs(){
 		for(Map.Entry<JobVariable, JobHub>entry:jobtoHub.entrySet()){
 			JobVariable job = entry.getKey();
-			JobHub jobhub = entry.getValue();
-			File sourceFile = SourceClassBinding.getSourceFileFromClassName(job.getSootClass().getName());
-			@SuppressWarnings("unused")
+			File sourceFile = SourceClassBinding.getSourceFileFromClassName(job.getSootClass().toString());
+			//bug process
+			if(sourceFile==null){
+				System.err.println("Cannot fine the job class:\t"+job.getSootClass().toString());
+				continue;
+			}
 			String htmlfileName = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
 			htmlfileName+=".html";
 			File htmlFile = new File(htmlfileName);
-			@SuppressWarnings("unused")
 			Patch.Hadoop.Job.JobAnnotate jobannot = new Patch.Hadoop.Job.JobAnnotate(job,htmlFile);
 		}
 	}
@@ -189,8 +191,10 @@ public class ProjectParser {
 									}
 								}
 								if(!defvar.getValue().toString().startsWith("$") &&
-										!defvar.getValue().toString().startsWith("temp$"))
+										!defvar.getValue().toString().startsWith("temp$")){
+									
 									defineJob(defvar,cfgNode,stmt);
+								}
 								else{
 									if(verbose)
 										System.out.println("Create a shadow job:\t"+defvar.getValue().toString());

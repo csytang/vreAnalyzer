@@ -30,7 +30,6 @@ public class JobAnnotate {
 		DefaultTableModel model = (DefaultTableModel)jobColorMapTable.getModel();
 		model.addRow(new Object[]{job.toString(),annotatedColor});
 		
-		
 		slcTag = (SourceLocationTag) jobstmt.getTag(SourceLocationTag.TAG_NAME);
 		if(slcTag.getTagType()==LocationType.SOURCE_TAG){
 			startline = slcTag.getStartLineNumber();
@@ -43,9 +42,6 @@ public class JobAnnotate {
 			startline = slcTag.getStartLineNumber();
 			HTMLAnnotation.annotateHTML(htmlFile, startline, annotatedColor, MainFrame.inst().getHTMLToJava());
 		}
-		
-		
-		
 		
 		
 	}

@@ -20,6 +20,8 @@ import java.util.zip.ZipInputStream;
 public class SourceClassBinding{
 	private static Map<String,File>classNameToSourceFile;
 	private static SourceClassBinding instance;
+	private static String clsPatternString = "";
+	private static String sourcePatternString = "";
 	private int index = 0;
 	/**
 	 * Create the dialog.
@@ -35,24 +37,36 @@ public class SourceClassBinding{
 	}
 	public SourceClassBinding(List<File>classes,List<File>source,String clsPattern,String sourcePattern) {
 		classNameToSourceFile = new HashMap<String,File>();
-		startdirBinding(classes,source,clsPattern,sourcePattern);		
+		SourceClassBinding.clsPatternString = clsPattern;
+		SourceClassBinding.sourcePatternString = sourcePattern;
+		startdirBinding(classes,source);		
 	}
 	public static File getSourceFileFromClassName(String className){
+		///////////
+		Pattern clsPattern = Pattern.compile(SourceClassBinding.clsPatternString);
 		for(Map.Entry<String, File>entry:classNameToSourceFile.entrySet()){
 			String classFullName = entry.getKey();
-			String[]subName = classFullName.split("/");
-			String name = subName[subName.length-1];
-			if(name.substring(0, name.length()-".class".length()).equals(className))
+			Matcher sourceMatcher = clsPattern.matcher(classFullName);
+			if(!sourceMatcher.find()){
+				continue;
+			}
+			String matchedPath = sourceMatcher.group(0);
+			int firstMatch = classFullName.indexOf(matchedPath);
+			String realName = classFullName.substring(matchedPath.length()+firstMatch, classFullName.length()-".class".length());
+			// 1. replace all / to .
+			realName = realName.replace("/", ".");
+			if(realName.equals(className)){
 				return entry.getValue();
+			}
 		}
-		return classNameToSourceFile.get(className);
+		return null;
 	}
-	public void startdirNameBinding(List<String>classes,ArrayList<File>source,String clsSysPathPattern,String sourceSysPathPattern){
+	public void startdirNameBinding(List<String>classes,ArrayList<File>source){
 		System.out.println("[vreHadoop] String dir NameBinding");
 		
 		index = 0;
 		int totalsize = classes.size();
-		Pattern clsPattern = Pattern.compile(clsSysPathPattern);
+		Pattern clsPattern = Pattern.compile(SourceClassBinding.clsPatternString);
 		for(String clsName:classes){
 			//System.out.println("Class name:"+clsName);
 			//String realName = clsName.substring(0+clsSysPathPattern.length(), clsName.length()-".class".length());
@@ -70,7 +84,7 @@ public class SourceClassBinding{
 				realName = realName.substring(0, realName.indexOf("$"));
 			}
 			
-			File result = allSearch(source,sourceSysPathPattern,realName,matchedPath);
+			File result = allSearch(source,realName,matchedPath);
 			if(result==null){
 				System.err.println("Unable to find the class:\t"+clsName);
 				continue;
@@ -85,29 +99,14 @@ public class SourceClassBinding{
 		}
 		
 	}
-	/**
-	 * @param clsPattern :the class pattern given
-	 * @param sourcePattern: the source pattern given
-	 * @param clsName: this is extracted by our program
-	 * @return ghostName a mapping ghost name created by pattern
-	 * Pattern 1:"/Users/tangchris/Downloads/mahout/.+/src/main/java/";
-	 * Pattern 2:"/Users/tangchris/Downloads/mahout/.+/target/classes/";
-	 * 
-	 * 
-	 */
-	public String createMappingGhostByPattern(String clsPattern,String sourcePattern,String clsName){
-		String ghostName = "";
-		
-		return ghostName;
-	}
 	
 	
-	private File allSearch(ArrayList<File> source,String sourcePathPattern,String value,String matchedClassPath) {
+	private File allSearch(ArrayList<File> source,String value,String matchedClassPath) {
 		// TODO Auto-generated method stub
 		for(File sourcefile:source){
 			String path = sourcefile.getAbsolutePath();
 			// 1. Use matcher
-			Pattern sourcePattern = Pattern.compile(sourcePathPattern);
+			Pattern sourcePattern = Pattern.compile(SourceClassBinding.sourcePatternString);
 			Matcher sourceMatcher = sourcePattern.matcher(path);
 			if(!sourceMatcher.find()){
 				continue;
@@ -124,7 +123,7 @@ public class SourceClassBinding{
 		
 	}
 	// start binding from source
-	public void startdirBinding(List<File>classes,List<File>source,String clsPattern,String sourcePattern){
+	public void startdirBinding(List<File>classes,List<File>source){
 		System.out.println("[vreHadoop] Binding source code with jar/class files");
 		ArrayList<File>sortedSource = new ArrayList<File>(source);
 		Collections.sort(sortedSource,new Comparator<File>(){
@@ -170,7 +169,7 @@ public class SourceClassBinding{
 						
 			}
 		}
-		startdirNameBinding(classNames,sortedSource,clsPattern,sourcePattern);
+		startdirNameBinding(classNames,sortedSource);
 		
 	}
 	
