@@ -46,11 +46,12 @@ public class Options {
 	 * Parses argument list (command line args), and gets settings for this program, removing them and returning soot-only args
 	 * @throws ConflictModelExpection 
 	 */
-	public static String[] parseFilterArgs(String[] args) throws ConflictModelExpection{
+	public static String[] parseFilterArgs(String[] args,boolean startFromSource) throws ConflictModelExpection{
 		String nobody = "-no-bodies-for-excluded";
 		List<String> argsSoot = new ArrayList<String>();
-		argsSoot.add(nobody);
-		
+		if(!startFromSource){
+			argsSoot.add(nobody);
+		}
 		for (int argIdx = 0; argIdx < args.length; ++argIdx) {
 			String arg = args[argIdx];
 			/*

@@ -22,6 +22,7 @@ import soot.jimple.IdentityStmt;
 import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
 import soot.jimple.internal.JNewExpr;
+import vreAnalyzer.vreAnalyzerCommandLine;
 import vreAnalyzer.Context.Context;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
@@ -78,8 +79,14 @@ public class ProjectParser {
 			Patch.Hadoop.Job.JobAnnotate jobannot = new Patch.Hadoop.Job.JobAnnotate(job,htmlFile);
 		}
 	}
-	
-	public void ClassParser(){
+	public void Annotate(){
+		// Following will only be allowed if it is started from GUI and source is binded
+		// Annotated all jobs with selected color;
+		if(vreAnalyzerCommandLine.isSourceBinding()){
+			ProjectParser.inst().annotateallJobs();
+		}
+	}
+	public void ProjectParser(){
 		libMapper = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Mapper");
 		libReducer = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Reducer");
 		jobtoHub = new HashMap<JobVariable,JobHub>();
@@ -100,6 +107,9 @@ public class ProjectParser {
 		System.out.println("# Combiner:\t"+JobUnderstand.getNumberofCombiner());
 		System.out.println("# Reducer:\t"+JobUnderstand.getNumberofReducer());
 		System.out.println("# Shadow:\t"+numShadow);
+		// annotated job and binding information
+		Annotate();
+		
 	}
 	
 	public void Parse(){

@@ -16,13 +16,15 @@ public class vreAnalyzerCommandLine{
 	private static vreAnalyzerCommandLine instance;
 	private static boolean isstartfromGUI = true;
 	private static boolean issourceBinding = false;
+	private static boolean startfromSource = false;
 	public static vreAnalyzerCommandLine inst(){
 		return instance;
 	}
-	public static vreAnalyzerCommandLine inst(String[]args,boolean isSourceBinding){
+	public static vreAnalyzerCommandLine inst(String[]args,boolean isSourceBinding,boolean startFromSource){
 		if(instance==null){
 			try {
-				issourceBinding = isSourceBinding; 
+				issourceBinding = isSourceBinding;
+				startfromSource = startFromSource;
 				instance = new vreAnalyzerCommandLine(args);
 			} catch (ConflictModelExpection e) {
 				// TODO Auto-generated catch block
@@ -48,30 +50,31 @@ public class vreAnalyzerCommandLine{
 		List<String>sootArgs = new LinkedList<String>(Arrays.asList(args));
 				
 		// Enable whole program mode
-		
-		sootArgs.add("-W");
-		
-		sootArgs.add("-p");
-		sootArgs.add("wjop");
-		sootArgs.add("enabled:true");
-		
-		sootArgs.add("-allow-phantom-refs");
-		// Enable points-to analysis
-		sootArgs.add("-p");
-		sootArgs.add("cg");
-		sootArgs.add("implicit-entry:false");
-								
-		// Enable Spark analysis
-		sootArgs.add("-p");
-		sootArgs.add("cg.spark");
-		sootArgs.add("enabled:true");
-		
-		// Use asm-backend instead of  Jasmin backend
-		sootArgs.add("-asm-backend");
-		
-		// Keep the original line number for debugging
-		sootArgs.add("-keep-line-number");
-		sootArgs.add("-keep-bytecode-offset");
+		if(!startfromSource){
+			sootArgs.add("-W");
+			
+			sootArgs.add("-p");
+			sootArgs.add("wjop");
+			sootArgs.add("enabled:true");
+			
+			sootArgs.add("-allow-phantom-refs");
+			// Enable points-to analysis
+			sootArgs.add("-p");
+			sootArgs.add("cg");
+			sootArgs.add("implicit-entry:false");
+									
+			// Enable Spark analysis
+			sootArgs.add("-p");
+			sootArgs.add("cg.spark");
+			sootArgs.add("enabled:true");
+			
+			// Use asm-backend instead of  Jasmin backend
+			sootArgs.add("-asm-backend");
+			
+			// Keep the original line number for debugging
+			sootArgs.add("-keep-line-number");
+			sootArgs.add("-keep-bytecode-offset");
+		}
 		
 		// Output
 		sootArgs.add("-f");
@@ -83,7 +86,7 @@ public class vreAnalyzerCommandLine{
 		String[]argsArray = sootArgs.toArray(new String[0]);
 				
 		// Use filter to get target commands to Soot
-	    String[] filtersootArgs = Options.parseFilterArgs(argsArray);
+	    String[] filtersootArgs = Options.parseFilterArgs(argsArray,startfromSource);
 		
 		// Internal transfer
 		PackManager.v().getPack("wjtp").add(new Transform("wjtp.myTransformer", new vreAnalyzerInternalTransform()));

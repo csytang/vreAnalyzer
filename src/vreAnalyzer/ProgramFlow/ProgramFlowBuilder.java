@@ -35,7 +35,7 @@ public class ProgramFlowBuilder {
 	
 	/** All application concrete methods, reachable or not */
 	private List<SootMethod> allAppMethods = null;
-	private List<SootMethod> entryMethods = null;
+	//private List<SootMethod> entryMethods = null;
 	
 	// Map from method to CFG
 	private HashMap<SootMethod,CFG> mToCFG = null;
@@ -75,7 +75,7 @@ public class ProgramFlowBuilder {
 		
 		return nodeToCFG.get(n);
 	}
-	public List<SootMethod> getEntryMethods(){return entryMethods;}
+	//public List<SootMethod> getEntryMethods(){return entryMethods;}
 	////////////////////////////////////////////////////////////////
 	
 	//////////////////////////Instance Creator//////////////////////////
@@ -94,7 +94,7 @@ public class ProgramFlowBuilder {
 	 */
 	private void initMethods() throws EntryNotFoundException{
 		this.allAppMethods = getAppConcreteMethods();
-		this.entryMethods = findEntryAppMethods();
+		//this.entryMethods = findEntryAppMethods();
 		 
 		
 		// Init MethodNode to CFG mapping
@@ -259,7 +259,7 @@ public class ProgramFlowBuilder {
 		}
 		return allAppMethods;
 	}
-	
+	/**
 	private static final String mainSubsig = "void main(java.lang.String[])";
 	private List<SootMethod> findEntryAppMethods() throws EntryNotFoundException {
 		if (entryMethods != null)
@@ -306,7 +306,7 @@ public class ProgramFlowBuilder {
 		assert !entryMethods.isEmpty();
 		return entryMethods;
 	}
-	
+	**/
 	
 	//////////////////////////////////////////////////////////////
 	/** Comparator to find unique ordering of methods based on lexical order */
@@ -322,12 +322,12 @@ public class ProgramFlowBuilder {
 
 		public EntryNotFoundException(String msg) { super(msg); }
 	}
-
+	/**
 	public SootClass getEntryClass() {
 		// TODO Auto-generated method stub
 		return entryMethods.get(0).getDeclaringClass();
 	}
-
+	 **/
 	public SootClass findLibClassByName(String string) {
 		// TODO Auto-generated method stub
 		for (Iterator<SootClass> itCls = Scene.v().getLibraryClasses().iterator();itCls.hasNext();){

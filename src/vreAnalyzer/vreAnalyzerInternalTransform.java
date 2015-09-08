@@ -34,13 +34,8 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 				System.out.println("[vreAnalyzer] Internal transform[Finish]");
 						
 				// Display Reusable Result by checking the mode
-				ProjectParser.inst().ClassParser();
-				// Following will only be allowed if it is started from GUI and source is binded
-				// Annotated all jobs with selected color;
-				if(vreAnalyzerCommandLine.isSourceBinding()&&
-						vreAnalyzerCommandLine.isStartFromGUI()){
-					ProjectParser.inst().annotateallJobs();
-				}
+				ProjectParser ppr = ProjectParser.inst();
+				
 				
 				
 	}

@@ -31,6 +31,7 @@ import javax.swing.SwingUtilities;
 
 import org.apache.commons.lang3.StringUtils;
 
+import vreAnalyzer.vreAnalyzerCommandLine;
 import vreAnalyzer.Text2HTML.Text2HTML;
 
 import java.awt.event.ActionListener;
@@ -71,6 +72,7 @@ public class MainFrame extends JFrame {
 	private String[]comm;
 	private static Map<String,File>classnametoSource;
 	private List<File>allsourcefiles = new LinkedList<File>();
+	private boolean startFromSource = false;
 	
 	// 4. Output redirect
 	PrintStream printStream;
@@ -218,7 +220,7 @@ public class MainFrame extends JFrame {
 		
 		// Redirect output stream
 		printStream = new PrintStream(new CustomOutputStream(textArea));
-		System.setOut(printStream);
+		//System.setOut(printStream);
 		//System.setErr(printStream);
         
 		scrollPane.setViewportView(textArea);
@@ -333,6 +335,9 @@ public class MainFrame extends JFrame {
 		
 		
 	}
+	public void runCommand(boolean bindingsource){
+		vreAnalyzerCommandLine.inst(MainFrame.inst().getCommand(), bindingsource,startFromSource);		
+	}
 	public void generateSootCommand(String command){
 		command = command.trim();
 		String commandtemp = "";
@@ -353,6 +358,8 @@ public class MainFrame extends JFrame {
 					getNextUnEmptyFlag = false;
 					if(commandtemp.equals("java")){
 						NewProjectPanel.sourceSet = true;
+						NewProjectPanel.startFromSource=true;
+						startFromSource = true;
 						if(NewProjectPanel.targetSet==true){
 							NewProjectPanel.btnAnalyze.setEnabled(true);
 						}

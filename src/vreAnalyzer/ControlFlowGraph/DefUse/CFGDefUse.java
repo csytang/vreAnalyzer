@@ -254,7 +254,7 @@ public class CFGDefUse extends CFG {
 		}
 		
 		// find defs and params
-		final boolean isEntryCFG = ProgramFlowBuilder.inst().getEntryMethods().contains(method);
+		//final boolean isEntryCFG = ProgramFlowBuilder.inst().getEntryMethods().contains(method);
 		final boolean isInstanceInit = method.getName().equals("<init>");
 		for (CFGNode _n : nodes) {
 			if (_n instanceof CFGNodeSpecial)
@@ -262,7 +262,7 @@ public class CFGDefUse extends CFG {
 			
 			NodeDefUses n = (NodeDefUses) _n;
 			Stmt s = n.getStmt();
-			if (!(s instanceof IdentityStmt) || isEntryCFG || allowParmsRetUseDefs ||
+			if (!(s instanceof IdentityStmt) || allowParmsRetUseDefs ||
 					(isInstanceInit && ((Local)((IdentityStmt)s).getLeftOp()).getName().equals("this")))
 			{
 				List<ValueBox> defBoxes = s.getDefBoxes();
@@ -339,6 +339,7 @@ public class CFGDefUse extends CFG {
 				n.setLocalDefsIds(new int[0]);
 		}
 		// add obj defs for entry method's arguments and static library fields
+		/**
 		if (isEntryCFG) {
 			// NOTE: we only support 'String[] args' obj defs for entry method 'main(String[])', for now
 			if (method.toString().equals("<"+method.getDeclaringClass()+": void main(java.lang.String[])>")) {
@@ -354,7 +355,7 @@ public class CFGDefUse extends CFG {
 			fieldDefs.add(new Def(new StdVariable(fldRefOut), ENTRY));
 //			
 		}
-		
+		**/
 		// map values to uses (in the form of bitsets)
 		final int numUses = idsToUses.size();
 		int useIdx = 0;

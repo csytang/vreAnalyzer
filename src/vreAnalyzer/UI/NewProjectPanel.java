@@ -51,6 +51,7 @@ public class NewProjectPanel extends JDialog {
 	protected static boolean sourceSet = false;
 	private static NewProjectPanel instance;
 	private static List<String>sootCommandsFromWizard = new LinkedList<String>();
+	protected static boolean startFromSource = false;
 	private JTextField textField_1;
 	private JLabel label;
 	private JTextField textField_3;
@@ -297,14 +298,18 @@ public class NewProjectPanel extends JDialog {
 		btnAnalyze.setEnabled(false);
 		btnAnalyze.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(!runFromConfigWizard){
-					// 1. jar/directory to be process
-					List<File>target = new LinkedList<File>();
-					DefaultListModel targetList = (DefaultListModel) jarLists.getModel();
+				// 1. jar/directory to be process
+				List<File>target = new LinkedList<File>();
+				DefaultListModel targetList = (DefaultListModel) jarLists.getModel();
+				if(!targetList.isEmpty()){
 					for(int i = 0;i < targetList.size();i++){
 						target.add((File) targetList.getElementAt(i));
 					}
-					
+					MainFrame.inst().setTargets(target);
+				}
+				
+				if(!runFromConfigWizard){
+
 					// 2. cp supporting jars
 					List<File>supporingjars = new LinkedList<File>();
 					DefaultListModel supportList = (DefaultListModel) dependingjarLists.getModel();
@@ -312,7 +317,6 @@ public class NewProjectPanel extends JDialog {
 						supporingjars.add((File) supportList.getElementAt(i));
 					}
 
-					MainFrame.inst().setTargets(target);
 					MainFrame.inst().setSupporingJars(supporingjars);				
 					MainFrame.inst().generateSootCommand();
 				}
@@ -323,16 +327,12 @@ public class NewProjectPanel extends JDialog {
 					// show error image for null setting for pattern
 					return;
 				}
+				@SuppressWarnings("rawtypes")
 				DefaultListModel sourceList = (DefaultListModel) javasource.getModel();				
 				// 4. binding the class to java source code
-				if(runFromConfigWizard && sourceSet){
-					// 1. jar/directory to be process
-					List<File>target = new LinkedList<File>();
-					DefaultListModel targetList = (DefaultListModel) jarLists.getModel();
-					for(int i = 0;i < targetList.size();i++){
-						target.add((File) targetList.getElementAt(i));
-					}
-					MainFrame.inst().setTargets(target);
+				
+				if(runFromConfigWizard && startFromSource){// in the command wizard the source is set
+					
 					// set the source from the configuration wizard
 					String srcDir = getSourceDirfromWizardCommand();
 					if(srcDir.startsWith("\"")){
@@ -348,7 +348,8 @@ public class NewProjectPanel extends JDialog {
 					dispose();
 					MainFrame.inst().bindSource(textField_1.getText(),textField_3.getText());	
 					bindingsource = true;
-				}else if(sourceList.size()!=0){
+				}else if(sourceList.size()!=0){// the source is set mannually
+					
 					List<File>sources = new LinkedList<File>();
 					for(int i = 0;i < sourceList.size();i++){
 						sources.add((File) sourceList.getElementAt(i));
@@ -362,7 +363,8 @@ public class NewProjectPanel extends JDialog {
 					dispose();
 					bindingsource = false;
 				}
-				run();
+				run(bindingsource);
+				
 			}
 
 			
@@ -427,20 +429,23 @@ public class NewProjectPanel extends JDialog {
 		
 		return null;
 	}
-	
-	public void run(){
+	public void run(final boolean bindingsource){
+		
 		Thread thread = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				vreAnalyzerCommandLine.inst(MainFrame.inst().getCommand(), bindingsource);
+				MainFrame.inst().runCommand(bindingsource);
 			}
            
             	
 		});
 		thread.start();
+		
+		
 			
 	}
+	
 	public class ExtensionFilter extends FileFilter {
 	    private String extensions[];
 
