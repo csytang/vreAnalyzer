@@ -34,16 +34,16 @@ public class JobVariable{
 		// write this job to file
 		if(sourceFile!=null){
 			vreAnalyzerCommandLine.jobwriter.println(jobvariable.toString()+"," +
-			"\"" +cfgNode.toString()+"\"" +","+
-			"\"" +sm.getName()+"\"" +","+
-			"\"" +sc.getName()+"\"" +","+
+			"\"" +cfgNode.toString().replaceAll("\"", "'")+"\"" +","+
+			"\"" +sm.getName().replaceAll("\"", "'")+"\"" +","+
+			"\"" +sc.getName().replaceAll("\"", "'")+"\"" +","+
 			"\"" +sourceFile.getAbsolutePath()+"\"");
 		}
 		else{
 			vreAnalyzerCommandLine.jobwriter.println(jobvariable.toString()+"," +
 					"\"" +cfgNode.toString()+"\"" +","+
-					"\"" +sm.getName()+"\"" +","+
-					"\"" +sc.getName()+"\"");
+					"\"" +sm.getName().replaceAll("\"", "'")+"\"" +","+
+					"\"" +sc.getName().replaceAll("\"", "'")+"\"");
 		}
 		
 	}

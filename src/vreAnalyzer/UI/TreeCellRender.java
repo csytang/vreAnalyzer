@@ -31,6 +31,9 @@ public class TreeCellRender extends DefaultTreeCellRenderer{
 				this.setOpaque(true);
 				this.setBackground(Color.RED);
 				this.setForeground(Color.WHITE);
+			}else{
+				this.setOpaque(false);
+				this.setBackground(Color.WHITE);
 			}
 		}else{
 			this.setOpaque(false);
