@@ -6,13 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellRenderer;
-import javax.swing.tree.TreePath;
-
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobUnderstand;
 import Patch.Hadoop.Job.JobVariable;
@@ -92,7 +87,7 @@ public class ProjectParser {
 		
 		for(Map.Entry<JobVariable, JobHub>entry:jobtoHub.entrySet()){
 			JobVariable job = entry.getKey();
-			File sourceFile = SourceClassBinding.getSourceFileFromClassName(job.getSootClass().toString());
+			File sourceFile = job.getSootFile();
 			//bug process
 			if(sourceFile==null){
 				System.err.println("Cannot fine the job class:\t"+job.getSootClass().toString());

@@ -6,6 +6,7 @@ import java.util.List;
 
 import soot.PackManager;
 import soot.Transform;
+import vreAnalyzer.CSV.CSVWriter;
 import vreAnalyzer.Util.ConflictModelExpection;
 import vreAnalyzer.Util.Options;
 
@@ -17,14 +18,21 @@ public class vreAnalyzerCommandLine{
 	private static boolean isstartfromGUI = true;
 	private static boolean issourceBinding = false;
 	private static boolean startfromSource = false;
+	public static CSVWriter contextwriter = null;
+	public static CSVWriter jobwriter = null;
+	private String outputDirectory = "";
+	
 	public static vreAnalyzerCommandLine inst(){
 		return instance;
 	}
 	public static vreAnalyzerCommandLine inst(String[]args,boolean isSourceBinding,boolean startFromSource){
 		if(instance==null){
 			try {
+				// 1. binding information
 				issourceBinding = isSourceBinding;
 				startfromSource = startFromSource;
+				
+				
 				instance = new vreAnalyzerCommandLine(args);
 			} catch (ConflictModelExpection e) {
 				// TODO Auto-generated catch block
@@ -46,6 +54,7 @@ public class vreAnalyzerCommandLine{
 	}
 	public vreAnalyzerCommandLine(String[]args) throws ConflictModelExpection{
 		// All input command list
+		outputDirectory = ".";
 		
 		List<String>sootArgs = new LinkedList<String>(Arrays.asList(args));
 				
@@ -88,6 +97,15 @@ public class vreAnalyzerCommandLine{
 		// Use filter to get target commands to Soot
 	    String[] filtersootArgs = Options.parseFilterArgs(argsArray,startfromSource);
 		
+	    
+	    // 1. data output to files
+	 	contextwriter = new CSVWriter(outputDirectory+"/context.csv");
+	 	contextwriter.println("ContextID,SootMethod,SootClass");
+	 	// 2. job output to files
+	 	jobwriter = new CSVWriter(outputDirectory+"/job.csv");
+	 	jobwriter.println("JobName,Stmt,SootMethod,SootClass,File");
+	 	
+	 	
 		// Internal transfer
 		PackManager.v().getPack("wjtp").add(new Transform("wjtp.myTransformer", new vreAnalyzerInternalTransform()));
 		
@@ -101,6 +119,9 @@ public class vreAnalyzerCommandLine{
 		// Run Soot
 		soot.Main.main(filtersootArgs);
 		
+		
+		contextwriter.close();
+		jobwriter.close();
 	}
 	
 	

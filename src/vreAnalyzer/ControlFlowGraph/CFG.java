@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import soot.PatchingChain;
+import soot.SootClass;
 import soot.SootMethod;
 import soot.Unit;
 import soot.UnitBox;
@@ -30,7 +31,7 @@ public class CFG {
 	
 	///////////////////////Field//////////////////////////////////
 	protected SootMethod method;
-	
+	protected SootClass sootcls;
 	//CFG nodes
 	protected ArrayList<CFGNode> nodes = new ArrayList<CFGNode>();
 	
@@ -69,6 +70,7 @@ public class CFG {
 	public CFG(SootMethod method) {
 		// TODO Create a CFG for the mNode
 		this.method = method;
+		this.sootcls = method.getDeclaringClass();
 		createNodesPredsSuccs();
 		
 	}
@@ -76,6 +78,7 @@ public class CFG {
 	////////////////////////Member Functions/////////////////////////////////////
 	public List<CFGNode> getNodes() { return nodes; }
 	public SootMethod getMethod() {return method;}
+	public SootClass getSootClass() {return sootcls;}
 	public Branch getEntryBranch() { return entryBranch; }
 	/** Returns first real node (i.e., the successor of ENTRY); EXIT if there are no real nodes */
 	public CFGNode getFirstRealNode() { return ENTRY.getSuccs().get(0); }

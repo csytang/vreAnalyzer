@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 
+import vreAnalyzer.vreAnalyzerCommandLine;
 import vreAnalyzer.ControlFlowGraph.CFG;
 
 /**
@@ -46,7 +47,7 @@ public class Context<SootMethod,CFGNode,PointsToGraph> implements soot.Context, 
 
 	/** A counter for global context identifiers. */
 	private static int count = 0;
-
+	
 	/** Debug stuff */
 	static java.util.Set<Object> freeContexts = new java.util.HashSet<Object>();
 	///static int totalNodes = 0;
@@ -89,13 +90,13 @@ public class Context<SootMethod,CFGNode,PointsToGraph> implements soot.Context, 
 	 *            and <tt>false</tt> if the analysis is in the forward direction
 	 */
 	@SuppressWarnings("unchecked")
-	public Context(SootMethod method, CFG cfg) {
+	public Context(SootMethod stmethod, CFG cfg) {
 		// Increment count and set id.
 		count++;
 		this.id = count;
 
 		// Initialise fields.
-		this.method = method;
+		this.method = stmethod;
 		this.controlFlowGraph = cfg;
 		this.inValues = new HashMap<CFGNode,PointsToGraph>();
 		this.outValues = new HashMap<CFGNode,PointsToGraph>();
@@ -133,6 +134,12 @@ public class Context<SootMethod,CFGNode,PointsToGraph> implements soot.Context, 
 		    		this.workList.add((CFGNode) cf);
 		    }
 		}
+		
+		// Record this context to csv file
+		vreAnalyzerCommandLine.inst().contextwriter.println(this.id+","+ 
+		"\""+method.toString()+"\""+","+
+		"\""+cfg.getSootClass().getName()+"\"");
+		
 	}
 
 	/**

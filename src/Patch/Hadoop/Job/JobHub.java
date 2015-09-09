@@ -1,16 +1,8 @@
 package Patch.Hadoop.Job;
-
-
-import java.util.LinkedList;
-import java.util.List;
-
 import soot.SootClass;
 import soot.Value;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
-import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
-
-
 
 public class JobHub {
 	

@@ -5,10 +5,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
-
 import soot.ArrayType;
 import soot.Local;
 import soot.RefLikeType;
@@ -35,7 +33,6 @@ import soot.jimple.InvokeExpr;
 import soot.jimple.InvokeStmt;
 import soot.jimple.Jimple;
 import soot.jimple.NewArrayExpr;
-import soot.jimple.NewMultiArrayExpr;
 import soot.jimple.ReturnStmt;
 import soot.jimple.SpecialInvokeExpr;
 import soot.jimple.StaticFieldRef;
