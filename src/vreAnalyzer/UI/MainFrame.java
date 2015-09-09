@@ -1,8 +1,6 @@
 package vreAnalyzer.UI;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,7 +10,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.JTextField;
@@ -76,7 +73,7 @@ public class MainFrame extends JFrame {
 	
 	// 4. Output redirect
 	PrintStream printStream;
-	private JTable table;
+	private final JTable table;
 	private static Map<String,String>htmlToJava;
 	
 	public static void main(String[] args) {
@@ -230,31 +227,22 @@ public class MainFrame extends JFrame {
 		tabbedPane.addTab("Statistics", new ImageIcon(MainFrame.class.getResource("/image/statistics.png")), scrollPane_2, null);
 		
 		JScrollPane scrollPane_3 = new JScrollPane();
+		
 		bottomsplitPane.setLeftComponent(scrollPane_3);
 		
 		String headers[] = {"job","color"};
-		DefaultTableModel model = new DefaultTableModel(null, headers);
-		table = new JTable(model){
+		DefaultTableModel model = new DefaultTableModel(null, headers){
 
 			@Override
-			public Component prepareRenderer(TableCellRenderer renderer,
-					int row, int column) {
+			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub
-				Component comp = super.prepareRenderer(renderer, row, column);
-				if(column==1){
-					Object color = getValueAt(row,1);
-					if(color instanceof Color){
-						Color bgcolor = (Color)color;
-						comp.setBackground(bgcolor);
-					}
-				}else if(column==0){
-					comp.setBackground(Color.white);
-				}
-				
-				return comp;
+				return false;
 			}
 			
 		};
+		
+		table = new JTable(model);
+		table.setDefaultRenderer(Object.class, new TableCellRender());
 		
 		scrollPane_3.setViewportView(table);
 		setVisible(true);
@@ -510,7 +498,7 @@ public class MainFrame extends JFrame {
 			classnametoSource = new HashMap<String,File>();
 		classnametoSource.put(className, source);
 	}
-	public static JTextPane getSrcTextArea(){
+	public static JTextPane getSrcTextPane(){
 		return txtrSource;
 	}
 	public JTable getJobColorMapTable(){

@@ -13,13 +13,16 @@ import vreAnalyzer.UI.RandomColor;
 import vreAnalyzer.UI.SourceClassBinding;
 
 public class JobVariable{
+	
 	Variable jobvariable;
 	SootClass sc;
 	SootMethod sm;
 	CFGNode jobCFGNode;
 	File sourceFile;
+	int jobId;
 	private Color jobColor;
 	public JobVariable(Variable val,CFGNode cfgNode) {
+		
 		jobvariable = val;
 		jobCFGNode = cfgNode;
 		sm = jobCFGNode.getMethod();
@@ -50,11 +53,14 @@ public class JobVariable{
 	public SootClass getSootClass(){
 		return sc;
 	}
-	public File getSootFile(){
+	public File getSourceFile(){
 		return sourceFile;
 	}
 	public SootMethod getSootMethod(){
 		return sm;
+	}
+	public void setJobId(int id){
+		this.jobId= id;
 	}
 	public Variable getVariable(){
 		return jobvariable;
@@ -89,6 +95,10 @@ public class JobVariable{
 	public Color getAnnotatedColor() {
 		// TODO Auto-generated method stub
 		return jobColor;
+	}
+	public int getJobId() {
+		// TODO Auto-generated method stub
+		return jobId;
 	}
 	
 

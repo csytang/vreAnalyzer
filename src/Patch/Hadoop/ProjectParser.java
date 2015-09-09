@@ -1,13 +1,22 @@
 package Patch.Hadoop;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.swing.JTable;
+import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import Patch.Hadoop.Job.JobAnnotate;
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobUnderstand;
 import Patch.Hadoop.Job.JobVariable;
@@ -35,7 +44,6 @@ import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.PointsTo.PointsToGraph;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.UI.MainFrame;
-import vreAnalyzer.UI.SourceClassBinding;
 import vreAnalyzer.UI.TreeCellRender;
 import vreAnalyzer.Util.Util;
 	
@@ -47,7 +55,7 @@ public class ProjectParser {
 	private boolean verbose = false;
 	private Context allcontext = null;
 	private static int numjobs = 0;
-	
+	private static int jobId = 0;
 	private static int numShadow = 0;
 	private SootClass libMapper;
 	private SootClass libReducer;
@@ -83,11 +91,51 @@ public class ProjectParser {
 	    }
 	    return null;
 	}
+	/**
+	 * this method will link the jobColor legend to the file,
+	 * if user double click the cell in legend, it will show the file in the 
+	 * textarea;
+	 */
+	public void addLegendListener(){
+		final JTable table = MainFrame.inst().getJobColorMapTable();
+		table.addMouseListener(new MouseAdapter(){
+			public void mousePressed(MouseEvent me){
+				Point p = me.getPoint();
+				int row = table.rowAtPoint(p);
+				if(me.getClickCount()==2){
+					int jobId = JobAnnotate.rowToJobId.get(row);
+					JobVariable job = indextoJob.get(jobId);
+					File sourceFile = job.getSourceFile();
+					String htmlfileName = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
+					htmlfileName+=".html";
+					File htmlFile = new File(htmlfileName);
+					JTextPane txtrSource = MainFrame.getSrcTextPane();
+					txtrSource.setContentType("text/html");
+					List<String> content;
+					try {
+						content = Files.readAllLines(htmlFile.toPath(),Charset.defaultCharset());
+						String allString = "";
+						for(String subcontent:content){
+							allString+=subcontent;
+							allString+="\n";
+						}
+						
+						txtrSource.setText("");
+						txtrSource.setText(allString);
+						txtrSource.setCaretPosition(0);
+					} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+					}
+				}
+			}
+		});
+	}
 	public void annotateallJobs(){
 		
 		for(Map.Entry<JobVariable, JobHub>entry:jobtoHub.entrySet()){
 			JobVariable job = entry.getKey();
-			File sourceFile = job.getSootFile();
+			File sourceFile = job.getSourceFile();
 			//bug process
 			if(sourceFile==null){
 				System.err.println("Cannot fine the job class:\t"+job.getSootClass().toString());
@@ -99,6 +147,7 @@ public class ProjectParser {
 			allannotatedFiles.add(htmlFile);
 			Patch.Hadoop.Job.JobAnnotate jobannot = new Patch.Hadoop.Job.JobAnnotate(job,htmlFile);
 		}
+		addLegendListener();
 		JTree mainFrameTree = MainFrame.inst().getTree();
 		mainFrameTree.setCellRenderer(new TreeCellRender(allannotatedFiles));
 	}
@@ -357,11 +406,13 @@ public class ProjectParser {
 		JobVariable jvb = new JobVariable(defvar,cfgNode);
 		if(!containjobvar(jvb)){
 			Value defValue = defvar.getValue();
+			jvb.setJobId(jobId);
+			jobId++;
 			System.out.println("Add a job\t"+jvb+"\t @stmt"+stmt+"\t @method: "+sootmethod);
 			numjobs++;
 			JobHub jhb = new JobHub(jvb);
 			jobtoHub.put(jvb, jhb);
-			indextoJob.put(numjobs, jvb);
+			indextoJob.put(jobId, jvb);
 		}
 	}
 	public JobHub getjobHub(Variable jobvar){

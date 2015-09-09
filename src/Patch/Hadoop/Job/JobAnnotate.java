@@ -2,6 +2,8 @@ package Patch.Hadoop.Job;
 
 import java.awt.Color;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -21,6 +23,8 @@ public class JobAnnotate {
 	int startcolumn = 0;
 	int endline = 0;
 	int endcolumn = 0;
+	private static int tableRow = 0;
+	public static Map<Integer,Integer> rowToJobId = new HashMap<Integer,Integer>();
 	public JobAnnotate(JobVariable job,File htmlFile){
 		this.hostJob = job;
 		annotatedColor = job.getAnnotatedColor();
@@ -29,7 +33,8 @@ public class JobAnnotate {
 		JTable jobColorMapTable = MainFrame.inst().getJobColorMapTable();
 		DefaultTableModel model = (DefaultTableModel)jobColorMapTable.getModel();
 		model.addRow(new Object[]{job.toString(),annotatedColor});
-		
+		rowToJobId.put(tableRow, job.getJobId());
+		tableRow++;
 		slcTag = (SourceLocationTag) jobstmt.getTag(SourceLocationTag.TAG_NAME);
 		if(slcTag.getTagType()==LocationType.SOURCE_TAG){
 			startline = slcTag.getStartLineNumber();
