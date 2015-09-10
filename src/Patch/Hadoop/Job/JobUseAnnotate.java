@@ -36,9 +36,15 @@ public class JobUseAnnotate {
 			
 			Stmt useStmt = node.getStmt();
 			
+			StmtMarkedTag smkTag;
 			// add job marked tag to this statement
-			StmtMarkedTag smkTag = new StmtMarkedTag(job);
-			useStmt.addTag(smkTag);
+			if( (smkTag = (StmtMarkedTag) useStmt.getTag(StmtMarkedTag.TAG_NAME))==null){
+				smkTag = new StmtMarkedTag();
+				smkTag.addJob(job);
+				useStmt.addTag(smkTag);
+			}else{
+				smkTag.addJob(job);
+			}
 			
 			SourceLocationTag slcTag = (SourceLocationTag) useStmt.getTag(SourceLocationTag.TAG_NAME);
 			if(startFromSource){

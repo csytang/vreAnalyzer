@@ -22,6 +22,8 @@ import Patch.Hadoop.Job.JobAnnotate;
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobUseAnnotate;
 import Patch.Hadoop.Job.JobVariable;
+import Patch.Hadoop.Statistic.JobDataCollector;
+import Patch.Hadoop.Statistic.JobDataWriteToTable;
 import soot.Local;
 import soot.RefLikeType;
 import soot.RefType;
@@ -134,6 +136,7 @@ public class ProjectParser {
 		
 		for(Map.Entry<JobVariable, JobHub>entry:jobtoHub.entrySet()){
 			JobVariable job = entry.getKey();
+			
 			File sourceFile = job.getSourceFile();
 			if(sourceFile==null){
 				System.err.println("Cannot fine the job class:\t"+job.getSootClass().toString());
@@ -144,10 +147,15 @@ public class ProjectParser {
 			File htmlFile = new File(htmlfileName);
 			allannotatedFiles.add(htmlFile);
 			Stmt jobstmt = job.getCFGNode().getStmt();
-			
+			StmtMarkedTag smkTag;
 			// add job marked tag to this statement
-			StmtMarkedTag smkTag = new StmtMarkedTag(job);
-			jobstmt.addTag(smkTag);
+			if( (smkTag = (StmtMarkedTag) jobstmt.getTag(StmtMarkedTag.TAG_NAME))==null){
+				smkTag = new StmtMarkedTag();
+				smkTag.addJob(job);
+				jobstmt.addTag(smkTag);
+			}else{
+				smkTag.addJob(job);
+			}
 			
 			Patch.Hadoop.Job.JobAnnotate jobannot = new Patch.Hadoop.Job.JobAnnotate(job,htmlFile);
 		}
@@ -183,6 +191,13 @@ public class ProjectParser {
 		}
 		
 	}
+	public void collectData(){
+		if(vreAnalyzerCommandLine.isSourceBinding()){
+			JobDataCollector.inst().parse(jobtoHub);
+			// show data
+			JobDataWriteToTable.inst().showData(jobtoHub);
+		}
+	}
 	public void runProjectParser(){
 		jobtoHub = new HashMap<JobVariable,JobHub>();
 		indextoJob = new HashMap<Integer,JobVariable>();// start from 1 insteadof 0
@@ -201,7 +216,7 @@ public class ProjectParser {
 		System.out.println("# Shadow:\t"+numShadow);
 		// annotated job and binding information
 		Annotate();
-		
+		collectData();
 	}
 	
 	public void Parse(){

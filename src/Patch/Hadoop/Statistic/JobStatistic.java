@@ -21,17 +21,17 @@ public class JobStatistic {
 		this.jobColor = jobvar.getAnnotatedColor();
 		JobHub jobhub = ProjectParser.instance.getjobHub(jobvar);
 		jobUsesSequence = jobhub.getjobUse();
-		this.loc = countStmts();
 	}
-	private int countStmts(){
-		int result = 0;
-		for(Map.Entry<SootClass, LinkedList<CFGNode>>entry:jobUsesSequence.entrySet()){
-			result+=entry.getValue().size();
-		}
-		return result;
+	public void setcountStmts(int totallines){
+		this.loc = totallines;
 	}
 	public void addreuseCode(){
 		this.reuseCode++;
 	}
-	
+	public int getLOC(){
+		return this.loc;
+	}
+	public int getReuseCode(){
+		return this.reuseCode;
+	}
 }
