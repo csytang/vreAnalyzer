@@ -18,7 +18,6 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import Patch.Hadoop.Job.JobAnnotate;
 import Patch.Hadoop.Job.JobHub;
-import Patch.Hadoop.Job.JobUnderstand;
 import Patch.Hadoop.Job.JobVariable;
 import soot.Local;
 import soot.RefLikeType;
@@ -57,8 +56,6 @@ public class ProjectParser {
 	private static int numjobs = 0;
 	private static int jobId = 0;
 	private static int numShadow = 0;
-	private SootClass libMapper;
-	private SootClass libReducer;
 	private SootClass cs;
 	private CFGNode exitNode;
 	private List<Context<SootMethod,CFGNode,PointsToGraph>> currContexts;
@@ -136,7 +133,6 @@ public class ProjectParser {
 		for(Map.Entry<JobVariable, JobHub>entry:jobtoHub.entrySet()){
 			JobVariable job = entry.getKey();
 			File sourceFile = job.getSourceFile();
-			//bug process
 			if(sourceFile==null){
 				System.err.println("Cannot fine the job class:\t"+job.getSootClass().toString());
 				continue;
@@ -152,15 +148,17 @@ public class ProjectParser {
 		mainFrameTree.setCellRenderer(new TreeCellRender(allannotatedFiles));
 	}
 	public void Annotate(){
-		// Following will only be allowed if it is started from GUI and source is binded
+		// 1. Following will only be allowed if it is started from GUI and source is binded
 		// Annotated all jobs with selected color;
 		if(vreAnalyzerCommandLine.isSourceBinding()){
 			ProjectParser.inst().annotateallJobs();
+			// 2. Following will annoated use of job
+			
+			
 		}
+		
 	}
 	public void runProjectParser(){
-		libMapper = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Mapper");
-		libReducer = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Reducer");
 		jobtoHub = new HashMap<JobVariable,JobHub>();
 		indextoJob = new HashMap<Integer,JobVariable>();// start from 1 insteadof 0
 		// run all the application methods
@@ -175,9 +173,6 @@ public class ProjectParser {
 			Parse();
 		}
 		System.out.println("# Jobs:\t"+numjobs);
-		System.out.println("# Mappers:\t"+JobUnderstand.getNumberofMapper());
-		System.out.println("# Combiner:\t"+JobUnderstand.getNumberofCombiner());
-		System.out.println("# Reducer:\t"+JobUnderstand.getNumberofReducer());
 		System.out.println("# Shadow:\t"+numShadow);
 		// annotated job and binding information
 		Annotate();
@@ -351,46 +346,10 @@ public class ProjectParser {
 					for(Variable usevar:useVariables){	
 						// If it is a define of job
 						if(usevar.getValue().getType().toString().equals("org.apache.hadoop.mapreduce.Job")){
-							if(stmt.containsInvokeExpr()){
-								JobHub jobinstance = getjobHub(usevar);
-								// get the invoke expression
-								if(jobinstance==null)
-									continue;
-								InvokeExpr invokeExpr = stmt.getInvokeExpr();
-								switch(invokeExpr.getMethod().getName()){
-								case "setMapperClass":{
-									// 1. setMapperClass									
-									JobUnderstand.process_SetMapperClass(jobinstance, invokeExpr, cfgNode,cfggraph,libMapper);
-									break;
-								}
-								case "setCombinerClass":{
-									// 2. setCombinerClass
-									JobUnderstand.process_SetCombinerClass(jobinstance, invokeExpr, cfgNode,cfggraph,libReducer);
-									break;
-								}
-								case "setReducerClass":{
-									// 3. setReducerClass
-									JobUnderstand.process_SetReducerClass(jobinstance, invokeExpr, cfgNode,cfggraph,libReducer);
-									break;
-								}
-								case "setOutputKeyClass":{
-									// 4. setOutputKeyClass
-									break;
-								}
-								case "setOutputValueClass":{
-									// 5. setOutputValueClass
-									break;
-								}
-								case "addArchiveToClassPath":{
-									// 6. addArchiveToClassPath
-									break;
-								}
-								default:{
-									System.out.println("A stmt:\t"+stmt);
-								}
-								}
-								
-							}
+							JobHub jobinstance = getjobHub(usevar);
+							if(jobinstance==null)
+								continue;
+							jobinstance.addUse(cfgNode);
 						}
 					}
 				
@@ -407,12 +366,13 @@ public class ProjectParser {
 		if(!containjobvar(jvb)){
 			Value defValue = defvar.getValue();
 			jvb.setJobId(jobId);
-			jobId++;
-			System.out.println("Add a job\t"+jvb+"\t @stmt"+stmt+"\t @method: "+sootmethod);
+			if(verbose)
+				System.out.println("Add a job\t"+jvb+"\t @stmt"+stmt+"\t @method: "+sootmethod);
 			numjobs++;
 			JobHub jhb = new JobHub(jvb);
 			jobtoHub.put(jvb, jhb);
 			indextoJob.put(jobId, jvb);
+			jobId++;
 		}
 	}
 	public JobHub getjobHub(Variable jobvar){
@@ -433,7 +393,8 @@ public class ProjectParser {
 				else if(!currlocalsites.isEmpty()&&!jobsites.isEmpty()){
 					if(jobsites.containsAll(currlocalsites)||
 							currlocalsites.containsAll(jobsites)){
-						System.out.println("Find a shadow job<(shadow) "+jobvar.getValue().toString()+" --> (real)"+curr.getVariable().getValue().toString()+" >");
+						if(verbose)
+							System.out.println("Find a shadow job<(shadow) "+jobvar.getValue().toString()+" --> (real)"+curr.getVariable().getValue().toString()+" >");
 						numShadow++;
 						return jobtoHub.get(curr);
 					}

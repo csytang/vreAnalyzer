@@ -2,10 +2,7 @@ package vreAnalyzer.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import soot.MethodSource;
 import soot.SootMethod;
-import soot.Unit;
 import soot.jimple.Stmt;
 import vreAnalyzer.ControlFlowGraph.Branch;
 import vreAnalyzer.Tag.StmtTag;
