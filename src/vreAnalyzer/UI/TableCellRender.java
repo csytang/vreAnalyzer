@@ -16,23 +16,20 @@ public class TableCellRender extends DefaultTableCellRenderer {
 				row, column);
 		
 		if(table.isRowSelected(row)){
-			if(column==1){
-				Object color = value;
-				if(color instanceof Color){
-					Color bgcolor = (Color)color;
-					cr.setBackground(bgcolor);
-				}
-			}else{
+			Object color = value;
+			if(color instanceof Color){
+				Color bgcolor = (Color)color;
+				cr.setBackground(bgcolor);
+			}
+			else{
 				cr.setBackground(table.getSelectionBackground());
 				cr.setForeground(table.getSelectionForeground());
 			}
 		}else{
-			if(column==1){
-				Object color = value;
-				if(color instanceof Color){
-					Color bgcolor = (Color)color;
-					cr.setBackground(bgcolor);
-				}
+			Object color = value;
+			if(color instanceof Color){
+				Color bgcolor = (Color)color;
+				cr.setBackground(bgcolor);
 			}else{
 				cr.setBackground(table.getBackground());
 				cr.setForeground(table.getForeground());

@@ -5,11 +5,16 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import javax.swing.JSplitPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.html.HTML;
+import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.JTextField;
@@ -17,6 +22,7 @@ import javax.swing.JButton;
 
 import java.awt.FlowLayout;
 
+import javax.swing.JEditorPane;
 import javax.swing.JTabbedPane;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
@@ -25,6 +31,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -75,6 +82,7 @@ public class MainFrame extends JFrame {
 	PrintStream printStream;
 	private final JTable table;
 	private static Map<String,String>htmlToJava;
+	private final JTable statistictable;
 	
 	public static void main(String[] args) {
 		classnametoSource = new HashMap<String,File>();
@@ -225,12 +233,17 @@ public class MainFrame extends JFrame {
 		JScrollPane scrollPane_2 = new JScrollPane();
 		
 		tabbedPane.addTab("Statistics", new ImageIcon(MainFrame.class.getResource("/image/statistics.png")), scrollPane_2, null);
+		String statheaders[] = {"Feature","Color","LOC","Reuse LOC","Dependenency(LOC)"};
+		DefaultTableModel statisitictableModel = new DefaultTableModel(null,statheaders);
+		statistictable = new JTable(statisitictableModel);
+		statistictable.getTableHeader().setReorderingAllowed(false);
+		scrollPane_2.setViewportView(statistictable);
 		
 		JScrollPane scrollPane_3 = new JScrollPane();
 		
 		bottomsplitPane.setLeftComponent(scrollPane_3);
 		
-		String headers[] = {"job","color"};
+		String headers[] = {"Feature","Color"};
 		DefaultTableModel model = new DefaultTableModel(null, headers){
 
 			@Override
@@ -410,6 +423,32 @@ public class MainFrame extends JFrame {
 						txtrSource.setContentType("text/plain");
 					}else if(selectedfile.getAbsolutePath().endsWith(".html")){
 						txtrSource.setContentType("text/html");
+						txtrSource.setEditorKit(new HTMLEditorKit());
+						ToolTipManager.sharedInstance().registerComponent(txtrSource);
+						txtrSource.addHyperlinkListener(new HyperlinkListener(){
+						String tooltip;
+							@Override
+							public void hyperlinkUpdate(HyperlinkEvent e) {
+								// TODO Auto-generated method stub
+								JEditorPane editor = (JEditorPane) e.getSource();
+						        if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+						          
+						        } else if (e.getEventType() == HyperlinkEvent.EventType.ENTERED) {
+						          tooltip = editor.getToolTipText();
+						          javax.swing.text.Element elem = e.getSourceElement();
+						          if (elem != null) {
+						            AttributeSet attr = elem.getAttributes();
+						            AttributeSet a = (AttributeSet) attr.getAttribute(HTML.Tag.A);
+						            if (a != null) {
+						              editor.setToolTipText((String) a.getAttribute(HTML.Attribute.TITLE));
+						            }
+						          }
+						        } else if (e.getEventType() == HyperlinkEvent.EventType.EXITED) {
+						          editor.setToolTipText(tooltip);
+						        }
+							}
+							
+						});
 					}
 					List<String> content;
 						
@@ -503,6 +542,9 @@ public class MainFrame extends JFrame {
 	}
 	public JTable getJobColorMapTable(){
 		return table;
+	}
+	public JTable getStatisticTable(){
+		return statistictable;
 	}
 	public JTree getTree(){
 		return tree;

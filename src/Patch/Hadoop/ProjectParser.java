@@ -12,12 +12,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.swing.JTable;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+
 import Patch.Hadoop.Job.JobAnnotate;
 import Patch.Hadoop.Job.JobHub;
+import Patch.Hadoop.Job.JobUseAnnotate;
 import Patch.Hadoop.Job.JobVariable;
 import soot.Local;
 import soot.RefLikeType;
@@ -30,7 +33,6 @@ import soot.jimple.AnyNewExpr;
 import soot.jimple.AssignStmt;
 import soot.jimple.DefinitionStmt;
 import soot.jimple.IdentityStmt;
-import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
 import soot.jimple.internal.JNewExpr;
 import vreAnalyzer.vreAnalyzerCommandLine;
@@ -42,7 +44,9 @@ import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.PointsTo.PointsToGraph;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
+import vreAnalyzer.Tag.StmtMarkedTag;
 import vreAnalyzer.UI.MainFrame;
+import vreAnalyzer.UI.SourceClassBinding;
 import vreAnalyzer.UI.TreeCellRender;
 import vreAnalyzer.Util.Util;
 	
@@ -74,9 +78,7 @@ public class ProjectParser {
 			instance = new ProjectParser();
 		return instance;
 	}
-	public JobHub getjobHub(Value job){
-		return jobtoHub.get(job);
-	}
+	
 	private DefaultMutableTreeNode findTreeNode(DefaultMutableTreeNode root, String s) {
 	    @SuppressWarnings("unchecked")
 	    Enumeration<DefaultMutableTreeNode> e = root.depthFirstEnumeration();
@@ -141,20 +143,43 @@ public class ProjectParser {
 			htmlfileName+=".html";
 			File htmlFile = new File(htmlfileName);
 			allannotatedFiles.add(htmlFile);
+			Stmt jobstmt = job.getCFGNode().getStmt();
+			
+			// add job marked tag to this statement
+			StmtMarkedTag smkTag = new StmtMarkedTag(job);
+			jobstmt.addTag(smkTag);
+			
 			Patch.Hadoop.Job.JobAnnotate jobannot = new Patch.Hadoop.Job.JobAnnotate(job,htmlFile);
 		}
 		addLegendListener();
 		JTree mainFrameTree = MainFrame.inst().getTree();
 		mainFrameTree.setCellRenderer(new TreeCellRender(allannotatedFiles));
 	}
+	public void annotateallJobUses(){
+		for(Map.Entry<JobVariable, JobHub>entry:jobtoHub.entrySet()){
+			JobVariable job = entry.getKey();
+			JobHub jobhub = entry.getValue();
+			Map<SootClass,LinkedList<CFGNode>>jobUses = jobhub.getjobUse();
+			for(Map.Entry<SootClass, LinkedList<CFGNode>>useentry:jobUses.entrySet()){
+				SootClass cls = useentry.getKey();
+				File sourceFile = SourceClassBinding.getSourceFileFromClassName(cls.toString());
+				String htmlfileName = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
+				htmlfileName+=".html";
+				File htmlFile = new File(htmlfileName);
+				allannotatedFiles.add(htmlFile);
+				JobUseAnnotate jobuseannot = new JobUseAnnotate(job, useentry.getValue(), htmlFile);
+			}
+		}
+		
+		
+	}
 	public void Annotate(){
 		// 1. Following will only be allowed if it is started from GUI and source is binded
 		// Annotated all jobs with selected color;
 		if(vreAnalyzerCommandLine.isSourceBinding()){
-			ProjectParser.inst().annotateallJobs();
 			// 2. Following will annoated use of job
-			
-			
+			ProjectParser.inst().annotateallJobs();
+			ProjectParser.inst().annotateallJobUses();
 		}
 		
 	}
@@ -349,7 +374,7 @@ public class ProjectParser {
 							JobHub jobinstance = getjobHub(usevar);
 							if(jobinstance==null)
 								continue;
-							jobinstance.addUse(cfgNode);
+							jobinstance.addUse(sootmethod.getDeclaringClass(),cfgNode);
 						}
 					}
 				
@@ -374,6 +399,9 @@ public class ProjectParser {
 			indextoJob.put(jobId, jvb);
 			jobId++;
 		}
+	}
+	public JobHub getjobHub(JobVariable job){
+		return jobtoHub.get(job);
 	}
 	public JobHub getjobHub(Variable jobvar){
 		// see the pointer part, if the associated $(partial use the temperate value)

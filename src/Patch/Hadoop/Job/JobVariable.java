@@ -21,6 +21,7 @@ public class JobVariable{
 	File sourceFile;
 	int jobId;
 	private Color jobColor;
+	
 	public JobVariable(Variable val,CFGNode cfgNode) {
 		
 		jobvariable = val;
@@ -36,14 +37,14 @@ public class JobVariable{
 		}
 		// write this job to file
 		if(sourceFile!=null){
-			vreAnalyzerCommandLine.jobwriter.println(jobvariable.toString()+"," +
+			vreAnalyzerCommandLine.featurewriter.println(jobvariable.toString()+"," +
 			"\"" +cfgNode.toString().replaceAll("\"", "'")+"\"" +","+
 			"\"" +sm.getName().replaceAll("\"", "'")+"\"" +","+
 			"\"" +sc.getName().replaceAll("\"", "'")+"\"" +","+
 			"\"" +sourceFile.getAbsolutePath()+"\"");
 		}
 		else{
-			vreAnalyzerCommandLine.jobwriter.println(jobvariable.toString()+"," +
+			vreAnalyzerCommandLine.featurewriter.println(jobvariable.toString()+"," +
 					"\"" +cfgNode.toString()+"\"" +","+
 					"\"" +sm.getName().replaceAll("\"", "'")+"\"" +","+
 					"\"" +sc.getName().replaceAll("\"", "'")+"\"");

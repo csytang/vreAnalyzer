@@ -19,7 +19,7 @@ public class vreAnalyzerCommandLine{
 	private static boolean issourceBinding = false;
 	private static boolean startfromSource = false;
 	public static CSVWriter contextwriter = null;
-	public static CSVWriter jobwriter = null;
+	public static CSVWriter featurewriter = null;
 	private String outputDirectory = "";
 	
 	public static vreAnalyzerCommandLine inst(){
@@ -99,11 +99,13 @@ public class vreAnalyzerCommandLine{
 		
 	    
 	    // 1. data output to files
+	    System.out.print("[vreAnalyzer] vreAnalyzer writes context information to:"+outputDirectory+"/context.csv");
 	 	contextwriter = new CSVWriter(outputDirectory+"/context.csv");
 	 	contextwriter.println("ContextID,SootMethod,SootClass");
 	 	// 2. job output to files
-	 	jobwriter = new CSVWriter(outputDirectory+"/job.csv");
-	 	jobwriter.println("JobName,Stmt,SootMethod,SootClass,File");
+	 	System.out.print("[vreAnalyzer] vreAnalyzer writes feature information to:"+outputDirectory+"/feature.csv");
+	 	featurewriter = new CSVWriter(outputDirectory+"/feature.csv");
+	 	featurewriter.println("JobName,Stmt,SootMethod,SootClass,File");
 	 	
 	 	
 		// Internal transfer
@@ -121,7 +123,7 @@ public class vreAnalyzerCommandLine{
 		
 		
 		contextwriter.close();
-		jobwriter.close();
+		featurewriter.close();
 	}
 	
 	
