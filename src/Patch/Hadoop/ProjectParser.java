@@ -423,6 +423,9 @@ public class ProjectParser {
 		@SuppressWarnings("unchecked")
 		PointsToGraph p2g = (PointsToGraph)allcontext.getValueBefore(exitNode);
 		HashMap<Local,Set<AnyNewExpr>> roots = p2g.getRoots();
+		// jobvar instaneceof FieldRef
+		if(!(jobvar.getValue() instanceof Local))
+			return null;
 		Local joblocal = (Local)jobvar.getValue();
 		Set<AnyNewExpr>jobsites  = roots.get(joblocal);
 		for(JobVariable curr:jobtoHub.keySet()){

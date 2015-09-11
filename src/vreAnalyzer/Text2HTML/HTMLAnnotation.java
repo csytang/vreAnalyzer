@@ -9,6 +9,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class HTMLAnnotation {
@@ -137,19 +139,23 @@ public class HTMLAnnotation {
 			
 			String spanStart = "<span title = \""+hovertext+"\""+" style=\"background-color:"+hex+"\">";
 			String spanEnd = "</span>";
-			StringBuffer buffStart = new StringBuffer(linecontent);
-			String startjavaString = htmlToJava.get(linecontent+"<br>");
-			String starthtmlreverse = Text2HTML.txtToHtml(startjavaString);
-			if(starthtmlreverse.endsWith("<br>")){
-				starthtmlreverse = starthtmlreverse.substring(0, starthtmlreverse.length()-"<br>".length());
+			String updateline = "";
+			if(!((updateline = isColorAssociatedSLResolver(linecontent,spanStart)).equals(""))){
+				htmlbyline[lineNumber-1] = updateline;
+			}else{
+				StringBuffer buffStart = new StringBuffer(linecontent);
+				String startjavaString = htmlToJava.get(linecontent+"<br>");
+				String starthtmlreverse = Text2HTML.txtToHtml(startjavaString);
+				if(starthtmlreverse.endsWith("<br>")){
+					starthtmlreverse = starthtmlreverse.substring(0, starthtmlreverse.length()-"<br>".length());
+				}
+				int startcolumninHTML = linecontent.indexOf(starthtmlreverse);
+				int endcolumninHTML = 0;
+				buffStart.insert(startcolumninHTML, spanStart);
+				endcolumninHTML = startcolumninHTML+starthtmlreverse.length()+spanStart.length();
+				buffStart.insert(endcolumninHTML, spanEnd);
+				htmlbyline[lineNumber-1] = buffStart.toString();
 			}
-			int startcolumninHTML = linecontent.indexOf(starthtmlreverse);
-			int endcolumninHTML = 0;
-			buffStart.insert(startcolumninHTML, spanStart);
-			endcolumninHTML = startcolumninHTML+starthtmlreverse.length()+spanStart.length();
-			buffStart.insert(endcolumninHTML, spanEnd);
-			htmlbyline[lineNumber-1] = buffStart.toString();
-			
 			
 			
 			String line = "";
@@ -288,22 +294,23 @@ public class HTMLAnnotation {
 				
 				String spanStart = "<span title = \""+hovertext+"\""+" style=\"background-color:"+hex+"\">";
 				String spanEnd = "</span>";
-				StringBuffer buffStart = new StringBuffer(linecontent);
-				String startjavaString = htmlToJava.get(linecontent+"<br>");
-				String starthtmlreverse = Text2HTML.txtToHtml(startjavaString);
-				if(starthtmlreverse.endsWith("<br>")){
-					starthtmlreverse = starthtmlreverse.substring(0, starthtmlreverse.length()-"<br>".length());
+				String updateline="";
+				if(!((updateline = isColorAssociatedSLResolver(linecontent,spanStart)).equals(""))){
+					htmlbyline[lineNumber-1] = updateline;
+				}else{
+					StringBuffer buffStart = new StringBuffer(linecontent);
+					String startjavaString = htmlToJava.get(linecontent+"<br>");
+					String starthtmlreverse = Text2HTML.txtToHtml(startjavaString);
+					if(starthtmlreverse.endsWith("<br>")){
+						starthtmlreverse = starthtmlreverse.substring(0, starthtmlreverse.length()-"<br>".length());
+					}
+					int startcolumninHTML = linecontent.indexOf(starthtmlreverse);
+					int endcolumninHTML = 0;
+					buffStart.insert(startcolumninHTML, spanStart);
+					endcolumninHTML = startcolumninHTML+starthtmlreverse.length()+spanStart.length();
+					buffStart.insert(endcolumninHTML, spanEnd);
+					htmlbyline[lineNumber-1] = buffStart.toString();
 				}
-				int startcolumninHTML = linecontent.indexOf(starthtmlreverse);
-				int endcolumninHTML = 0;
-				buffStart.insert(startcolumninHTML, spanStart);
-				endcolumninHTML = startcolumninHTML+starthtmlreverse.length()+spanStart.length();
-				buffStart.insert(endcolumninHTML, spanEnd);
-				htmlbyline[lineNumber-1] = buffStart.toString();
-				
-				
-				
-				
 			}
 			String line = "";
 			for(String content:htmlbyline){
@@ -323,5 +330,36 @@ public class HTMLAnnotation {
 			e.printStackTrace();
 		}
 	}
-	
+	private static String isColorAssociatedSLResolver(String linecontent,String spanStart){
+		String colorpattern = new String("<span title = \".+\" style=\"background-color:.+\">");
+		Pattern startPattern = Pattern.compile(colorpattern);
+		Matcher matcher = startPattern.matcher(linecontent);
+		if(matcher.find()){
+			String matchedString = matcher.group(0);
+			if(matchedString.equals(spanStart)){
+				return linecontent;
+			}else{
+				String merged  = linecontent;
+				// this may add a new color to this
+				// 1. title index
+				int ortitleindex = linecontent.indexOf("<span title = \"")+"<span title = \"".length();
+				int spantitleindex = spanStart.indexOf("<span title = \"")+"<span title = \"".length();
+				int spantitleendindex = spanStart.indexOf("\" style=\"background-color");
+				String spantitle = spanStart.substring(spantitleindex, spantitleendindex);
+				// insert title first
+				merged = new StringBuilder(merged).insert(ortitleindex, spantitle).toString();
+				
+				// 2. color index
+				int orcolorindex = linecontent.indexOf("\" style=\"background-color:")+"\" style=\"background-color:".length();
+				int spancolorindex = spanStart.indexOf("\" style=\"background-color:")+"\" style=\"background-color:".length();		
+				int spancolorendindex = spanStart.indexOf("\">");
+				String spanhxcolr = spanStart.substring(spancolorindex, spancolorendindex);
+				
+				merged = new StringBuilder(merged).insert(orcolorindex, spanhxcolr).toString();
+				return merged;
+			}
+		}else{
+			return "";
+		}
+	}
 }
