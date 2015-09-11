@@ -1,4 +1,5 @@
 package Patch.Hadoop.Job;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -21,9 +22,14 @@ public class JobHub {
 	public void addUse(SootClass sc,CFGNode cfgNode){
 		if(!jobUsesSequence.containsKey(sc)){
 			jobUsesSequence.put(sc, new LinkedList<CFGNode>());
-			
 		}
 		jobUsesSequence.get(sc).add(cfgNode);
+	}
+	public void addUse(SootClass sc,Collection<CFGNode> cfgNodes){
+		if(!jobUsesSequence.containsKey(sc)){
+			jobUsesSequence.put(sc, new LinkedList<CFGNode>());
+		}
+		jobUsesSequence.get(sc).addAll(cfgNodes);
 	}
 	public void addSharedUse(CFGNode cfgNode){
 		this.sharedCFGNode.add(cfgNode);
@@ -33,6 +39,9 @@ public class JobHub {
 	}
 	public String getJobName(){
 		return job.getVariable().getValue().toString();
+	}
+	public JobVariable getJob(){
+		return job;
 	}
 	
 }

@@ -112,6 +112,9 @@ public class HTMLAnnotation {
 	public static void annotateHTML(String hovertext,File htmlFile, int lineNumber,Color annotatedColor, Map<String, String> htmlToJava) {
 		// TODO Auto-generated method stub
 		try {
+			if(lineNumber<=1)
+				return;
+			
 			annotateColor = annotatedColor;
 			String hex = Integer.toHexString(annotateColor.getRGB() & 0xffffff);
 			if (hex.length() < 6) {
@@ -135,6 +138,7 @@ public class HTMLAnnotation {
 			FileWriter htmlWriter = new FileWriter(htmlFile);
 			BufferedWriter bwhtml = new BufferedWriter(htmlWriter);
 			String[] htmlbyline = allhtmlcontent.split("<br>");
+			
 			String linecontent = htmlbyline[lineNumber-1];
 			
 			String spanStart = "<span title = \""+hovertext+"\""+" style=\"background-color:"+hex+"\">";
@@ -290,6 +294,8 @@ public class HTMLAnnotation {
 			BufferedWriter bwhtml = new BufferedWriter(htmlWriter);
 			String[] htmlbyline = allhtmlcontent.split("<br>");
 			for(int lineNumber:lines){
+				if(lineNumber<=1)
+					continue;
 				String linecontent = htmlbyline[lineNumber-1];
 				
 				String spanStart = "<span title = \""+hovertext+"\""+" style=\"background-color:"+hex+"\">";

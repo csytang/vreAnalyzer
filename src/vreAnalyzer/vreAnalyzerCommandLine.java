@@ -87,7 +87,7 @@ public class vreAnalyzerCommandLine{
 		
 		// Output
 		sootArgs.add("-f");
-		sootArgs.add("none");
+		sootArgs.add("jimple");
 		//sootArgs.add("class");
 		
 		
@@ -99,11 +99,11 @@ public class vreAnalyzerCommandLine{
 		
 	    
 	    // 1. data output to files
-	    System.out.print("[vreAnalyzer] vreAnalyzer writes context information to:"+outputDirectory+"/context.csv");
+	    System.out.println("[vreAnalyzer] vreAnalyzer writes context information to:"+outputDirectory+"/context.csv");
 	 	contextwriter = new CSVWriter(outputDirectory+"/context.csv");
 	 	contextwriter.println("ContextID,SootMethod,SootClass");
 	 	// 2. job output to files
-	 	System.out.print("[vreAnalyzer] vreAnalyzer writes feature information to:"+outputDirectory+"/feature.csv");
+	 	System.out.println("[vreAnalyzer] vreAnalyzer writes feature information to:"+outputDirectory+"/feature.csv");
 	 	featurewriter = new CSVWriter(outputDirectory+"/feature.csv");
 	 	featurewriter.println("JobName,Stmt,SootMethod,SootClass,File");
 	 	

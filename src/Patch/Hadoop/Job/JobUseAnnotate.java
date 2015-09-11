@@ -18,22 +18,18 @@ public class JobUseAnnotate {
 	int[]lines;
 	Color annotatedColor;
 	boolean startFromSource = false;
+	boolean firstime = true;
 	int counter = 0;
 	
 	public JobUseAnnotate(JobVariable job,LinkedList<CFGNode>cfgNodes,File htmlFile){
 		this.hostJob = job;
 		String hovertext = "Job:"+job.toString()+"(Id:"+job.getJobId()+")";
 		annotatedColor = job.getAnnotatedColor();
-		SourceLocationTag taginst = (SourceLocationTag) cfgNodes.get(0).getStmt().getTag(SourceLocationTag.TAG_NAME);
-		if(taginst.getTagType()==LocationType.SOURCE_TAG){
-			positions = new int[cfgNodes.size()][4];
-			startFromSource = true;
-		}else{
-			lines = new int[cfgNodes.size()];
-			startFromSource = false;
-		}
+		firstime = true;
+		
 		for(CFGNode node:cfgNodes){
-			
+			if(node.isSpecial())
+				continue;
 			Stmt useStmt = node.getStmt();
 			
 			StmtMarkedTag smkTag;
@@ -45,8 +41,18 @@ public class JobUseAnnotate {
 			}else{
 				smkTag.addJob(job);
 			}
-			
 			SourceLocationTag slcTag = (SourceLocationTag) useStmt.getTag(SourceLocationTag.TAG_NAME);
+			if(firstime){
+				if(slcTag.getTagType()==LocationType.SOURCE_TAG){
+					startFromSource = true;
+					positions = new int[cfgNodes.size()][4];
+				}else{
+					startFromSource = false;
+					lines = new int[cfgNodes.size()];
+				}
+				firstime = false;
+			}
+			
 			if(startFromSource){
 				int startline = slcTag.getStartLineNumber();
 				int startcolumn = slcTag.getStartPos();

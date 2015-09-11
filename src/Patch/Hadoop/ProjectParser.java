@@ -20,6 +20,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import Patch.Hadoop.Job.JobAnnotate;
 import Patch.Hadoop.Job.JobHub;
+import Patch.Hadoop.Job.JobMethodBind;
 import Patch.Hadoop.Job.JobUseAnnotate;
 import Patch.Hadoop.Job.JobVariable;
 import Patch.Hadoop.Statistic.JobDataCollector;
@@ -35,10 +36,12 @@ import soot.jimple.AnyNewExpr;
 import soot.jimple.AssignStmt;
 import soot.jimple.DefinitionStmt;
 import soot.jimple.IdentityStmt;
+import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
 import soot.jimple.internal.JNewExpr;
 import vreAnalyzer.vreAnalyzerCommandLine;
 import vreAnalyzer.Context.Context;
+import vreAnalyzer.ControlFlowGraph.CFG;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
 import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
@@ -175,6 +178,7 @@ public class ProjectParser {
 				htmlfileName+=".html";
 				File htmlFile = new File(htmlfileName);
 				allannotatedFiles.add(htmlFile);
+				@SuppressWarnings("unused")
 				JobUseAnnotate jobuseannot = new JobUseAnnotate(job, useentry.getValue(), htmlFile);
 			}
 		}
@@ -390,7 +394,24 @@ public class ProjectParser {
 							if(jobinstance==null)
 								continue;
 							jobinstance.addUse(sootmethod.getDeclaringClass(),cfgNode);
+							JobVariable job = jobinstance.getJob();
+							// contains job -> invoke method
+							if(stmt.containsInvokeExpr()){
+								// map , reduce add the binding manually
+								InvokeExpr invorkEpxr = stmt.getInvokeExpr();
+								SootMethod sminvoked = invorkEpxr.getMethod();
+								JobMethodBind jmb = new JobMethodBind(job,invorkEpxr);
+								List<SootMethod>bindingsm = jmb.getBindingMethod();
+								for(SootMethod sm:bindingsm){
+									SootClass bindsc = sm.getDeclaringClass();
+									CFG bindcfg = ProgramFlowBuilder.inst().getCFG(sm);
+									List<CFGNode>bindcfgnodess = bindcfg.getNodes();
+									jobinstance.addUse(bindsc, bindcfgnodess);
+								}
+								
+							}
 						}
+						
 					}
 				
 				}
