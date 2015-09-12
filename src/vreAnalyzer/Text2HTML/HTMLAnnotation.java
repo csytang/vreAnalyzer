@@ -349,19 +349,23 @@ public class HTMLAnnotation {
 				// this may add a new color to this
 				// 1. title index
 				int ortitleindex = linecontent.indexOf("<span title = \"")+"<span title = \"".length();
+				int ortitleendindex = linecontent.indexOf("\" style=\"background-color");
 				int spantitleindex = spanStart.indexOf("<span title = \"")+"<span title = \"".length();
 				int spantitleendindex = spanStart.indexOf("\" style=\"background-color");
 				String spantitle = spanStart.substring(spantitleindex, spantitleendindex);
+				String ortitle = linecontent.substring(ortitleindex, ortitleendindex);
+				if(ortitle.contains(spantitle))
+					return merged;
 				// insert title first
 				merged = new StringBuilder(merged).insert(ortitleindex, spantitle).toString();
 				
 				// 2. color index
-				int orcolorindex = linecontent.indexOf("\" style=\"background-color:")+"\" style=\"background-color:".length();
-				int spancolorindex = spanStart.indexOf("\" style=\"background-color:")+"\" style=\"background-color:".length();		
-				int spancolorendindex = spanStart.indexOf("\">");
-				String spanhxcolr = spanStart.substring(spancolorindex, spancolorendindex);
+				int orcolorindex = merged.indexOf("\" style=\"background-color:")+"\" style=\"background-color:".length();
+				// int spancolorindex = spanStart.indexOf("\" style=\"background-color:")+"\" style=\"background-color:".length();		
+				// int spancolorendindex = spanStart.indexOf("\">");
+				// String spanhxcolr = spanStart.substring(spancolorindex, spancolorendindex);
 				
-				merged = new StringBuilder(merged).insert(orcolorindex, spanhxcolr).toString();
+				// merged = new StringBuilder(merged).insert(orcolorindex, spanhxcolr).toString();
 				return merged;
 			}
 		}else{

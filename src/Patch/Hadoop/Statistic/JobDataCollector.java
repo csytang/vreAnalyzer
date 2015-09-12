@@ -39,11 +39,13 @@ public class JobDataCollector {
 				jobToStatistic.put(job, jobstat);
 			}
 			else
-				jobstat = jobToStatistic.get(jobstat);
+				jobstat = jobToStatistic.get(job);
 			for(Map.Entry<SootClass, LinkedList<CFGNode>>cfgentry:jobUsesSequence.entrySet()){
 				LinkedList<CFGNode>cfgnodes = cfgentry.getValue();
 				totalsize+=cfgnodes.size();
 				for(CFGNode cfgNode:cfgnodes){
+					if(cfgNode.isSpecial())
+						continue;
 					Stmt stmt = cfgNode.getStmt();
 					StmtMarkedTag smkTag = (StmtMarkedTag) stmt.getTag(StmtMarkedTag.TAG_NAME);
 					Set<JobVariable> jobassociated= smkTag.getJobs();
