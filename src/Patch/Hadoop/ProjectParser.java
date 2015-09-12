@@ -400,7 +400,7 @@ public class ProjectParser {
 								// map , reduce add the binding manually
 								InvokeExpr invorkEpxr = stmt.getInvokeExpr();
 								SootMethod sminvoked = invorkEpxr.getMethod();
-								JobMethodBind jmb = new JobMethodBind(job,invorkEpxr);
+								JobMethodBind jmb = new JobMethodBind(job,invorkEpxr,cfggraph,cfgNode);
 								List<SootMethod>bindingsm = jmb.getBindingMethod();
 								for(SootMethod sm:bindingsm){
 									SootClass bindsc = sm.getDeclaringClass();

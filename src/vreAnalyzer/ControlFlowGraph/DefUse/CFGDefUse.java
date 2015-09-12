@@ -8,9 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import soot.Local;
-import soot.RefType;
-import soot.Scene;
-import soot.SootClass;
 import soot.SootMethod;
 import soot.Value;
 import soot.ValueBox;
@@ -61,6 +58,7 @@ public class CFGDefUse extends CFG {
 	////////////////////////////Fields///////////////////////////////////////////
     protected ArrayList<Use> idsToUses = new ArrayList<Use>(); // intra-procedural id->use map
 	protected HashMap<Use, Integer> usesToIds = new HashMap<Use, Integer>(); // use->id map (reverse of previous map)
+	protected HashMap<Variable, Integer> defsVariableToIds = new HashMap<Variable, Integer>(); // def->id map
 	protected ArrayList<Def> idsToDefs = new ArrayList<Def>(); // intra-procedural id->def map
 	protected HashMap<Variable,BitSet> varsToUses = new HashMap<Variable,BitSet>(); // associates each var with all uses for it
 	protected HashMap<Variable,BitSet> varsToDefs = new HashMap<Variable,BitSet>(); // associates each var with all defs for it
@@ -90,14 +88,14 @@ public class CFGDefUse extends CFG {
 	public List<Use> getUses() { return idsToUses; }
 	public List<Def> getDefs() { return idsToDefs; }
 	public int getUseId(Use use) { return usesToIds.get(use); }
+	public int getDefVariableId(Variable def) { return defsVariableToIds.get(def); }
+	
 	public List<Use> getFieldUses() { return fieldUses; }
 	public List<Def> getFieldDefs() { return fieldDefs; }
 	public List<Use> getArrayElemUses() { return arrElemUses; }
 	public List<Def> getArrayElemDefs() { return arrElemDefs; }
 	
 	public List<Def> getConstDefs() { return new ArrayList<Def>(argConstDefs.isEmpty()? retConstDefs : argConstDefs); }
-	
-	
 	
 	public List<Use> getUsesBefore(NodeDefUses defNode){
 		List<Use> useBefore = new LinkedList<Use>();
@@ -133,8 +131,6 @@ public class CFGDefUse extends CFG {
 		return defBefore;
 	}
 	/////////////////////////////////////////////////////////////////////////////////
-	
-	
 	
 	//////////////////////////////Override Method////////////////////////////////////////
 	public void analyze() {
@@ -331,6 +327,8 @@ public class CFGDefUse extends CFG {
 				for (Def d : defs) {
 					int defId = idsToDefs.size();
 					idsToDefs.add(d);
+					//defsToIds.put(d, defId);
+					defsVariableToIds.put(d.getVar(), defId);
 					defsIds[i++] = defId;
 				}
 				n.setLocalDefsIds(defsIds);

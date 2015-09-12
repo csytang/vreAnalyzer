@@ -1,23 +1,30 @@
 package Patch.Hadoop.Job;
-
 import java.util.LinkedList;
 import java.util.List;
 
+import soot.Local;
 import soot.Modifier;
 import soot.SootClass;
 import soot.SootMethod;
 import soot.Value;
 import soot.jimple.ClassConstant;
-import soot.jimple.Constant;
+import soot.jimple.FieldRef;
 import soot.jimple.InvokeExpr;
+import soot.jimple.Stmt;
+import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
+import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
+import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
+import vreAnalyzer.Tag.MethodTag;
 
 public class JobMethodBind {
 	List<SootMethod>bindsm= null;
+	List<Stmt>bindstmt = null;
 	SootClass libMapper = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Mapper");
 	SootClass libReducer = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Reducer");
-	public JobMethodBind(JobVariable job,InvokeExpr expr){
+	public JobMethodBind(JobVariable job,InvokeExpr expr,CFGDefUse inputducfg,NodeDefUses duNode){
 		bindsm = new LinkedList<SootMethod>();
+		bindstmt = new LinkedList<Stmt>();
 		SootMethod invokemethod = expr.getMethod();
 		int argCount = expr.getArgCount();
 		String methodName =invokemethod.getName();
@@ -44,25 +51,33 @@ public class JobMethodBind {
 					mapperclsName = mapperclsName.replaceAll("/", ".");
 					SootClass mappercls = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(mapperclsName, libMapper);
 					// 2. 
-					
-					SootMethod mapsm = findMethodByName(mappercls,"map");
-					SootMethod setsm = findMethodByName(mappercls,"setup");
-					SootMethod runsm = findMethodByName(mappercls,"run");
-					SootMethod cleanupsm = findMethodByName(mappercls,"cleanup");
+					List<SootMethod> mapsm = findallMethodByName(mappercls,"map");
+					List<SootMethod> setsm = findallMethodByName(mappercls,"setup");
+					List<SootMethod> runsm = findallMethodByName(mappercls,"run");
+					List<SootMethod> cleanupsm = findallMethodByName(mappercls,"cleanup");
 					if(cleanupsm!=null){
-						bindsm.add(cleanupsm);
+						bindsm.addAll(cleanupsm);
 					}
 					if(mapsm!=null){
-						bindsm.add(mapsm);
+						bindsm.addAll(mapsm);
 					}
 					if(setsm!=null){
-						bindsm.add(setsm);
+						bindsm.addAll(setsm);
 					}
 					if(runsm!=null){
-						bindsm.add(runsm);
+						bindsm.addAll(runsm);
 					}
 				}else{
-					
+					// this job is represented by a variable 
+					if(mapperclsValue instanceof Local||
+							mapperclsValue instanceof FieldRef){
+						Variable videf = duNode.getDeffromValue(mapperclsValue);
+						int id = inputducfg.getDefVariableId(videf);
+						NodeDefUses defNode = (NodeDefUses) inputducfg.getNodes().get(id);
+						bindstmt.add(defNode.getStmt());
+					}else{
+						
+					}
 					
 				}
 			}else if(argCount==2){
@@ -77,24 +92,33 @@ public class JobMethodBind {
 					mapperclsName = mapperclsName.replaceAll("/", ".");
 					SootClass mappercls = ProgramFlowBuilder.inst().findAppClassByNameAndSuper(mapperclsName, libMapper);
 					// 2. 
-					SootMethod mapsm = findMethodByName(mappercls,"map");
-					SootMethod setsm = findMethodByName(mappercls,"setup");
-					SootMethod runsm = findMethodByName(mappercls,"run");
-					SootMethod cleanupsm = findMethodByName(mappercls,"cleanup");
+					List<SootMethod> mapsm = findallMethodByName(mappercls,"map");
+					List<SootMethod> setsm = findallMethodByName(mappercls,"setup");
+					List<SootMethod> runsm = findallMethodByName(mappercls,"run");
+					List<SootMethod> cleanupsm = findallMethodByName(mappercls,"cleanup");
 					if(cleanupsm!=null){
-						bindsm.add(cleanupsm);
+						bindsm.addAll(cleanupsm);
 					}
 					if(mapsm!=null){
-						bindsm.add(mapsm);
+						bindsm.addAll(mapsm);
 					}
 					if(setsm!=null){
-						bindsm.add(setsm);
+						bindsm.addAll(setsm);
 					}
 					if(runsm!=null){
-						bindsm.add(runsm);
+						bindsm.addAll(runsm);
 					}
 				}else{
-					
+					// this job is represented by a variable 
+					if(mapperclsValue instanceof Local||
+							mapperclsValue instanceof FieldRef){
+						Variable videf = duNode.getDeffromValue(mapperclsValue);
+						int id = inputducfg.getDefVariableId(videf);
+						NodeDefUses defNode = (NodeDefUses) inputducfg.getNodes().get(id);
+						bindstmt.add(defNode.getStmt());					
+					}else{
+						
+					}
 				}
 			}
 			break;
@@ -123,15 +147,13 @@ public class JobMethodBind {
 	public List<SootMethod> getBindingMethod(){
 		return bindsm;
 	}
-	public SootMethod findMethodByName(SootClass sc,String methodName){
+	public List<SootMethod> findallMethodByName(SootClass sc,String methodName){
 		List<SootMethod>allmethods = sc.getMethods();
-		SootMethod foundMethod = null;
+		List<SootMethod> foundMethod = new LinkedList<SootMethod>();
 		for(SootMethod sm:allmethods){
-			if(sm.getName().equals(methodName) && !Modifier.isVolatile(sm.getModifiers())){
-				if(foundMethod==null)
-					foundMethod = sm;
-				else
-					throw new RuntimeException("ambiguous method: " + methodName + " in class " + sc);
+			if((sm.getName().equals(methodName) && !Modifier.isVolatile(sm.getModifiers()))&&
+					sm.hasTag(MethodTag.TAG_NAME)){
+				foundMethod.add(sm);
 			}
 		}
 		return foundMethod;
