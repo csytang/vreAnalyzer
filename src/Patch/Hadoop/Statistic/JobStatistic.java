@@ -1,10 +1,12 @@
 package Patch.Hadoop.Statistic;
 
 import java.awt.Color;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+
 import soot.SootClass;
 import vreAnalyzer.Elements.CFGNode;
 import Patch.Hadoop.ProjectParser;
@@ -24,6 +26,8 @@ public class JobStatistic {
 		this.jobColor = jobvar.getAnnotatedColor();
 		JobHub jobhub = ProjectParser.instance.getjobHub(jobvar);
 		jobUsesSequence = jobhub.getjobUse();
+		methodCodeLines = new HashMap<SootClass,Set<Integer>>();
+		reuseMethodCodeLines = new HashMap<SootClass,Set<Integer>>();
 	}
 	public void addUseStmts(SootClass sootcls,int sourceline){
 		if(!methodCodeLines.containsKey(sootcls)){
@@ -45,14 +49,14 @@ public class JobStatistic {
 			reuseMethodCodeLines.put(sootcls, new HashSet<Integer>());
 			reuseMethodCodeLines.get(sootcls).add(reuseline);
 		}else
-			methodCodeLines.get(sootcls).add(reuseline);
+			reuseMethodCodeLines.get(sootcls).add(reuseline);
 	}
 	public void addReuseCode(SootClass sootcls,Set<Integer> reuselines){
 		if(!reuseMethodCodeLines.containsKey(sootcls)){
 			reuseMethodCodeLines.put(sootcls, new HashSet<Integer>());
 			reuseMethodCodeLines.get(sootcls).addAll(reuselines);
 		}else
-			methodCodeLines.get(sootcls).addAll(reuselines);
+			reuseMethodCodeLines.get(sootcls).addAll(reuselines);
 	}
 	public int getLOC(){
 		for(Map.Entry<SootClass, Set<Integer>>entry:methodCodeLines.entrySet()){

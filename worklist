@@ -1,4 +1,7 @@
 1. Track: jobvariable is FieldReferenceType {@linke ProjectParser}
 2. job will serve as seed, propergate the seed and annotated all use of job
- map , reduce add the binding manually
-3. 統計錯誤  loc的統計都是與對jimple code
+ map , reduce add the binding manually (fixed)
+3. 統計錯誤  loc的統計都是與對jimple code(fixed)
+5. enhancement: mouse hover show popup hints
+6. common asset relation
+8. 

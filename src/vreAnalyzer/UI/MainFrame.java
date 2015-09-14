@@ -66,10 +66,11 @@ public class MainFrame extends JFrame {
 	private List<File>target;
 	private List<File>supporingjars;
 	private List<File>sources;
-	private final JSplitPane upsplitPane;
+	private final JSplitPane sourcesplitPane;
 	private static JTextPane txtrSource=null;
-	private final JTextArea textArea;
-	private final JTree tree;
+	private static JTextPane source_annotatedDisplayArea;
+	private final JTextArea consoletextArea;
+	private final JTree source_annotateDirTree;
 	private static int textArealinecount = 0;
 	
 	// 3. 
@@ -80,9 +81,10 @@ public class MainFrame extends JFrame {
 	
 	// 4. Output redirect
 	PrintStream printStream;
-	private final JTable table;
+	private final JTable legendtable;
 	private static Map<String,String>htmlToJava;
 	private final JTable statistictable;
+	private JTable comassettable;
 	
 	public static void main(String[] args) {
 		classnametoSource = new HashMap<String,File>();
@@ -164,12 +166,12 @@ public class MainFrame extends JFrame {
 		mainsplitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		contentPane.add(mainsplitPane);
 		
-		upsplitPane = new JSplitPane();
-		upsplitPane.setOneTouchExpandable(true);
-		mainsplitPane.setLeftComponent(upsplitPane);
+		sourcesplitPane = new JSplitPane();
+		sourcesplitPane.setOneTouchExpandable(true);
+		mainsplitPane.setLeftComponent(sourcesplitPane);
 		
-		tree = new JTree();
-		tree.setModel(new DefaultTreeModel(
+		source_annotateDirTree = new JTree();
+		source_annotateDirTree.setModel(new DefaultTreeModel(
 			new DefaultMutableTreeNode("Source directory") {
 			{
 				}
@@ -177,74 +179,83 @@ public class MainFrame extends JFrame {
 		));
 		
 		
-		JPanel panel = new JPanel();
-		upsplitPane.setRightComponent(panel);
-		panel.setLayout(new BorderLayout(0, 0));
-		upsplitPane.setDividerLocation(160+upsplitPane.getInsets().left);
+		JPanel sourcepanel = new JPanel();
+		sourcesplitPane.setRightComponent(sourcepanel);
+		sourcepanel.setLayout(new BorderLayout(0, 0));
+		sourcesplitPane.setDividerLocation(160+sourcesplitPane.getInsets().left);
 		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		panel.add(scrollPane_1, BorderLayout.CENTER);
+		JScrollPane source_annotateDisplayPane = new JScrollPane();
+		sourcepanel.add(source_annotateDisplayPane, BorderLayout.CENTER);
 		
-		txtrSource = new JTextPane();
-		scrollPane_1.setViewportView(txtrSource);
+		source_annotatedDisplayArea = new JTextPane();
+		source_annotateDisplayPane.setViewportView(source_annotatedDisplayArea);
 		
-		JPanel panel_1 = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) panel_1.getLayout();
-		flowLayout.setAlignment(FlowLayout.LEFT);
-		panel.add(panel_1, BorderLayout.SOUTH);
+		JPanel searchPanel = new JPanel();
+		FlowLayout fl_searchPanel = (FlowLayout) searchPanel.getLayout();
+		fl_searchPanel.setAlignment(FlowLayout.LEFT);
+		sourcepanel.add(searchPanel, BorderLayout.SOUTH);
 		
 		textField = new JTextField();
-		panel_1.add(textField);
+		searchPanel.add(textField);
 		textField.setColumns(40);
 		
 		JButton btnSearch = new JButton("Search");
-		panel_1.add(btnSearch);
+		searchPanel.add(btnSearch);
 		
 		JButton btnForwardSearch = new JButton("Forward Search");
-		panel_1.add(btnForwardSearch);
+		searchPanel.add(btnForwardSearch);
 		
 		JButton btnBackwardSearch = new JButton("Backward Search");
-		panel_1.add(btnBackwardSearch);
+		searchPanel.add(btnBackwardSearch);
 		
-		JScrollPane scrollPane_4 = new JScrollPane();
-		scrollPane_4.setViewportView(tree);
-		upsplitPane.setLeftComponent(scrollPane_4);
+		JScrollPane sourceDirPane = new JScrollPane();
+		sourceDirPane.setViewportView(source_annotateDirTree);
+		sourcesplitPane.setLeftComponent(sourceDirPane);
 		
-		JSplitPane bottomsplitPane = new JSplitPane();
-		bottomsplitPane.setOneTouchExpandable(true);
-		mainsplitPane.setRightComponent(bottomsplitPane);
+		JSplitPane analysissplitPane = new JSplitPane();
+		analysissplitPane.setOneTouchExpandable(true);
+		mainsplitPane.setRightComponent(analysissplitPane);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		bottomsplitPane.setRightComponent(tabbedPane);
-		bottomsplitPane.setDividerLocation(160+bottomsplitPane.getInsets().left);
-		JScrollPane scrollPane = new JScrollPane();
-		tabbedPane.addTab("Console", new ImageIcon(MainFrame.class.getResource("/image/console.png")), scrollPane, null);
+		analysissplitPane.setRightComponent(tabbedPane);
+		analysissplitPane.setDividerLocation(160+analysissplitPane.getInsets().left);
+		JScrollPane consolePane = new JScrollPane();
+		tabbedPane.addTab("Console", new ImageIcon(MainFrame.class.getResource("/image/console.png")), consolePane, null);
 		
-		textArea = new JTextArea();
-		textArea.setEditable(false);
+		consoletextArea = new JTextArea();
+		consoletextArea.setEditable(false);
 		
 		// Redirect output stream
-		printStream = new PrintStream(new CustomOutputStream(textArea));
+		printStream = new PrintStream(new CustomOutputStream(consoletextArea));
 		//System.setOut(printStream);
 		//System.setErr(printStream);
         
-		scrollPane.setViewportView(textArea);
+		consolePane.setViewportView(consoletextArea);
 		
-		JScrollPane scrollPane_2 = new JScrollPane();
+		JScrollPane comassetPane = new JScrollPane();
+		tabbedPane.addTab("Common Assets", new ImageIcon(MainFrame.class.getResource("/image/common.png")), comassetPane, null);
 		
-		tabbedPane.addTab("Statistics", new ImageIcon(MainFrame.class.getResource("/image/statistics.png")), scrollPane_2, null);
+		String commonassetheaders[] = {"CommonAsset ID","Color","LOC","Shared Feature IDs","Element Type"};
+		DefaultTableModel coommonassettableModel = new DefaultTableModel(null,commonassetheaders);
+		comassettable = new JTable(coommonassettableModel);
+		comassettable.getTableHeader().setReorderingAllowed(false);
+		comassetPane.setViewportView(comassettable);
+		
+		JScrollPane statisticsPane = new JScrollPane();
+		
+		tabbedPane.addTab("Statistics", new ImageIcon(MainFrame.class.getResource("/image/data-analytics1.png")), statisticsPane, null);
 		String statheaders[] = {"Feature","Color","LOC","Reuse LOC","Dependenency(LOC)"};
 		DefaultTableModel statisitictableModel = new DefaultTableModel(null,statheaders);
 		statistictable = new JTable(statisitictableModel);
 		statistictable.getTableHeader().setReorderingAllowed(false);
-		scrollPane_2.setViewportView(statistictable);
+		statisticsPane.setViewportView(statistictable);
 		
-		JScrollPane scrollPane_3 = new JScrollPane();
+		JScrollPane LegendPane = new JScrollPane();
 		
-		bottomsplitPane.setLeftComponent(scrollPane_3);
+		analysissplitPane.setLeftComponent(LegendPane);
 		
-		String headers[] = {"Feature","Color"};
-		DefaultTableModel model = new DefaultTableModel(null, headers){
+		String legendheaders[] = {"Feature","Color"};
+		DefaultTableModel model = new DefaultTableModel(null, legendheaders){
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -254,10 +265,10 @@ public class MainFrame extends JFrame {
 			
 		};
 		
-		table = new JTable(model);
-		table.setDefaultRenderer(Object.class, new TableCellRender());
+		legendtable = new JTable(model);
+		legendtable.setDefaultRenderer(Object.class, new TableCellRender());
 		
-		scrollPane_3.setViewportView(table);
+		LegendPane.setViewportView(legendtable);
 		setVisible(true);
 
 	}
@@ -407,13 +418,13 @@ public class MainFrame extends JFrame {
 		
 		root.add(filelist);
 		root.add(htmllist);
-		DefaultTreeModel treeModel = (DefaultTreeModel)tree.getModel();
+		DefaultTreeModel treeModel = (DefaultTreeModel)source_annotateDirTree.getModel();
 		treeModel.setRoot(root);
 		treeModel.reload();
 		
-		tree.addMouseListener(new MouseAdapter(){
+		source_annotateDirTree.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent e){
-				DefaultMutableTreeNode selected = (DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+				DefaultMutableTreeNode selected = (DefaultMutableTreeNode)source_annotateDirTree.getLastSelectedPathComponent();
 				if(selected==null){
 					
 				}
@@ -525,10 +536,10 @@ public class MainFrame extends JFrame {
 				textArealinecount++;
 				if(textArealinecount>=50){
 					textArealinecount=0;
-					textArea.setText("");
+					consoletextArea.setText("");
 				}
-				textArea.append(str);
-				textArea.setCaretPosition(textArea.getDocument().getLength());
+				consoletextArea.append(str);
+				consoletextArea.setCaretPosition(consoletextArea.getDocument().getLength());
 			}
 		});
 	}
@@ -538,15 +549,15 @@ public class MainFrame extends JFrame {
 		classnametoSource.put(className, source);
 	}
 	public static JTextPane getSrcTextPane(){
-		return txtrSource;
+		return source_annotatedDisplayArea;
 	}
 	public JTable getJobColorMapTable(){
-		return table;
+		return legendtable;
 	}
 	public JTable getStatisticTable(){
 		return statistictable;
 	}
 	public JTree getTree(){
-		return tree;
+		return source_annotateDirTree;
 	}
 }

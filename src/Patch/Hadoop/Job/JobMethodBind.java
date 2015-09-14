@@ -1,9 +1,6 @@
 package Patch.Hadoop.Job;
 import java.util.LinkedList;
 import java.util.List;
-import Patch.Hadoop.Job.Understand.setCombinerClassUnd;
-import Patch.Hadoop.Job.Understand.setMapperClassUnd;
-import Patch.Hadoop.Job.Understand.setReducerClassUnd;
 import soot.Modifier;
 import soot.SootClass;
 import soot.SootMethod;
@@ -19,6 +16,8 @@ public class JobMethodBind {
 	List<Stmt>bindstmt = null;
 	SootClass libMapper = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Mapper");
 	SootClass libReducer = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Reducer");
+	SootClass libInputFormat = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.InputFormat");
+	SootClass libOutputFormat = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.OutputFormat");
 	public JobMethodBind(JobVariable job,InvokeExpr expr,CFGDefUse inputducfg,NodeDefUses duNode){
 		bindsm = new LinkedList<SootMethod>();
 		bindstmt = new LinkedList<Stmt>();
@@ -27,11 +26,11 @@ public class JobMethodBind {
 		String methodName =invokemethod.getName();
 		switch(methodName){
 		case "setCombinerClass":{
-			new setCombinerClassUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libReducer);
+			new JobUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libReducer);
 			break;
 		}
 		case "setInputFormatClass":{
-			
+			new JobUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libInputFormat);
 			break;
 		}
 		case "setMapOutputKeyClass":{
@@ -41,10 +40,11 @@ public class JobMethodBind {
 			break;
 		}
 		case "setMapperClass":{
-			new setMapperClassUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libMapper);
+			new JobUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libMapper);
 			break;
 		}
 		case "setOutputFormatClass":{
+			new JobUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libOutputFormat);
 			break;
 		}
 		case "setOutputValueClass":{
@@ -54,7 +54,7 @@ public class JobMethodBind {
 			break;
 		}
 		case "setReducerClass":{
-			new setReducerClassUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libReducer);
+			new JobUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libReducer);
 			break;
 		}
 		
