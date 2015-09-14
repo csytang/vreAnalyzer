@@ -31,9 +31,15 @@ public class JobHub {
 		}
 		jobUsesSequence.get(sc).addAll(cfgNodes);
 	}
+	
+	/**
+	 * add a shared cfgNode to this job
+	 * @param cfgNode
+	 */
 	public void addSharedUse(CFGNode cfgNode){
 		this.sharedCFGNode.add(cfgNode);
 	}
+	
 	public Map<SootClass,LinkedList<CFGNode>> getjobUse(){
 		return jobUsesSequence;
 	}
