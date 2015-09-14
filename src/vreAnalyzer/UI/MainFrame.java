@@ -128,7 +128,6 @@ public class MainFrame extends JFrame {
 		mnFile.add(mntmSave);
 		
 		
-		
 		JMenu mnEdit = new JMenu("Edit");
 		menuBar.add(mnEdit);
 		

@@ -29,7 +29,7 @@ public class JobAnnotate {
 		this.hostJob = job;
 		String hovertext = "Job:"+job.toString()+"(Id:"+job.getJobId()+")";
 		annotatedColor = job.getAnnotatedColor();
-		jobstmt = job.getCFGNode().getStmt();
+		jobstmt = job.getBlock().getCFGNodes().get(0).getStmt();
 		// set the color job mapping to the MainFrame
 		JTable jobColorMapTable = MainFrame.inst().getJobColorMapTable();
 		DefaultTableModel model = (DefaultTableModel)jobColorMapTable.getModel();

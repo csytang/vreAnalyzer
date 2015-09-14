@@ -7,11 +7,11 @@ import Patch.Hadoop.Job.JobVariable;
 import soot.tagkit.AttributeValueException;
 import soot.tagkit.Tag;
 
-public class StmtMarkedTag implements Tag{
+public class BlockMarkedTag implements Tag{
 	
 	public static String TAG_NAME = "smkt";
 	private Set<JobVariable> jobassociated;
-	public StmtMarkedTag(){
+	public BlockMarkedTag(){
 		jobassociated = new HashSet<JobVariable>();
 	}
 	public Set<JobVariable> getJobs(){
@@ -23,7 +23,7 @@ public class StmtMarkedTag implements Tag{
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return StmtMarkedTag.TAG_NAME;
+		return BlockMarkedTag.TAG_NAME;
 	}
 
 	@Override

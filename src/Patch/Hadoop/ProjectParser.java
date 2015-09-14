@@ -18,6 +18,7 @@ import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import Patch.Hadoop.CommonAss.AssetType;
 import Patch.Hadoop.Job.JobAnnotate;
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobMethodBind;
@@ -46,10 +47,11 @@ import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
 import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
+import vreAnalyzer.Elements.CodeBlock;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.PointsTo.PointsToGraph;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
-import vreAnalyzer.Tag.StmtMarkedTag;
+import vreAnalyzer.Tag.BlockMarkedTag;
 import vreAnalyzer.UI.MainFrame;
 import vreAnalyzer.UI.SourceClassBinding;
 import vreAnalyzer.UI.TreeCellRender;
@@ -149,13 +151,13 @@ public class ProjectParser {
 			htmlfileName+=".html";
 			File htmlFile = new File(htmlfileName);
 			allannotatedFiles.add(htmlFile);
-			Stmt jobstmt = job.getCFGNode().getStmt();
-			StmtMarkedTag smkTag;
+			CodeBlock jobblock = job.getBlock();
+			BlockMarkedTag smkTag;
 			// add job marked tag to this statement
-			if( (smkTag = (StmtMarkedTag) jobstmt.getTag(StmtMarkedTag.TAG_NAME))==null){
-				smkTag = new StmtMarkedTag();
+			if( (smkTag = (BlockMarkedTag) jobblock.getTag(BlockMarkedTag.TAG_NAME))==null){
+				smkTag = new BlockMarkedTag();
 				smkTag.addJob(job);
-				jobstmt.addTag(smkTag);
+				jobblock.addTag(smkTag);
 			}else{
 				smkTag.addJob(job);
 			}
@@ -170,8 +172,8 @@ public class ProjectParser {
 		for(Map.Entry<JobVariable, JobHub>entry:jobtoHub.entrySet()){
 			JobVariable job = entry.getKey();
 			JobHub jobhub = entry.getValue();
-			Map<SootClass,LinkedList<CFGNode>>jobUses = jobhub.getjobUse();
-			for(Map.Entry<SootClass, LinkedList<CFGNode>>useentry:jobUses.entrySet()){
+			Map<SootClass,LinkedList<CodeBlock>>jobUsesBlocks = jobhub.getjobUse();
+			for(Map.Entry<SootClass, LinkedList<CodeBlock>>useentry:jobUsesBlocks.entrySet()){
 				SootClass cls = useentry.getKey();
 				File sourceFile = SourceClassBinding.getSourceFileFromClassName(cls.toString());
 				String htmlfileName = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
@@ -329,7 +331,6 @@ public class ProjectParser {
 											Util.updateSucceedP2G(loright, argsExpr, cfgNode, cfggraph, allcontext);
 											p2g.assignNew((Local) defvar.getValue(), argsExpr);
 											Util.updateSucceedP2G((Local) defvar.getValue(), argsExpr, cfgNode, cfggraph, allcontext);
-											
 										}
 									}else{
 										if(defvar.isLocal())
@@ -387,13 +388,15 @@ public class ProjectParser {
 				}		
 				// use of the job
 				if(!useVariables.isEmpty()){
+					////////////////////////////////////
 					for(Variable usevar:useVariables){	
 						// If it is a define of job
 						if(usevar.getValue().getType().toString().equals("org.apache.hadoop.mapreduce.Job")){
 							JobHub jobinstance = getjobHub(usevar);
 							if(jobinstance==null)
 								continue;
-							jobinstance.addUse(sootmethod.getDeclaringClass(),cfgNode);
+							CodeBlock cb = new CodeBlock(usevar, cfgNode, sootmethod);
+							jobinstance.addUse(sootmethod.getDeclaringClass(),cb);
 							JobVariable job = jobinstance.getJob();
 							// contains job -> invoke method
 							if(stmt.containsInvokeExpr()){
@@ -402,18 +405,30 @@ public class ProjectParser {
 								SootMethod sminvoked = invorkEpxr.getMethod();
 								JobMethodBind jmb = new JobMethodBind(job,invorkEpxr,cfggraph,cfgNode);
 								List<SootMethod>bindingsm = jmb.getBindingMethod();
-								for(SootMethod sm:bindingsm){
-									SootClass bindsc = sm.getDeclaringClass();
-									CFG bindcfg = ProgramFlowBuilder.inst().getCFG(sm);
+								AssetType bindType = jmb.getBindType();
+								if(bindType==AssetType.Class){
+									List<CFGNode>bindcfgnodess = new LinkedList<CFGNode>();
+									SootClass bindsc  = bindingsm.get(0).getDeclaringClass();
+									for(SootMethod sm:bindingsm){
+										CFG bindcfg = ProgramFlowBuilder.inst().getCFG(sm);
+										bindcfgnodess.addAll(bindcfg.getNodes());
+									}
+									CodeBlock cBlock = new CodeBlock(bindcfgnodess, bindsc);
+									jobinstance.addUse(bindsc, cBlock);
+									
+								}else if(bindType==AssetType.Method){
+									CFG bindcfg = ProgramFlowBuilder.inst().getCFG(bindingsm.get(0));
 									List<CFGNode>bindcfgnodess = bindcfg.getNodes();
-									jobinstance.addUse(bindsc, bindcfgnodess);
+									CodeBlock mBlock = new CodeBlock(bindcfgnodess,bindingsm.get(0));
+									jobinstance.addUse(bindingsm.get(0).getDeclaringClass(), mBlock);
 								}
+								
 								
 							}
 						}
 						
 					}
-				
+					//////////////////////////////////////////////////////////////////
 				}
 				
 				
@@ -423,7 +438,8 @@ public class ProjectParser {
 		}
 	}
 	public void defineJob(Variable defvar,NodeDefUses cfgNode,Stmt stmt){
-		JobVariable jvb = new JobVariable(defvar,cfgNode);
+		CodeBlock jobblock = new CodeBlock(defvar,cfgNode,cfgNode.getMethod());
+		JobVariable jvb = new JobVariable(defvar,jobblock);
 		if(!containjobvar(jvb)){
 			Value defValue = defvar.getValue();
 			jvb.setJobId(jobId);

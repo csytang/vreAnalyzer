@@ -1,6 +1,8 @@
 package Patch.Hadoop.Job;
 import java.util.LinkedList;
 import java.util.List;
+
+import Patch.Hadoop.CommonAss.AssetType;
 import soot.Modifier;
 import soot.SootClass;
 import soot.SootMethod;
@@ -14,6 +16,7 @@ import vreAnalyzer.Tag.MethodTag;
 public class JobMethodBind {
 	List<SootMethod>bindsm= null;
 	List<Stmt>bindstmt = null;
+	AssetType bindType = AssetType.NON;
 	SootClass libMapper = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Mapper");
 	SootClass libReducer = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Reducer");
 	SootClass libInputFormat = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.InputFormat");
@@ -27,10 +30,12 @@ public class JobMethodBind {
 		switch(methodName){
 		case "setCombinerClass":{
 			new JobUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libReducer);
+			bindType = AssetType.Class;
 			break;
 		}
 		case "setInputFormatClass":{
 			new JobUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libInputFormat);
+			bindType = AssetType.Method;
 			break;
 		}
 		case "setMapOutputKeyClass":{
@@ -41,10 +46,12 @@ public class JobMethodBind {
 		}
 		case "setMapperClass":{
 			new JobUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libMapper);
+			bindType = AssetType.Class;
 			break;
 		}
 		case "setOutputFormatClass":{
 			new JobUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libOutputFormat);
+			bindType = AssetType.Method;
 			break;
 		}
 		case "setOutputValueClass":{
@@ -55,6 +62,7 @@ public class JobMethodBind {
 		}
 		case "setReducerClass":{
 			new JobUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libReducer);
+			bindType = AssetType.Class;
 			break;
 		}
 		
@@ -63,6 +71,9 @@ public class JobMethodBind {
 	
 	public List<SootMethod> getBindingMethod(){
 		return bindsm;
+	}
+	public AssetType getBindType(){
+		return bindType;
 	}
 	public static List<SootMethod> findallMethodByName(SootClass sc,String methodName){
 		List<SootMethod>allmethods = sc.getMethods();

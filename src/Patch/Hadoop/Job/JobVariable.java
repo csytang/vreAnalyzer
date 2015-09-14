@@ -8,6 +8,7 @@ import soot.SootMethod;
 import vreAnalyzer.vreAnalyzerCommandLine;
 import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
+import vreAnalyzer.Elements.CodeBlock;
 import vreAnalyzer.Tag.StmtTag;
 import vreAnalyzer.UI.RandomColor;
 import vreAnalyzer.UI.SourceClassBinding;
@@ -17,16 +18,18 @@ public class JobVariable{
 	Variable jobvariable;
 	SootClass sc;
 	SootMethod sm;
-	CFGNode jobCFGNode;
+	CFGNode cfgNode;
+	CodeBlock jobNodeBlock;
 	File sourceFile;
 	int jobId;
 	private Color jobColor;
 	
-	public JobVariable(Variable val,CFGNode cfgNode) {
+	public JobVariable(Variable val,CodeBlock block) {
 		
 		jobvariable = val;
-		jobCFGNode = cfgNode;
-		sm = jobCFGNode.getMethod();
+		jobNodeBlock = block;
+		cfgNode = block.getCFGNodes().get(0);
+		sm = block.getCFGNodes().get(0).getMethod();
 		sc = sm.getDeclaringClass();
 		if(vreAnalyzerCommandLine.isSourceBinding()){
 			sourceFile = SourceClassBinding.getSourceFileFromClassName(sc.toString());
@@ -66,8 +69,8 @@ public class JobVariable{
 	public Variable getVariable(){
 		return jobvariable;
 	}
-	public CFGNode getCFGNode(){
-		return jobCFGNode;
+	public CodeBlock getBlock(){
+		return jobNodeBlock;
 	}
 	@Override
 	public String toString() {
@@ -91,7 +94,7 @@ public class JobVariable{
 	}
 	public StmtTag getSootStmtTag() {
 		// TODO Auto-generated method stub
-		return this.jobCFGNode.getStmtTag();
+		return this.cfgNode.getStmtTag();
 	}
 	public Color getAnnotatedColor() {
 		// TODO Auto-generated method stub

@@ -1,46 +1,39 @@
 package Patch.Hadoop.Job;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-
 import soot.SootClass;
-import vreAnalyzer.Elements.CFGNode;
+import vreAnalyzer.Elements.CodeBlock;
 
 
 public class JobHub {
 	
 	
 	private JobVariable job;
-	private Map<SootClass,LinkedList<CFGNode>>jobUsesSequence;
-	private LinkedList<CFGNode>sharedCFGNode;
+	private Map<SootClass,LinkedList<CodeBlock>>jobUsesSequence;
+	private LinkedList<CodeBlock>sharedBlocks;
 	public JobHub(JobVariable job){
 		this.job = job;
-		jobUsesSequence = new HashMap<SootClass,LinkedList<CFGNode>>();
-		sharedCFGNode = new LinkedList<CFGNode>();
+		jobUsesSequence = new HashMap<SootClass,LinkedList<CodeBlock>>();
+		sharedBlocks = new LinkedList<CodeBlock>();
 	}
-	public void addUse(SootClass sc,CFGNode cfgNode){
+	public void addUse(SootClass sc,CodeBlock blocknode){
 		if(!jobUsesSequence.containsKey(sc)){
-			jobUsesSequence.put(sc, new LinkedList<CFGNode>());
+			jobUsesSequence.put(sc, new LinkedList<CodeBlock>());
 		}
-		jobUsesSequence.get(sc).add(cfgNode);
+		jobUsesSequence.get(sc).add(blocknode);
 	}
-	public void addUse(SootClass sc,Collection<CFGNode> cfgNodes){
-		if(!jobUsesSequence.containsKey(sc)){
-			jobUsesSequence.put(sc, new LinkedList<CFGNode>());
-		}
-		jobUsesSequence.get(sc).addAll(cfgNodes);
-	}
+	
 	
 	/**
 	 * add a shared cfgNode to this job
 	 * @param cfgNode
 	 */
-	public void addSharedUse(CFGNode cfgNode){
-		this.sharedCFGNode.add(cfgNode);
+	public void addSharedUse(CodeBlock blockNode){
+		this.sharedBlocks.add(blockNode);
 	}
 	
-	public Map<SootClass,LinkedList<CFGNode>> getjobUse(){
+	public Map<SootClass,LinkedList<CodeBlock>> getjobUse(){
 		return jobUsesSequence;
 	}
 	public String getJobName(){
