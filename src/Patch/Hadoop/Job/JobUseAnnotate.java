@@ -31,19 +31,18 @@ public class JobUseAnnotate {
 		for(CodeBlock block:blocks){
 			BlockMarkedTag bmkTag;
 			// add job marked tag to this statement
-			if( (bmkTag = (BlockMarkedTag) block.getTag(BlockMarkedTag.TAG_NAME))==null){
+			if((bmkTag = (BlockMarkedTag) block.getTag(BlockMarkedTag.TAG_NAME))==null){
 				bmkTag = new BlockMarkedTag();
 				bmkTag.addJob(job);
 				block.addTag(bmkTag);
 			}else{
 				bmkTag.addJob(job);
 			}
+			counter = 0;
 			for(CFGNode node:block.getCFGNodes()){
 				if(node.isSpecial())
 					continue;
 				Stmt useStmt = node.getStmt();
-				
-				
 				SourceLocationTag slcTag = (SourceLocationTag) useStmt.getTag(SourceLocationTag.TAG_NAME);
 				if(firstime){
 					if(slcTag.getTagType()==LocationType.SOURCE_TAG){

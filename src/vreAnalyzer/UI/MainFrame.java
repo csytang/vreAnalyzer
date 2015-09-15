@@ -57,6 +57,11 @@ import java.util.Stack;
 import javax.swing.JTable;
 
 public class MainFrame extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	// 1. Instance
 	private static MainFrame instance;
 	
@@ -67,7 +72,6 @@ public class MainFrame extends JFrame {
 	private List<File>supporingjars;
 	private List<File>sources;
 	private final JSplitPane sourcesplitPane;
-	private static JTextPane txtrSource=null;
 	private static JTextPane source_annotatedDisplayArea;
 	private final JTextArea consoletextArea;
 	private final JTree source_annotateDirTree;
@@ -149,6 +153,7 @@ public class MainFrame extends JFrame {
 		JMenuItem mntmAbout = new JMenuItem("About");
 		mntmAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				@SuppressWarnings("unused")
 				About abtinstance = About.inst(instance);
 				
 			}
@@ -430,12 +435,12 @@ public class MainFrame extends JFrame {
 				else if(isLeaf(selected.getUserObject())){
 					File selectedfile = (File)selected.getUserObject();
 					if(selectedfile.getAbsolutePath().endsWith(".java")){
-						txtrSource.setContentType("text/plain");
+						source_annotatedDisplayArea.setContentType("text/plain");
 					}else if(selectedfile.getAbsolutePath().endsWith(".html")){
-						txtrSource.setContentType("text/html");
-						txtrSource.setEditorKit(new HTMLEditorKit());
-						ToolTipManager.sharedInstance().registerComponent(txtrSource);
-						txtrSource.addHyperlinkListener(new HyperlinkListener(){
+						source_annotatedDisplayArea.setContentType("text/html");
+						source_annotatedDisplayArea.setEditorKit(new HTMLEditorKit());
+						ToolTipManager.sharedInstance().registerComponent(source_annotatedDisplayArea);
+						source_annotatedDisplayArea.addHyperlinkListener(new HyperlinkListener(){
 						String tooltip;
 							@Override
 							public void hyperlinkUpdate(HyperlinkEvent e) {
@@ -470,9 +475,9 @@ public class MainFrame extends JFrame {
 								allString+="\n";
 							}
 							
-							txtrSource.setText("");
-							txtrSource.setText(allString);
-							txtrSource.setCaretPosition(0);
+							source_annotatedDisplayArea.setText("");
+							source_annotatedDisplayArea.setText(allString);
+							source_annotatedDisplayArea.setCaretPosition(0);
 					} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -555,6 +560,9 @@ public class MainFrame extends JFrame {
 	}
 	public JTable getStatisticTable(){
 		return statistictable;
+	}
+	public JTable getCommonAssetTable(){
+		return comassettable;
 	}
 	public JTree getTree(){
 		return source_annotateDirTree;

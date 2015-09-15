@@ -19,6 +19,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import Patch.Hadoop.CommonAss.AssetType;
+import Patch.Hadoop.CommonAss.CommonAssetWriteToTable;
 import Patch.Hadoop.Job.JobAnnotate;
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobMethodBind;
@@ -197,11 +198,16 @@ public class ProjectParser {
 		}
 		
 	}
-	public void collectData(){
+	public void collectStatisiticData(){
 		if(vreAnalyzerCommandLine.isSourceBinding()){
 			JobDataCollector.inst().parse(jobtoHub);
 			// show data
 			JobDataWriteToTable.inst().showData(jobtoHub);
+		}
+	}
+	public void collectCommonAssetData(){
+		if(vreAnalyzerCommandLine.isSourceBinding()){
+			CommonAssetWriteToTable.inst().showData(JobDataCollector.inst().getCommonAssets());
 		}
 	}
 	public void runProjectParser(){
@@ -222,7 +228,8 @@ public class ProjectParser {
 		System.out.println("# Shadow:\t"+numShadow);
 		// annotated job and binding information
 		Annotate();
-		collectData();
+		collectStatisiticData();
+		collectCommonAssetData();
 	}
 	
 	public void Parse(){
@@ -395,7 +402,7 @@ public class ProjectParser {
 							JobHub jobinstance = getjobHub(usevar);
 							if(jobinstance==null)
 								continue;
-							CodeBlock cb = new CodeBlock(usevar, cfgNode, sootmethod);
+							CodeBlock cb = CodeBlock.tryToCreate(usevar, cfgNode, sootmethod);
 							jobinstance.addUse(sootmethod.getDeclaringClass(),cb);
 							JobVariable job = jobinstance.getJob();
 							// contains job -> invoke method
@@ -413,13 +420,13 @@ public class ProjectParser {
 										CFG bindcfg = ProgramFlowBuilder.inst().getCFG(sm);
 										bindcfgnodess.addAll(bindcfg.getNodes());
 									}
-									CodeBlock cBlock = new CodeBlock(bindcfgnodess, bindsc);
+									CodeBlock cBlock = CodeBlock.tryToCreate(bindcfgnodess, bindsc);
 									jobinstance.addUse(bindsc, cBlock);
 									
 								}else if(bindType==AssetType.Method){
 									CFG bindcfg = ProgramFlowBuilder.inst().getCFG(bindingsm.get(0));
 									List<CFGNode>bindcfgnodess = bindcfg.getNodes();
-									CodeBlock mBlock = new CodeBlock(bindcfgnodess,bindingsm.get(0));
+									CodeBlock mBlock = CodeBlock.tryToCreate(bindcfgnodess,bindingsm.get(0));
 									jobinstance.addUse(bindingsm.get(0).getDeclaringClass(), mBlock);
 								}
 								
@@ -438,7 +445,7 @@ public class ProjectParser {
 		}
 	}
 	public void defineJob(Variable defvar,NodeDefUses cfgNode,Stmt stmt){
-		CodeBlock jobblock = new CodeBlock(defvar,cfgNode,cfgNode.getMethod());
+		CodeBlock jobblock = CodeBlock.tryToCreate(defvar,cfgNode,cfgNode.getMethod());
 		JobVariable jvb = new JobVariable(defvar,jobblock);
 		if(!containjobvar(jvb)){
 			Value defValue = defvar.getValue();

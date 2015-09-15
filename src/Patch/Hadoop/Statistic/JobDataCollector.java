@@ -1,8 +1,10 @@
 package Patch.Hadoop.Statistic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,8 +23,10 @@ import Patch.Hadoop.Job.JobVariable;
 public class JobDataCollector {
 	public static JobDataCollector instance;
 	protected Map<JobVariable,JobStatistic>jobToStatistic;
+	protected List<CommonAsset>commonassets;// id to common assets
 	public JobDataCollector(){
 		jobToStatistic = new HashMap<JobVariable,JobStatistic>();
+		commonassets = new ArrayList<CommonAsset>();
 	}
 	public static JobDataCollector inst(){
 		if(instance==null)
@@ -55,7 +59,7 @@ public class JobDataCollector {
 					Set<JobVariable> bindingjobs = bmTag.getJobs();
 					Set<Integer>lines = null;
 					int line = 0;
-					boolean startFromSource = false;
+					
 					for(CFGNode cfgNode:block.getCFGNodes()){
 						if(cfgNode.isSpecial())
 							continue;
@@ -63,7 +67,7 @@ public class JobDataCollector {
 						SourceLocationTag slcTag = (SourceLocationTag) stmt.getTag(SourceLocationTag.TAG_NAME);
 						if(slcTag.getTagType()==LocationType.SOURCE_TAG){// start from java source code
 							lines = new HashSet<Integer>();
-							startFromSource= true;
+							
 							for(int i = slcTag.getStartLineNumber();i <= slcTag.getEndLineNumber();i++){
 								lines.add(i);
 							}
@@ -71,7 +75,7 @@ public class JobDataCollector {
 						}
 						
 						else{// start from bytecode
-							startFromSource = false;
+							
 							line = slcTag.getStartLineNumber();	
 							jobstat.addUseStmts(blockentry.getKey(), line);
 						}
@@ -98,9 +102,11 @@ public class JobDataCollector {
 					*/
 						if(bindingjobs.size()>1){
 							CommonAsset comasst;
+							
 							for(JobVariable jb:bindingjobs){
 								jobtoHub.get(jb).addSharedUse(block);
-								comasst = new CommonAsset(block, jb.getAnnotatedColor(), jb);
+								comasst = new CommonAsset(block,lines.size(), jb.getAnnotatedColor(), jb);
+								commonassets.add(comasst);
 								if(jobToStatistic.containsKey(jb)){
 									jobToStatistic.get(jb).addReuseAsset(blockentry.getKey(),comasst,lines);
 								}else{
@@ -118,5 +124,8 @@ public class JobDataCollector {
 			
 		}
 		
+	}
+	public List<CommonAsset> getCommonAssets(){
+		return commonassets;
 	}
 }
