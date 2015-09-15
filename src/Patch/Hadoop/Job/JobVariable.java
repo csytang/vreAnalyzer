@@ -2,6 +2,10 @@ package Patch.Hadoop.Job;
 
 import java.awt.Color;
 import java.io.File;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import soot.SootClass;
 import soot.SootMethod;
@@ -20,9 +24,11 @@ public class JobVariable{
 	SootMethod sm;
 	CFGNode cfgNode;
 	CodeBlock jobNodeBlock;
+	String hexColor;
 	File sourceFile;
 	int jobId;
 	private Color jobColor;
+	private static Map<String,Set<JobVariable>>hexColorToJob = new HashMap<String,Set<JobVariable>>();
 	
 	public JobVariable(Variable val,CodeBlock block) {
 		
@@ -37,6 +43,15 @@ public class JobVariable{
 		if(vreAnalyzerCommandLine.isSourceBinding()&&vreAnalyzerCommandLine.isStartFromGUI()){
 			RandomColor rcolor = new RandomColor();
 			jobColor = rcolor.getColor();
+			String hex = Integer.toHexString(jobColor.getRGB() & 0xffffff);
+			if (hex.length() < 6) {
+			    hex = "0" + hex;
+			}
+			hex = "#" + hex;
+			hexColor = hex;
+			Set<JobVariable>jobs = new HashSet<JobVariable>();
+			jobs.add(this);
+			JobVariable.hexColorToJob.put(hex, jobs);
 		}
 		// write this job to file
 		if(sourceFile!=null){
@@ -104,7 +119,14 @@ public class JobVariable{
 		// TODO Auto-generated method stub
 		return jobId;
 	}
-	
-
+	public String getHexColor(){
+		return hexColor;
+	}
+	public static Map<String,Set<JobVariable>> getJobColorMap(){
+		return hexColorToJob;
+	}
+	public static Set<JobVariable> getJobVariableFromhexColor(String hexColor){
+		return hexColorToJob.get(hexColor);
+	}
 	
 }

@@ -2,11 +2,13 @@ package Patch.Hadoop.CommonAss;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import Patch.Hadoop.Job.JobVariable;
+import vreAnalyzer.Elements.CodeBlock;
 import vreAnalyzer.UI.MainFrame;
 
 
@@ -18,20 +20,31 @@ public class CommonAssetWriteToTable {
 			instance = new CommonAssetWriteToTable();
 		return instance;
 	}
-	public void showData(List<CommonAsset> commonAssets) {
+	
+	public void showData(Map<CodeBlock,CommonAsset> commonAssets) {
 		// TODO Auto-generated method stub
 		JTable commonassets = MainFrame.inst().getCommonAssetTable();
 		DefaultTableModel commonassetmodel = (DefaultTableModel)commonassets.getModel();
-		for(int i = 0;i < commonAssets.size();i++){
-			//"CommonAsset ID","Color","LOC","Shared Feature IDs","Element Type"
-			CommonAsset asset = commonAssets.get(i);
+		for(Map.Entry<CodeBlock, CommonAsset>entry:commonAssets.entrySet()){
+			CommonAsset asset = entry.getValue();
+			int id = asset.getAssetId();
 			List<JobVariable>jobs = asset.getJobs();
-			List<Integer>ids = new LinkedList<Integer>();
+			String idString = "[";
 			for(JobVariable jb:jobs){
-				ids.add(jb.getJobId());
+				idString+=jb.getJobId()+",";
 			}
-			commonassetmodel.addRow(new Object[]{i,asset.getColor(),asset.getLOC(),ids,asset.getType()});
+			idString+="]";
+			if(asset.getType()==AssetType.Class){
+				commonassetmodel.addRow(new Object[]{id,asset.getColor(),asset.getLOC(),idString,asset.getType()+":"+asset.getSootClass().getName()});
+			}else if(asset.getType()==AssetType.Method){
+				commonassetmodel.addRow(new Object[]{id,asset.getColor(),asset.getLOC(),idString,asset.getType()+":"+asset.getSootMethod().getName()});
+			}else if(asset.getType()==AssetType.Argument||
+					asset.getType()==AssetType.Field||
+					asset.getType()==AssetType.Local){
+				commonassetmodel.addRow(new Object[]{id,asset.getColor(),asset.getLOC(),idString,asset.getType()+":"+asset.getVariable().toString()});
+			}
 		}
+		
 	}
 	
 	

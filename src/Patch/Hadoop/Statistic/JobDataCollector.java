@@ -1,10 +1,8 @@
 package Patch.Hadoop.Statistic;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,12 +19,14 @@ import Patch.Hadoop.Job.JobVariable;
 
 
 public class JobDataCollector {
+	
 	public static JobDataCollector instance;
 	protected Map<JobVariable,JobStatistic>jobToStatistic;
-	protected List<CommonAsset>commonassets;// id to common assets
+	
+	private boolean startFromSource = false;
 	public JobDataCollector(){
 		jobToStatistic = new HashMap<JobVariable,JobStatistic>();
-		commonassets = new ArrayList<CommonAsset>();
+		
 	}
 	public static JobDataCollector inst(){
 		if(instance==null)
@@ -57,7 +57,7 @@ public class JobDataCollector {
 				for(CodeBlock block:blocks){
 					BlockMarkedTag bmTag = block.getTag(BlockMarkedTag.TAG_NAME);
 					Set<JobVariable> bindingjobs = bmTag.getJobs();
-					Set<Integer>lines = null;
+					Set<Integer>lines = new HashSet<Integer>();
 					int line = 0;
 					
 					for(CFGNode cfgNode:block.getCFGNodes()){
@@ -66,8 +66,7 @@ public class JobDataCollector {
 						Stmt stmt = cfgNode.getStmt();
 						SourceLocationTag slcTag = (SourceLocationTag) stmt.getTag(SourceLocationTag.TAG_NAME);
 						if(slcTag.getTagType()==LocationType.SOURCE_TAG){// start from java source code
-							lines = new HashSet<Integer>();
-							
+							startFromSource = true;
 							for(int i = slcTag.getStartLineNumber();i <= slcTag.getEndLineNumber();i++){
 								lines.add(i);
 							}
@@ -75,19 +74,24 @@ public class JobDataCollector {
 						}
 						
 						else{// start from bytecode
-							
+							startFromSource = false;
 							line = slcTag.getStartLineNumber();	
+							lines.add(line);
 							jobstat.addUseStmts(blockentry.getKey(), line);
 						}
 					}
 					/////
-					/**
-					if(startFromSource){// start from java source code
+					
 						if(bindingjobs.size()>1){
-							CommonAsset comasst;
+							CommonAsset comasst = null;
+							boolean firstTime = true;
 							for(JobVariable jb:bindingjobs){
 								jobtoHub.get(jb).addSharedUse(block);
-								comasst = new CommonAsset(block, jb.getAnnotatedColor(), jb);
+								if(firstTime){
+									comasst =  CommonAsset.tryToCreate(block,lines.size(), bindingjobs);
+									
+									firstTime = false;
+								}
 								if(jobToStatistic.containsKey(jb)){
 									jobToStatistic.get(jb).addReuseAsset(blockentry.getKey(),comasst,lines);
 								}else{
@@ -95,28 +99,9 @@ public class JobDataCollector {
 									dependstatis.addReuseAsset(blockentry.getKey(),comasst,lines);
 									jobToStatistic.put(jb, dependstatis);
 								}
-								
 							}
 						}
-					}else{
-					*/
-						if(bindingjobs.size()>1){
-							CommonAsset comasst;
-							
-							for(JobVariable jb:bindingjobs){
-								jobtoHub.get(jb).addSharedUse(block);
-								comasst = new CommonAsset(block,lines.size(), jb.getAnnotatedColor(), jb);
-								commonassets.add(comasst);
-								if(jobToStatistic.containsKey(jb)){
-									jobToStatistic.get(jb).addReuseAsset(blockentry.getKey(),comasst,lines);
-								}else{
-									JobStatistic dependstatis = new JobStatistic(jb);
-									dependstatis.addReuseAsset(blockentry.getKey(),comasst,line);
-									jobToStatistic.put(jb, dependstatis);
-								}
-							}
-						}
-					//}
+					
 					/////
 				}
 			}
@@ -125,7 +110,7 @@ public class JobDataCollector {
 		}
 		
 	}
-	public List<CommonAsset> getCommonAssets(){
-		return commonassets;
+	public Map<CodeBlock,CommonAsset> getCommonAssets(){
+		return CommonAsset.getBlockToAsset();
 	}
 }

@@ -8,13 +8,19 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import Patch.Hadoop.CommonAss.CommonAsset;
+import Patch.Hadoop.Job.JobVariable;
 
 
 public class HTMLAnnotation {
 	static Color annotateColor = null;
+	private static JobVariable currJob;
 	// background <span style="background-color:red">xxx(text)</span>
 	/**
 	 * 
@@ -26,14 +32,10 @@ public class HTMLAnnotation {
 	 * @param annotatedColor
 	 */
 	
-	public static void annotateHTML(String hovertext,File htmlFile,int startline,int startcolumn,int endline,int endcolumn,Color annotatedColor,Map<String,String> htmlToJava){
+	public static void annotateHTML(JobVariable job,String hovertext,File htmlFile,int startline,int startcolumn,int endline,int endcolumn,Map<String,String> htmlToJava){
 		try {
-			annotateColor = annotatedColor;
-			String hex = Integer.toHexString(annotateColor.getRGB() & 0xffffff);
-			if (hex.length() < 6) {
-			    hex = "0" + hex;
-			}
-			hex = "#" + hex;
+			currJob = job;
+			String hex = job.getHexColor();
 			FileReader htmlReader = new FileReader(htmlFile);
 			
 			BufferedReader brhtml = new BufferedReader(htmlReader);
@@ -109,18 +111,14 @@ public class HTMLAnnotation {
 		
 		
 	}
-	public static void annotateHTML(String hovertext,File htmlFile, int lineNumber,Color annotatedColor, Map<String, String> htmlToJava) {
+	public static void annotateHTML(JobVariable job, String hovertext,File htmlFile, int lineNumber, Map<String, String> htmlToJava) {
 		// TODO Auto-generated method stub
+		currJob = job;
 		try {
 			if(lineNumber<=1)
 				return;
 			
-			annotateColor = annotatedColor;
-			String hex = Integer.toHexString(annotateColor.getRGB() & 0xffffff);
-			if (hex.length() < 6) {
-			    hex = "0" + hex;
-			}
-			hex = "#" + hex;
+			String hex = job.getHexColor();
 			FileReader htmlReader = new FileReader(htmlFile);
 			
 			BufferedReader brhtml = new BufferedReader(htmlReader);
@@ -269,6 +267,7 @@ public class HTMLAnnotation {
 			e.printStackTrace();
 		}
 	}
+	
 	public static void annotatemultipleLineHTML(String hovertext,File htmlFile,int[] lines,Color annotatedColor,Map<String,String> htmlToJava){
 		try {
 			annotateColor = annotatedColor;
@@ -359,13 +358,27 @@ public class HTMLAnnotation {
 				// insert title first
 				merged = new StringBuilder(merged).insert(ortitleindex, spantitle).toString();
 				
-				// 2. color index
-				int orcolorindex = merged.indexOf("\" style=\"background-color:")+"\" style=\"background-color:".length();
-				// int spancolorindex = spanStart.indexOf("\" style=\"background-color:")+"\" style=\"background-color:".length();		
-				// int spancolorendindex = spanStart.indexOf("\">");
-				// String spanhxcolr = spanStart.substring(spancolorindex, spancolorendindex);
 				
-				// merged = new StringBuilder(merged).insert(orcolorindex, spanhxcolr).toString();
+				// 2. color index
+				// Turn to CommonAsset find the mapping color
+				
+				int orcolorindex = merged.indexOf("\" style=\"background-color:")+"\" style=\"background-color:".length();
+				int orcolorendindex = merged.indexOf("\">");
+				String orcolor = merged.substring(orcolorindex, orcolorendindex);
+				Set<JobVariable> jbvars = JobVariable.getJobVariableFromhexColor(orcolor);
+				Set<JobVariable>currjobslist = new HashSet<JobVariable>();		
+				currjobslist.addAll(jbvars);
+				currjobslist.add(currJob);
+				Color mergedColor = CommonAsset.getCommonColor(currjobslist);
+				
+				String hex = Integer.toHexString(mergedColor.getRGB() & 0xffffff);
+				if (hex.length() < 6) {
+				    hex = "0" + hex;
+				}
+				hex = "#" + hex;
+				// add this mapping to the set
+				JobVariable.getJobColorMap().put(hex, currjobslist);
+				merged = new StringBuilder(merged).replace(orcolorindex, orcolorendindex, hex).toString();
 				return merged;
 			}
 		}else{

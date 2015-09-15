@@ -1,4 +1,5 @@
 package Patch.Hadoop;
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -16,6 +17,7 @@ import java.util.Set;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import Patch.Hadoop.CommonAss.AssetType;
@@ -165,7 +167,7 @@ public class ProjectParser {
 			
 			Patch.Hadoop.Job.JobAnnotate jobannot = new Patch.Hadoop.Job.JobAnnotate(job,htmlFile);
 		}
-		addLegendListener();
+		
 		JTree mainFrameTree = MainFrame.inst().getTree();
 		mainFrameTree.setCellRenderer(new TreeCellRender(allannotatedFiles));
 	}
@@ -188,15 +190,22 @@ public class ProjectParser {
 		
 		
 	}
-	public void Annotate(){
+	public void annotate(){
 		// 1. Following will only be allowed if it is started from GUI and source is binded
 		// Annotated all jobs with selected color;
 		if(vreAnalyzerCommandLine.isSourceBinding()){
 			// 2. Following will annoated use of job
 			ProjectParser.inst().annotateallJobs();
 			ProjectParser.inst().annotateallJobUses();
+			
 		}
 		
+	}
+	public static Color hex2Rgb(String colorStr) {
+	    return new Color(
+	            Integer.valueOf( colorStr.substring( 1, 3 ), 16 ),
+	            Integer.valueOf( colorStr.substring( 3, 5 ), 16 ),
+	            Integer.valueOf( colorStr.substring( 5, 7 ), 16 ) );
 	}
 	public void collectStatisiticData(){
 		if(vreAnalyzerCommandLine.isSourceBinding()){
@@ -227,9 +236,28 @@ public class ProjectParser {
 		System.out.println("# Jobs:\t"+numjobs);
 		System.out.println("# Shadow:\t"+numShadow);
 		// annotated job and binding information
-		Annotate();
+		annotate();
 		collectStatisiticData();
 		collectCommonAssetData();
+		// 3. add the annotated color to legend
+		JTable jobColorMapTable = MainFrame.inst().getJobColorMapTable();
+		DefaultTableModel model = (DefaultTableModel)jobColorMapTable.getModel();
+		Map<String,Set<JobVariable>>hexColorToJob = JobVariable.getJobColorMap();
+		for(Map.Entry<String, Set<JobVariable>>entry:hexColorToJob.entrySet()){
+			Color color = hex2Rgb(entry.getKey());
+			String jobsString = "[";
+			for(JobVariable jb:entry.getValue()){
+				jobsString+=jb.getJobId();
+				jobsString+=":";
+			}
+			jobsString = jobsString.substring(0, jobsString.length()-1);
+			jobsString+="]";
+			model.addRow(new Object[]{jobsString,color});
+		}
+					
+		addLegendListener();
+		
+		
 	}
 	
 	public void Parse(){

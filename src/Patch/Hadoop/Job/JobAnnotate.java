@@ -5,9 +5,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-
 import soot.jimple.Stmt;
 import vreAnalyzer.Tag.SourceLocationTag;
 import vreAnalyzer.Tag.SourceLocationTag.LocationType;
@@ -31,9 +28,7 @@ public class JobAnnotate {
 		annotatedColor = job.getAnnotatedColor();
 		jobstmt = job.getBlock().getCFGNodes().get(0).getStmt();
 		// set the color job mapping to the MainFrame
-		JTable jobColorMapTable = MainFrame.inst().getJobColorMapTable();
-		DefaultTableModel model = (DefaultTableModel)jobColorMapTable.getModel();
-		model.addRow(new Object[]{job.toString(),annotatedColor});
+		
 		rowToJobId.put(tableRow, job.getJobId());
 		tableRow++;
 		slcTag = (SourceLocationTag) jobstmt.getTag(SourceLocationTag.TAG_NAME);
@@ -43,10 +38,10 @@ public class JobAnnotate {
 			endline = slcTag.getEndLineNumber();
 			endcolumn = slcTag.getEndPos();
 			// annotated source code
-			HTMLAnnotation.annotateHTML(hovertext,htmlFile, startline, startcolumn, endline, endcolumn, annotatedColor,MainFrame.inst().getHTMLToJava());
+			HTMLAnnotation.annotateHTML(job,hovertext,htmlFile, startline, startcolumn, endline, endcolumn,MainFrame.inst().getHTMLToJava());
 		}else{
 			startline = slcTag.getStartLineNumber();
-			HTMLAnnotation.annotateHTML(hovertext,htmlFile, startline, annotatedColor, MainFrame.inst().getHTMLToJava());
+			HTMLAnnotation.annotateHTML(job,hovertext,htmlFile, startline, MainFrame.inst().getHTMLToJava());
 		}
 		
 		
