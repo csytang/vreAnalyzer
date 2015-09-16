@@ -433,7 +433,7 @@ public class ProjectParser {
 							JobHub jobinstance = getjobHub(usevar);
 							if(jobinstance==null)
 								continue;
-							SimpleBlock cb = SimpleBlock.tryToCreate(usevar, cfgNode, sootmethod);
+							SimpleBlock cb = SimpleBlock.tryToCreate(cfgNode, sootmethod);
 							jobinstance.addUse(sootmethod.getDeclaringClass(),cb);
 							JobVariable job = jobinstance.getJob();
 							// contains job -> invoke method
@@ -476,7 +476,7 @@ public class ProjectParser {
 		}
 	}
 	public void defineJob(Variable defvar,NodeDefUses cfgNode,Stmt stmt){
-		SimpleBlock jobblock = SimpleBlock.tryToCreate(defvar,cfgNode,cfgNode.getMethod());
+		SimpleBlock jobblock = SimpleBlock.tryToCreate(cfgNode,cfgNode.getMethod());
 		JobVariable jvb = new JobVariable(defvar,jobblock);
 		if(!containjobvar(jvb)){
 			Value defValue = defvar.getValue();

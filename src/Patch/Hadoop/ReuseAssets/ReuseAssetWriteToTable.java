@@ -1,6 +1,5 @@
 package Patch.Hadoop.ReuseAssets;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 
 import Patch.Hadoop.Job.JobVariable;
 import vreAnalyzer.Blocks.CodeBlock;
+import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.UI.MainFrame;
 
 
@@ -33,15 +33,21 @@ public class ReuseAssetWriteToTable {
 			for(JobVariable jb:jobs){
 				idString+=jb.getJobId()+",";
 			}
+			idString = idString.substring(0, idString.length()-1);
 			idString+="]";
 			if(asset.getType()==AssetType.Class){
 				commonassetmodel.addRow(new Object[]{id,asset.getColor(),asset.getLOC(),idString,asset.getType()+":"+asset.getSootClass().getName()});
 			}else if(asset.getType()==AssetType.Method){
 				commonassetmodel.addRow(new Object[]{id,asset.getColor(),asset.getLOC(),idString,asset.getType()+":"+asset.getSootMethod().getName()});
-			}else if(asset.getType()==AssetType.Argument||
-					asset.getType()==AssetType.Field||
-					asset.getType()==AssetType.Local){
-				commonassetmodel.addRow(new Object[]{id,asset.getColor(),asset.getLOC(),idString,asset.getType()+":"+asset.getVariable().toString()});
+			}else if(asset.getType()==AssetType.Stmt){
+				List<CFGNode> cfgNodes = asset.getCFGNodes();
+				String cfgIds = "[";
+				for(CFGNode node:cfgNodes){
+					cfgIds+=node.getIdInMethod()+",";
+				}
+				cfgIds = cfgIds.substring(0, cfgIds.length()-1);
+				cfgIds += "]";
+				commonassetmodel.addRow(new Object[]{id,asset.getColor(),asset.getLOC(),idString,asset.getType()+":"+cfgIds});
 			}
 		}
 		

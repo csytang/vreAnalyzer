@@ -1,15 +1,10 @@
 package vreAnalyzer.Blocks;
 
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-
 import Patch.Hadoop.ReuseAssets.AssetType;
 import Patch.Hadoop.Tag.BlockJobTag;
 import soot.SootClass;
 import soot.SootMethod;
-import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
 
 public class CodeBlock {
@@ -20,14 +15,10 @@ public class CodeBlock {
 	 */
 	private AssetType blockType = null;
 	private List<CFGNode>blocks;
-	private List<Variable> variable;// if applicable
 	private SootMethod method;// if applicable
 	private SootClass cls;
 	private BlockJobTag bmtag;
-	
-	public static Map<CFGNode,CodeBlock>valuepool = new HashMap<CFGNode,CodeBlock>();
-	
-	
+	private int blockId = 0;
 	public SootClass getSootClass(){
 		return this.cls;
 	}
@@ -43,19 +34,7 @@ public class CodeBlock {
 	public void setBlocks(List<CFGNode>blocks){
 		this.blocks = blocks;
 	}
-	public List<Variable> getValues(){
-		if(this.blockType.equals(AssetType.Argument)||
-				this.blockType.equals(AssetType.Field)||
-				this.blockType.equals(AssetType.Local)){
-			return this.variable;
-		}
-		return null;
-	}
-	public void addValue(Variable vi){
-		if(this.variable==null)
-			this.variable = new LinkedList<Variable>();
-		this.variable.add(vi);
-	}
+	
 	public AssetType getType(){
 		return this.blockType;
 	}
@@ -92,7 +71,14 @@ public class CodeBlock {
 		}else if(this.blockType==AssetType.Method){
 			return this.method==objBlock.getSootMethod();
 		}else{
-			return this.variable==objBlock.getValues();
+			return this.blocks.equals(objBlock.getCFGNodes());
 		}
+	}
+	public int getBlockId() {
+		// TODO Auto-generated method stub
+		return blockId;
+	}
+	public void setBlockId(int id){
+		blockId = id;
 	}
 }

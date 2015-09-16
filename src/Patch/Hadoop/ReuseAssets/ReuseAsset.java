@@ -13,11 +13,11 @@ import Patch.Hadoop.Job.JobVariable;
 import soot.SootClass;
 import soot.SootMethod;
 import vreAnalyzer.Blocks.CodeBlock;
-import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
+import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.UI.RandomColor;
 
 public class ReuseAsset {
-	public static int globalassetId = 0;
+	
 	private int assetId = 0;
 	private AssetType commonType;
 	private CodeBlock block;
@@ -25,13 +25,13 @@ public class ReuseAsset {
 	private SootClass commonClass = null;
 	private Color color;
 	private List<JobVariable>jobs;
+	private List<CFGNode>cfgNodes;
 	private static Map<CodeBlock,ReuseAsset>blockToAsset = new HashMap<CodeBlock,ReuseAsset>();
 	private static Map<Set<JobVariable>,Color>joblistToColor = new HashMap<Set<JobVariable>,Color>();
 	private int LOC = 0;
 	
 	private ReuseAsset(CodeBlock block,int lineofCode,Collection<JobVariable> joblist){
-		this.assetId = globalassetId;
-		globalassetId++;
+		this.assetId = block.getBlockId();
 		this.block = block;
 		this.LOC = lineofCode;
 		this.commonType = block.getType();
@@ -47,6 +47,8 @@ public class ReuseAsset {
 			this.commonMethod = block.getSootMethod();
 		}else if(this.commonType.equals(AssetType.Class)){
 			this.commonClass = block.getSootClass();
+		}else if(this.commonType.equals(AssetType.Stmt)){
+			this.cfgNodes = block.getCFGNodes();
 		}
 		this.jobs = new LinkedList<JobVariable>();
 		this.jobs.addAll(joblist);
@@ -88,8 +90,8 @@ public class ReuseAsset {
 	public SootMethod getSootMethod(){
 		return commonMethod;
 	}
-	public List<Variable> getVariable(){
-		return block.getValues();
+	public List<CFGNode> getCFGNodes(){
+		return cfgNodes;
 	}
 	public int getAssetId(){
 		return this.assetId;

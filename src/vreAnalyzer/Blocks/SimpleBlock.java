@@ -4,41 +4,54 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import soot.SootMethod;
-import soot.jimple.IdentityRef;
-import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
-import vreAnalyzer.Elements.CFGNode;
+
 import Patch.Hadoop.ReuseAssets.AssetType;
+import soot.SootMethod;
+import vreAnalyzer.Elements.CFGNode;
 
 public class SimpleBlock extends CodeBlock{
-	public static Map<CFGNode,SimpleBlock>valuepool = new HashMap<CFGNode,SimpleBlock>();
+	public static Map<List<CFGNode>,SimpleBlock>valuepool = new HashMap<List<CFGNode>,SimpleBlock>();
+	private static Map<SootMethod,List<SimpleBlock>>methodToBlocks = new HashMap<SootMethod,List<SimpleBlock>>();
 	private List<CFGNode>blocks;
 	
 	
-	public SimpleBlock(Variable variable,CFGNode cfgNode,SootMethod method){
+	public SimpleBlock(List<CFGNode> cfgnodes,SootMethod method){
 		super();
-		super.addValue(variable);
-		if(variable.isLocal()){
-			super.setType(AssetType.Local);
-		}else if(variable.isFieldRef()){
-			super.setType(AssetType.Field);
-		}else if(variable.getValue() instanceof IdentityRef){
-			super.setType(AssetType.Argument);
-		}
 		blocks = new LinkedList<CFGNode>();
-		blocks.add(cfgNode);
+		blocks.addAll(cfgnodes);
 		super.setBlocks(blocks);
 		super.setMethod(method);
 		super.setSootClass(method.getDeclaringClass());
-		valuepool.put(cfgNode, this);
+		super.setType(AssetType.Stmt);
+		valuepool.put(blocks, this);
+		if(methodToBlocks.containsKey(method)){
+			methodToBlocks.get(method).add(this);
+		}else{
+			List<SimpleBlock>blocks = new LinkedList<SimpleBlock>();
+			blocks.add(this);
+			methodToBlocks.put(method, blocks);
+		}
 	}
-	public static SimpleBlock tryToCreate(Variable variable,CFGNode cfgNode,SootMethod method){
-		if(valuepool.containsKey(cfgNode)){
-			SimpleBlock exist = valuepool.get(cfgNode);
-			if(!exist.getValues().contains(variable))
-				exist.addValue(variable);
-			return valuepool.get(variable);
+	
+	public static SimpleBlock tryToCreate(List<CFGNode> cfgnodes,SootMethod method){
+		if(valuepool.containsKey(cfgnodes)){
+			SimpleBlock exist = valuepool.get(cfgnodes);
+			return exist;
 		}else
-			return new SimpleBlock(variable,cfgNode,method);
+			return new SimpleBlock(cfgnodes,method);
+	}
+	public static SimpleBlock tryToCreate(CFGNode cfgnode,SootMethod method){
+		if(methodToBlocks.containsKey(method)){
+			List<SimpleBlock>blocks = methodToBlocks.get(method);
+			for(SimpleBlock block:blocks){
+				if(block.getCFGNodes().contains(cfgnode))
+					return block;
+			}
+			return null;
+		}else{
+			List<CFGNode>list = new LinkedList<CFGNode>();
+			list.add(cfgnode);
+			return new SimpleBlock(list,method);
+		}
 	}
 }

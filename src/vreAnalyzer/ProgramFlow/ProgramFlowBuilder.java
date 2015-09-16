@@ -49,7 +49,7 @@ public class ProgramFlowBuilder {
 	/** Unique index for each method (same order for any execution) */
 	private Map<SootMethod,Integer> mToId = new HashMap<SootMethod, Integer>();
 	
-	private boolean verbose = true;
+	//private boolean verbose = true;
 	//////////////////////////////////////////////////////////////
 
 	
