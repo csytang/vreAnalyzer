@@ -17,14 +17,18 @@ public class MethodBlock extends CodeBlock{
 		super.setMethod(method);
 		super.setSootClass(method.getDeclaringClass());
 		super.setBlockId(blockId);
+		
 		methodpool.put(method, this);
+		
 	}
 	public static MethodBlock tryToCreate(List<CFGNode>cfgNodes,SootMethod method){
 		if(methodpool.containsKey(method)){
-			return methodpool.get(method);
+			MethodBlock methodb = methodpool.get(method);
+			
+			return methodb;
 		}else{
-			int id = BlockGenerator.inst().getBlockId();
-			BlockGenerator.inst().increaseId();
+			int id = BlockGenerator.getBlockId();
+			BlockGenerator.increaseId();
 			return new MethodBlock(cfgNodes,method,id);
 		}
 	}

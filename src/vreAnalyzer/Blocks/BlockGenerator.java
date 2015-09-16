@@ -44,7 +44,7 @@ public class BlockGenerator {
 					// 1. Create method block
 					CFG cfg = ProgramFlowBuilder.inst().getCFG(method);
 					List<CFGNode>nodes = cfg.getNodes();
-					MethodBlock.tryToCreate(nodes, method);
+					addNewBlockToPool(MethodBlock.tryToCreate(nodes, method));
 					classallnode.addAll(nodes);
 					// 2. Create inside method blocks
 					/**
@@ -53,6 +53,7 @@ public class BlockGenerator {
 					 * 
 					 * 2. //"Block ID","LOC","Type","Method(IF)","Class"
 					 */
+					/**
 					CFGNode entry = cfg.ENTRY;
 					List<CFGNode>temp = new LinkedList<CFGNode>();
 					Stack<CFGNode>analysisstack = new Stack<CFGNode>();
@@ -70,24 +71,27 @@ public class BlockGenerator {
 							temp.add(curr.getSuccs().get(0));
 						}
 					}
+					**/
 				}
 			}
 			// 2. Create class block
-			ClassBlock.tryToCreate(classallnode, cls);
+			addNewBlockToPool(ClassBlock.tryToCreate(classallnode, cls));
 		}
 	}
-	public void increaseId(){
+	public static void increaseId(){
 		blockid++;
 	}
-	public int getBlockId(){
+	public static int getBlockId(){
 		return blockid;
 	}
 	public void addNewBlockToPool(CodeBlock block){
 		//2. //"Block ID","Type","Method(IF)","Class"
-		if(block.getType()==AssetType.Class)
-			blockmodel.addRow(new Object[]{block.getBlockId(),block.getType(),"-",block.getSootClass().getName()});
-		else
-			blockmodel.addRow(new Object[]{block.getBlockId(),block.getType(),block.getSootMethod().getName(),block.getSootClass().getName()});
-		blockpool.add(block);
+		if(!blockpool.contains(block)){
+			if(block.getType()==AssetType.Class)
+				blockmodel.addRow(new Object[]{block.getBlockId(),block.getType(),"-",block.getSootClass().getName()});
+			else
+				blockmodel.addRow(new Object[]{block.getBlockId(),block.getType(),block.getSootMethod().getName(),block.getSootClass().getName()});
+			blockpool.add(block);
+		}
 	}
 }

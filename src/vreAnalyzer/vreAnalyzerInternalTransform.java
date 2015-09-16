@@ -1,7 +1,6 @@
 package vreAnalyzer;
 
 import java.util.Map;
-
 import Patch.Hadoop.ProjectParser;
 import soot.SceneTransformer;
 import vreAnalyzer.Blocks.BlockGenerator;
@@ -29,7 +28,7 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 		if(vreAnalyzerCommandLine.inst().isStartFromGUI())
 			BlockGenerator.inst(ProgramFlowBuilder.inst().getAppClasses());
 		System.out.println("[vreAnalyzer] Program flow build[Finish]");
-				
+		/**		
 		System.out.println("[vreAnalyzer] Points to graph build[Start]");
 		PointsToAnalysis.inst().doAnalysis();
 		System.out.println("[vreAnalyzer] Points to graph build[Finish]");
@@ -39,7 +38,7 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 						
 		// Display Reusable Result by checking the mode
 		ProjectParser.inst().runProjectParser();
-				
+		**/
 				
 				
 	}

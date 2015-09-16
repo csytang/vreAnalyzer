@@ -17,14 +17,15 @@ public class ClassBlock extends CodeBlock{
 		super.setType(AssetType.Class);
 		super.setBlocks(new LinkedList<CFGNode>(cfgNodes));
 		super.setSootClass(cls);
+		
 		clspool.put(cls, this);
 	}
 	public static ClassBlock tryToCreate(List<CFGNode>cfgNodes,SootClass cls){
 		if(clspool.containsKey(cls)){
 			return clspool.get(cls);
 		}else{
-			int id = BlockGenerator.inst().getBlockId();
-			BlockGenerator.inst().increaseId();
+			int id = BlockGenerator.getBlockId();
+			BlockGenerator.increaseId();
 			return new ClassBlock(cfgNodes,cls,id);
 		}
 	}

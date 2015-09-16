@@ -19,6 +19,7 @@ public class CodeBlock {
 	private SootClass cls;
 	private BlockJobTag bmtag;
 	private int blockId = 0;
+	
 	public SootClass getSootClass(){
 		return this.cls;
 	}
@@ -28,6 +29,7 @@ public class CodeBlock {
 	public SootMethod getSootMethod(){
 		return this.method;
 	}
+	
 	public List<CFGNode> getCFGNodes(){
 		return this.blocks;
 	}
