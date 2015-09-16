@@ -1,23 +1,18 @@
 package vreAnalyzer.UI;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Desktop;
-import java.awt.Frame;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.JButton;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-
 import javax.swing.JDialog;
 import javax.swing.JTabbedPane;
 import javax.swing.JScrollPane;

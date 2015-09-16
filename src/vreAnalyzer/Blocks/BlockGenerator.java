@@ -8,6 +8,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import Patch.Hadoop.ReuseAssets.AssetType;
+import soot.Modifier;
 import soot.SootClass;
 import soot.SootMethod;
 import vreAnalyzer.ControlFlowGraph.CFG;
@@ -40,7 +41,8 @@ public class BlockGenerator {
 			List<SootMethod>clsmethods = cls.getMethods();
 			List<CFGNode>classallnode = new LinkedList<CFGNode>();
 			for(SootMethod method:clsmethods){
-				if(method.getTag(MethodTag.TAG_NAME)!=null){
+				if(method.getTag(MethodTag.TAG_NAME)!=null&&
+						!Modifier.isVolatile(method.getModifiers())){
 					// 1. Create method block
 					CFG cfg = ProgramFlowBuilder.inst().getCFG(method);
 					List<CFGNode>nodes = cfg.getNodes();
@@ -53,14 +55,14 @@ public class BlockGenerator {
 					 * 
 					 * 2. //"Block ID","LOC","Type","Method(IF)","Class"
 					 */
-					/**
+					
 					CFGNode entry = cfg.ENTRY;
 					List<CFGNode>temp = new LinkedList<CFGNode>();
 					Stack<CFGNode>analysisstack = new Stack<CFGNode>();
 					analysisstack.push(entry);
+					//DFS
 					while(!analysisstack.isEmpty()){
 						CFGNode curr = analysisstack.pop();
-						temp.add(curr);
 						for(CFGNode next:curr.getSuccs()){
 							analysisstack.push(next);
 						}
@@ -71,7 +73,7 @@ public class BlockGenerator {
 							temp.add(curr.getSuccs().get(0));
 						}
 					}
-					**/
+					
 				}
 			}
 			// 2. Create class block

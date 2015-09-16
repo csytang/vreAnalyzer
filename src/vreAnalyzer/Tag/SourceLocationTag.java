@@ -2,7 +2,6 @@ package vreAnalyzer.Tag;
 
 import soot.tagkit.AttributeValueException;
 import soot.tagkit.Host;
-import soot.tagkit.LineNumberTag;
 import soot.tagkit.SourceLnPosTag;
 import soot.tagkit.Tag;
 import soot.SootMethod;

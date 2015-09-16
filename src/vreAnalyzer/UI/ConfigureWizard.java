@@ -27,6 +27,7 @@ public class ConfigureWizard extends JDialog {
 	public static ConfigureWizard inst(NewProjectPanel owner){
 		if(instance==null)
 			instance=new ConfigureWizard(owner);
+		ConfigureWizard.instance.setVisible(true);
 		return instance;
 	}
 	
@@ -94,6 +95,6 @@ public class ConfigureWizard extends JDialog {
 		}
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
-		setVisible(true);
+		
 	}
 }

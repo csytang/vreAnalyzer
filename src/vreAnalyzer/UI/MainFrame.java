@@ -183,7 +183,6 @@ public class MainFrame extends JFrame {
 			}
 		));
 		
-		
 		JPanel sourcepanel = new JPanel();
 		sourcesplitPane.setRightComponent(sourcepanel);
 		sourcepanel.setLayout(new BorderLayout(0, 0));
