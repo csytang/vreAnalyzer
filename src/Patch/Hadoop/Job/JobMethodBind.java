@@ -2,7 +2,7 @@ package Patch.Hadoop.Job;
 import java.util.LinkedList;
 import java.util.List;
 
-import Patch.Hadoop.CommonAss.AssetType;
+import Patch.Hadoop.ReuseAssets.AssetType;
 import soot.Modifier;
 import soot.SootClass;
 import soot.SootMethod;

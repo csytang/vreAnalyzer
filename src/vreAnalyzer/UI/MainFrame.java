@@ -88,7 +88,8 @@ public class MainFrame extends JFrame {
 	private final JTable legendtable;
 	private static Map<String,String>htmlToJava;
 	private final JTable statistictable;
-	private JTable comassettable;
+	private JTable reusetable;
+	private JTable variantstable;
 	
 	public static void main(String[] args) {
 		classnametoSource = new HashMap<String,File>();
@@ -236,14 +237,22 @@ public class MainFrame extends JFrame {
         
 		consolePane.setViewportView(consoletextArea);
 		
-		JScrollPane comassetPane = new JScrollPane();
-		tabbedPane.addTab("Common Assets", new ImageIcon(MainFrame.class.getResource("/image/common.png")), comassetPane, null);
+		JScrollPane reusePane = new JScrollPane();
+		tabbedPane.addTab("Reuse Assets", new ImageIcon(MainFrame.class.getResource("/image/common.png")), reusePane, "Code assets reuse by two or more features");
 		
-		String commonassetheaders[] = {"CommonAsset ID","Color","LOC","Shared Feature IDs","Element Type"};
-		DefaultTableModel coommonassettableModel = new DefaultTableModel(null,commonassetheaders);
-		comassettable = new JTable(coommonassettableModel);
-		comassettable.getTableHeader().setReorderingAllowed(false);
-		comassetPane.setViewportView(comassettable);
+		String reuseheaders[] = {"ReuseAsset ID","Color","LOC","Feature IDs","Element Type"};
+		DefaultTableModel coommonassettableModel = new DefaultTableModel(null,reuseheaders);
+		reusetable = new JTable(coommonassettableModel);
+		reusetable.getTableHeader().setReorderingAllowed(false);
+		reusePane.setViewportView(reusetable);
+		
+		JScrollPane variantBlockPane = new JScrollPane();
+		tabbedPane.addTab("Variant Blocks", new ImageIcon(MainFrame.class.getResource("/image/variants.png")), variantBlockPane, null);
+		String variantsheaders[] = {"Variant ID","LOC","Features(IF)","Seperators"};
+		DefaultTableModel varitableModel = new DefaultTableModel(null,variantsheaders);
+		variantstable = new JTable(varitableModel);
+		variantstable.getTableHeader().setReorderingAllowed(false);
+		variantBlockPane.setViewportView(variantstable);
 		
 		JScrollPane statisticsPane = new JScrollPane();
 		
@@ -562,7 +571,7 @@ public class MainFrame extends JFrame {
 		return statistictable;
 	}
 	public JTable getCommonAssetTable(){
-		return comassettable;
+		return reusetable;
 	}
 	public JTree getTree(){
 		return source_annotateDirTree;

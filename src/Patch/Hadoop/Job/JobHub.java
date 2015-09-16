@@ -2,8 +2,9 @@ package Patch.Hadoop.Job;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+
 import soot.SootClass;
-import vreAnalyzer.Elements.CodeBlock;
+import vreAnalyzer.Blocks.CodeBlock;
 
 
 public class JobHub {
@@ -23,7 +24,6 @@ public class JobHub {
 		}
 		jobUsesSequence.get(sc).add(blocknode);
 	}
-	
 	
 	/**
 	 * add a shared cfgNode to this job

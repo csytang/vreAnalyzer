@@ -8,11 +8,11 @@ import java.util.Map;
 import java.util.Set;
 
 import soot.SootClass;
-import vreAnalyzer.Elements.CodeBlock;
+import vreAnalyzer.Blocks.CodeBlock;
 import Patch.Hadoop.ProjectParser;
-import Patch.Hadoop.CommonAss.CommonAsset;
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobVariable;
+import Patch.Hadoop.ReuseAssets.ReuseAsset;
 
 public class JobStatistic {
 	JobVariable job;
@@ -20,7 +20,7 @@ public class JobStatistic {
 	int reuseCode = 0;
 	int loc = 0;
 	Map<SootClass,LinkedList<CodeBlock>>jobUsesSequence;
-	Set<CommonAsset>reuseCodeAsset;
+	Set<ReuseAsset>reuseCodeAsset;
 	Map<SootClass,Set<Integer>>methodCodeLines;
 	Map<SootClass,Set<Integer>>reuseMethodCodeLines;
 	public JobStatistic(JobVariable jobvar){
@@ -30,7 +30,7 @@ public class JobStatistic {
 		jobUsesSequence = jobhub.getjobUse();
 		methodCodeLines = new HashMap<SootClass,Set<Integer>>();
 		reuseMethodCodeLines = new HashMap<SootClass,Set<Integer>>();
-		reuseCodeAsset = new HashSet<CommonAsset>();
+		reuseCodeAsset = new HashSet<ReuseAsset>();
 	}
 	public void addUseStmts(SootClass sootcls,int sourceline){
 		if(!methodCodeLines.containsKey(sootcls)){
@@ -47,7 +47,7 @@ public class JobStatistic {
 			methodCodeLines.get(sootcls).addAll(sourcelines);
 	}
 	
-	public void addReuseAsset(SootClass sootcls,CommonAsset commonass,int reuseline){
+	public void addReuseAsset(SootClass sootcls,ReuseAsset commonass,int reuseline){
 		if(!reuseMethodCodeLines.containsKey(sootcls)){
 			reuseMethodCodeLines.put(sootcls, new HashSet<Integer>());
 			reuseMethodCodeLines.get(sootcls).add(reuseline);
@@ -55,7 +55,7 @@ public class JobStatistic {
 			reuseMethodCodeLines.get(sootcls).add(reuseline);
 		reuseCodeAsset.add(commonass);
 	}
-	public void addReuseAsset(SootClass sootcls,CommonAsset commonass,Set<Integer> reuselines){
+	public void addReuseAsset(SootClass sootcls,ReuseAsset commonass,Set<Integer> reuselines){
 		if(!reuseMethodCodeLines.containsKey(sootcls)){
 			reuseMethodCodeLines.put(sootcls, new HashSet<Integer>());
 			reuseMethodCodeLines.get(sootcls).addAll(reuselines);

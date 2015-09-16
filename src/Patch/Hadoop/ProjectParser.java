@@ -20,15 +20,16 @@ import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import Patch.Hadoop.CommonAss.AssetType;
-import Patch.Hadoop.CommonAss.CommonAssetWriteToTable;
 import Patch.Hadoop.Job.JobAnnotate;
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobMethodBind;
 import Patch.Hadoop.Job.JobUseAnnotate;
 import Patch.Hadoop.Job.JobVariable;
+import Patch.Hadoop.ReuseAssets.AssetType;
+import Patch.Hadoop.ReuseAssets.ReuseAssetWriteToTable;
 import Patch.Hadoop.Statistic.JobDataCollector;
 import Patch.Hadoop.Statistic.JobDataWriteToTable;
+import Patch.Hadoop.Tag.BlockJobTag;
 import soot.Local;
 import soot.RefLikeType;
 import soot.RefType;
@@ -44,17 +45,19 @@ import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
 import soot.jimple.internal.JNewExpr;
 import vreAnalyzer.vreAnalyzerCommandLine;
+import vreAnalyzer.Blocks.ClassBlock;
+import vreAnalyzer.Blocks.CodeBlock;
+import vreAnalyzer.Blocks.MethodBlock;
+import vreAnalyzer.Blocks.SimpleBlock;
 import vreAnalyzer.Context.Context;
 import vreAnalyzer.ControlFlowGraph.CFG;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
 import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
-import vreAnalyzer.Elements.CodeBlock;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.PointsTo.PointsToGraph;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
-import vreAnalyzer.Tag.BlockMarkedTag;
 import vreAnalyzer.UI.MainFrame;
 import vreAnalyzer.UI.SourceClassBinding;
 import vreAnalyzer.UI.TreeCellRender;
@@ -155,10 +158,10 @@ public class ProjectParser {
 			File htmlFile = new File(htmlfileName);
 			allannotatedFiles.add(htmlFile);
 			CodeBlock jobblock = job.getBlock();
-			BlockMarkedTag smkTag;
+			BlockJobTag smkTag;
 			// add job marked tag to this statement
-			if( (smkTag = (BlockMarkedTag) jobblock.getTag(BlockMarkedTag.TAG_NAME))==null){
-				smkTag = new BlockMarkedTag();
+			if( (smkTag = (BlockJobTag) jobblock.getTag(BlockJobTag.TAG_NAME))==null){
+				smkTag = new BlockJobTag();
 				smkTag.addJob(job);
 				jobblock.addTag(smkTag);
 			}else{
@@ -216,7 +219,7 @@ public class ProjectParser {
 	}
 	public void collectCommonAssetData(){
 		if(vreAnalyzerCommandLine.isSourceBinding()){
-			CommonAssetWriteToTable.inst().showData(JobDataCollector.inst().getCommonAssets());
+			ReuseAssetWriteToTable.inst().showData(JobDataCollector.inst().getCommonAssets());
 		}
 	}
 	public void runProjectParser(){
@@ -430,7 +433,7 @@ public class ProjectParser {
 							JobHub jobinstance = getjobHub(usevar);
 							if(jobinstance==null)
 								continue;
-							CodeBlock cb = CodeBlock.tryToCreate(usevar, cfgNode, sootmethod);
+							SimpleBlock cb = SimpleBlock.tryToCreate(usevar, cfgNode, sootmethod);
 							jobinstance.addUse(sootmethod.getDeclaringClass(),cb);
 							JobVariable job = jobinstance.getJob();
 							// contains job -> invoke method
@@ -448,13 +451,13 @@ public class ProjectParser {
 										CFG bindcfg = ProgramFlowBuilder.inst().getCFG(sm);
 										bindcfgnodess.addAll(bindcfg.getNodes());
 									}
-									CodeBlock cBlock = CodeBlock.tryToCreate(bindcfgnodess, bindsc);
+									ClassBlock cBlock = ClassBlock.tryToCreate(bindcfgnodess, bindsc);
 									jobinstance.addUse(bindsc, cBlock);
 									
 								}else if(bindType==AssetType.Method){
 									CFG bindcfg = ProgramFlowBuilder.inst().getCFG(bindingsm.get(0));
 									List<CFGNode>bindcfgnodess = bindcfg.getNodes();
-									CodeBlock mBlock = CodeBlock.tryToCreate(bindcfgnodess,bindingsm.get(0));
+									MethodBlock mBlock = MethodBlock.tryToCreate(bindcfgnodess,bindingsm.get(0));
 									jobinstance.addUse(bindingsm.get(0).getDeclaringClass(), mBlock);
 								}
 								
@@ -473,7 +476,7 @@ public class ProjectParser {
 		}
 	}
 	public void defineJob(Variable defvar,NodeDefUses cfgNode,Stmt stmt){
-		CodeBlock jobblock = CodeBlock.tryToCreate(defvar,cfgNode,cfgNode.getMethod());
+		SimpleBlock jobblock = SimpleBlock.tryToCreate(defvar,cfgNode,cfgNode.getMethod());
 		JobVariable jvb = new JobVariable(defvar,jobblock);
 		if(!containjobvar(jvb)){
 			Value defValue = defvar.getValue();

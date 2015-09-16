@@ -8,14 +8,14 @@ import java.util.Set;
 
 import soot.SootClass;
 import soot.jimple.Stmt;
+import vreAnalyzer.Blocks.CodeBlock;
 import vreAnalyzer.Elements.CFGNode;
-import vreAnalyzer.Elements.CodeBlock;
-import vreAnalyzer.Tag.BlockMarkedTag;
 import vreAnalyzer.Tag.SourceLocationTag;
 import vreAnalyzer.Tag.SourceLocationTag.LocationType;
-import Patch.Hadoop.CommonAss.CommonAsset;
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobVariable;
+import Patch.Hadoop.ReuseAssets.ReuseAsset;
+import Patch.Hadoop.Tag.BlockJobTag;
 
 
 public class JobDataCollector {
@@ -55,7 +55,7 @@ public class JobDataCollector {
 			for(Map.Entry<SootClass, LinkedList<CodeBlock>>blockentry:jobUsesSequence.entrySet()){
 				LinkedList<CodeBlock>blocks = blockentry.getValue();
 				for(CodeBlock block:blocks){
-					BlockMarkedTag bmTag = block.getTag(BlockMarkedTag.TAG_NAME);
+					BlockJobTag bmTag = block.getTag(BlockJobTag.TAG_NAME);
 					Set<JobVariable> bindingjobs = bmTag.getJobs();
 					Set<Integer>lines = new HashSet<Integer>();
 					int line = 0;
@@ -83,12 +83,12 @@ public class JobDataCollector {
 					/////
 					
 						if(bindingjobs.size()>1){
-							CommonAsset comasst = null;
+							ReuseAsset comasst = null;
 							boolean firstTime = true;
 							for(JobVariable jb:bindingjobs){
 								jobtoHub.get(jb).addSharedUse(block);
 								if(firstTime){
-									comasst =  CommonAsset.tryToCreate(block,lines.size(), bindingjobs);
+									comasst =  ReuseAsset.tryToCreate(block,lines.size(), bindingjobs);
 									
 									firstTime = false;
 								}
@@ -110,7 +110,7 @@ public class JobDataCollector {
 		}
 		
 	}
-	public Map<CodeBlock,CommonAsset> getCommonAssets(){
-		return CommonAsset.getBlockToAsset();
+	public Map<CodeBlock,ReuseAsset> getCommonAssets(){
+		return ReuseAsset.getBlockToAsset();
 	}
 }

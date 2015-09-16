@@ -14,8 +14,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import Patch.Hadoop.CommonAss.CommonAsset;
 import Patch.Hadoop.Job.JobVariable;
+import Patch.Hadoop.ReuseAssets.ReuseAsset;
 
 
 public class HTMLAnnotation {
@@ -369,7 +369,7 @@ public class HTMLAnnotation {
 				Set<JobVariable>currjobslist = new HashSet<JobVariable>();		
 				currjobslist.addAll(jbvars);
 				currjobslist.add(currJob);
-				Color mergedColor = CommonAsset.getCommonColor(currjobslist);
+				Color mergedColor = ReuseAsset.getCommonColor(currjobslist);
 				
 				String hex = Integer.toHexString(mergedColor.getRGB() & 0xffffff);
 				if (hex.length() < 6) {

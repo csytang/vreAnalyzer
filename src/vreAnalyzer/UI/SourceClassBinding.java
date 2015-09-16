@@ -61,8 +61,6 @@ public class SourceClassBinding{
 		return null;
 	}
 	public void startdirNameBinding(List<String>classes,ArrayList<File>source){
-		System.out.println("[vreHadoop] String dir NameBinding");
-		
 		index = 0;
 		int totalsize = classes.size();
 		Pattern clsPattern = Pattern.compile(SourceClassBinding.clsPatternString);
@@ -92,7 +90,7 @@ public class SourceClassBinding{
 			classNameToSourceFile.put(clsName, result);
 			MainFrame.inst().addBinding(clsName, result);
 			 
-			System.out.println("[vreHadoop] Binding class ["+clsName+"] with source ["+result.getAbsolutePath()+"]");
+			System.out.println("[vreAnalyzer] Binding class ["+clsName+"] with source ["+result.getAbsolutePath()+"]");
 			index++;
 		
 		}

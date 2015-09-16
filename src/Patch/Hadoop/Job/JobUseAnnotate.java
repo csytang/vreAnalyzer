@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.io.File;
 import java.util.LinkedList;
 
+import Patch.Hadoop.Tag.BlockJobTag;
 import soot.jimple.Stmt;
+import vreAnalyzer.Blocks.CodeBlock;
 import vreAnalyzer.Elements.CFGNode;
-import vreAnalyzer.Elements.CodeBlock;
-import vreAnalyzer.Tag.BlockMarkedTag;
 import vreAnalyzer.Tag.SourceLocationTag;
 import vreAnalyzer.Tag.SourceLocationTag.LocationType;
 import vreAnalyzer.Text2HTML.HTMLAnnotation;
@@ -29,10 +29,10 @@ public class JobUseAnnotate {
 		firstime = true;
 		
 		for(CodeBlock block:blocks){
-			BlockMarkedTag bmkTag;
+			BlockJobTag bmkTag;
 			// add job marked tag to this statement
-			if((bmkTag = (BlockMarkedTag) block.getTag(BlockMarkedTag.TAG_NAME))==null){
-				bmkTag = new BlockMarkedTag();
+			if((bmkTag = (BlockJobTag) block.getTag(BlockJobTag.TAG_NAME))==null){
+				bmkTag = new BlockJobTag();
 				bmkTag.addJob(job);
 				block.addTag(bmkTag);
 			}else{
