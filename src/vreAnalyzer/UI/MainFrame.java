@@ -1,7 +1,6 @@
 package vreAnalyzer.UI;
 
 import java.awt.BorderLayout;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -90,6 +89,7 @@ public class MainFrame extends JFrame {
 	private final JTable statistictable;
 	private JTable reusetable;
 	private JTable variantstable;
+	private JTable blocktable;
 	
 	public static void main(String[] args) {
 		classnametoSource = new HashMap<String,File>();
@@ -193,6 +193,7 @@ public class MainFrame extends JFrame {
 		sourcepanel.add(source_annotateDisplayPane, BorderLayout.CENTER);
 		
 		source_annotatedDisplayArea = new JTextPane();
+		source_annotatedDisplayArea.setEditable(false);
 		source_annotateDisplayPane.setViewportView(source_annotatedDisplayArea);
 		
 		JPanel searchPanel = new JPanel();
@@ -237,18 +238,26 @@ public class MainFrame extends JFrame {
         
 		consolePane.setViewportView(consoletextArea);
 		
+		JScrollPane blocksPane = new JScrollPane();
+		tabbedPane.addTab("Code Blocks", new ImageIcon(MainFrame.class.getResource("/image/blocks.png")), blocksPane, "Divide all codes into snippets by branches");
+		String blockheaders[] = {"Block ID","Type","Method(IF)","Class"};
+		DefaultTableModel blocktableModel = new DefaultTableModel(null,blockheaders);
+		blocktable = new JTable(blocktableModel);
+		blocktable.getTableHeader().setReorderingAllowed(false);
+		blocksPane.setViewportView(blocktable);
+		
 		JScrollPane reusePane = new JScrollPane();
 		tabbedPane.addTab("Reuse Assets", new ImageIcon(MainFrame.class.getResource("/image/common.png")), reusePane, "Code assets reuse by two or more features");
 		
-		String reuseheaders[] = {"ReuseAsset ID","Color","LOC","Feature IDs","Element Type"};
+		String reuseheaders[] = {"Block ID","Color","LOC","Feature IDs","Element Type"};
 		DefaultTableModel coommonassettableModel = new DefaultTableModel(null,reuseheaders);
 		reusetable = new JTable(coommonassettableModel);
 		reusetable.getTableHeader().setReorderingAllowed(false);
 		reusePane.setViewportView(reusetable);
 		
 		JScrollPane variantBlockPane = new JScrollPane();
-		tabbedPane.addTab("Variant Blocks", new ImageIcon(MainFrame.class.getResource("/image/variants.png")), variantBlockPane, null);
-		String variantsheaders[] = {"Variant ID","LOC","Features(IF)","Seperators"};
+		tabbedPane.addTab("Variant Blocks", new ImageIcon(MainFrame.class.getResource("/image/variants.png")), variantBlockPane, "variant assets from variabillity aspect");
+		String variantsheaders[] = {"Block ID","LOC","Features(IF)","Seperators"};
 		DefaultTableModel varitableModel = new DefaultTableModel(null,variantsheaders);
 		variantstable = new JTable(varitableModel);
 		variantstable.getTableHeader().setReorderingAllowed(false);
@@ -575,5 +584,10 @@ public class MainFrame extends JFrame {
 	}
 	public JTree getTree(){
 		return source_annotateDirTree;
+	}
+
+	public JTable getBlockTable() {
+		// TODO Auto-generated method stub
+		return blocktable;
 	}
 }

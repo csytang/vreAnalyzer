@@ -27,7 +27,7 @@ public class ReuseAssetWriteToTable {
 		DefaultTableModel commonassetmodel = (DefaultTableModel)commonassets.getModel();
 		for(Map.Entry<CodeBlock, ReuseAsset>entry:commonAssets.entrySet()){
 			ReuseAsset asset = entry.getValue();
-			int id = asset.getAssetId();
+			int id = asset.getBlockId();
 			List<JobVariable>jobs = asset.getJobs();
 			String idString = "[";
 			for(JobVariable jb:jobs){

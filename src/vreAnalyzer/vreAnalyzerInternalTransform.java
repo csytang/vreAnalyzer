@@ -4,6 +4,7 @@ import java.util.Map;
 
 import Patch.Hadoop.ProjectParser;
 import soot.SceneTransformer;
+import vreAnalyzer.Blocks.BlockGenerator;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder.EntryNotFoundException;
@@ -25,6 +26,8 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		if(vreAnalyzerCommandLine.inst().isStartFromGUI())
+			BlockGenerator.inst(ProgramFlowBuilder.inst().getAppClasses());
 		System.out.println("[vreAnalyzer] Program flow build[Finish]");
 				
 		System.out.println("[vreAnalyzer] Points to graph build[Start]");

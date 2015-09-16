@@ -18,7 +18,7 @@ import vreAnalyzer.UI.RandomColor;
 
 public class ReuseAsset {
 	
-	private int assetId = 0;
+	private int blockId = 0;
 	private AssetType commonType;
 	private CodeBlock block;
 	private SootMethod commonMethod =  null;
@@ -31,7 +31,7 @@ public class ReuseAsset {
 	private int LOC = 0;
 	
 	private ReuseAsset(CodeBlock block,int lineofCode,Collection<JobVariable> joblist){
-		this.assetId = block.getBlockId();
+		this.blockId = block.getBlockId();
 		this.block = block;
 		this.LOC = lineofCode;
 		this.commonType = block.getType();
@@ -93,8 +93,8 @@ public class ReuseAsset {
 	public List<CFGNode> getCFGNodes(){
 		return cfgNodes;
 	}
-	public int getAssetId(){
-		return this.assetId;
+	public int getBlockId(){
+		return this.blockId;
 	}
 	public List<JobVariable> getJobs(){
 		return this.jobs;

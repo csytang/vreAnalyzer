@@ -11,8 +11,9 @@ import Patch.Hadoop.ReuseAssets.AssetType;
 public class ClassBlock extends CodeBlock{
 	
 	public static Map<SootClass,ClassBlock>clspool = new HashMap<SootClass,ClassBlock>();
-	private ClassBlock(List<CFGNode>cfgNodes,SootClass cls){
+	private ClassBlock(List<CFGNode>cfgNodes,SootClass cls,int blockId){
 		super();
+		super.setBlockId(blockId);
 		super.setType(AssetType.Class);
 		super.setBlocks(new LinkedList<CFGNode>(cfgNodes));
 		super.setSootClass(cls);
@@ -21,7 +22,10 @@ public class ClassBlock extends CodeBlock{
 	public static ClassBlock tryToCreate(List<CFGNode>cfgNodes,SootClass cls){
 		if(clspool.containsKey(cls)){
 			return clspool.get(cls);
-		}else
-			return new ClassBlock(cfgNodes,cls);
+		}else{
+			int id = BlockGenerator.inst().getBlockId();
+			BlockGenerator.inst().increaseId();
+			return new ClassBlock(cfgNodes,cls,id);
+		}
 	}
 }

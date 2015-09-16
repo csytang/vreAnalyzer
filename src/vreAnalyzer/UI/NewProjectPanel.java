@@ -372,7 +372,7 @@ public class NewProjectPanel extends JDialog {
 		
 		contentPane.add(btnAnalyze);
 		
-		JButton btnConfigureWizard = new JButton("Configure Wizard");
+		JButton btnConfigureWizard = new JButton("[Direct]SootCommand");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, btnConfigureWizard, 11, SpringLayout.SOUTH, scrollPane_4);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnConfigureWizard, 40, SpringLayout.SOUTH, scrollPane_4);
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnConfigureWizard, 0, SpringLayout.EAST, btnRemove);
@@ -384,7 +384,7 @@ public class NewProjectPanel extends JDialog {
 		});
 		contentPane.add(btnConfigureWizard);
 		
-		JLabel lblSourceFilePath = new JLabel("Source binding pattern[source]:");
+		JLabel lblSourceFilePath = new JLabel("Regular pattern for source file path:");
 		sl_contentPane.putConstraint(SpringLayout.WEST, lblSourceFilePath, 0, SpringLayout.WEST, lblProjectName);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, lblSourceFilePath, 10, SpringLayout.SOUTH, btnConfigureWizard);
 		contentPane.add(lblSourceFilePath);
@@ -396,7 +396,7 @@ public class NewProjectPanel extends JDialog {
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 		
-		label = new JLabel("Source binding pattern[target]:");
+		label = new JLabel("Regular pattern for class file path:");
 		sl_contentPane.putConstraint(SpringLayout.WEST, label, 0, SpringLayout.WEST, lblProjectName);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, label,20, SpringLayout.SOUTH, lblSourceFilePath);
 		contentPane.add(label);
