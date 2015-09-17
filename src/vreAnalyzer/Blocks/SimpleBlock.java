@@ -37,7 +37,6 @@ public class SimpleBlock extends CodeBlock{
 	public static SimpleBlock tryToCreate(List<CFGNode> cfgnodes,SootMethod method,int parentId){
 		if(valuepool.containsKey(cfgnodes)){
 			SimpleBlock exist = valuepool.get(cfgnodes);
-			
 			return exist;
 		}else{
 			int id = BlockGenerator.getBlockId();
@@ -51,11 +50,14 @@ public class SimpleBlock extends CodeBlock{
 		if(methodToBlocks.containsKey(method)){
 			List<SimpleBlock>blocks = methodToBlocks.get(method);
 			for(SimpleBlock block:blocks){
-				if(block.getCFGNodes().contains(cfgnode))
-					
+				if(block.getCFGNodes().contains(cfgnode)&&block.getCFGNodes().size()==1)
 					return block;
 			}
-			return null;
+			int id = BlockGenerator.getBlockId();
+			BlockGenerator.increaseId();
+			List<CFGNode>list = new LinkedList<CFGNode>();
+			list.add(cfgnode);
+			return new SimpleBlock(list,method,id,parentId);
 		}else{
 			int id = BlockGenerator.getBlockId();
 			BlockGenerator.increaseId();

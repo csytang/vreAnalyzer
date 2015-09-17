@@ -202,7 +202,7 @@ public class ProjectParser {
 		if(vreAnalyzerCommandLine.isSourceBinding()){
 			// 2. Following will annoated use of job
 			ProjectParser.inst().annotateallJobs();
-			//ProjectParser.inst().annotateallJobUses();
+			ProjectParser.inst().annotateallJobUses();
 			
 		}
 		
@@ -243,8 +243,8 @@ public class ProjectParser {
 		System.out.println("# Shadow:\t"+numShadow);
 		// annotated job and binding information
 		annotate();
-		//collectStatisiticData();
-		//collectCommonAssetData();
+		collectStatisiticData();
+		collectCommonAssetData();
 		// 3. add the annotated color to legend
 		JTable jobColorMapTable = MainFrame.inst().getJobColorMapTable();
 		DefaultTableModel model = (DefaultTableModel)jobColorMapTable.getModel();
