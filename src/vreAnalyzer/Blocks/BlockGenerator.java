@@ -40,9 +40,11 @@ public class BlockGenerator {
 			
 			List<SootMethod>clsmethods = cls.getMethods();
 			List<CFGNode>classallnode = new LinkedList<CFGNode>();
+			List<CFGNode>marked = new LinkedList<CFGNode>();
 			for(SootMethod method:clsmethods){
 				if(method.getTag(MethodTag.TAG_NAME)!=null&&
 						!Modifier.isVolatile(method.getModifiers())){
+					marked.clear();
 					// 1. Create method block
 					CFG cfg = ProgramFlowBuilder.inst().getCFG(method);
 					List<CFGNode>nodes = cfg.getNodes();
@@ -53,27 +55,39 @@ public class BlockGenerator {
 					 * Strategy:
 					 * 1. go through the control flow, find the branch, create separate block for each branch
 					 * 
-					 * 2. //"Block ID","LOC","Type","Method(IF)","Class"
+					 * 2. //"Block ID","Type","Method(IF)","Class" line numbers
 					 */
-					
-					CFGNode entry = cfg.ENTRY;
-					List<CFGNode>temp = new LinkedList<CFGNode>();
-					Stack<CFGNode>analysisstack = new Stack<CFGNode>();
-					analysisstack.push(entry);
-					//DFS
-					while(!analysisstack.isEmpty()){
-						CFGNode curr = analysisstack.pop();
-						for(CFGNode next:curr.getSuccs()){
-							analysisstack.push(next);
-						}
-						if(curr.getSuccs().size()>1){
-							SimpleBlock.tryToCreate(temp, method);
+					if(cfg.containsBraches()){
+						CFGNode entry = cfg.ENTRY;
+						List<CFGNode>temp = new LinkedList<CFGNode>();
+						Stack<CFGNode>analysisstack = new Stack<CFGNode>();
+						analysisstack.push(entry);
+						
+						//DFS
+						while(!analysisstack.isEmpty()){
+							CFGNode curr = analysisstack.pop();
+							if(marked.contains(curr)){
+								addNewBlockToPool(SimpleBlock.tryToCreate(temp, method));
+								temp.clear();
+								continue;
+							}
+							temp.add(curr);
+							for(CFGNode next:curr.getSuccs()){
+								analysisstack.push(next);
+							}
+							if(curr.getSuccs().size()>1){
+								addNewBlockToPool(SimpleBlock.tryToCreate(temp, method));
+								temp.clear();
+							}
+							marked.add(curr);
+						}//
+						if(!temp.isEmpty()){
+							addNewBlockToPool(SimpleBlock.tryToCreate(temp, method));
 							temp.clear();
-						}else if(curr.getSuccs().size()==1){
-							temp.add(curr.getSuccs().get(0));
 						}
+					}else{
+						addNewBlockToPool(SimpleBlock.tryToCreate(nodes, method));
 					}
-					
 				}
 			}
 			// 2. Create class block

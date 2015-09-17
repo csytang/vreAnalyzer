@@ -6,3 +6,5 @@
 6. common asset relation
 8. common asset color (fixed)
 9. 在運行之前 生成一系列的code blocks
+/**
+9. BlockGenerator 部分問題

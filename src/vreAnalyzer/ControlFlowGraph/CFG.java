@@ -34,7 +34,7 @@ public class CFG {
 	protected SootClass sootcls;
 	//CFG nodes
 	protected ArrayList<CFGNode> nodes = new ArrayList<CFGNode>();
-	
+	private boolean containBraches = false;
 	// Statement to CFGNode
 	protected Map<Stmt,CFGNode> stmtToCFGNode = new HashMap<Stmt, CFGNode>();
 	
@@ -225,7 +225,9 @@ public class CFG {
 			if (n.getSuccs().size() > 1) {
 				// Create and store branches to successors (avoid multiple brs for same successor)
 				List<CFGNode> succList;
-				
+				if(!containBraches){
+					containBraches = true;
+				}
 				
 				succList = new ArrayList<CFGNode>(); // remove repeated successor nodes
 				for (CFGNode nSucc : n.getSuccs())
@@ -306,7 +308,9 @@ public class CFG {
 		// TODO Auto-generated method stub
 		return ENTRY.getSuccs();
 	}
-	
+	public boolean containsBraches(){
+		return containBraches;
+	}
 	
 	
 }
