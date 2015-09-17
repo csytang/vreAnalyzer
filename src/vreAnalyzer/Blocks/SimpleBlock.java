@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import Patch.Hadoop.ReuseAssets.AssetType;
 import soot.SootMethod;
 import vreAnalyzer.Elements.CFGNode;
 
@@ -23,7 +22,7 @@ public class SimpleBlock extends CodeBlock{
 		super.setBlocks(blocks);
 		super.setMethod(method);
 		super.setSootClass(method.getDeclaringClass());
-		super.setType(AssetType.Stmt);
+		super.setType(BlockType.Stmt);
 
 		valuepool.put(blocks, this);
 		if(methodToBlocks.containsKey(method)){

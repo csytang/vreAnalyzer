@@ -7,6 +7,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import Patch.Hadoop.Job.JobVariable;
+import vreAnalyzer.Blocks.BlockType;
 import vreAnalyzer.Blocks.CodeBlock;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.UI.MainFrame;
@@ -35,11 +36,11 @@ public class ReuseAssetWriteToTable {
 			}
 			idString = idString.substring(0, idString.length()-1);
 			idString+="]";
-			if(asset.getType()==AssetType.Class){
+			if(asset.getType()==BlockType.Class){
 				commonassetmodel.addRow(new Object[]{id,asset.getColor(),asset.getLOC(),idString,asset.getType()+":"+asset.getSootClass().getName()});
-			}else if(asset.getType()==AssetType.Method){
+			}else if(asset.getType()==BlockType.Method){
 				commonassetmodel.addRow(new Object[]{id,asset.getColor(),asset.getLOC(),idString,asset.getType()+":"+asset.getSootMethod().getName()});
-			}else if(asset.getType()==AssetType.Stmt){
+			}else if(asset.getType()==BlockType.Stmt){
 				List<CFGNode> cfgNodes = asset.getCFGNodes();
 				String cfgIds = "[";
 				for(CFGNode node:cfgNodes){

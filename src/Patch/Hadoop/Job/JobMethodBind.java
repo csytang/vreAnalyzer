@@ -2,12 +2,12 @@ package Patch.Hadoop.Job;
 import java.util.LinkedList;
 import java.util.List;
 
-import Patch.Hadoop.ReuseAssets.AssetType;
 import soot.Modifier;
 import soot.SootClass;
 import soot.SootMethod;
 import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
+import vreAnalyzer.Blocks.BlockType;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
@@ -16,7 +16,7 @@ import vreAnalyzer.Tag.MethodTag;
 public class JobMethodBind {
 	List<SootMethod>bindsm= null;
 	List<Stmt>bindstmt = null;
-	AssetType bindType = AssetType.NON;
+	BlockType bindType = BlockType.NON;
 	SootClass libMapper = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Mapper");
 	SootClass libReducer = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.Reducer");
 	SootClass libInputFormat = ProgramFlowBuilder.inst().findLibClassByName("org.apache.hadoop.mapreduce.InputFormat");
@@ -30,12 +30,12 @@ public class JobMethodBind {
 		switch(methodName){
 		case "setCombinerClass":{
 			new JobUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libReducer);
-			bindType = AssetType.Class;
+			bindType = BlockType.Class;
 			break;
 		}
 		case "setInputFormatClass":{
 			new JobUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libInputFormat);
-			bindType = AssetType.Method;
+			bindType = BlockType.Method;
 			break;
 		}
 		case "setMapOutputKeyClass":{
@@ -46,12 +46,12 @@ public class JobMethodBind {
 		}
 		case "setMapperClass":{
 			new JobUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libMapper);
-			bindType = AssetType.Class;
+			bindType = BlockType.Class;
 			break;
 		}
 		case "setOutputFormatClass":{
 			new JobUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libOutputFormat);
-			bindType = AssetType.Method;
+			bindType = BlockType.Method;
 			break;
 		}
 		case "setOutputValueClass":{
@@ -62,7 +62,7 @@ public class JobMethodBind {
 		}
 		case "setReducerClass":{
 			new JobUnd(argCount, job, expr, inputducfg, duNode, bindsm, bindstmt, libReducer);
-			bindType = AssetType.Class;
+			bindType = BlockType.Class;
 			break;
 		}
 		
@@ -72,7 +72,7 @@ public class JobMethodBind {
 	public List<SootMethod> getBindingMethod(){
 		return bindsm;
 	}
-	public AssetType getBindType(){
+	public BlockType getBindType(){
 		return bindType;
 	}
 	public static List<SootMethod> findallMethodByName(SootClass sc,String methodName){

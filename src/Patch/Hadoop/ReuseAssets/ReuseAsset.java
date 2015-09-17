@@ -12,6 +12,7 @@ import java.util.Set;
 import Patch.Hadoop.Job.JobVariable;
 import soot.SootClass;
 import soot.SootMethod;
+import vreAnalyzer.Blocks.BlockType;
 import vreAnalyzer.Blocks.CodeBlock;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.UI.RandomColor;
@@ -19,7 +20,7 @@ import vreAnalyzer.UI.RandomColor;
 public class ReuseAsset {
 	
 	private int blockId = 0;
-	private AssetType commonType;
+	private BlockType commonType;
 	private CodeBlock block;
 	private SootMethod commonMethod =  null;
 	private SootClass commonClass = null;
@@ -43,11 +44,11 @@ public class ReuseAsset {
 			this.color = rcolor.getColor();
 			joblistToColor.put(alljobs, this.color);
 		}
-		if(this.commonType.equals(AssetType.Method)){
+		if(this.commonType.equals(BlockType.Method)){
 			this.commonMethod = block.getSootMethod();
-		}else if(this.commonType.equals(AssetType.Class)){
+		}else if(this.commonType.equals(BlockType.Class)){
 			this.commonClass = block.getSootClass();
-		}else if(this.commonType.equals(AssetType.Stmt)){
+		}else if(this.commonType.equals(BlockType.Stmt)){
 			this.cfgNodes = block.getCFGNodes();
 		}
 		this.jobs = new LinkedList<JobVariable>();
@@ -81,7 +82,7 @@ public class ReuseAsset {
 		}
 		return null;
 	}
-	public AssetType getType(){
+	public BlockType getType(){
 		return commonType;
 	}
 	public SootClass getSootClass(){

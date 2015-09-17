@@ -25,7 +25,6 @@ import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobMethodBind;
 import Patch.Hadoop.Job.JobUseAnnotate;
 import Patch.Hadoop.Job.JobVariable;
-import Patch.Hadoop.ReuseAssets.AssetType;
 import Patch.Hadoop.ReuseAssets.ReuseAssetWriteToTable;
 import Patch.Hadoop.Statistic.JobDataCollector;
 import Patch.Hadoop.Statistic.JobDataWriteToTable;
@@ -45,6 +44,7 @@ import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
 import soot.jimple.internal.JNewExpr;
 import vreAnalyzer.vreAnalyzerCommandLine;
+import vreAnalyzer.Blocks.BlockType;
 import vreAnalyzer.Blocks.ClassBlock;
 import vreAnalyzer.Blocks.CodeBlock;
 import vreAnalyzer.Blocks.MethodBlock;
@@ -443,8 +443,8 @@ public class ProjectParser {
 								SootMethod sminvoked = invorkEpxr.getMethod();
 								JobMethodBind jmb = new JobMethodBind(job,invorkEpxr,cfggraph,cfgNode);
 								List<SootMethod>bindingsm = jmb.getBindingMethod();
-								AssetType bindType = jmb.getBindType();
-								if(bindType==AssetType.Class){
+								BlockType bindType = jmb.getBindType();
+								if(bindType==BlockType.Class){
 									List<CFGNode>bindcfgnodess = new LinkedList<CFGNode>();
 									SootClass bindsc  = bindingsm.get(0).getDeclaringClass();
 									for(SootMethod sm:bindingsm){
@@ -454,7 +454,7 @@ public class ProjectParser {
 									ClassBlock cBlock = ClassBlock.tryToCreate(bindcfgnodess, bindsc);
 									jobinstance.addUse(bindsc, cBlock);
 									
-								}else if(bindType==AssetType.Method){
+								}else if(bindType==BlockType.Method){
 									CFG bindcfg = ProgramFlowBuilder.inst().getCFG(bindingsm.get(0));
 									List<CFGNode>bindcfgnodess = bindcfg.getNodes();
 									MethodBlock mBlock = MethodBlock.tryToCreate(bindcfgnodess,bindingsm.get(0));

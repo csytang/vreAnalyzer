@@ -239,7 +239,7 @@ public class MainFrame extends JFrame {
 		
 		JScrollPane blocksPane = new JScrollPane();
 		tabbedPane.addTab("Code Blocks", new ImageIcon(MainFrame.class.getResource("/image/blocks.png")), blocksPane, "Divide all codes into snippets by branches");
-		String blockheaders[] = {"Block ID","Type","Method(IF)","Class"};
+		String blockheaders[] = {"Block ID","Code Range(Jimple)","Type","Method(IF)","Class"};
 		DefaultTableModel blocktableModel = new DefaultTableModel(null,blockheaders);
 		blocktable = new JTable(blocktableModel);
 		blocktable.getTableHeader().setReorderingAllowed(false);

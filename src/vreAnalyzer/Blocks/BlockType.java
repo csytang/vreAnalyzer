@@ -1,6 +1,6 @@
-package Patch.Hadoop.ReuseAssets;
+package vreAnalyzer.Blocks;
 
-public enum AssetType {
+public enum BlockType {
 	NON{
 
 		@Override
@@ -15,7 +15,7 @@ public enum AssetType {
 		@Override
 		public String toString() {
 			// TODO Auto-generated method stub
-			return "Stmt";
+			return "Stmt_Block";
 		}
 	},
 	Method{

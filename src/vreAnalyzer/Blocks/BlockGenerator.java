@@ -7,7 +7,6 @@ import java.util.Stack;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import Patch.Hadoop.ReuseAssets.AssetType;
 import soot.Modifier;
 import soot.SootClass;
 import soot.SootMethod;
@@ -66,28 +65,35 @@ public class BlockGenerator {
 						//DFS
 						while(!analysisstack.isEmpty()){
 							CFGNode curr = analysisstack.pop();
-							if(marked.contains(curr)){
+							if(marked.contains(curr)&&!temp.isEmpty()){
 								addNewBlockToPool(SimpleBlock.tryToCreate(temp, method));
 								temp.clear();
+								continue;
+							}else if(marked.contains(curr)){
 								continue;
 							}
 							temp.add(curr);
 							for(CFGNode next:curr.getSuccs()){
 								analysisstack.push(next);
 							}
-							if(curr.getSuccs().size()>1){
+							if(curr.getSuccs().size()>1&&!temp.isEmpty()){
 								addNewBlockToPool(SimpleBlock.tryToCreate(temp, method));
 								temp.clear();
 							}
 							marked.add(curr);
-						}//
+						}
+						
 						if(!temp.isEmpty()){
 							addNewBlockToPool(SimpleBlock.tryToCreate(temp, method));
 							temp.clear();
 						}
-					}else{
-						addNewBlockToPool(SimpleBlock.tryToCreate(nodes, method));
-					}
+					}/**
+					else{
+						// not code block for this part, we directly use the method block
+						
+						if(!nodes.isEmpty())
+							addNewBlockToPool(SimpleBlock.tryToCreate(nodes, method));
+					}**/
 				}
 			}
 			// 2. Create class block
@@ -103,10 +109,11 @@ public class BlockGenerator {
 	public void addNewBlockToPool(CodeBlock block){
 		//2. //"Block ID","Type","Method(IF)","Class"
 		if(!blockpool.contains(block)){
-			if(block.getType()==AssetType.Class)
-				blockmodel.addRow(new Object[]{block.getBlockId(),block.getType(),"-",block.getSootClass().getName()});
-			else
-				blockmodel.addRow(new Object[]{block.getBlockId(),block.getType(),block.getSootMethod().getName(),block.getSootClass().getName()});
+			if(block.getType()==BlockType.Class)
+				blockmodel.addRow(new Object[]{block.getBlockId(),"Nil",block.getType(),"Nil",block.getSootClass().getName()});
+			else{
+				blockmodel.addRow(new Object[]{block.getBlockId(),block.getCodeRange(),block.getType(),block.getSootMethod().getName(),block.getSootClass().getName()});
+			}
 			blockpool.add(block);
 		}
 	}

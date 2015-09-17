@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import soot.SootClass;
 import vreAnalyzer.Elements.CFGNode;
-import Patch.Hadoop.ReuseAssets.AssetType;
 
 public class ClassBlock extends CodeBlock{
 	
@@ -14,7 +14,7 @@ public class ClassBlock extends CodeBlock{
 	private ClassBlock(List<CFGNode>cfgNodes,SootClass cls,int blockId){
 		super();
 		super.setBlockId(blockId);
-		super.setType(AssetType.Class);
+		super.setType(BlockType.Class);
 		super.setBlocks(new LinkedList<CFGNode>(cfgNodes));
 		super.setSootClass(cls);
 		
