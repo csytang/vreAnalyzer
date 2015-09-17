@@ -15,7 +15,6 @@ import soot.SootMethod;
 import vreAnalyzer.Blocks.BlockType;
 import vreAnalyzer.Blocks.CodeBlock;
 import vreAnalyzer.Elements.CFGNode;
-import vreAnalyzer.UI.RandomColor;
 
 public class ReuseAsset {
 	
@@ -28,7 +27,6 @@ public class ReuseAsset {
 	private List<JobVariable>jobs;
 	private List<CFGNode>cfgNodes;
 	private static Map<CodeBlock,ReuseAsset>blockToAsset = new HashMap<CodeBlock,ReuseAsset>();
-	private static Map<Set<JobVariable>,Color>joblistToColor = new HashMap<Set<JobVariable>,Color>();
 	private int LOC = 0;
 	
 	private ReuseAsset(CodeBlock block,int lineofCode,Collection<JobVariable> joblist){
@@ -37,13 +35,6 @@ public class ReuseAsset {
 		this.LOC = lineofCode;
 		this.commonType = block.getType();
 		Set<JobVariable>alljobs = new HashSet<JobVariable>(joblist);
-		if(joblistToColor.containsKey(alljobs)){
-			this.color = joblistToColor.get(alljobs);
-		}else{
-			RandomColor rcolor = new RandomColor();
-			this.color = rcolor.getColor();
-			joblistToColor.put(alljobs, this.color);
-		}
 		if(this.commonType.equals(BlockType.Method)){
 			this.commonMethod = block.getSootMethod();
 		}else if(this.commonType.equals(BlockType.Class)){
@@ -64,15 +55,6 @@ public class ReuseAsset {
 			return result;
 		else{
 			return new ReuseAsset(block,lineofCode,joblist);
-		}
-	}
-	public static Color getCommonColor(Set<JobVariable>jobs){
-		if(joblistToColor.containsKey(jobs)){
-			return joblistToColor.get(jobs);
-		}else{
-			RandomColor rcolor = new RandomColor();
-			joblistToColor.put(jobs, rcolor.getColor());
-			return rcolor.getColor();
 		}
 	}
 	public static ReuseAsset customizecontainsKey(Map<CodeBlock,ReuseAsset>blockToAsset,CodeBlock block){

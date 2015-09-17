@@ -14,7 +14,7 @@ public class SimpleBlock extends CodeBlock{
 	private List<CFGNode>blocks;
 	
 	
-	public SimpleBlock(List<CFGNode> cfgnodes,SootMethod method,int blockId){
+	public SimpleBlock(List<CFGNode> cfgnodes,SootMethod method,int blockId,int parentId){
 		super();
 		blocks = new LinkedList<CFGNode>();
 		blocks.addAll(cfgnodes);
@@ -23,7 +23,7 @@ public class SimpleBlock extends CodeBlock{
 		super.setMethod(method);
 		super.setSootClass(method.getDeclaringClass());
 		super.setType(BlockType.Stmt);
-
+		super.setParentId(parentId);
 		valuepool.put(blocks, this);
 		if(methodToBlocks.containsKey(method)){
 			methodToBlocks.get(method).add(this);
@@ -34,7 +34,7 @@ public class SimpleBlock extends CodeBlock{
 		}
 	}
 	
-	public static SimpleBlock tryToCreate(List<CFGNode> cfgnodes,SootMethod method){
+	public static SimpleBlock tryToCreate(List<CFGNode> cfgnodes,SootMethod method,int parentId){
 		if(valuepool.containsKey(cfgnodes)){
 			SimpleBlock exist = valuepool.get(cfgnodes);
 			
@@ -42,12 +42,12 @@ public class SimpleBlock extends CodeBlock{
 		}else{
 			int id = BlockGenerator.getBlockId();
 			BlockGenerator.increaseId();
-			return new SimpleBlock(cfgnodes,method,id);
+			return new SimpleBlock(cfgnodes,method,id,parentId);
 		}
 	}
 	
 
-	public static SimpleBlock tryToCreate(CFGNode cfgnode,SootMethod method){
+	public static SimpleBlock tryToCreate(CFGNode cfgnode,SootMethod method,int parentId){
 		if(methodToBlocks.containsKey(method)){
 			List<SimpleBlock>blocks = methodToBlocks.get(method);
 			for(SimpleBlock block:blocks){
@@ -61,7 +61,7 @@ public class SimpleBlock extends CodeBlock{
 			BlockGenerator.increaseId();
 			List<CFGNode>list = new LinkedList<CFGNode>();
 			list.add(cfgnode);
-			return new SimpleBlock(list,method,id);
+			return new SimpleBlock(list,method,id,parentId);
 		}
 	}
 }

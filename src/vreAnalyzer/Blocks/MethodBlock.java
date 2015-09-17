@@ -10,18 +10,18 @@ import vreAnalyzer.Elements.CFGNode;
 
 public class MethodBlock extends CodeBlock{
 	public static Map<SootMethod,MethodBlock>methodpool = new HashMap<SootMethod,MethodBlock>();
-	public MethodBlock(List<CFGNode>cfgNodes,SootMethod method,int blockId){
+	public MethodBlock(List<CFGNode>cfgNodes,SootMethod method,int blockId,int parentId){
 		super();
 		super.setType(BlockType.Method);
 		super.setBlocks(new LinkedList<CFGNode>(cfgNodes));
 		super.setMethod(method);
 		super.setSootClass(method.getDeclaringClass());
 		super.setBlockId(blockId);
-		
+		super.setParentId(parentId);
 		methodpool.put(method, this);
 		
 	}
-	public static MethodBlock tryToCreate(List<CFGNode>cfgNodes,SootMethod method){
+	public static MethodBlock tryToCreate(List<CFGNode>cfgNodes,SootMethod method,int parentId){
 		if(methodpool.containsKey(method)){
 			MethodBlock methodb = methodpool.get(method);
 			
@@ -29,7 +29,13 @@ public class MethodBlock extends CodeBlock{
 		}else{
 			int id = BlockGenerator.getBlockId();
 			BlockGenerator.increaseId();
-			return new MethodBlock(cfgNodes,method,id);
+			return new MethodBlock(cfgNodes,method,id,parentId);
 		}
+	}
+	public static MethodBlock getMethodBlock(SootMethod method){
+		if(methodpool.containsKey(method))
+			return methodpool.get(method);
+		else
+			return null;
 	}
 }

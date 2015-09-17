@@ -52,6 +52,9 @@ public class vreAnalyzerCommandLine{
 	public static boolean isSourceBinding(){
 		return issourceBinding;
 	}
+	public static boolean isStartFromSource(){
+		return startfromSource;
+	}
 	public vreAnalyzerCommandLine(String[]args) throws ConflictModelExpection{
 		// All input command list
 		outputDirectory = ".";

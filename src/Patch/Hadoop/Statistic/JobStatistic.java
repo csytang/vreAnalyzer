@@ -10,6 +10,7 @@ import java.util.Set;
 import soot.SootClass;
 import vreAnalyzer.Blocks.CodeBlock;
 import Patch.Hadoop.ProjectParser;
+import Patch.Hadoop.Job.ColorMap;
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobVariable;
 import Patch.Hadoop.ReuseAssets.ReuseAsset;
@@ -25,7 +26,7 @@ public class JobStatistic {
 	Map<SootClass,Set<Integer>>reuseMethodCodeLines;
 	public JobStatistic(JobVariable jobvar){
 		this.job = jobvar;
-		this.jobColor = jobvar.getAnnotatedColor();
+		this.jobColor = ColorMap.inst().getJobColor(jobvar);
 		JobHub jobhub = ProjectParser.instance.getjobHub(jobvar);
 		jobUsesSequence = jobhub.getjobUse();
 		methodCodeLines = new HashMap<SootClass,Set<Integer>>();

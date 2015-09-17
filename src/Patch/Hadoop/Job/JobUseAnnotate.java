@@ -6,10 +6,10 @@ import java.util.LinkedList;
 
 import Patch.Hadoop.Tag.BlockJobTag;
 import soot.jimple.Stmt;
+import vreAnalyzer.vreAnalyzerCommandLine;
 import vreAnalyzer.Blocks.CodeBlock;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Tag.SourceLocationTag;
-import vreAnalyzer.Tag.SourceLocationTag.LocationType;
 import vreAnalyzer.Text2HTML.HTMLAnnotation;
 import vreAnalyzer.UI.MainFrame;
 
@@ -19,14 +19,13 @@ public class JobUseAnnotate {
 	int[]lines;
 	Color annotatedColor;
 	boolean startFromSource = false;
-	boolean firstime = true;
 	int counter = 0;
 	
 	public JobUseAnnotate(JobVariable job,LinkedList<CodeBlock>blocks,File htmlFile){
 		this.hostJob = job;
 		String hovertext = "Job:"+job.toString()+"(Id:"+job.getJobId()+")";
-		annotatedColor = job.getAnnotatedColor();
-		firstime = true;
+		annotatedColor = ColorMap.inst().getJobColor(job);
+		startFromSource = vreAnalyzerCommandLine.isStartFromSource();
 		
 		for(CodeBlock block:blocks){
 			BlockJobTag bmkTag;
@@ -38,37 +37,34 @@ public class JobUseAnnotate {
 			}else{
 				bmkTag.addJob(job);
 			}
-			counter = 0;
-			for(CFGNode node:block.getCFGNodes()){
+			
+			
+			if(startFromSource){
+				positions = new int[block.getCFGNodes().size()][4];
+			}else{
+				lines = new int[block.getCFGNodes().size()];
+			}
+			for(int i = 0;i < block.getCFGNodes().size();i++){
+				CFGNode node = block.getCFGNodes().get(i);
 				if(node.isSpecial())
 					continue;
 				Stmt useStmt = node.getStmt();
 				SourceLocationTag slcTag = (SourceLocationTag) useStmt.getTag(SourceLocationTag.TAG_NAME);
-				if(firstime){
-					if(slcTag.getTagType()==LocationType.SOURCE_TAG){
-						startFromSource = true;
-						positions = new int[block.getCFGNodes().size()][4];
-					}else{
-						startFromSource = false;
-						lines = new int[block.getCFGNodes().size()];
-					}
-					firstime = false;
-				}
 				
 				if(startFromSource){
 					int startline = slcTag.getStartLineNumber();
 					int startcolumn = slcTag.getStartPos();
 					int endline = slcTag.getEndLineNumber();
 					int endcolumn = slcTag.getEndPos();
-					positions[counter][0] = startline;
-					positions[counter][1] = startcolumn;
-					positions[counter][2] = endline;
-					positions[counter][3] = endcolumn;
+					positions[i][0] = startline;
+					positions[i][1] = startcolumn;
+					positions[i][2] = endline;
+					positions[i][3] = endcolumn;
 				}else{
 					int startline = slcTag.getStartLineNumber();
-					lines[counter] = startline;
+					lines[i] = startline;
 				}
-				counter++;
+				
 			}
 			if(startFromSource){
 				HTMLAnnotation.annotatemultipleLineHTML(hovertext,htmlFile, positions, annotatedColor, MainFrame.inst().getHTMLToJava());

@@ -6,6 +6,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import vreAnalyzer.UI.MainFrame;
+import Patch.Hadoop.Job.ColorMap;
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobVariable;
 
@@ -32,7 +33,7 @@ public class JobDataWriteToTable {
 			/*
 			 *String statheaders[] = {"Feature","Color","LOC","Reuse LOC","Dependenency(LOC)"}; 
 			 */
-			statisticmodel.addRow(new Object[]{job.toString(),job.getAnnotatedColor(),statisitc.getLOC(),statisitc.getReuseCode(),""});
+			statisticmodel.addRow(new Object[]{job.toString(),ColorMap.inst().getJobColor(job),statisitc.getLOC(),statisitc.getReuseCode(),""});
 		}
 	}
 	

@@ -20,6 +20,7 @@ import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import Patch.Hadoop.Job.ColorMap;
 import Patch.Hadoop.Job.JobAnnotate;
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobMethodBind;
@@ -44,6 +45,7 @@ import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
 import soot.jimple.internal.JNewExpr;
 import vreAnalyzer.vreAnalyzerCommandLine;
+import vreAnalyzer.Blocks.BlockGenerator;
 import vreAnalyzer.Blocks.BlockType;
 import vreAnalyzer.Blocks.ClassBlock;
 import vreAnalyzer.Blocks.CodeBlock;
@@ -77,6 +79,7 @@ public class ProjectParser {
 	private CFGNode exitNode;
 	private List<Context<SootMethod,CFGNode,PointsToGraph>> currContexts;
 	private List<File>allannotatedFiles = new LinkedList<File>();
+	private MethodBlock mblock = null;
 	/* 
 	 * Store all jobs that defined in the main method,
 	 * including locals and fields 
@@ -199,7 +202,7 @@ public class ProjectParser {
 		if(vreAnalyzerCommandLine.isSourceBinding()){
 			// 2. Following will annoated use of job
 			ProjectParser.inst().annotateallJobs();
-			ProjectParser.inst().annotateallJobUses();
+			//ProjectParser.inst().annotateallJobUses();
 			
 		}
 		
@@ -227,7 +230,7 @@ public class ProjectParser {
 		indextoJob = new HashMap<Integer,JobVariable>();// start from 1 insteadof 0
 		// run all the application methods
 		for(SootMethod sm:ProgramFlowBuilder.inst().getAppConcreteMethods()){
-			
+			mblock = MethodBlock.getMethodBlock(sm);
 			sootmethod = sm;
 			cs = sm.getDeclaringClass();
 			cfggraph = (CFGDefUse) ProgramFlowBuilder.inst().getCFG(sm);
@@ -240,12 +243,12 @@ public class ProjectParser {
 		System.out.println("# Shadow:\t"+numShadow);
 		// annotated job and binding information
 		annotate();
-		collectStatisiticData();
-		collectCommonAssetData();
+		//collectStatisiticData();
+		//collectCommonAssetData();
 		// 3. add the annotated color to legend
 		JTable jobColorMapTable = MainFrame.inst().getJobColorMapTable();
 		DefaultTableModel model = (DefaultTableModel)jobColorMapTable.getModel();
-		Map<String,Set<JobVariable>>hexColorToJob = JobVariable.getJobColorMap();
+		Map<String,Set<JobVariable>>hexColorToJob = ColorMap.inst().getJobColorMap();
 		for(Map.Entry<String, Set<JobVariable>>entry:hexColorToJob.entrySet()){
 			Color color = hex2Rgb(entry.getKey());
 			String jobsString = "[";
@@ -433,7 +436,9 @@ public class ProjectParser {
 							JobHub jobinstance = getjobHub(usevar);
 							if(jobinstance==null)
 								continue;
-							SimpleBlock cb = SimpleBlock.tryToCreate(cfgNode, sootmethod);
+							SimpleBlock cb = SimpleBlock.tryToCreate(cfgNode, sootmethod,mblock.getBlockId());
+							//add to table
+							BlockGenerator.inst().addNewBlockToPool(cb);
 							jobinstance.addUse(sootmethod.getDeclaringClass(),cb);
 							JobVariable job = jobinstance.getJob();
 							// contains job -> invoke method
@@ -452,12 +457,16 @@ public class ProjectParser {
 										bindcfgnodess.addAll(bindcfg.getNodes());
 									}
 									ClassBlock cBlock = ClassBlock.tryToCreate(bindcfgnodess, bindsc);
+									BlockGenerator.inst().addNewBlockToPool(cBlock);
 									jobinstance.addUse(bindsc, cBlock);
 									
 								}else if(bindType==BlockType.Method){
 									CFG bindcfg = ProgramFlowBuilder.inst().getCFG(bindingsm.get(0));
 									List<CFGNode>bindcfgnodess = bindcfg.getNodes();
-									MethodBlock mBlock = MethodBlock.tryToCreate(bindcfgnodess,bindingsm.get(0));
+									SootClass cls = bindingsm.get(0).getDeclaringClass();
+									ClassBlock cblock = ClassBlock.getMethodBlock(cls);
+									MethodBlock mBlock = MethodBlock.tryToCreate(bindcfgnodess,bindingsm.get(0),cblock.getBlockId());
+									BlockGenerator.inst().addNewBlockToPool(mBlock);
 									jobinstance.addUse(bindingsm.get(0).getDeclaringClass(), mBlock);
 								}
 								
@@ -476,7 +485,8 @@ public class ProjectParser {
 		}
 	}
 	public void defineJob(Variable defvar,NodeDefUses cfgNode,Stmt stmt){
-		SimpleBlock jobblock = SimpleBlock.tryToCreate(cfgNode,cfgNode.getMethod());
+		SimpleBlock jobblock = SimpleBlock.tryToCreate(cfgNode,cfgNode.getMethod(),mblock.getBlockId());
+		BlockGenerator.inst().addNewBlockToPool(jobblock);
 		JobVariable jvb = new JobVariable(defvar,jobblock);
 		if(!containjobvar(jvb)){
 			Value defValue = defvar.getValue();

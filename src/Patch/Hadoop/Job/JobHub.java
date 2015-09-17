@@ -18,6 +18,12 @@ public class JobHub {
 		jobUsesSequence = new HashMap<SootClass,LinkedList<CodeBlock>>();
 		sharedBlocks = new LinkedList<CodeBlock>();
 	}
+	/**
+	 *
+	 * @param sc
+	 * @param blocknode
+	 */
+	// bug
 	public void addUse(SootClass sc,CodeBlock blocknode){
 		if(!jobUsesSequence.containsKey(sc)){
 			jobUsesSequence.put(sc, new LinkedList<CodeBlock>());

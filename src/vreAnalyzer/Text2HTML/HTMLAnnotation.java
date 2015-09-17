@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import Patch.Hadoop.Job.ColorMap;
 import Patch.Hadoop.Job.JobVariable;
 import Patch.Hadoop.ReuseAssets.ReuseAsset;
 
@@ -365,20 +366,22 @@ public class HTMLAnnotation {
 				int orcolorindex = merged.indexOf("\" style=\"background-color:")+"\" style=\"background-color:".length();
 				int orcolorendindex = merged.indexOf("\">");
 				String orcolor = merged.substring(orcolorindex, orcolorendindex);
-				Set<JobVariable> jbvars = JobVariable.getJobVariableFromhexColor(orcolor);
-				Set<JobVariable>currjobslist = new HashSet<JobVariable>();		
-				currjobslist.addAll(jbvars);
-				currjobslist.add(currJob);
-				Color mergedColor = ReuseAsset.getCommonColor(currjobslist);
-				
-				String hex = Integer.toHexString(mergedColor.getRGB() & 0xffffff);
-				if (hex.length() < 6) {
-				    hex = "0" + hex;
+				Set<JobVariable> jbvars = ColorMap.inst().getJobVariableFromhexColor(orcolor);
+				if(!jbvars.contains(currJob)){
+					Set<JobVariable>currjobs = new HashSet<JobVariable>();		
+					currjobs.addAll(jbvars);
+					currjobs.add(currJob);
+					Color mergedColor = ColorMap.inst().getCombinedColor(currjobs);
+					
+					String hex = Integer.toHexString(mergedColor.getRGB() & 0xffffff);
+					if (hex.length() < 6) {
+					    hex = "0" + hex;
+					}
+					hex = "#" + hex;
+					// add this mapping to the set
+					ColorMap.inst().addHexColorToJob(hex, currjobs);
+					merged = new StringBuilder(merged).replace(orcolorindex, orcolorendindex, hex).toString();
 				}
-				hex = "#" + hex;
-				// add this mapping to the set
-				JobVariable.getJobColorMap().put(hex, currjobslist);
-				merged = new StringBuilder(merged).replace(orcolorindex, orcolorendindex, hex).toString();
 				return merged;
 			}
 		}else{

@@ -21,7 +21,7 @@ public class CodeBlock {
 	private SootClass cls;
 	private BlockJobTag bmtag;
 	private int blockId = 0;
-	
+	private int parentId = 0;
 	public SootClass getSootClass(){
 		return this.cls;
 	}
@@ -36,6 +36,7 @@ public class CodeBlock {
 		return this.blocks;
 	}
 	public void setBlocks(List<CFGNode>blocks){
+		
 		this.blocks = blocks;
 	}
 	
@@ -161,5 +162,12 @@ public class CodeBlock {
 			}
 		}
 		return i;
+	}
+	public void setParentId(int parentId) {
+		// TODO Auto-generated method stub
+		this.parentId = parentId;
+	}
+	public int getParentId(){
+		return this.parentId;
 	}
 }

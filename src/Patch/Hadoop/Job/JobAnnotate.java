@@ -25,7 +25,7 @@ public class JobAnnotate {
 	public JobAnnotate(JobVariable job,File htmlFile){
 		this.hostJob = job;
 		String hovertext = "Job:"+job.toString()+"(Id:"+job.getJobId()+")";
-		annotatedColor = job.getAnnotatedColor();
+		annotatedColor = ColorMap.inst().getJobColor(job);
 		jobstmt = job.getBlock().getCFGNodes().get(0).getStmt();
 		// set the color job mapping to the MainFrame
 		

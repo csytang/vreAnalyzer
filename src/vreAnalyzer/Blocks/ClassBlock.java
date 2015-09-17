@@ -29,4 +29,7 @@ public class ClassBlock extends CodeBlock{
 			return new ClassBlock(cfgNodes,cls,id);
 		}
 	}
+	public static ClassBlock getMethodBlock(SootClass cls){
+		return clspool.get(cls);
+	}
 }

@@ -41,13 +41,22 @@ public class BlockGenerator {
 			List<CFGNode>classallnode = new LinkedList<CFGNode>();
 			List<CFGNode>marked = new LinkedList<CFGNode>();
 			for(SootMethod method:clsmethods){
+				CFG cfg = ProgramFlowBuilder.inst().getCFG(method);
+				List<CFGNode>nodes = cfg.getNodes();
+				classallnode.addAll(nodes);
+			}
+			// 2. Create class block
+			ClassBlock clsblock = ClassBlock.tryToCreate(classallnode, cls);
+			addNewBlockToPool(clsblock);
+			for(SootMethod method:clsmethods){
 				if(method.getTag(MethodTag.TAG_NAME)!=null&&
 						!Modifier.isVolatile(method.getModifiers())){
 					marked.clear();
 					// 1. Create method block
 					CFG cfg = ProgramFlowBuilder.inst().getCFG(method);
 					List<CFGNode>nodes = cfg.getNodes();
-					addNewBlockToPool(MethodBlock.tryToCreate(nodes, method));
+					MethodBlock methodBlock = MethodBlock.tryToCreate(nodes, method,clsblock.getBlockId());
+					addNewBlockToPool(methodBlock);
 					classallnode.addAll(nodes);
 					// 2. Create inside method blocks
 					/**
@@ -66,7 +75,7 @@ public class BlockGenerator {
 						while(!analysisstack.isEmpty()){
 							CFGNode curr = analysisstack.pop();
 							if(marked.contains(curr)&&!temp.isEmpty()){
-								addNewBlockToPool(SimpleBlock.tryToCreate(temp, method));
+								addNewBlockToPool(SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId()));
 								temp.clear();
 								continue;
 							}else if(marked.contains(curr)){
@@ -77,27 +86,20 @@ public class BlockGenerator {
 								analysisstack.push(next);
 							}
 							if(curr.getSuccs().size()>1&&!temp.isEmpty()){
-								addNewBlockToPool(SimpleBlock.tryToCreate(temp, method));
+								addNewBlockToPool(SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId()));
 								temp.clear();
 							}
 							marked.add(curr);
 						}
 						
 						if(!temp.isEmpty()){
-							addNewBlockToPool(SimpleBlock.tryToCreate(temp, method));
+							addNewBlockToPool(SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId()));
 							temp.clear();
 						}
-					}/**
-					else{
-						// not code block for this part, we directly use the method block
-						
-						if(!nodes.isEmpty())
-							addNewBlockToPool(SimpleBlock.tryToCreate(nodes, method));
-					}**/
+					}
 				}
 			}
-			// 2. Create class block
-			addNewBlockToPool(ClassBlock.tryToCreate(classallnode, cls));
+			
 		}
 	}
 	public static void increaseId(){
@@ -110,9 +112,9 @@ public class BlockGenerator {
 		//2. //"Block ID","Type","Method(IF)","Class"
 		if(!blockpool.contains(block)){
 			if(block.getType()==BlockType.Class)
-				blockmodel.addRow(new Object[]{block.getBlockId(),"Nil",block.getType(),"Nil",block.getSootClass().getName()});
+				blockmodel.addRow(new Object[]{block.getBlockId(),"Nil",block.getType(),"Nil",block.getSootClass().getName(),"-"});
 			else{
-				blockmodel.addRow(new Object[]{block.getBlockId(),block.getCodeRange(),block.getType(),block.getSootMethod().getName(),block.getSootClass().getName()});
+				blockmodel.addRow(new Object[]{block.getBlockId(),block.getCodeRange(),block.getType(),block.getSootMethod().getName(),block.getSootClass().getName(),block.getParentId()});
 			}
 			blockpool.add(block);
 		}
