@@ -4,11 +4,10 @@ import java.awt.Color;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import Patch.Hadoop.Job.ColorMap;
 import Patch.Hadoop.Job.JobVariable;
 import soot.SootClass;
 import soot.SootMethod;
@@ -24,7 +23,7 @@ public class ReuseAsset {
 	private SootMethod commonMethod =  null;
 	private SootClass commonClass = null;
 	private Color color;
-	private List<JobVariable>jobs;
+	private Set<JobVariable>jobs;
 	private List<CFGNode>cfgNodes;
 	private static Map<CodeBlock,ReuseAsset>blockToAsset = new HashMap<CodeBlock,ReuseAsset>();
 	private int LOC = 0;
@@ -34,7 +33,6 @@ public class ReuseAsset {
 		this.block = block;
 		this.LOC = lineofCode;
 		this.commonType = block.getType();
-		Set<JobVariable>alljobs = new HashSet<JobVariable>(joblist);
 		if(this.commonType.equals(BlockType.Method)){
 			this.commonMethod = block.getSootMethod();
 		}else if(this.commonType.equals(BlockType.Class)){
@@ -42,8 +40,9 @@ public class ReuseAsset {
 		}else if(this.commonType.equals(BlockType.Stmt)){
 			this.cfgNodes = block.getCFGNodes();
 		}
-		this.jobs = new LinkedList<JobVariable>();
+		this.jobs = new HashSet<JobVariable>();
 		this.jobs.addAll(joblist);
+		this.color = ColorMap.inst().getCombinedColor(jobs);
 		blockToAsset.put(block, this);
 	}
 	public static Map<CodeBlock, ReuseAsset> getBlockToAsset(){
@@ -79,7 +78,7 @@ public class ReuseAsset {
 	public int getBlockId(){
 		return this.blockId;
 	}
-	public List<JobVariable> getJobs(){
+	public Set<JobVariable> getJobs(){
 		return this.jobs;
 	}
 	public Color getColor(){

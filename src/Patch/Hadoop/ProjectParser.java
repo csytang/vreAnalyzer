@@ -492,16 +492,83 @@ public class ProjectParser {
 			JobVariable job = entry.getKey();
 			List<SimpleBlock> blocklist = entry.getValue();
 			List<CFGNode>nodes = new LinkedList<CFGNode>();
+			List<CFGNode>tempnodes = new LinkedList<CFGNode>();
+			JobHub jobhub = jobtoHub.get(job);
 			for(SimpleBlock block:blocklist){
 				nodes.addAll(block.getCFGNodes());
 			}
-			SimpleBlock cb = SimpleBlock.tryToCreate(nodes, sootmethod,mblock.getBlockId());
-			//add to table
-			BlockGenerator.inst().addNewBlockToPool(cb,false);
-			jobtoHub.get(job).addUse(sootmethod.getDeclaringClass(), cb);
+			CFG cfg = ProgramFlowBuilder.inst().getCFG(job.getSootMethod());
+			int blocklistsize = nodes.size();
+			int[]coderange = new int[blocklistsize];
+			for(int i = 0;i < nodes.size();i++){
+				coderange[i]=cfg.getIndexId(nodes.get(i));
+			}
+			quickSort(coderange,0,coderange.length-1);
+			int startIndex = 0;
+			int endIndex = 0;
+			for(int i = 0;i < coderange.length;i++){
+				startIndex = i;
+				endIndex = startIndex;
+				if(i<coderange.length-1){
+					while(coderange[i+1]-coderange[i]==1){
+						endIndex++;
+						i++;
+						if(i==coderange.length-1)
+							break;
+					}
+				}
+				if(endIndex-startIndex>=1){
+					tempnodes.clear();
+					for(int j = startIndex;j <= endIndex;j++){
+						tempnodes.add(cfg.getNodes().get(coderange[j]));
+					}
+					SimpleBlock cb = SimpleBlock.tryToCreate(tempnodes, sootmethod,mblock.getBlockId());
+					//add to table
+					BlockGenerator.inst().addNewBlockToPool(cb,false);
+					jobhub.addUse(sootmethod.getDeclaringClass(),cb);
+									
+				}else if(endIndex==startIndex){
+					SimpleBlock cb = SimpleBlock.tryToCreate(cfg.getNodes().get(coderange[startIndex]), sootmethod,mblock.getBlockId());
+					//add to table
+					BlockGenerator.inst().addNewBlockToPool(cb,false);
+					jobhub.addUse(sootmethod.getDeclaringClass(), cb);
+				}
+					
+			}
+			
+
 		}
 		
 	}
+	public void quickSort(int arr[],int left,int right){
+		int index = partition(arr,left,right);
+		if(left< index-1){
+			quickSort(arr,left,index-1);
+		}
+		if(index<right){
+			quickSort(arr,index,right);
+		}
+	}
+	public int partition(int arr[],int left,int right){
+		int i = left, j = right;
+		int temp;
+		int pivot = arr[(left+right)/2];
+		while(i <= j){
+			while(arr[i]< pivot)
+				i++;
+			while(arr[j]> pivot)
+				j--;
+			if(i <= j){
+				temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
+				i++;
+				j--;
+			}
+		}
+		return i;
+	}
+
 	public void defineJob(Variable defvar,NodeDefUses cfgNode,Stmt stmt){
 		SimpleBlock jobblock = SimpleBlock.tryToCreate(cfgNode,cfgNode.getMethod(),mblock.getBlockId());
 		BlockGenerator.inst().addNewBlockToPool(jobblock,false);

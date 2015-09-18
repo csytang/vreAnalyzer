@@ -32,7 +32,16 @@ public class SimpleBlock extends CodeBlock{
 			methodToBlocks.put(method, blocks);
 		}
 	}
-	
+	private SimpleBlock(List<CFGNode> cfgnodes,SootMethod method,int parentId){
+		super();
+		blocks = new LinkedList<CFGNode>();
+		blocks.addAll(cfgnodes);
+		super.setBlocks(blocks);
+		super.setMethod(method);
+		super.setSootClass(method.getDeclaringClass());
+		super.setType(BlockType.Stmt);
+		super.setParentId(parentId);
+	}
 	public static SimpleBlock tryToCreate(List<CFGNode> cfgnodes,SootMethod method,int parentId){
 		int id = 0;
 		List<SimpleBlock> methodBlocks = null;
@@ -58,8 +67,7 @@ public class SimpleBlock extends CodeBlock{
 	public static SimpleBlock createTemp(CFGNode cfgnode,SootMethod method,int parentId){
 		List<CFGNode>list = new LinkedList<CFGNode>();
 		list.add(cfgnode);
-		int temperateId = -1;
-		return new SimpleBlock(list,method,temperateId,parentId);
+		return new SimpleBlock(list,method,parentId);
 	}
 	
 	public static SimpleBlock tryToCreate(CFGNode cfgnode,SootMethod method,int parentId){

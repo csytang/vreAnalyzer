@@ -121,7 +121,7 @@ public class SourceClassBinding{
 	}
 	// start binding from source
 	public void startdirBinding(List<File>classes,List<File>source){
-		System.out.println("[vreHadoop] Binding source code with jar/class files");
+		System.out.println("[vreAnalyzer] Binding source code with jar/class files");
 		ArrayList<File>sortedSource = new ArrayList<File>(source);
 		Collections.sort(sortedSource,new Comparator<File>(){
 

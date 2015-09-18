@@ -2,6 +2,7 @@ package Patch.Hadoop.ReuseAssets;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -29,7 +30,7 @@ public class ReuseAssetWriteToTable {
 		for(Map.Entry<CodeBlock, ReuseAsset>entry:commonAssets.entrySet()){
 			ReuseAsset asset = entry.getValue();
 			int id = asset.getBlockId();
-			List<JobVariable>jobs = asset.getJobs();
+			Set<JobVariable>jobs = asset.getJobs();
 			String idString = "[";
 			for(JobVariable jb:jobs){
 				idString+=jb.getJobId()+",";
