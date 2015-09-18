@@ -47,7 +47,7 @@ public class BlockGenerator {
 			}
 			// 2. Create class block
 			ClassBlock clsblock = ClassBlock.tryToCreate(classallnode, cls);
-			addNewBlockToPool(clsblock);
+			addNewBlockToPool(clsblock,true);
 			for(SootMethod method:clsmethods){
 				if(method.getTag(MethodTag.TAG_NAME)!=null&&
 						!Modifier.isVolatile(method.getModifiers())){
@@ -56,7 +56,7 @@ public class BlockGenerator {
 					CFG cfg = ProgramFlowBuilder.inst().getCFG(method);
 					List<CFGNode>nodes = cfg.getNodes();
 					MethodBlock methodBlock = MethodBlock.tryToCreate(nodes, method,clsblock.getBlockId());
-					addNewBlockToPool(methodBlock);
+					addNewBlockToPool(methodBlock,true);
 					classallnode.addAll(nodes);
 					// 2. Create inside method blocks
 					/**
@@ -75,7 +75,7 @@ public class BlockGenerator {
 						while(!analysisstack.isEmpty()){
 							CFGNode curr = analysisstack.pop();
 							if(marked.contains(curr)&&!temp.isEmpty()){
-								addNewBlockToPool(SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId()));
+								addNewBlockToPool(SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId()),true);
 								temp.clear();
 								continue;
 							}else if(marked.contains(curr)){
@@ -86,14 +86,14 @@ public class BlockGenerator {
 								analysisstack.push(next);
 							}
 							if(curr.getSuccs().size()>1&&!temp.isEmpty()){
-								addNewBlockToPool(SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId()));
+								addNewBlockToPool(SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId()),true);
 								temp.clear();
 							}
 							marked.add(curr);
 						}
 						
 						if(!temp.isEmpty()){
-							addNewBlockToPool(SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId()));
+							addNewBlockToPool(SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId()),true);
 							temp.clear();
 						}
 					}
@@ -108,13 +108,20 @@ public class BlockGenerator {
 	public static int getBlockId(){
 		return blockid;
 	}
-	public void addNewBlockToPool(CodeBlock block){
+	public void addNewBlockToPool(CodeBlock block,boolean original){
 		//2. //"Block ID","Type","Method(IF)","Class"
 		if(!blockpool.contains(block)){
-			if(block.getType()==BlockType.Class)
-				blockmodel.addRow(new Object[]{block.getBlockId(),"Nil",block.getType(),"Nil",block.getSootClass().getName(),"-"});
+			if(block.getType()==BlockType.Class){
+				if(original)
+					blockmodel.addRow(new Object[]{block.getBlockId(),"Nil",block.getType(),"Nil",block.getSootClass().getName(),"-","Y"});
+				else
+					blockmodel.addRow(new Object[]{block.getBlockId(),"Nil",block.getType(),"Nil",block.getSootClass().getName(),"-","N"});
+			}
 			else{
-				blockmodel.addRow(new Object[]{block.getBlockId(),block.getCodeRange(),block.getType(),block.getSootMethod().getName(),block.getSootClass().getName(),block.getParentId()});
+				if(original)
+					blockmodel.addRow(new Object[]{block.getBlockId(),block.getCodeRange(),block.getType(),block.getSootMethod().getName(),block.getSootClass().getName(),block.getParentId(),"Y"});
+				else
+					blockmodel.addRow(new Object[]{block.getBlockId(),block.getCodeRange(),block.getType(),block.getSootMethod().getName(),block.getSootClass().getName(),block.getParentId(),"N"});
 			}
 			blockpool.add(block);
 		}

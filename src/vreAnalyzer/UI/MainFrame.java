@@ -18,9 +18,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-
 import java.awt.FlowLayout;
-
 import javax.swing.JEditorPane;
 import javax.swing.JTabbedPane;
 import javax.swing.ImageIcon;
@@ -31,12 +29,9 @@ import javax.swing.JSeparator;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
-
 import org.apache.commons.lang3.StringUtils;
-
 import vreAnalyzer.vreAnalyzerCommandLine;
 import vreAnalyzer.Text2HTML.Text2HTML;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -239,7 +234,7 @@ public class MainFrame extends JFrame {
 		
 		JScrollPane blocksPane = new JScrollPane();
 		tabbedPane.addTab("Code Blocks", new ImageIcon(MainFrame.class.getResource("/image/blocks.png")), blocksPane, "Divide all codes into snippets by branches");
-		String blockheaders[] = {"Block ID","Code Range(Jimple)","Type","Method(IF)","Class","Parent BlockID"};
+		String blockheaders[] = {"Block ID","Code Range(Jimple)","Type","Method(IF)","Class","Parent BlockID","Original(Y/N)"};
 		DefaultTableModel blocktableModel = new DefaultTableModel(null,blockheaders);
 		blocktable = new JTable(blocktableModel);
 		blocktable.getTableHeader().setReorderingAllowed(false);

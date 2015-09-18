@@ -13,13 +13,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.swing.JTable;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
-
 import Patch.Hadoop.Job.ColorMap;
 import Patch.Hadoop.Job.JobAnnotate;
 import Patch.Hadoop.Job.JobHub;
@@ -271,8 +269,7 @@ public class ProjectParser {
 		int index = 0;
 		List<CFGNode> allnodes = cfggraph.getNodes();
 		// 2.0 Find mapper and reducer in lib class set
-		
-				
+		Map<JobVariable,List<SimpleBlock>>jobToUseBlocks = new HashMap<JobVariable,List<SimpleBlock>>();		
 		// 2. Find all Jobs and associated with mapper and reducer classes
 		for(int i = 0;i < allnodes.size();i++){
 			NodeDefUses cfgNode = (NodeDefUses) allnodes.get(i);
@@ -436,11 +433,20 @@ public class ProjectParser {
 							JobHub jobinstance = getjobHub(usevar);
 							if(jobinstance==null)
 								continue;
-							SimpleBlock cb = SimpleBlock.tryToCreate(cfgNode, sootmethod,mblock.getBlockId());
+							//SimpleBlock cb = SimpleBlock.tryToCreate(cfgNode, sootmethod,mblock.getBlockId());
 							//add to table
-							BlockGenerator.inst().addNewBlockToPool(cb);
-							jobinstance.addUse(sootmethod.getDeclaringClass(),cb);
+							//BlockGenerator.inst().addNewBlockToPool(cb);
 							JobVariable job = jobinstance.getJob();
+							SimpleBlock cb = SimpleBlock.createTemp(cfgNode, sootmethod, mblock.getBlockId());
+							if(jobToUseBlocks.containsKey(job)){
+								jobToUseBlocks.get(job).add(cb);
+							}else{
+								List<SimpleBlock>tempblocklist = new LinkedList<SimpleBlock>();
+								tempblocklist.add(cb);
+								jobToUseBlocks.put(job, tempblocklist);
+							}
+							//jobinstance.addUse(sootmethod.getDeclaringClass(),cb);
+							
 							// contains job -> invoke method
 							if(stmt.containsInvokeExpr()){
 								// map , reduce add the binding manually
@@ -457,7 +463,7 @@ public class ProjectParser {
 										bindcfgnodess.addAll(bindcfg.getNodes());
 									}
 									ClassBlock cBlock = ClassBlock.tryToCreate(bindcfgnodess, bindsc);
-									BlockGenerator.inst().addNewBlockToPool(cBlock);
+									BlockGenerator.inst().addNewBlockToPool(cBlock,false);
 									jobinstance.addUse(bindsc, cBlock);
 									
 								}else if(bindType==BlockType.Method){
@@ -466,7 +472,7 @@ public class ProjectParser {
 									SootClass cls = bindingsm.get(0).getDeclaringClass();
 									ClassBlock cblock = ClassBlock.getMethodBlock(cls);
 									MethodBlock mBlock = MethodBlock.tryToCreate(bindcfgnodess,bindingsm.get(0),cblock.getBlockId());
-									BlockGenerator.inst().addNewBlockToPool(mBlock);
+									BlockGenerator.inst().addNewBlockToPool(mBlock,false);
 									jobinstance.addUse(bindingsm.get(0).getDeclaringClass(), mBlock);
 								}
 								
@@ -477,16 +483,28 @@ public class ProjectParser {
 					}
 					//////////////////////////////////////////////////////////////////
 				}
-				
-				
-				
-				
 			}
 		}
+		
+		/////////////////////////////
+		//1. combine temp blocks
+		for(Map.Entry<JobVariable,List<SimpleBlock>>entry:jobToUseBlocks.entrySet()){
+			JobVariable job = entry.getKey();
+			List<SimpleBlock> blocklist = entry.getValue();
+			List<CFGNode>nodes = new LinkedList<CFGNode>();
+			for(SimpleBlock block:blocklist){
+				nodes.addAll(block.getCFGNodes());
+			}
+			SimpleBlock cb = SimpleBlock.tryToCreate(nodes, sootmethod,mblock.getBlockId());
+			//add to table
+			BlockGenerator.inst().addNewBlockToPool(cb,false);
+			jobtoHub.get(job).addUse(sootmethod.getDeclaringClass(), cb);
+		}
+		
 	}
 	public void defineJob(Variable defvar,NodeDefUses cfgNode,Stmt stmt){
 		SimpleBlock jobblock = SimpleBlock.tryToCreate(cfgNode,cfgNode.getMethod(),mblock.getBlockId());
-		BlockGenerator.inst().addNewBlockToPool(jobblock);
+		BlockGenerator.inst().addNewBlockToPool(jobblock,false);
 		JobVariable jvb = new JobVariable(defvar,jobblock);
 		if(!containjobvar(jvb)){
 			Value defValue = defvar.getValue();
