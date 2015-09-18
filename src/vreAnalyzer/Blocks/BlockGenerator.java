@@ -15,6 +15,7 @@ import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.Tag.MethodTag;
 import vreAnalyzer.UI.MainFrame;
+import vreAnalyzer.Variants.StaticVariants;
 
 public class BlockGenerator {
 	public static BlockGenerator instance;
@@ -75,7 +76,11 @@ public class BlockGenerator {
 						while(!analysisstack.isEmpty()){
 							CFGNode curr = analysisstack.pop();
 							if(marked.contains(curr)&&!temp.isEmpty()){
-								addNewBlockToPool(SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId()),true);
+								SimpleBlock sblock = SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId());
+								addNewBlockToPool(sblock,true);// sub block
+								
+								// 1. add a new static variant
+								StaticVariants stvariant = new StaticVariants(sblock);
 								temp.clear();
 								continue;
 							}else if(marked.contains(curr)){
@@ -86,7 +91,7 @@ public class BlockGenerator {
 								analysisstack.push(next);
 							}
 							if(curr.getSuccs().size()>1&&!temp.isEmpty()){
-								addNewBlockToPool(SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId()),true);
+								addNewBlockToPool(SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId()),true);// prior block
 								temp.clear();
 							}
 							marked.add(curr);

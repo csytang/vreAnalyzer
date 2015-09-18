@@ -13,11 +13,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.swing.JTable;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
+
 import Patch.Hadoop.Job.ColorMap;
 import Patch.Hadoop.Job.JobAnnotate;
 import Patch.Hadoop.Job.JobHub;
@@ -69,11 +71,11 @@ public class ProjectParser {
 	private SootMethod sootmethod = null;
 	private CFGDefUse cfggraph;
 	private boolean verbose = false;
+	@SuppressWarnings("rawtypes")
 	private Context allcontext = null;
 	private static int numjobs = 0;
 	private static int jobId = 0;
 	private static int numShadow = 0;
-	private SootClass cs;
 	private CFGNode exitNode;
 	private List<Context<SootMethod,CFGNode,PointsToGraph>> currContexts;
 	private List<File>allannotatedFiles = new LinkedList<File>();
@@ -230,7 +232,6 @@ public class ProjectParser {
 		for(SootMethod sm:ProgramFlowBuilder.inst().getAppConcreteMethods()){
 			mblock = MethodBlock.getMethodBlock(sm);
 			sootmethod = sm;
-			cs = sm.getDeclaringClass();
 			cfggraph = (CFGDefUse) ProgramFlowBuilder.inst().getCFG(sm);
 			exitNode = cfggraph.EXIT;
 			currContexts = PointsToAnalysis.inst().getContexts(sm);
@@ -260,8 +261,6 @@ public class ProjectParser {
 		}
 					
 		addLegendListener();
-		
-		
 	}
 	
 	public void Parse(){
@@ -291,9 +290,8 @@ public class ProjectParser {
 					for(Variable defvar:definedVariables){	
 							// If it is a define of job
 						if(defvar.getValue().getType().toString().equals("org.apache.hadoop.mapreduce.Job")){
-							   	//number of jobs counter
-							   	//created by use standard API
-							
+							//number of jobs counter
+							//created by use standard API
 							if(stmt instanceof AssignStmt){
 								// created by use customized functions
 								AssignStmt assign = (AssignStmt)stmt;
@@ -315,7 +313,6 @@ public class ProjectParser {
 											Util.updateSucceedP2G((Local)defvar.getValue(), argsExpr, cfgNode, cfggraph, allcontext);
 											p2g.assignNew(loright, argsExpr);
 											Util.updateSucceedP2G(loright, argsExpr, cfgNode, cfggraph, allcontext);
-											
 										}
 									}else{
 										if(defvar.isLocal())
@@ -324,7 +321,6 @@ public class ProjectParser {
 												p2g.assignNew((Local) defvar.getValue(), argsExpr);
 												Util.updateSucceedP2G((Local) defvar.getValue(), argsExpr, cfgNode, cfggraph, allcontext);
 											}
-											
 										}
 									}
 								}else{
