@@ -251,7 +251,7 @@ public class MainFrame extends JFrame {
 		
 		JScrollPane variantBlockPane = new JScrollPane();
 		tabbedPane.addTab("Variant Blocks", new ImageIcon(MainFrame.class.getResource("/image/variants.png")), variantBlockPane, "variant assets from variabillity aspect");
-		String variantsheaders[] = {"Block ID","LOC","Features(IF)","Seperators"};
+		String variantsheaders[] = {"Block ID","Feature ID(IF)","Seperators"};
 		DefaultTableModel varitableModel = new DefaultTableModel(null,variantsheaders);
 		variantstable = new JTable(varitableModel);
 		variantstable.getTableHeader().setReorderingAllowed(false);
@@ -579,7 +579,9 @@ public class MainFrame extends JFrame {
 	public JTree getTree(){
 		return source_annotateDirTree;
 	}
-
+	public JTable getVariantTable(){
+		return variantstable;
+	}
 	public JTable getBlockTable() {
 		// TODO Auto-generated method stub
 		return blocktable;

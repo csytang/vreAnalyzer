@@ -15,6 +15,8 @@ import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.Tag.MethodTag;
 import vreAnalyzer.UI.MainFrame;
+import vreAnalyzer.Variants.BindingType;
+import vreAnalyzer.Variants.DynamicVariants;
 import vreAnalyzer.Variants.StaticVariants;
 
 public class BlockGenerator {
@@ -22,6 +24,7 @@ public class BlockGenerator {
 	private static int blockid = 0;
 	private static ArrayList<CodeBlock> blockpool = new ArrayList<CodeBlock>();
 	private DefaultTableModel blockmodel;
+	private DefaultTableModel variantmodel;
 	public static BlockGenerator inst(List<SootClass> appClasses){
 		if(instance==null)
 			instance = new BlockGenerator(appClasses);
@@ -35,6 +38,8 @@ public class BlockGenerator {
 		
 		JTable blocktable = MainFrame.inst().getBlockTable();
 		blockmodel = (DefaultTableModel)blocktable.getModel();
+		JTable variantable = MainFrame.inst().getVariantTable();
+		variantmodel = (DefaultTableModel)variantable.getModel();
 		
 		for(SootClass cls:appClasses){
 			
@@ -42,6 +47,7 @@ public class BlockGenerator {
 			List<CFGNode>classallnode = new LinkedList<CFGNode>();
 			List<CFGNode>marked = new LinkedList<CFGNode>();
 			for(SootMethod method:clsmethods){
+				
 				CFG cfg = ProgramFlowBuilder.inst().getCFG(method);
 				List<CFGNode>nodes = cfg.getNodes();
 				classallnode.addAll(nodes);
@@ -58,7 +64,14 @@ public class BlockGenerator {
 					List<CFGNode>nodes = cfg.getNodes();
 					MethodBlock methodBlock = MethodBlock.tryToCreate(nodes, method,clsblock.getBlockId());
 					addNewBlockToPool(methodBlock,true);
-					classallnode.addAll(nodes);
+					
+					MethodTag mTag = (MethodTag) method.getTag(MethodTag.TAG_NAME);
+					if(mTag.isOverloadMethod()){
+						DynamicVariants dyvariant = new DynamicVariants(methodBlock,BindingType.overload);
+					}
+					if(mTag.isOverrideMethod()){
+						DynamicVariants dyvariant = new DynamicVariants(methodBlock,BindingType.override);
+					}
 					// 2. Create inside method blocks
 					/**
 					 * Strategy:
@@ -80,7 +93,7 @@ public class BlockGenerator {
 								addNewBlockToPool(sblock,true);// sub block
 								
 								// 1. add a new static variant
-								StaticVariants stvariant = new StaticVariants(sblock);
+								StaticVariants stvariant = new StaticVariants(sblock,BindingType.branch);
 								temp.clear();
 								continue;
 							}else if(marked.contains(curr)){
@@ -118,9 +131,9 @@ public class BlockGenerator {
 		if(!blockpool.contains(block)){
 			if(block.getType()==BlockType.Class){
 				if(original)
-					blockmodel.addRow(new Object[]{block.getBlockId(),"Nil",block.getType(),"Nil",block.getSootClass().getName(),"-","Y"});
+					blockmodel.addRow(new Object[]{block.getBlockId(),"-",block.getType(),"-",block.getSootClass().getName(),"-","Y"});
 				else
-					blockmodel.addRow(new Object[]{block.getBlockId(),"Nil",block.getType(),"Nil",block.getSootClass().getName(),"-","N"});
+					blockmodel.addRow(new Object[]{block.getBlockId(),"-",block.getType(),"-",block.getSootClass().getName(),"-","N"});
 			}
 			else{
 				if(original)
@@ -129,6 +142,30 @@ public class BlockGenerator {
 					blockmodel.addRow(new Object[]{block.getBlockId(),block.getCodeRange(),block.getType(),block.getSootMethod().getName(),block.getSootClass().getName(),block.getParentId(),"N"});
 			}
 			blockpool.add(block);
+		}
+	}
+	public void addVariantBlockToPool(DynamicVariants dvariant){
+		if(!DynamicVariants.poolContain(dvariant)){
+			//{"Block ID","Feature ID(IF)","Seperators"};
+			CodeBlock block = dvariant.getBlock();
+			if(block.getFeatureId()!=-1){
+				variantmodel.addRow(new Object[]{block.getBlockId(),block.getFeatureId(),dvariant.getType()});
+			}else{
+				variantmodel.addRow(new Object[]{block.getBlockId(),"-",dvariant.getType()});
+			}
+			DynamicVariants.addToPool(dvariant);
+		}
+	}
+	public void addVariantBlockToPool(StaticVariants svariant){
+		if(!StaticVariants.poolContain(svariant)){
+			//{"Block ID","Feature ID(IF)","Seperators"};
+			CodeBlock block = svariant.getBlock();
+			if(block.getFeatureId()!=-1){
+				variantmodel.addRow(new Object[]{block.getBlockId(),block.getFeatureId(),"branch"});
+			}else{
+				variantmodel.addRow(new Object[]{block.getBlockId(),"-","branch"});
+			}
+			StaticVariants.addToPool(svariant);
 		}
 	}
 }

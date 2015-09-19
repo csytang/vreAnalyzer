@@ -1,14 +1,17 @@
 package vreAnalyzer.Tag;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import soot.Local;
+import soot.Modifier;
 import soot.PatchingChain;
+import soot.SootClass;
 import soot.SootMethod;
+import soot.Type;
 import soot.Unit;
 import soot.UnitBox;
 import soot.jimple.IdentityStmt;
@@ -18,6 +21,7 @@ import soot.tagkit.AttributeValueException;
 import soot.tagkit.Tag;
 import vreAnalyzer.Elements.CallSite;
 import vreAnalyzer.Elements.Location;
+import vreAnalyzer.Util.SootClassWrapper;
 import vreAnalyzer.Util.Util;
 
 public class MethodTag implements Tag {
@@ -25,7 +29,7 @@ public class MethodTag implements Tag {
 	/////////////////////////Field///////////////////////////////
 	// SootMethod attached;
 	private SootMethod sm = null;
-	
+	private SootClass cls = null;
 	// All statement in the method (unordered)
 	private ArrayList<Stmt> stmtList;
 	
@@ -34,8 +38,8 @@ public class MethodTag implements Tag {
 	
 	// Store the statement to id
 	private HashMap<Stmt, Integer> revStmtMap;
-	
-	
+	private boolean isOverloadMethod = false;
+	private boolean isOverrideMethod = false;
 	
 	// Store the formal parameters
 	private Local[] formalParams;
@@ -70,9 +74,15 @@ public class MethodTag implements Tag {
 	public MethodTag(SootMethod sm) {
 		// TODO Auto-generated constructor stub
 		this.sm = sm;
+		this.cls = sm.getDeclaringClass();
 		this.stmtList = new ArrayList<Stmt>(); // maps id->stmt
-		
-		
+		List<SootMethod>methods = sm.getDeclaringClass().getMethods();
+		int methodCount = getMethodsCountForName(sm.getName(),methods);
+		if(methodCount>1)
+			isOverloadMethod = true;
+		else
+			isOverloadMethod = false;
+		this.isOverrideMethod = isOverrideSootMethod();
 		// Init all statements
 		int sIdx = 0;
 		for (Unit u : sm.retrieveActiveBody().getUnits())
@@ -112,11 +122,63 @@ public class MethodTag implements Tag {
 	////////////////////////Member Functions/////////////////
 	public SootMethod getSootMethod() {return this.sm;}
 	public Local[] getFormalParams() { return this.formalParams; }
-	
+	/**
+     * Gets a method in the specified class that overrides the specified method of the base class. ie if M of class BaseClass
+     * return MO of subclass SC where MO is the method of SC tht overrides M of baseclass
+     * @param sc the soot class
+     * @param baseMethod the base method
+     * @return a method in the specified class that overrides the specified method of the base class. return null if
+     * no override method exists
+     */
+    public boolean isOverrideSootMethod() {
+        List<SootMethod> list = new SootClassWrapper(cls).getAllMethodsInherited();//sc.getMethods();
+        for (SootMethod meth : list) { 
+            if (meth.getName().equals(sm.getName())) {
+                if (meth.getParameterCount() == sm.getParameterCount()) {       
+                    if (meth.getParameterCount() == 0) { // special case of a method with no arguments
+                        return true;
+                    }
+                    
+                    // method has parameters
+                    List<Type> parameterTypeList = meth.getParameterTypes();
+                    List<Type> parameterTypeListParent = sm.getParameterTypes();
+                    //List<MethodParameter> methParameterList = md.getParameterList();
+                    boolean allThesame = true;
+                    for (int i=0; i<meth.getParameterCount(); ++i) {
+                        if (!parameterTypeList.get(i).toString().equals(parameterTypeListParent.get(i).toString())) {
+                            allThesame = false;
+                            break;//return meth;
+                        }
+                    }
+                    if (allThesame) {
+                        return true;
+                    }
+                }
+            }
+        }
+        
+        if (cls.isAbstract() || cls.isInterface()) {// it is permitted for abstract or iface not to have the method
+            return false;
+        }
+		return false;
+        
+        
+    }
 	public HashSet<SootMethod> getAllCalleeMethods(){return this.allCalleeMethods;}
 	public String toString() {return this.sm.toString();}
 	public CallSite stmtgetCallSite(Stmt stmt){return this.stmtToCallSite.get(stmt);}
 	public void addCallerSite(CallSite callersite){this.callerSites.add(callersite);}
+	public boolean isOverloadMethod(){return this.isOverloadMethod;}
+	public boolean isOverrideMethod(){return this.isOverrideMethod;}
+	public int getMethodsCountForName(String methodName,List<SootMethod>methods){
+		int methodCount = 0;
+		for(SootMethod method:methods){
+			if(method.getName().equals(methodName)&&
+					!Modifier.isVolatile(sm.getModifiers()))
+				methodCount++;
+		}
+		return methodCount;
+	}
 	//////////////////////////////////////////////////////////
 	
 	///////////////////////Analysis////////////////////////////

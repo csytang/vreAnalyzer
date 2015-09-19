@@ -18,10 +18,12 @@ public class CodeBlock {
 	private BlockType blockType = null;
 	private List<CFGNode>blocks;
 	private SootMethod method;// if applicable
+	private String codeRange = "";
 	private SootClass cls;
 	private BlockJobTag bmtag;
 	private int blockId = 0;
 	private int parentId = 0;
+	private int featureId = -1;
 	public SootClass getSootClass(){
 		return this.cls;
 	}
@@ -88,7 +90,8 @@ public class CodeBlock {
 	}
 	public String getCodeRange() {
 		// TODO Auto-generated method stub
-		
+		if(!codeRange.trim().equals(""))
+			return codeRange;
 		CFG cfg = ProgramFlowBuilder.inst().getCFG(method);
 		int blockrealSize = this.blocks.size();
 		if(this.blocks.contains(cfg.ENTRY))
@@ -133,6 +136,7 @@ public class CodeBlock {
 		if(coderange.length>0)
 			rangestring = rangestring.substring(0, rangestring.length()-1);
 		rangestring+="]";
+		codeRange = rangestring;
 		return rangestring;
 	}
 	public void quickSort(int arr[],int left,int right){
@@ -169,5 +173,13 @@ public class CodeBlock {
 	}
 	public int getParentId(){
 		return this.parentId;
+	}
+	public void setFeatureId(int id){
+		this.featureId = id;
+	}
+	public int getFeatureId() {
+		// TODO Auto-generated method stub
+
+		return featureId;
 	}
 }

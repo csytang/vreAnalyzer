@@ -11,12 +11,26 @@ public class StaticVariants {
 	 * IfStmt, WhileStmt, SwitchStmt, ForStmt, GoStmt 
 	 * It is decided by the conditional expression
 	 */
-	private static List<StaticVariants> blockpool = new LinkedList<StaticVariants>();
-	public StaticVariants(CodeBlock block){		
+	private CodeBlock variant;
+	private BindingType type;
+	private static List<StaticVariants> svariantpool = new LinkedList<StaticVariants>();
+	public StaticVariants(CodeBlock block,BindingType type){		
 		//{"Block ID","LOC","Features(IF)","Seperators"};
-		blockpool.add(this);
-		
-		
-		
+		this.variant = block;
+		this.type = type;
+		svariantpool.add(this);
+	}
+	public List<StaticVariants> getPool(){
+		return svariantpool;
+	}
+	public static boolean poolContain(StaticVariants vi){
+		return svariantpool.contains(vi);
+	}
+	public static void addToPool(StaticVariants vi){
+		svariantpool.add(vi);
+	}
+	public CodeBlock getBlock() {
+		// TODO Auto-generated method stub
+		return variant;
 	}
 }

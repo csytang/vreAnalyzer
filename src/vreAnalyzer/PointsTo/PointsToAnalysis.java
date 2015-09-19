@@ -86,8 +86,6 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 	
 	public PointsToAnalysis() {
 		super();
-		
-		
 		// Create an empty analysis stack
 		this.analysisStack = new Stack<Context<SootMethod,CFGNode,PointsToGraph>>();
 		// No classes statically initialised yet
