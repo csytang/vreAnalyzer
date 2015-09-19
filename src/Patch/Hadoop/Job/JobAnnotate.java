@@ -20,8 +20,8 @@ public class JobAnnotate {
 	int startcolumn = 0;
 	int endline = 0;
 	int endcolumn = 0;
-	private static int tableRow = 0;
-	public static Map<Integer,Integer> rowToJobId = new HashMap<Integer,Integer>();
+	
+	
 	public JobAnnotate(JobVariable job,File htmlFile){
 		this.hostJob = job;
 		String hovertext = "Job:"+job.toString()+"(Id:"+job.getJobId()+")";
@@ -29,8 +29,6 @@ public class JobAnnotate {
 		jobstmt = job.getBlock().getCFGNodes().get(0).getStmt();
 		// set the color job mapping to the MainFrame
 		
-		rowToJobId.put(tableRow, job.getJobId());
-		tableRow++;
 		slcTag = (SourceLocationTag) jobstmt.getTag(SourceLocationTag.TAG_NAME);
 		if(slcTag.getTagType()==LocationType.SOURCE_TAG){
 			startline = slcTag.getStartLineNumber();

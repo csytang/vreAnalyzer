@@ -1,6 +1,7 @@
 package Patch.Hadoop.Job;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -10,6 +11,7 @@ import vreAnalyzer.UI.RandomColor;
 public class ColorMap {
 	public static ColorMap instance;
 	private static Map<JobVariable,Color>jbToColor;
+	private static ArrayList<Set<JobVariable>>indexToJobs;
 	private static Map<String,Set<JobVariable>>hexColorToJob = new HashMap<String,Set<JobVariable>>();
 	private static Map<Set<JobVariable>,Color>combinedToColor;
 	public static ColorMap inst(){
@@ -18,8 +20,15 @@ public class ColorMap {
 		return instance;
 	}
 	public ColorMap(){
+		indexToJobs = new ArrayList<Set<JobVariable>>();
 		jbToColor = new HashMap<JobVariable,Color>();
 		combinedToColor = new HashMap<Set<JobVariable>,Color>();
+	}
+	public void registerLegendJobsList(Set<JobVariable>jobs){
+		indexToJobs.add(jobs);
+	}
+	public ArrayList<Set<JobVariable>> getLegendJobsList(){
+		return indexToJobs;
 	}
 	public void registerJobColor(JobVariable job,Color color){
 		this.jbToColor.put(job, color);

@@ -13,12 +13,12 @@ public class StaticVariants {
 	 */
 	private CodeBlock variant;
 	private BindingType type;
+	private int rowinVariantTable = -1;
 	private static List<StaticVariants> svariantpool = new LinkedList<StaticVariants>();
 	public StaticVariants(CodeBlock block,BindingType type){		
 		//{"Block ID","LOC","Features(IF)","Seperators"};
 		this.variant = block;
 		this.type = type;
-		svariantpool.add(this);
 	}
 	public List<StaticVariants> getPool(){
 		return svariantpool;
@@ -28,6 +28,12 @@ public class StaticVariants {
 	}
 	public static void addToPool(StaticVariants vi){
 		svariantpool.add(vi);
+	}
+	public void setRowInVariantTable(int row){
+		rowinVariantTable = row;
+	}
+	public int getRowInVariantTable(){
+		return rowinVariantTable;
 	}
 	public CodeBlock getBlock() {
 		// TODO Auto-generated method stub

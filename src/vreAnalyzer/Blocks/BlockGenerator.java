@@ -68,9 +68,11 @@ public class BlockGenerator {
 					MethodTag mTag = (MethodTag) method.getTag(MethodTag.TAG_NAME);
 					if(mTag.isOverloadMethod()){
 						DynamicVariants dyvariant = new DynamicVariants(methodBlock,BindingType.overload);
+						addVariantBlockToPool(dyvariant);
 					}
 					if(mTag.isOverrideMethod()){
 						DynamicVariants dyvariant = new DynamicVariants(methodBlock,BindingType.override);
+						addVariantBlockToPool(dyvariant);
 					}
 					// 2. Create inside method blocks
 					/**
@@ -94,6 +96,7 @@ public class BlockGenerator {
 								
 								// 1. add a new static variant
 								StaticVariants stvariant = new StaticVariants(sblock,BindingType.branch);
+								addVariantBlockToPool(stvariant);
 								temp.clear();
 								continue;
 							}else if(marked.contains(curr)){
@@ -146,24 +149,26 @@ public class BlockGenerator {
 	}
 	public void addVariantBlockToPool(DynamicVariants dvariant){
 		if(!DynamicVariants.poolContain(dvariant)){
-			//{"Block ID","Feature ID(IF)","Seperators"};
+			//{"Block ID","Feature ID(IF)","Seperators","SootMethod","Class"};
 			CodeBlock block = dvariant.getBlock();
+			dvariant.setRowInVariantTable(variantmodel.getRowCount());
 			if(block.getFeatureId()!=-1){
-				variantmodel.addRow(new Object[]{block.getBlockId(),block.getFeatureId(),dvariant.getType()});
+				variantmodel.addRow(new Object[]{block.getBlockId(),block.getCodeRange(),block.getFeatureId(),dvariant.getType(),block.getSootMethod().getName(),block.getSootClass().getName()});
 			}else{
-				variantmodel.addRow(new Object[]{block.getBlockId(),"-",dvariant.getType()});
+				variantmodel.addRow(new Object[]{block.getBlockId(),block.getCodeRange(),"-",dvariant.getType(),block.getSootMethod().getName(),block.getSootClass().getName()});
 			}
 			DynamicVariants.addToPool(dvariant);
 		}
 	}
 	public void addVariantBlockToPool(StaticVariants svariant){
 		if(!StaticVariants.poolContain(svariant)){
-			//{"Block ID","Feature ID(IF)","Seperators"};
+			//{"Block ID","Feature ID(IF)","Seperators","SootMethod","Class"};
 			CodeBlock block = svariant.getBlock();
+			svariant.setRowInVariantTable(variantmodel.getRowCount());
 			if(block.getFeatureId()!=-1){
-				variantmodel.addRow(new Object[]{block.getBlockId(),block.getFeatureId(),"branch"});
+				variantmodel.addRow(new Object[]{block.getBlockId(),block.getFeatureId(),"branch",block.getSootMethod().getName(),block.getSootClass().getName()});
 			}else{
-				variantmodel.addRow(new Object[]{block.getBlockId(),"-","branch"});
+				variantmodel.addRow(new Object[]{block.getBlockId(),"-","branch",block.getSootMethod().getName(),block.getSootClass().getName()});
 			}
 			StaticVariants.addToPool(svariant);
 		}

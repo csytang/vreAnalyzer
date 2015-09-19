@@ -24,7 +24,6 @@ public class HTMLAnnotation {
 	private static JobVariable currJob;
 	// background <span style="background-color:red">xxx(text)</span>
 	/**
-	 * 
 	 * @param htmlfile: a html file to be annotated by color marker
 	 * @param startline start from 0
 	 * @param startcolumn: 

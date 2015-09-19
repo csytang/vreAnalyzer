@@ -234,7 +234,7 @@ public class MainFrame extends JFrame {
 		
 		JScrollPane blocksPane = new JScrollPane();
 		tabbedPane.addTab("Code Blocks", new ImageIcon(MainFrame.class.getResource("/image/blocks.png")), blocksPane, "Divide all codes into snippets by branches");
-		String blockheaders[] = {"Block ID","Code Range(Jimple)","Type","Method(IF)","Class","Parent BlockID","Original(Y/N)"};
+		String blockheaders[] = {"Block ID","Code Range(Jimple)","Type","Method(IF)","Class","Parent BlockID","Original(Y/N)","Feature ID"};
 		DefaultTableModel blocktableModel = new DefaultTableModel(null,blockheaders);
 		blocktable = new JTable(blocktableModel);
 		blocktable.getTableHeader().setReorderingAllowed(false);
@@ -247,11 +247,12 @@ public class MainFrame extends JFrame {
 		DefaultTableModel coommonassettableModel = new DefaultTableModel(null,reuseheaders);
 		reusetable = new JTable(coommonassettableModel);
 		reusetable.getTableHeader().setReorderingAllowed(false);
+		reusetable.setDefaultRenderer(Object.class, new TableCellRender());
 		reusePane.setViewportView(reusetable);
 		
 		JScrollPane variantBlockPane = new JScrollPane();
 		tabbedPane.addTab("Variant Blocks", new ImageIcon(MainFrame.class.getResource("/image/variants.png")), variantBlockPane, "variant assets from variabillity aspect");
-		String variantsheaders[] = {"Block ID","Feature ID(IF)","Seperators"};
+		String variantsheaders[] = {"Block ID","Code Range(jimmple)","Feature ID(IF)","Seperators","SootMethod","Class"};
 		DefaultTableModel varitableModel = new DefaultTableModel(null,variantsheaders);
 		variantstable = new JTable(varitableModel);
 		variantstable.getTableHeader().setReorderingAllowed(false);

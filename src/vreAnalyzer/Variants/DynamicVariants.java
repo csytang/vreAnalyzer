@@ -15,6 +15,7 @@ public class DynamicVariants  {
 	 */
 	private CodeBlock variant;
 	private BindingType type;
+	private int rowinVariantTable = -1;
 	private static Map<DynamicVariants,BindingType> dvariantpool = new HashMap<DynamicVariants,BindingType>();
 	public DynamicVariants(CodeBlock block,BindingType type){
 		//{"Block ID","LOC","Features(IF)","Seperators"};
@@ -29,6 +30,12 @@ public class DynamicVariants  {
 	}
 	public BindingType getType(){
 		return this.type;
+	}
+	public void setRowInVariantTable(int row){
+		rowinVariantTable = row;
+	}
+	public int getRowInVariantTable(){
+		return rowinVariantTable;
 	}
 	public CodeBlock getBlock() {
 		// TODO Auto-generated method stub
