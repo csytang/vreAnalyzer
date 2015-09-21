@@ -3,18 +3,7 @@ package vreAnalyzer.UI;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.Shape;
-
 import javax.swing.JFrame;
-
-import java.awt.*;
-import java.awt.event.*;
-import java.net.URL;
-import java.util.Objects;
-
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
-import javax.swing.text.html.*; 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
@@ -28,7 +17,6 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.Element;
 import javax.swing.text.Position;
-import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.View;
 import javax.swing.text.ViewFactory;
@@ -36,14 +24,11 @@ import javax.swing.text.html.BlockView;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
-import javax.swing.text.html.HTMLEditorKit.HTMLFactory;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-
 import java.awt.FlowLayout;
-
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
@@ -52,15 +37,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
-import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
-
 import org.apache.commons.lang3.StringUtils;
-
 import vreAnalyzer.vreAnalyzerCommandLine;
 import vreAnalyzer.Text2HTML.Text2HTML;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -76,7 +57,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-
 import javax.swing.JTable;
 
 public class MainFrame extends JFrame {
