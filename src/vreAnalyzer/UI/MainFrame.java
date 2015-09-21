@@ -1,7 +1,20 @@
 package vreAnalyzer.UI;
 
 import java.awt.BorderLayout;
+import java.awt.Point;
+import java.awt.Shape;
+
 import javax.swing.JFrame;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.net.URL;
+import java.util.Objects;
+
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.text.*;
+import javax.swing.text.html.*; 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
@@ -11,15 +24,28 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
+import javax.swing.text.Element;
+import javax.swing.text.Position;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.View;
+import javax.swing.text.ViewFactory;
+import javax.swing.text.html.BlockView;
 import javax.swing.text.html.HTML;
+import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
+import javax.swing.text.html.HTMLEditorKit.HTMLFactory;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+
 import java.awt.FlowLayout;
+
 import javax.swing.JEditorPane;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuBar;
@@ -29,9 +55,12 @@ import javax.swing.JSeparator;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
+
 import org.apache.commons.lang3.StringUtils;
+
 import vreAnalyzer.vreAnalyzerCommandLine;
 import vreAnalyzer.Text2HTML.Text2HTML;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -66,7 +95,7 @@ public class MainFrame extends JFrame {
 	private List<File>supporingjars;
 	private List<File>sources;
 	private final JSplitPane sourcesplitPane;
-	private static JTextPane source_annotatedDisplayArea;
+	private static JEditorPane source_annotatedDisplayArea;
 	private final JTextArea consoletextArea;
 	private final JTree source_annotateDirTree;
 	private static int textArealinecount = 0;
@@ -186,7 +215,73 @@ public class MainFrame extends JFrame {
 		JScrollPane source_annotateDisplayPane = new JScrollPane();
 		sourcepanel.add(source_annotateDisplayPane, BorderLayout.CENTER);
 		
-		source_annotatedDisplayArea = new JTextPane();
+		source_annotatedDisplayArea = new JEditorPane(){
+			private final transient Position.Bias[] bias = new Position.Bias[1];
+		    private transient HyperlinkListener listener;
+			@Override public void updateUI() {
+		        removeHyperlinkListener(listener);
+		        super.updateUI();
+		        listener = new HyperlinkListener() {
+		            private String tooltip;
+		            @Override public void hyperlinkUpdate(HyperlinkEvent e) {
+		                JEditorPane editor = (JEditorPane) e.getSource();
+		                if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+		                    JOptionPane.showMessageDialog(editor, e.getURL());
+		                } else if (e.getEventType() == HyperlinkEvent.EventType.ENTERED) {
+		                    tooltip = editor.getToolTipText();
+		                    Element elem = e.getSourceElement();
+		                    if (elem!=null) {
+		                        AttributeSet attr = elem.getAttributes();
+		                        AttributeSet a = (AttributeSet) attr.getAttribute(HTML.Tag.A);
+		                        if (a!=null) {
+		                            editor.setToolTipText((String) a.getAttribute(HTML.Attribute.TITLE));
+		                        }
+		                    }
+		                } else if (e.getEventType() == HyperlinkEvent.EventType.EXITED) {
+		                    editor.setToolTipText(tooltip);
+		                }
+		            }
+		        };
+		        addHyperlinkListener(listener);
+		    }
+		    @Override public String getToolTipText(MouseEvent e) {
+		        String title = super.getToolTipText(e);
+		        JEditorPane editor = (JEditorPane) e.getComponent();
+		        //HTMLEditorKit kit = (HTMLEditorKit) editor.getEditorKit();
+		        if (!editor.isEditable()) {
+		            Point pt = new Point(e.getX(), e.getY());
+		            int pos = editor.getUI().viewToModel(editor, pt, bias);
+		            if (bias[0] == Position.Bias.Backward && pos > 0) {
+		                pos--;
+		            }
+		            if (pos >= 0 && editor.getDocument() instanceof HTMLDocument) {
+		                HTMLDocument hdoc = (HTMLDocument) editor.getDocument();
+		                String str = getSpanTitleAttribute(hdoc, pos);
+		                if (str!=null) {
+		                    title = str;
+		                }
+		            }
+		        }
+		        return title;
+		    }
+		    private String getSpanTitleAttribute(HTMLDocument hdoc, int pos) {
+		        //HTMLDocument hdoc = (HTMLDocument) editor.getDocument();
+		        Element elem = hdoc.getCharacterElement(pos);
+		        //if (!doesElementContainLocation(editor, elem, pos, e.getX(), e.getY())) {
+		        //    elem = null;
+		        //}
+		        //if (elem != null) {
+		        AttributeSet a = elem.getAttributes();
+		        AttributeSet span = (AttributeSet) a.getAttribute(HTML.Tag.SPAN);
+		        if (span!=null) {
+		            return (String) span.getAttribute(HTML.Attribute.TITLE);
+		        }
+		        //}
+		        return null;
+		    }
+			
+		};
+		ToolTipManager.sharedInstance().registerComponent(source_annotatedDisplayArea);
 		source_annotatedDisplayArea.setEditable(false);
 		source_annotateDisplayPane.setViewportView(source_annotatedDisplayArea);
 		
@@ -451,7 +546,7 @@ public class MainFrame extends JFrame {
 						source_annotatedDisplayArea.setContentType("text/plain");
 					}else if(selectedfile.getAbsolutePath().endsWith(".html")){
 						source_annotatedDisplayArea.setContentType("text/html");
-						source_annotatedDisplayArea.setEditorKit(new HTMLEditorKit());
+						source_annotatedDisplayArea.setEditorKit(new TooltipEditorKit());
 						ToolTipManager.sharedInstance().registerComponent(source_annotatedDisplayArea);
 						source_annotatedDisplayArea.addHyperlinkListener(new HyperlinkListener(){
 						String tooltip;
@@ -565,7 +660,7 @@ public class MainFrame extends JFrame {
 			classnametoSource = new HashMap<String,File>();
 		classnametoSource.put(className, source);
 	}
-	public static JTextPane getSrcTextPane(){
+	public static JEditorPane getSrcTextPane(){
 		return source_annotatedDisplayArea;
 	}
 	public JTable getJobColorMapTable(){
@@ -586,5 +681,31 @@ public class MainFrame extends JFrame {
 	public JTable getBlockTable() {
 		// TODO Auto-generated method stub
 		return blocktable;
+	}
+	class TooltipEditorKit extends HTMLEditorKit {
+	    @Override public ViewFactory getViewFactory() {
+	        return new HTMLFactory() {
+	            @Override public View create(Element elem) {
+	                AttributeSet attrs = elem.getAttributes();
+	                Object elementName = attrs.getAttribute(AbstractDocument.ElementNameAttribute);
+	                Object o = elementName==null ? attrs.getAttribute(StyleConstants.NameAttribute) : null;
+	                if (o instanceof HTML.Tag) {
+	                    HTML.Tag kind = (HTML.Tag) o;
+	                    if (kind == HTML.Tag.DIV) {
+	                        return new BlockView(elem, View.Y_AXIS) {
+	                            @Override public String getToolTipText(float x, float y, Shape allocation) {
+	                                String s = super.getToolTipText(x, y, allocation);
+	                                if (s==null) {
+	                                    s = (String) getElement().getAttributes().getAttribute(HTML.Attribute.TITLE);
+	                                }
+	                                return s;
+	                            }
+	                        };
+	                    }
+	                }
+	                return super.create(elem);
+	            }
+	        };
+	    }
 	}
 }

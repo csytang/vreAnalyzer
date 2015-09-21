@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import soot.SootMethod;
-import soot.Value;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse.VariableComparator;
 import vreAnalyzer.ControlFlowGraph.DefUse.Def.Def;
 import vreAnalyzer.ControlFlowGraph.DefUse.Use.Use;
@@ -74,24 +73,7 @@ public  class NodeDefUses extends CFGNode {
 		return sortedVarsList;
 	}
 	
-	public Variable getDeffromValue(Value def){
-		CFGDefUse cfgDU = (CFGDefUse) ProgramFlowBuilder.inst().getContainingCFG(this);
-		for (int dId : getLocalDefsIds()) {
-			Variable v = cfgDU.getDefs().get(dId).getVar();
-			if(v.getValue().equals(def))
-				return v;
-		}
-		// add defined field and array-element variables
-		for (Def d : cfgDU.getFieldDefs())
-			if (d.getN() == this){
-				return d.getVar();
-			}
-		for (Def d : cfgDU.getArrayElemDefs())
-			if (d.getN() == this){
-				return d.getVar();
-			}
-		return null;
-	}
+	
 	
 	/////////////////////////////////////////////////////////////////////////////////////
 	

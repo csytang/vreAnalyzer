@@ -12,11 +12,13 @@ import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
-import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 
 public class JobUnd {
 	public JobUnd(int argCount,JobVariable job,InvokeExpr expr,CFGDefUse inputducfg,NodeDefUses duNode,List<SootMethod>bindsm,List<Stmt>bindstmt,SootClass lib){
+		/*
+		 * only one parameter
+		 */
 		if(argCount==1){
 			Value argu0 = expr.getArg(0);
 			if(argu0 instanceof ClassConstant){
@@ -73,17 +75,23 @@ public class JobUnd {
 				}
 			}else{
 				if(argu0 instanceof Local||
-						argu0 instanceof FieldRef){
-					Variable videf = duNode.getDeffromValue(argu0);
-					int id = inputducfg.getDefVariableId(videf);
+						argu0 instanceof FieldRef){			
+					int id = inputducfg.getDefVariableId(argu0);
 					NodeDefUses defNode = (NodeDefUses) inputducfg.getNodes().get(id);
 					bindstmt.add(defNode.getStmt());
 				}else{
 					
 				}
 			}
-		}else if(argCount==2){
+		}
+		/*
+		 * two parameters assigned
+		 */
+		else if(argCount==2){
 			Value argu1 = expr.getArg(1);
+			/*
+			 * If the second input parameter is constant
+			 */
 			if(argu1 instanceof ClassConstant){
 				// 1. Firstly find the class
 				ClassConstant vclssConstant = (ClassConstant)argu1;
@@ -136,11 +144,14 @@ public class JobUnd {
 						bindsm.addAll(runsm);
 					}
 				}
-			}else{
+			}
+			/*
+			 * If the second input parameter is from local or reference
+			 */
+			else{
 				if(argu1 instanceof Local||
 						argu1 instanceof FieldRef){
-					Variable videf = duNode.getDeffromValue(argu1);
-					int id = inputducfg.getDefVariableId(videf);
+					int id = inputducfg.getDefVariableId(argu1);
 					NodeDefUses defNode = (NodeDefUses) inputducfg.getNodes().get(id);
 					bindstmt.add(defNode.getStmt());
 				}else{

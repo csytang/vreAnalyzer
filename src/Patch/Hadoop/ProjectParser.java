@@ -14,11 +14,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.swing.JEditorPane;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
+
 import Patch.Hadoop.Job.ColorMap;
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobMethodBind;
@@ -130,7 +133,7 @@ public class ProjectParser {
 						String htmlfileName = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
 						htmlfileName+=".html";
 						File htmlFile = new File(htmlfileName);
-						JTextPane txtrSource = MainFrame.getSrcTextPane();
+						JEditorPane txtrSource = MainFrame.getSrcTextPane();
 						txtrSource.setContentType("text/html");
 						List<String> content;
 						try {
@@ -459,6 +462,8 @@ public class ProjectParser {
 								SootMethod sminvoked = invorkEpxr.getMethod();
 								JobMethodBind jmb = new JobMethodBind(job,invorkEpxr,cfggraph,cfgNode);
 								List<SootMethod>bindingsm = jmb.getBindingMethod();
+								if(bindingsm.isEmpty())
+									continue;
 								BlockType bindType = jmb.getBindType();
 								if(bindType==BlockType.Class){
 									List<CFGNode>bindcfgnodess = new LinkedList<CFGNode>();

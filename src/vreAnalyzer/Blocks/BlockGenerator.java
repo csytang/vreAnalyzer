@@ -1,5 +1,6 @@
 package vreAnalyzer.Blocks;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -46,11 +47,14 @@ public class BlockGenerator {
 			List<SootMethod>clsmethods = cls.getMethods();
 			List<CFGNode>classallnode = new LinkedList<CFGNode>();
 			List<CFGNode>marked = new LinkedList<CFGNode>();
-			for(SootMethod method:clsmethods){
-				
-				CFG cfg = ProgramFlowBuilder.inst().getCFG(method);
-				List<CFGNode>nodes = cfg.getNodes();
-				classallnode.addAll(nodes);
+			for (Iterator<SootMethod> itMthd = cls.getMethods().iterator(); itMthd.hasNext();) {
+				SootMethod m = itMthd.next();
+				if (!m.isAbstract() && m.toString().indexOf(": java.lang.Class class$") == -1){
+					clsmethods.add(m);
+					CFG cfg = ProgramFlowBuilder.inst().getCFG(m);
+					List<CFGNode>nodes = cfg.getNodes();
+					classallnode.addAll(nodes);
+				}
 			}
 			// 2. Create class block
 			ClassBlock clsblock = ClassBlock.tryToCreate(classallnode, cls);
@@ -166,9 +170,9 @@ public class BlockGenerator {
 			CodeBlock block = svariant.getBlock();
 			svariant.setRowInVariantTable(variantmodel.getRowCount());
 			if(block.getFeatureId()!=-1){
-				variantmodel.addRow(new Object[]{block.getBlockId(),block.getFeatureId(),"branch",block.getSootMethod().getName(),block.getSootClass().getName()});
+				variantmodel.addRow(new Object[]{block.getBlockId(),block.getCodeRange(),block.getFeatureId(),"branch",block.getSootMethod().getName(),block.getSootClass().getName()});
 			}else{
-				variantmodel.addRow(new Object[]{block.getBlockId(),"-","branch",block.getSootMethod().getName(),block.getSootClass().getName()});
+				variantmodel.addRow(new Object[]{block.getBlockId(),block.getCodeRange(),"-","branch",block.getSootMethod().getName(),block.getSootClass().getName()});
 			}
 			StaticVariants.addToPool(svariant);
 		}

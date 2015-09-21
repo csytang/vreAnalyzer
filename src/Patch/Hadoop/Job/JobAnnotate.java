@@ -2,9 +2,6 @@ package Patch.Hadoop.Job;
 
 import java.awt.Color;
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-
 import soot.jimple.Stmt;
 import vreAnalyzer.Tag.SourceLocationTag;
 import vreAnalyzer.Tag.SourceLocationTag.LocationType;
@@ -20,7 +17,6 @@ public class JobAnnotate {
 	int startcolumn = 0;
 	int endline = 0;
 	int endcolumn = 0;
-	
 	
 	public JobAnnotate(JobVariable job,File htmlFile){
 		this.hostJob = job;

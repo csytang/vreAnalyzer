@@ -89,7 +89,13 @@ public class CFGDefUse extends CFG {
 	public List<Def> getDefs() { return idsToDefs; }
 	public int getUseId(Use use) { return usesToIds.get(use); }
 	public int getDefVariableId(Variable def) { return defsVariableToIds.get(def); }
-	
+	public int getDefVariableId(Value def){
+		for(Map.Entry<Variable, Integer>entry:defsVariableToIds.entrySet()){
+			if(entry.getKey().getValue().equals(def))
+				return entry.getValue();
+		}
+		return -1;
+	}
 	public List<Use> getFieldUses() { return fieldUses; }
 	public List<Def> getFieldDefs() { return fieldDefs; }
 	public List<Use> getArrayElemUses() { return arrElemUses; }

@@ -6,6 +6,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import vreAnalyzer.UI.MainFrame;
+import vreAnalyzer.UI.TableCellRender;
 import Patch.Hadoop.Job.ColorMap;
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobVariable;
@@ -35,6 +36,7 @@ public class JobDataWriteToTable {
 			 */
 			statisticmodel.addRow(new Object[]{job.toString(),ColorMap.inst().getJobColor(job),statisitc.getLOC(),statisitc.getReuseCode(),""});
 		}
+		jobstatisticTable.setDefaultRenderer(Object.class, new TableCellRender());
 	}
 	
 }
