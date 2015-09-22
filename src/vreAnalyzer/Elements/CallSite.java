@@ -1,12 +1,11 @@
 package vreAnalyzer.Elements;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import soot.SootMethod;
 import vreAnalyzer.Context.Context;
-import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.PointsTo.PointsToGraph;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CallSite implements Comparable<CallSite>{
 	/////////////////////Fields/////////////////////////
@@ -42,8 +41,8 @@ public class CallSite implements Comparable<CallSite>{
 	
 	////////////////////Function Methods/////////////////
 	public Location getLoc() { return loc; }
-	//public List<SootMethod> getAppCallees() { return mAppCallees; }
-	//public List<SootMethod> getLibCallees() { return mLibCallees; }
+	public List<SootMethod> getAppCallees() { return mAppCallees; }
+	public List<SootMethod> getLibCallees() { return mLibCallees; }
 	public List<SootMethod> getAllCallees() {
 		@SuppressWarnings("unchecked")
 		ArrayList<SootMethod> clone =  (ArrayList<SootMethod>) ((ArrayList<SootMethod>) mAppCallees).clone();
@@ -54,6 +53,7 @@ public class CallSite implements Comparable<CallSite>{
 	public void setCallingContext(Context<SootMethod,CFGNode,PointsToGraph> callingContext){
 		this.callingContext = callingContext;
 	}
+
 	// This will be initialized at CFG part
 	public void setCFGNode(CFGNode cfgNode){this.cfgNode = cfgNode;
 		this.cfgNode.setCallSite(this);
