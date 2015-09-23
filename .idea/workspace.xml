@@ -2,12 +2,40 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e3f56018-01f2-4d54-8777-0c6109785f43" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/Variants/BindingResolver.class" afterPath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/Variants/BindingResolver.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/Context/Context.class" afterPath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/Context/Context.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/vreHadoop/Patch/Hadoop/Job/JobVariable.class" afterPath="$PROJECT_DIR$/out/production/vreHadoop/Patch/Hadoop/Job/JobVariable.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/Tag/MethodTag.class" afterPath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/Tag/MethodTag.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/PointsTo/PointsToAnalysis.class" afterPath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/PointsTo/PointsToAnalysis.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/vreAnalyzer/Variants/BindingResolver.java" afterPath="$PROJECT_DIR$/src/vreAnalyzer/Variants/BindingResolver.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/MainFrame$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/MainFrame$2.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/MainFrame$3.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/MainFrame$4$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/MainFrame$4.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/MainFrame$5.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/MainFrame$6$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/MainFrame$6.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/MainFrame$7.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/MainFrame$TooltipEditorKit$1$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/MainFrame$TooltipEditorKit$1.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/Util/ClassWriter.class" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/Variants/BindingResolver.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/Variants/BindingResolver.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/Elements/CallSite.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/Elements/CallSite.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/Text2HTML/HTMLAnnotation.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/Text2HTML/HTMLAnnotation.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/MainFrame$TooltipEditorKit.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/UI/MainFrame$TooltipEditorKit.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/MainFrame.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/UI/MainFrame.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/Tag/MethodTag.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/Tag/MethodTag.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$1.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$1.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$10.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$10.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$2.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$2.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$3.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$3.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$4.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$4.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$5.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$5.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$6.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$6.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$7.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$7.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$8.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$8.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$9.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$9.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$ExtensionFilter.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel$ExtensionFilter.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/UI/NewProjectPanel.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/Variants/Variant.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/Variants/Variant.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bin/vreAnalyzer/vreAnalyzerInternalTransform.class" afterPath="$PROJECT_DIR$/bin/vreAnalyzer/vreAnalyzerInternalTransform.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/context.csv" afterPath="$PROJECT_DIR$/context.csv" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feature.csv" afterPath="$PROJECT_DIR$/feature.csv" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="vreHadoop.iws" />
@@ -37,8 +65,8 @@
       <file leaf-file-name="BindingResolver.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Variants/BindingResolver.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.39252338">
-              <caret line="194" column="20" selection-start-line="194" selection-start-column="20" selection-end-line="194" selection-end-column="20" />
+            <state vertical-scroll-proportion="0.7079439">
+              <caret line="260" column="38" selection-start-line="260" selection-start-column="38" selection-end-line="260" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1102#1111#0" expanded="true" />
@@ -145,7 +173,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="5" />
-    <option name="y" value="24" />
+    <option name="y" value="23" />
     <option name="width" value="1280" />
     <option name="height" value="714" />
   </component>
@@ -457,8 +485,8 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="5" y="24" width="1280" height="714" extended-state="0" />
-    <editor active="true" />
+    <frame x="5" y="23" width="1280" height="714" extended-state="0" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -478,7 +506,7 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24959612" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26688102" sideWeight="0.49676898" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26688102" sideWeight="0.49676898" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -961,8 +989,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Variants/BindingResolver.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.39252338">
-          <caret line="194" column="20" selection-start-line="194" selection-start-column="20" selection-end-line="194" selection-end-column="20" />
+        <state vertical-scroll-proportion="0.7079439">
+          <caret line="260" column="38" selection-start-line="260" selection-start-column="38" selection-end-line="260" selection-end-column="38" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1102#1111#0" expanded="true" />

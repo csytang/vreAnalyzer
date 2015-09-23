@@ -153,6 +153,7 @@ public class MainFrame extends JFrame {
 		source_annotateDirTree = new JTree();
 		source_annotateDirTree.setModel(new DefaultTreeModel(
 			new DefaultMutableTreeNode("Source directory") {
+
 			{
 				}
 			}
@@ -167,6 +168,7 @@ public class MainFrame extends JFrame {
 		sourcepanel.add(source_annotateDisplayPane, BorderLayout.CENTER);
 		
 		source_annotatedDisplayArea = new JEditorPane(){
+			
 			private final transient Position.Bias[] bias = new Position.Bias[1];
 		    private transient HyperlinkListener listener;
 			@Override public void updateUI() {

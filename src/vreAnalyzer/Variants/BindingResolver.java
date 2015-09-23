@@ -1,6 +1,12 @@
 package vreAnalyzer.Variants;
 
-import soot.*;
+import soot.ArrayType;
+import soot.Body;
+import soot.Local;
+import soot.RefType;
+import soot.SootClass;
+import soot.SootMethod;
+import soot.Value;
 import soot.jimple.AnyNewExpr;
 import soot.jimple.IdentityRef;
 import soot.jimple.InvokeExpr;
@@ -19,7 +25,7 @@ import vreAnalyzer.Tag.MethodTag;
 import vreAnalyzer.Tag.StmtTag;
 import vreAnalyzer.UI.SourceClassBinding;
 import vreAnalyzer.vreAnalyzerCommandLine;
-
+import vreAnalyzer.Context.Context;
 import java.io.File;
 import java.util.*;
 
@@ -59,9 +65,9 @@ public class BindingResolver {
 			List<Local>parameterLocals = method.getActiveBody().getParameterLocals();
 			List<Use>uses = cfg.getUses();
 			NodeDefUses exitNode = (NodeDefUses) cfg.EXIT;
-			vreAnalyzer.Context.Context exitContext = null;
-			List<vreAnalyzer.Context.Context<SootMethod,CFGNode,PointsToGraph>> contexts = PointsToAnalysis.inst().getContexts(method);
-			for(vreAnalyzer.Context.Context context:contexts){
+			Context<SootMethod,CFGNode,PointsToGraph> exitContext = null;
+			List<Context<SootMethod,CFGNode,PointsToGraph>> contexts = PointsToAnalysis.inst().getContexts(method);
+			for(Context<SootMethod,CFGNode,PointsToGraph> context:contexts){
 				if(context.getValueBefore(exitNode)!=null)
 					exitContext = context;
 			}
@@ -69,7 +75,11 @@ public class BindingResolver {
 			HashMap<Local,Set<AnyNewExpr>>roots = graph.getRoots();
 			// Annotate and classify all local and argument
 			for(Use u:uses) {
-				CFGNode node = u.getSrcNode();
+				CFGNode node = u.getN();
+				if(node==null){
+					// this u corresponds to a branch
+					node = u.getBranch().getSrc();
+				}
 				Variable var = u.getVar();
 				Stmt stmt = node.getStmt();
 				if (u.getValue().getType() instanceof RefType || u.getValue().getType() instanceof ArrayType) {
@@ -92,7 +102,10 @@ public class BindingResolver {
 									for (List<Value> list : listValues) {
 										Value realbindingValue = list.get(index);
 										//Variant.addVarStmtMap(realbindingValue,bindingStmts);
-										methodTemp.put(realbindingValue,bindingStmts);
+										if(methodTemp.containsKey(realbindingValue)){
+											methodTemp.get(realbindingValue).addAll(bindingStmts);
+										}else
+											methodTemp.put(realbindingValue,bindingStmts);
 									}
 								}
 								calleeSet.remove(method);
@@ -104,14 +117,20 @@ public class BindingResolver {
 							//Variant.addVarStmtMap(var.getValue(), stmt);
 							List<Stmt>bindingStmts = new LinkedList<Stmt>();
 							bindingStmts.add(stmt);
-							methodTemp.put(var.getValue(),bindingStmts);
+							if(methodTemp.containsKey(var.getValue())){
+								methodTemp.get(var.getValue()).addAll(bindingStmts);
+							}else
+								methodTemp.put(var.getValue(),bindingStmts);
 						}
 					}else {
 						stmt.addTag(new PRBTag(var));
 						//Variant.addVarStmtMap(var.getValue(), stmt);
 						List<Stmt>bindingStmts = new LinkedList<Stmt>();
 						bindingStmts.add(stmt);
-						methodTemp.put(var.getValue(),bindingStmts);
+						if(methodTemp.containsKey(var.getValue())){
+							methodTemp.get(var.getValue()).addAll(bindingStmts);
+						}else
+							methodTemp.put(var.getValue(),bindingStmts);
 					}
 				} else {
 					stmt.addTag(new LBTag(var));
@@ -237,7 +256,7 @@ public class BindingResolver {
 		}
 
 		// 2.
-		Iterator iterator = needRemove.iterator();
+		Iterator<Value> iterator = needRemove.iterator();
 		while(iterator.hasNext()){
 			Value vi = (Value)iterator.next();
 			Variant.removeValue(vi);
@@ -302,7 +321,7 @@ public class BindingResolver {
 					htmlfileName = htmlfileName.substring(0, startIndex) + realName;
 					htmlfileName += ".html";
 					File htmlFile = new File(htmlfileName);
-					VariantAnnotate variantAnnotate = new VariantAnnotate(stmts, htmlFile);
+					new VariantAnnotate(stmts, htmlFile);
 				}
 
 			}
