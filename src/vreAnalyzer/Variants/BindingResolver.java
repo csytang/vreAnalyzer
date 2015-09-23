@@ -1,17 +1,19 @@
-
-
 package vreAnalyzer.Variants;
 
 import soot.*;
+import soot.jimple.AnyNewExpr;
 import soot.jimple.IdentityRef;
 import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
+import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
 import vreAnalyzer.ControlFlowGraph.DefUse.Use.Use;
 import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Elements.CallSite;
 import vreAnalyzer.Elements.Location;
+import vreAnalyzer.PointsTo.PointsToAnalysis;
+import vreAnalyzer.PointsTo.PointsToGraph;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.Tag.MethodTag;
 import vreAnalyzer.Tag.StmtTag;
@@ -26,7 +28,8 @@ public class BindingResolver {
 
 	public static BindingResolver instance = null;
 	private Map<SootMethod,List<List<Value>>>methodToArgs;
-    private Map<Stmt,Value>firstStmtToValue;
+    private Map<Stmt, Value>firstStmtToValue;
+	private boolean verbose = true;
     private List<Variant>variants = new LinkedList<Variant>();
     private Map<Value,Variant>valueToVariant = new HashMap<Value,Variant>();
 	public static BindingResolver inst(){
@@ -43,11 +46,27 @@ public class BindingResolver {
         firstStmtToValue = new HashMap<Stmt,Value>();
 		Set<SootMethod>calleeSet = new HashSet<SootMethod>();
 		Set<Value>needRemove = new HashSet<Value>();
+		Map<Value,List<Stmt>>methodTemp = new HashMap<Value,List<Stmt>>();
+		Map<Set<AnyNewExpr>,Value>sitesToValue = new HashMap<Set<AnyNewExpr>,Value>();
 		for(SootMethod method:allAppMethods){
-
+			/**
+			 * 1. 插入的時候進行檢查 如果value指向同一個地址 不用分開多個(fixed)
+			 * 2. Call Site處有問題
+			 *    是不是要有那種binding的才要處理 其他的不需要
+			 */
+			methodTemp.clear();
 			CFGDefUse cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(method);
 			List<Local>parameterLocals = method.getActiveBody().getParameterLocals();
 			List<Use>uses = cfg.getUses();
+			NodeDefUses exitNode = (NodeDefUses) cfg.EXIT;
+			vreAnalyzer.Context.Context exitContext = null;
+			List<vreAnalyzer.Context.Context<SootMethod,CFGNode,PointsToGraph>> contexts = PointsToAnalysis.inst().getContexts(method);
+			for(vreAnalyzer.Context.Context context:contexts){
+				if(context.getValueBefore(exitNode)!=null)
+					exitContext = context;
+			}
+			PointsToGraph graph = (PointsToGraph) exitContext.getValueBefore(exitNode);
+			HashMap<Local,Set<AnyNewExpr>>roots = graph.getRoots();
 			// Annotate and classify all local and argument
 			for(Use u:uses) {
 				CFGNode node = u.getSrcNode();
@@ -72,7 +91,8 @@ public class BindingResolver {
 								if(bindingStmts!=null) {
 									for (List<Value> list : listValues) {
 										Value realbindingValue = list.get(index);
-										Variant.addVarStmtMap(realbindingValue,bindingStmts);
+										//Variant.addVarStmtMap(realbindingValue,bindingStmts);
+										methodTemp.put(realbindingValue,bindingStmts);
 									}
 								}
 								calleeSet.remove(method);
@@ -81,21 +101,58 @@ public class BindingResolver {
 
 						}else{
 							stmt.addTag(new PRBTag(var));
-							Variant.addVarStmtMap(var.getValue(), stmt);
+							//Variant.addVarStmtMap(var.getValue(), stmt);
+							List<Stmt>bindingStmts = new LinkedList<Stmt>();
+							bindingStmts.add(stmt);
+							methodTemp.put(var.getValue(),bindingStmts);
 						}
 					}else {
 						stmt.addTag(new PRBTag(var));
-						Variant.addVarStmtMap(var.getValue(), stmt);
+						//Variant.addVarStmtMap(var.getValue(), stmt);
+						List<Stmt>bindingStmts = new LinkedList<Stmt>();
+						bindingStmts.add(stmt);
+						methodTemp.put(var.getValue(),bindingStmts);
 					}
 				} else {
 					stmt.addTag(new LBTag(var));
-					Variant.addVarStmtMap(var.getValue(), stmt);
+					/**
+					 * remove currently
+					 */
+					//Variant.addVarStmtMap(var.getValue(), stmt);
 				}
 			}
+
+			// add all temped var-stmt map into {@link Variant}mapvlToStmt
+			/*
+			 * if two values are points to same location, just add one
+			 */
+			for(Map.Entry<Value,List<Stmt>>entry:methodTemp.entrySet()){
+				Value vi = entry.getKey();
+				List<Stmt>stmts = entry.getValue();
+				if(vi instanceof Local){
+					Local vilocal = (Local)vi;
+					Set<AnyNewExpr>sites = roots.get(vilocal);
+					if(sitesToValue.containsKey(sites)){
+						Value bindvi = sitesToValue.get(sites);
+						Variant bindvariant = valueToVariant.get(bindvi);
+						bindvariant.addPaddingValue(vi);
+
+						bindvariant.addBindingStmts(stmts);
+						valueToVariant.put(vi, bindvariant);
+					}else{
+						Variant variant = new Variant(vi,stmts);
+						valueToVariant.put(vi,variant);
+						sitesToValue.put(sites,vi);
+					}
+				}
+			}
+
 			MethodTag mTag = (MethodTag)method.getTag(MethodTag.TAG_NAME);
 			for(CallSite callsite:mTag.getAllCalleeSites()){
 				Location srcLoc = callsite.getLoc();
 				Stmt srcInvokeStmt = srcLoc.getStmt();
+
+
 				InvokeExpr invokeExpr = srcInvokeStmt.getInvokeExpr();
 				List<Value>argus = invokeExpr.getArgs();
 				for(SootMethod callee:callsite.getAppCallees()){
@@ -132,6 +189,12 @@ public class BindingResolver {
 			for(Use u:uses) {
 				CFGNode node = u.getSrcNode();
 				Variable var = u.getVar();
+				/*
+				    if it is not inside the variant value site no need to consider
+				    since it doesnot invoke in a binding issue;
+				  */
+				if(!valueToVariant.containsKey(var.getValue()))
+					continue;
 				Stmt stmt = node.getStmt();
 				if (u.getValue().getType() instanceof RefType || u.getValue().getType() instanceof ArrayType) {
 					if(methodToArgs.containsKey(callee)){
@@ -168,7 +231,7 @@ public class BindingResolver {
 					}
 				} else {
 					stmt.addTag(new LBTag(var));
-					Variant.addVarStmtMap(var.getValue(), stmt);
+					//Variant.addVarStmtMap(var.getValue(), stmt);
 				}
 			}
 		}
@@ -178,6 +241,7 @@ public class BindingResolver {
 		while(iterator.hasNext()){
 			Value vi = (Value)iterator.next();
 			Variant.removeValue(vi);
+
 		}
 
         // 3. create the variants for each vi and binding
@@ -198,6 +262,8 @@ public class BindingResolver {
                 valueToVariant.put(vi,variant);
             }
         }
+		if(verbose)
+			System.out.println("#Variants by Value:"+variants.size());
 
 	}
 

@@ -3,20 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="e3f56018-01f2-4d54-8777-0c6109785f43" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/Variants/BindingResolver.class" afterPath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/Variants/BindingResolver.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/ControlFlowGraph/CFG.class" afterPath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/ControlFlowGraph/CFG.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/Text2HTML/HTMLAnnotation.class" afterPath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/Text2HTML/HTMLAnnotation.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/vreHadoop/Patch/Hadoop/Job/JobAnnotate.class" afterPath="$PROJECT_DIR$/out/production/vreHadoop/Patch/Hadoop/Job/JobAnnotate.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/vreHadoop/Patch/Hadoop/Job/JobUseAnnotate.class" afterPath="$PROJECT_DIR$/out/production/vreHadoop/Patch/Hadoop/Job/JobUseAnnotate.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/Context/Context.class" afterPath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/Context/Context.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/vreHadoop/Patch/Hadoop/Job/JobVariable.class" afterPath="$PROJECT_DIR$/out/production/vreHadoop/Patch/Hadoop/Job/JobVariable.class" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/Tag/MethodTag.class" afterPath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/Tag/MethodTag.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/PointsTo/PointsToAnalysis.class" afterPath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/PointsTo/PointsToAnalysis.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/Variants/Variant.class" afterPath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/Variants/Variant.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/context.csv" afterPath="$PROJECT_DIR$/context.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feature.csv" afterPath="$PROJECT_DIR$/feature.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/vreAnalyzerInternalTransform.class" afterPath="$PROJECT_DIR$/out/production/vreHadoop/vreAnalyzer/vreAnalyzerInternalTransform.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/vreAnalyzer/Variants/BindingResolver.java" afterPath="$PROJECT_DIR$/src/vreAnalyzer/Variants/BindingResolver.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/vreAnalyzer/Text2HTML/HTMLAnnotation.java" afterPath="$PROJECT_DIR$/src/vreAnalyzer/Text2HTML/HTMLAnnotation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/vreAnalyzer/Tag/MethodTag.java" afterPath="$PROJECT_DIR$/src/vreAnalyzer/Tag/MethodTag.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/vreAnalyzer/Variants/Variant.java" afterPath="$PROJECT_DIR$/src/vreAnalyzer/Variants/Variant.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/vreAnalyzer/vreAnalyzerInternalTransform.java" afterPath="$PROJECT_DIR$/src/vreAnalyzer/vreAnalyzerInternalTransform.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="vreHadoop.iws" />
@@ -46,15 +37,69 @@
       <file leaf-file-name="BindingResolver.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Variants/BindingResolver.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.0724299">
-              <caret line="241" column="13" selection-start-line="241" selection-start-column="13" selection-end-line="241" selection-end-column="13" />
+            <state vertical-scroll-proportion="0.39252338">
+              <caret line="194" column="20" selection-start-line="194" selection-start-column="20" selection-end-line="194" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#894#903#0" expanded="true" />
-                <element signature="e#1445#1457#0" expanded="true" />
-                <element signature="e#1497#1504#0" expanded="true" />
-                <element signature="e#7127#7150#0" expanded="true" />
-                <element signature="e#7564#7570#0" expanded="true" />
+                <element signature="e#1102#1111#0" expanded="true" />
+                <element signature="e#1173#1188#0" expanded="true" />
+                <element signature="e#1653#1665#0" expanded="true" />
+                <element signature="e#1705#1712#0" expanded="true" />
+                <element signature="e#1763#1781#0" expanded="true" />
+                <element signature="e#1839#1862#0" expanded="true" />
+                <element signature="e#4070#4076#0" expanded="true" />
+                <element signature="e#4318#4324#0" expanded="true" />
+                <element signature="e#5945#5958#0" expanded="true" />
+                <element signature="e#9603#9626#0" expanded="true" />
+                <element signature="e#10040#10046#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Location.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Elements/Location.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="6" column="54" selection-start-line="6" selection-start-column="54" selection-end-line="6" selection-end-column="54" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PointsToGraph.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/PointsTo/PointsToGraph.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="128" column="41" selection-start-line="128" selection-start-column="11" selection-end-line="128" selection-end-column="41" />
+              <folding>
+                <element signature="e#4478#4479#0" expanded="true" />
+                <element signature="e#4531#4532#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PointsToAnalysis.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/PointsTo/PointsToAnalysis.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="79" column="39" selection-start-line="79" selection-start-column="35" selection-end-line="79" selection-end-column="39" />
+              <folding>
+                <element signature="method#doAnalysis#0;class#PointsToAnalysis#0" expanded="false" />
+                <element signature="docComment;method#initContext#0;class#PointsToAnalysis#0" expanded="false" />
+                <element signature="method#initContext#0;class#PointsToAnalysis#0" expanded="false" />
+                <element signature="docComment;method#flowFunction#0;class#PointsToAnalysis#0" expanded="false" />
+                <element signature="method#flowFunction#0;class#PointsToAnalysis#0" expanded="false" />
+                <element signature="method#updateSuccessPointerwithNewExprs#0;class#PointsToAnalysis#0" expanded="false" />
+                <element signature="method#boundaryValue#0;class#PointsToAnalysis#0" expanded="false" />
+                <element signature="method#copy#0;class#PointsToAnalysis#0" expanded="false" />
+                <element signature="method#meet#0;class#PointsToAnalysis#0" expanded="false" />
+                <element signature="method#programRepresentation#0;class#PointsToAnalysis#0" expanded="false" />
+                <element signature="method#processCall#0;class#PointsToAnalysis#0" expanded="false" />
+                <element signature="method#handleInvoke#0;class#PointsToAnalysis#0" expanded="false" />
+                <element signature="method#getTargets#0;class#PointsToAnalysis#0" expanded="false" />
+                <element signature="method#getDummyTarget#0;class#PointsToAnalysis#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -99,8 +144,8 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-16" />
-    <option name="y" value="23" />
+    <option name="x" value="5" />
+    <option name="y" value="24" />
     <option name="width" value="1280" />
     <option name="height" value="714" />
   </component>
@@ -179,112 +224,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="vreAnalyzer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vreHadoop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vreHadoop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vreAnalyzer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Variants" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vreHadoop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vreHadoop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vreAnalyzer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="UI" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vreHadoop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vreHadoop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vreAnalyzer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Text2HTML" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vreHadoop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vreHadoop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Hadoop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vreHadoop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="vreHadoop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Hadoop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Job" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -518,7 +457,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-16" y="23" width="1280" height="714" extended-state="0" />
+    <frame x="5" y="24" width="1280" height="714" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -529,7 +468,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37942123" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3231511" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26666668" sideWeight="0.503231" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.329582" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -589,18 +528,10 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/vreAnalyzer/Variants/BindingResolver.java</url>
-          <line>45</line>
-          <properties />
-          <option name="timeStamp" value="21" />
-        </line-breakpoint>
-      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="22" />
+      <option name="time" value="25" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -609,38 +540,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Variants/BindingResolver.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="32" column="4" selection-start-line="32" selection-start-column="4" selection-end-line="32" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/UI/MainFrame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="150" column="8" selection-start-line="150" selection-start-column="8" selection-end-line="150" selection-end-column="8" />
-          <folding>
-            <element signature="e#15492#15498#0" expanded="true" />
-            <element signature="class#TooltipEditorKit#0;class#MainFrame#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.7.0_79.jdk/Contents/Home/src.zip!/java/util/LinkedList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="80" column="0" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Variants/BindingResolver.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Variants/Variant.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -739,13 +638,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Variants/PRBTag.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Tag/CallSiteTag.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.23076923">
@@ -764,13 +656,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="79" column="57" selection-start-line="79" selection-start-column="45" selection-end-line="79" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Variants/RBTag.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="12" column="33" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="33" />
         </state>
       </provider>
     </entry>
@@ -799,20 +684,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/PointsTo/PointsToGraph.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="110" column="11" selection-start-line="110" selection-start-column="11" selection-end-line="110" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/PointsTo/PointsToAnalysis.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="545" column="95" selection-start-line="545" selection-start-column="16" selection-end-line="545" selection-end-column="95" />
         </state>
       </provider>
     </entry>
@@ -865,16 +736,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Variants/Variant.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.222222">
-          <caret line="40" column="66" selection-start-line="40" selection-start-column="66" selection-end-line="40" selection-end-column="66" />
-          <folding>
-            <element signature="e#262#280#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.7.0_79.jdk/Contents/Home/src.zip!/java/util/Map.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -899,9 +760,9 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="352" column="53" selection-start-line="352" selection-start-column="53" selection-end-line="352" selection-end-column="53" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#13842#13848#0" expanded="true" />
-            <element signature="e#14388#14394#0" expanded="true" />
+            <element signature="imports" expanded="false" />
+            <element signature="e#13842#13848#0" expanded="false" />
+            <element signature="e#14388#14394#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -943,15 +804,15 @@
         <state vertical-scroll-proportion="-8.740741">
           <caret line="384" column="43" selection-start-line="384" selection-start-column="26" selection-end-line="384" selection-end-column="43" />
           <folding>
-            <element signature="e#1762#1772#0" expanded="true" />
+            <element signature="e#1762#1772#0" expanded="false" />
             <element signature="method#isOverrideSootMethod#0;class#MethodTag#0" expanded="false" />
             <element signature="method#getMethodsCountForName#0;class#MethodTag#0" expanded="false" />
+            <element signature="method#initPredsAndExits#0;class#MethodTag#0" expanded="false" />
             <element signature="method#findFormalParams#0;class#MethodTag#0" expanded="false" />
             <element signature="method#initCallSites#0;class#MethodTag#0" expanded="false" />
             <element signature="method#getName#0;class#MethodTag#0" expanded="false" />
-            <element signature="method#getValue#0;class#MethodTag#0" expanded="false" />
-            <element signature="e#12962#12963#0" expanded="true" />
-            <element signature="e#12985#12986#0" expanded="true" />
+            <element signature="e#12962#12963#0" expanded="false" />
+            <element signature="e#12985#12986#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1006,17 +867,115 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Variants/RBTag.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="33" selection-start-line="12" selection-start-column="25" selection-end-line="12" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Variants/PRBTag.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="13" column="44" selection-start-line="13" selection-start-column="37" selection-end-line="13" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Variants/LBTag.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Variants/Variant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="11" column="51" selection-start-line="11" selection-start-column="40" selection-end-line="11" selection-end-column="51" />
+          <folding>
+            <element signature="e#262#280#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/ControlFlowGraph/DefUse/NodeDefUses.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="17" column="14" selection-start-line="17" selection-start-column="14" selection-end-line="17" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/PointsTo/PointsToAnalysis.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="79" column="39" selection-start-line="79" selection-start-column="35" selection-end-line="79" selection-end-column="39" />
+          <folding>
+            <element signature="method#doAnalysis#0;class#PointsToAnalysis#0" expanded="false" />
+            <element signature="docComment;method#initContext#0;class#PointsToAnalysis#0" expanded="false" />
+            <element signature="method#initContext#0;class#PointsToAnalysis#0" expanded="false" />
+            <element signature="docComment;method#flowFunction#0;class#PointsToAnalysis#0" expanded="false" />
+            <element signature="method#flowFunction#0;class#PointsToAnalysis#0" expanded="false" />
+            <element signature="method#updateSuccessPointerwithNewExprs#0;class#PointsToAnalysis#0" expanded="false" />
+            <element signature="method#boundaryValue#0;class#PointsToAnalysis#0" expanded="false" />
+            <element signature="method#copy#0;class#PointsToAnalysis#0" expanded="false" />
+            <element signature="method#meet#0;class#PointsToAnalysis#0" expanded="false" />
+            <element signature="method#programRepresentation#0;class#PointsToAnalysis#0" expanded="false" />
+            <element signature="method#processCall#0;class#PointsToAnalysis#0" expanded="false" />
+            <element signature="method#handleInvoke#0;class#PointsToAnalysis#0" expanded="false" />
+            <element signature="method#getTargets#0;class#PointsToAnalysis#0" expanded="false" />
+            <element signature="method#getDummyTarget#0;class#PointsToAnalysis#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/soot-trunk.jar!/soot/Context.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.16393442">
+          <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/PointsTo/PointsToGraph.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="128" column="41" selection-start-line="128" selection-start-column="11" selection-end-line="128" selection-end-column="41" />
+          <folding>
+            <element signature="e#4478#4479#0" expanded="true" />
+            <element signature="e#4531#4532#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Elements/Location.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="6" column="54" selection-start-line="6" selection-start-column="54" selection-end-line="6" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/vreAnalyzer/Variants/BindingResolver.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.0724299">
-          <caret line="241" column="13" selection-start-line="241" selection-start-column="13" selection-end-line="241" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.39252338">
+          <caret line="194" column="20" selection-start-line="194" selection-start-column="20" selection-end-line="194" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#894#903#0" expanded="true" />
-            <element signature="e#1445#1457#0" expanded="true" />
-            <element signature="e#1497#1504#0" expanded="true" />
-            <element signature="e#7127#7150#0" expanded="true" />
-            <element signature="e#7564#7570#0" expanded="true" />
+            <element signature="e#1102#1111#0" expanded="true" />
+            <element signature="e#1173#1188#0" expanded="true" />
+            <element signature="e#1653#1665#0" expanded="true" />
+            <element signature="e#1705#1712#0" expanded="true" />
+            <element signature="e#1763#1781#0" expanded="true" />
+            <element signature="e#1839#1862#0" expanded="true" />
+            <element signature="e#4070#4076#0" expanded="true" />
+            <element signature="e#4318#4324#0" expanded="true" />
+            <element signature="e#5945#5958#0" expanded="true" />
+            <element signature="e#9603#9626#0" expanded="true" />
+            <element signature="e#10040#10046#0" expanded="true" />
           </folding>
         </state>
       </provider>
