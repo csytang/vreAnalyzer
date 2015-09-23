@@ -1,6 +1,6 @@
 <component name="CopyrightManager">
   <copyright>
     <option name="myName" value="The Hong Kong Polytechnic University" />
-    <option name="notice" value="Copyright (c) &amp;#36;today.year This software is delivered by The Hong Kong Polytechnic University, Department of Computing, Software Development and Management Laboratory. @ author: Chris Tang(csytang(AT)comp.polyu.edu.hk)" />
+    <option name="notice" value="Copyright (c) &amp;#36;today.year This software is delivered by The Hong Kong Polytechnic University,&#10;Department of Computing,&#10;Software Development and Management Laboratory. &#10;@ author: Chris Tang(csytang(AT)comp.polyu.edu.hk)&#10;@ author/contact: Hareton Leung(cshleung(AT)comp.polyu.edu.hk)&#10;" />
   </copyright>
 </component>

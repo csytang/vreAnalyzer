@@ -24,14 +24,20 @@ public class BindingResolver {
 	private CFGDefUse cfg = null;
 	public static BindingResolver instance = null;
 	private Map<SootMethod,List<List<Value>>>methodToArgs;
-
+    private Map<Stmt,Value>firstStmtToValue;
+    private List<Variant>variants = new LinkedList<Variant>();
+    private Map<Value,Variant>valueToVariant = new HashMap<Value,Variant>();
 	public static BindingResolver inst(){
 		if(instance==null)
 			instance = new BindingResolver();
 		return instance;
 	}
 	public void parse(List<SootMethod> allAppMethods){
+		/**
+		 * Block ID,Code Range, FeatureID, Seperators, SootMethod,Class
+		 */
 		methodToArgs = new HashMap<SootMethod,List<List<Value>>>();
+        firstStmtToValue = new HashMap<Stmt,Value>();
 		Set<SootMethod>calleeSet = new HashSet<SootMethod>();
 		Set<Value>needRemove = new HashSet<Value>();
 		for(SootMethod method:allAppMethods){
@@ -162,6 +168,29 @@ public class BindingResolver {
 			Value vi = (Value)iterator.next();
 			Variant.removeValue(vi);
 		}
+
+        // 3. create the variants for each vi and binding
+        // 4. combine variants
+        for(Map.Entry<Value,List<Stmt>>entry:Variant.getMapvlToStmt().entrySet()){
+
+            Value vi = entry.getKey();
+            List<Stmt>stmts = entry.getValue();
+            if(firstStmtToValue.containsKey(stmts.get(0))){
+                Variant existVar = valueToVariant.get(firstStmtToValue.get(stmts.get(0)));
+                existVar.addPaddingValue(vi);
+                existVar.addBindingStmts(stmts);
+                valueToVariant.put(vi,existVar);
+            }else{
+                firstStmtToValue.put(stmts.get(0),vi);
+                Variant variant = new Variant(vi,stmts);
+                variants.add(variant);
+                valueToVariant.put(vi,variant);
+            }
+        }
+
+
+
+
 
 	}
 }

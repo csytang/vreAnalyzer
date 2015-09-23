@@ -1,26 +1,14 @@
 package vreAnalyzer.UI;
 
-import java.awt.BorderLayout;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileFilter;
-import javax.swing.DefaultListModel;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.SpringLayout;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JScrollPane;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
-import javax.swing.JSeparator;
 
 public class NewProjectPanel extends JDialog {
 
@@ -340,6 +328,13 @@ public class NewProjectPanel extends JDialog {
 					sources.add(new File(srcDir));
 					MainFrame.inst().setSourceCode(sources);
 					MainFrame.inst().loadSourceCodeandHTML();
+					/*
+						add  variant directory
+					 */
+					MainFrame.inst().createVariantHTML();
+					MainFrame.inst().finishDirLoad();
+					MainFrame.inst().addDirTreeListener();
+
 					dispose();
 					MainFrame.inst().bindSource(textField_1.getText(),textField_3.getText());	
 					bindingsource = true;
@@ -351,6 +346,12 @@ public class NewProjectPanel extends JDialog {
 					}
 					MainFrame.inst().setSourceCode(sources);
 					MainFrame.inst().loadSourceCodeandHTML();
+					/*
+						add variant direcotry.
+					 */
+					MainFrame.inst().createVariantHTML();
+					MainFrame.inst().finishDirLoad();
+					MainFrame.inst().addDirTreeListener();
 					dispose();
 					MainFrame.inst().bindSource(textField_1.getText(),textField_3.getText());	
 					bindingsource = true;

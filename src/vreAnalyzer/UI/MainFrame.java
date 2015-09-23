@@ -1,49 +1,25 @@
 package vreAnalyzer.UI;
 
-import java.awt.BorderLayout;
-import java.awt.Point;
-import java.awt.Shape;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import org.apache.commons.lang3.StringUtils;
+import vreAnalyzer.Text2HTML.Text2HTML;
+import vreAnalyzer.Variants.VariantHTMLFiles;
+import vreAnalyzer.vreAnalyzerCommandLine;
+
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import javax.swing.JSplitPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.Element;
-import javax.swing.text.Position;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.View;
-import javax.swing.text.ViewFactory;
+import javax.swing.text.*;
 import javax.swing.text.html.BlockView;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.awt.FlowLayout;
-import javax.swing.JEditorPane;
-import javax.swing.JOptionPane;
-import javax.swing.JTabbedPane;
-import javax.swing.ImageIcon;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JSeparator;
-import javax.swing.SwingUtilities;
-import javax.swing.ToolTipManager;
-import org.apache.commons.lang3.StringUtils;
-import vreAnalyzer.vreAnalyzerCommandLine;
-import vreAnalyzer.Text2HTML.Text2HTML;
-import java.awt.event.ActionListener;
+import javax.swing.tree.DefaultTreeModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -51,13 +27,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Stack;
-import javax.swing.JTable;
 
 public class MainFrame extends JFrame {
 	/**
@@ -79,7 +50,7 @@ public class MainFrame extends JFrame {
 	private final JTextArea consoletextArea;
 	private final JTree source_annotateDirTree;
 	private static int textArealinecount = 0;
-	
+	private DefaultMutableTreeNode root;
 	// 3. 
 	private String[]comm;
 	private static Map<String,File>classnametoSource;
@@ -224,7 +195,8 @@ public class MainFrame extends JFrame {
 		        };
 		        addHyperlinkListener(listener);
 		    }
-		    @Override public String getToolTipText(MouseEvent e) {
+		    @Override
+			public String getToolTipText(MouseEvent e) {
 		        String title = super.getToolTipText(e);
 		        JEditorPane editor = (JEditorPane) e.getComponent();
 		        //HTMLEditorKit kit = (HTMLEditorKit) editor.getEditorKit();
@@ -473,30 +445,35 @@ public class MainFrame extends JFrame {
 		}
 		
 	}
-	
+	public void createVariantHTML(){
+		VariantHTMLFiles variantHTMLFiles = new VariantHTMLFiles(sources);
+		DefaultMutableTreeNode variantlist = variantHTMLFiles.getRootTreeNode();
+		root.add(variantlist);
+	}
+
 	public void loadSourceCodeandHTML() {
 		// TODO Auto-generated method stub
-		Stack<File>sourcefiles = new Stack<File>();
+		Stack<File> sourcefiles = new Stack<File>();
 		sourcefiles.addAll(sources);
-		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
+		root = new DefaultMutableTreeNode("Root");
 		DefaultMutableTreeNode filelist = new DefaultMutableTreeNode("source_list");
 		DefaultMutableTreeNode htmllist = new DefaultMutableTreeNode("annotated_list");
-		while(!sourcefiles.isEmpty()){
+		while (!sourcefiles.isEmpty()) {
 			File subfile = sourcefiles.pop();
-			
-			if(subfile.isDirectory()){
-				File[]childdir = subfile.listFiles();
-				for(File child:childdir){
+
+			if (subfile.isDirectory()) {
+				File[] childdir = subfile.listFiles();
+				for (File child : childdir) {
 					sourcefiles.push(child);
 				}
-			}else{
+			} else {
 				// only add .java file
-				if(subfile.exists()&&
-						subfile.getPath().endsWith(".java")){
-					String htmlfileName = subfile.getPath().substring(0, subfile.getPath().length()-".java".length());
-					htmlfileName+=".html";
+				if (subfile.exists() &&
+						subfile.getPath().endsWith(".java")) {
+					String htmlfileName = subfile.getPath().substring(0, subfile.getPath().length() - ".java".length());
+					htmlfileName += ".html";
 					File htmlfile = new File(htmlfileName);
-					Text2HTML t2html = new Text2HTML(subfile,htmlfile);
+					Text2HTML t2html = new Text2HTML(subfile, htmlfile);
 					htmlToJava.putAll(t2html.getHTMLMapping());
 					DefaultMutableTreeNode fileNode = new DefaultMutableTreeNode(subfile);
 					DefaultMutableTreeNode htmlNode = new DefaultMutableTreeNode(htmlfile);
@@ -506,14 +483,18 @@ public class MainFrame extends JFrame {
 				}
 			}
 		}
-		
-		
+
+
 		root.add(filelist);
 		root.add(htmllist);
-		DefaultTreeModel treeModel = (DefaultTreeModel)source_annotateDirTree.getModel();
+
+	}
+	public void finishDirLoad(){
+		DefaultTreeModel treeModel = (DefaultTreeModel) source_annotateDirTree.getModel();
 		treeModel.setRoot(root);
 		treeModel.reload();
-		
+	}
+	public void addDirTreeListener(){
 		source_annotateDirTree.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent e){
 				DefaultMutableTreeNode selected = (DefaultMutableTreeNode)source_annotateDirTree.getLastSelectedPathComponent();
