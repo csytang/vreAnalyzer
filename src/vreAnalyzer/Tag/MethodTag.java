@@ -382,7 +382,9 @@ public class MethodTag implements Tag {
 		// TODO Auto-generated method stub
 		return callerSites;
 	}
-
+	public List<CallSite> getAllCalleeSites(){
+		return callSites;
+	}
 	
 	//////////////////////////////////////////////////////////
 

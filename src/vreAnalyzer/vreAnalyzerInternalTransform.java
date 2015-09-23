@@ -1,12 +1,14 @@
 package vreAnalyzer;
 
-import java.util.Map;
 import Patch.Hadoop.ProjectParser;
 import soot.SceneTransformer;
 import vreAnalyzer.Blocks.BlockGenerator;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder.EntryNotFoundException;
+import vreAnalyzer.Variants.BindingResolver;
+
+import java.util.Map;
 
 
 public class vreAnalyzerInternalTransform extends SceneTransformer{
@@ -35,9 +37,14 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 		// Finish
 						
 		System.out.println("[vreAnalyzer] Internal transform[Finish]");
-						
+		System.out.println("[vreAnalyzer] BindingResolve[Start]");
+		BindingResolver.inst().parse();
+		BindingResolver.inst().annotate();
+		System.out.println("[vreAnalyzer] BindingResolve[Finish]");
+		System.out.println("[vreAnalyzer] Project analysis[Start]");
 		// Display Reusable Result by checking the mode
 		ProjectParser.inst().runProjectParser();
+		System.out.println("[vreAnalyzer] Project analysis[Finish]");
 		
 				
 				

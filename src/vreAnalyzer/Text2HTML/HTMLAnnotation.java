@@ -43,7 +43,7 @@ public class HTMLAnnotation {
 			String spanStart = "<span title = \""+hovertext+"\""+" style=\"background-color:"+hex+"\">";
 			String spanEnd = "</span>";
 			StringBuffer buffStart = new StringBuffer(startlinecontent);
-			String startjavaString = htmlToJava.get(startlinecontent+"<br>");
+			String startjavaString = htmlToJava.get(startlinecontent + "<br>");
 			String substartjavaString = startjavaString.substring(startcolumn-1, startjavaString.length());
 			String starthtmlreverse = Text2HTML.txtToHtml(substartjavaString);
 			if(starthtmlreverse.endsWith("<br>")){
@@ -63,8 +63,8 @@ public class HTMLAnnotation {
 				htmlbyline[startline-1] = buffStart.toString();
 			}else{
 				StringBuffer buffEnd = new StringBuffer(endlinecontent);
-				String endjavaString = htmlToJava.get(endlinecontent+"<br>");
-				String subendjavaString = endjavaString.substring(endcolumn-1, endjavaString.length());
+				String endjavaString = htmlToJava.get(endlinecontent + "<br>");
+				String subendjavaString = endjavaString.substring(endcolumn - 1, endjavaString.length());
 				String endhtmlreverse = Text2HTML.txtToHtml(subendjavaString);
 				if(endhtmlreverse.endsWith("<br>")){
 					endhtmlreverse = endhtmlreverse.substring(0, endhtmlreverse.length()-"<br>".length());
@@ -127,7 +127,7 @@ public class HTMLAnnotation {
 			String spanStart = "<span title = \""+hovertext+"\""+" style=\"background-color:"+hex+"\">";
 			String spanEnd = "</span>";
 			String updateline = "";
-			if(!((updateline = isColorAssociatedSLResolver(linecontent,spanStart)).equals(""))){
+			if(!((updateline = isColorTitleAssociatedSLResolver(linecontent, spanStart)).equals(""))){
 				htmlbyline[lineNumber-1] = updateline;
 			}else{
 				StringBuffer buffStart = new StringBuffer(linecontent);
@@ -372,7 +372,7 @@ public class HTMLAnnotation {
 				String spanStart = "<span title = \""+hovertext+"\""+" style=\"background-color:"+hex+"\">";
 				String spanEnd = "</span>";
 				String updateline="";
-				if(!((updateline = isColorAssociatedSLResolver(linecontent,spanStart)).equals(""))){
+				if(!((updateline = isColorTitleAssociatedSLResolver(linecontent, spanStart)).equals(""))){
 					htmlbyline[lineNumber-1] = updateline;
 				}else{
 					StringBuffer buffStart = new StringBuffer(linecontent);
@@ -441,7 +441,7 @@ public class HTMLAnnotation {
 				String spanStart = "<span style=\"background-color:"+hex+"\">";
 				String spanEnd = "</span>";
 				String updateline="";
-				if(!((updateline = isColorAssociatedSLResolver(linecontent,spanStart)).equals(""))){
+				if(!((updateline = isColorAssociatedSLResolver(linecontent, spanStart)).equals(""))){
 					htmlbyline[lineNumber-1] = updateline;
 				}else{
 					StringBuffer buffStart = new StringBuffer(linecontent);
@@ -476,8 +476,21 @@ public class HTMLAnnotation {
 			e.printStackTrace();
 		}
 	}
-
-	private static String isColorAssociatedSLResolver(String linecontent,String spanStart){
+	private static String isColorAssociatedSLResolver(String linecontent,String spanStart) {
+		String colorpattern = new String("<span style=\"background-color:.+\">");
+		Pattern startPattern = Pattern.compile(colorpattern);
+		Matcher matcher = startPattern.matcher(linecontent);
+		if (matcher.find()) {
+			String matchedString = matcher.group(0);
+			if (matchedString.equals(spanStart)) {
+				return linecontent;
+			} else {
+				return "";
+			}
+		}
+		return "";
+	}
+	private static String isColorTitleAssociatedSLResolver(String linecontent,String spanStart){
 		String colorpattern = new String("<span title = \".+\" style=\"background-color:.+\">");
 		Pattern startPattern = Pattern.compile(colorpattern);
 		Matcher matcher = startPattern.matcher(linecontent);

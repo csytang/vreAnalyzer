@@ -1,6 +1,4 @@
-/*
- * Copyright (c) 2015 This software is delivered by The Hong Kong Polytechnic University, Department of Computing, Software Development and Management Laboratory. @ author: Chris Tang(csytang(AT)comp.polyu.edu.hk)
- */
+
 
 package vreAnalyzer.Variants;
 
@@ -16,12 +14,16 @@ import vreAnalyzer.Elements.CallSite;
 import vreAnalyzer.Elements.Location;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.Tag.MethodTag;
+import vreAnalyzer.Tag.StmtTag;
+import vreAnalyzer.UI.SourceClassBinding;
+import vreAnalyzer.vreAnalyzerCommandLine;
 
+import java.io.File;
 import java.util.*;
 
 public class BindingResolver {
-	private SootMethod method = null;
-	private CFGDefUse cfg = null;
+
+
 	public static BindingResolver instance = null;
 	private Map<SootMethod,List<List<Value>>>methodToArgs;
     private Map<Stmt,Value>firstStmtToValue;
@@ -32,18 +34,19 @@ public class BindingResolver {
 			instance = new BindingResolver();
 		return instance;
 	}
-	public void parse(List<SootMethod> allAppMethods){
+	public void parse(){
 		/**
 		 * Block ID,Code Range, FeatureID, Seperators, SootMethod,Class
 		 */
+		List<SootMethod> allAppMethods = ProgramFlowBuilder.inst().getAppConcreteMethods();
 		methodToArgs = new HashMap<SootMethod,List<List<Value>>>();
         firstStmtToValue = new HashMap<Stmt,Value>();
 		Set<SootMethod>calleeSet = new HashSet<SootMethod>();
 		Set<Value>needRemove = new HashSet<Value>();
 		for(SootMethod method:allAppMethods){
-			this.method = method;
-			this.cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(method);
-			List<Local>parameterLocals = this.method.getActiveBody().getParameterLocals();
+
+			CFGDefUse cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(method);
+			List<Local>parameterLocals = method.getActiveBody().getParameterLocals();
 			List<Use>uses = cfg.getUses();
 			// Annotate and classify all local and argument
 			for(Use u:uses) {
@@ -90,13 +93,12 @@ public class BindingResolver {
 				}
 			}
 			MethodTag mTag = (MethodTag)method.getTag(MethodTag.TAG_NAME);
-			for(CallSite callsite:mTag.getAllCallerSites()){
-				List<SootMethod> allAppCallees = callsite.getAppCallees();
+			for(CallSite callsite:mTag.getAllCalleeSites()){
 				Location srcLoc = callsite.getLoc();
 				Stmt srcInvokeStmt = srcLoc.getStmt();
 				InvokeExpr invokeExpr = srcInvokeStmt.getInvokeExpr();
 				List<Value>argus = invokeExpr.getArgs();
-				for(SootMethod callee:allAppCallees){
+				for(SootMethod callee:callsite.getAppCallees()){
 					if(methodToArgs.containsKey(callee)){
 						List<List<Value>>lists = methodToArgs.get(callee);
 						lists.add(argus);
@@ -113,9 +115,18 @@ public class BindingResolver {
 		}
 		// 1. If there still remains in
 		for(SootMethod callee:calleeSet){
-			this.method = callee;
-			this.cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(method);
-			List<Local>parameterLocals = this.method.getActiveBody().getParameterLocals();
+			CFGDefUse cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(callee);
+			/*
+			   If there is no activebody for the callee, skip it
+			   since no need need to binding the caller parameters with callee arguments
+			 */
+			if(!callee.hasActiveBody()||
+					cfg==null)
+				continue;
+			Body activeBody = callee.getActiveBody();
+			if(activeBody==null)
+				continue;
+			List<Local>parameterLocals = activeBody.getParameterLocals();
 			List<Use>uses = cfg.getUses();
 			// Annotate and classify all local and argument
 			for(Use u:uses) {
@@ -123,9 +134,9 @@ public class BindingResolver {
 				Variable var = u.getVar();
 				Stmt stmt = node.getStmt();
 				if (u.getValue().getType() instanceof RefType || u.getValue().getType() instanceof ArrayType) {
-					if(methodToArgs.containsKey(method)){
+					if(methodToArgs.containsKey(callee)){
 						if(var.getValue() instanceof IdentityRef){
-							List<List<Value>>listValues = methodToArgs.get(method);
+							List<List<Value>>listValues = methodToArgs.get(callee);
 							int index = -1;
 							for(int i = 0;i < parameterLocals.size();i++){
 								Local locali = parameterLocals.get(i);
@@ -188,9 +199,46 @@ public class BindingResolver {
             }
         }
 
+	}
 
+	/**
+	 * 1. current solution, first we all annotated all the files(testing)
+	 * 2. seperate stmts list into combination of code blocks
+	 */
+	public void annotate() {
+		if (vreAnalyzerCommandLine.isSourceBinding() &&
+				vreAnalyzerCommandLine.isStartFromGUI())
+		{
+			Map<SootClass, List<Stmt>> classVariantStmtMap = new HashMap<SootClass, List<Stmt>>();
+			for (Variant variant : variants) {
+				List<Stmt> bindingStmts = variant.getBindingStmts();
+				for (Stmt stmt : bindingStmts) {
+					StmtTag stmtTag = (StmtTag) stmt.getTag(StmtTag.TAG_NAME);
+					SootClass cls = stmtTag.getSootMethod().getDeclaringClass();
+					if (classVariantStmtMap.containsKey(cls)) {
+						classVariantStmtMap.get(cls).add(stmt);
+					} else {
+						List<Stmt> stmts = new LinkedList<Stmt>();
+						stmts.add(stmt);
+						classVariantStmtMap.put(cls, stmts);
+					}
+				}
+			}
+			for (Map.Entry<SootClass, List<Stmt>> entry : classVariantStmtMap.entrySet()) {
+					SootClass cls = entry.getKey();
+					List<Stmt> stmts = entry.getValue();
+					File sourceFile = SourceClassBinding.getSourceFileFromClassName(cls.toString());
+					String htmlfileName = sourceFile.getPath().substring(0, sourceFile.getPath().length() - ".java".length());
+					int startIndex = htmlfileName.lastIndexOf("/");
+					startIndex += 1;
+					String realName = htmlfileName.substring(startIndex);
+					realName = "variant_" + realName;
+					htmlfileName = htmlfileName.substring(0, startIndex) + realName;
+					htmlfileName += ".html";
+					File htmlFile = new File(htmlfileName);
+					VariantAnnotate variantAnnotate = new VariantAnnotate(stmts, htmlFile);
+				}
 
-
-
+			}
 	}
 }

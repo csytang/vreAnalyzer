@@ -18,7 +18,6 @@ public class Variant {
 		bindingStmts = new LinkedList<Stmt>();
 		paddingValues.add(vi);
 		bindingStmts.addAll(stmts);
-
 	}
 	public Variant(List<Value>vis,List<Stmt>stmts){
 		paddingValues = new LinkedList<Value>();
@@ -39,6 +38,8 @@ public class Variant {
     public void addBindingStmts(List<Stmt>stmts){
         this.bindingStmts.addAll(stmts);
     }
+	public List<Stmt> getBindingStmts(){return this.bindingStmts; }
+	public List<Value> getPaddingValues() {return this.paddingValues; }
 	public static void addVarStmtMap(Value vi,List<Stmt>stmts){
 		if(mapvlToStmt.containsKey(vi)){
 			mapvlToStmt.get(vi).addAll(stmts);
