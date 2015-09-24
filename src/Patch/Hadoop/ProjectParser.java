@@ -14,14 +14,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.swing.JEditorPane;
 import javax.swing.JTable;
-import javax.swing.JTextPane;
 import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
-
 import Patch.Hadoop.Job.ColorMap;
 import Patch.Hadoop.Job.JobHub;
 import Patch.Hadoop.Job.JobMethodBind;
@@ -114,48 +111,7 @@ public class ProjectParser {
 	 * @bug
 	 */
 	
-	public void addLegendListener(){
-		final JTable table = MainFrame.inst().getJobColorMapTable();
-		final ArrayList<Set<JobVariable>>indexToJobs = ColorMap.inst().getLegendJobsList();
-		table.addMouseListener(new MouseAdapter(){
-			public void mousePressed(MouseEvent me){
-				Point p = me.getPoint();
-				int row = table.rowAtPoint(p);
-				if(me.getClickCount()==2){
-					
-					Set<JobVariable> jobs = indexToJobs.get(row);
-					if(jobs.size()==1){
-						JobVariable job = null;
-						for(JobVariable jb:jobs){
-							job = jb;
-						}
-						File sourceFile = job.getSourceFile();
-						String htmlfileName = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
-						htmlfileName+=".html";
-						File htmlFile = new File(htmlfileName);
-						JEditorPane txtrSource = MainFrame.getSrcTextPane();
-						txtrSource.setContentType("text/html");
-						List<String> content;
-						try {
-							content = Files.readAllLines(htmlFile.toPath(),Charset.defaultCharset());
-							String allString = "";
-							for(String subcontent:content){
-								allString+=subcontent;
-								allString+="\n";
-							}
-							
-							txtrSource.setText("");
-							txtrSource.setText(allString);
-							txtrSource.setCaretPosition(0);
-						} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-						}
-					}
-				}
-			}
-		});
-	}
+	
 	
 	public void annotateallJobs(){
 		
@@ -256,28 +212,13 @@ public class ProjectParser {
 		collectStatisiticData();
 		collectCommonAssetData();
 		// 3. add the annotated color to legend
-		JTable jobColorMapTable = MainFrame.inst().getJobColorMapTable();
-		DefaultTableModel model = (DefaultTableModel)jobColorMapTable.getModel();
-		Map<String,Set<JobVariable>>hexColorToJob = ColorMap.inst().getJobColorMap();
-		for(Map.Entry<String, Set<JobVariable>>entry:hexColorToJob.entrySet()){
-			Color color = hex2Rgb(entry.getKey());
-			String jobsString = "[";
-			for(JobVariable jb:entry.getValue()){
-				jobsString+=jb.getJobId();
-				jobsString+=":";
-			}
-			jobsString = jobsString.substring(0, jobsString.length()-1);
-			jobsString+="]";
-			ColorMap.inst().registerLegendJobsList(entry.getValue());
-			model.addRow(new Object[]{jobsString,color});
-		}
-					
-		addLegendListener();
+		ColorMap.inst().addToLegend();
+		ColorMap.inst().addLegendListener();
 	}
 	
 	public void Parse(){
 		// 1. Get the CFG
-		int index = 0;
+		
 		List<CFGNode> allnodes = cfggraph.getNodes();
 		// 2.0 Find mapper and reducer in lib class set
 		Map<JobVariable,List<SimpleBlock>>jobToUseBlocks = new HashMap<JobVariable,List<SimpleBlock>>();		

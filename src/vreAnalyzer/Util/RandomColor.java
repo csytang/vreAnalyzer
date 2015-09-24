@@ -1,4 +1,4 @@
-package vreAnalyzer.UI;
+package vreAnalyzer.Util;
 
 import java.awt.Color;
 import java.util.Random;

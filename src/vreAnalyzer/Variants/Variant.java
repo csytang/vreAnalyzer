@@ -19,12 +19,11 @@ public class Variant {
 		paddingValues.add(vi);
 		bindingStmts.addAll(stmts);
 	}
-	public Variant(List<Value>vis,List<Stmt>stmts){
+	public Variant(List<Value>vis,List<Stmt>stmts,int idx){
 		paddingValues = new LinkedList<Value>();
 		bindingStmts = new LinkedList<Stmt>();
 		paddingValues.addAll(vis);
 		bindingStmts.addAll(stmts);
-
 	}
 	public void addPaddingValue(List<Value>vis){
 		this.paddingValues.addAll(vis);

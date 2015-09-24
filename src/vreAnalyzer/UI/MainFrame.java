@@ -320,7 +320,7 @@ public class MainFrame extends JFrame {
 		
 		analysissplitPane.setLeftComponent(LegendPane);
 		
-		String legendheaders[] = {"Feature","Color"};
+		String legendheaders[] = {"Feature/Variant","Color"};
 		DefaultTableModel model = new DefaultTableModel(null, legendheaders){
 
 			@Override

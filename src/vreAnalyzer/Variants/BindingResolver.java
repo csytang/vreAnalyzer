@@ -26,6 +26,8 @@ import vreAnalyzer.Tag.StmtTag;
 import vreAnalyzer.UI.SourceClassBinding;
 import vreAnalyzer.vreAnalyzerCommandLine;
 import vreAnalyzer.Context.Context;
+
+import java.awt.Color;
 import java.io.File;
 import java.util.*;
 
@@ -36,12 +38,16 @@ public class BindingResolver {
 	private Map<SootMethod,List<List<Value>>>methodToArgs;
     private Map<Stmt, Value>firstStmtToValue;
 	private boolean verbose = true;
-    private List<Variant>variants = new LinkedList<Variant>();
+	 
+    private ArrayList<Variant>variants = new ArrayList<Variant>();
     private Map<Value,Variant>valueToVariant = new HashMap<Value,Variant>();
 	public static BindingResolver inst(){
 		if(instance==null)
 			instance = new BindingResolver();
 		return instance;
+	}
+	public ArrayList<Variant>getVariants(){
+		return variants;
 	}
 	public void parse(){
 		/**
@@ -58,7 +64,7 @@ public class BindingResolver {
 			/**
 			 * 1. 插入的時候進行檢查 如果value指向同一個地址 不用分開多個(fixed)
 			 * 2. Call Site處有問題
-			 *    是不是要有那種binding的才要處理 其他的不需要
+			 *    是不是要有那種binding的才要處理 其他的不需要(fixed)
 			 */
 			methodTemp.clear();
 			CFGDefUse cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(method);
@@ -155,13 +161,17 @@ public class BindingResolver {
 						Value bindvi = sitesToValue.get(sites);
 						Variant bindvariant = valueToVariant.get(bindvi);
 						bindvariant.addPaddingValue(vi);
-
 						bindvariant.addBindingStmts(stmts);
 						valueToVariant.put(vi, bindvariant);
+						
 					}else{
 						Variant variant = new Variant(vi,stmts);
 						valueToVariant.put(vi,variant);
 						sitesToValue.put(sites,vi);
+						/**
+						 * Binding this value set to color
+						 */
+						VariantColorMap.inst().registerNewColor(variant);
 					}
 				}
 			}
@@ -193,8 +203,8 @@ public class BindingResolver {
 		for(SootMethod callee:calleeSet){
 			CFGDefUse cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(callee);
 			/*
-			   If there is no activebody for the callee, skip it
-			   since no need need to binding the caller parameters with callee arguments
+			 *  If there is no activebody for the callee, skip it
+			 *  since no need need to binding the caller parameters with callee arguments
 			 */
 			if(!callee.hasActiveBody()||
 					cfg==null)
@@ -279,6 +289,10 @@ public class BindingResolver {
                 Variant variant = new Variant(vi,stmts);
                 variants.add(variant);
                 valueToVariant.put(vi,variant);
+                /**
+				 * Binding this value set to color
+				 */
+				VariantColorMap.inst().registerNewColor(variant);
             }
         }
 		if(verbose)
@@ -289,6 +303,8 @@ public class BindingResolver {
 	/**
 	 * 1. current solution, first we all annotated all the files(testing)
 	 * 2. seperate stmts list into combination of code blocks
+	 * 
+	 * Rewrite with annotated color
 	 */
 	public void annotate() {
 		if (vreAnalyzerCommandLine.isSourceBinding() &&
@@ -297,6 +313,8 @@ public class BindingResolver {
 			Map<SootClass, List<Stmt>> classVariantStmtMap = new HashMap<SootClass, List<Stmt>>();
 			for (Variant variant : variants) {
 				List<Stmt> bindingStmts = variant.getBindingStmts();
+				Color variantColor = VariantColorMap.inst().getColorforVariant(variant);
+				classVariantStmtMap.clear();
 				for (Stmt stmt : bindingStmts) {
 					StmtTag stmtTag = (StmtTag) stmt.getTag(StmtTag.TAG_NAME);
 					SootClass cls = stmtTag.getSootMethod().getDeclaringClass();
@@ -308,8 +326,7 @@ public class BindingResolver {
 						classVariantStmtMap.put(cls, stmts);
 					}
 				}
-			}
-			for (Map.Entry<SootClass, List<Stmt>> entry : classVariantStmtMap.entrySet()) {
+				for (Map.Entry<SootClass, List<Stmt>> entry : classVariantStmtMap.entrySet()) {
 					SootClass cls = entry.getKey();
 					List<Stmt> stmts = entry.getValue();
 					File sourceFile = SourceClassBinding.getSourceFileFromClassName(cls.toString());
@@ -321,9 +338,10 @@ public class BindingResolver {
 					htmlfileName = htmlfileName.substring(0, startIndex) + realName;
 					htmlfileName += ".html";
 					File htmlFile = new File(htmlfileName);
-					new VariantAnnotate(stmts, htmlFile);
+					new VariantAnnotate(stmts, htmlFile,variantColor);
 				}
-
 			}
+
+		}
 	}
 }

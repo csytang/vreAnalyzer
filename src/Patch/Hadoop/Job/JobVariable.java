@@ -11,8 +11,8 @@ import vreAnalyzer.Blocks.CodeBlock;
 import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Tag.StmtTag;
-import vreAnalyzer.UI.RandomColor;
 import vreAnalyzer.UI.SourceClassBinding;
+import vreAnalyzer.Util.RandomColor;
 
 public class JobVariable{
 	
