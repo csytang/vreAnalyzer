@@ -220,15 +220,7 @@ public class ProgramFlowBuilder {
 		if (appClasses == null) {
 			appClasses = new ArrayList<SootClass>();
 			for (Iterator<SootClass> itCls = Scene.v().getApplicationClasses().iterator();itCls.hasNext();){
-				SootClass appClass = itCls.next();
-				if(Options.allowReuableChecking()){
-					
-					reusableMode mode = Options.getMode();
-
-					
-					// Other models has been redirected to other patch code 
-				}
-				
+				SootClass appClass = itCls.next();			
 				appClasses.add(appClass);
 			}
 		}

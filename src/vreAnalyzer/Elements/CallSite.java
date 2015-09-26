@@ -12,7 +12,7 @@ public class CallSite implements Comparable<CallSite>{
 	private Location loc;
 	private List<SootMethod> mAppCallees;
 	private Context callingContext;
-	private CFGNode cfgNode;
+	private CFGNode srccfgNode;
 	// Mapping to MethodNode 
 	
 	
@@ -29,7 +29,7 @@ public class CallSite implements Comparable<CallSite>{
 		this.loc = loc;
 		this.mAppCallees = sortedAppTgts;
 		this.mLibCallees = sortedLibTgts;
-		this.cfgNode = cfgNode;
+		this.srccfgNode = cfgNode;
 
 		
 	}
@@ -55,8 +55,9 @@ public class CallSite implements Comparable<CallSite>{
 	}
 
 	// This will be initialized at CFG part
-	public void setCFGNode(CFGNode cfgNode){this.cfgNode = cfgNode;
-		this.cfgNode.setCallSite(this);
+	public void setCFGNode(CFGNode cfgNode){
+		this.srccfgNode = cfgNode;
+		this.srccfgNode.setCallSite(this);
 	}
 	public Context<SootMethod,CFGNode,PointsToGraph>getCallingContext(){
 		if(this.callingContext==null){
@@ -69,7 +70,7 @@ public class CallSite implements Comparable<CallSite>{
 	public String toString() {
 		return "CS( " + loc + " , APP" + mAppCallees + " LIB" + mLibCallees + " )";
 	}
-	public CFGNode getCallNode(){return cfgNode;}
+	public CFGNode getCallCFGNode(){return srccfgNode;}
 	/////////////////////////////////////////////////////
 
 

@@ -31,7 +31,6 @@ public class Options {
 	// Flag to tag a single change
 	private static boolean isChanges = false;
 	
-	private static boolean reuseableChecking = false;
 	
 	private static Set<String> normalClassList = null;
 	
@@ -99,7 +98,7 @@ public class Options {
 				allowParmsRetUseDefs = true;
 			else if(arg.equals("-normal")){
 				
-				reuseableChecking = true;
+				
 				
 				// also enable def-use mode by hand, which will be used inside the reusable checker
 				allowParmsRetUseDefs = true;
@@ -120,7 +119,7 @@ public class Options {
 				normalClassList = new HashSet(Arrays.asList(className.split(":")));
 			}
 			else if(arg.equals("-hadoop")){
-				reuseableChecking = true;
+				
 				
 				// also enable def-use mode, which will be used inside the reusable checker
 				allowParmsRetUseDefs = true;
@@ -184,6 +183,6 @@ public class Options {
 		return normalClassList;
 	}
 	public static boolean allowParmsRetUseDefs() { return allowParmsRetUseDefs; }
-	public static boolean allowReuableChecking() { return reuseableChecking; }
+	
 	public static DUModelBehavior duModelBehavior() { return duModelBehavior; }
 }

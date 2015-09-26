@@ -32,10 +32,10 @@ public class JobAnnotate {
 			endline = slcTag.getEndLineNumber();
 			endcolumn = slcTag.getEndPos();
 			// annotated source code
-			HTMLAnnotation.annotateHTML(job,hovertext,htmlFile, startline, startcolumn, endline, endcolumn,MainFrame.inst().getHTMLToJava());
+			HTMLAnnotation.annotateHTML_Feature(job,hovertext,htmlFile, startline, startcolumn, endline, endcolumn,MainFrame.inst().getHTMLToJava());
 		}else{
 			startline = slcTag.getStartLineNumber();
-			HTMLAnnotation.annotateHTML(job,hovertext,htmlFile, startline, MainFrame.inst().getHTMLToJava());
+			HTMLAnnotation.annotateHTML_Feature(job,hovertext,htmlFile, startline, MainFrame.inst().getHTMLToJava());
 		}
 		
 		

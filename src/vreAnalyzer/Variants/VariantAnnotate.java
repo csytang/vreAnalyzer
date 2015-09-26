@@ -26,7 +26,7 @@ public class VariantAnnotate {
     boolean startFromSource;
     int[][]positions;
     int[]lines;
-    public VariantAnnotate(List<Stmt> stmts,File htmlFile,Color annotatedColor){
+    public VariantAnnotate(Variant variant,String variantId,List<Stmt> stmts,File htmlFile,Color annotatedColor){
         startFromSource = vreAnalyzerCommandLine.isStartFromSource();
         if(startFromSource){
             positions = new int[stmts.size()][4];
@@ -50,9 +50,9 @@ public class VariantAnnotate {
                 lines[i] = startline;
             }
             if(startFromSource){
-                HTMLAnnotation.annotatemultipleLineHTML(htmlFile, positions, annotatedColor, MainFrame.inst().getHTMLToJava());
+                HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,htmlFile, positions, annotatedColor, MainFrame.inst().getHTMLToJava());
             }else{
-                HTMLAnnotation.annotatemultipleLineHTML(htmlFile, lines, annotatedColor, MainFrame.inst().getHTMLToJava());
+                HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,htmlFile, lines, annotatedColor, MainFrame.inst().getHTMLToJava());
             }
 
         }

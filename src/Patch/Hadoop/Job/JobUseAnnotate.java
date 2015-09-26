@@ -67,9 +67,9 @@ public class JobUseAnnotate {
 				
 			}
 			if(startFromSource){
-				HTMLAnnotation.annotatemultipleLineHTML(hovertext,htmlFile, positions, annotatedColor, MainFrame.inst().getHTMLToJava());
+				HTMLAnnotation.annotatemultipleLineHTML_Feature(hovertext,htmlFile, positions, annotatedColor, MainFrame.inst().getHTMLToJava());
 			}else{
-				HTMLAnnotation.annotatemultipleLineHTML(hovertext,htmlFile, lines, annotatedColor, MainFrame.inst().getHTMLToJava());
+				HTMLAnnotation.annotatemultipleLineHTML_Feature(hovertext,htmlFile, lines, annotatedColor, MainFrame.inst().getHTMLToJava());
 			}
 		}
 	}

@@ -1,46 +1,33 @@
 package vreAnalyzer.Variants;
 
-import soot.ArrayType;
 import soot.Body;
 import soot.Local;
-import soot.RefType;
-import soot.SootClass;
 import soot.SootMethod;
 import soot.Value;
-import soot.jimple.AnyNewExpr;
-import soot.jimple.IdentityRef;
+import soot.jimple.IdentityStmt;
 import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
+import soot.jimple.ThisRef;
+import vreAnalyzer.Tag.MethodTag;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
-import vreAnalyzer.ControlFlowGraph.DefUse.Use.Use;
 import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Elements.CallSite;
-import vreAnalyzer.Elements.Location;
-import vreAnalyzer.PointsTo.PointsToAnalysis;
-import vreAnalyzer.PointsTo.PointsToGraph;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
-import vreAnalyzer.Tag.MethodTag;
-import vreAnalyzer.Tag.StmtTag;
-import vreAnalyzer.UI.SourceClassBinding;
-import vreAnalyzer.vreAnalyzerCommandLine;
-import vreAnalyzer.Context.Context;
-
-import java.awt.Color;
-import java.io.File;
 import java.util.*;
 
 public class BindingResolver {
 
-
 	public static BindingResolver instance = null;
-	private Map<SootMethod,List<List<Value>>>methodToArgs;
-    private Map<Stmt, Value>firstStmtToValue;
-	private boolean verbose = true;
-	 
+	private Map<SootMethod,List<Args>>methodToArgsList = null;
     private ArrayList<Variant>variants = new ArrayList<Variant>();
-    private Map<Value,Variant>valueToVariant = new HashMap<Value,Variant>();
+    private boolean verbose = true;
+    private List<SootMethod> allAppMethod = null;
+    public BindingResolver(){
+    	methodToArgsList = new HashMap<SootMethod,List<Args>>();
+    	allAppMethod = new LinkedList<SootMethod>();
+    }
 	public static BindingResolver inst(){
 		if(instance==null)
 			instance = new BindingResolver();
@@ -49,263 +36,141 @@ public class BindingResolver {
 	public ArrayList<Variant>getVariants(){
 		return variants;
 	}
+	
 	public void parse(){
-		/**
-		 * Block ID,Code Range, FeatureID, Seperators, SootMethod,Class
-		 */
-		List<SootMethod> allAppMethods = ProgramFlowBuilder.inst().getAppConcreteMethods();
-		methodToArgs = new HashMap<SootMethod,List<List<Value>>>();
-        firstStmtToValue = new HashMap<Stmt,Value>();
-		Set<SootMethod>calleeSet = new HashSet<SootMethod>();
-		Set<Value>needRemove = new HashSet<Value>();
-		Map<Value,List<Stmt>>methodTemp = new HashMap<Value,List<Stmt>>();
-		Map<Set<AnyNewExpr>,Value>sitesToValue = new HashMap<Set<AnyNewExpr>,Value>();
-		for(SootMethod method:allAppMethods){
-			/**
-			 * 1. 插入的時候進行檢查 如果value指向同一個地址 不用分開多個(fixed)
-			 * 2. Call Site處有問題
-			 *    是不是要有那種binding的才要處理 其他的不需要(fixed)
-			 */
-			methodTemp.clear();
-			CFGDefUse cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(method);
-			List<Local>parameterLocals = method.getActiveBody().getParameterLocals();
-			List<Use>uses = cfg.getUses();
-			NodeDefUses exitNode = (NodeDefUses) cfg.EXIT;
-			Context<SootMethod,CFGNode,PointsToGraph> exitContext = null;
-			List<Context<SootMethod,CFGNode,PointsToGraph>> contexts = PointsToAnalysis.inst().getContexts(method);
-			for(Context<SootMethod,CFGNode,PointsToGraph> context:contexts){
-				if(context.getValueBefore(exitNode)!=null)
-					exitContext = context;
-			}
-			PointsToGraph graph = (PointsToGraph) exitContext.getValueBefore(exitNode);
-			HashMap<Local,Set<AnyNewExpr>>roots = graph.getRoots();
-			// Annotate and classify all local and argument
-			for(Use u:uses) {
-				CFGNode node = u.getN();
-				if(node==null){
-					// this u corresponds to a branch
-					node = u.getBranch().getSrc();
-				}
-				Variable var = u.getVar();
-				Stmt stmt = node.getStmt();
-				if (u.getValue().getType() instanceof RefType || u.getValue().getType() instanceof ArrayType) {
-					if(methodToArgs.containsKey(method)){
-						if(var.getValue() instanceof IdentityRef){
-							List<List<Value>>listValues = methodToArgs.get(method);
-							int index = -1;
-							for(int i = 0;i < parameterLocals.size();i++){
-								Local locali = parameterLocals.get(i);
-								Value vallocali = (Value)locali;
-								if(vallocali.equals(var.getValue())){
-									index = i;
-									break;
-								}
-							}
-							if(index!=-1) {
-								// get the number of argument/index
-								List<Stmt>bindingStmts = Variant.getVarStmt(var.getValue());
-								if(bindingStmts!=null) {
-									for (List<Value> list : listValues) {
-										Value realbindingValue = list.get(index);
-										//Variant.addVarStmtMap(realbindingValue,bindingStmts);
-										if(methodTemp.containsKey(realbindingValue)){
-											methodTemp.get(realbindingValue).addAll(bindingStmts);
-										}else
-											methodTemp.put(realbindingValue,bindingStmts);
-									}
-								}
-								calleeSet.remove(method);
-								needRemove.add(var.getValue());
-							}
-
-						}else{
-							stmt.addTag(new PRBTag(var));
-							//Variant.addVarStmtMap(var.getValue(), stmt);
-							List<Stmt>bindingStmts = new LinkedList<Stmt>();
-							bindingStmts.add(stmt);
-							if(methodTemp.containsKey(var.getValue())){
-								methodTemp.get(var.getValue()).addAll(bindingStmts);
-							}else
-								methodTemp.put(var.getValue(),bindingStmts);
-						}
-					}else {
-						stmt.addTag(new PRBTag(var));
-						//Variant.addVarStmtMap(var.getValue(), stmt);
-						List<Stmt>bindingStmts = new LinkedList<Stmt>();
-						bindingStmts.add(stmt);
-						if(methodTemp.containsKey(var.getValue())){
-							methodTemp.get(var.getValue()).addAll(bindingStmts);
-						}else
-							methodTemp.put(var.getValue(),bindingStmts);
-					}
-				} else {
-					stmt.addTag(new LBTag(var));
-					/**
-					 * remove currently
-					 */
-					//Variant.addVarStmtMap(var.getValue(), stmt);
-				}
-			}
-
-			// add all temped var-stmt map into {@link Variant}mapvlToStmt
-			/*
-			 * if two values are points to same location, just add one
-			 */
-			for(Map.Entry<Value,List<Stmt>>entry:methodTemp.entrySet()){
-				Value vi = entry.getKey();
-				List<Stmt>stmts = entry.getValue();
-				if(vi instanceof Local){
-					Local vilocal = (Local)vi;
-					Set<AnyNewExpr>sites = roots.get(vilocal);
-					if(sitesToValue.containsKey(sites)){
-						Value bindvi = sitesToValue.get(sites);
-						Variant bindvariant = valueToVariant.get(bindvi);
-						bindvariant.addPaddingValue(vi);
-						bindvariant.addBindingStmts(stmts);
-						valueToVariant.put(vi, bindvariant);
-						
-					}else{
-						Variant variant = new Variant(vi,stmts);
-						valueToVariant.put(vi,variant);
-						sitesToValue.put(sites,vi);
-						/**
-						 * Binding this value set to color
-						 */
-						VariantColorMap.inst().registerNewColor(variant);
-					}
-				}
-			}
-
-			MethodTag mTag = (MethodTag)method.getTag(MethodTag.TAG_NAME);
-			for(CallSite callsite:mTag.getAllCalleeSites()){
-				Location srcLoc = callsite.getLoc();
-				Stmt srcInvokeStmt = srcLoc.getStmt();
-
-
-				InvokeExpr invokeExpr = srcInvokeStmt.getInvokeExpr();
-				List<Value>argus = invokeExpr.getArgs();
-				for(SootMethod callee:callsite.getAppCallees()){
-					if(methodToArgs.containsKey(callee)){
-						List<List<Value>>lists = methodToArgs.get(callee);
-						lists.add(argus);
-						calleeSet.add(callee);
-					}else{
-						List<List<Value>>lists = new LinkedList<List<Value>>();
-						lists.add(argus);
-						methodToArgs.put(callee,lists);
-						calleeSet.add(callee);
-					}
-				}
-			}
-
-		}
-		// 1. If there still remains in
-		for(SootMethod callee:calleeSet){
-			CFGDefUse cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(callee);
-			/*
-			 *  If there is no activebody for the callee, skip it
-			 *  since no need need to binding the caller parameters with callee arguments
-			 */
-			if(!callee.hasActiveBody()||
-					cfg==null)
-				continue;
-			Body activeBody = callee.getActiveBody();
-			if(activeBody==null)
-				continue;
-			List<Local>parameterLocals = activeBody.getParameterLocals();
-			List<Use>uses = cfg.getUses();
-			// Annotate and classify all local and argument
-			for(Use u:uses) {
-				CFGNode node = u.getSrcNode();
-				Variable var = u.getVar();
-				/*
-				    if it is not inside the variant value site no need to consider
-				    since it doesnot invoke in a binding issue;
-				  */
-				if(!valueToVariant.containsKey(var.getValue()))
+		// 1. for all methods first set the call site binding
+		allAppMethod.addAll(ProgramFlowBuilder.inst().getAppConcreteMethods());
+		for(SootMethod method:allAppMethod){
+			MethodTag mTag = (MethodTag) method.getTag(MethodTag.TAG_NAME);
+			List<CallSite> callsites = mTag.getAllCallSites();
+			for(CallSite site:callsites){
+				// 1.1 get call cfg node
+				CFGNode srcCallCFGNode = site.getCallCFGNode();
+				Stmt srcStmt = srcCallCFGNode.getStmt();
+				InvokeExpr invokeExpr = srcStmt.getInvokeExpr();
+				List<Value>args = invokeExpr.getArgs();
+				if(args.isEmpty())
 					continue;
-				Stmt stmt = node.getStmt();
-				if (u.getValue().getType() instanceof RefType || u.getValue().getType() instanceof ArrayType) {
-					if(methodToArgs.containsKey(callee)){
-						if(var.getValue() instanceof IdentityRef){
-							List<List<Value>>listValues = methodToArgs.get(callee);
-							int index = -1;
-							for(int i = 0;i < parameterLocals.size();i++){
-								Local locali = parameterLocals.get(i);
-								Value vallocali = (Value)locali;
-								if(vallocali.equals(var.getValue())){
-									index = i;
-									break;
-								}
-							}
-							if(index!=-1) {
-								// get the number of argument/index
-								List<Stmt>bindingStmts = Variant.getVarStmt(var.getValue());
-								if(bindingStmts!=null) {
-									for (List<Value> list : listValues) {
-										Value realbindingValue = list.get(index);
-										Variant.addVarStmtMap(realbindingValue,bindingStmts);
-									}
-								}
-								needRemove.add(var.getValue());
-							}
-
-						}else{
-							stmt.addTag(new PRBTag(var));
-							Variant.addVarStmtMap(var.getValue(), stmt);
-						}
-					}else {
-						stmt.addTag(new PRBTag(var));
-						Variant.addVarStmtMap(var.getValue(), stmt);
+				List<SootMethod>appcallees = site.getAppCallees();
+				// DEBUG
+				String argsString = "";
+				for(Value ar:args){
+					argsString+=ar.toString();
+					argsString+=",";
+				}
+				if(!args.isEmpty()){
+					argsString = argsString.substring(0,argsString.length()-1);
+				}
+				// FINISH
+				for(SootMethod callee:appcallees){
+					if(verbose){
+						System.out.println("Add a method and args bind: callee method["+callee.getName()+"] with input parameters "
+								+ "["+argsString+"] in caller method["+method.getName()+"]");
 					}
-				} else {
-					stmt.addTag(new LBTag(var));
-					//Variant.addVarStmtMap(var.getValue(), stmt);
+					Args ar = new Args(method,callee,args);
+					if(methodToArgsList.containsKey(callee)){
+						methodToArgsList.get(callee).add(ar);
+					}else{						
+						List<Args>argsList = new LinkedList<Args>();
+						argsList.add(ar);
+						methodToArgsList.put(callee, argsList);
+					}
 				}
 			}
 		}
-
-		// 2.
-		Iterator<Value> iterator = needRemove.iterator();
-		while(iterator.hasNext()){
-			Value vi = (Value)iterator.next();
-			Variant.removeValue(vi);
-
+		// 2. if there is a call binding, does not use its own arguments value use parameter instead
+		/*
+		 * We categorize the variable into following groups:
+		 * 1. Fields -- from class
+		 * 2. Arguments -- from input set
+		 * 3. Locals
+		 * STEP
+		 * STEP 1: get the cfg 
+		 * STEP 2: for a CFGNode, get the use of this cfgNode
+		 * STEP 3: classify this use
+		 * is this use a field?
+		 * is this use a local? --> binding to argument/ binding to RefLike/ others
+		 * STEP 4: 
+		 * 
+		 */
+		boolean isParaAssignStmt = false;
+		for(SootMethod method:allAppMethod){
+			CFGDefUse cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(method);
+			Body body = method.retrieveActiveBody();
+			List<Local>argLists = body.getParameterLocals();//locals assigned with parameters
+			List<CFGNode>nodes = cfg.getNodes();
+			if(methodToArgsList.containsKey(method)){
+				// 2.1 The method is invoked by other method use callers' parameters
+				for(CFGNode node:nodes){
+					NodeDefUses defusenode = (NodeDefUses)node;
+					Stmt stmt = defusenode.getStmt();
+					if(stmt instanceof IdentityStmt &&
+							!(((IdentityStmt) stmt).getRightOp() instanceof ThisRef)){
+						isParaAssignStmt = true;
+					}else{
+						isParaAssignStmt = false;
+					}
+					List<Variable> useVars = defusenode.getUsedVars();
+					int argIndex = -1;
+					Value argu = null;
+					if(isParaAssignStmt){
+						IdentityStmt idstmt =  (IdentityStmt)stmt;
+						// 2.1.1 arguments
+						argu = idstmt.getLeftOp();
+						Local localarg = (Local)argu;
+						argIndex = argLists.indexOf(localarg);
+					}
+					for(Variable vi:useVars){
+						Value value = vi.getValue();
+						if(vi.isFieldRef()){
+							
+						}else if(vi.isArrayRef()){
+							
+						}else if(vi.isConstant()){
+							
+						}else if(vi.isLocal()){
+							
+						}
+						
+					}
+					
+				}
+				
+			}else{
+				// 2.2 Use this method's own arguments directly
+				for(CFGNode node:nodes){
+					NodeDefUses defusenode = (NodeDefUses)node;
+					List<Variable> useVars = defusenode.getUsedVars();
+					for(Variable vi:useVars){
+						Value value = vi.getValue();
+						if(vi.isFieldRef()){
+							
+						}else if(vi.isArrayRef()){
+							
+						}else if(vi.isConstant()){
+							
+						}else if(vi.isLocal()){
+							
+						}
+					}
+					
+					
+				}
+			}
+		
 		}
-
-        // 3. create the variants for each vi and binding
-        // 4. combine variants
-        for(Map.Entry<Value,List<Stmt>>entry:Variant.getMapvlToStmt().entrySet()){
-
-            Value vi = entry.getKey();
-            List<Stmt>stmts = entry.getValue();
-            if(firstStmtToValue.containsKey(stmts.get(0))){
-                Variant existVar = valueToVariant.get(firstStmtToValue.get(stmts.get(0)));
-                existVar.addPaddingValue(vi);
-                existVar.addBindingStmts(stmts);
-                valueToVariant.put(vi,existVar);
-            }else{
-                firstStmtToValue.put(stmts.get(0),vi);
-                Variant variant = new Variant(vi,stmts);
-                variants.add(variant);
-                valueToVariant.put(vi,variant);
-                /**
-				 * Binding this value set to color
-				 */
-				VariantColorMap.inst().registerNewColor(variant);
-            }
-        }
-		if(verbose)
-			System.out.println("#Variants by Value:"+variants.size());
-
+		
+		
+		
 	}
-
+	
 	/**
 	 * 1. current solution, first we all annotated all the files(testing)
 	 * 2. seperate stmts list into combination of code blocks
 	 * 
 	 * Rewrite with annotated color
 	 */
+	/*
 	public void annotate() {
 		if (vreAnalyzerCommandLine.isSourceBinding() &&
 				vreAnalyzerCommandLine.isStartFromGUI())
@@ -326,6 +191,7 @@ public class BindingResolver {
 						classVariantStmtMap.put(cls, stmts);
 					}
 				}
+				String variantId = "variant:"+variants.indexOf(variant);
 				for (Map.Entry<SootClass, List<Stmt>> entry : classVariantStmtMap.entrySet()) {
 					SootClass cls = entry.getKey();
 					List<Stmt> stmts = entry.getValue();
@@ -338,10 +204,11 @@ public class BindingResolver {
 					htmlfileName = htmlfileName.substring(0, startIndex) + realName;
 					htmlfileName += ".html";
 					File htmlFile = new File(htmlfileName);
-					new VariantAnnotate(stmts, htmlFile,variantColor);
+					new VariantAnnotate(variant,variantId,stmts, htmlFile,variantColor);
 				}
 			}
 
 		}
 	}
+	*/
 }
