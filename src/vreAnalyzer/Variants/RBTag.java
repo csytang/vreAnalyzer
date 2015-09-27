@@ -2,23 +2,28 @@ package vreAnalyzer.Variants;
 import java.util.HashSet;
 import java.util.Set;
 
+import soot.Value;
 import soot.tagkit.AttributeValueException;
 import soot.tagkit.Tag;
-import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 
 public class RBTag implements Tag{
 	/**
 	 * This means runtime binding for this statement and these variables are required.
 	 */
 	public static String TAG_NAME = "rtbind";
-	private Set<Variable> variables;
-	public RBTag(Set<Variable>variables){
-		this.variables = variables;
+	private Set<Value> bindingvalues;
+	public RBTag(Set<Value>values){
+		this.bindingvalues = values;
 	}
-	public RBTag(Variable variable){
-		if(this.variables==null)
-			this.variables = new HashSet<Variable>();
-		this.variables.add(variable);
+	public RBTag(Value value){
+		if(this.bindingvalues==null)
+			this.bindingvalues = new HashSet<Value>();
+		this.bindingvalues.add(value);
+	}
+	public void addBindingValue(Value value){
+		if(this.bindingvalues==null)
+			this.bindingvalues = new HashSet<Value>();
+		this.bindingvalues.add(value);
 	}
 	@Override
 	public String getName() {
