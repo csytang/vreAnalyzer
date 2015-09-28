@@ -39,7 +39,7 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 		System.out.println("[vreAnalyzer] Internal transform[Finish]");
 		System.out.println("[vreAnalyzer] BindingResolve[Start]");
 		BindingResolver.inst().parse();
-		//BindingResolver.inst().annotate();
+		BindingResolver.inst().annotate();
 		System.out.println("[vreAnalyzer] BindingResolve[Finish]");
 		System.out.println("[vreAnalyzer] Project analysis[Start]");
 		// Display Reusable Result by checking the mode
