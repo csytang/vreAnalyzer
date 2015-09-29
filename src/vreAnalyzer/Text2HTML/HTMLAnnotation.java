@@ -80,9 +80,11 @@ public class HTMLAnnotation {
 			
 			
 			String line = "";
-			for(String content:htmlbyline){
-				line=content;
-				line+="<br>";
+			for(int i = 0;i < htmlbyline.length; i++){
+				line = htmlbyline[i];
+				if(i!=htmlbyline.length-1){
+					line+="<br>";
+				}
 				bwhtml.write(line);
 			}
 			bwhtml.flush();
@@ -149,9 +151,11 @@ public class HTMLAnnotation {
 			
 			
 			String line = "";
-			for(String content:htmlbyline){
-				line=content;
-				line+="<br>";
+			for(int i = 0;i < htmlbyline.length; i++){
+				line = htmlbyline[i];
+				if(i!=htmlbyline.length-1){
+					line+="<br>";
+				}
 				bwhtml.write(line);
 			}
 			bwhtml.flush();
@@ -237,9 +241,11 @@ public class HTMLAnnotation {
 				}
 			}
 			String line = "";
-			for(String content:htmlbyline){
-				line=content;
-				line+="<br>";
+			for(int i = 0;i < htmlbyline.length; i++){
+				line = htmlbyline[i];
+				if(i!=htmlbyline.length-1){
+					line+="<br>";
+				}
 				bwhtml.write(line);
 			}
 			
@@ -306,9 +312,11 @@ public class HTMLAnnotation {
 				}
 			}
 			String line = "";
-			for(String content:htmlbyline){
-				line=content;
-				line+="<br>";
+			for(int i = 0;i < htmlbyline.length; i++){
+				line = htmlbyline[i];
+				if(i!=htmlbyline.length-1){
+					line+="<br>";
+				}
 				bwhtml.write(line);
 			}
 			bwhtml.flush();
@@ -449,9 +457,12 @@ public class HTMLAnnotation {
 				}
 			}
 			String line = "";
-			for(String content:htmlbyline){
-				line=content;
-				line+="<br>";
+			
+			for(int i = 0;i < htmlbyline.length; i++){
+				line = htmlbyline[i];
+				if(i!=htmlbyline.length-1){
+					line+="<br>";
+				}
 				bwhtml.write(line);
 			}
 			
@@ -519,9 +530,11 @@ public class HTMLAnnotation {
 				}
 			}
 			String line = "";
-			for(String content:htmlbyline){
-				line=content;
-				line+="<br>";
+			for(int i = 0;i < htmlbyline.length; i++){
+				line = htmlbyline[i];
+				if(i!=htmlbyline.length-1){
+					line+="<br>";
+				}
 				bwhtml.write(line);
 			}
 			bwhtml.flush();

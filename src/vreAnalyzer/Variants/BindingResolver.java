@@ -139,8 +139,7 @@ public class BindingResolver {
 					continue;
 				NodeDefUses defusenode = (NodeDefUses)node;
 				Stmt stmt = defusenode.getStmt();
-				if(stmt instanceof IdentityStmt &&
-						!(((IdentityStmt) stmt).getRightOp() instanceof ThisRef)){
+				if(stmt instanceof IdentityStmt && !(((IdentityStmt) stmt).getRightOp() instanceof ThisRef)){
 					isParaAssignStmt = true;
 				}else{
 					isParaAssignStmt = false;
@@ -440,6 +439,9 @@ public class BindingResolver {
 				List<Stmt> bindingStmts = variant.getBindingStmts();
 				Color variantColor = VariantColorMap.inst().getColorforVariant(variant);
 				classVariantStmtMap.clear();
+				String variantId = "variant:"+variants.indexOf(variant);
+				if(verbose)
+					System.out.println("Currently process variant with id:"+variantId);
 				for (Stmt stmt : bindingStmts) {
 					StmtTag stmtTag = (StmtTag) stmt.getTag(StmtTag.TAG_NAME);
 					SootClass cls = stmtTag.getSootMethod().getDeclaringClass();
@@ -450,8 +452,10 @@ public class BindingResolver {
 						stmts.add(stmt);
 						classVariantStmtMap.put(cls, stmts);
 					}
+					if(verbose)
+						System.out.println("Stmt:"+stmt);
 				}
-				String variantId = "variant:"+variants.indexOf(variant);
+				
 				for (Map.Entry<SootClass, List<Stmt>> entry : classVariantStmtMap.entrySet()) {
 					SootClass cls = entry.getKey();
 					List<Stmt> stmts = entry.getValue();
