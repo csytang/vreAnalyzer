@@ -90,8 +90,8 @@ public class vreAnalyzerCommandLine{
 		
 		// Output
 		sootArgs.add("-f");
-		sootArgs.add("none");
-		//sootArgs.add("jimple");
+		//sootArgs.add("none");
+		sootArgs.add("jimple");
 		//sootArgs.add("class");
 		
 		

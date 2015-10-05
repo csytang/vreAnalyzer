@@ -1,10 +1,14 @@
 package vreAnalyzer.UI;
 
 import org.apache.commons.lang3.StringUtils;
+
+import Patch.Hadoop.ProjectParser;
+import Patch.Hadoop.Job.ColorMap;
 import vreAnalyzer.Text2HTML.Text2HTML;
+import vreAnalyzer.Variants.VariantAnnotate;
+import vreAnalyzer.Variants.VariantColorMap;
 import vreAnalyzer.Variants.VariantHTMLFiles;
 import vreAnalyzer.vreAnalyzerCommandLine;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.HyperlinkEvent;
@@ -17,6 +21,8 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -153,7 +159,6 @@ public class MainFrame extends JFrame {
 		source_annotateDirTree = new JTree();
 		source_annotateDirTree.setModel(new DefaultTreeModel(
 			new DefaultMutableTreeNode("Source directory") {
-
 			{
 				}
 			}
@@ -496,13 +501,30 @@ public class MainFrame extends JFrame {
 		treeModel.setRoot(root);
 		treeModel.reload();
 	}
+	public boolean isVariantReady(){
+		return VariantAnnotate.variantready;
+	}
+	public boolean isFeatureReady(){
+		return ProjectParser.isfeatureAnnotatedReady;
+	}
 	public void addDirTreeListener(){
 		source_annotateDirTree.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent e){
 				DefaultMutableTreeNode selected = (DefaultMutableTreeNode)source_annotateDirTree.getLastSelectedPathComponent();
-				if(selected==null){
-					
+				if(selected!=null){
+					if(!selected.isRoot()){
+						if(selected.getParent().toString().equals("annotated_list")){
+							if(isFeatureReady()){
+								source_annotateDirTree.setModel((TreeModel) ColorMap.inst().getTableModel());
+							}
+						}else if(selected.getParent().toString().equals("variantanno_list")){
+							if(isVariantReady()){
+								source_annotateDirTree.setModel((TreeModel)VariantColorMap.inst().getTableModel());
+							}
+						}
+					}
 				}
+				if(selected==null){}
 				else if(isLeaf(selected.getUserObject())){
 					File selectedfile = (File)selected.getUserObject();
 					if(selectedfile.getAbsolutePath().endsWith(".java")){

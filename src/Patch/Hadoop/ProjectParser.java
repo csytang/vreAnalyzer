@@ -1,23 +1,13 @@
 package Patch.Hadoop;
 import java.awt.Color;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.swing.JEditorPane;
-import javax.swing.JTable;
 import javax.swing.JTree;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import Patch.Hadoop.Job.ColorMap;
 import Patch.Hadoop.Job.JobHub;
@@ -78,6 +68,7 @@ public class ProjectParser {
 	private List<Context<SootMethod,CFGNode,PointsToGraph>> currContexts;
 	private List<File>allannotatedFiles = new LinkedList<File>();
 	private MethodBlock mblock = null;
+	public static boolean isfeatureAnnotatedReady = false;
 	/* 
 	 * Store all jobs that defined in the main method,
 	 * including locals and fields 
@@ -108,11 +99,7 @@ public class ProjectParser {
 	 * this method will link the jobColor legend to the file,
 	 * if user double click the cell in legend, it will show the file in the 
 	 * textarea;
-	 * @bug
 	 */
-	
-	
-	
 	public void annotateallJobs(){
 		
 		for(Map.Entry<JobVariable, JobHub>entry:jobtoHub.entrySet()){
@@ -170,7 +157,7 @@ public class ProjectParser {
 			// 2. Following will annoated use of job
 			ProjectParser.inst().annotateallJobs();
 			ProjectParser.inst().annotateallJobUses();
-			
+			isfeatureAnnotatedReady = true;
 		}
 		
 	}
@@ -211,11 +198,14 @@ public class ProjectParser {
 		annotate();
 		collectStatisiticData();
 		collectCommonAssetData();
+		addToLegend();
+		
+	}
+	public void addToLegend(){
 		// 3. add the annotated color to legend
 		ColorMap.inst().addToLegend();
 		ColorMap.inst().addLegendListener();
 	}
-	
 	public void Parse(){
 		// 1. Get the CFG
 		

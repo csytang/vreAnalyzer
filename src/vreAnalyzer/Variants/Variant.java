@@ -45,7 +45,6 @@ public class Variant {
 			}
 		}else
 			ValueStartsBind.put(value, stmt);
-		
 	}
 	public void addPaddingValue(List<Value>vis){
 		this.paddingValues.addAll(vis);

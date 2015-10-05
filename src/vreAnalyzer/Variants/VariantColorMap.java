@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.TreeModel;
 import soot.Value;
 import vreAnalyzer.UI.MainFrame;
 import vreAnalyzer.Util.RandomColor;
@@ -19,7 +20,7 @@ public class VariantColorMap {
 	public static VariantColorMap instance = null;
 	private static Map<String,Set<Variant>>hexColorToVariant = new HashMap<String,Set<Variant>>();
 	private static Map<Set<Variant>,Color>combinedToColor = new HashMap<Set<Variant>,Color>();
-	
+	private DefaultTableModel treemodel = null;
 	/**
 	 * Color inheritance:
 	 * If there is an invoke expression goes like
@@ -62,7 +63,7 @@ public class VariantColorMap {
 			variantToColor.remove(vi);
 	}
 	public void addToLegend(){
-		JTable variantColorMapTable = MainFrame.inst().getJobColorMapTable();
+		
 		String legendheaders[] = {"Variant","Values","Color"};
 		@SuppressWarnings("serial")
 		DefaultTableModel model = new DefaultTableModel(null,legendheaders){
@@ -80,11 +81,9 @@ public class VariantColorMap {
 			String values = covertValueToString(valueList);
 			model.addRow(new Object[]{i,values,color});
 		}
-		variantColorMapTable.setModel(model);
+		treemodel = model;
 	}
-	public void addLegendListener(){
 	
-	}
 	public String covertValueToString(List<Value>valueList){
 		String result = "[";
 		for(Value vit:valueList){
@@ -121,5 +120,10 @@ public class VariantColorMap {
 	public void addHexColorToVariant(String hex, Set<Variant> currvariants) {
 		// TODO Auto-generated method stub
 		hexColorToVariant.put(hex, currvariants);
+	}
+
+	public DefaultTableModel getTableModel() {
+		// TODO Auto-generated method stub
+		return treemodel;
 	}
 }

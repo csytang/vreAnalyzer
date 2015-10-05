@@ -29,6 +29,7 @@ public class ColorMap {
 	private static ArrayList<Set<JobVariable>>indexToJobs = null;
 	private static Map<String,Set<JobVariable>>hexColorToJob = new HashMap<String,Set<JobVariable>>();
 	private static Map<Set<JobVariable>,Color>combinedToColor = null;
+	private DefaultTableModel treemodel = null;
 	public static ColorMap inst(){
 		if(instance==null)
 			instance = new ColorMap();
@@ -69,9 +70,11 @@ public class ColorMap {
 			return rcolor.getColor();
 		}
 	}
+	public DefaultTableModel getTableModel(){
+		return treemodel;
+	}
 	public void addToLegend(){
-		// 3. add the annotated color to legend
-		JTable jobColorMapTable = MainFrame.inst().getJobColorMapTable();
+		
 		String legendheaders[] = {"Feature","Color"};
 		DefaultTableModel model = new DefaultTableModel(null,legendheaders){
 			@Override
@@ -93,7 +96,8 @@ public class ColorMap {
 				ColorMap.inst().registerLegendJobsList(entry.getValue());
 				model.addRow(new Object[]{jobsString,color});
 		}
-		jobColorMapTable.setModel(model);
+		
+		treemodel = model;
 	}
 	public void addLegendListener(){
 		final JTable table = MainFrame.inst().getJobColorMapTable();

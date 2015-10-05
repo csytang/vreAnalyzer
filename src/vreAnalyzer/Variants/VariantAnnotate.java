@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 This software is delivered by The Hong Kong Polytechnic University,
+  * Copyright (c) 2015 This software is delivered by The Hong Kong Polytechnic University,
  * Department of Computing,
  * Software Development and Management Laboratory.
  * @ author: Chris Tang(csytang(AT)comp.polyu.edu.hk)
@@ -26,6 +26,7 @@ public class VariantAnnotate {
     boolean startFromSource;
     int[][]positions;
     int[]lines;
+    public static boolean variantready = false;
     public VariantAnnotate(Variant variant,String variantId,List<Stmt> stmts,File htmlFile,Color annotatedColor){
         startFromSource = vreAnalyzerCommandLine.isStartFromSource();
         if(startFromSource){
@@ -54,7 +55,7 @@ public class VariantAnnotate {
             }else{
                 HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,htmlFile, lines, annotatedColor, MainFrame.inst().getHTMLToJava());
             }
-
         }
+        variantready = true;
     }
 }

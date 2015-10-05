@@ -5,11 +5,9 @@ import soot.Local;
 import soot.SootClass;
 import soot.SootMethod;
 import soot.Value;
-import soot.jimple.AssignStmt;
 import soot.jimple.DefinitionStmt;
 import soot.jimple.IdentityStmt;
 import soot.jimple.InvokeExpr;
-import soot.jimple.InvokeStmt;
 import soot.jimple.Stmt;
 import soot.jimple.ThisRef;
 import vreAnalyzer.Tag.MethodTag;
@@ -22,7 +20,6 @@ import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Elements.CallSite;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
-
 import java.awt.Color;
 import java.io.File;
 import java.util.*;
@@ -36,9 +33,9 @@ public class BindingResolver {
     private List<SootMethod> allAppMethod = null;
     private List<SootMethod> callerMethod = null;
     private List<SootMethod> calleeMethod = null;
+    private Stack<Stmt> PRBAnalysisStack = new Stack<Stmt>();
     private Map<SootMethod,List<Value>>unBindingValueMap = null;
-    private Map<Args,SootMethod>argsToCalleeMethod = new HashMap<Args,SootMethod>();
-    private Map<Value,Variant>valueToVariant = new HashMap<Value,Variant>();//globally, for a value, there is a mapped variant
+    private Map<Value,List<Variant>>valueToVariant = new HashMap<Value,List<Variant>>();//globally, for a value, there is a mapped variant
     public BindingResolver(){
     	methodToArgsList = new HashMap<SootMethod,List<Args>>();
     	allAppMethod = new LinkedList<SootMethod>();
@@ -53,13 +50,10 @@ public class BindingResolver {
 	}
 	
 	public void parse(){
-		/*
-		 *1. 设计后加入的value 也需要被被处理 
-		 *2. 删除不可见的variant  
-		 */
+		
 		// 1. for all methods first set the call site binding
 		allAppMethod.addAll(ProgramFlowBuilder.inst().getAppConcreteMethods());
-		Map<Value,List<Value>>localParameterToRemoteArgu = new HashMap<Value,List<Value>>();
+		
 		for(SootMethod method:allAppMethod){
 			MethodTag mTag = (MethodTag) method.getTag(MethodTag.TAG_NAME);
 			List<CallSite> callsites = mTag.getAllCallSites();
@@ -81,15 +75,15 @@ public class BindingResolver {
 				if(!args.isEmpty()){
 					argsString = argsString.substring(0,argsString.length()-1);
 				}
-				// FINISH
+				
 				for(SootMethod callee:appcallees){
 					if(verbose){
 						System.out.println("Add a method and args bind: callee method["+callee.getName()+"] with input parameters "
 								+ "["+argsString+"] in caller method["+method.getName()+"]");
 					}
+					// FINISH
 					Args ar = new Args(method,callee,args);
 					// add this args to callee into record
-					argsToCalleeMethod.put(ar, callee);
 					if(methodToArgsList.containsKey(callee)){
 						methodToArgsList.get(callee).add(ar);
 					}else{						
@@ -100,12 +94,14 @@ public class BindingResolver {
 				}
 			}
 		}
+		/////////////////////////////
+		
 		calleeMethod = new LinkedList<SootMethod>();
 		calleeMethod.addAll(methodToArgsList.keySet());
 		Set<SootMethod>tmp = new HashSet<SootMethod>(allAppMethod);
 		tmp.retainAll(calleeMethod);
-		callerMethod = new LinkedList<SootMethod>(tmp);
-		
+		callerMethod = new LinkedList<SootMethod>(allAppMethod);
+		callerMethod.removeAll(tmp);
 		
 		// 2. if there is a call binding, does not use its own arguments value use parameter instead
 		/*
@@ -129,6 +125,8 @@ public class BindingResolver {
 		unBindingValueMap = new HashMap<SootMethod,List<Value>>();
 		boolean isParaAssignStmt = false;
 		for(SootMethod method:callerMethod){
+			// clean the analysis stack
+			PRBAnalysisStack.clear();
 			unBindingValueMap.put(method,new LinkedList<Value>());
 			CFGDefUse cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(method);
 			List<CFGNode>nodes = cfg.getNodes();
@@ -145,8 +143,6 @@ public class BindingResolver {
 					isParaAssignStmt = false;
 				}
 				List<Variable> useVars = defusenode.getUsedVars();
-				
-				
 				if(isParaAssignStmt){
 					DefinitionStmt defstmt = (DefinitionStmt)stmt;
 					Value argu = defstmt.getLeftOp();
@@ -155,85 +151,147 @@ public class BindingResolver {
 					///// add variants to variant set///
 					Variant variant = new Variant(argu,stmt);
 					variants.add(variant);
-					valueToVariant.put(argu, variant);
+					List<Variant>variantlist = new LinkedList<Variant>();
+					variantlist.add(variant);
+					valueToVariant.put(argu, variantlist);
 					/////
 					if(rbTag!=null){
 						rbTag.addBindingValue(argu);
-						
 						if(verbose){
-							System.out.println("Value:["+argu.toString()+"] for stmt:["+stmt+"]");
+							System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+argu.toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(variantlist));
 						}
 					}else{
 						rbTag = new RBTag(argu);
 						stmt.addTag(rbTag);
 						if(verbose){
-							System.out.println("Value:["+argu.toString()+"] for stmt:["+stmt+"]");
+							System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+argu.toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(variantlist));
 						}
+					}
+					for(Variable use:useVars){
+						unBindingValueMap.get(method).add(use.getValue());
 					}
 					continue;
 				}
-				if(stmt instanceof AssignStmt){
-					AssignStmt assignstmt = (AssignStmt)stmt;
+				
+				boolean isused = false;
+				for(Variable use:useVars){
+					if(unBindingValueMap.get(method).contains(use.getValue())){
+						isused = true;
+						break;
+					}
+				}
+				
+				if(isused){
+					List<Variable>defVars = defusenode.getDefinedVars();
+					List<Variant> allvariantlist = new LinkedList<Variant>();//着色
 					for(Variable use:useVars){
-						if(unBindingValueMap.get(method).contains(use.getValue())){
-							Value LHSValue = assignstmt.getLeftOp();
-							RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
-							unBindingValueMap.get(method).add(LHSValue);
-							if(rbTag!=null){
-								rbTag.addBindingValue(LHSValue);
-								if(verbose){
-									System.out.println("Value:["+LHSValue.toString()+"] for stmt:["+stmt+"]");
-								}
-							}else{
-								rbTag = new RBTag(LHSValue);
-								stmt.addTag(rbTag);
-								if(verbose){
-									System.out.println("Value:["+LHSValue.toString()+"] for stmt:["+stmt+"]");
-								}
-							}
-							///// add variants to variant set///
-							Variant variant = valueToVariant.get(use.getValue());
-							variant.addPaddingValue(LHSValue);
-							variant.addBindingStmts(stmt);
-							variant.addFirstBind(LHSValue, stmt);
-							valueToVariant.put(LHSValue, variant);
-							/////
+						if(valueToVariant.containsKey(use.getValue())){
+							List<Variant> variantlist = valueToVariant.get(use.getValue());
+							allvariantlist.addAll(variantlist);
 						}
 					}
-				}else if(stmt instanceof DefinitionStmt){
-					DefinitionStmt defstmt = (DefinitionStmt)stmt;
+					//potential use
 					for(Variable use:useVars){
-						if(unBindingValueMap.get(method).contains(use.getValue())){
-							Value LHSValue = defstmt.getLeftOp();
-							RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
-							unBindingValueMap.get(method).add(LHSValue);
-							if(rbTag!=null){
-								rbTag.addBindingValue(LHSValue);
+						/*
+						 * if there is a value use but currently not defined as full unsolved should be added
+						 * to partial unbind
+						 */
+						if(!unBindingValueMap.get(method).contains(use.getValue())){
+							PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
+							if(prbTag!=null){
+								prbTag.addBindingValue(use.getValue());
 								if(verbose){
-									System.out.println("Value:["+LHSValue.toString()+"] for stmt:["+stmt+"]");
+									System.out.println("[Parital binding for class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+use.getValue().toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(allvariantlist));
 								}
 							}else{
-								rbTag = new RBTag(LHSValue);
-								stmt.addTag(rbTag);
+								prbTag = new PRBTag(use.getValue());
+								stmt.addTag(prbTag);
 								if(verbose){
-									System.out.println("Value:["+LHSValue.toString()+"] for stmt:["+stmt+"]");
+									System.out.println("[Parital binding for class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+use.getValue().toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(allvariantlist));
 								}
 							}
-							///// add variants to variant set///
-							Variant variant = valueToVariant.get(use.getValue());
-							variant.addPaddingValue(LHSValue);
-							variant.addBindingStmts(stmt);
-							variant.addFirstBind(LHSValue, stmt);
-							valueToVariant.put(LHSValue, variant);
-							/////
+						}else{
+							List<Variant> variantlist = valueToVariant.get(use.getValue());
+							/*
+							 * if there is a value and unresolved.
+							 */
+							RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
+							if(rbTag!=null){
+								rbTag.addBindingValue(use.getValue());
+								if(verbose){
+									System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+use.getValue().toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(variantlist));
+								}
+							}else{
+								rbTag = new RBTag(use.getValue());
+								stmt.addTag(rbTag);
+								if(verbose){
+									System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+use.getValue().toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(variantlist));
+								}
+							}
+							
 						}
 					}
-				}else if(stmt instanceof InvokeStmt){
-					InvokeStmt invokestmt = (InvokeStmt)stmt;
-					InvokeExpr invokexpr = invokestmt.getInvokeExpr();
+					for(Variable def:defVars){
+						RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
+						unBindingValueMap.get(method).add(def.getValue());
+						if(rbTag!=null){
+							rbTag.addBindingValue(def.getValue());
+							if(verbose){
+								System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+def.getValue().toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(allvariantlist));
+							}
+						}else{
+							rbTag = new RBTag(def.getValue());
+							stmt.addTag(rbTag);
+							if(verbose){
+								System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+def.getValue().toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(allvariantlist));
+							}
+						}
+						for(Variant variant:allvariantlist){
+							variant.addPaddingValue(def.getValue());
+							variant.addFirstBind(def.getValue(), stmt);
+						}
+						valueToVariant.put(def.getValue(), allvariantlist);
+						/////
+						// 1. annotate the definition 
+						// 2. annotate all previous use of this value in method;
+						markdefandPreUse(def.getValue(),node,nodes);
+					}
+					if(!defVars.isEmpty()){
+						/*
+						 * if there is value defined, pop the stmts in the stack
+						 * and add them to binding stmt
+						 */
+						for(Variant variant:allvariantlist){
+							variant.addBindingStmts(stmt);
+						}
+						while(!PRBAnalysisStack.isEmpty()){
+							Stmt prebindingstmt = PRBAnalysisStack.pop();
+							for(Variant variant:allvariantlist){
+								variant.addBindingStmts(prebindingstmt);
+							}
+							
+							RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
+							if(rbTag!=null){
+								unBindingValueMap.get(method).addAll(rbTag.getBindingValues());
+								break;
+							}
+						}
+						if(PRBAnalysisStack.isEmpty()){
+							
+						}
+					}else{
+						// if there is a value use and no value defined now
+						// we should push this statement to 
+						PRBAnalysisStack.push(stmt);
+					}
+					/////
+				}
+				
+				if(stmt.containsInvokeExpr()){
+					InvokeExpr invokexpr = stmt.getInvokeExpr();
 					SootMethod callee = invokexpr.getMethod();
 					// add this method to callee method analysis stack
-					//analysisStack.push(callee);
+					// analysisStack.push(callee);
 					List<Args>argulist = methodToArgsList.get(callee);
 					if(argulist==null){
 						continue;
@@ -256,14 +314,17 @@ public class BindingResolver {
 				}
 			}
 		}
+		System.out.println("--------------------Finish caller method----------------------------");
+		
+	
 		/////////////////////////////////////////////////////////
 		/**
 		 * WARNING:
 		 * not all arguments in callee method should be added to RBTag, since it fully depends on the caller.
-		 * 
 		 */
-		for(Map.Entry<Args,SootMethod>entry:argsToCalleeMethod.entrySet()){
-			SootMethod method = entry.getValue();
+		Map<Value,List<Value>>localParameterToRemoteArgu = new HashMap<Value,List<Value>>();
+		for(SootMethod method:calleeMethod){
+			PRBAnalysisStack.clear();
 			unBindingValueMap.put(method,new LinkedList<Value>());
 			localParameterToRemoteArgu.clear();
 			CFGDefUse cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(method);
@@ -272,13 +333,12 @@ public class BindingResolver {
 			Body body = method.retrieveActiveBody();
 			List<Local>argLists = body.getParameterLocals();//locals assigned with parameters
 			List<CFGNode>nodes = cfg.getNodes();
-			
 			// 2.1 The method is invoked by other method use callers' parameters
 			for(CFGNode node:nodes){
 				NodeDefUses defusenode = (NodeDefUses)node;
 				if(node.isSpecial())
 					continue;
-				Stmt stmt = defusenode.getStmt();
+				Stmt stmt = defusenode.getStmt();//$r7 := @caughtexception
 				if(stmt instanceof IdentityStmt &&
 						!(((IdentityStmt) stmt).getRightOp() instanceof ThisRef)){
 					isParaAssignStmt = true;
@@ -294,133 +354,183 @@ public class BindingResolver {
 					argu = idstmt.getLeftOp();
 					Local localarg = (Local)argu;
 					argIndex = argLists.indexOf(localarg);
-				}
+					if(argIndex==-1)
+						continue;
 					
-				for(Variable viu:useVars){
-					Value value = viu.getValue();
-					if(isParaAssignStmt){
-						// if this value is the argument
-						if(value.equivTo(argu)){
-							 // Run through all the argument lists and only
-							 // annotate one with unbind
-							Args args = entry.getKey();
-							Value remote = args.getArgs().get(argIndex);
-							if(localParameterToRemoteArgu.containsKey(value)){
-								localParameterToRemoteArgu.get(value).add(remote);
+					// Run through all the argument lists and only
+					// annotate one with unbind
+					// args list
+					List<Args> args = methodToArgsList.get(method);
+					if(args!=null){
+						
+						for(Args arg:args){
+							// 1. a remote value 
+							Value remote = arg.getArgs().get(argIndex);
+							
+							
+							List<Value> unbinds	= arg.getUnBindArgs();
+							if(localParameterToRemoteArgu.containsKey(argu)){
+								localParameterToRemoteArgu.get(argu).add(remote);
 							}else{
 								List<Value>mappedval = new LinkedList<Value>();
 								mappedval.add(remote);
-								localParameterToRemoteArgu.put(value, mappedval);
+								localParameterToRemoteArgu.put(argu, mappedval);
 							}
-							List<Value> unbinds	= args.getUnBindArgs();
-							
 							if(unbinds!=null){
 								if(!unbinds.isEmpty()){
 									if(unbinds.contains(remote)){
-										unBindingValueMap.get(method).add(value);
+										unBindingValueMap.get(method).add((Value)localarg);
 										// add this tag to the stmt
 										RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
+										///// add variants to variant set///
+										List<Variant> variantlist = valueToVariant.get(remote);
+										for(Variant variant:variantlist){
+											variant.addPaddingValue((Value)localarg);
+											variant.addBindingStmts(stmt);
+											variant.addFirstBind((Value)localarg, stmt);
+										}
+				
+										if(valueToVariant.containsKey((Value)localarg)){
+											//valueToVariant.put((Value)localarg,variantlist);
+											valueToVariant.get((Value)localarg).addAll(variantlist);
+										}else{
+											
+											valueToVariant.put((Value)localarg,variantlist);
+										}
+										/////
 										if(rbTag!=null){
-											rbTag.addBindingValue(value);
+											rbTag.addBindingValue((Value)localarg);
 											if(verbose){
-												System.out.println("Value:["+value.toString()+"] for stmt:["+stmt+"]");
+												System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+localarg.toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(variantlist));
 											}
 										}else{
-											rbTag = new RBTag(value);
+											rbTag = new RBTag((Value)localarg);
 											stmt.addTag(rbTag);
 											if(verbose){
-												System.out.println("Value:["+value.toString()+"] for stmt:["+stmt+"]");
+												System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+localarg.toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(variantlist));
 											}
 										}
-										///// add variants to variant set///
-										Variant variant = valueToVariant.get(remote);
-										variant.addPaddingValue(value);
-										variant.addBindingStmts(stmt);
-										variant.addFirstBind(value, stmt);
-										valueToVariant.put(value, variant);
-										/////
+												
 									}
 								}
-							}
-							
-							
-						}
-					}if(stmt instanceof AssignStmt){
-						AssignStmt assignstmt = (AssignStmt)stmt;
-						for(Variable use:useVars){
-							if(unBindingValueMap.get(method).contains(use.getValue())){
-								Value LHSValue = assignstmt.getLeftOp();
-								RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
-								unBindingValueMap.get(method).add(LHSValue);
-								if(rbTag!=null){
-									rbTag.addBindingValue(LHSValue);
-									if(verbose){
-										System.out.println("Value:["+LHSValue.toString()+"] for stmt:["+stmt+"]");
-									}
-								}else{
-									rbTag = new RBTag(LHSValue);
-									stmt.addTag(rbTag);
-									if(verbose){
-										System.out.println("Value:["+LHSValue.toString()+"] for stmt:["+stmt+"]");
-									}
-								}
-								///// add variants to variant set///
-								Variant variant = valueToVariant.get(use.getValue());
-								variant.addPaddingValue(LHSValue);
-								variant.addBindingStmts(stmt);
-								variant.addFirstBind(LHSValue, stmt);
-								valueToVariant.put(LHSValue, variant);
-								/////
-
-							}
-						}
-					}else if(stmt instanceof DefinitionStmt){
-						DefinitionStmt defstmt = (DefinitionStmt)stmt;
-						for(Variable use:useVars){
-							if(unBindingValueMap.get(method).contains(use.getValue())){
-								Value LHSValue = defstmt.getLeftOp();
-								RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
-								unBindingValueMap.get(method).add(LHSValue);
-								if(rbTag!=null){
-									rbTag.addBindingValue(LHSValue);
-									if(verbose){
-										System.out.println("Value:["+LHSValue.toString()+"] for stmt:["+stmt+"]");
-									}
-								}else{
-									rbTag = new RBTag(LHSValue);
-									stmt.addTag(rbTag);
-									if(verbose){
-										System.out.println("Value:["+LHSValue.toString()+"] for stmt:["+stmt+"]");
-									}
-								}
-								///// add variants to variant set///
-								Variant variant = valueToVariant.get(use.getValue());
-								variant.addPaddingValue(LHSValue);
-								variant.addBindingStmts(stmt);
-								variant.addFirstBind(LHSValue, stmt);
-								valueToVariant.put(LHSValue, variant);
-								/////
 							}
 						}
 					}
-					
-					
-					
+					continue;
+				}
+				
+				boolean isused = false;
+				for(Variable use:useVars){
+					if(unBindingValueMap.get(method).contains(use.getValue())){
+						isused = true;
+						break;
+					}
+				}
+				
+				if(isused){
+					List<Variable>defVars = defusenode.getDefinedVars();
+					List<Variant>allvariantlist = new LinkedList<Variant>();
+					for(Variable use:useVars){
+						if(valueToVariant.containsKey(use.getValue())){
+							List<Variant> variantlist = valueToVariant.get(use.getValue());
+							allvariantlist.addAll(variantlist);
+						}
+					}
+					//potential use
+					for(Variable use:useVars){
+						if(!unBindingValueMap.get(method).contains(use.getValue())){
+							PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
+							if(prbTag!=null){
+								prbTag.addBindingValue(use.getValue());
+								if(verbose){
+									System.out.println("[Partial Binding Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+use.getValue().toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(allvariantlist));
+								}
+							}else{
+								prbTag = new PRBTag(use.getValue());
+								stmt.addTag(prbTag);
+								if(verbose){
+									System.out.println("[Partial Binding Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+use.getValue().toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(allvariantlist));
+								}
+							}
+						}else{
+							/*
+							 * if there is a value and unresolved.
+							 */
+							List<Variant> variantlist = valueToVariant.get(use.getValue());
+							RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
+							if(rbTag!=null){
+								rbTag.addBindingValue(use.getValue());
+								if(verbose){
+									System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+use.getValue().toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(variantlist));
+								}
+							}else{
+								rbTag = new RBTag(use.getValue());
+								stmt.addTag(rbTag);
+								if(verbose){
+									System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+use.getValue().toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(variantlist));
+								}
+							}
+							
+						}
+					}
+					for(Variable def:defVars){
+						RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
+						unBindingValueMap.get(method).add(def.getValue());
+						if(rbTag!=null){
+							rbTag.addBindingValue(def.getValue());
+							if(verbose){
+								System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+def.getValue().toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(allvariantlist));
+							}
+						}else{
+							rbTag = new RBTag(def.getValue());
+							stmt.addTag(rbTag);
+							if(verbose){
+								System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+def.getValue().toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(allvariantlist));
+							}
+						}
+						for(Variant variant:allvariantlist){
+							variant.addPaddingValue(def.getValue());
+							variant.addFirstBind(def.getValue(), stmt);
+							
+						}
+						valueToVariant.put(def.getValue(), allvariantlist);
+						/////
+						// 1. annotate the definition 
+						// 2. annotate all previous use of this value in method;
+						markdefandPreUse(def.getValue(),node,nodes);
+					}
+					if(!defVars.isEmpty()){
+						
+						for(Variant variant:allvariantlist){
+							variant.addBindingStmts(stmt);
+						}
+						while(!PRBAnalysisStack.isEmpty()){
+							Stmt prebindingstmt = PRBAnalysisStack.pop();
+							for(Variant variant:allvariantlist){
+								variant.addBindingStmts(prebindingstmt);
+							}
+							
+							RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
+							if(rbTag!=null){
+								unBindingValueMap.get(method).addAll(rbTag.getBindingValues());
+								break;
+							}
+						}
+						if(PRBAnalysisStack.isEmpty()){
+							
+						}
+					}else{
+						PRBAnalysisStack.push(stmt);
+					}
+					/////
 				}
 			}
+			
 			
 		}
 		// DEBUG
 		System.out.println("Num. of variants without combine:"+variants.size());
 		// FINISH
-		/*
-		 * Combine function will combine all variants' variable start from the same stmt;
-		 * WARNING:
-		 * 1. the start stmt must not be the identity stmt
-		 * 2. do the stmt binding before.
-		 */
-		
-		
 	}
 	
 	/**
@@ -430,10 +540,71 @@ public class BindingResolver {
 	 * Rewrite with annotated color
 	 */
 	
+	public void markdefandPreUse(Value value,CFGNode cfgNode,List<CFGNode>nodes){
+		for(CFGNode node:nodes){
+			if(node==cfgNode)
+				break;
+			NodeDefUses defusenode = (NodeDefUses)node;
+			if(defusenode.isSpecial())
+				continue;
+			Stmt stmt = defusenode.getStmt();
+			List<Variable>defs = defusenode.getDefinedVars();
+			for(Variable variable:defs){
+				if(variable.getValue().equals(value)){
+					RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
+					if(rbTag!=null){
+						rbTag.addBindingValue(value);
+						if(verbose){
+							System.out.println("Value:["+value.toString()+"] for stmt:["+stmt+"] with variant:");
+						}
+					}else{
+						rbTag = new RBTag(value);
+						stmt.addTag(rbTag);
+						if(verbose){
+							System.out.println("Value:["+value.toString()+"] for stmt:["+stmt+"] with variant:");
+						}
+					}
+				
+					///// add variants to variant set///
+					List<Variant> variantlist = valueToVariant.get(value);
+					for(Variant variant:variantlist){
+						variant.addBindingStmts(stmt);
+						variant.addFirstBind(value, stmt);
+					}
+					/////
+				}
+			}
+			List<Variable>uses = defusenode.getUsedVars();
+			for(Variable use:uses){
+				if(use.getValue().equals(value)){
+					RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
+					if(rbTag!=null){
+						rbTag.addBindingValue(value);
+						if(verbose){
+							System.out.println("Value:["+value.toString()+"] for stmt:["+stmt+"] with variant:");
+						}
+					}else{
+						rbTag = new RBTag(value);
+						stmt.addTag(rbTag);
+						if(verbose){
+							System.out.println("Value:["+value.toString()+"] for stmt:["+stmt+"] with variant:");
+						}
+					}
+					///// add variants to variant set///
+					List<Variant> variantlist = valueToVariant.get(value);
+					for(Variant variant:variantlist){
+						variant.addBindingStmts(stmt);
+						variant.addFirstBind(value, stmt);
+					}
+					/////
+				}
+			}
+		}
+	}
+	
 	public void annotate() {
 		if (vreAnalyzerCommandLine.isSourceBinding() &&
-				vreAnalyzerCommandLine.isStartFromGUI())
-		{
+				vreAnalyzerCommandLine.isStartFromGUI()) {
 			Map<SootClass, List<Stmt>> classVariantStmtMap = new HashMap<SootClass, List<Stmt>>();
 			for (Variant variant : variants) {
 				List<Stmt> bindingStmts = variant.getBindingStmts();
@@ -471,8 +642,23 @@ public class BindingResolver {
 					new VariantAnnotate(variant,variantId,stmts, htmlFile,variantColor);
 				}
 			}
-
+			VariantColorMap.inst().addToLegend();
+			
+			
+			
 		}
+	}
+	public String getVariantListIds(List<Variant>variantlist){
+		String varaintIds = "variants:[";
+		for(Variant vri:variantlist){
+			varaintIds+=variants.indexOf(vri)+",";
+		}
+		if(!variantlist.isEmpty())
+			varaintIds = varaintIds.substring(0, varaintIds.length()-1);
+		else
+			return "variants:[]";
+		varaintIds+="]";
+		return varaintIds;
 	}
 	
 }

@@ -7,13 +7,9 @@ import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder.EntryNotFoundException;
 import vreAnalyzer.Variants.BindingResolver;
-
 import java.util.Map;
 
-
 public class vreAnalyzerInternalTransform extends SceneTransformer{
-
-	
 
 	@Override
 	protected void internalTransform(String arg0, Map<String, String> arg1) {
@@ -27,7 +23,7 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if(vreAnalyzerCommandLine.inst().isStartFromGUI())
+		if(vreAnalyzerCommandLine.isStartFromGUI())
 			BlockGenerator.inst(ProgramFlowBuilder.inst().getAppClasses());
 		System.out.println("[vreAnalyzer] Program flow build[Finish]");
 			
@@ -43,7 +39,7 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 		System.out.println("[vreAnalyzer] BindingResolve[Finish]");
 		System.out.println("[vreAnalyzer] Project analysis[Start]");
 		// Display Reusable Result by checking the mode
-		ProjectParser.inst().runProjectParser();
+		//ProjectParser.inst().runProjectParser();
 		System.out.println("[vreAnalyzer] Project analysis[Finish]");
 		
 				
