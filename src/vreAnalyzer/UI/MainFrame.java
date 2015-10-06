@@ -21,8 +21,6 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -137,7 +135,6 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				@SuppressWarnings("unused")
 				About abtinstance = About.inst(instance);
-				
 			}
 		});
 		mnHelp.add(mntmAbout);
@@ -515,11 +512,11 @@ public class MainFrame extends JFrame {
 					if(!selected.isRoot()){
 						if(selected.getParent().toString().equals("annotated_list")){
 							if(isFeatureReady()){
-								source_annotateDirTree.setModel((TreeModel) ColorMap.inst().getTableModel());
+								legendtable.setModel(ColorMap.inst().getTableModel());
 							}
 						}else if(selected.getParent().toString().equals("variantanno_list")){
 							if(isVariantReady()){
-								source_annotateDirTree.setModel((TreeModel)VariantColorMap.inst().getTableModel());
+								legendtable.setModel(VariantColorMap.inst().getTableModel());
 							}
 						}
 					}

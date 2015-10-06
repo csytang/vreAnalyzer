@@ -17,8 +17,6 @@ import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Tag.MethodTag;
 import vreAnalyzer.Util.Options;
-import vreAnalyzer.Util.Options.reusableMode;
-
 
 
 public class ProgramFlowBuilder {
@@ -94,23 +92,16 @@ public class ProgramFlowBuilder {
 	 */
 	private void initMethods() throws EntryNotFoundException{
 		this.allAppMethods = getAppConcreteMethods();
-		//this.entryMethods = findEntryAppMethods();
-		 
-		
+		// this.entryMethods = findEntryAppMethods();	
 		// Init MethodNode to CFG mapping
-		mToCFG = new HashMap<SootMethod,CFG>();
-		
+		mToCFG = new HashMap<SootMethod,CFG>();		
 		allCFGs = new LinkedList<CFG>();
-		
-		
 		// Purely intraprocedural initialization
 		// For all application Soot classes:
 		// Find contextual defs and uses for each Stmt in each Method
 		// Determine local kill summary for each Method
 		// For each Soot Method: list defs, uses and kills
 		createAppContexts();
-		
-	    
 	}
 	
 	

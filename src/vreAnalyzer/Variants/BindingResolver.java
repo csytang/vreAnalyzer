@@ -5,6 +5,7 @@ import soot.Local;
 import soot.SootClass;
 import soot.SootMethod;
 import soot.Value;
+import soot.jimple.AssignStmt;
 import soot.jimple.DefinitionStmt;
 import soot.jimple.IdentityStmt;
 import soot.jimple.InvokeExpr;
@@ -13,6 +14,7 @@ import soot.jimple.ThisRef;
 import vreAnalyzer.Tag.MethodTag;
 import vreAnalyzer.Tag.StmtTag;
 import vreAnalyzer.UI.SourceClassBinding;
+import vreAnalyzer.Util.Util;
 import vreAnalyzer.vreAnalyzerCommandLine;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
@@ -33,7 +35,7 @@ public class BindingResolver {
     private List<SootMethod> allAppMethod = null;
     private List<SootMethod> callerMethod = null;
     private List<SootMethod> calleeMethod = null;
-    private Stack<Stmt> PRBAnalysisStack = new Stack<Stmt>();
+    private Stack<CFGNode> PRBAnalysisStack = new Stack<CFGNode>();
     private Map<SootMethod,List<Value>>unBindingValueMap = null;
     private Map<Value,List<Variant>>valueToVariant = new HashMap<Value,List<Variant>>();//globally, for a value, there is a mapped variant
     public BindingResolver(){
@@ -123,10 +125,12 @@ public class BindingResolver {
 		 */
 		// use to decide whether a stmt is parameter assign stmt
 		unBindingValueMap = new HashMap<SootMethod,List<Value>>();
+		List<Value>partialunbindvalue = new LinkedList<Value>();
 		boolean isParaAssignStmt = false;
 		for(SootMethod method:callerMethod){
 			// clean the analysis stack
 			PRBAnalysisStack.clear();
+			partialunbindvalue.clear();
 			unBindingValueMap.put(method,new LinkedList<Value>());
 			CFGDefUse cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(method);
 			List<CFGNode>nodes = cfg.getNodes();
@@ -180,10 +184,11 @@ public class BindingResolver {
 						break;
 					}
 				}
-				
+				List<Variable>defVars = defusenode.getDefinedVars();
+				List<Variant> allvariantlist = new LinkedList<Variant>();//着色
 				if(isused){
-					List<Variable>defVars = defusenode.getDefinedVars();
-					List<Variant> allvariantlist = new LinkedList<Variant>();//着色
+					
+					
 					for(Variable use:useVars){
 						if(valueToVariant.containsKey(use.getValue())){
 							List<Variant> variantlist = valueToVariant.get(use.getValue());
@@ -198,6 +203,8 @@ public class BindingResolver {
 						 */
 						if(!unBindingValueMap.get(method).contains(use.getValue())){
 							PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
+							// 将这个部分未绑定的值加入到列表中
+							partialunbindvalue.add(use.getValue());
 							if(prbTag!=null){
 								prbTag.addBindingValue(use.getValue());
 								if(verbose){
@@ -264,27 +271,72 @@ public class BindingResolver {
 						for(Variant variant:allvariantlist){
 							variant.addBindingStmts(stmt);
 						}
+						List<CFGNode>tmpcfgnode = new LinkedList<CFGNode>();
+						List<Value>bindingvalue = new LinkedList<Value>();
 						while(!PRBAnalysisStack.isEmpty()){
-							Stmt prebindingstmt = PRBAnalysisStack.pop();
-							for(Variant variant:allvariantlist){
-								variant.addBindingStmts(prebindingstmt);
-							}
+							CFGNode prebindingnode = PRBAnalysisStack.pop();
+							tmpcfgnode.add(prebindingnode);
 							
+							// 如果当前位置的是RBTag 获得对应的所有variant
+							// 这些部分绑定已经完成
 							RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
 							if(rbTag!=null){
+								List<Stmt>tmpstmt = Util.getAllStmtsforCFGNodes(tmpcfgnode);
+								bindingvalue = Util.getAllUseandDefValueforCFGNode(tmpcfgnode);
 								unBindingValueMap.get(method).addAll(rbTag.getBindingValues());
+								for(Value value:rbTag.getBindingValues()){
+									for(Variant variant:valueToVariant.get(value)){
+										variant.addBindingStmts(tmpstmt);
+										variant.addPaddingValue(bindingvalue);
+									}
+								}
 								break;
 							}
 						}
-						if(PRBAnalysisStack.isEmpty()){
-							
-						}
+						PRBAnalysisStack.clear();
 					}else{
 						// if there is a value use and no value defined now
 						// we should push this statement to 
-						PRBAnalysisStack.push(stmt);
+						PRBAnalysisStack.push(node);
 					}
 					/////
+				}else if((stmt instanceof DefinitionStmt||
+						stmt instanceof AssignStmt) &&
+						isUseandPartialUnbindOverlap(partialunbindvalue,useVars)){
+					/**
+					 * 如果这个函数语句中 有复制语句 并且 含有部分绑定的变量
+					 */
+					if(!defVars.isEmpty()){
+						/*
+						 * if there is value defined, pop the stmts in the stack
+						 * and add them to binding stmt
+						 */
+						for(Variant variant:allvariantlist){
+							variant.addBindingStmts(stmt);
+						}
+						List<CFGNode>tmpcfgnode = new LinkedList<CFGNode>();
+						List<Value>bindingvalue = new LinkedList<Value>();
+						while(!PRBAnalysisStack.isEmpty()){
+							CFGNode prebindingnode = PRBAnalysisStack.pop();
+							tmpcfgnode.add(prebindingnode);
+							
+							// 如果当前位置的是RBTag 获得对应的所有variant
+							// 这些部分绑定已经完成
+							RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
+							if(rbTag!=null){
+								List<Stmt>tmpstmt = Util.getAllStmtsforCFGNodes(tmpcfgnode);
+								bindingvalue = Util.getAllUseandDefValueforCFGNode(tmpcfgnode);
+								unBindingValueMap.get(method).addAll(rbTag.getBindingValues());
+								for(Value value:rbTag.getBindingValues()){
+									for(Variant variant:valueToVariant.get(value)){
+										variant.addBindingStmts(tmpstmt);
+										variant.addPaddingValue(bindingvalue);
+									}
+								}
+								break;
+							}
+						}
+					}
 				}
 				
 				if(stmt.containsInvokeExpr()){
@@ -426,10 +478,10 @@ public class BindingResolver {
 						break;
 					}
 				}
-				
+				List<Variable>defVars = defusenode.getDefinedVars();
+				List<Variant>allvariantlist = new LinkedList<Variant>();
 				if(isused){
-					List<Variable>defVars = defusenode.getDefinedVars();
-					List<Variant>allvariantlist = new LinkedList<Variant>();
+					
 					for(Variable use:useVars){
 						if(valueToVariant.containsKey(use.getValue())){
 							List<Variant> variantlist = valueToVariant.get(use.getValue());
@@ -440,6 +492,7 @@ public class BindingResolver {
 					for(Variable use:useVars){
 						if(!unBindingValueMap.get(method).contains(use.getValue())){
 							PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
+							partialunbindvalue.add(use.getValue());
 							if(prbTag!=null){
 								prbTag.addBindingValue(use.getValue());
 								if(verbose){
@@ -504,25 +557,69 @@ public class BindingResolver {
 						for(Variant variant:allvariantlist){
 							variant.addBindingStmts(stmt);
 						}
+						List<CFGNode>tmpcfgnode = new LinkedList<CFGNode>();
+						List<Value>bindingvalue = new LinkedList<Value>();
 						while(!PRBAnalysisStack.isEmpty()){
-							Stmt prebindingstmt = PRBAnalysisStack.pop();
-							for(Variant variant:allvariantlist){
-								variant.addBindingStmts(prebindingstmt);
-							}
+							CFGNode prebindingnode = PRBAnalysisStack.pop();
+							tmpcfgnode.add(prebindingnode);
 							
+							// 如果当前位置的是RBTag 获得对应的所有variant
+							// 这些部分绑定已经完成
 							RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
 							if(rbTag!=null){
+								List<Stmt>tmpstmt = Util.getAllStmtsforCFGNodes(tmpcfgnode);
+								bindingvalue = Util.getAllUseandDefValueforCFGNode(tmpcfgnode);
 								unBindingValueMap.get(method).addAll(rbTag.getBindingValues());
+								for(Value value:rbTag.getBindingValues()){
+									for(Variant variant:valueToVariant.get(value)){
+										variant.addBindingStmts(tmpstmt);
+										variant.addPaddingValue(bindingvalue);
+									}
+								}
 								break;
 							}
 						}
-						if(PRBAnalysisStack.isEmpty()){
-							
-						}
 					}else{
-						PRBAnalysisStack.push(stmt);
+						PRBAnalysisStack.push(node);
 					}
 					/////
+				}else if((stmt instanceof DefinitionStmt||
+						stmt instanceof AssignStmt) &&
+						isUseandPartialUnbindOverlap(partialunbindvalue,useVars)){
+					/**
+					 * 如果这个函数语句中 有复制语句 并且 含有部分绑定的变量
+					 */
+					if(!defVars.isEmpty()){
+						/*
+						 * if there is value defined, pop the stmts in the stack
+						 * and add them to binding stmt
+						 */
+						for(Variant variant:allvariantlist){
+							variant.addBindingStmts(stmt);
+						}
+						List<CFGNode>tmpcfgnode = new LinkedList<CFGNode>();
+						List<Value>bindingvalue = new LinkedList<Value>();
+						while(!PRBAnalysisStack.isEmpty()){
+							CFGNode prebindingnode = PRBAnalysisStack.pop();
+							tmpcfgnode.add(prebindingnode);
+							
+							// 如果当前位置的是RBTag 获得对应的所有variant
+							// 这些部分绑定已经完成
+							RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
+							if(rbTag!=null){
+								List<Stmt>tmpstmt = Util.getAllStmtsforCFGNodes(tmpcfgnode);
+								bindingvalue = Util.getAllUseandDefValueforCFGNode(tmpcfgnode);
+								unBindingValueMap.get(method).addAll(rbTag.getBindingValues());
+								for(Value value:rbTag.getBindingValues()){
+									for(Variant variant:valueToVariant.get(value)){
+										variant.addBindingStmts(tmpstmt);
+										variant.addPaddingValue(bindingvalue);
+									}
+								}
+								break;
+							}
+						}
+					}
 				}
 			}
 			
@@ -533,6 +630,13 @@ public class BindingResolver {
 		// FINISH
 	}
 	
+	public boolean isUseandPartialUnbindOverlap(List<Value>partialunbindvalue,List<Variable>useValues){
+		for(Variable usevalue:useValues){
+			if(partialunbindvalue.contains(usevalue.getValue()))
+				return true;
+		}
+		return false;
+	}
 	/**
 	 * 1. current solution, first we all annotated all the files(testing)
 	 * 2. seperate stmts list into combination of code blocks

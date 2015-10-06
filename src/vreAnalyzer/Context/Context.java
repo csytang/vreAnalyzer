@@ -89,7 +89,7 @@ public class Context<SootMethod,CFGNode,PointsToGraph> implements soot.Context, 
 	 * @param reverse <tt>true</tt> if the analysis is in the reverse direction,
 	 *            and <tt>false</tt> if the analysis is in the forward direction
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "static-access" })
 	public Context(SootMethod stmethod, CFG cfg) {
 		// Increment count and set id.
 		count++;

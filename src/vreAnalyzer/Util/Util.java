@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,6 +45,9 @@ import soot.jimple.internal.JReturnVoidStmt;
 import soot.util.NumberedString;
 import vreAnalyzer.Context.Context;
 import vreAnalyzer.ControlFlowGraph.CFG;
+import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
+import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
+import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.PointsTo.PointsToGraph;
 
@@ -221,7 +225,27 @@ public class Util {
 		}
 		return subclasses;
 	}
-	
+	public static List<Stmt> getAllStmtsforCFGNodes(List<CFGNode>nodes){
+		List<Stmt>statements = new LinkedList<Stmt>();
+		for(CFGNode node:nodes){
+			statements.add(node.getStmt());
+		}
+		
+		return statements;
+	}
+	public static List<Value> getAllUseandDefValueforCFGNode(List<CFGNode>nodes){
+		List<Value>values = new LinkedList<Value>();
+		for(CFGNode node:nodes){
+			NodeDefUses defusenode = (NodeDefUses)node;
+			for(Variable def:defusenode.getDefinedVars()){
+				values.add(def.getValue());
+			}
+			for(Variable use:defusenode.getUsedVars()){
+				values.add(use.getValue());
+			}
+		}
+		return values;
+	}
 
 	
 	/** A value represents a var if it's a constant, local, field ref (for field itself), or array elem ref (any element in it).

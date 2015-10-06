@@ -29,7 +29,7 @@ public class VariantAnnotate {
     public static boolean variantready = false;
     public VariantAnnotate(Variant variant,String variantId,List<Stmt> stmts,File htmlFile,Color annotatedColor){
         startFromSource = vreAnalyzerCommandLine.isStartFromSource();
-        if(startFromSource){
+        if(startFromSource) {
             positions = new int[stmts.size()][4];
         }else{
             lines = new int[stmts.size()];
@@ -46,11 +46,11 @@ public class VariantAnnotate {
                 positions[i][1] = startcolumn;
                 positions[i][2] = endline;
                 positions[i][3] = endcolumn;
-            } else {
+            }else {
                 int startline = slcTag.getStartLineNumber();
                 lines[i] = startline;
             }
-            if(startFromSource){
+            if(startFromSource) {
                 HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,htmlFile, positions, annotatedColor, MainFrame.inst().getHTMLToJava());
             }else{
                 HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,htmlFile, lines, annotatedColor, MainFrame.inst().getHTMLToJava());

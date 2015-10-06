@@ -65,6 +65,7 @@ public class BlockGenerator {
 					MethodBlock methodBlock = MethodBlock.tryToCreate(nodes, method,clsblock.getBlockId());
 					addNewBlockToPool(methodBlock,true);
 					
+					@SuppressWarnings("unused")
 					MethodTag mTag = (MethodTag) method.getTag(MethodTag.TAG_NAME);
 					
 					// 2. Create inside method blocks

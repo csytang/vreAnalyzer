@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class Options {
 	private static String entryClassName = null; // default: find unique 'main' in program
-	private static boolean processJar = false;
+	
 	/** Indicates the behavior of a call model: 'this' is defined and args (including 'this) are used, or only args are used, or no def nor use. */
 	public static enum DUModelBehavior { DEF_USES_ALL, USES_ALL, NONE };
 	
