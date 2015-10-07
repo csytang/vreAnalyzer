@@ -257,6 +257,10 @@ public class BindingResolver {
 					// 对于这里的def 由于 存在未绑定的使用 那么def 也是未绑定
 					for(Variable def:defVars){
 						rbTag.addBindingValue(def.getValue());
+						//将为左侧的定义 加入到绑定中
+						if(!unBindingValueMap.get(method).contains(def.getValue())){
+							unBindingValueMap.get(method).add(def.getValue());
+						}
 						if(verbose){
 							System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+def.getValue().toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(allvariantlist));
 						}
@@ -302,6 +306,7 @@ public class BindingResolver {
 						if(prbTag!=null && rpTag==null){
 							partialBindingStmt.add(prbstmt);
 						}else if(rpTag!=null){
+							// 这里只执行一次 然后跳出
 							Set<Value>rpbindingValue = rpTag.getBindingValues();
 							// 对于这里的variants 加入对应的stmt
 							for(Value value:rpbindingValue){
@@ -310,6 +315,13 @@ public class BindingResolver {
 									variant.addPaddingValue(PRBValuelist);
 								}
 							}
+							// 将所有的部分未绑定(PRB) -> 转换为 未绑定(RB)
+							for(Value rpbvalue:PRBValuelist){
+								if(!unBindingValueMap.get(method).contains(rpbvalue)){
+									unBindingValueMap.get(method).add(rpbvalue);
+								}
+							}
+							
 							PRBValuelist.clear();
 							break;
 						}
@@ -523,6 +535,9 @@ public class BindingResolver {
 					// 对于这里的def 由于 存在未绑定的使用 那么def 也是未绑定
 					for(Variable def:defVars){
 						rbTag.addBindingValue(def.getValue());
+						if(!unBindingValueMap.get(method).contains(def.getValue())){
+							unBindingValueMap.get(method).add(def.getValue());
+						}
 						if(verbose){
 							System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+def.getValue().toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(allvariantlist));
 						}
@@ -568,12 +583,19 @@ public class BindingResolver {
 						if(prbTag!=null && rpTag==null){
 							partialBindingStmt.add(prbstmt);
 						}else if(rpTag!=null){
+							// 这里只执行一次
 							Set<Value>rpbindingValue = rpTag.getBindingValues();
 							// 对于这里的variants 加入对应的stmt
 							for(Value value:rpbindingValue){
 								for(Variant variant:valueToVariant.get(value)){
 									variant.addBindingStmts(partialBindingStmt);
 									variant.addPaddingValue(PRBValuelist);
+								}
+							}
+							// 将所有的部分未绑定(PRB) -> 转换为 未绑定(RB)
+							for(Value rpbvalue:PRBValuelist){
+								if(!unBindingValueMap.get(method).contains(rpbvalue)){
+									unBindingValueMap.get(method).add(rpbvalue);
 								}
 							}
 							PRBValuelist.clear();
