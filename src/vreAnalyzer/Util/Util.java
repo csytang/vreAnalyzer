@@ -45,7 +45,6 @@ import soot.jimple.internal.JReturnVoidStmt;
 import soot.util.NumberedString;
 import vreAnalyzer.Context.Context;
 import vreAnalyzer.ControlFlowGraph.CFG;
-import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
 import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
