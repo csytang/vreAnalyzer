@@ -59,9 +59,19 @@ public class BindingResolver {
 	}
 	
 	public void parse(){
-		
+		/*
+		 * 1. 检查所有的variant的设定是否存在问题 是否将variant加入（统一位置 从新思考）
+		 * 
+		 * 统一位置  所有的variant 单独列一个函数处理
+		 * 
+		 * 2. 
+		 */
 		// 1. for all methods first set the call site binding
 		allAppMethod.addAll(ProgramFlowBuilder.inst().getAppConcreteMethods());
+		// 定义的变量
+		List<Variable> defVars = null;
+		// 使用的变量
+		List<Variable> useVars = null;
 		
 		for(SootMethod method:allAppMethod){
 			MethodTag mTag = (MethodTag) method.getTag(MethodTag.TAG_NAME);
@@ -113,23 +123,6 @@ public class BindingResolver {
 		callerMethod.removeAll(tmp);
 		
 		// 2. if there is a call binding, does not use its own arguments value use parameter instead
-		/*
-		 * We categorize the variable into following groups:
-		 * 1. Fields -- from class
-		 * 2. Arguments -- from input set
-		 * 3. Locals
-		 * STEP
-		 * STEP 1: get the cfg 
-		 * STEP 2: for a CFGNode, get the use of this cfgNode
-		 * STEP 3: classify this use
-		 * is this use a field?
-		 * is this use a local? --> binding to argument/ binding to RefLike/ others
-		 * STEP 4: 
-		 * unbind method First
-		 * 4.1 Arguments/Local points to argument in non-callee method 
-		 * 4.2 all assignment/use method invoke, assignment along with unbind value should be set unbind
-		 * 
-		 */
 		// use to decide whether a stmt is parameter assign stmt
 		unBindingValueMap = new HashMap<SootMethod,List<Value>>();
 		
@@ -148,41 +141,40 @@ public class BindingResolver {
 			for(CFGNode node:nodes){
 				if(node.isSpecial())
 					continue;
+				//////////////////////
 				NodeDefUses defusenode = (NodeDefUses)node;
 				Stmt stmt = defusenode.getStmt();
+				useVars = defusenode.getUsedVars();
+				defVars = defusenode.getDefinedVars();
+				///////////////////////
 				if(stmt instanceof IdentityStmt && !(((IdentityStmt) stmt).getRightOp() instanceof ThisRef)){
 					isParaAssignStmt = true;
 				}else{
 					isParaAssignStmt = false;
 				}
-				List<Variable> useVars = defusenode.getUsedVars();
+				
 				/////////////如果这个语句是域赋值给local语句////////////////////////////
 				if(isParaAssignStmt){
 					DefinitionStmt defstmt = (DefinitionStmt)stmt;
 					Value argu = defstmt.getLeftOp();
 					unBindingValueMap.get(method).add(argu);
 					RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
-					///// add variants to variant set///
-					Variant variant = new Variant(argu,stmt);
-					variants.add(variant);
-					List<Variant>variantlist = new LinkedList<Variant>();
-					variantlist.add(variant);
-					valueToVariant.put(argu, variantlist);
-					////////////////////////////////////
+					for(Variable use:useVars){
+						unBindingValueMap.get(method).add(use.getValue());
+					}
+					// 创建对应的variant
+					List<Variant>variantscreated = createNewVariant(argu,stmt);
 					if(rbTag!=null){
 						rbTag.addBindingValue(argu);
 						if(verbose){
-							System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+argu.toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(variantlist));
+							System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+argu.toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(variantscreated));
 						}
 					}else{
 						rbTag = new RBTag(argu);
 						stmt.addTag(rbTag);
 						if(verbose){
-							System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+argu.toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(variantlist));
+							System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+argu.toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(variantscreated));
 						}
-					}
-					for(Variable use:useVars){
-						unBindingValueMap.get(method).add(use.getValue());
 					}
 					continue;
 				}
@@ -195,7 +187,7 @@ public class BindingResolver {
 						break;
 					}
 				}
-				List<Variable> defVars = defusenode.getDefinedVars();
+				
 				List<Variant> allvariantlist = new LinkedList<Variant>();
 				
 				
@@ -209,9 +201,8 @@ public class BindingResolver {
 							allvariantlist.addAll(variantlist);
 						}
 					}
-					boolean containPRBValue = false;//是否包含部分帮定值
+					boolean containPRBValue = false;// 是否包含部分帮定值
 					// 如果这里使用了 RB内容 我们设置其他的使用变量为 PRB变量
-					
 					for(Variable use:useVars){
 						if(!unBindingValueMap.get(method).contains(use.getValue())){
 							// 将这个部分未绑定的值 加入到PRBValue列表中
@@ -264,14 +255,21 @@ public class BindingResolver {
 						if(verbose){
 							System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+def.getValue().toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(allvariantlist));
 						}
-						// 对于这个语句上的所有variant来说 加入一个新的为绑定变量 就是 这里定义的值
+						
+						markdefandPreUse(def.getValue(),node,nodes);
+						/*
+						 * 由于使用的已经加入到variant之中 只需要
+						 * 将定义的变量加入到variant之中
+						 */
 						for(Variant variant:allvariantlist){
 							variant.addPaddingValue(def.getValue());
 							variant.addFirstBind(def.getValue(), stmt);
-							variant.addBindingStmts(stmt);
 						}
 						valueToVariant.put(def.getValue(), allvariantlist);
-						markdefandPreUse(def.getValue(),node,nodes);
+					}
+					// 将当前语句加入到variant的绑定中
+					for(Variant variant:allvariantlist){
+						variant.addBindingStmts(stmt);
 					}
 				}
 				else if(isuseVarsPRBindingOverlap(useVars,PRBValuelist) && defVars.isEmpty()){
@@ -387,13 +385,16 @@ public class BindingResolver {
 				if(node.isSpecial())
 					continue;
 				Stmt stmt = defusenode.getStmt();//$r7 := @caughtexception
+				useVars = defusenode.getUsedVars();
+				defVars = defusenode.getDefinedVars();
+				
 				if(stmt instanceof IdentityStmt &&
 						!(((IdentityStmt) stmt).getRightOp() instanceof ThisRef)){
 					isParaAssignStmt = true;
 				}else{
 					isParaAssignStmt = false;
 				}
-				List<Variable> useVars = defusenode.getUsedVars();
+				
 				int argIndex = -1;
 				Value argu = null;
 				if(isParaAssignStmt){
@@ -474,7 +475,7 @@ public class BindingResolver {
 						break;
 					}
 				}
-				List<Variable>defVars = defusenode.getDefinedVars();
+				
 				List<Variant>allvariantlist = new LinkedList<Variant>();
 
 				///////////////////如果此语句中有未绑定内容调用///////////////////////
@@ -487,9 +488,8 @@ public class BindingResolver {
 							allvariantlist.addAll(variantlist);
 						}
 					}
-					boolean containPRBValue = false;//是否包含部分帮定值
+					boolean containPRBValue = false;// 是否包含部分帮定值
 					// 如果这里使用了 RB内容 我们设置其他的使用变量为 PRB变量
-					
 					for(Variable use:useVars){
 						if(!unBindingValueMap.get(method).contains(use.getValue())){
 							// 将这个部分未绑定的值 加入到PRBValue列表中
@@ -535,20 +535,28 @@ public class BindingResolver {
 					// 对于这里的def 由于 存在未绑定的使用 那么def 也是未绑定
 					for(Variable def:defVars){
 						rbTag.addBindingValue(def.getValue());
+						//将为左侧的定义 加入到绑定中
 						if(!unBindingValueMap.get(method).contains(def.getValue())){
 							unBindingValueMap.get(method).add(def.getValue());
 						}
 						if(verbose){
 							System.out.println("[Class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+def.getValue().toString()+"] for stmt:["+stmt+"] with variant:"+getVariantListIds(allvariantlist));
 						}
-						// 对于这个语句上的所有variant来说 加入一个新的为绑定变量 就是 这里定义的值
+						
+						markdefandPreUse(def.getValue(),node,nodes);
+						/*
+						 * 由于使用的已经加入到variant之中 只需要
+						 * 将定义的变量加入到variant之中
+						 */
 						for(Variant variant:allvariantlist){
 							variant.addPaddingValue(def.getValue());
 							variant.addFirstBind(def.getValue(), stmt);
-							variant.addBindingStmts(stmt);
 						}
 						valueToVariant.put(def.getValue(), allvariantlist);
-						markdefandPreUse(def.getValue(),node,nodes);
+					}
+					// 将当前语句加入到variant的绑定中
+					for(Variant variant:allvariantlist){
+						variant.addBindingStmts(stmt);
 					}
 				}
 				else if(isuseVarsPRBindingOverlap(useVars,PRBValuelist) && defVars.isEmpty()){
@@ -613,6 +621,27 @@ public class BindingResolver {
 		// DEBUG
 		System.out.println("Num. of variants without combine:"+variants.size());
 		// FINISH
+	}
+	/*
+	 * 生成一个新的variant
+	 */
+	private List<Variant> createNewVariant(Value vi,List<Stmt>stmts){
+		///// add variants to variant set///
+		Variant variant = new Variant(vi,stmts);
+		variants.add(variant);
+		List<Variant>variantlist = new LinkedList<Variant>();
+		variantlist.add(variant);
+		valueToVariant.put(vi, variantlist);
+		return variantlist;
+	}
+	private List<Variant> createNewVariant(Value vi,Stmt stmt){
+		///// add variants to variant set///
+		Variant variant = new Variant(vi,stmt);
+		variants.add(variant);
+		List<Variant>variantlist = new LinkedList<Variant>();
+		variantlist.add(variant);
+		valueToVariant.put(vi, variantlist);
+		return variantlist;
 	}
 	
 	private boolean isuseVarsPRBindingOverlap(List<Variable> useVars, List<Value> pRBBindingValues) {
