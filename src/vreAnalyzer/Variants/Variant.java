@@ -2,7 +2,6 @@ package vreAnalyzer.Variants;
 
 import soot.Value;
 import soot.jimple.Stmt;
-import vreAnalyzer.Tag.StmtTag;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,22 +28,6 @@ public class Variant {
 		paddingValues.add(vi);
 		bindingStmts.add(stmt);
 		VariantColorMap.inst().registerNewColor(this);
-	}
-	public void addFirstBind(Value value,Stmt stmt){
-		StmtTag stmtTag = (StmtTag) stmt.getTag(StmtTag.TAG_NAME);
-		int stmtId = stmtTag.getIdxInMethod();
-		if(ValueStartsBind.containsKey(value)){
-			Stmt exist = ValueStartsBind.get(value);
-			if(exist.equals(stmt)){
-				return;
-			}
-			StmtTag existTag = (StmtTag) exist.getTag(StmtTag.TAG_NAME);
-			int existId = existTag.getIdxInMethod();
-			if(stmtId<existId){
-				ValueStartsBind.put(value, stmt);
-			}
-		}else
-			ValueStartsBind.put(value, stmt);
 	}
 	public void addPaddingValue(List<Value>vis){
 		this.paddingValues.addAll(vis);
