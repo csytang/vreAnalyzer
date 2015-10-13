@@ -60,15 +60,15 @@ public class WordCount2$TokenizerMapper extends org.apache.hadoop.mapreduce.Mapp
 
         r0 := @this: WordCount2$TokenizerMapper;
 
-        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+        #r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
 
-        $r7 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+        #$r7 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
 
-        r0.<WordCount2$TokenizerMapper: org.apache.hadoop.conf.Configuration conf> = $r7;
+        #r0.<WordCount2$TokenizerMapper: org.apache.hadoop.conf.Configuration conf> = $r7;
 
-        $r8 = r0.<WordCount2$TokenizerMapper: org.apache.hadoop.conf.Configuration conf>;
+        #$r8 = r0.<WordCount2$TokenizerMapper: org.apache.hadoop.conf.Configuration conf>;
 
-        $z0 = virtualinvoke $r8.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("wordcount.case.sensitive", 1);
+        #$z0 = virtualinvoke $r8.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("wordcount.case.sensitive", 1);
 
         r0.<WordCount2$TokenizerMapper: boolean caseSensitive> = $z0;
 

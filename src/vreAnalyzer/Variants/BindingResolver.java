@@ -136,7 +136,8 @@ public class BindingResolver {
 			// clean the analysis stack
 			PRBAnalysisStack.clear();
 			PRBAnalysisStackBindingValue.clear();
-			
+			if(verbose)
+				System.out.println("Currently process method:"+method.getName());
 			CFGDefUse cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(method);
 			List<CFGNode>nodes = cfg.getNodes();
 
@@ -147,6 +148,8 @@ public class BindingResolver {
 				//////////////////////
 				NodeDefUses defusenode = (NodeDefUses) node;
 				Stmt stmt = defusenode.getStmt();
+				if(verbose)
+					System.out.println("Currently process statement:"+stmt.toString());
 				useVars = defusenode.getUsedVars();// 在当前语句中的使用
 				defVars = defusenode.getDefinedVars();// 当前语句中的定义
 				///////////////////////
@@ -281,11 +284,17 @@ public class BindingResolver {
 							System.out.println("Add RBTag to stmt:"+stmt);
 							System.out.println("----Value:"+use.getValue().toString());
 						}
+						if(!methodToUnbindValues.get(method).contains(use.getValue())){
+							methodToUnbindValues.get(method).add(use.getValue());
+						}
 					}
 					// 加入所有的定义defs
 					for(Variable def:defVars){// def is local
 						RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
 						rbTag.addBindingValue(def.getValue());
+						if(!methodToUnbindValues.get(method).contains(def.getValue())){
+							methodToUnbindValues.get(method).add(def.getValue());
+						}
 					}
 					
 					int stacklength = PRBAnalysisStack.size();
@@ -303,12 +312,19 @@ public class BindingResolver {
 						 */
 						PRBTag prbTag = (PRBTag)prbstmt.getTag(PRBTag.TAG_NAME);
 						Set<Value> bindingvalues = prbTag.getBindingValues();
+						// 从partial unbind value中移除
+						for(Value value:bindingvalues){
+							if(methodToParitalUnbindValues.get(method).contains(value))
+								methodToParitalUnbindValues.get(method).remove(value);
+						}
 						RBTag rbTag = (RBTag)prbstmt.getTag(RBTag.TAG_NAME);
 						rbTag.addBindingValue(bindingvalues);
 						rbTag.addBindingValue(lastbindvalues);
 						prbstmt.removeTag(PRBTag.TAG_NAME);
 						// 将这个Tag取代 PRBTag加入到stmt上
 						prbstmt.addTag(rbTag);
+						// 加入到unbindvalue 中
+						methodToUnbindValues.get(method).addAll(bindingvalues);
 						if(verbose){
 							System.out.println("Add RBTag to stmt:"+prbstmt);
 							
@@ -364,7 +380,8 @@ public class BindingResolver {
 			// clean the analysis stack
 			PRBAnalysisStack.clear();
 			PRBAnalysisStackBindingValue.clear();
-			
+			if(verbose)
+				System.out.println("Currently process method:"+method.getName());
 			CFGDefUse cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(method);
 			if(cfg==null)
 				continue;
@@ -385,6 +402,8 @@ public class BindingResolver {
 						if(node.isSpecial())
 							continue;
 						Stmt stmt = defusenode.getStmt();//$r7 := @caughtexception
+						if(verbose)
+							System.out.println("currently process statement:"+stmt);
 						useVars = defusenode.getUsedVars();
 						defVars = defusenode.getDefinedVars();
 						if(stmt instanceof IdentityStmt && !(((IdentityStmt) stmt).getRightOp() instanceof ThisRef)){
@@ -542,6 +561,10 @@ public class BindingResolver {
 							PRBAnalysisStack.push(node);
 						}
 						else if(usedOverlap(useVars,methodToParitalUnbindValues.get(method)) && !defVars.isEmpty()){
+							// 使用了prb值 但是是有赋值内容
+							// 所有的prb值 和在PRBAnalysisStack中的prb值需要指向这个值
+							// 首先将这个stmt加入
+							
 							for(Variable use:useVars){
 								RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
 								if(rbTag!=null){
@@ -554,15 +577,19 @@ public class BindingResolver {
 									System.out.println("Add RBTag to stmt:"+stmt);
 									System.out.println("----Value:"+use.getValue().toString());
 								}
+								if(!methodToUnbindValues.get(method).contains(use.getValue())){
+									methodToUnbindValues.get(method).add(use.getValue());
+								}
 							}
 							// 加入所有的定义defs
 							for(Variable def:defVars){// def is local
 								RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
 								rbTag.addBindingValue(def.getValue());
+								if(!methodToUnbindValues.get(method).contains(def.getValue())){
+									methodToUnbindValues.get(method).add(def.getValue());
+								}
 							}
 							
-							// 使用了prb值 但是是有赋值内容
-							// 所有的prb值 和在PRBAnalysisStack中的prb值需要指向这个值
 							int stacklength = PRBAnalysisStack.size();
 							CFGNode lastnode = PRBAnalysisStack.get(stacklength-1);
 							Stmt laststmt = lastnode.getStmt();
@@ -578,11 +605,21 @@ public class BindingResolver {
 								 */
 								PRBTag prbTag = (PRBTag)prbstmt.getTag(PRBTag.TAG_NAME);
 								Set<Value> bindingvalues = prbTag.getBindingValues();
+								// 从partial unbind value中移除
+								for(Value value:bindingvalues){
+									if(methodToParitalUnbindValues.get(method).contains(value))
+										methodToParitalUnbindValues.get(method).remove(value);
+								}
 								RBTag rbTag = (RBTag)prbstmt.getTag(RBTag.TAG_NAME);
 								rbTag.addBindingValue(bindingvalues);
 								rbTag.addBindingValue(lastbindvalues);
+								prbstmt.removeTag(PRBTag.TAG_NAME);
+								// 将这个Tag取代 PRBTag加入到stmt上
+								prbstmt.addTag(rbTag);
+								// 加入到unbindvalue 中
+								methodToUnbindValues.get(method).addAll(bindingvalues);
 								if(verbose){
-									System.out.println("Add RBTag to stmt:"+stmt);
+									System.out.println("Add RBTag to stmt:"+prbstmt);
 									
 									String valuesString = "";
 									for(Value value:bindingvalues){
@@ -595,20 +632,6 @@ public class BindingResolver {
 									System.out.println("----Value:"+valuesString);
 									
 								}
-								// 如果在这个语句上使用argument 那么
-								// 判断是否是 overlap
-								if(usedOverlap(localParameterToRemoteArgu.keySet(),bindingvalues)){
-									Set<Value>intersection = new HashSet<Value>(localParameterToRemoteArgu.keySet());
-									intersection.retainAll(bindingvalues);
-									// 对于交集的内容 
-									for(Value value:intersection){
-										rbTag.addBindingValue(localParameterToRemoteArgu.get(value));
-									}
-									
-								}
-								prbstmt.removeTag(PRBTag.TAG_NAME);
-								// 将这个Tag取代 PRBTag加入到stmt上
-								prbstmt.addTag(rbTag);
 							}
 							PRBAnalysisStack.clear();
 						}
@@ -737,6 +760,10 @@ public class BindingResolver {
 						PRBAnalysisStack.push(node);
 					}
 					else if(usedOverlap(useVars,methodToParitalUnbindValues.get(method)) && !defVars.isEmpty()){
+						// 使用了prb值 但是是有赋值内容
+						// 所有的prb值 和在PRBAnalysisStack中的prb值需要指向这个值
+						// 首先将这个stmt加入
+						
 						for(Variable use:useVars){
 							RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
 							if(rbTag!=null){
@@ -749,14 +776,19 @@ public class BindingResolver {
 								System.out.println("Add RBTag to stmt:"+stmt);
 								System.out.println("----Value:"+use.getValue().toString());
 							}
+							if(!methodToUnbindValues.get(method).contains(use.getValue())){
+								methodToUnbindValues.get(method).add(use.getValue());
+							}
 						}
 						// 加入所有的定义defs
 						for(Variable def:defVars){// def is local
 							RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
 							rbTag.addBindingValue(def.getValue());
+							if(!methodToUnbindValues.get(method).contains(def.getValue())){
+								methodToUnbindValues.get(method).add(def.getValue());
+							}
 						}
-						// 使用了prb值 但是是有赋值内容
-						// 所有的prb值 和在PRBAnalysisStack中的prb值需要指向这个值
+						
 						int stacklength = PRBAnalysisStack.size();
 						CFGNode lastnode = PRBAnalysisStack.get(stacklength-1);
 						Stmt laststmt = lastnode.getStmt();
@@ -772,14 +804,21 @@ public class BindingResolver {
 							 */
 							PRBTag prbTag = (PRBTag)prbstmt.getTag(PRBTag.TAG_NAME);
 							Set<Value> bindingvalues = prbTag.getBindingValues();
+							// 从partial unbind value中移除
+							for(Value value:bindingvalues){
+								if(methodToParitalUnbindValues.get(method).contains(value))
+									methodToParitalUnbindValues.get(method).remove(value);
+							}
 							RBTag rbTag = (RBTag)prbstmt.getTag(RBTag.TAG_NAME);
 							rbTag.addBindingValue(bindingvalues);
 							rbTag.addBindingValue(lastbindvalues);
 							prbstmt.removeTag(PRBTag.TAG_NAME);
 							// 将这个Tag取代 PRBTag加入到stmt上
 							prbstmt.addTag(rbTag);
+							// 加入到unbindvalue 中
+							methodToUnbindValues.get(method).addAll(bindingvalues);
 							if(verbose){
-								System.out.println("Add RBTag to stmt:"+stmt);
+								System.out.println("Add RBTag to stmt:"+prbstmt);
 								
 								String valuesString = "";
 								for(Value value:bindingvalues){
@@ -794,7 +833,6 @@ public class BindingResolver {
 							}
 						}
 						PRBAnalysisStack.clear();
-						
 					}
 			
 				}
