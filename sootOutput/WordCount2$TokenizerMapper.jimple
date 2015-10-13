@@ -286,19 +286,19 @@ public class WordCount2$TokenizerMapper extends org.apache.hadoop.mapreduce.Mapp
 
         r0 := @this: WordCount2$TokenizerMapper;
 
-        r1 := @parameter0: java.lang.Object;
+        #r1 := @parameter0: java.lang.Object;
 
-        r2 := @parameter1: java.lang.Object;
+        #r2 := @parameter1: java.lang.Object;
 
-        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+        #r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
 
-        $r6 = (java.lang.Object) r1;
+        #$r6 = (java.lang.Object) r1;
 
-        $r5 = (org.apache.hadoop.io.Text) r2;
+        #$r5 = (org.apache.hadoop.io.Text) r2;
 
-        $r4 = (org.apache.hadoop.mapreduce.Mapper$Context) r3;
+        #$r4 = (org.apache.hadoop.mapreduce.Mapper$Context) r3;
 
-        virtualinvoke r0.<WordCount2$TokenizerMapper: void map(java.lang.Object,org.apache.hadoop.io.Text,org.apache.hadoop.mapreduce.Mapper$Context)>($r6, $r5, $r4);
+        #virtualinvoke r0.<WordCount2$TokenizerMapper: void map(java.lang.Object,org.apache.hadoop.io.Text,org.apache.hadoop.mapreduce.Mapper$Context)>($r6, $r5, $r4);
 
         return;
     }
