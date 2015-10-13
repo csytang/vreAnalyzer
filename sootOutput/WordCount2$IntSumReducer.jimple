@@ -81,11 +81,11 @@ public class WordCount2$IntSumReducer extends org.apache.hadoop.mapreduce.Reduce
 
         r0 := @this: WordCount2$IntSumReducer;
 
-        ##r1 := @parameter0: java.lang.Object;#v0#
+        r1 := @parameter0: java.lang.Object;
 
-        ##r2 := @parameter1: java.lang.Iterable;#v1#
+        r2 := @parameter1: java.lang.Iterable;
 
-        ##r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;#v2#
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
 
         $r6 = (org.apache.hadoop.io.Text) r1;
 

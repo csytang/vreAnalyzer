@@ -26,6 +26,9 @@ public class RBTag implements Tag{
 			this.bindingvalues = new HashSet<Value>();
 		this.bindingvalues.add(value);
 	}
+	public void addBindingValue(Set<Value>values){
+		this.bindingvalues.addAll(values);
+	}
 	public Set<Value> getBindingValues(){
 		return this.bindingvalues;
 	}

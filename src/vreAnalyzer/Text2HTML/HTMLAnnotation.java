@@ -170,7 +170,6 @@ public class HTMLAnnotation {
 			e.printStackTrace();
 		}
 	}
-
 	public static void annotatemultipleLineHTML_Feature(String hovertext,File htmlFile,int[][] position,Color annotatedColor,Map<String,String> htmlToJava){
 		try {
 			annotateColor = annotatedColor;
@@ -261,7 +260,6 @@ public class HTMLAnnotation {
 			e.printStackTrace();
 		}
 	}
-	
 	public static void annotatemultipleLineHTML_Feature(String hovertext,File htmlFile,int[] lines,Color annotatedColor,Map<String,String> htmlToJava){
 		try {
 			annotateColor = annotatedColor;
@@ -601,5 +599,75 @@ public class HTMLAnnotation {
 			return "";
 		}
 	}
-
+	///////////////////////////////////////////////////////////////////////
+	/*
+	 * 单一颜色着色 
+	 */
+	public static void annotatemultipleLinesingleColor(File htmlFile,int[] lines,Color annotatedColor,Map<String,String> htmlToJava){
+		annotateColor = annotatedColor;
+		String hex = Integer.toHexString(annotateColor.getRGB() & 0xffffff);
+		if (hex.length() < 6) {
+		    hex = "0" + hex;
+		}
+		hex = "#" + hex;
+		FileReader htmlReader;
+		try {
+			htmlReader = new FileReader(htmlFile);
+		
+			BufferedReader brhtml = new BufferedReader(htmlReader);
+			String allhtmlcontent = "";
+			String htmlline = "";
+		
+			while((htmlline = brhtml.readLine()) != null){				
+				allhtmlcontent+=htmlline;
+				allhtmlcontent+="\n";
+			}
+			brhtml.close();
+			htmlReader.close();
+		
+		
+			FileWriter htmlWriter = new FileWriter(htmlFile);
+			BufferedWriter bwhtml = new BufferedWriter(htmlWriter);
+			String[] htmlbyline = allhtmlcontent.split("<br>");
+			for(int lineNumber:lines){
+				if(lineNumber<=1)
+					continue;
+				String linecontent = htmlbyline[lineNumber-1];
+			
+				String spanStart = "<span style=\"background-color:"+hex+"\">";
+				String spanEnd = "</span>";
+				String updateline="";
+				if(!((updateline = isColorTitleAssociatedSLResolver_Variant(linecontent, spanStart)).equals(""))){
+					htmlbyline[lineNumber-1] = updateline;
+				}else{
+					StringBuffer buffStart = new StringBuffer(linecontent);
+					String startjavaString = htmlToJava.get(linecontent+"<br>");
+					String starthtmlreverse = Text2HTML.txtToHtml(startjavaString);
+					if(starthtmlreverse.endsWith("<br>")){
+						starthtmlreverse = starthtmlreverse.substring(0, starthtmlreverse.length()-"<br>".length());
+					}
+					int startcolumninHTML = linecontent.indexOf(starthtmlreverse);
+					int endcolumninHTML = 0;
+					buffStart.insert(startcolumninHTML, spanStart);
+					endcolumninHTML = startcolumninHTML+starthtmlreverse.length()+spanStart.length();
+					buffStart.insert(endcolumninHTML, spanEnd);
+					htmlbyline[lineNumber-1] = buffStart.toString();
+				}
+			}
+			String line = "";
+			for(int i = 0;i < htmlbyline.length; i++){
+				line = htmlbyline[i];
+				if(i!=htmlbyline.length-1){
+					line+="<br>";
+				}
+				bwhtml.write(line);
+			}
+			bwhtml.flush();
+			bwhtml.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }
