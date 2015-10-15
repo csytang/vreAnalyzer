@@ -47,10 +47,7 @@ public class BindingResolver {
     private Map<SootMethod,Set<Value>> methodToUnbindValues = new HashMap<SootMethod,Set<Value>>();
     // 2. partialUnbindValueList 部分未绑定值列表
     private Map<SootMethod,Set<Value>> methodToParitalUnbindValues = new HashMap<SootMethod,Set<Value>>();
-    // Map 从SootMethod到 variant
-    private Map<SootMethod,List<Variant>> methodToVariants = new HashMap<SootMethod,List<Variant>>();
-    // 临时的variant 列表包括所有的method中的variant 
-    private Map<SootMethod,List<Variant>> methodToVariantsTmp = new HashMap<SootMethod,List<Variant>>();
+   
     
     // Map 从SootMethod 到 valueToVariant
     private Map<SootMethod,ValueToVariant>methodToValueToVariant = new HashMap<SootMethod,ValueToVariant>();
@@ -228,15 +225,23 @@ public class BindingResolver {
 							PRBAnalysisStack.push(node);
 						else{
 							// 并且LOP是一个真正的local
-							boolean containsLocal = false;
+							boolean containsLocalField = false;
 							for(Variable def:defVars){
-								if(def.isLocal()){
-									containsLocal = true;
+								if(def.isLocal()||def.isFieldRef()){
+									containsLocalField = true;
 									break;
 								}
 							}
-							if(!containsLocal){
+							if(!containsLocalField){
 								PRBAnalysisStack.push(node);
+							}else{
+								
+								PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
+								Set<Value>punbindValue = prbTag.getBindingValues();
+								for(Value value:punbindValue){
+									methodToParitalUnbindValues.get(method).remove(value);
+								}
+								stmt.removeTag(PRBTag.TAG_NAME);
 							}
 						}
 					}
@@ -452,10 +457,10 @@ public class BindingResolver {
 							// 获取在调用层的参数
 							Value remote = argument.getArgs().get(argIndex);
 							List<Value> unbinds	= argument.getUnBindArgs();
-							if(unbinds==null||unbinds.isEmpty()){
+							if(unbinds.isEmpty()){
 								// 如果所有的实参 都是fixed 那么没有必要进行处理 也不必加入到unbind序列中
 								continue;
-							}else if(!unbinds.isEmpty()){
+							}else{
 								// 如果有实参未绑定
 								if(unbinds.contains(remote)){
 									RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
@@ -542,15 +547,23 @@ public class BindingResolver {
 									PRBAnalysisStack.push(node);
 								else{
 									// 并且LOP是一个真正的local
-									boolean containsLocal = false;
+									boolean containsLocalField = false;
 									for(Variable def:defVars){
-										if(def.isLocal()){
-											containsLocal = true;
+										if(def.isLocal()||def.isFieldRef()){
+											containsLocalField = true;
 											break;
 										}
 									}
-									if(!containsLocal){
+									if(!containsLocalField){
 										PRBAnalysisStack.push(node);
+									}else{
+										
+										PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
+										Set<Value>punbindValue = prbTag.getBindingValues();
+										for(Value value:punbindValue){
+											methodToParitalUnbindValues.get(method).remove(value);
+										}
+										stmt.removeTag(PRBTag.TAG_NAME);
 									}
 								}
 							}
