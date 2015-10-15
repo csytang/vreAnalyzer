@@ -401,7 +401,7 @@ public class BindingResolver {
 		
 		/////////////////////////////////////////////////////////
 		//实参 形参对应列表
-		/*
+		
 		Map<Value,Value>localParameterToRemoteArgu = new HashMap<Value,Value>();
 		for(SootMethod method:calleeMethod){
 			// clean the analysis stack
@@ -449,10 +449,10 @@ public class BindingResolver {
 							// 获取在调用层的参数
 							Value remote = argument.getArgs().get(argIndex);
 							List<Value> unbinds	= argument.getUnBindArgs();
-							if(unbinds==null){
+							if(unbinds==null||unbinds.isEmpty()){
 								// 如果所有的实参 都是fixed 那么没有必要进行处理 也不必加入到unbind序列中
 								continue;
-							}else if(unbinds!=null){
+							}else if(!unbinds.isEmpty()){
 								// 如果有实参未绑定
 								if(unbinds.contains(remote)){
 									RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
@@ -462,11 +462,11 @@ public class BindingResolver {
 										// 将这个argument的赋值语句 加入相应的argument值作为绑定值
 										rbTag.addBindingValue(argu);
 										// 将remote的value 加入绑定值中
-										rbTag.addBindingValue(remote);
+										
 									}else{
 										rbTag = new RBTag(argu);
 										// 将remote的value 加入绑定值中
-										rbTag.addBindingValue(remote);
+										
 										stmt.addTag(rbTag);
 									}
 									if(verbose){
@@ -505,10 +505,7 @@ public class BindingResolver {
 										rbTag = new RBTag(use.getValue());
 										stmt.addTag(rbTag);										
 									}
-									// 如果在这个语句上使用argument 那么
-									if(localParameterToRemoteArgu.containsKey(use.getValue())){
-										rbTag.addBindingValue(localParameterToRemoteArgu.get(use.getValue()));
-									}
+									
 									if(verbose){
 										System.out.println("Add RBTag to stmt:"+stmt);
 										System.out.println("----Value:"+use.getValue().toString());
@@ -910,7 +907,7 @@ public class BindingResolver {
 			}
 			
 		}
-		*/
+		
 	}
 	
 	public void RBTagCollector(){
