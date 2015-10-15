@@ -110,7 +110,7 @@ public class BindingResolver {
 								+ "["+argsString+"] in caller method["+method.getName()+"]");
 					}
 					// FINISH
-					Args ar = new Args(method,callee,args);
+					Args ar = new Args(method,callee,site,args);
 					// add this args to callee into record
 					if(methodToArgsList.containsKey(callee)){
 						methodToArgsList.get(callee).add(ar);
@@ -141,7 +141,6 @@ public class BindingResolver {
 			CFGDefUse cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(method);
 			List<CFGNode>nodes = cfg.getNodes();
 
-			// 2.1 The method is invoked by other method use callers' parameters
 			for(CFGNode node:nodes){
 				if(node.isSpecial())
 					continue;
@@ -164,9 +163,10 @@ public class BindingResolver {
 					Value argu = defstmt.getLeftOp();
 					RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
 					if(rbTag!=null){
-						rbTag.addBindingValue(argu);		
+						// 加入本地bindingvalue 在所有的Caller函数中
+						rbTag.addBindingValue(argu,null);		
 					}else{
-						rbTag = new RBTag(argu);
+						rbTag = new RBTag(argu,false,null,null);
 						stmt.addTag(rbTag);
 					}
 					// 将这个值加入到methodToUnbindValues
@@ -196,9 +196,9 @@ public class BindingResolver {
 							}
 							RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
 							if(rbTag!=null){
-								rbTag.addBindingValue(use.getValue());
+								rbTag.addBindingValue(use.getValue(),null);
 							}else{
-								rbTag = new RBTag(use.getValue());
+								rbTag = new RBTag(use.getValue(),false,null,null);
 								stmt.addTag(rbTag);
 							}
 							if(verbose){
@@ -249,7 +249,7 @@ public class BindingResolver {
 						if(!def.isLocal() && !def.isFieldRef()){
 							continue;
 						}
-						rbTag.addBindingValue(def.getValue());
+						rbTag.addBindingValue(def.getValue(),null);
 						//将为左侧的定义 加入到绑定中
 						if(!methodToUnbindValues.get(method).contains(def.getValue())){
 							methodToUnbindValues.get(method).add(def.getValue());
@@ -295,9 +295,9 @@ public class BindingResolver {
 						}
 						RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
 						if(rbTag!=null){
-							rbTag.addBindingValue(use.getValue());
+							rbTag.addBindingValue(use.getValue(),null);
 						}else{
-							rbTag = new RBTag(use.getValue());
+							rbTag = new RBTag(use.getValue(),false,null,null);
 							stmt.addTag(rbTag);
 						}
 						if(verbose){
@@ -315,7 +315,7 @@ public class BindingResolver {
 							continue;
 						}
 						RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
-						rbTag.addBindingValue(def.getValue());
+						rbTag.addBindingValue(def.getValue(),null);
 						if(!methodToUnbindValues.get(method).contains(def.getValue())){
 							methodToUnbindValues.get(method).add(def.getValue());
 						}
@@ -327,7 +327,7 @@ public class BindingResolver {
 					CFGNode lastnode = PRBAnalysisStack.get(stacklength-1);
 					Stmt laststmt = lastnode.getStmt();
 					RBTag lastrbTag = (RBTag)laststmt.getTag(RBTag.TAG_NAME);
-					Set<Value>lastbindvalues = lastrbTag.getBindingValues();
+					Set<Value>lastbindvalues = lastrbTag.getBindingValues(null);
 					
 					while(!PRBAnalysisStack.isEmpty()){
 						CFGNode prbnode = PRBAnalysisStack.pop();
@@ -344,8 +344,8 @@ public class BindingResolver {
 								methodToParitalUnbindValues.get(method).remove(value);
 						}
 						
-						RBTag rbTag = new RBTag(bindingvalues);
-						rbTag.addBindingValue(lastbindvalues);
+						RBTag rbTag = new RBTag(bindingvalues,false,null,null);
+						rbTag.addBindingValue(lastbindvalues,null);
 						prbstmt.removeTag(PRBTag.TAG_NAME);
 						// 将这个Tag取代 PRBTag加入到stmt上
 						prbstmt.addTag(rbTag);
@@ -397,6 +397,9 @@ public class BindingResolver {
 				}
 			}
 		}
+		
+		
+		
 		System.out.println("--------------------Finish caller method----------------------------");
 		
 		/////////////////////////////////////////////////////////
@@ -460,11 +463,11 @@ public class BindingResolver {
 									localParameterToRemoteArgu.put(argu, remote);
 									if(rbTag!=null){
 										// 将这个argument的赋值语句 加入相应的argument值作为绑定值
-										rbTag.addBindingValue(argu);
+										rbTag.addBindingValue(argu,argument.getCallSite());
 										// 将remote的value 加入绑定值中
 										
 									}else{
-										rbTag = new RBTag(argu);
+										rbTag = new RBTag(argu,true,argument.getCallerMethod(),argument.getCallSite());
 										// 将remote的value 加入绑定值中
 										
 										stmt.addTag(rbTag);
@@ -499,10 +502,10 @@ public class BindingResolver {
 									}
 									RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
 									if(rbTag!=null){
-										rbTag.addBindingValue(use.getValue());
+										rbTag.addBindingValue(use.getValue(),argument.getCallSite());
 										
 									}else{
-										rbTag = new RBTag(use.getValue());
+										rbTag = new RBTag(use.getValue(),true,argument.getCallerMethod(),argument.getCallSite());
 										stmt.addTag(rbTag);										
 									}
 									
@@ -559,7 +562,7 @@ public class BindingResolver {
 								if(!def.isLocal() && !def.isFieldRef()){
 									continue;
 								}
-								rbTag.addBindingValue(def.getValue());
+								rbTag.addBindingValue(def.getValue(),argument.getCallSite());
 								//将为左侧的定义 加入到绑定中
 								if(!methodToUnbindValues.get(method).contains(def.getValue())){
 									methodToUnbindValues.get(method).add(def.getValue());
@@ -612,9 +615,9 @@ public class BindingResolver {
 								}
 								RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
 								if(rbTag!=null){
-									rbTag.addBindingValue(use.getValue());
+									rbTag.addBindingValue(use.getValue(),argument.getCallSite());
 								}else{
-									rbTag = new RBTag(use.getValue());
+									rbTag = new RBTag(use.getValue(),true,argument.getCallerMethod(),argument.getCallSite());
 									stmt.addTag(rbTag);
 								}
 								if(verbose){
@@ -632,7 +635,7 @@ public class BindingResolver {
 									continue;
 								}
 								RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
-								rbTag.addBindingValue(def.getValue());
+								rbTag.addBindingValue(def.getValue(),argument.getCallSite());
 								if(!methodToUnbindValues.get(method).contains(def.getValue())){
 									methodToUnbindValues.get(method).add(def.getValue());
 								}
@@ -644,7 +647,7 @@ public class BindingResolver {
 							CFGNode lastnode = PRBAnalysisStack.get(stacklength-1);
 							Stmt laststmt = lastnode.getStmt();
 							RBTag lastrbTag = (RBTag)laststmt.getTag(RBTag.TAG_NAME);
-							Set<Value>lastbindvalues = lastrbTag.getBindingValues();
+							Set<Value>lastbindvalues = lastrbTag.getBindingValues(argument.getCallSite());
 							
 							while(!PRBAnalysisStack.isEmpty()){
 								CFGNode prbnode = PRBAnalysisStack.pop();
@@ -660,8 +663,8 @@ public class BindingResolver {
 									if(methodToParitalUnbindValues.get(method).contains(value))
 										methodToParitalUnbindValues.get(method).remove(value);
 								}
-								RBTag rbTag = new RBTag(bindingvalues);
-								rbTag.addBindingValue(lastbindvalues);
+								RBTag rbTag = new RBTag(bindingvalues,true,argument.getCallerMethod(),argument.getCallSite());
+								rbTag.addBindingValue(lastbindvalues,argument.getCallSite());
 								prbstmt.removeTag(PRBTag.TAG_NAME);
 								// 将这个Tag取代 PRBTag加入到stmt上
 								prbstmt.addTag(rbTag);
@@ -690,315 +693,12 @@ public class BindingResolver {
 					}
 					
 				}
-			}else{
-				// 没有参数进入和 callermethod的处理方法一样
-				// 2.1 The method is invoked by other method use callers' parameters
-				for(CFGNode node:nodes){
-					if(node.isSpecial())
-						continue;
-					//////////////////////
-					NodeDefUses defusenode = (NodeDefUses) node;
-					Stmt stmt = defusenode.getStmt();
-					useVars = defusenode.getUsedVars();// 在当前语句中的使用
-					defVars = defusenode.getDefinedVars();// 当前语句中的定义
-					///////////////////////
-					if(stmt instanceof IdentityStmt && !(((IdentityStmt) stmt).getRightOp() instanceof ThisRef)){
-						isParaAssignStmt = true;
-					}else{
-						isParaAssignStmt = false;
-					}
-					/////////////如果这个语句是域赋值给local语句////////////////////////////
-					if(isParaAssignStmt){
-						DefinitionStmt defstmt = (DefinitionStmt) stmt;
-						Value argu = defstmt.getLeftOp();
-						RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
-						if(rbTag!=null){
-							rbTag.addBindingValue(argu);		
-						}else{
-							rbTag = new RBTag(argu);
-							stmt.addTag(rbTag);
-						}
-						// 将这个值加入到methodToUnbindValues
-						if(!methodToUnbindValues.get(method).contains(argu)){
-							methodToUnbindValues.get(method).add(argu);
-						}
-						if(verbose){
-							System.out.println("Add RBTag to stmt:"+stmt);
-							System.out.println("----Value:"+argu.toString());
-						}
-						continue;
-					}
-					///////////////////如果此语句中有未绑定内容调用///////////////////////
-					if(usedOverlap_Variable(useVars,methodToUnbindValues.get(method))){
-						// 存在RB内容
-						boolean containPRBValue = false;// 是否包含部分帮定值
-						// 如果这里使用了 RB内容 我们设置其他的使用变量为 PRB变量
-						for(Variable use:useVars){
-							// 我们只将field 和 local加入
-							if(!use.isLocal() && !use.isFieldRef()){
-								continue;
-							}
-							if(methodToUnbindValues.get(method).contains(use.getValue())){
-								// 如果包含则为未绑定语句
-								RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
-								if(rbTag!=null){
-									rbTag.addBindingValue(use.getValue());
-								}else{
-									rbTag = new RBTag(use.getValue());
-									stmt.addTag(rbTag);
-								}
-								if(verbose){
-									System.out.println("Add a RBTag for stmt:"+stmt);
-									System.out.println("----Value:"+use.getValue().toString());
-								}
-							}else{// 只有在未定义中可以加入为 PRB值
-								PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
-								if(prbTag!=null){
-									prbTag.addBindingValue(use.getValue());					
-								}else{                                                                 
-									prbTag = new PRBTag(use.getValue());
-									stmt.addTag(prbTag);
-								}
-								// 将这个值加入到部分未绑定序列
-								methodToParitalUnbindValues.get(method).add(use.getValue());
-								if(!containPRBValue)
-									containPRBValue = true;
-							}
-						}
-						if(containPRBValue){
-							if(defVars.isEmpty())// 将这个部分未绑定的cfgnode加入到列表中
-								PRBAnalysisStack.push(node);
-							else{
-								// 并且LOP是一个真正的local
-								boolean containsLocal = false;
-								for(Variable def:defVars){
-									if(def.isLocal()){
-										containsLocal = true;
-										break;
-									}
-								}
-								if(!containsLocal){
-									PRBAnalysisStack.push(node);
-								}
-							}
-						}
-						RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
-						
-						// 对于这里的def 由于 存在未绑定的使用 那么def 也是未绑定
-						// 检查一下 多少个variant绑定在上面
-						for(Variable def:defVars){
-							// 我们只将field 和 local加入
-							if(!def.isLocal() && !def.isFieldRef()){
-								continue;
-							}
-							rbTag.addBindingValue(def.getValue());
-							//将为左侧的定义 加入到绑定中
-							if(!methodToUnbindValues.get(method).contains(def.getValue())){
-								methodToUnbindValues.get(method).add(def.getValue());
-							}
-						}
-					}
-					else if(usedOverlap_Variable(useVars,methodToParitalUnbindValues.get(method)) && defVars.isEmpty()){
-						// 使用了prb值 但是没有赋值内容
-						for(Variable use:useVars){
-							// 我们只将field 和 local加入
-							if(!use.isLocal() && !use.isFieldRef()){
-								continue;
-							}
-							// 将这个部分未绑定的值 加入到PRBValue列表中
-							PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
-							if(methodToParitalUnbindValues.get(method).contains(use.getValue())){
-								continue;
-							}else{
-								methodToParitalUnbindValues.get(method).add(use.getValue());
-							}
-							if(prbTag!=null){
-								prbTag.addBindingValue(use.getValue());
-							}else{
-								prbTag = new PRBTag(use.getValue());
-								stmt.addTag(prbTag);
-							}
-						}
-						PRBAnalysisStack.push(node);
-					}
-					else if(usedOverlap_Variable(useVars,methodToParitalUnbindValues.get(method)) && !defVars.isEmpty()){
-						// 使用了prb值 但是是有赋值内容
-						// 所有的prb值 和在PRBAnalysisStack中的prb值需要指向这个值
-						// 首先将这个stmt加入
-						
-						for(Variable use:useVars){
-							// 我们只将field 和 local加入
-							if(!use.isLocal() && !use.isFieldRef()){
-								continue;
-							}
-							RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
-							if(rbTag!=null){
-								rbTag.addBindingValue(use.getValue());
-							}else{
-								rbTag = new RBTag(use.getValue());
-								stmt.addTag(rbTag);
-							}
-							if(verbose){
-								System.out.println("Add RBTag to stmt:"+stmt);
-								System.out.println("----Value:"+use.getValue().toString());
-							}
-							if(!methodToUnbindValues.get(method).contains(use.getValue())){
-								methodToUnbindValues.get(method).add(use.getValue());
-							}
-						}
-						// 加入所有的定义defs
-						for(Variable def:defVars){// def is local
-							RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
-							rbTag.addBindingValue(def.getValue());
-							if(!methodToUnbindValues.get(method).contains(def.getValue())){
-								methodToUnbindValues.get(method).add(def.getValue());
-							}
-						}
-						
-						int stacklength = PRBAnalysisStack.size();
-						if(stacklength < 1)
-							continue;
-						CFGNode lastnode = PRBAnalysisStack.get(stacklength-1);
-						Stmt laststmt = lastnode.getStmt();
-						RBTag lastrbTag = (RBTag)laststmt.getTag(RBTag.TAG_NAME);
-						Set<Value>lastbindvalues = lastrbTag.getBindingValues();
-						
-						while(!PRBAnalysisStack.isEmpty()){
-							CFGNode prbnode = PRBAnalysisStack.pop();
-							Stmt prbstmt = prbnode.getStmt();
-							
-							 // 删除stmt上绑定的PRBTag 加入新的RBTag
-							 // 在新加入的RBTag上绑定 lastnode上的values 
-							 //
-							PRBTag prbTag = (PRBTag)prbstmt.getTag(PRBTag.TAG_NAME);
-							Set<Value> bindingvalues = prbTag.getBindingValues();
-							// 从partial unbind value中移除
-							for(Value value:bindingvalues){
-								if(methodToParitalUnbindValues.get(method).contains(value))
-									methodToParitalUnbindValues.get(method).remove(value);
-							}
-							RBTag rbTag = new RBTag(bindingvalues);
-							rbTag.addBindingValue(lastbindvalues);
-							prbstmt.removeTag(PRBTag.TAG_NAME);
-							// 将这个Tag取代 PRBTag加入到stmt上
-							prbstmt.addTag(rbTag);
-							// 加入到unbindvalue 中
-							methodToUnbindValues.get(method).addAll(bindingvalues);
-							if(verbose){
-								System.out.println("Add RBTag to stmt:"+prbstmt);
-								
-								String valuesString = "";
-								for(Value value:bindingvalues){
-									valuesString+=value;
-									valuesString+=":";
-								}
-								if(!bindingvalues.isEmpty()){
-									valuesString.subSequence(0, valuesString.length()-1);
-								}
-								System.out.println("----Value:"+valuesString);
-								
-							}
-						}
-						PRBAnalysisStack.clear();
-					}
-			
-				}
-				
 			}
 			
 		}
 		
 	}
 	
-	public void RBTagCollector(){
-		/*
-		 * 遍历所有的caller函数
-		 */
-		methodToUnbindValues.clear();
-		for(SootMethod method:allAppMethod){
-			CFGDefUse cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(method);
-			List<CFGNode>nodes = cfg.getNodes();
-			// 初始化methodToVariant 让每一个函数对应一系列variants
-			if(!methodToVariants.containsKey(method)){
-				methodToVariants.put(method, new LinkedList<Variant>());
-			}
-			if(!methodToVariantsTmp.containsKey(method)){
-				methodToVariantsTmp.put(method, new LinkedList<Variant>());
-			}
-			if(!methodToValueToVariant.containsKey(method)){
-				methodToValueToVariant.put(method, new ValueToVariant());
-			}
-			ValueToVariant mvalueToVariant = methodToValueToVariant.get(method);
-			for(CFGNode node:nodes){
-				if(node.isSpecial())
-					continue;
-				NodeDefUses defusenode = (NodeDefUses) node;
-				Stmt stmt = defusenode.getStmt();
-				// 获得RBTag
-				RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
-				if(rbTag!=null){
-					// 获得绑定的值
-					Set<Value>bindingvalues = rbTag.getBindingValues();
-					if(!bindingvalues.isEmpty()){
-						//判读是否存在这个value
-						for(Value bindv:bindingvalues){
-							// 如果存在 在那个一个variant
-							if(methodToUnbindValues.get(method).contains(bindv)){
-								// 将这个语句加入到 那个variant之中
-								if(mvalueToVariant.containsValue(bindv)){
-									// 
-									List<Variant>variantlist = mvalueToVariant.getVariantsByValue(bindv);
-									for(Variant variant:variantlist){
-										variant.addBindingStmts(stmt);
-										variant.addPaddingValue(bindv);
-									}
-								}else{
-									// 创建一个Variant 根据这个值
-									Variant variant = new Variant(bindv,stmt);
-									mvalueToVariant.addValueToVariant(bindv, variant);
-									methodToVariantsTmp.get(method).add(variant);
-								}
-								
-							}
-						}
-					}
-				}
-			}
-			//DEBUG
-			if(verbose)
-				System.out.println("Current number of variants is:"+methodToVariantsTmp.get(method).size());
-			//FINISH
-			System.out.println("Now refining variants");
-			/*
-			 * 开始的stmt的是同一个 就全部绑定一起
-			 * 1. 任意两个variant 
-			 */
-			List<Variant>variantsListTmp = new ArrayList<Variant>(methodToVariantsTmp.get(method));
-			boolean isRepeat = false;
-			for(int i = 0;i < variantsListTmp.size();i++){
-				for(int j = i+1;j < variantsListTmp.size();j++){
-					Variant varianti = variantsListTmp.get(i);
-					Variant variantj = variantsListTmp.get(j);
-					if(varianti.getFirstBindStmt().equals(variantj.getFirstBindStmt())){
-						isRepeat = true;
-					}else
-						isRepeat = false;
-				}
-				/*
-				 * 添加到永久只在i层
-				 */
-				// 如果是重复 这将i层variant 加入
-				if(isRepeat){
-					
-				}else{
-					
-				}
-			}
-			
-			
-			
-		}
-	}
 	
 	// 判断两个集合是否有交集
 	private boolean usedOverlap_Variable(Set<Variable> useVars, Set<Value> list) {

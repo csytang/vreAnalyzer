@@ -39,4 +39,8 @@ public class Args {
 	public List<Value> getArgs(){
 		return this.args;
 	}
+	public CallSite getCallSite() {
+		// TODO Auto-generated method stub
+		return this.callSite;
+	}
 }
