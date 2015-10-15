@@ -2,7 +2,23 @@ public class WordCount2$IntSumReducer extends org.apache.hadoop.mapreduce.Reduce
 {
     private org.apache.hadoop.io.IntWritable result;
 
-    
+    public void <init>()
+    {
+        WordCount2$IntSumReducer r0;
+        org.apache.hadoop.io.IntWritable $r1;
+
+        r0 := @this: WordCount2$IntSumReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        $r1 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r1.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+        r0.<WordCount2$IntSumReducer: org.apache.hadoop.io.IntWritable result> = $r1;
+
+        return;
+    }
 
     public void reduce(org.apache.hadoop.io.Text, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
     {
@@ -65,19 +81,19 @@ public class WordCount2$IntSumReducer extends org.apache.hadoop.mapreduce.Reduce
 
         r0 := @this: WordCount2$IntSumReducer;
 
-        #r1 := @parameter0: java.lang.Object;
+        r1 := @parameter0: java.lang.Object;
 
-        #r2 := @parameter1: java.lang.Iterable;
+        r2 := @parameter1: java.lang.Iterable;
 
-        #r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
 
-        #$r6 = (org.apache.hadoop.io.Text) r1;
+        $r6 = (org.apache.hadoop.io.Text) r1;
 
-        #$r5 = (java.lang.Iterable) r2;
+        $r5 = (java.lang.Iterable) r2;
 
-        #$r4 = (org.apache.hadoop.mapreduce.Reducer$Context) r3;
+        $r4 = (org.apache.hadoop.mapreduce.Reducer$Context) r3;
 
-        #virtualinvoke r0.<WordCount2$IntSumReducer: void reduce(org.apache.hadoop.io.Text,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r6, $r5, $r4);
+        virtualinvoke r0.<WordCount2$IntSumReducer: void reduce(org.apache.hadoop.io.Text,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r6, $r5, $r4);
 
         return;
     }

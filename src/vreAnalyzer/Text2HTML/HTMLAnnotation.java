@@ -637,7 +637,7 @@ public class HTMLAnnotation {
 				String spanStart = "<span style=\"background-color:"+hex+"\">";
 				String spanEnd = "</span>";
 				String updateline="";
-				if(!((updateline = isColorTitleAssociatedSLResolver_Variant(linecontent, spanStart)).equals(""))){
+				if(!((updateline = isSingleColorAssociated(linecontent, spanStart)).equals(""))){
 					htmlbyline[lineNumber-1] = updateline;
 				}else{
 					StringBuffer buffStart = new StringBuffer(linecontent);
@@ -669,5 +669,19 @@ public class HTMLAnnotation {
 			e.printStackTrace();
 		}
 	}
-	
+	private static String isSingleColorAssociated(String linecontent,String spanStart){
+		String colorpattern = new String("<span style=\"background-color:.+\">");
+		Pattern startPattern = Pattern.compile(colorpattern);
+		Matcher matcher = startPattern.matcher(linecontent);
+		if(matcher.find()){
+			String matchedString = matcher.group(0);
+			if(matchedString.equals(spanStart)){
+				return linecontent;
+			}else{
+				return "";
+			}
+		}else{
+			return "";
+		}
+	}
 }

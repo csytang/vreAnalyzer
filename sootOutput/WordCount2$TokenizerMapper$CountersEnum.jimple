@@ -64,12 +64,12 @@ final enum class WordCount2$TokenizerMapper$CountersEnum extends java.lang.Enum
         java.lang.Enum $r1;
         WordCount2$TokenizerMapper$CountersEnum $r2;
 
-        #r0 := @parameter0: java.lang.String;
+        r0 := @parameter0: java.lang.String;
 
-        #$r1 = staticinvoke <java.lang.Enum: java.lang.Enum valueOf(java.lang.Class,java.lang.String)>(class "WordCount2$TokenizerMapper$CountersEnum", r0);
+        $r1 = staticinvoke <java.lang.Enum: java.lang.Enum valueOf(java.lang.Class,java.lang.String)>(class "WordCount2$TokenizerMapper$CountersEnum", r0);
 
-        #$r2 = (WordCount2$TokenizerMapper$CountersEnum) $r1;
+        $r2 = (WordCount2$TokenizerMapper$CountersEnum) $r1;
 
-        #return $r2;
+        return $r2;
     }
 }

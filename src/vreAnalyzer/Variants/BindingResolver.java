@@ -44,9 +44,9 @@ public class BindingResolver {
     private Map<Value,List<Value>> PRBAnalysisStackBindingValue = new HashMap<Value,List<Value>>();
     // 对于每一个函数来讲 有以下两个
     // 1. unbindValueList 未绑定值列表
-    private Map<SootMethod,List<Value>> methodToUnbindValues = new HashMap<SootMethod,List<Value>>();
+    private Map<SootMethod,Set<Value>> methodToUnbindValues = new HashMap<SootMethod,Set<Value>>();
     // 2. partialUnbindValueList 部分未绑定值列表
-    private Map<SootMethod,List<Value>> methodToParitalUnbindValues = new HashMap<SootMethod,List<Value>>();
+    private Map<SootMethod,Set<Value>> methodToParitalUnbindValues = new HashMap<SootMethod,Set<Value>>();
     // Map 从SootMethod到 variant
     private Map<SootMethod,List<Variant>> methodToVariants = new HashMap<SootMethod,List<Variant>>();
     // 临时的variant 列表包括所有的method中的variant 
@@ -82,9 +82,9 @@ public class BindingResolver {
 			List<CallSite> callsites = mTag.getAllCallSites();
 			
 			// 初始化methodToUnbindValue
-			methodToUnbindValues.put(method, new LinkedList<Value>());
+			methodToUnbindValues.put(method, new HashSet<Value>());
 			// 初始化methodToParitalUnbindValues
-			methodToParitalUnbindValues.put(method, new LinkedList<Value>());
+			methodToParitalUnbindValues.put(method, new HashSet<Value>());
 			for(CallSite site:callsites){
 				
 				CFGNode srcCallCFGNode = site.getCallCFGNode();
@@ -183,13 +183,17 @@ public class BindingResolver {
 				// P1 检查这个点下的所有unbindingValueList
 				////////////////////////////////////////////////////////
 				///////////////////如果此语句中有未绑定内容调用///////////////////////
-				if(usedOverlap(useVars,methodToUnbindValues.get(method))){
+				if(usedOverlap_Variable(useVars,methodToUnbindValues.get(method))){
 					// 存在RB内容
 					boolean containPRBValue = false;// 是否包含部分帮定值
 					// 如果这里使用了 RB内容 我们设置其他的使用变量为 PRB变量
 					for(Variable use:useVars){
 						if(methodToUnbindValues.get(method).contains(use.getValue())){
 							// 如果包含则为未绑定语句
+							// 我们只将field 和 local加入
+							if(!use.isLocal() && !use.isFieldRef()){
+								continue;
+							}
 							RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
 							if(rbTag!=null){
 								rbTag.addBindingValue(use.getValue());
@@ -202,6 +206,10 @@ public class BindingResolver {
 								System.out.println("----Value:"+use.getValue().toString());
 							}
 						}else{
+							// 我们只将field 和 local加入
+							if(!use.isLocal() && !use.isFieldRef()){
+								continue;
+							}
 							PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
 							if(prbTag!=null){
 								prbTag.addBindingValue(use.getValue());					
@@ -237,6 +245,10 @@ public class BindingResolver {
 					// 对于这里的def 由于 存在未绑定的使用 那么def 也是未绑定
 					// 检查一下 多少个variant绑定在上面
 					for(Variable def:defVars){// def is local
+						// 我们只将field 和 local加入
+						if(!def.isLocal() && !def.isFieldRef()){
+							continue;
+						}
 						rbTag.addBindingValue(def.getValue());
 						//将为左侧的定义 加入到绑定中
 						if(!methodToUnbindValues.get(method).contains(def.getValue())){
@@ -248,10 +260,14 @@ public class BindingResolver {
 						}
 					}
 				}
-				else if(usedOverlap(useVars,methodToParitalUnbindValues.get(method)) && defVars.isEmpty()){
+				else if(usedOverlap_Variable(useVars,methodToParitalUnbindValues.get(method)) && defVars.isEmpty()){
 					// 使用了prb值 但是没有赋值内容
 					for(Variable use:useVars){
 						// 将这个部分未绑定的值 加入到PRBValue列表中
+						// 我们只将field 和 local加入
+						if(!use.isLocal() && !use.isFieldRef()){
+							continue;
+						}
 						PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
 						if(methodToParitalUnbindValues.get(method).contains(use.getValue())){
 							continue;
@@ -267,12 +283,16 @@ public class BindingResolver {
 					}
 					PRBAnalysisStack.push(node);
 				}
-				else if(usedOverlap(useVars,methodToParitalUnbindValues.get(method)) && !defVars.isEmpty()){
+				else if(usedOverlap_Variable(useVars,methodToParitalUnbindValues.get(method)) && !defVars.isEmpty()){
 					// 使用了prb值 但是是有赋值内容
 					// 所有的prb值 和在PRBAnalysisStack中的prb值需要指向这个值
 					// 首先将这个stmt加入
 					
 					for(Variable use:useVars){
+						// 我们只将field 和 local加入
+						if(!use.isLocal() && !use.isFieldRef()){
+							continue;
+						}
 						RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
 						if(rbTag!=null){
 							rbTag.addBindingValue(use.getValue());
@@ -290,6 +310,10 @@ public class BindingResolver {
 					}
 					// 加入所有的定义defs
 					for(Variable def:defVars){// def is local
+						// 我们只将field 和 local加入
+						if(!def.isLocal() && !def.isFieldRef()){
+							continue;
+						}
 						RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
 						rbTag.addBindingValue(def.getValue());
 						if(!methodToUnbindValues.get(method).contains(def.getValue())){
@@ -298,6 +322,8 @@ public class BindingResolver {
 					}
 					
 					int stacklength = PRBAnalysisStack.size();
+					if(stacklength<1)
+						continue;
 					CFGNode lastnode = PRBAnalysisStack.get(stacklength-1);
 					Stmt laststmt = lastnode.getStmt();
 					RBTag lastrbTag = (RBTag)laststmt.getTag(RBTag.TAG_NAME);
@@ -317,8 +343,8 @@ public class BindingResolver {
 							if(methodToParitalUnbindValues.get(method).contains(value))
 								methodToParitalUnbindValues.get(method).remove(value);
 						}
-						RBTag rbTag = (RBTag)prbstmt.getTag(RBTag.TAG_NAME);
-						rbTag.addBindingValue(bindingvalues);
+						
+						RBTag rbTag = new RBTag(bindingvalues);
 						rbTag.addBindingValue(lastbindvalues);
 						prbstmt.removeTag(PRBTag.TAG_NAME);
 						// 将这个Tag取代 PRBTag加入到stmt上
@@ -375,6 +401,7 @@ public class BindingResolver {
 		
 		/////////////////////////////////////////////////////////
 		//实参 形参对应列表
+		/*
 		Map<Value,Value>localParameterToRemoteArgu = new HashMap<Value,Value>();
 		for(SootMethod method:calleeMethod){
 			// clean the analysis stack
@@ -459,13 +486,17 @@ public class BindingResolver {
 						}
 						
 						///////////////////如果此语句中有未绑定内容调用///////////////////////
-						if(usedOverlap(useVars,methodToUnbindValues.get(method))){
+						if(usedOverlap_Variable(useVars,methodToUnbindValues.get(method))){
 							// 存在RB内容
 							boolean containPRBValue = false;// 是否包含部分帮定值
 							// 如果这里使用了 RB内容 我们设置其他的使用变量为 PRB变量
 							for(Variable use:useVars){
 								if(methodToUnbindValues.get(method).contains(use.getValue())){
 									// 如果包含则为未绑定语句
+									// 我们只将field 和 local加入
+									if(!use.isLocal() && !use.isFieldRef()){
+										continue;
+									}
 									RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
 									if(rbTag!=null){
 										rbTag.addBindingValue(use.getValue());
@@ -483,6 +514,10 @@ public class BindingResolver {
 										System.out.println("----Value:"+use.getValue().toString());
 									}
 								}else{// 只有在未定义中可以加入为 PRB值
+									// 我们只将field 和 local加入
+									if(!use.isLocal() && !use.isFieldRef()){
+										continue;
+									}
 									PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
 									if(prbTag!=null){
 										prbTag.addBindingValue(use.getValue());
@@ -523,6 +558,10 @@ public class BindingResolver {
 							// 对于这里的def 由于 存在未绑定的使用 那么def 也是未绑定
 							// 检查一下 多少个variant绑定在上面
 							for(Variable def:defVars){
+								// 我们只将field 和 local加入
+								if(!def.isLocal() && !def.isFieldRef()){
+									continue;
+								}
 								rbTag.addBindingValue(def.getValue());
 								//将为左侧的定义 加入到绑定中
 								if(!methodToUnbindValues.get(method).contains(def.getValue())){
@@ -535,10 +574,14 @@ public class BindingResolver {
 							}							
 						}
 						
-						else if(usedOverlap(useVars,methodToParitalUnbindValues.get(method)) && defVars.isEmpty()){
+						else if(usedOverlap_Variable(useVars,methodToParitalUnbindValues.get(method)) && defVars.isEmpty()){
 							// 使用了prb值 但是没有赋值内容
 							for(Variable use:useVars){
 								// 将这个部分未绑定的值 加入到PRBValue列表中
+								// 我们只将field 和 local加入
+								if(!use.isLocal() && !use.isFieldRef()){
+									continue;
+								}
 								PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
 								if(methodToParitalUnbindValues.get(method).contains(use.getValue())){
 									continue;
@@ -560,12 +603,16 @@ public class BindingResolver {
 							}
 							PRBAnalysisStack.push(node);
 						}
-						else if(usedOverlap(useVars,methodToParitalUnbindValues.get(method)) && !defVars.isEmpty()){
+						else if(usedOverlap_Variable(useVars,methodToParitalUnbindValues.get(method)) && !defVars.isEmpty()){
 							// 使用了prb值 但是是有赋值内容
 							// 所有的prb值 和在PRBAnalysisStack中的prb值需要指向这个值
 							// 首先将这个stmt加入
 							
 							for(Variable use:useVars){
+								// 我们只将field 和 local加入
+								if(!use.isLocal() && !use.isFieldRef()){
+									continue;
+								}
 								RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
 								if(rbTag!=null){
 									rbTag.addBindingValue(use.getValue());
@@ -583,6 +630,10 @@ public class BindingResolver {
 							}
 							// 加入所有的定义defs
 							for(Variable def:defVars){// def is local
+								// 我们只将field 和 local加入
+								if(!def.isLocal() && !def.isFieldRef()){
+									continue;
+								}
 								RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
 								rbTag.addBindingValue(def.getValue());
 								if(!methodToUnbindValues.get(method).contains(def.getValue())){
@@ -591,6 +642,8 @@ public class BindingResolver {
 							}
 							
 							int stacklength = PRBAnalysisStack.size();
+							if(stacklength<1)
+								continue;
 							CFGNode lastnode = PRBAnalysisStack.get(stacklength-1);
 							Stmt laststmt = lastnode.getStmt();
 							RBTag lastrbTag = (RBTag)laststmt.getTag(RBTag.TAG_NAME);
@@ -599,10 +652,10 @@ public class BindingResolver {
 							while(!PRBAnalysisStack.isEmpty()){
 								CFGNode prbnode = PRBAnalysisStack.pop();
 								Stmt prbstmt = prbnode.getStmt();
-								/*
-								 * 删除stmt上绑定的PRBTag 加入新的RBTag
-								 * 在新加入的RBTag上绑定 lastnode上的values 
-								 */
+								
+								 // 删除stmt上绑定的PRBTag 加入新的RBTag
+								 // 在新加入的RBTag上绑定 lastnode上的values 
+								 
 								PRBTag prbTag = (PRBTag)prbstmt.getTag(PRBTag.TAG_NAME);
 								Set<Value> bindingvalues = prbTag.getBindingValues();
 								// 从partial unbind value中移除
@@ -610,12 +663,12 @@ public class BindingResolver {
 									if(methodToParitalUnbindValues.get(method).contains(value))
 										methodToParitalUnbindValues.get(method).remove(value);
 								}
-								RBTag rbTag = (RBTag)prbstmt.getTag(RBTag.TAG_NAME);
-								rbTag.addBindingValue(bindingvalues);
+								RBTag rbTag = new RBTag(bindingvalues);
 								rbTag.addBindingValue(lastbindvalues);
 								prbstmt.removeTag(PRBTag.TAG_NAME);
 								// 将这个Tag取代 PRBTag加入到stmt上
 								prbstmt.addTag(rbTag);
+								
 								// 加入到unbindvalue 中
 								methodToUnbindValues.get(method).addAll(bindingvalues);
 								if(verbose){
@@ -679,11 +732,15 @@ public class BindingResolver {
 						continue;
 					}
 					///////////////////如果此语句中有未绑定内容调用///////////////////////
-					if(usedOverlap(useVars,methodToUnbindValues.get(method))){
+					if(usedOverlap_Variable(useVars,methodToUnbindValues.get(method))){
 						// 存在RB内容
 						boolean containPRBValue = false;// 是否包含部分帮定值
 						// 如果这里使用了 RB内容 我们设置其他的使用变量为 PRB变量
 						for(Variable use:useVars){
+							// 我们只将field 和 local加入
+							if(!use.isLocal() && !use.isFieldRef()){
+								continue;
+							}
 							if(methodToUnbindValues.get(method).contains(use.getValue())){
 								// 如果包含则为未绑定语句
 								RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
@@ -733,6 +790,10 @@ public class BindingResolver {
 						// 对于这里的def 由于 存在未绑定的使用 那么def 也是未绑定
 						// 检查一下 多少个variant绑定在上面
 						for(Variable def:defVars){
+							// 我们只将field 和 local加入
+							if(!def.isLocal() && !def.isFieldRef()){
+								continue;
+							}
 							rbTag.addBindingValue(def.getValue());
 							//将为左侧的定义 加入到绑定中
 							if(!methodToUnbindValues.get(method).contains(def.getValue())){
@@ -740,9 +801,13 @@ public class BindingResolver {
 							}
 						}
 					}
-					else if(usedOverlap(useVars,methodToParitalUnbindValues.get(method)) && defVars.isEmpty()){
+					else if(usedOverlap_Variable(useVars,methodToParitalUnbindValues.get(method)) && defVars.isEmpty()){
 						// 使用了prb值 但是没有赋值内容
 						for(Variable use:useVars){
+							// 我们只将field 和 local加入
+							if(!use.isLocal() && !use.isFieldRef()){
+								continue;
+							}
 							// 将这个部分未绑定的值 加入到PRBValue列表中
 							PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
 							if(methodToParitalUnbindValues.get(method).contains(use.getValue())){
@@ -759,12 +824,16 @@ public class BindingResolver {
 						}
 						PRBAnalysisStack.push(node);
 					}
-					else if(usedOverlap(useVars,methodToParitalUnbindValues.get(method)) && !defVars.isEmpty()){
+					else if(usedOverlap_Variable(useVars,methodToParitalUnbindValues.get(method)) && !defVars.isEmpty()){
 						// 使用了prb值 但是是有赋值内容
 						// 所有的prb值 和在PRBAnalysisStack中的prb值需要指向这个值
 						// 首先将这个stmt加入
 						
 						for(Variable use:useVars){
+							// 我们只将field 和 local加入
+							if(!use.isLocal() && !use.isFieldRef()){
+								continue;
+							}
 							RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
 							if(rbTag!=null){
 								rbTag.addBindingValue(use.getValue());
@@ -790,6 +859,8 @@ public class BindingResolver {
 						}
 						
 						int stacklength = PRBAnalysisStack.size();
+						if(stacklength < 1)
+							continue;
 						CFGNode lastnode = PRBAnalysisStack.get(stacklength-1);
 						Stmt laststmt = lastnode.getStmt();
 						RBTag lastrbTag = (RBTag)laststmt.getTag(RBTag.TAG_NAME);
@@ -798,10 +869,10 @@ public class BindingResolver {
 						while(!PRBAnalysisStack.isEmpty()){
 							CFGNode prbnode = PRBAnalysisStack.pop();
 							Stmt prbstmt = prbnode.getStmt();
-							/*
-							 * 删除stmt上绑定的PRBTag 加入新的RBTag
-							 * 在新加入的RBTag上绑定 lastnode上的values 
-							 */
+							
+							 // 删除stmt上绑定的PRBTag 加入新的RBTag
+							 // 在新加入的RBTag上绑定 lastnode上的values 
+							 //
 							PRBTag prbTag = (PRBTag)prbstmt.getTag(PRBTag.TAG_NAME);
 							Set<Value> bindingvalues = prbTag.getBindingValues();
 							// 从partial unbind value中移除
@@ -809,8 +880,7 @@ public class BindingResolver {
 								if(methodToParitalUnbindValues.get(method).contains(value))
 									methodToParitalUnbindValues.get(method).remove(value);
 							}
-							RBTag rbTag = (RBTag)prbstmt.getTag(RBTag.TAG_NAME);
-							rbTag.addBindingValue(bindingvalues);
+							RBTag rbTag = new RBTag(bindingvalues);
 							rbTag.addBindingValue(lastbindvalues);
 							prbstmt.removeTag(PRBTag.TAG_NAME);
 							// 将这个Tag取代 PRBTag加入到stmt上
@@ -840,7 +910,7 @@ public class BindingResolver {
 			}
 			
 		}
-		
+		*/
 	}
 	
 	public void RBTagCollector(){
@@ -934,7 +1004,7 @@ public class BindingResolver {
 	}
 	
 	// 判断两个集合是否有交集
-	private boolean usedOverlap(List<Variable> useVars, List<Value> list) {
+	private boolean usedOverlap_Variable(Set<Variable> useVars, Set<Value> list) {
 		// TODO Auto-generated method stub
 		for(Variable use:useVars){
 			if(list.contains(use.getValue()))
@@ -942,7 +1012,15 @@ public class BindingResolver {
 		}
 		return false;
 	}
-	private boolean usedOverlap(Set<Value>vaset_A,Set<Value>vaset_B){
+	private boolean usedOverlap_Variable(List<Variable> useVars, Set<Value> list) {
+		// TODO Auto-generated method stub
+		for(Variable use:useVars){
+			if(list.contains(use.getValue()))
+				return true;
+		}
+		return false;
+	}
+	private boolean usedOverlap_Value(Set<Value>vaset_A,Set<Value>vaset_B){
 		Set<Value>intersection = new HashSet<Value>(vaset_A);
 		intersection.retainAll(vaset_B);
 		if(intersection.isEmpty())
@@ -967,8 +1045,18 @@ public class BindingResolver {
 				System.err.println("Cannot fine the class:\t"+cls.toString());
 				continue;
 			}
-			String htmlfileName = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
-			htmlfileName+=".html";
+			String htmlfileNametemp = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
+			String htmlfileName = "";
+			String[] subpatharray = htmlfileNametemp.split("/");
+			for(int i = 0;i < subpatharray.length;i++){
+				if(i!=(subpatharray.length-1)){
+					htmlfileName += subpatharray[i];
+					htmlfileName+="/";
+				}else{
+					htmlfileName += "variant_"+subpatharray[i];
+					htmlfileName += ".html";
+				}
+			}
 			File htmlFile = new File(htmlfileName);
 			for(CFGNode node:nodes){
 				if(node.isSpecial()){
