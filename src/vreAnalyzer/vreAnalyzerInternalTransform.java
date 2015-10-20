@@ -7,6 +7,8 @@ import vreAnalyzer.ProgramFlow.ProgramFlowBuilder.EntryNotFoundException;
 import vreAnalyzer.Variants.BindingResolver;
 import java.util.Map;
 
+import Patch.Hadoop.ProjectParser;
+
 public class vreAnalyzerInternalTransform extends SceneTransformer{
 
 	@Override
@@ -37,7 +39,7 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 		System.out.println("[vreAnalyzer] BindingResolve[Finish]");
 		System.out.println("[vreAnalyzer] Project analysis[Start]");
 		// Display Reusable Result by checking the mode
-		//ProjectParser.inst().runProjectParser();
+		ProjectParser.inst().runProjectParser();
 		System.out.println("[vreAnalyzer] Project analysis[Finish]");
 		
 				

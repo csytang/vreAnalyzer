@@ -1,36 +1,43 @@
 package vreAnalyzer.Variants;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
-
+import java.util.Set;
 import soot.Value;
+import vreAnalyzer.Elements.CallSite;
 
 public class ValueToVariant {
-	
-	private Map<Value,List<Variant>>valueToVariant = new HashMap<Value,List<Variant>>();
-	
-	public ValueToVariant(){
-		
+	// 
+	private Map<Value,Set<Variant>> valueToVariant = new HashMap<Value,Set<Variant>>();
+	private Set<Variant> variantSet = new HashSet<Variant>();
+	private CallSite callsite = null;// 如果函数是一个调用函数 那么这里为空
+	public ValueToVariant(CallSite callsite){
+		this.callsite = callsite;
 	}
-	public void addValueToVariant(Value value,List<Variant>variantlist){
+	public Set<Value> getValueSet(){
+		return this.valueToVariant.keySet();
+	}
+	public void addValueToVariant(Value value,Set<Variant> variantset){
 		if(valueToVariant.containsKey(value)){
-			valueToVariant.get(value).addAll(variantlist);
+			valueToVariant.get(value).addAll(variantset);
 		}else{
-			valueToVariant.put(value, variantlist);
+			valueToVariant.put(value, variantset);
 		}
+		variantSet.addAll(variantset);
 	}
-	public void addValueToVariant(Value value,Variant variant){
+	public void addValueToVariant(Value value, Variant variant){
 		if(valueToVariant.containsKey(value)){
 			valueToVariant.get(value).add(variant);
 		}else{
-			List<Variant>variantlist = new LinkedList<Variant>();
-			variantlist.add(variant);
-			valueToVariant.put(value, variantlist);
+			Set<Variant>variantset = new HashSet<Variant>();
+			variantset.add(variant);
+			valueToVariant.put(value, variantset);
 		}
+		variantSet.add(variant);
 	}
-	public List<Variant> getVariantsByValue(Value value){
+	
+	public Set<Variant> getVariantsByValue(Value value){
 		if(valueToVariant.containsKey(value)){
 			return valueToVariant.get(value);
 		}else
@@ -41,5 +48,8 @@ public class ValueToVariant {
 			return true;
 		}else
 			return false;
+	}
+	public Set<Variant> getVariants(){
+		return this.variantSet;
 	}
 }

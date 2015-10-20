@@ -38,6 +38,10 @@ public class RBTag implements Tag{
 			Set<CallSite>callSiteSet = new HashSet<CallSite>();
 			callSiteSet.add(remoteCallSite);
 			this.callerToSites.put(callerMethod, callSiteSet);
+			//binding value set
+			Set<Value>values = new HashSet<Value>();
+			values.add(bindingvalue);
+			this.calleebindingvalues.put(remoteCallSite, values);
 		}else{
 			this.callerbindingvalues.add(bindingvalue);
 		}

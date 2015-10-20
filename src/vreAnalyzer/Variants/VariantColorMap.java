@@ -101,4 +101,26 @@ public class VariantColorMap {
 		// TODO Auto-generated method stub
 		return treemodel;
 	}
+	
+	public void addToLegend(){
+		// 1. 首先加入所有的单一颜色
+		String legendheaders[] = {"Variant","Color"};
+		DefaultTableModel model = new DefaultTableModel(null,legendheaders){
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
+		for(Map.Entry<Variant, Color>entry : variantToColor.entrySet()){
+			Variant variant = entry.getKey();
+			Color color = entry.getValue();
+			int variantId = variant.getVariantId();
+			String variantIdStr = "["+variantId+"]";
+			model.addRow(new Object[]{variantIdStr,color});
+		}
+		treemodel = model;
+		
+	}
+	
 }
