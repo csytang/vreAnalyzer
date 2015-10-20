@@ -63,11 +63,14 @@ public class BindingResolver {
 	}
 	
 	public void run(){
+		// 分析程序 并创建variant
 		parse();
 		//singlecolorannotation(Color.RED);
+		// 出去不可见的Varaint
 		variantColorAssign();
 		variantcolorannotation();
 		VariantColorMap.inst().addToLegend();
+		
 	}
 	
 	public void parse(){
@@ -835,13 +838,18 @@ public class BindingResolver {
 							PRBAnalysisStack.clear();
 						}
 					}
-					
-					
 				}
 			}
 			
 		}
 		
+	}
+	
+	public void removeHiddenVariant(Variant variant){
+		/*
+		 * 删除不可见Variant
+		 */
+		fullVariantList.remove(variant);
 	}
 	
 	private boolean usedOverlap_Variable(List<Variable> useVars, Set<Value> list) {

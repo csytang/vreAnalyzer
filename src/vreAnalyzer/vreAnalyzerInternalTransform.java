@@ -41,9 +41,6 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 		// Display Reusable Result by checking the mode
 		ProjectParser.inst().runProjectParser();
 		System.out.println("[vreAnalyzer] Project analysis[Finish]");
-		
-				
-				
 	}
 
 }

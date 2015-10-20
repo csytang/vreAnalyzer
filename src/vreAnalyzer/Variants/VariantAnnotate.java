@@ -30,10 +30,15 @@ public class VariantAnnotate {
     boolean startFromSource;
     int[][]positions;
     int[]lines;
+    private boolean hide = false;
     public static boolean variantready = false;
+    public static void setvariantready(){
+    	variantready = true;
+    }
     public VariantAnnotate(Variant variant,String variantId, Color annotatedColor){
         startFromSource = vreAnalyzerCommandLine.isStartFromSource();
         // 先处理在Caller中的部分
+        
         List<Stmt> callerstmts = variant.getBindingStmts(null);
         if(startFromSource) {
             positions = new int[callerstmts.size()][4];
@@ -78,8 +83,14 @@ public class VariantAnnotate {
                 lines[i] = startline;
             }
             if(startFromSource) {
+            	if(shouldbeHide(positions)){
+            		hide = true;
+            	}
                 HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,htmlFile, positions, annotatedColor, MainFrame.inst().getHTMLToJava());
             }else{
+            	if(shouldbeHide(lines)){
+            		hide = true;
+            	}
                 HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,htmlFile, lines, annotatedColor, MainFrame.inst().getHTMLToJava());
             }
         }
@@ -128,14 +139,43 @@ public class VariantAnnotate {
                          lines[i] = startline;
                      }
                      if(startFromSource) {
+                    	 if(shouldbeHide(positions)){
+                    		hide = true; 
+                    	 }
                          HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,calleehtmlFile, positions, annotatedColor, MainFrame.inst().getHTMLToJava());
                      }else{
+                    	 if(shouldbeHide(lines)){
+                     		hide = true;
+                     	}
                          HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,calleehtmlFile, lines, annotatedColor, MainFrame.inst().getHTMLToJava());
                      }
                  }
           		  
              }
         }
-        variantready = true;
+        if(!hide){
+        	// 刪除掉这个Variant
+        	BindingResolver.inst().removeHiddenVariant(variant);
+        }
     }
+	private boolean shouldbeHide(int[][] positions) {
+		// TODO Auto-generated method stub
+		for(int i = 0;i < positions.length;i++){
+			for(int j =0; j < positions[0].length;j++){
+				if(positions[i][j]>1)
+					return false;
+			}
+		}
+		return true;
+	}
+	private boolean shouldbeHide(int[] lines) {
+		// 判断一个variant是否应该被隐藏
+		
+		for(int i:lines){
+			if(i>1)
+				return false;
+		}
+		return true;
+		
+	}
 }
