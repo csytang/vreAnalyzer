@@ -21,6 +21,7 @@ import vreAnalyzer.Elements.CallSite;
 
 import java.awt.*;
 import java.io.File;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -32,13 +33,17 @@ public class VariantAnnotate {
     int[]lines;
     private boolean hide = false;
     public static boolean variantready = false;
+    private static List<Variant> shouldremoveVariants = new LinkedList<Variant>();
     public static void setvariantready(){
     	variantready = true;
+    }
+    public static List<Variant> getShouldBeHideVariants(){
+    	return shouldremoveVariants;
     }
     public VariantAnnotate(Variant variant,String variantId, Color annotatedColor){
         startFromSource = vreAnalyzerCommandLine.isStartFromSource();
         // 先处理在Caller中的部分
-        
+        hide = true;
         List<Stmt> callerstmts = variant.getBindingStmts(null);
         if(startFromSource) {
             positions = new int[callerstmts.size()][4];
@@ -83,13 +88,13 @@ public class VariantAnnotate {
                 lines[i] = startline;
             }
             if(startFromSource) {
-            	if(shouldbeHide(positions)){
-            		hide = true;
+            	if(!shouldbeHide(positions)){
+            		hide = false;
             	}
                 HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,htmlFile, positions, annotatedColor, MainFrame.inst().getHTMLToJava());
             }else{
-            	if(shouldbeHide(lines)){
-            		hide = true;
+            	if(!shouldbeHide(lines)){
+            		hide = false;
             	}
                 HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,htmlFile, lines, annotatedColor, MainFrame.inst().getHTMLToJava());
             }
@@ -139,13 +144,13 @@ public class VariantAnnotate {
                          lines[i] = startline;
                      }
                      if(startFromSource) {
-                    	 if(shouldbeHide(positions)){
-                    		hide = true; 
+                    	 if(!shouldbeHide(positions)){
+                    		hide = false; 
                     	 }
                          HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,calleehtmlFile, positions, annotatedColor, MainFrame.inst().getHTMLToJava());
                      }else{
-                    	 if(shouldbeHide(lines)){
-                     		hide = true;
+                    	 if(!shouldbeHide(lines)){
+                     		hide = false;
                      	}
                          HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,calleehtmlFile, lines, annotatedColor, MainFrame.inst().getHTMLToJava());
                      }
@@ -153,9 +158,10 @@ public class VariantAnnotate {
           		  
              }
         }
-        if(!hide){
+        if(hide){
         	// 刪除掉这个Variant
-        	BindingResolver.inst().removeHiddenVariant(variant);
+        	// BindingResolver.inst().removeHiddenVariant(variant);
+        	shouldremoveVariants.add(variant);
         }
     }
 	private boolean shouldbeHide(int[][] positions) {
@@ -178,4 +184,5 @@ public class VariantAnnotate {
 		return true;
 		
 	}
+	
 }

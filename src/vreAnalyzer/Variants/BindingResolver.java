@@ -1,7 +1,6 @@
 package vreAnalyzer.Variants;
 import soot.Body;
 import soot.Local;
-import soot.SootClass;
 import soot.SootMethod;
 import soot.Value;
 import soot.jimple.DefinitionStmt;
@@ -10,20 +9,12 @@ import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
 import soot.jimple.ThisRef;
 import vreAnalyzer.Tag.MethodTag;
-import vreAnalyzer.Tag.SourceLocationTag;
-import vreAnalyzer.Text2HTML.HTMLAnnotation;
-import vreAnalyzer.UI.MainFrame;
-import vreAnalyzer.UI.SourceClassBinding;
-import vreAnalyzer.vreAnalyzerCommandLine;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
 import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Elements.CallSite;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
-
-import java.awt.Color;
-import java.io.File;
 import java.util.*;
 
 public class BindingResolver {
@@ -66,11 +57,15 @@ public class BindingResolver {
 		// 分析程序 并创建variant
 		parse();
 		//singlecolorannotation(Color.RED);
-		// 出去不可见的Varaint
+		// 出去不可见的Variant
 		variantColorAssign();
 		variantcolorannotation();
+		// 删除不需要的Variant
+		removeHiddenVariant(VariantAnnotate.getShouldBeHideVariants());
 		VariantColorMap.inst().addToLegend();
-		
+		VariantAnnotate.setvariantready();
+		// 加入表格中
+		VariantToTable.inst().addVariantToTable(fullVariantList);
 	}
 	
 	public void parse(){
@@ -845,11 +840,11 @@ public class BindingResolver {
 		
 	}
 	
-	public void removeHiddenVariant(Variant variant){
+	public void removeHiddenVariant(List<Variant> variants){
 		/*
 		 * 删除不可见Variant
 		 */
-		fullVariantList.remove(variant);
+		fullVariantList.removeAll(variants);
 	}
 	
 	private boolean usedOverlap_Variable(List<Variable> useVars, Set<Value> list) {
@@ -873,87 +868,17 @@ public class BindingResolver {
 	}
 	
 	private void variantcolorannotation(){
-		int i = 0;
+		
 		String variantId = "";
 		for(Variant variant:fullVariantList){
-			i++;
 			variantId = "";
-			variantId += i;
+			variantId += variant.getVariantId();
 			new VariantAnnotate(variant,variantId,VariantColorMap.inst().getColorforVariant(variant));
 		}
 	}
-	private void singlecolorannotation(Color color){
-		/*
-		 * 遍历所有的varaint
-		 */
-		boolean startFromSource;
-		int[][]positions = null;
-	    int[]lines = null;
-		for(SootMethod method:allAppMethod){
-			CFGDefUse cfg = (CFGDefUse) ProgramFlowBuilder.inst().getCFG(method);
-			List<CFGNode>nodes = cfg.getNodes();
-			SootClass cls = method.getDeclaringClass();
-			List<Stmt>annotateStmt = new LinkedList<Stmt>();
-			File sourceFile = SourceClassBinding.getSourceFileFromClassName(cls.toString());
-			if(sourceFile==null){
-				System.err.println("Cannot fine the class:\t"+cls.toString());
-				continue;
-			}
-			String htmlfileNametemp = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
-			String htmlfileName = "";
-			String[] subpatharray = htmlfileNametemp.split("/");
-			for(int i = 0;i < subpatharray.length;i++){
-				if(i!=(subpatharray.length-1)){
-					htmlfileName += subpatharray[i];
-					htmlfileName+="/";
-				}else{
-					htmlfileName += "variant_"+subpatharray[i];
-					htmlfileName += ".html";
-				}
-			}
-			File htmlFile = new File(htmlfileName);
-			for(CFGNode node:nodes){
-				if(node.isSpecial()){
-					continue;
-				}
-				Stmt stmt = node.getStmt();
-				RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
-				if(rbTag!=null){
-					annotateStmt.add(stmt);
-				}
-			}
-			// 将这个函数上色
-			startFromSource = vreAnalyzerCommandLine.isStartFromSource();
-			if(startFromSource) {
-	            positions = new int[annotateStmt.size()][4];
-	        }else{
-	            lines = new int[annotateStmt.size()];
-	        }
-	        for(int i = 0;i < annotateStmt.size();i++) {
-	        	Stmt stmt = annotateStmt.get(i);
-	            SourceLocationTag slcTag = (SourceLocationTag) stmt.getTag(SourceLocationTag.TAG_NAME);
-	            if (startFromSource) {
-	                int startline = slcTag.getStartLineNumber();
-	                int startcolumn = slcTag.getStartPos();
-	                int endline = slcTag.getEndLineNumber();
-	                int endcolumn = slcTag.getEndPos();
-	                positions[i][0] = startline;
-	                positions[i][1] = startcolumn;
-	                positions[i][2] = endline;
-	                positions[i][3] = endcolumn;
-	            }else {
-	                int startline = slcTag.getStartLineNumber();
-	                lines[i] = startline;
-	            }
-	            if(startFromSource) {
-	                HTMLAnnotation.annotatemultipleLinesingleColor(htmlFile, lines, color, MainFrame.inst().getHTMLToJava());
-	            }else{
-	            	 HTMLAnnotation.annotatemultipleLinesingleColor(htmlFile, lines, color, MainFrame.inst().getHTMLToJava());
-	            }
-	        }
-	        
-	        
-		}
-	}
 	
+	
+	public List<Variant> getfullVariantList(){
+		return fullVariantList;
+	}
 }

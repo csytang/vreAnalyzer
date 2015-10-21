@@ -303,7 +303,7 @@ public class MainFrame extends JFrame {
 		
 		JScrollPane variantBlockPane = new JScrollPane();
 		tabbedPane.addTab("Variant Blocks", new ImageIcon(MainFrame.class.getResource("/image/variants.png")), variantBlockPane, "variant assets from variabillity aspect");
-		String variantsheaders[] = {"Block ID","Code Range(jimmple)","Feature ID(IF)","Seperators","SootMethod","Class"};
+		String variantsheaders[] = {"Variant ID","Parent Block Id","Separators","SootMethod","SootClass"};
 		DefaultTableModel varitableModel = new DefaultTableModel(null,variantsheaders);
 		variantstable = new JTable(varitableModel);
 		variantstable.getTableHeader().setReorderingAllowed(false);
@@ -564,7 +564,6 @@ public class MainFrame extends JFrame {
 								allString+=subcontent;
 								allString+="\n";
 							}
-							
 							source_annotatedDisplayArea.setText("");
 							source_annotatedDisplayArea.setText(allString);
 							source_annotatedDisplayArea.setCaretPosition(0);
@@ -575,9 +574,6 @@ public class MainFrame extends JFrame {
 				}	
 			}
 		});
-		
-		
-
 	}
 	
 	public void bindSource(String sourcePattern,String classPattern){

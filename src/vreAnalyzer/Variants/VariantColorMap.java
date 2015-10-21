@@ -112,12 +112,13 @@ public class VariantColorMap {
 				return false;
 			}
 		};
-		for(Map.Entry<Variant, Color>entry : variantToColor.entrySet()){
-			Variant variant = entry.getKey();
-			Color color = entry.getValue();
-			int variantId = variant.getVariantId();
-			String variantIdStr = "["+variantId+"]";
-			model.addRow(new Object[]{variantIdStr,color});
+		for(Variant variant:BindingResolver.inst().getfullVariantList()){
+			if(variantToColor.containsKey(variant)){
+				Color color = variantToColor.get(variant);
+				int variantId = variant.getVariantId();
+				String variantIdStr = "["+variantId+"]";
+				model.addRow(new Object[]{variantIdStr,color});
+			}
 		}
 		treemodel = model;
 		

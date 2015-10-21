@@ -36,13 +36,11 @@ public class BlockGenerator {
 		JTable blocktable = MainFrame.inst().getBlockTable();
 		blockmodel = (DefaultTableModel)blocktable.getModel();
 		
-		
-		
 		for(SootClass cls:appClasses){
 			
-			List<SootMethod>clsmethods = cls.getMethods();
-			List<CFGNode>classallnode = new LinkedList<CFGNode>();
-			List<CFGNode>marked = new LinkedList<CFGNode>();
+			List<SootMethod> clsmethods = cls.getMethods();
+			List<CFGNode> classallnode = new LinkedList<CFGNode>();
+			List<CFGNode> marked = new LinkedList<CFGNode>();
 			for (Iterator<SootMethod> itMthd = cls.getMethods().iterator(); itMthd.hasNext();) {
 				SootMethod m = itMthd.next();
 				if (!m.isAbstract() && m.toString().indexOf(": java.lang.Class class$") == -1){
@@ -56,8 +54,7 @@ public class BlockGenerator {
 			ClassBlock clsblock = ClassBlock.tryToCreate(classallnode, cls);
 			addNewBlockToPool(clsblock,true);
 			for(SootMethod method:clsmethods){
-				if(method.getTag(MethodTag.TAG_NAME)!=null&&
-						!Modifier.isVolatile(method.getModifiers())){
+				if(method.getTag(MethodTag.TAG_NAME)!=null && !Modifier.isVolatile(method.getModifiers())){
 					marked.clear();
 					// 1. Create method block
 					CFG cfg = ProgramFlowBuilder.inst().getCFG(method);
@@ -122,6 +119,9 @@ public class BlockGenerator {
 	}
 	public static int getBlockId(){
 		return blockid;
+	}
+	public List<CodeBlock> getblockPool(){
+		return blockpool;
 	}
 	public void addNewBlockToPool(CodeBlock block,boolean original){
 		//2. //"Block ID","Type","Method(IF)","Class"
