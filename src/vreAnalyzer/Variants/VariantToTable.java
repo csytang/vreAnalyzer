@@ -41,10 +41,9 @@ public class VariantToTable {
 			String classString = ClassesToString(classes);
 			varitableModel.addRow(new Object[]{variantId,blockidString,"-",methodsString,classString});
 			
-		}
-		
-		
+		}		
 	}
+	
 	public String IdsToString(List<Integer>blockIds){
 		String ids = "[";
 		for(int id:blockIds){

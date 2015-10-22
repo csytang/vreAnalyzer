@@ -40,6 +40,8 @@ public class BindingResolver {
     
     // Map 从SootMethod 到 valueToVariant
     private Map<SootMethod,List<ValueToVariant>> methodToValueToVariant = new HashMap<SootMethod,List<ValueToVariant>>();
+    
+    private boolean containPRBValue = false;//是否包含部分 未绑定值
     // 包含所有的Varaint
     private List<Variant> fullVariantList = new LinkedList<Variant>();
     public BindingResolver(){
@@ -134,10 +136,9 @@ public class BindingResolver {
 		callerMethod.removeAll(tmp);
 		// ValueToVariant 对应检查
 		boolean isParaAssignStmt = false;
-		for(SootMethod method:callerMethod){
+		for(SootMethod method:callerMethod) {
 			// clean the analysis stack
 			PRBAnalysisStack.clear();
-			
 			if(verbose)
 				System.out.println("Currently process method:"+method.getName());
 			CFGDefUse cfg = (CFGDefUse) ProgramFlowBuilder.inst().getCFG(method);
@@ -145,7 +146,6 @@ public class BindingResolver {
 			// 获得vtVariant
 			ValueToVariant vtVariant = new ValueToVariant(null);
 			methodToValueToVariant.get(method).add(vtVariant);
-			
 			for(CFGNode node:nodes){
 				if(node.isSpecial())
 					continue;
@@ -197,11 +197,15 @@ public class BindingResolver {
 				// P1 检查这个点下的所有unbindingValueList
 				////////////////////////////////////////////////////////
 				///////////////////如果此语句中有未绑定内容调用///////////////////////
-				if(usedOverlap_Variable(useVars,methodToUnbindValues.get(method))){
+				if(usedOverlap_Variable(useVars,methodToUnbindValues.get(method))) {
 					// 存在RB内容
 					Set<Variant> usedVariantSet = new HashSet<Variant>();
-					boolean containPRBValue = false;// 是否包含部分帮定值
+					containPRBValue = false;// 是否包含部分帮定值
 					// 如果这里使用了 RB内容 我们设置其他的使用变量为 PRB变量
+					/**
+					 * specialinvoke $r75.<java.util.Scanner: void <init>(java.io.InputStream,java.lang.String)>($r83, "UTF-8")
+					 * r150 = $r75
+					 */
 					for(Variable use:useVars) {
 						if(methodToUnbindValues.get(method).contains(use.getValue())) {
 							// 如果包含则为未绑定语句
@@ -223,7 +227,8 @@ public class BindingResolver {
 							// 获得在这个语句中使用的 variant
 							Set<Variant> useVariant = vtVariant.getVariantsByValue(use.getValue());
 							// 将使用的 variant 加入本语句的Set中
-							usedVariantSet.addAll(useVariant);
+							if(useVariant!=null)
+								usedVariantSet.addAll(useVariant);
 							
 						}else{
 							// 我们只将field 和 local加入
@@ -244,8 +249,15 @@ public class BindingResolver {
 						}
 					}
 					if(containPRBValue){
+						//TODO 检查这个位置是否有经过
+						
+						PRBAnalysisStack.clear();
+						
 						if(defVars.isEmpty()){// 将这个部分未绑定的cfgnode加入到列表中
+							//---- 1. PRBAnalysisNode--------
 							PRBAnalysisStack.push(node);
+							if(verbose)
+								System.out.println("Push a bottom node "+node.getStmt().toString()+" to stack");						
 						}
 						else{
 							// 并且LOP是一个真正的local
@@ -258,6 +270,9 @@ public class BindingResolver {
 							}
 							if(!containsLocalField){
 								PRBAnalysisStack.push(node);
+								if(verbose)
+									System.out.println("Push a bottom node "+node.getStmt().toString()+" to stack");
+							
 							}else{
 								
 								PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
@@ -268,6 +283,7 @@ public class BindingResolver {
 								stmt.removeTag(PRBTag.TAG_NAME);
 							}
 						}
+						containPRBValue = false;
 					}
 					RBTag rbTag = (RBTag) stmt.getTag(RBTag.TAG_NAME);
 					
@@ -314,6 +330,7 @@ public class BindingResolver {
 						if(!use.isLocal() && !use.isFieldRef()){
 							continue;
 						}
+						// 加入到 部分未绑定值
 						PRBTag prbTag = (PRBTag) stmt.getTag(PRBTag.TAG_NAME);
 						if(methodToParitalUnbindValues.get(method).contains(use.getValue())){
 							continue;
@@ -327,7 +344,8 @@ public class BindingResolver {
 							stmt.addTag(prbTag);
 						}
 					}
-					PRBAnalysisStack.push(node);
+					if(PRBAnalysisStack!=null)
+						PRBAnalysisStack.push(node);
 				}
 				else if(usedOverlap_Variable(useVars,methodToParitalUnbindValues.get(method)) && !defVars.isEmpty()){
 					// 使用了prb值 但是是有赋值内容
@@ -370,14 +388,28 @@ public class BindingResolver {
 					int stacklength = PRBAnalysisStack.size();
 					if(stacklength<1)
 						continue;
-					CFGNode lastnode = PRBAnalysisStack.get(stacklength-1);
+					
+					CFGNode lastnode = getStackElement(PRBAnalysisStack,stacklength-1);
 					Stmt laststmt = lastnode.getStmt();
+					if(verbose){
+						System.out.println("The last statement is:"+laststmt);
+						System.out.println("All CFGNodes in stack:");
+						for(CFGNode prbnode:PRBAnalysisStack){
+							System.out.println("Node:"+prbnode.getStmt());
+						}
+					}
 					RBTag lastrbTag = (RBTag)laststmt.getTag(RBTag.TAG_NAME);
+					if(lastrbTag==null){
+						System.out.println("Error lastrbTag should not be null");
+					}
 					Set<Value>lastbindvalues = lastrbTag.getBindingValues(null);
+					
 					// 堆栈对应的Variant集合
 					Set<Variant> variantset = new HashSet<Variant>();
 					for(Value vi:lastbindvalues){
-						variantset.addAll(vtVariant.getVariantsByValue(vi));
+						Set<Variant> vivariantset = vtVariant.getVariantsByValue(vi);
+						if(vivariantset!=null)
+							variantset.addAll(vivariantset);
 					}
 					// variant 中加入当前语句 
 					for(Variant variant:variantset){
@@ -444,7 +476,9 @@ public class BindingResolver {
 							vtVariant.addValueToVariant(value, variantset);
 						}
 					}
+					// 清空PRB栈 并将containPRB设置为false
 					PRBAnalysisStack.clear();
+					
 				}
 				//////////////////////////////////////////////////
 				// 如果存在函数 调用那么则将函数调用放入到methodToArgsList中
@@ -583,7 +617,7 @@ public class BindingResolver {
 						if(usedOverlap_Variable(useVars,methodToUnbindValues.get(method))){
 							// 存在RB内容-------------
 							Set<Variant> usedVariantSet = new HashSet<Variant>();
-							boolean containPRBValue = false;// 是否包含部分帮定值
+							containPRBValue = false;// 是否包含部分帮定值
 							// 如果这里使用了 RB内容 我们设置其他的使用变量为 PRB变量
 							for(Variable use:useVars){
 								if(methodToUnbindValues.get(method).contains(use.getValue())){
@@ -634,8 +668,14 @@ public class BindingResolver {
 								}
 							}
 							if(containPRBValue){
-								if(defVars.isEmpty())// 将这个部分未绑定的cfgnode加入到列表中
+								//TODO 检查这个位置是否有经过
+								
+								PRBAnalysisStack.clear();
+								if(defVars.isEmpty()){// 将这个部分未绑定的cfgnode加入到列表中
 									PRBAnalysisStack.push(node);
+									if(verbose)
+										System.out.println("Push a bottom node "+node.getStmt().toString()+" to stack");
+								}
 								else{
 									// 并且LOP是一个真正的local
 									boolean containsLocalField = false;
@@ -647,6 +687,8 @@ public class BindingResolver {
 									}
 									if(!containsLocalField){
 										PRBAnalysisStack.push(node);
+										if(verbose)
+											System.out.println("Push a bottom node "+node.getStmt().toString()+" to stack");
 									}else{
 										
 										PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
@@ -712,7 +754,8 @@ public class BindingResolver {
 									}
 								}
 							}
-							PRBAnalysisStack.push(node);
+							if(PRBAnalysisStack!=null)
+								PRBAnalysisStack.push(node);
 						}
 						else if(usedOverlap_Variable(useVars,methodToParitalUnbindValues.get(method)) && !defVars.isEmpty()){
 							// 使用了prb值 但是是有赋值内容
@@ -755,7 +798,7 @@ public class BindingResolver {
 							int stacklength = PRBAnalysisStack.size();
 							if(stacklength<1)
 								continue;
-							CFGNode lastnode = PRBAnalysisStack.get(stacklength-1);
+							CFGNode lastnode = getStackElement(PRBAnalysisStack,stacklength-1);
 							Stmt laststmt = lastnode.getStmt();
 							RBTag lastrbTag = (RBTag)laststmt.getTag(RBTag.TAG_NAME);
 							Set<Value> lastbindvalues = lastrbTag.getBindingValues(argument.getCallSite());
@@ -831,6 +874,8 @@ public class BindingResolver {
 								
 							}
 							PRBAnalysisStack.clear();
+							containPRBValue = false;
+							
 						}
 					}
 				}
@@ -866,6 +911,19 @@ public class BindingResolver {
 			VariantColorMap.inst().registerNewColor(variant);
 		}
 	}
+	
+	public static <T> T getStackElement(Stack<T> stack, int index) {
+		  if (index == 0) {
+		    return stack.peek();
+		  }
+
+		  T x = stack.pop();
+		  try {
+		    return getStackElement(stack, index - 1);
+		  } finally {
+		    stack.push(x);
+		  }
+		}
 	
 	private void variantcolorannotation(){
 		

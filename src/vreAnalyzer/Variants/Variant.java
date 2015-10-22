@@ -186,10 +186,10 @@ public class Variant {
 			List<Stmt> callsiteStmts = callSiteToBindingStmt.get(callsite);
 			Set<Stmt> calleestmtsSet = new HashSet<Stmt>(callsiteStmts);
 			List<SootMethod>callees = callsite.getAllCallees();
-			// 2. 在caller函数中
+			// 2. 在callee函数中
 			for(SootMethod callee:callees){
 				for(CodeBlock block:blockpool){// 此處應該為callee
-					if(block.getSootMethod()==callerMethod && block.getType()==BlockType.Stmt){
+					if(block.getSootMethod()==callee && block.getType()==BlockType.Stmt){
 						List<CFGNode> blocknodes = block.getCFGNodes();
 						// 3. 将包含在 block nodes 中的node全部删除 看剩余
 						Set<Stmt>remainsstmts = blockProcess(calleestmtsSet,blocknodes);
