@@ -146,7 +146,7 @@ public class BindingResolver {
 		for(SootMethod method:callerMethod) {
 			PRBAnalysisStack.clear();
 			if(verbose)
-				System.out.println("Currently process method:"+method.getName());
+				System.out.println("当前处理函数: "+method.getName());
 			CFGDefUse cfg = (CFGDefUse) ProgramFlowBuilder.inst().getCFG(method);
 			List<CFGNode> nodes = cfg.getNodes();
 			// 获得vtVariant
@@ -533,7 +533,7 @@ public class BindingResolver {
 			// clean the analysis stack
 			PRBAnalysisStack.clear();
 			if(verbose)
-				System.out.println("Currently process method:"+method.getName());
+				System.out.println("当前处理的函数: "+method.getName());
 			CFGDefUse cfg = (CFGDefUse)ProgramFlowBuilder.inst().getCFG(method);
 			if(cfg==null)
 				continue;
@@ -551,7 +551,6 @@ public class BindingResolver {
 					// SootMethod callerMethod = argument.getCallerMethod();
 					localParameterToRemoteArgu.clear();
 					
-					// TODO 处理这里的错误
 					/*
 					 * TODO
 					 * 1. 为什么要get(0)
@@ -573,7 +572,7 @@ public class BindingResolver {
 							continue;
 						Stmt stmt = defusenode.getStmt(); // $r7 := @caughtexception
 						if(verbose)
-							System.out.println("currently process statement:"+stmt);
+							System.out.println("处理当前的语句: "+stmt);
 						useVars = defusenode.getUsedVars();
 						defVars = defusenode.getDefinedVars();
 						if(stmt instanceof IdentityStmt && !(((IdentityStmt) stmt).getRightOp() instanceof ThisRef)){
@@ -663,7 +662,8 @@ public class BindingResolver {
 									// 获得在这个语句中使用的 variant
 									Set<Variant> useVariant = localvtVariant.getVariantsByValue(use.getValue());
 									// 将使用的 variant 加入本语句的Set中
-									usedVariantSet.addAll(useVariant);
+									if(useVariant!=null)
+										usedVariantSet.addAll(useVariant);
 								}else{// 只有在未定义中可以加入为 PRB值
 									// 我们只将field 和 local加入
 									if(!use.isLocal() && !use.isFieldRef()){
@@ -690,12 +690,16 @@ public class BindingResolver {
 							}
 							if(containPRBValue){
 								//TODO 检查这个位置是否有经过
+								//TODO 检查这个位置是否有经过
 								
 								PRBAnalysisStack.clear();
+								
 								if(defVars.isEmpty()){// 将这个部分未绑定的cfgnode加入到列表中
+									//---- 1. PRBAnalysisNode--------
 									PRBAnalysisStack.push(node);
-									if(verbose)
-										System.out.println("Push a bottom node "+node.getStmt().toString()+" to stack");
+									if(verbose){
+										System.out.println("向栈中加入底层节点: "+node.getStmt().toString());	
+									}
 								}
 								else{
 									// 并且LOP是一个真正的local
@@ -708,8 +712,9 @@ public class BindingResolver {
 									}
 									if(!containsLocalField){
 										PRBAnalysisStack.push(node);
-										if(verbose)
-											System.out.println("Push a bottom node "+node.getStmt().toString()+" to stack");
+										if(verbose){
+											System.out.println("向栈中加入底层节点: "+node.getStmt().toString());
+										}
 									}else{
 										
 										PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
@@ -718,8 +723,11 @@ public class BindingResolver {
 											methodToParitalUnbindValues.get(method).remove(value);
 										}
 										stmt.removeTag(PRBTag.TAG_NAME);
+
 									}
 								}
+								containPRBValue = false;
+								
 							}
 							RBTag rbTag = (RBTag)stmt.getTag(RBTag.TAG_NAME);
 							// 对于这里的def 由于 存在未绑定的使用 那么def 也是未绑定
@@ -740,7 +748,7 @@ public class BindingResolver {
 								}
 								// def的值加入到binding value中
 								for(Variant usedvariant:usedVariantSet){
-									usedvariant.addPaddingValue(def.getValue(), null);
+									usedvariant.addPaddingValue(def.getValue(), argument.getCallSite());
 								}
 								// 加入vtovariant
 								localvtVariant.addValueToVariant(def.getValue(), usedVariantSet);
@@ -757,11 +765,6 @@ public class BindingResolver {
 									continue;
 								}
 								PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
-								if(methodToParitalUnbindValues.get(method).contains(use.getValue())){
-									continue;
-								}else{
-									methodToParitalUnbindValues.get(method).add(use.getValue());
-								}
 								if(prbTag!=null){
 									prbTag.addBindingValue(use.getValue());
 									if(verbose){
@@ -773,6 +776,11 @@ public class BindingResolver {
 									if(verbose){
 										System.out.println("[Parital binding for class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+use.getValue().toString()+"] for stmt:["+stmt+"] ");
 									}
+								}
+								if(methodToParitalUnbindValues.get(method).contains(use.getValue())){
+									continue;
+								}else{
+									methodToParitalUnbindValues.get(method).add(use.getValue());
 								}
 							}
 							if(PRBAnalysisStack!=null)
@@ -819,23 +827,40 @@ public class BindingResolver {
 							int stacklength = PRBAnalysisStack.size();
 							if(stacklength<1)
 								continue;
+							
 							CFGNode lastnode = getStackElement(PRBAnalysisStack,stacklength-1);
 							Stmt laststmt = lastnode.getStmt();
+							if(verbose){
+								System.out.println("The last statement is:"+laststmt);
+								System.out.println("All CFGNodes in stack:");
+								for(CFGNode prbnode:PRBAnalysisStack){
+									System.out.println("Node:"+prbnode.getStmt());
+								}
+							}
+							
+							
 							RBTag lastrbTag = (RBTag)laststmt.getTag(RBTag.TAG_NAME);
+							if(lastrbTag==null){
+								System.out.println("Error lastrbTag should not be null");
+							}
+							
 							Set<Value> lastbindvalues = lastrbTag.getBindingValues(argument.getCallSite());
 							// 堆栈对应的Variant集合
 							Set<Variant> variantset = new HashSet<Variant>();
 							for(Value vi:lastbindvalues){
-								variantset.addAll(localvtVariant.getVariantsByValue(vi));
+								// variantset.addAll(localvtVariant.getVariantsByValue(vi));
+								Set<Variant> vivariantset = localvtVariant.getVariantsByValue(vi);
+								if(vivariantset!=null)
+									variantset.addAll(vivariantset);
 							}
 							// variant 中加入当前语句 
 							for(Variant variant:variantset){
-								variant.addBindingStmts(stmt, null);
+								variant.addBindingStmts(stmt, argument.getCallSite());
 								for(Variable def:defVars) {
-									variant.addPaddingValue(def.getValue(), null);
+									variant.addPaddingValue(def.getValue(), argument.getCallSite());
 								}
 								for(Variable use:useVars) {
-									variant.addPaddingValue(use.getValue(), null);
+									variant.addPaddingValue(use.getValue(), argument.getCallSite());
 								}
 							}
 							for(Variable def:defVars) {
@@ -853,6 +878,9 @@ public class BindingResolver {
 								 // 在新加入的RBTag上绑定 lastnode上的values 
 								 
 								PRBTag prbTag = (PRBTag)prbstmt.getTag(PRBTag.TAG_NAME);
+								if(prbTag==null){
+									System.out.println("PRBTag 为空对于语句:"+prbstmt.toString());
+								}
 								Set<Value> bindingvalues = prbTag.getBindingValues();
 								// 从partial unbind value中移除
 								for(Value value:bindingvalues){
