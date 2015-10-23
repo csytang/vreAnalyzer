@@ -22,8 +22,8 @@ public class JobDataCollector {
 	
 	public static JobDataCollector instance;
 	protected Map<JobVariable,JobStatistic>jobToStatistic;
-	
 	private boolean startFromSource = false;
+	
 	public JobDataCollector(){
 		jobToStatistic = new HashMap<JobVariable,JobStatistic>();
 		
