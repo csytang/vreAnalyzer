@@ -114,7 +114,7 @@ public class VariantAnnotate {
              for(SootMethod calleemethod:calleemethods){
             	 SootClass calleecls = calleemethod.getDeclaringClass();
             	 File calleesourceFile = SourceClassBinding.getSourceFileFromClassName(calleecls.toString());
-            	 String calleehtmlfileNametemp = calleesourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
+            	 String calleehtmlfileNametemp = calleesourceFile.getPath().substring(0, calleesourceFile.getPath().length()-".java".length());
           		 String calleehtmlfileName = "";
           		 String[] calleesubpatharray = calleehtmlfileNametemp.split("/");
           		 for(int i = 0;i < calleesubpatharray.length;i++){

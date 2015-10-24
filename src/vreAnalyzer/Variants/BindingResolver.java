@@ -347,7 +347,7 @@ public class BindingResolver {
 							methodToParitalUnbindValues.get(method).add(use.getValue());
 						}
 					}
-					if(PRBAnalysisStack!=null){
+					if(!PRBAnalysisStack.isEmpty()){
 						PRBAnalysisStack.push(node);
 						if(verbose){
 							System.out.println("向栈中节点: "+node.getStmt().toString());
@@ -550,7 +550,7 @@ public class BindingResolver {
 					// 调用函数
 					// SootMethod callerMethod = argument.getCallerMethod();
 					localParameterToRemoteArgu.clear();
-					
+					PRBAnalysisStack.clear();
 					/*
 					 * TODO
 					 * 1. 为什么要get(0)
@@ -690,7 +690,6 @@ public class BindingResolver {
 							}
 							if(containPRBValue){
 								//TODO 检查这个位置是否有经过
-								//TODO 检查这个位置是否有经过
 								
 								PRBAnalysisStack.clear();
 								
@@ -698,7 +697,7 @@ public class BindingResolver {
 									//---- 1. PRBAnalysisNode--------
 									PRBAnalysisStack.push(node);
 									if(verbose){
-										System.out.println("向栈中加入底层节点: "+node.getStmt().toString());	
+										System.out.println("line700:向栈中加入底层节点: "+node.getStmt().toString());	
 									}
 								}
 								else{
@@ -713,7 +712,7 @@ public class BindingResolver {
 									if(!containsLocalField){
 										PRBAnalysisStack.push(node);
 										if(verbose){
-											System.out.println("向栈中加入底层节点: "+node.getStmt().toString());
+											System.out.println("line715:向栈中加入底层节点: "+node.getStmt().toString());
 										}
 									}else{
 										
@@ -740,11 +739,7 @@ public class BindingResolver {
 								rbTag.addBindingValue(def.getValue(),argument.getCallSite());
 								//将为左侧的定义 加入到绑定中
 								if(!methodToUnbindValues.get(method).contains(def.getValue())){
-									methodToUnbindValues.get(method).add(def.getValue());
-									if(verbose){
-										System.out.println("Add RBTag to stmt:"+stmt);
-										System.out.println("----Value:"+def.getValue().toString());
-									}
+									methodToUnbindValues.get(method).add(def.getValue());									
 								}
 								// def的值加入到binding value中
 								for(Variant usedvariant:usedVariantSet){
@@ -767,15 +762,9 @@ public class BindingResolver {
 								PRBTag prbTag = (PRBTag)stmt.getTag(PRBTag.TAG_NAME);
 								if(prbTag!=null){
 									prbTag.addBindingValue(use.getValue());
-									if(verbose){
-										System.out.println("[Parital binding for class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+use.getValue().toString()+"] for stmt:["+stmt+"]");
-									}
 								}else{
 									prbTag = new PRBTag(use.getValue());
-									stmt.addTag(prbTag);
-									if(verbose){
-										System.out.println("[Parital binding for class: "+method.getDeclaringClass().getName()+"\tMethod:"+method.getDeclaringClass().getName()+"\t]Value:["+use.getValue().toString()+"] for stmt:["+stmt+"] ");
-									}
+									stmt.addTag(prbTag);								
 								}
 								if(methodToParitalUnbindValues.get(method).contains(use.getValue())){
 									continue;
@@ -783,14 +772,17 @@ public class BindingResolver {
 									methodToParitalUnbindValues.get(method).add(use.getValue());
 								}
 							}
-							if(PRBAnalysisStack!=null)
+							if(!PRBAnalysisStack.isEmpty()){
 								PRBAnalysisStack.push(node);
+								if(verbose){
+									System.out.println("line788:向PRB分析栈中加入:\t"+node.getStmt());
+								}
+							}
 						}
 						else if(usedOverlap_Variable(useVars,methodToParitalUnbindValues.get(method)) && !defVars.isEmpty()){
 							// 使用了prb值 但是是有赋值内容
 							// 所有的prb值 和在PRBAnalysisStack中的prb值需要指向这个值
 							// 首先将这个stmt加入
-							
 							for(Variable use:useVars){
 								// 我们只将field 和 local加入
 								if(!use.isLocal() && !use.isFieldRef()){
@@ -828,11 +820,11 @@ public class BindingResolver {
 							if(stacklength<1)
 								continue;
 							
-							CFGNode lastnode = getStackElement(PRBAnalysisStack,stacklength-1);
+							CFGNode lastnode = getStackElement(PRBAnalysisStack, stacklength-1);
 							Stmt laststmt = lastnode.getStmt();
 							if(verbose){
-								System.out.println("The last statement is:"+laststmt);
-								System.out.println("All CFGNodes in stack:");
+								System.out.println("line836: 在堆栈中的最后语句 :"+laststmt);
+								System.out.println("line837: 在堆栈中的所有语句 :");
 								for(CFGNode prbnode:PRBAnalysisStack){
 									System.out.println("Node:"+prbnode.getStmt());
 								}
