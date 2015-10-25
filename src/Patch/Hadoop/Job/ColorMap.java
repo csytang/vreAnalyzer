@@ -25,10 +25,10 @@ public class ColorMap {
 	 * Move the color map issue to this file and directly write to legend
 	 */
 	public static ColorMap instance = null;
-	private static Map<JobVariable,Color>jbToColor = null;
-	private static ArrayList<Set<JobVariable>>indexToJobs = null;
-	private static Map<String,Set<JobVariable>>hexColorToJob = new HashMap<String,Set<JobVariable>>();
-	private static Map<Set<JobVariable>,Color>combinedToColor = null;
+	private static Map<JobVariable,Color> jbToColor = null;
+	private static ArrayList<Set<JobVariable>> indexToJobs = null;
+	private static Map<String,Set<JobVariable>> hexColorToJob = new HashMap<String,Set<JobVariable>>();
+	private static Map<Set<JobVariable>,Color> combinedToColor = null;
 	private DefaultTableModel treemodel = null;
 	public static ColorMap inst(){
 		if(instance==null)
@@ -47,10 +47,10 @@ public class ColorMap {
 		return indexToJobs;
 	}
 	public void registerJobColor(JobVariable job,Color color){
-		this.jbToColor.put(job, color);
+		jbToColor.put(job, color);
 	}
 	public Color getJobColor(JobVariable job){
-		return this.jbToColor.get(job);
+		return jbToColor.get(job);
 	}
 	public Map<String,Set<JobVariable>> getJobColorMap(){
 		return hexColorToJob;
@@ -76,7 +76,7 @@ public class ColorMap {
 	public void addToLegend(){
 		
 		String legendheaders[] = {"Feature","Color"};
-		DefaultTableModel model = new DefaultTableModel(null,legendheaders){
+		DefaultTableModel model = new DefaultTableModel(null, legendheaders){
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub
@@ -85,16 +85,16 @@ public class ColorMap {
 		};
 		
 		for(Map.Entry<String, Set<JobVariable>>entry:hexColorToJob.entrySet()){
-				Color color = ProjectParser.hex2Rgb(entry.getKey());
-				String jobsString = "[";
-				for(JobVariable jb:entry.getValue()){
+			Color color = ProjectParser.hex2Rgb(entry.getKey());
+			String jobsString = "[";
+			for(JobVariable jb:entry.getValue()){
 					jobsString+=jb.getJobId();
 					jobsString+=":";
-				}
-				jobsString = jobsString.substring(0, jobsString.length()-1);
-				jobsString+="]";
-				ColorMap.inst().registerLegendJobsList(entry.getValue());
-				model.addRow(new Object[]{jobsString,color});
+			}
+			jobsString = jobsString.substring(0, jobsString.length()-1);
+			jobsString+="]";
+			ColorMap.inst().registerLegendJobsList(entry.getValue());
+			model.addRow(new Object[]{jobsString,color});
 		}
 		
 		treemodel = model;
@@ -103,42 +103,40 @@ public class ColorMap {
 		final JTable table = MainFrame.inst().getJobColorMapTable();
 		final ArrayList<Set<JobVariable>>indexToJobs = ColorMap.inst().getLegendJobsList();
 		table.addMouseListener(new MouseAdapter(){
-			public void mousePressed(MouseEvent me){
-				Point p = me.getPoint();
-				int row = table.rowAtPoint(p);
-				if(me.getClickCount()==2){
-					
-					Set<JobVariable> jobs = indexToJobs.get(row);
-					if(jobs.size()==1){
-						JobVariable job = null;
-						for(JobVariable jb:jobs){
-							job = jb;
-						}
-						File sourceFile = job.getSourceFile();
-						String htmlfileName = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
-						htmlfileName+=".html";
-						File htmlFile = new File(htmlfileName);
-						JEditorPane txtrSource = MainFrame.getSrcTextPane();
-						txtrSource.setContentType("text/html");
-						List<String> content;
-						try {
-							content = Files.readAllLines(htmlFile.toPath(),Charset.defaultCharset());
-							String allString = "";
-							for(String subcontent:content){
-								allString+=subcontent;
-								allString+="\n";
-							}
-							
-							txtrSource.setText("");
-							txtrSource.setText(allString);
-							txtrSource.setCaretPosition(0);
-						} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-						}
+		public void mousePressed(MouseEvent me){
+			Point p = me.getPoint();
+			int row = table.rowAtPoint(p);
+			if(me.getClickCount()==2){			
+				Set<JobVariable> jobs = indexToJobs.get(row);
+				if(jobs.size()==1){
+					JobVariable job = null;
+					for(JobVariable jb:jobs){
+						job = jb;
+					}
+					File sourceFile = job.getSourceFile();
+					String htmlfileName = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
+					htmlfileName+=".html";
+					File htmlFile = new File(htmlfileName);
+					JEditorPane txtrSource = MainFrame.getSrcTextPane();
+					txtrSource.setContentType("text/html");
+					List<String> content;
+					try {
+						content = Files.readAllLines(htmlFile.toPath(),Charset.defaultCharset());
+						String allString = "";
+						for(String subcontent:content){
+							allString+=subcontent;
+							allString+="\n";
+						}		
+						txtrSource.setText("");
+						txtrSource.setText(allString);
+						txtrSource.setCaretPosition(0);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
 				}
 			}
+		}
 		});
 	}
 }

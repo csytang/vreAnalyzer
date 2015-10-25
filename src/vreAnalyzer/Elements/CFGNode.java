@@ -19,7 +19,6 @@ public class CFGNode {
 	private CallSite callsite = null;
 	private SootMethod sm;
 	private ArrayList<Branch> outBranches = null; // created on demand
-	private boolean verbose = true;
 	///////////////////////////////////////////////////////////////
 	
 	////////////////////Constructor///////////////////////////////
@@ -46,17 +45,43 @@ public class CFGNode {
 	}
 	
 	// Whether it is in catch block, agent it to sNode
-	public boolean isInCatchBlock() {return sTag!=null && sTag.getStatement() != null && sTag.isInCatchBlock();}
+	public boolean isInCatchBlock() {
+		return sTag!=null && sTag.getStatement() != null && sTag.isInCatchBlock();
+	}
 	
-	public boolean isSpecial() { assert sTag.getStatement() != null; return false; }
+	public boolean isSpecial() { 
+		assert sTag.getStatement() != null; return false; 
+	}
 	
-	public ArrayList<CFGNode> getPreds() { return preds; }
-	public ArrayList<CFGNode> getSuccs() { return succs; }
-	public CFGNode getFallThroughTgt() { return fallThroughTgt; }
-	public void setFallThroughTgt(CFGNode tgt){ fallThroughTgt = tgt;}
-	public void addPred(CFGNode n) { if (!preds.contains(n)) preds.add(n); }  // avoid multiple connections to a predecessor
-	public void addSucc(CFGNode n) { if (!succs.contains(n)) succs.add(n); }  // avoid multiple connections to a successor
-	public List<Branch> getOutBranches() { return outBranches; }
+	public ArrayList<CFGNode> getPreds() { 
+		return preds; 
+	}
+	
+	public ArrayList<CFGNode> getSuccs() { 
+		return succs; 
+	}
+	
+	public CFGNode getFallThroughTgt() { 
+		return fallThroughTgt; 
+	}
+	
+	public void setFallThroughTgt(CFGNode tgt){ 
+		fallThroughTgt = tgt;
+	}
+	
+	public void addPred(CFGNode n) { 
+		if (!preds.contains(n)) 
+			preds.add(n); 
+	}  // avoid multiple connections to a predecessor
+	
+	public void addSucc(CFGNode n) {
+		if (!succs.contains(n)) 
+			succs.add(n); 
+	}  // avoid multiple connections to a successor
+	
+	public List<Branch> getOutBranches() { 
+		return outBranches; 
+	}
 	public void addOutBranch(Branch outBr) {
 		if (outBranches == null)
 			outBranches = new ArrayList<Branch>();
@@ -68,8 +93,14 @@ public class CFGNode {
 		else
 		return this.sTag.getStatement();
 	}
-	public SootMethod getMethod(){return sm;}
-	public StmtTag getStmtTag(){return this.sTag;}
+	public SootMethod getMethod(){
+		return sm;
+	}
+	
+	public StmtTag getStmtTag(){
+		return this.sTag;
+	}
+	
 	public String toString(){
 		return sTag.getStatement().toString();
 	}

@@ -2,12 +2,14 @@ package vreAnalyzer.Variants;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import soot.SootClass;
 import soot.SootMethod;
+import soot.Value;
 import vreAnalyzer.UI.MainFrame;
 
 public class VariantToTable {
@@ -33,13 +35,14 @@ public class VariantToTable {
 			
 			List<SootMethod> methods = variant.getAllMethods();
 			List<SootClass> classes = variant.getAllClasses();
-			
+			Set<Value> seperatorValues  = variant.getSeperatorValues();
 			// 将这个内容写入到表格中
 			String variantId = ""+id;
 			String blockidString = IdsToString(blocksIds);
 			String methodsString = MethodsToString(methods);
 			String classString = ClassesToString(classes);
-			varitableModel.addRow(new Object[]{variantId,blockidString,"-",methodsString,classString});
+			String sepeartorString = SeperatorToString(seperatorValues);
+			varitableModel.addRow(new Object[]{variantId,blockidString,sepeartorString,methodsString,classString});
 			
 		}		
 	}
@@ -71,5 +74,19 @@ public class VariantToTable {
 		}
 		return className;
 	}
+	
+	public String SeperatorToString(Set<Value>values){
+		String seperator = "";
+		for(Value value:values){
+			seperator += value;
+			seperator += ";";
+		}
+		if(values.size()>=1){
+			seperator = seperator.substring(0, seperator.length()-1);
+		}
+		return seperator;
+		
+	}
+	
 	
 }

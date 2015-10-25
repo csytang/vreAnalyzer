@@ -33,7 +33,7 @@ public class ProgramFlowBuilder {
 	
 	/** All application concrete methods, reachable or not */
 	private List<SootMethod> allAppMethods = null;
-	//private List<SootMethod> entryMethods = null;
+	// private List<SootMethod> entryMethods = null;
 	
 	// Map from method to CFG
 	private HashMap<SootMethod,CFG> mToCFG = null;
@@ -101,7 +101,7 @@ public class ProgramFlowBuilder {
 		// Find contextual defs and uses for each Stmt in each Method
 		// Determine local kill summary for each Method
 		// For each Soot Method: list defs, uses and kills
-		createAppContexts();
+		createProgramFlows();
 	}
 	
 	
@@ -110,7 +110,7 @@ public class ProgramFlowBuilder {
 	 * 1. Use SootMethods to create MethodNode
 	 * 2. Set the CallSite/Call relation within the MethodNode
 	 */
-	private void createAppContexts() {
+	private void createProgramFlows() {
 		// TODO Initialization requiring previously computed intra-procedural info
 		int mIdx = 0;
 		for (SootMethod m : allAppMethods) {
@@ -128,10 +128,8 @@ public class ProgramFlowBuilder {
 			// Initial Call Site and set call relation
 			MethodTag mNode = (MethodTag) m.getTag(MethodTag.TAG_NAME);
 			mNode.initCallSites();
-			
 			// Create control flow graph (CFG) for this method
 			initCFG(m);
-			
 		}
 		
 	}

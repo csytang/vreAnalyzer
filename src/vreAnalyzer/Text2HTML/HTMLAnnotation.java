@@ -476,7 +476,10 @@ public class HTMLAnnotation {
 			e.printStackTrace();
 		}
 	}
-
+	/*
+	 * 为Variant上颜色 对于同一个语句当有多个Variant上
+	 * 生成新的颜色
+	 */
 	public static void annotatemultipleLineHTML_Variant(Variant variant,String hovertext,File htmlFile,int[] lines,Color annotatedColor,Map<String,String> htmlToJava){
 		try {
 			currVar = variant;
@@ -547,43 +550,59 @@ public class HTMLAnnotation {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/*
+	 * 判断一个语句行中是否有多个Variant绑定
+	 * 如果有多个Variant 绑定生成新的颜色 
+	 * 
+	 * 
+	 */
 	private static String isColorTitleAssociatedSLResolver_Variant(String linecontent,String spanStart){
+		// 颜色的pattern
 		String colorpattern = new String("<span title = \".+\" style=\"background-color:.+\">");
 		Pattern startPattern = Pattern.compile(colorpattern);
 		Matcher matcher = startPattern.matcher(linecontent);
+		
 		if(matcher.find()){
 			String matchedString = matcher.group(0);
 			if(matchedString.equals(spanStart)){
 				return linecontent;
 			}else{
 				String merged  = linecontent;
-				// this may add a new color to this
-				// 1. title index
+				
+				// 1. 获得原来的title的索引开始 索引结束
 				int ortitleindex = linecontent.indexOf("<span title = \"")+"<span title = \"".length();
 				int ortitleendindex = linecontent.indexOf("\" style=\"background-color");
+				String ortitle = linecontent.substring(ortitleindex, ortitleendindex);
+				
+				// 2. 获得新的title的索引开始 索引结束
 				int spantitleindex = spanStart.indexOf("<span title = \"")+"<span title = \"".length();
 				int spantitleendindex = spanStart.indexOf("\" style=\"background-color");
 				String spantitle = spanStart.substring(spantitleindex, spantitleendindex);
-				String ortitle = linecontent.substring(ortitleindex, ortitleendindex);
+				
+				// 3. 如果两个是相同的 返回
 				if(ortitle.contains(spantitle))
 					return merged;
-				// insert title first
-				merged = new StringBuilder(merged).insert(ortitleindex, spantitle).toString();
 				
+				// 4. 如果是index = 0, 直接插入span内容
+				if(ortitle.trim()=="")
+					merged = new StringBuilder(merged).insert(ortitleindex, spantitle).toString();
+				else // 插入span内容 并以:分割
+					merged = new StringBuilder(merged).insert(ortitleindex, ":"+spantitle).toString();
 				
-				// 2. color index
-				// Turn to CommonAsset find the mapping color
-				
+				///////////////////////////颜色处理/////////////////////
 				int orcolorindex = merged.indexOf("\" style=\"background-color:")+"\" style=\"background-color:".length();
 				int orcolorendindex = merged.indexOf("\">");
-				String orcolor = merged.substring(orcolorindex, orcolorendindex);
+				String orcolor = merged.substring(orcolorindex, orcolorendindex);//原来的颜色
 				
-				Set<Variant>varints = VariantColorMap.inst().getVariantFromhexColor(orcolor);
-				if(!varints.contains(currVar)){
+				Set<Variant> variants = VariantColorMap.inst().getVariantFromhexColor(orcolor);// 获得这个颜色对应的Variants
+				
+				if(!variants.contains(currVar)){// 如果包含当前的variants,不需要修改颜色
+					// 将现有的和新加入进行统一
 					Set<Variant>currvariants = new HashSet<Variant>();
-					currvariants.addAll(varints);
+					currvariants.addAll(variants);
 					currvariants.add(currVar);
+					
 					Color mergedColor = VariantColorMap.inst().getCombinedColor(currvariants);
 					String hex = Integer.toHexString(mergedColor.getRGB() & 0xffffff);
 					if (hex.length() < 6) {
@@ -593,6 +612,7 @@ public class HTMLAnnotation {
 					VariantColorMap.inst().addHexColorToVariant(hex,currvariants);
 					merged = new StringBuilder(merged).replace(orcolorindex, orcolorendindex, hex).toString();
 				}
+				
 				return merged;
 			}
 		}else{

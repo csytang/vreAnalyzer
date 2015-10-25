@@ -3,10 +3,13 @@ import soot.Body;
 import soot.Local;
 import soot.SootMethod;
 import soot.Value;
+import soot.jimple.ConditionExpr;
 import soot.jimple.DefinitionStmt;
 import soot.jimple.IdentityStmt;
+import soot.jimple.IfStmt;
 import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
+import soot.jimple.SwitchStmt;
 import soot.jimple.ThisRef;
 import vreAnalyzer.Tag.MethodTag;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
@@ -44,6 +47,7 @@ public class BindingResolver {
     private boolean containPRBValue = false;//是否包含部分 未绑定值
     // 包含所有的Varaint
     private List<Variant> fullVariantList = new LinkedList<Variant>();
+    
     public BindingResolver(){
     	methodToArgsList = new HashMap<SootMethod,List<Args>>();
     	allAppMethod = new LinkedList<SootMethod>();
@@ -58,7 +62,6 @@ public class BindingResolver {
 	public void run(){
 		// 分析程序 并创建variant
 		parse();
-		//singlecolorannotation(Color.RED);
 		// 出去不可见的Variant
 		variantColorAssign();
 		variantcolorannotation();
@@ -153,11 +156,70 @@ public class BindingResolver {
 			ValueToVariant vtVariant = new ValueToVariant(null);
 			methodToValueToVariant.get(method).add(vtVariant);
 			for(CFGNode node:nodes){
+				
 				if(node.isSpecial())
 					continue;
 				//////////////////////
 				NodeDefUses defusenode = (NodeDefUses) node;
+				
 				Stmt stmt = defusenode.getStmt();
+				/*
+				 * 在caller 和 callee中判断是否
+				 * 一个node是分支节点 如果是 看判断条件中的useVars 是否为unbind 值
+				 * if z0 != 0 goto r8 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>(r4, r5, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", class "org/apache/mahout/cf/taste/hadoop/als/DatasetSplitter$WritePrefsMapper", class "org/apache/hadoop/io/NullWritable", class "org/apache/hadoop/io/Text", class "org/apache/hadoop/mapreduce/lib/output/TextOutputFormat")
+				 */
+				if(defusenode.getSuccs().size()>1){					
+					if(stmt instanceof IfStmt){
+						IfStmt ifstmt = (IfStmt) stmt;
+						Value conditionValue = ifstmt.getCondition();
+						ConditionExpr coniExpr = (ConditionExpr) conditionValue;
+						Value lOperator = coniExpr.getOp1();// 左侧操作符
+						Value rOperator = coniExpr.getOp2();// 右側操作符
+						String symbol = coniExpr.getSymbol();
+						if(symbol.equals("=")){
+							// 如果操作符是 ＝ 赋值
+							// 左侧是定义 右侧是使用						
+							if(vtVariant.containsValue(rOperator)){
+								Set<Variant> rightVariants = vtVariant.getVariantsByValue(rOperator);
+								for(Variant variant:rightVariants){
+									variant.setInitialConditionStmt(ifstmt, null);
+									variant.addInitialConditionValue(rOperator, null);
+								}
+							}
+							
+						}else{
+							// 其他--- 两侧都是使用
+							if(vtVariant.containsValue(lOperator)){
+								Set<Variant> leftVariants = vtVariant.getVariantsByValue(lOperator);
+								for(Variant variant:leftVariants){
+									variant.setInitialConditionStmt (ifstmt, null);
+									variant.addInitialConditionValue (lOperator, null);
+								}
+							}
+							if(vtVariant.containsValue(rOperator)){
+								Set<Variant> rightVariants = vtVariant.getVariantsByValue(rOperator);
+								for(Variant variant:rightVariants){
+									variant.setInitialConditionStmt(ifstmt, null);
+									variant.addInitialConditionValue(rOperator, null);
+								}
+							}
+							
+						}
+					}else if(stmt instanceof SwitchStmt){
+						SwitchStmt switchstmt = (SwitchStmt) stmt;
+						Value keyValue = switchstmt.getKey();
+						if(verbose)
+							System.out.println("Key is:"+keyValue);
+						if(vtVariant.containsValue(keyValue)){
+							Set<Variant> Variants = vtVariant.getVariantsByValue(keyValue);
+							for(Variant variant:Variants){
+								variant.setInitialConditionStmt(switchstmt, null);
+								variant.addInitialConditionValue(keyValue, null);
+							}
+						}
+					}
+				}
+				
 				if(verbose)
 					System.out.println("Currently process statement:"+stmt.toString());
 				useVars = defusenode.getUsedVars();// 在当前语句中的使用
@@ -252,9 +314,7 @@ public class BindingResolver {
 					}
 					if(containPRBValue){
 						//TODO 检查这个位置是否有经过
-						
-						PRBAnalysisStack.clear();
-						
+						PRBAnalysisStack.clear();					
 						if(defVars.isEmpty()){// 将这个部分未绑定的cfgnode加入到列表中
 							//---- 1. PRBAnalysisNode--------
 							PRBAnalysisStack.push(node);
@@ -581,6 +641,65 @@ public class BindingResolver {
 							isParaAssignStmt = false;
 						}
 						Value argu = null;
+						/*
+						 * 在caller 和 callee中判断是否
+						 * 一个node是分支节点 如果是 看判断条件中的useVars 是否为unbind 值
+						 * if z0 != 0 goto r8 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>(r4, r5, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", class "org/apache/mahout/cf/taste/hadoop/als/DatasetSplitter$WritePrefsMapper", class "org/apache/hadoop/io/NullWritable", class "org/apache/hadoop/io/Text", class "org/apache/hadoop/mapreduce/lib/output/TextOutputFormat")
+						 */
+						if(defusenode.getSuccs().size()>1){					
+							if(stmt instanceof IfStmt){
+								IfStmt ifstmt = (IfStmt) stmt;
+								Value conditionValue = ifstmt.getCondition();
+								ConditionExpr coniExpr = (ConditionExpr) conditionValue;
+								Value lOperator = coniExpr.getOp1();// 左侧操作符
+								Value rOperator = coniExpr.getOp2();// 右側操作符
+								String symbol = coniExpr.getSymbol();
+								if(symbol.equals("=")){
+									// 如果操作符是 ＝ 赋值
+									// 左侧是定义 右侧是使用						
+									if(localvtVariant.containsValue(rOperator)){
+										Set<Variant> rightVariants = localvtVariant.getVariantsByValue(rOperator);
+										for(Variant variant:rightVariants){
+											variant.setInitialConditionStmt(ifstmt, null);
+											variant.addInitialConditionValue(rOperator, null);
+										}
+									}
+									
+								}else{
+									// 其他--- 两侧都是使用
+									if(localvtVariant.containsValue(lOperator)){
+										Set<Variant> leftVariants = localvtVariant.getVariantsByValue(lOperator);
+										for(Variant variant:leftVariants){
+											variant.setInitialConditionStmt (ifstmt, null);
+											variant.addInitialConditionValue (lOperator, null);
+										}
+									}
+									if(localvtVariant.containsValue(rOperator)){
+										Set<Variant> rightVariants = localvtVariant.getVariantsByValue(rOperator);
+										for(Variant variant:rightVariants){
+											variant.setInitialConditionStmt(ifstmt, null);
+											variant.addInitialConditionValue(rOperator, null);
+										}
+									}
+									
+								}
+							}else if(stmt instanceof SwitchStmt){
+								SwitchStmt switchstmt = (SwitchStmt) stmt;
+								Value keyValue = switchstmt.getKey();
+								if(verbose)
+									System.out.println("Key is:"+keyValue);
+								if(localvtVariant.containsValue(keyValue)){
+									Set<Variant> Variants = localvtVariant.getVariantsByValue(keyValue);
+									for(Variant variant:Variants){
+										variant.setInitialConditionStmt(switchstmt, null);
+										variant.addInitialConditionValue(keyValue, null);
+									}
+								}
+							}
+						}
+						
+						
+						
 						if(isParaAssignStmt){
 							IdentityStmt idstmt =  (IdentityStmt) stmt;
 							argu = idstmt.getLeftOp();
@@ -930,7 +1049,11 @@ public class BindingResolver {
 		/*
 		 * 删除不可见Variant
 		 */
+		if(verbose)
+			System.out.println("#variant in fullvariantList is:"+fullVariantList.size());
 		fullVariantList.removeAll(variants);
+		if(verbose)
+			System.out.println("After remove #variant in fullvariantList is:"+fullVariantList.size());
 	}
 	
 	private boolean usedOverlap_Variable(List<Variable> useVars, Set<Value> list) {
@@ -949,7 +1072,7 @@ public class BindingResolver {
 		 * 1. 一个语句对应多个variant
 		 */
 		for(Variant variant:fullVariantList){
-			VariantColorMap.inst().registerNewColor(variant);
+			VariantColorMap.inst().registerColorForVariant(variant);
 		}
 	}
 	
@@ -975,7 +1098,6 @@ public class BindingResolver {
 			new VariantAnnotate(variant,variantId,VariantColorMap.inst().getColorforVariant(variant));
 		}
 	}
-	
 	
 	public List<Variant> getfullVariantList(){
 		return fullVariantList;

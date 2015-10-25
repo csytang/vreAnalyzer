@@ -26,7 +26,19 @@ public class Variant {
 	private Map<CallSite,List<Stmt>> callSiteToBindingStmt = new HashMap<CallSite,List<Stmt>>();
 	private Map<CallSite,List<Value>> callSiteToBindingValue = new HashMap<CallSite,List<Value>>();
 	private List<CallSite> callsiteList = null;
+	
+	// 第一个判别条件和语句
+	private Map<CallSite,Set<Value>> calleeinitConditionalValues = new HashMap<CallSite,Set<Value>>();
+	private Map<CallSite,Stmt> calleeinitConditionalStmt = new HashMap<CallSite,Stmt>();
+	private Set<Value> callerinitConditionalValues = new HashSet<Value>();
+	private Stmt callerinitConditionalStmt = null;
+	
+	
 	int id = 0;
+	
+	/*
+	 * Variant 构造器
+	 */
 	public Variant(Value vi,List<Stmt>stmts,CallSite callsite,SootMethod method,int id){
 		if(callsite==null){
 			paddingValues = new LinkedList<Value>();
@@ -61,6 +73,10 @@ public class Variant {
 		}
 		this.id = id;
 	}
+	//////////////////////////////////////////////////////////////
+	
+	
+	// 加入绑定值到这个Variant////////////////////////////////////
 	public void addPaddingValue(List<Value>vis,CallSite callsite){
 		if(callsite==null){
 			this.paddingValues.addAll(vis);
@@ -97,6 +113,9 @@ public class Variant {
 			}
 		}
 	}
+	///////////////////////////////////////////////////////////
+	
+	// 加入绑定语句//////////////////////////////////////////////
     public void addBindingStmts(Stmt stmt,CallSite callsite) {
     	if(callsite==null){
     		this.bindingStmts.add(stmt);
@@ -121,6 +140,8 @@ public class Variant {
     		}
     	}
     }
+    /////////////////////////////////////////////////////////
+    
 	public List<Stmt> getBindingStmts(CallSite callsite) {
 		if(callsite==null){
 			return this.bindingStmts; 
@@ -132,6 +153,8 @@ public class Variant {
 			}
 		}
 	}
+	
+	// 获得在一个callsite下的绑定值
 	public List<Value> getPaddingValues(CallSite callsite) {
 		if(callsite == null){
 			return this.paddingValues;
@@ -143,6 +166,8 @@ public class Variant {
 		}
 		
 	}
+	
+	// 获得所有的callsite
 	public List<CallSite> getCallSiteList(){
 		if(callsiteList==null)
 			callsiteList = new LinkedList<CallSite>(callSiteToBindingStmt.keySet());
@@ -156,6 +181,8 @@ public class Variant {
 		// TODO Auto-generated method stub
 		return id;
 	}
+	
+	// 获得一个Variant在code block中对应
 	public List<Integer> getBlockIds() {
 		// TODO Auto-generated method stub
 		List<Integer> blockIds = new LinkedList<Integer>();
@@ -170,7 +197,7 @@ public class Variant {
 			if(block.getSootMethod()==callerMethod && block.getType()==BlockType.Stmt){
 				List<CFGNode> blocknodes = block.getCFGNodes();
 				// 4. 将包含在 block nodes 中的node全部删除 看剩余
-				Set<Stmt>remainsstmts = blockProcess(callerstmts,blocknodes);
+				Set<Stmt>remainsstmts = removeStmtinBlock(callerstmts,blocknodes);
 				if(isFullSubSet(remainsstmts,callerstmts)){
 					// 将这个codeblock的id加入到blockIds中
 					blockIds.add(block.getBlockId());
@@ -192,7 +219,7 @@ public class Variant {
 					if(block.getSootMethod()==callee && block.getType()==BlockType.Stmt){
 						List<CFGNode> blocknodes = block.getCFGNodes();
 						// 3. 将包含在 block nodes 中的node全部删除 看剩余
-						Set<Stmt>remainsstmts = blockProcess(calleestmtsSet,blocknodes);
+						Set<Stmt>remainsstmts = removeStmtinBlock(calleestmtsSet,blocknodes);
 						if(isFullSubSet(remainsstmts,calleestmtsSet)){
 							// 将这个codeblock的id加入到blockIds中
 							blockIds.add(block.getBlockId());
@@ -207,18 +234,21 @@ public class Variant {
 		return blockIds;
 	}
 	
-	
-	
+	// 判断两个集合关系 是否为 子集
 	private boolean isFullSubSet(Set<Stmt> remainsstmts, Set<Stmt> allstmts) {
 		// TODO Auto-generated method stub
 		return allstmts.containsAll(remainsstmts);
 	}
+	
+	// 判断两个集合关系 是否为 有交集
 	private boolean isOverlap(Set<Stmt> remainsstmts, Set<Stmt> allstmts){
 		// 1. 两个set有重复
 		Set<Stmt> allstmtsTmp = new HashSet<Stmt>(allstmts);
 		return allstmtsTmp.retainAll(remainsstmts);
 	}
-	public Set<Stmt> blockProcess(Set<Stmt>allstmts, List<CFGNode>blocknodes){
+	
+	// 出去在block中的重复语句
+	public Set<Stmt> removeStmtinBlock(Set<Stmt>allstmts, List<CFGNode>blocknodes){
 		/*
 		 * 对于这个block中 包含的 进行处理
 		 */
@@ -234,6 +264,8 @@ public class Variant {
 		Set<Stmt>remainstmtset = new HashSet<Stmt>(remainstmts);
 		return remainstmtset;
 	}
+	
+	// 获得这个Variant所涉及的所有函数
 	public List<SootMethod> getAllMethods() {
 		// TODO Auto-generated method stub
 		Set<SootMethod>methodset = new HashSet<SootMethod>();
@@ -248,6 +280,8 @@ public class Variant {
 		
 		return allmethods;
 	}
+	
+	// 获得这个Variant所涉及的所有类
 	public List<SootClass> getAllClasses() {
 		// TODO Auto-generated method stub
 		Set<SootClass>classset = new HashSet<SootClass>();
@@ -264,6 +298,59 @@ public class Variant {
 		}
 		List<SootClass> allclasses = new LinkedList<SootClass> (classset);
 		return allclasses;
+	}
+		
+	// 初始化 条件 stmt 和 callsite
+	public void setInitialConditionStmt(Stmt stmt,CallSite callsite){
+		if(callsite==null){
+			callerinitConditionalStmt = stmt;
+		}else{
+			calleeinitConditionalStmt.put(callsite,stmt);
+		}
+	}
+	
+	// 初始化 条件 stmt 和 callsite
+	public void addInitialConditionValue(Value value,CallSite callsite){
+		if(callsite==null){
+			// 对于callsite 无 Caller
+			if(callerinitConditionalValues.isEmpty()){
+				Set<Value>values = new HashSet<Value>();
+				values.add(value);
+				callerinitConditionalValues.addAll(values);
+			}else{
+				callerinitConditionalValues.add(value);
+			}
+		}else{
+			if(!calleeinitConditionalValues.containsKey(callsite)){
+				Set<Value>values = new HashSet<Value>();
+				values.add(value);
+				calleeinitConditionalValues.put(callsite, values);
+			}else{
+				calleeinitConditionalValues.get(callsite).add(value);
+			}
+		}
+	}
+	
+	public void addInitialConditionValue(Set<Value> values, CallSite callsite){
+		if(callsite==null){
+			callerinitConditionalValues.addAll(values);
+		}else{
+			if(!calleeinitConditionalValues.containsKey(callsite)){
+				calleeinitConditionalValues.put(callsite, values);
+			}else{
+				calleeinitConditionalValues.get(callsite).addAll(values);
+			}
+		}
+	}
+	
+	public Set<Value> getSeperatorValues() {
+		// TODO Auto-generated method stub
+		Set<Value> valueset = new HashSet<Value>();
+		valueset.addAll(callerinitConditionalValues);
+		// 遍历所有的callsite
+		
+		
+		return valueset;
 	}
 	
 }

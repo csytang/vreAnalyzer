@@ -2,26 +2,33 @@ package vreAnalyzer.Variants;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.table.DefaultTableModel;
-import soot.Value;
 import vreAnalyzer.Util.RandomColor;
 
 public class VariantColorMap {
 	
-	
+	// 单例模式
 	public static VariantColorMap instance = null;
-	private static Map<String,Set<Variant>>hexColorToVariant = new HashMap<String,Set<Variant>>();
-	private static Map<Set<Variant>,Color>combinedToColor = new HashMap<Set<Variant>,Color>();
-	private DefaultTableModel treemodel = null;
-	/**
-	 * Color inheritance:
-	 * If there is an invoke expression goes like
-	 * 
+	
+	// 十六进制颜色对应Variant
+	private static Map<String,Set<Variant>> hexColorToVariant = new HashMap<String,Set<Variant>>();
+	
+	/////////////////////////
+	/*
+	 * 当一个语句有属于多个Variant, 那么
 	 */
+	private static Map<Set<Variant>,Color> combinedToColor = new HashMap<Set<Variant>,Color>();
+	
+	// VariantToColor
 	private Map<Variant,Color> variantToColor = null;
+	////////////////////////
+	
+	// 在MainFrame中的treemodel
+	private DefaultTableModel treemodel = null;
+	
+	
 	
 	public static VariantColorMap inst(){
 		if(instance==null)
@@ -33,17 +40,30 @@ public class VariantColorMap {
 		variantToColor = new HashMap<Variant,Color>();
 	}
 	
-	public void registerNewColor(Variant vi){
+	public void registerColorForVariant(Variant vi){
+		/*
+		 * 注册一个新的颜色对于Variant
+		 */
 		RandomColor rcolor = new RandomColor();
 		Color color = rcolor.getColor();
+		String hex = ColorToHex(color);
+		
+		// 处理颜色重复问题
+		while(hexColorToVariant.containsKey(hex)){
+			rcolor = new RandomColor();
+			color = rcolor.getColor();
+			hex = ColorToHex(color);
+		}
 		if(!variantToColor.containsKey(vi)){
 			variantToColor.put(vi, color);
 		}
-		String hex = ColorToHex(color);
+		
 		Set<Variant>variant = new HashSet<Variant>();
 		variant.add(vi);
 		hexColorToVariant.put(hex, variant);
 	}
+	
+	// 将Color转化为十六进制字符串
 	public String ColorToHex(Color col){
 		String hex = "";
 		hex = Integer.toHexString(col.getRGB() & 0xffffff);
@@ -53,41 +73,42 @@ public class VariantColorMap {
 		hex = "#" + hex;
 		return hex;
 	}
-	public void removeColorMap(Variant vi){
-		if(variantToColor.containsKey(vi))
+	public void removeColorMap (Variant vi) {
+		/*
+		 * 将这个颜色从variantToColor列表中删除
+		 */
+		if(variantToColor.containsKey(vi)){
+			Color color = variantToColor.get(vi);
 			variantToColor.remove(vi);
-	}
-	
-	
-	public String covertValueToString(List<Value>valueList){
-		String result = "[";
-		for(Value vit:valueList){
-			result+=vit.toString();
-			result+=",";
+			String hexColor = ColorToHex(color);
+			if(hexColorToVariant.containsKey(hexColor)){
+				hexColorToVariant.remove(hexColor);
+			}
 		}
-		if(!valueList.isEmpty())
-			result = result.substring(0,result.length()-1);
-		result += "]";
-		return result;
 	}
-
+	
+	
 	public Color getColorforVariant(Variant variant) {
-		// TODO Auto-generated method stub
+		// TODO 獲取variant的顏色
 		return variantToColor.get(variant);
 	}
 
 	public Set<Variant> getVariantFromhexColor(String hex) {
-		// TODO Auto-generated method stub
+		// TODO 获得hex颜色从variant中
 		return hexColorToVariant.get(hex);
 	}
 
 	public Color getCombinedColor(Set<Variant> currvariants) {
-		// TODO Auto-generated method stub
+		// 获得一个variant结合颜色
 		if(combinedToColor.containsKey(currvariants)){
 			return combinedToColor.get(currvariants);
 		}else{
 			RandomColor rcolor = new RandomColor();
 			combinedToColor.put(currvariants, rcolor.getColor());
+			String hexcolor = ColorToHex(rcolor.getColor());
+			
+			// 将集合颜色让如到 hexColorToVaraint中
+			hexColorToVariant.put(hexcolor, currvariants);
 			return rcolor.getColor();
 		}
 	}
@@ -113,7 +134,7 @@ public class VariantColorMap {
 			}
 		};
 		for(Variant variant:BindingResolver.inst().getfullVariantList()){
-			if(variantToColor.containsKey(variant)){
+			if(variantToColor.containsKey(variant) && BindingResolver.inst().getfullVariantList().contains(variant)){
 				Color color = variantToColor.get(variant);
 				int variantId = variant.getVariantId();
 				String variantIdStr = "["+variantId+"]";

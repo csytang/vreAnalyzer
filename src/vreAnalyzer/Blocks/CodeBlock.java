@@ -111,7 +111,6 @@ public class CodeBlock {
 			return "[]";
 		quickSort(coderange,0,coderange.length-1);
 		String rangestring = "[";
-		String temp = "";
 		int startIndex = 0;
 		int endIndex = 0;
 		for(int i = 0;i < coderange.length;i++){
