@@ -46,19 +46,20 @@ public class MainFrame extends JFrame {
 	// 2. Contents
 	private JPanel contentPane;
 	private final JTextField textField;
-	private List<File>target;
-	private List<File>supporingjars;
-	private List<File>sources;
+	private List<File> target;
+	private List<File> supporingjars;
+	private List<File> sources;
 	private final JSplitPane sourcesplitPane;
 	private static JEditorPane source_annotatedDisplayArea;
 	private final JTextArea consoletextArea;
 	private final JTree source_annotateDirTree;
 	private static int textArealinecount = 0;
 	private DefaultMutableTreeNode root;
+	
 	// 3. 
-	private String[]comm;
-	private static Map<String,File>classnametoSource;
-	private List<File>allsourcefiles = new LinkedList<File>();
+	private String[] comm;
+	private static Map<String,File> classnametoSource;
+	private List<File> allsourcefiles = new LinkedList<File>();
 	private boolean startFromSource = false;
 	
 	// 4. Output redirect
@@ -86,6 +87,7 @@ public class MainFrame extends JFrame {
 		return instance;
 	}
 	
+	// MainFrame 的构造函数
 	public MainFrame() {
 		setTitle("vreAnalyzer");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -513,10 +515,16 @@ public class MainFrame extends JFrame {
 						if(selected.getParent().toString().equals("annotated_list")){
 							if(isFeatureReady()){
 								legendtable.setModel(ColorMap.inst().getTableModel());
+								// 删除现有的listener 加入feature listener
+								ColorMap.inst().addLegendListener();
+								
 							}
 						}else if(selected.getParent().toString().equals("variantanno_list")){
 							if(isVariantReady()){
 								legendtable.setModel(VariantColorMap.inst().getTableModel());
+								// 删除现有的listener 加入variant legacy listener
+								ColorMap.inst().removeLegendListener();
+								
 							}
 						}
 					}

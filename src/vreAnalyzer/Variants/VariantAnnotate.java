@@ -24,9 +24,6 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by tangchris on 15/9/22.
- */
 public class VariantAnnotate {
     boolean startFromSource;
     int[][]positions;

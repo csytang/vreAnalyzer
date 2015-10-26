@@ -127,6 +127,8 @@ public class VariantColorMap {
 		// 1. 首先加入所有的单一颜色
 		String legendheaders[] = {"Variant","Color"};
 		DefaultTableModel model = new DefaultTableModel(null,legendheaders){
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub

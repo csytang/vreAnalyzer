@@ -2,26 +2,22 @@ package vreAnalyzer.Variants;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-
 import soot.SootClass;
 import soot.SootMethod;
-import soot.Value;
 import vreAnalyzer.UI.MainFrame;
 
 public class VariantToTable {
+	// 单例模式
 	public static VariantToTable instance;
 	public static VariantToTable inst(){
 		if(instance==null)
 			instance = new VariantToTable();
 		return instance;
 	}
-	public VariantToTable(){
-		
-	}
+	
+	// 将Variant中的内容加入到table中
 	public void addVariantToTable(List<Variant> fullvaraintlist){
 		/*
 		 * "Variant ID","Parent Block Id","separators","SootMethod","SootClass"
@@ -35,13 +31,13 @@ public class VariantToTable {
 			
 			List<SootMethod> methods = variant.getAllMethods();
 			List<SootClass> classes = variant.getAllClasses();
-			Set<Value> seperatorValues  = variant.getSeperatorValues();
+			String sepeartorString  = variant.getSeperatorValues();
+			
 			// 将这个内容写入到表格中
 			String variantId = ""+id;
 			String blockidString = IdsToString(blocksIds);
 			String methodsString = MethodsToString(methods);
 			String classString = ClassesToString(classes);
-			String sepeartorString = SeperatorToString(seperatorValues);
 			varitableModel.addRow(new Object[]{variantId,blockidString,sepeartorString,methodsString,classString});
 			
 		}		
@@ -59,6 +55,8 @@ public class VariantToTable {
 		ids += "]";
 		return ids;
 	}
+	
+	// Variant的方法的集合转化为字符串
 	public String MethodsToString(List<SootMethod> methods){
 		String methodName = "";
 		for(SootMethod method:methods){
@@ -67,6 +65,7 @@ public class VariantToTable {
 		return methodName;
 	}
 	
+	// Variant中class转化为字符串
 	public String ClassesToString(List<SootClass>classes){
 		String className = "";
 		for(SootClass sootcls: classes){
@@ -75,18 +74,7 @@ public class VariantToTable {
 		return className;
 	}
 	
-	public String SeperatorToString(Set<Value>values){
-		String seperator = "";
-		for(Value value:values){
-			seperator += value;
-			seperator += ";";
-		}
-		if(values.size()>=1){
-			seperator = seperator.substring(0, seperator.length()-1);
-		}
-		return seperator;
-		
-	}
+	
 	
 	
 }

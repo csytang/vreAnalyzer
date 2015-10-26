@@ -476,21 +476,30 @@ public class HTMLAnnotation {
 			e.printStackTrace();
 		}
 	}
+	
 	/*
 	 * 为Variant上颜色 对于同一个语句当有多个Variant上
 	 * 生成新的颜色
 	 */
 	public static void annotatemultipleLineHTML_Variant(Variant variant,String hovertext,File htmlFile,int[] lines,Color annotatedColor,Map<String,String> htmlToJava){
 		try {
+			// 当前要加入的Variant
 			currVar = variant;
+			
+			// 颜色
 			annotateColor = annotatedColor;
+			
+			// 颜色的十六进制字符串表示
 			String hex = Integer.toHexString(annotateColor.getRGB() & 0xffffff);
+			
 			if (hex.length() < 6) {
 			    hex = "0" + hex;
 			}
 			hex = "#" + hex;
-			FileReader htmlReader = new FileReader(htmlFile);
-			BufferedReader brhtml = new BufferedReader(htmlReader);
+			
+			// Variant对应的HTML
+			FileReader htmlReader = new FileReader (htmlFile);
+			BufferedReader brhtml = new BufferedReader (htmlReader);
 			String allhtmlcontent = "";
 			String htmlline = "";
 			
@@ -551,12 +560,6 @@ public class HTMLAnnotation {
 		}
 	}
 	
-	/*
-	 * 判断一个语句行中是否有多个Variant绑定
-	 * 如果有多个Variant 绑定生成新的颜色 
-	 * 
-	 * 
-	 */
 	private static String isColorTitleAssociatedSLResolver_Variant(String linecontent,String spanStart){
 		// 颜色的pattern
 		String colorpattern = new String("<span title = \".+\" style=\"background-color:.+\">");
@@ -588,7 +591,7 @@ public class HTMLAnnotation {
 				if(ortitle.trim()=="")
 					merged = new StringBuilder(merged).insert(ortitleindex, spantitle).toString();
 				else // 插入span内容 并以:分割
-					merged = new StringBuilder(merged).insert(ortitleindex, ":"+spantitle).toString();
+					merged = new StringBuilder(merged).insert(ortitleindex+1, ":"+spantitle).toString();
 				
 				///////////////////////////颜色处理/////////////////////
 				int orcolorindex = merged.indexOf("\" style=\"background-color:")+"\" style=\"background-color:".length();

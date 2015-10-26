@@ -56,7 +56,7 @@ public class BlockGenerator {
 			for(SootMethod method:clsmethods){
 				if(method.getTag(MethodTag.TAG_NAME)!=null && !Modifier.isVolatile(method.getModifiers())){
 					marked.clear();
-					// 1. Create method block
+					// 2.1. Create method block
 					CFG cfg = ProgramFlowBuilder.inst().getCFG(method);
 					List<CFGNode>nodes = cfg.getNodes();
 					MethodBlock methodBlock = MethodBlock.tryToCreate(nodes, method,clsblock.getBlockId());
@@ -65,7 +65,7 @@ public class BlockGenerator {
 					@SuppressWarnings("unused")
 					MethodTag mTag = (MethodTag) method.getTag(MethodTag.TAG_NAME);
 					
-					// 2. Create inside method blocks
+					// 2.2. Create inside method blocks
 					/**
 					 * Strategy:
 					 * 1. go through the control flow, find the branch, create separate block for each branch

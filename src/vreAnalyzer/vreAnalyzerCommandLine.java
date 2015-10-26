@@ -55,7 +55,7 @@ public class vreAnalyzerCommandLine{
 	public static boolean isStartFromSource(){
 		return startfromSource;
 	}
-	public vreAnalyzerCommandLine(String[]args) throws ConflictModelExpection{
+	public vreAnalyzerCommandLine(String[]args) throws ConflictModelExpection {
 		// All input command list
 		outputDirectory = ".";
 		
@@ -90,9 +90,9 @@ public class vreAnalyzerCommandLine{
 		
 		// Output
 		sootArgs.add("-f");
-		sootArgs.add("none");
-		// sootArgs.add("jimple");
-		//sootArgs.add("class");
+		//sootArgs.add("none");
+		sootArgs.add("jimple");
+		// sootArgs.add("class");
 		
 		
 		// Get all input commands
@@ -106,6 +106,7 @@ public class vreAnalyzerCommandLine{
 	    System.out.println("[vreAnalyzer] vreAnalyzer writes context information to:"+outputDirectory+"/context.csv");
 	 	contextwriter = new CSVWriter(outputDirectory+"/context.csv");
 	 	contextwriter.println("ContextID,SootMethod,SootClass");
+	 	
 	 	// 2. job output to files
 	 	System.out.println("[vreAnalyzer] vreAnalyzer writes feature information to:"+outputDirectory+"/feature.csv");
 	 	featurewriter = new CSVWriter(outputDirectory+"/feature.csv");
@@ -116,8 +117,9 @@ public class vreAnalyzerCommandLine{
 		PackManager.v().getPack("wjtp").add(new Transform("wjtp.myTransformer", new vreAnalyzerInternalTransform()));
 		
 		System.out.print("[vreAnalyzer] vreAnalyzer args to Soot: ");
+		
 		for (String s : filtersootArgs){
-				System.out.print(s + " ");
+			System.out.print(s + " ");
 		}
 		
 		System.out.println();

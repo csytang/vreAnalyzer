@@ -56,6 +56,7 @@ public class Variant {
 		}
 		this.id = id;
 	}
+	
 	public Variant(Value vi,Stmt stmt,CallSite callsite,SootMethod method,int id){
 		if(callsite==null){
 			paddingValues = new LinkedList<Value>();
@@ -88,6 +89,7 @@ public class Variant {
 			}
 		}
 	}
+	
 	public void addPaddingValue(Set<Value>vis,CallSite callsite){
 		if(callsite==null){
 			this.paddingValues.addAll(vis);
@@ -100,6 +102,7 @@ public class Variant {
 			}
 		}
 	}
+	
 	public void addPaddingValue(Value vi,CallSite callsite){
 		if(callsite==null){
 			this.paddingValues.add(vi);
@@ -129,6 +132,7 @@ public class Variant {
     		}
     	}
     }
+    
     public void addBindingStmts(List<Stmt>stmts,CallSite callsite) {
     	if(callsite==null){
     		this.bindingStmts.addAll(stmts);
@@ -164,7 +168,6 @@ public class Variant {
 			}else
 				return null;
 		}
-		
 	}
 	
 	// 获得所有的callsite
@@ -194,17 +197,29 @@ public class Variant {
 		List<CodeBlock> blockpool = BlockGenerator.instance.getblockPool();
 		// 3. 在caller函数中
 		for(CodeBlock block:blockpool){
+			Set<Integer> blockIdStmt = new HashSet<Integer>();
+			int blockIdMethod = -1;
 			if(block.getSootMethod()==callerMethod && block.getType()==BlockType.Stmt){
 				List<CFGNode> blocknodes = block.getCFGNodes();
 				// 4. 将包含在 block nodes 中的node全部删除 看剩余
 				Set<Stmt>remainsstmts = removeStmtinBlock(callerstmts,blocknodes);
 				if(isFullSubSet(remainsstmts,callerstmts)){
 					// 将这个codeblock的id加入到blockIds中
-					blockIds.add(block.getBlockId());
+					blockIdStmt.add(block.getBlockId());
 				}else if(isOverlap(remainsstmts,callerstmts)){
 					// 将这个codeblock的id加入到blockIds中
-					blockIds.add(block.getBlockId());
+					blockIdStmt.add(block.getBlockId());
 				}
+			}else if(block.getSootMethod()==callerMethod && block.getType()==BlockType.Method){
+				blockIdMethod = block.getBlockId();
+			}
+			if(blockIdStmt.isEmpty()){
+				// 如果不被包含在任何子语句中
+				blockIds.add(blockIdMethod);
+				blockIdMethod = -1;
+			}else{
+				blockIds.addAll(blockIdStmt);
+				blockIdStmt.clear();
 			}
 		}
 		///////////////////////CallSite/////////////////////////////////
@@ -216,18 +231,31 @@ public class Variant {
 			// 2. 在callee函数中
 			for(SootMethod callee:callees){
 				for(CodeBlock block:blockpool){// 此處應該為callee
+					Set<Integer> blockIdStmt = new HashSet<Integer>();
+					int blockIdMethod = -1;
 					if(block.getSootMethod()==callee && block.getType()==BlockType.Stmt){
 						List<CFGNode> blocknodes = block.getCFGNodes();
 						// 3. 将包含在 block nodes 中的node全部删除 看剩余
 						Set<Stmt>remainsstmts = removeStmtinBlock(calleestmtsSet,blocknodes);
 						if(isFullSubSet(remainsstmts,calleestmtsSet)){
 							// 将这个codeblock的id加入到blockIds中
-							blockIds.add(block.getBlockId());
+							blockIdStmt.add(block.getBlockId());
 						}else if(isOverlap(remainsstmts,calleestmtsSet)){
 							// 将这个codeblock的id加入到blockIds中
-							blockIds.add(block.getBlockId());
+							blockIdStmt.add(block.getBlockId());
 						}
+					}else if(block.getSootMethod()==callerMethod && block.getType()==BlockType.Method){
+						blockIdMethod = block.getBlockId();
 					}
+					if(blockIdStmt.isEmpty()){
+						// 如果不被包含在任何子语句中
+						blockIds.add(blockIdMethod);
+						blockIdMethod = -1;
+					}else{
+						blockIds.addAll(blockIdStmt);
+						blockIdStmt.clear();
+					}
+					
 				}
 			}
 		}
@@ -267,7 +295,7 @@ public class Variant {
 	
 	// 获得这个Variant所涉及的所有函数
 	public List<SootMethod> getAllMethods() {
-		// TODO Auto-generated method stub
+		
 		Set<SootMethod>methodset = new HashSet<SootMethod>();
 		methodset.add(callerMethod);
 		if(callsiteList==null){
@@ -283,12 +311,13 @@ public class Variant {
 	
 	// 获得这个Variant所涉及的所有类
 	public List<SootClass> getAllClasses() {
-		// TODO Auto-generated method stub
+
 		Set<SootClass>classset = new HashSet<SootClass>();
 		classset.add(callerMethod.getDeclaringClass());
 		if(callsiteList==null){
 			callsiteList = new LinkedList<CallSite>(callSiteToBindingStmt.keySet());
 		}
+		
 		for(CallSite callsite:callsiteList){
 			for(SootMethod callee:callsite.getAppCallees()){
 				if(ProgramFlowBuilder.inst().getAppClasses().contains(callee.getDeclaringClass())){
@@ -331,6 +360,7 @@ public class Variant {
 		}
 	}
 	
+	// 初始化条件值
 	public void addInitialConditionValue(Set<Value> values, CallSite callsite){
 		if(callsite==null){
 			callerinitConditionalValues.addAll(values);
@@ -343,14 +373,56 @@ public class Variant {
 		}
 	}
 	
-	public Set<Value> getSeperatorValues() {
-		// TODO Auto-generated method stub
-		Set<Value> valueset = new HashSet<Value>();
-		valueset.addAll(callerinitConditionalValues);
+	// 获得Variant的分隔符号
+	public String getSeperatorValues() {
+		
+		// 返回一个字符串 这个字符串中
+		String seperatorValueString = "";
+		seperatorValueString += "[";
+		// 1. 加入在caller中的value
+		if(!callerinitConditionalValues.isEmpty()){
+			seperatorValueString += "(@";
+			seperatorValueString += callerMethod.getName();
+			seperatorValueString += " ";
+		}
+		for(Value value:callerinitConditionalValues){
+			seperatorValueString += value;
+			seperatorValueString += ":";
+		}
+		if(!callerinitConditionalValues.isEmpty()){
+			seperatorValueString = seperatorValueString.substring(0,seperatorValueString.length()-1);
+			seperatorValueString += ")";
+		}
+		
+		
 		// 遍历所有的callsite
+		if(callsiteList==null)
+			callsiteList = new LinkedList<CallSite>(callSiteToBindingStmt.keySet());
+		if(callsiteList.size()!=0){
+			seperatorValueString += ":";
+		}
 		
+		for(CallSite site:callsiteList){
+			Set<Value> calleeValues = calleeinitConditionalValues.get(site);
+			seperatorValueString += "(@";
+			// 加入method
+			
+			for(Value calleeValue:calleeValues){
+				seperatorValueString += calleeValue;
+				seperatorValueString += ":";
+			}
+			if(!calleeValues.isEmpty()){
+				seperatorValueString = seperatorValueString.substring(0,seperatorValueString.length()-1);
+			}
+			seperatorValueString += ")";
+		}
+		if(callsiteList.size()!=0){
+			seperatorValueString = seperatorValueString.substring(0,seperatorValueString.length()-1);
+		}
 		
-		return valueset;
+		seperatorValueString += "]";
+		return seperatorValueString;
+		
 	}
 	
 }

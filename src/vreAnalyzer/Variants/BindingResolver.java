@@ -23,7 +23,7 @@ import java.util.*;
 public class BindingResolver {
 
 	public static BindingResolver instance = null;
-	private Map<SootMethod,List<Args>>methodToArgsList = null;
+	private Map<SootMethod,List<Args>> methodToArgsList = null;
     
     private boolean verbose = true;
     private List<SootMethod> allAppMethod = null;
@@ -1066,11 +1066,7 @@ public class BindingResolver {
 	}
 	
 	private void variantColorAssign(){
-		/*
-		 * 这个函数中 将color赋值给所有在Variantlist中的Variant
-		 * 注意 这里要处理的
-		 * 1. 一个语句对应多个variant
-		 */
+		
 		for(Variant variant:fullVariantList){
 			VariantColorMap.inst().registerColorForVariant(variant);
 		}
@@ -1089,6 +1085,7 @@ public class BindingResolver {
 		  }
 		}
 	
+	// 
 	private void variantcolorannotation(){
 		
 		String variantId = "";
@@ -1102,4 +1099,5 @@ public class BindingResolver {
 	public List<Variant> getfullVariantList(){
 		return fullVariantList;
 	}
+
 }

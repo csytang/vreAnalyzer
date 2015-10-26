@@ -1,19 +1,9 @@
 package Patch.Hadoop.Job;
-
 import java.awt.Color;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.swing.JEditorPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import Patch.Hadoop.ProjectParser;
@@ -30,6 +20,8 @@ public class ColorMap {
 	private static Map<String,Set<JobVariable>> hexColorToJob = new HashMap<String,Set<JobVariable>>();
 	private static Map<Set<JobVariable>,Color> combinedToColor = null;
 	private DefaultTableModel treemodel = null;
+	private boolean containsListener = false;
+	private FeatureLegacyListener featureLegacyListener = null;
 	public static ColorMap inst(){
 		if(instance==null)
 			instance = new ColorMap();
@@ -99,44 +91,26 @@ public class ColorMap {
 		
 		treemodel = model;
 	}
+	
+	// 将listener加入到feature legacy中
 	public void addLegendListener(){
 		final JTable table = MainFrame.inst().getJobColorMapTable();
 		final ArrayList<Set<JobVariable>>indexToJobs = ColorMap.inst().getLegendJobsList();
-		table.addMouseListener(new MouseAdapter(){
-		public void mousePressed(MouseEvent me){
-			Point p = me.getPoint();
-			int row = table.rowAtPoint(p);
-			if(me.getClickCount()==2){			
-				Set<JobVariable> jobs = indexToJobs.get(row);
-				if(jobs.size()==1){
-					JobVariable job = null;
-					for(JobVariable jb:jobs){
-						job = jb;
-					}
-					File sourceFile = job.getSourceFile();
-					String htmlfileName = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
-					htmlfileName+=".html";
-					File htmlFile = new File(htmlfileName);
-					JEditorPane txtrSource = MainFrame.getSrcTextPane();
-					txtrSource.setContentType("text/html");
-					List<String> content;
-					try {
-						content = Files.readAllLines(htmlFile.toPath(),Charset.defaultCharset());
-						String allString = "";
-						for(String subcontent:content){
-							allString+=subcontent;
-							allString+="\n";
-						}		
-						txtrSource.setText("");
-						txtrSource.setText(allString);
-						txtrSource.setCaretPosition(0);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-			}
+		featureLegacyListener = new FeatureLegacyListener(indexToJobs, table);
+		table.addMouseListener(featureLegacyListener);
+		containsListener = true;
+	}
+	
+	// 删除监听器
+	public void removeLegendListener(){
+		if(containsListener){
+			final JTable table = MainFrame.inst().getJobColorMapTable();
+			table.removeMouseListener(featureLegacyListener);
+			containsListener = false;
 		}
-		});
+	}
+	
+	public boolean containsLegacyListener(){
+		return containsListener;
 	}
 }
