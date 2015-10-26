@@ -32,8 +32,6 @@ public class Variant {
 	private Map<CallSite,Stmt> calleeinitConditionalStmt = new HashMap<CallSite,Stmt>();
 	private Set<Value> callerinitConditionalValues = new HashSet<Value>();
 	private Stmt callerinitConditionalStmt = null;
-	
-	
 	int id = 0;
 	
 	/*
