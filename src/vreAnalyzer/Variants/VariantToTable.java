@@ -32,16 +32,20 @@ public class VariantToTable {
 			List<SootMethod> methods = variant.getAllMethods();
 			List<SootClass> classes = variant.getAllClasses();
 			String sepeartorString  = variant.getSeperatorValues();
+			// 获得这个Variant的code range
+			String coderange = variant.getCodeRangeforVariant();
 			
 			// 将这个内容写入到表格中
 			String variantId = ""+id;
 			String blockidString = IdsToString(blocksIds);
 			String methodsString = MethodsToString(methods);
 			String classString = ClassesToString(classes);
-			varitableModel.addRow(new Object[]{variantId,blockidString,sepeartorString,methodsString,classString});
+			
+			varitableModel.addRow(new Object[]{variantId,blockidString,coderange,sepeartorString,methodsString,classString});
 			
 		}		
 	}
+	
 	
 	public String IdsToString(List<Integer>blockIds){
 		String ids = "[";

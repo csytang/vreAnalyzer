@@ -311,6 +311,6 @@ public class CFG {
 	public boolean containsBraches(){
 		return containBraches;
 	}
-	
-	
+	public CFGNode convertstmtToCFGNode(Stmt stmt){ return stmtToCFGNode.get(stmt);}
+	public Set<Stmt> getstmtSet(){ return stmtToCFGNode.keySet(); }
 }

@@ -7,6 +7,7 @@ import soot.jimple.Stmt;
 import vreAnalyzer.Blocks.BlockGenerator;
 import vreAnalyzer.Blocks.BlockType;
 import vreAnalyzer.Blocks.CodeBlock;
+import vreAnalyzer.ControlFlowGraph.CFG;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Elements.CallSite;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
@@ -32,6 +33,7 @@ public class Variant {
 	private Map<CallSite,Stmt> calleeinitConditionalStmt = new HashMap<CallSite,Stmt>();
 	private Set<Value> callerinitConditionalValues = new HashSet<Value>();
 	private Stmt callerinitConditionalStmt = null;
+	private String codeRange = "";
 	int id = 0;
 	
 	/*
@@ -73,7 +75,6 @@ public class Variant {
 		this.id = id;
 	}
 	//////////////////////////////////////////////////////////////
-	
 	
 	// 加入绑定值到这个Variant////////////////////////////////////
 	public void addPaddingValue(List<Value>vis,CallSite callsite){
@@ -194,9 +195,9 @@ public class Variant {
 		// 2. 获得所有block的列表
 		List<CodeBlock> blockpool = BlockGenerator.instance.getblockPool();
 		// 3. 在caller函数中
+		Set<Integer> blockIdStmt = new HashSet<Integer>();
+		int blockIdMethod = -1;
 		for(CodeBlock block:blockpool){
-			Set<Integer> blockIdStmt = new HashSet<Integer>();
-			int blockIdMethod = -1;
 			if(block.getSootMethod()==callerMethod && block.getType()==BlockType.Stmt){
 				List<CFGNode> blocknodes = block.getCFGNodes();
 				// 4. 将包含在 block nodes 中的node全部删除 看剩余
@@ -211,15 +212,16 @@ public class Variant {
 			}else if(block.getSootMethod()==callerMethod && block.getType()==BlockType.Method){
 				blockIdMethod = block.getBlockId();
 			}
-			if(blockIdStmt.isEmpty()){
-				// 如果不被包含在任何子语句中
-				blockIds.add(blockIdMethod);
-				blockIdMethod = -1;
-			}else{
-				blockIds.addAll(blockIdStmt);
-				blockIdStmt.clear();
-			}
 		}
+		if(blockIdStmt.isEmpty() && blockIdMethod!=-1){
+			// 如果不被包含在任何子语句中
+			blockIds.add(blockIdMethod);
+			blockIdMethod = -1;
+		}else if(!blockIdStmt.isEmpty()){
+			blockIds.addAll(blockIdStmt);
+			blockIdStmt.clear();
+		}
+		
 		///////////////////////CallSite/////////////////////////////////
 		for(CallSite callsite:callsiteList){
 			// 1. 获取在这个callsite下的stmts
@@ -229,8 +231,6 @@ public class Variant {
 			// 2. 在callee函数中
 			for(SootMethod callee:callees){
 				for(CodeBlock block:blockpool){// 此處應該為callee
-					Set<Integer> blockIdStmt = new HashSet<Integer>();
-					int blockIdMethod = -1;
 					if(block.getSootMethod()==callee && block.getType()==BlockType.Stmt){
 						List<CFGNode> blocknodes = block.getCFGNodes();
 						// 3. 将包含在 block nodes 中的node全部删除 看剩余
@@ -245,17 +245,18 @@ public class Variant {
 					}else if(block.getSootMethod()==callerMethod && block.getType()==BlockType.Method){
 						blockIdMethod = block.getBlockId();
 					}
-					if(blockIdStmt.isEmpty()){
-						// 如果不被包含在任何子语句中
-						blockIds.add(blockIdMethod);
-						blockIdMethod = -1;
-					}else{
-						blockIds.addAll(blockIdStmt);
-						blockIdStmt.clear();
-					}
 					
 				}
 			}
+			if(blockIdStmt.isEmpty() && blockIdMethod!= -1){
+				// 如果不被包含在任何子语句中
+				blockIds.add(blockIdMethod);
+				blockIdMethod = -1;
+			}else if(!blockIdStmt.isEmpty()){
+				blockIds.addAll(blockIdStmt);
+				blockIdStmt.clear();
+			}
+					
 		}
 		return blockIds;
 	}
@@ -278,17 +279,16 @@ public class Variant {
 		/*
 		 * 对于这个block中 包含的 进行处理
 		 */
-		List<Stmt>blockstmts = new LinkedList<Stmt>();
+		
+		Set<Stmt>remainstmts = new HashSet<Stmt>();
+		remainstmts.addAll(allstmts);
 		for(CFGNode node:blocknodes){
 			Stmt stmt = node.getStmt();
-			blockstmts.add(stmt);
+			if(remainstmts.contains(stmt))
+				remainstmts.remove(stmt);
 		}
-		// 加入看是否有重叠
-		List<Stmt>remainstmts = new LinkedList<Stmt>();
-		remainstmts.addAll(allstmts);
-		remainstmts.retainAll(blockstmts);
-		Set<Stmt>remainstmtset = new HashSet<Stmt>(remainstmts);
-		return remainstmtset;
+		
+		return remainstmts;
 	}
 	
 	// 获得这个Variant所涉及的所有函数
@@ -306,7 +306,7 @@ public class Variant {
 		
 		return allmethods;
 	}
-	
+
 	// 获得这个Variant所涉及的所有类
 	public List<SootClass> getAllClasses() {
 
@@ -422,5 +422,174 @@ public class Variant {
 		return seperatorValueString;
 		
 	}
+
+	public String getCodeRangeforVariant() {
+		
+		// 1. CodeRange 字符串
+		if(!codeRange.trim().equals(""))
+			return codeRange;
+		
+		// 2. 对于 caller method
+		CFG cfg = ProgramFlowBuilder.inst().getCFG(callerMethod);
+		int callerblocksize = this.bindingStmts.size();
+		int []callercoderange = new int[callerblocksize];
+		int rangeindex = 0;
+		
+		for(int i = 0;i < bindingStmts.size();i++){
+			CFGNode cfgNode = cfg.convertstmtToCFGNode(bindingStmts.get(i));
+			callercoderange[rangeindex] = cfgNode.getIdInMethod();
+			rangeindex++;
+		}
+		// 2.1 删除相同的元素
+		Set<Integer> updatecallercoderangeSet = removeRepeateValues(callercoderange);
+		callercoderange = new int[updatecallercoderangeSet.size()];
+		int index = 0;
+		for(int id:updatecallercoderangeSet){
+			callercoderange[index] = id;
+			index++;
+		}
+		
+		String callerCodeRange = "";
+		
+		// 3. caller array排序
+		if(callerblocksize>1){
+			callerCodeRange += "@"+callerMethod.getName();
+			quickSort(callercoderange,0,callercoderange.length-1);
+			String rangestring = "[";
+				int startIndex = 0;
+				int endIndex = 0;
+				for(int i = 0;i < callercoderange.length;i++){
+					startIndex = i;
+					endIndex = startIndex;
+					if(i<callercoderange.length-1){
+						while(callercoderange[i+1]-callercoderange[i]==1){
+							endIndex++;
+							i++;
+							if(i==callercoderange.length-1)
+								break;
+						}
+					}
+					if(endIndex-startIndex>=2)
+						rangestring+=callercoderange[startIndex]+":"+callercoderange[endIndex]+",";
+					else if(endIndex-startIndex==1)
+						rangestring+=callercoderange[startIndex]+","+callercoderange[endIndex]+",";
+					else
+						rangestring+=callercoderange[startIndex]+",";
+						
+				}
+				if(callercoderange.length>0)
+					rangestring = rangestring.substring(0, rangestring.length()-1);
+				rangestring+="]";
+				callerCodeRange += rangestring;
+		}
+		codeRange = callerCodeRange;
+		// 4. 在Callee中处理
+		String calleeCodeRange = "";
+		if(callsiteList==null){
+			callsiteList.addAll(callSiteToBindingStmt.keySet());
+		}
+		
+		// 5. 遍历整个list
+		for(CallSite callsite:callsiteList){
+			List<Stmt> calleebindingstmts = callSiteToBindingStmt.get(callsite);
+			List<SootMethod> calleeMethods = callsite.getAppCallees();
+			for(SootMethod callee:calleeMethods){
+				CFG calleecfg = ProgramFlowBuilder.inst().getCFG(callee);
+				Set<Stmt>calleestmtSet = calleecfg.getstmtSet();
+				
+				// 如果是这个 callee method
+				if(calleestmtSet.containsAll(calleebindingstmts)){
+					int calleeblocksize = calleebindingstmts.size();
+					int []calleecoderange = new int[calleeblocksize];
+					rangeindex = 0;
+					for(int i = 0;i < calleebindingstmts.size();i++){
+						CFGNode cfgNode = calleecfg.convertstmtToCFGNode(calleebindingstmts.get(i));
+						calleecoderange[rangeindex] = cfgNode.getIdInMethod();
+						rangeindex++;
+					}
+					// 2.1 删除相同的元素
+					Set<Integer> updatecalleecoderangeSet = removeRepeateValues(calleecoderange);
+					calleecoderange = new int[updatecalleecoderangeSet.size()];
+					index = 0;
+					for(int id:updatecalleecoderangeSet){
+						calleecoderange[index] = id;
+						index++;
+					}
+					
+					
+					calleeCodeRange = "";
+					calleeCodeRange += "@"+callee.getName();
+					if(calleeblocksize>1){
+						quickSort(calleecoderange,0,calleecoderange.length-1);
+						String rangestring = "[";
+							int startIndex = 0;
+							int endIndex = 0;
+							for(int i = 0;i < callercoderange.length;i++){
+								startIndex = i;
+								endIndex = startIndex;
+								if(i<calleecoderange.length-1){
+									while(calleecoderange[i+1]-calleecoderange[i]==1){
+										endIndex++;
+										i++;
+										if(i==calleecoderange.length-1)
+											break;
+									}
+								}
+								if(endIndex-startIndex>=2)
+									rangestring+=calleecoderange[startIndex]+":"+calleecoderange[endIndex]+",";
+								else if(endIndex-startIndex==1)
+									rangestring+=calleecoderange[startIndex]+","+calleecoderange[endIndex]+",";
+								else
+									rangestring+=calleecoderange[startIndex]+",";
+									
+							}
+							if(calleecoderange.length>0)
+								rangestring = rangestring.substring(0, rangestring.length()-1);
+							rangestring+="]";
+							calleeCodeRange += rangestring;
+					}
+					codeRange += calleeCodeRange;
+				}
+			}
+		}
+		
+		return codeRange;
+	}
 	
+	public void quickSort(int arr[],int left,int right){
+		int index = partition(arr,left,right);
+		if(left< index-1){
+			quickSort(arr,left,index-1);
+		}
+		if(index<right){
+			quickSort(arr,index,right);
+		}
+	}
+	public int partition(int arr[],int left,int right){
+		int i = left, j = right;
+		int temp;
+		int pivot = arr[(left+right)/2];
+		while(i <= j){
+			while(arr[i]< pivot)
+				i++;
+			while(arr[j]> pivot)
+				j--;
+			if(i <= j){
+				temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
+				i++;
+				j--;
+			}
+		}
+		return i;
+	}
+	public Set<Integer> removeRepeateValues(int []codeIds){
+		Set<Integer>updateIds = new HashSet<Integer>();
+		for(int i:codeIds){
+			updateIds.add(i);
+		}
+		return updateIds;
+	}
+
 }

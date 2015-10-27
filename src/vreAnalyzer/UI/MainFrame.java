@@ -305,7 +305,7 @@ public class MainFrame extends JFrame {
 		
 		JScrollPane variantBlockPane = new JScrollPane();
 		tabbedPane.addTab("Variant Blocks", new ImageIcon(MainFrame.class.getResource("/image/variants.png")), variantBlockPane, "variant assets from variabillity aspect");
-		String variantsheaders[] = {"Variant ID","Parent Block Id","Separators","SootMethod","SootClass"};
+		String variantsheaders[] = {"Variant ID","Block_Id","Code Range(jimple)","Separators","SootMethod","SootClass"};
 		DefaultTableModel varitableModel = new DefaultTableModel(null,variantsheaders);
 		variantstable = new JTable(varitableModel);
 		variantstable.getTableHeader().setReorderingAllowed(false);
