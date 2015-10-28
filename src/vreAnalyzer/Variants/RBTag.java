@@ -48,7 +48,7 @@ public class RBTag implements Tag{
 	}
 	
 	public void addBindingValue(Value value,CallSite remoteCallSite){
-		if(fromRemoteCaller){
+		if(remoteCallSite!=null){
 			// 如果当前有这个CallSite
 			if(this.calleebindingvalues.containsKey(remoteCallSite)){
 				this.calleebindingvalues.get(remoteCallSite).add(value);
@@ -64,7 +64,7 @@ public class RBTag implements Tag{
 		}
 	}
 	public void addBindingValue(Set<Value>values,CallSite remoteCallSite){
-		if(fromRemoteCaller){
+		if(remoteCallSite!=null){
 			// 如果当前 有这个CallSite
 			if(this.calleebindingvalues.containsKey(remoteCallSite)){
 				this.calleebindingvalues.get(remoteCallSite).addAll(values);
@@ -78,7 +78,7 @@ public class RBTag implements Tag{
 		}
 	}
 	public Set<Value> getBindingValues(CallSite remoteCallSite){
-		if(fromRemoteCaller){
+		if(remoteCallSite!=null){
 			if(this.calleebindingvalues.containsKey(remoteCallSite)){
 				return this.calleebindingvalues.get(remoteCallSite);
 			}else{

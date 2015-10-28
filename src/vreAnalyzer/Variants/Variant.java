@@ -34,11 +34,10 @@ public class Variant {
 	private Set<Value> callerinitConditionalValues = new HashSet<Value>();
 	private Stmt callerinitConditionalStmt = null;
 	private String codeRange = "";
+	private boolean verbose = true;
 	int id = 0;
 	
-	/*
-	 * Variant 构造器
-	 */
+	
 	public Variant(Value vi,List<Stmt>stmts,CallSite callsite,SootMethod method,int id){
 		if(callsite==null){
 			paddingValues = new LinkedList<Value>();
@@ -74,6 +73,8 @@ public class Variant {
 		}
 		this.id = id;
 	}
+	
+	
 	//////////////////////////////////////////////////////////////
 	
 	// 加入绑定值到这个Variant////////////////////////////////////
@@ -118,6 +119,7 @@ public class Variant {
 	///////////////////////////////////////////////////////////
 	
 	// 加入绑定语句//////////////////////////////////////////////
+	
     public void addBindingStmts(Stmt stmt,CallSite callsite) {
     	if(callsite==null){
     		this.bindingStmts.add(stmt);
@@ -143,6 +145,7 @@ public class Variant {
     		}
     	}
     }
+    
     /////////////////////////////////////////////////////////
     
 	public List<Stmt> getBindingStmts(CallSite callsite) {
@@ -185,8 +188,12 @@ public class Variant {
 	}
 	
 	// 获得一个Variant在code block中对应
-	public List<Integer> getBlockIds() {
+	public int[] getBlockIds() {
 		// TODO Auto-generated method stub
+		if(verbose){
+			String range =  getCodeRangeforVariant();
+			System.out.println("Code Range:"+range);
+		}
 		List<Integer> blockIds = new LinkedList<Integer>();
 		///////////////////////////CallerStmt////////////////////////////
 		// 1. 获得
@@ -199,17 +206,30 @@ public class Variant {
 		int blockIdMethod = -1;
 		for(CodeBlock block:blockpool){
 			if(block.getSootMethod()==callerMethod && block.getType()==BlockType.Stmt){
+				
 				List<CFGNode> blocknodes = block.getCFGNodes();
 				// 4. 将包含在 block nodes 中的node全部删除 看剩余
 				Set<Stmt>remainsstmts = removeStmtinBlock(callerstmts,blocknodes);
-				if(isFullSubSet(remainsstmts,callerstmts)){
+				if(remainsstmts.isEmpty() && !callerstmts.isEmpty()){
 					// 将这个codeblock的id加入到blockIds中
 					blockIdStmt.add(block.getBlockId());
+					if(verbose){
+						// 打印函数名 类名 codeRange
+						System.out.println("Method Name:"+block.getSootMethod()+"; ClassName:"+block.getSootClass().getName()+"; CodeRange:"+block.getCodeRange());
+					}
 				}else if(isOverlap(remainsstmts,callerstmts)){
 					// 将这个codeblock的id加入到blockIds中
 					blockIdStmt.add(block.getBlockId());
+					if(verbose){
+						// 打印函数名 类名 codeRange
+						System.out.println("Method Name:"+block.getSootMethod()+"; ClassName:"+block.getSootClass().getName()+"; CodeRange:"+block.getCodeRange());
+					}
 				}
 			}else if(block.getSootMethod()==callerMethod && block.getType()==BlockType.Method){
+				if(verbose){
+					// 打印函数名 类名 codeRange
+					System.out.println("Method Name:"+block.getSootMethod()+"; ClassName:"+block.getSootClass().getName()+"; CodeRange:"+block.getCodeRange());
+				}
 				blockIdMethod = block.getBlockId();
 			}
 		}
@@ -235,7 +255,7 @@ public class Variant {
 						List<CFGNode> blocknodes = block.getCFGNodes();
 						// 3. 将包含在 block nodes 中的node全部删除 看剩余
 						Set<Stmt>remainsstmts = removeStmtinBlock(calleestmtsSet,blocknodes);
-						if(isFullSubSet(remainsstmts,calleestmtsSet)){
+						if(remainsstmts.isEmpty() && !callerstmts.isEmpty()){
 							// 将这个codeblock的id加入到blockIds中
 							blockIdStmt.add(block.getBlockId());
 						}else if(isOverlap(remainsstmts,calleestmtsSet)){
@@ -258,20 +278,32 @@ public class Variant {
 			}
 					
 		}
-		return blockIds;
+		int[]blockidArray = new int[blockIds.size()];
+		for(int i = 0;i < blockidArray.length;i++){
+			blockidArray[i] = blockIds.get(i);
+		}
+		// 对id进行排序
+		if(blockidArray.length > 1){
+			quickSort(blockidArray,0,blockidArray.length-1);
+		}
+		return blockidArray;
 	}
 	
-	// 判断两个集合关系 是否为 子集
-	private boolean isFullSubSet(Set<Stmt> remainsstmts, Set<Stmt> allstmts) {
-		// TODO Auto-generated method stub
-		return allstmts.containsAll(remainsstmts);
-	}
+	
 	
 	// 判断两个集合关系 是否为 有交集
 	private boolean isOverlap(Set<Stmt> remainsstmts, Set<Stmt> allstmts){
 		// 1. 两个set有重复
 		Set<Stmt> allstmtsTmp = new HashSet<Stmt>(allstmts);
-		return allstmtsTmp.retainAll(remainsstmts);
+		if(allstmtsTmp.containsAll(remainsstmts)){
+			allstmtsTmp.removeAll(remainsstmts);
+			if(allstmtsTmp.isEmpty()){
+				return false;
+			}else{
+				return true;
+			}
+		}else
+			return false;
 	}
 	
 	// 出去在block中的重复语句
@@ -404,7 +436,8 @@ public class Variant {
 			Set<Value> calleeValues = calleeinitConditionalValues.get(site);
 			seperatorValueString += "(@";
 			// 加入method
-			
+			if(calleeValues==null)
+				continue;
 			for(Value calleeValue:calleeValues){
 				seperatorValueString += calleeValue;
 				seperatorValueString += ":";
@@ -436,11 +469,18 @@ public class Variant {
 		int rangeindex = 0;
 		
 		for(int i = 0;i < bindingStmts.size();i++){
+			
+			if(verbose){
+				System.out.println("Line472 Stmt: ["+bindingStmts.get(i)+"]in callermethod:["+callerMethod+";]in classs["+callerMethod.getDeclaringClass()+"]");
+			}
 			CFGNode cfgNode = cfg.convertstmtToCFGNode(bindingStmts.get(i));
+			if(verbose)
+				System.out.println("Line476 CFGNode: ["+cfgNode.getStmt()+"]in callermethod:["+callerMethod+";] in classs["+callerMethod.getDeclaringClass()+"]");
 			callercoderange[rangeindex] = cfgNode.getIdInMethod();
 			rangeindex++;
 		}
-		// 2.1 删除相同的元素
+		
+		// 3. 删除相同的元素
 		Set<Integer> updatecallercoderangeSet = removeRepeateValues(callercoderange);
 		callercoderange = new int[updatecallercoderangeSet.size()];
 		int index = 0;
@@ -451,7 +491,7 @@ public class Variant {
 		
 		String callerCodeRange = "";
 		
-		// 3. caller array排序
+		// 4. caller array排序
 		if(callerblocksize>1){
 			callerCodeRange += "@"+callerMethod.getName();
 			quickSort(callercoderange,0,callercoderange.length-1);
@@ -483,13 +523,15 @@ public class Variant {
 				callerCodeRange += rangestring;
 		}
 		codeRange = callerCodeRange;
-		// 4. 在Callee中处理
+		// 5. 在Callee中处理
 		String calleeCodeRange = "";
 		if(callsiteList==null){
 			callsiteList.addAll(callSiteToBindingStmt.keySet());
 		}
 		
-		// 5. 遍历整个list
+		
+		
+		// 6. 遍历整个list
 		for(CallSite callsite:callsiteList){
 			List<Stmt> calleebindingstmts = callSiteToBindingStmt.get(callsite);
 			List<SootMethod> calleeMethods = callsite.getAppCallees();
@@ -524,7 +566,7 @@ public class Variant {
 						String rangestring = "[";
 							int startIndex = 0;
 							int endIndex = 0;
-							for(int i = 0;i < callercoderange.length;i++){
+							for(int i = 0;i < calleecoderange.length;i++){
 								startIndex = i;
 								endIndex = startIndex;
 								if(i<calleecoderange.length-1){

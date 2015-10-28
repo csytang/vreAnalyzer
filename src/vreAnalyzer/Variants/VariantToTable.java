@@ -1,6 +1,5 @@
 package vreAnalyzer.Variants;
 
-import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -25,9 +24,8 @@ public class VariantToTable {
 		JTable jvariantTable = MainFrame.inst().getVariantTable();
 		DefaultTableModel varitableModel = (DefaultTableModel) jvariantTable.getModel();
 		for(Variant variant:fullvaraintlist){
-			int id = variant.getVariantId();
-			List<Integer> blocksIds = new LinkedList<Integer>();
-			blocksIds = variant.getBlockIds();
+			int id = variant.getVariantId();	
+			int[] blocksIds = variant.getBlockIds();
 			
 			List<SootMethod> methods = variant.getAllMethods();
 			List<SootClass> classes = variant.getAllClasses();
@@ -47,13 +45,13 @@ public class VariantToTable {
 	}
 	
 	
-	public String IdsToString(List<Integer>blockIds){
+	public String IdsToString(int[]blockIds){
 		String ids = "[";
 		for(int id:blockIds){
 			ids += id;
 			ids += ",";
 		}
-		if(blockIds.size()>=1){
+		if(blockIds.length>=1){
 			ids = ids.substring(0, ids.length()-1);
 		}
 		ids += "]";

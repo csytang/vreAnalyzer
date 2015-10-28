@@ -1023,9 +1023,9 @@ public class BindingResolver {
 								
 								// variant 中加入当前语句 
 								for(Variant variant:variantset){
-									variant.addBindingStmts(stmt, null);
+									variant.addBindingStmts(stmt, argument.getCallSite());
 									for(Value value:bindingvalues){
-										variant.addPaddingValue(value, null);
+										variant.addPaddingValue(value, argument.getCallSite());
 									}
 								}
 								for(Value value:bindingvalues) {
