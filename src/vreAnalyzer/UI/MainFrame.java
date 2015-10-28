@@ -35,9 +35,7 @@ import java.util.*;
 import java.util.List;
 
 public class MainFrame extends JFrame {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	// 1. Instance

@@ -26,7 +26,6 @@ public class JobDataCollector {
 	
 	public JobDataCollector(){
 		jobToStatistic = new HashMap<JobVariable,JobStatistic>();
-		
 	}
 	public static JobDataCollector inst(){
 		if(instance==null)

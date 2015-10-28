@@ -29,7 +29,7 @@ public class VariantToTable {
 			
 			List<SootMethod> methods = variant.getAllMethods();
 			List<SootClass> classes = variant.getAllClasses();
-			String sepeartorString  = variant.getSeperatorValues();
+			String separatorString  = variant.getSeperatorValues();
 			// 获得这个Variant的code range
 			String coderange = variant.getCodeRangeforVariant();
 			
@@ -39,8 +39,8 @@ public class VariantToTable {
 			String methodsString = MethodsToString(methods);
 			String classString = ClassesToString(classes);
 			
-			varitableModel.addRow(new Object[]{variantId,blockidString,coderange,sepeartorString,methodsString,classString});
-			
+			varitableModel.addRow(new Object[]{variantId,blockidString,coderange,separatorString,methodsString,classString});
+			VariantToFile.inst().writeRow(variantId, blockidString, coderange, separatorString, methodsString, classString);
 		}		
 	}
 	

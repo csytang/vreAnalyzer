@@ -69,8 +69,10 @@ public class BindingResolver {
 		removeHiddenVariant(VariantAnnotate.getShouldBeHideVariants());
 		VariantColorMap.inst().addToLegend();
 		VariantAnnotate.setvariantready();
-		// 加入表格中
+		// 加入表格和文件中中
+		VariantToFile.inst().startWrite();
 		VariantToTable.inst().addVariantToTable(fullVariantList);
+		VariantToFile.inst().endWrite();
 	}
 	
 	public void parse(){
