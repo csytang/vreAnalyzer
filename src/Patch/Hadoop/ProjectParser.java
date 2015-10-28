@@ -161,12 +161,18 @@ public class ProjectParser {
 		}
 		
 	}
+	
 	public static Color hex2Rgb(String colorStr) {
+		if(true){
+			System.out.println("Color is:"+colorStr);
+		}
 	    return new Color(
 	            Integer.valueOf( colorStr.substring( 1, 3 ), 16 ),
 	            Integer.valueOf( colorStr.substring( 3, 5 ), 16 ),
 	            Integer.valueOf( colorStr.substring( 5, 7 ), 16 ) );
 	}
+	
+	
 	public void collectStatisiticData(){
 		if(vreAnalyzerCommandLine.isSourceBinding()){
 			JobDataCollector.inst().parse(jobtoHub);

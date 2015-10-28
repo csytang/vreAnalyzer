@@ -35,6 +35,8 @@ public class BlockGenerator {
 		
 		JTable blocktable = MainFrame.inst().getBlockTable();
 		blockmodel = (DefaultTableModel)blocktable.getModel();
+		// 1. 加入到文件中
+		BlockToFile.inst().startWrite();
 		
 		for(SootClass cls:appClasses){
 			
@@ -84,10 +86,7 @@ public class BlockGenerator {
 							if(marked.contains(curr)&&!temp.isEmpty()){
 								SimpleBlock sblock = SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId());
 								addNewBlockToPool(sblock,true);// sub block
-								
 								// 1. add a new static variant
-								
-								
 								temp.clear();
 								continue;
 							}else if(marked.contains(curr)){
@@ -113,6 +112,9 @@ public class BlockGenerator {
 			}
 			
 		}
+		
+		// 2. 完成写入文件 
+		BlockToFile.inst().endWrite();
 	}
 	public static void increaseId(){
 		blockid++;
@@ -127,16 +129,27 @@ public class BlockGenerator {
 		//2. //"Block ID","Type","Method(IF)","Class"
 		if(!blockpool.contains(block)){
 			if(block.getType()==BlockType.Class){
-				if(original)
-					blockmodel.addRow(new Object[]{block.getBlockId(),"-",block.getType(),"-",block.getSootClass().getName(),"-","Y"});
-				else
-					blockmodel.addRow(new Object[]{block.getBlockId(),"-",block.getType(),"-",block.getSootClass().getName(),"-","N"});
+				if(original){
+					blockmodel.addRow(new Object[]{block.getBlockId(),"-",block.getType(),"-",block.getSootClass().getName(),"-","Y",""});
+					// 将block内容加入到文件中
+					BlockToFile.inst().writeRow(block.getBlockId()+"", "-", block.getType(), "-", block.getSootClass().getName(), "-","Y", "");
+				}else{
+					blockmodel.addRow(new Object[]{block.getBlockId(),"-",block.getType(),"-",block.getSootClass().getName(),"-","N",""});
+					// 将block内容加入到文件中
+					BlockToFile.inst().writeRow(block.getBlockId()+"","-",block.getType(),"-",block.getSootClass().getName(),"-","N","");
+				}
 			}
 			else{
-				if(original)
-					blockmodel.addRow(new Object[]{block.getBlockId(),block.getCodeRange(),block.getType(),block.getSootMethod().getName(),block.getSootClass().getName(),block.getParentId(),"Y"});
-				else
-					blockmodel.addRow(new Object[]{block.getBlockId(),block.getCodeRange(),block.getType(),block.getSootMethod().getName(),block.getSootClass().getName(),block.getParentId(),"N"});
+				if(original){
+					blockmodel.addRow(new Object[]{block.getBlockId(),block.getCodeRange(),block.getType(),block.getSootMethod().getName(),block.getSootClass().getName(),block.getParentId(),"Y",""});
+					// 将block内容加入到文件中
+					BlockToFile.inst().writeRow(block.getBlockId()+"", block.getCodeRange(), block.getType(),
+							block.getSootMethod().getName(),block.getSootClass().getName(),block.getParentId()+"","Y","");
+				}else{
+					blockmodel.addRow(new Object[]{block.getBlockId(),block.getCodeRange(),block.getType(),block.getSootMethod().getName(),block.getSootClass().getName(),block.getParentId(),"N",""});
+					// 将block中内容加入到文件中
+					BlockToFile.inst().writeRow(block.getBlockId()+"", block.getCodeRange(), block.getType(), block.getSootMethod().getName(), block.getSootClass().getName(), block.getParentId()+"", "N", "");				
+				}
 			}
 			blockpool.add(block);
 		}
