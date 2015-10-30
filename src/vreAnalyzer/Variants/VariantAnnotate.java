@@ -18,7 +18,6 @@ import vreAnalyzer.UI.MainFrame;
 import vreAnalyzer.UI.SourceClassBinding;
 import vreAnalyzer.vreAnalyzerCommandLine;
 import vreAnalyzer.Elements.CallSite;
-
 import java.awt.*;
 import java.io.File;
 import java.util.LinkedList;

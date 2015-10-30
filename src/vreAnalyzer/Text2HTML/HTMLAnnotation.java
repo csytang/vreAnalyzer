@@ -591,7 +591,7 @@ public class HTMLAnnotation {
 				if(ortitle.trim()=="")
 					merged = new StringBuilder(merged).insert(ortitleindex, spantitle).toString();
 				else // 插入span内容 并以:分割
-					merged = new StringBuilder(merged).insert(ortitleindex+1, ":"+spantitle).toString();
+					merged = new StringBuilder(merged).insert(ortitleendindex, ":"+spantitle).toString();
 				
 				///////////////////////////颜色处理/////////////////////
 				int orcolorindex = merged.indexOf("\" style=\"background-color:")+"\" style=\"background-color:".length();

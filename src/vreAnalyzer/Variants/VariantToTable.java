@@ -27,7 +27,7 @@ public class VariantToTable {
 			int id = variant.getVariantId();	
 			int[] blocksIds = variant.getBlockIds();
 			
-			List<SootMethod> methods = variant.getAllMethods();
+			
 			List<SootClass> classes = variant.getAllClasses();
 			String separatorString  = variant.getSeperatorValues();
 			// 获得这个Variant的code range
@@ -36,7 +36,7 @@ public class VariantToTable {
 			// 将这个内容写入到表格中
 			String variantId = ""+id;
 			String blockidString = IdsToString(blocksIds);
-			String methodsString = MethodsToString(methods);
+			String methodsString = MethodsToString(variant);
 			String classString = ClassesToString(classes);
 			
 			varitableModel.addRow(new Object[]{variantId,blockidString,coderange,separatorString,methodsString,classString});
@@ -59,11 +59,26 @@ public class VariantToTable {
 	}
 	
 	// Variant的方法的集合转化为字符串
-	public String MethodsToString(List<SootMethod> methods){
+	public String MethodsToString(Variant variant){
 		String methodName = "";
-		for(SootMethod method:methods){
+		List<SootMethod>calleeMethods = variant.getAllCalleeMethods();
+		SootMethod callerMethod = variant.getCallerMethod();
+		methodName += "[caller@";
+		methodName += callerMethod.getName();
+		methodName += ";";
+		boolean isFirst = true;
+		for(SootMethod method:calleeMethods){
+			if(isFirst){
+				isFirst = false;
+				methodName += "callee@";
+			}
 			methodName += method.getName();
+			methodName += ",";
 		}
+		if(!calleeMethods.isEmpty()){
+			methodName = methodName.substring(0, methodName.length()-1);
+		}
+		methodName += "]";
 		return methodName;
 	}
 	

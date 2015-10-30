@@ -22,9 +22,14 @@ public class BlockToFile {
 		blockwriter.println("Block ID,Code Range(Jimple),Type,Method(IF),Class,Parent BlockID,Original(Y/N),Feature ID");
 	}
 	public void writeRow(String blockId,String coderange,BlockType blockType,String methodsString,String classString,String parentblockIdString,String original,String featureIdString){
-		blockwriter.println("\""+blockId+"\","+"\""+coderange+"\","+"\""+blockType+"\","+
-	"\""+methodsString+"\","+"\""+classString+"\""+"\""+parentblockIdString+"\""+
-				"\""+original+"\""+"\""+featureIdString+"\"");
+		blockwriter.println("\""+blockId+"\","+
+				"\""+coderange+"\","+
+				"\""+blockType+"\","+
+				"\""+methodsString+"\","+
+				"\""+classString+"\","+
+				"\""+parentblockIdString+"\","+
+				"\""+original+"\","+
+				"\""+featureIdString+"\"");
 	}
 	public void endWrite(){
 		blockwriter.close();

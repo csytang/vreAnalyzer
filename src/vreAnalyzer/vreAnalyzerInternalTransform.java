@@ -1,6 +1,7 @@
 package vreAnalyzer;
 import soot.SceneTransformer;
 import vreAnalyzer.Blocks.BlockGenerator;
+import vreAnalyzer.Blocks.BlockToFile;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder.EntryNotFoundException;
@@ -23,6 +24,9 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		// 1. 加入到文件中
+		BlockToFile.inst().startWrite();
+		
 		if(vreAnalyzerCommandLine.isStartFromGUI())
 			BlockGenerator.inst(ProgramFlowBuilder.inst().getAppClasses());
 		System.out.println("[vreAnalyzer] Program flow build[Finish]");
@@ -40,6 +44,7 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 		System.out.println("[vreAnalyzer] Project analysis[Start]");
 		// Display Reusable Result by checking the mode
 		ProjectParser.inst().runProjectParser();
+		BlockToFile.inst().endWrite();
 		System.out.println("[vreAnalyzer] Project analysis[Finish]");
 	}
 

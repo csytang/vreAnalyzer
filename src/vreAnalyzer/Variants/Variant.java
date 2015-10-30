@@ -276,11 +276,13 @@ public class Variant {
 				blockIds.addAll(blockIdStmt);
 				blockIdStmt.clear();
 			}
-					
 		}
-		int[]blockidArray = new int[blockIds.size()];
-		for(int i = 0;i < blockidArray.length;i++){
-			blockidArray[i] = blockIds.get(i);
+		Set<Integer>blockidSet = new HashSet<Integer>(blockIds);
+		int[]blockidArray = new int[blockidSet.size()];
+		int index = 0;
+		for(int i:blockidSet){
+			blockidArray[index] = i;
+			index++;
 		}
 		// 对id进行排序
 		if(blockidArray.length > 1){
@@ -324,19 +326,19 @@ public class Variant {
 	}
 	
 	// 获得这个Variant所涉及的所有函数
-	public List<SootMethod> getAllMethods() {
+	
+	public List<SootMethod> getAllCalleeMethods() {
 		
-		Set<SootMethod>methodset = new HashSet<SootMethod>();
-		methodset.add(callerMethod);
-		if(callsiteList==null){
+		Set<SootMethod> methodset = new HashSet<SootMethod>();
+		if(callsiteList==null) {
 			callsiteList = new LinkedList<CallSite>(callSiteToBindingStmt.keySet());
 		}
-		for(CallSite callsite:callsiteList){
+		for(CallSite callsite:callsiteList) {
 			methodset.addAll(callsite.getAppCallees());
 		}
-		List<SootMethod> allmethods = new LinkedList<SootMethod>(methodset);
+		List<SootMethod> allcalleemethods = new LinkedList<SootMethod>(methodset);
 		
-		return allmethods;
+		return allcalleemethods;
 	}
 
 	// 获得这个Variant所涉及的所有类
@@ -409,11 +411,12 @@ public class Variant {
 		// 返回一个字符串 这个字符串中
 		String seperatorValueString = "";
 		seperatorValueString += "[";
+		
 		// 1. 加入在caller中的value
 		if(!callerinitConditionalValues.isEmpty()){
-			seperatorValueString += "(@";
+			seperatorValueString += "(caller@";
 			seperatorValueString += callerMethod.getName();
-			seperatorValueString += " ";
+			seperatorValueString += "_";
 		}
 		for(Value value:callerinitConditionalValues){
 			seperatorValueString += value;
@@ -428,16 +431,18 @@ public class Variant {
 		// 遍历所有的callsite
 		if(callsiteList==null)
 			callsiteList = new LinkedList<CallSite>(callSiteToBindingStmt.keySet());
-		if(callsiteList.size()!=0){
-			seperatorValueString += ":";
-		}
 		
+		boolean isFirst = true;// 是否为第一个callee
 		for(CallSite site:callsiteList){
 			Set<Value> calleeValues = calleeinitConditionalValues.get(site);
-			seperatorValueString += "(@";
+			
 			// 加入method
 			if(calleeValues==null)
 				continue;
+			if(isFirst){
+				isFirst = false;
+				seperatorValueString += "(callee@";
+			}
 			for(Value calleeValue:calleeValues){
 				seperatorValueString += calleeValue;
 				seperatorValueString += ":";
@@ -447,7 +452,7 @@ public class Variant {
 			}
 			seperatorValueString += ")";
 		}
-		if(callsiteList.size()!=0){
+		if(!callsiteList.isEmpty() && !isFirst){
 			seperatorValueString = seperatorValueString.substring(0,seperatorValueString.length()-1);
 		}
 		
@@ -493,6 +498,7 @@ public class Variant {
 		
 		// 4. caller array排序
 		if(callerblocksize>1){
+			callerCodeRange += "caller";
 			callerCodeRange += "@"+callerMethod.getName();
 			quickSort(callercoderange,0,callercoderange.length-1);
 			String rangestring = "[";
@@ -530,7 +536,6 @@ public class Variant {
 		}
 		
 		
-		
 		// 6. 遍历整个list
 		for(CallSite callsite:callsiteList){
 			List<Stmt> calleebindingstmts = callSiteToBindingStmt.get(callsite);
@@ -559,7 +564,7 @@ public class Variant {
 					}
 					
 					
-					calleeCodeRange = "";
+					calleeCodeRange = "callee";
 					calleeCodeRange += "@"+callee.getName();
 					if(calleeblocksize>1){
 						quickSort(calleecoderange,0,calleecoderange.length-1);

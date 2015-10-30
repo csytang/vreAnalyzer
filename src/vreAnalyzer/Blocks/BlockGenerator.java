@@ -35,8 +35,7 @@ public class BlockGenerator {
 		
 		JTable blocktable = MainFrame.inst().getBlockTable();
 		blockmodel = (DefaultTableModel)blocktable.getModel();
-		// 1. 加入到文件中
-		BlockToFile.inst().startWrite();
+		
 		
 		for(SootClass cls:appClasses){
 			
@@ -71,7 +70,6 @@ public class BlockGenerator {
 					/**
 					 * Strategy:
 					 * 1. go through the control flow, find the branch, create separate block for each branch
-					 * 
 					 * 2. //"Block ID","Type","Method(IF)","Class" line numbers
 					 */
 					if(cfg.containsBraches()){
@@ -113,8 +111,7 @@ public class BlockGenerator {
 			
 		}
 		
-		// 2. 完成写入文件 
-		BlockToFile.inst().endWrite();
+		
 	}
 	public static void increaseId(){
 		blockid++;
@@ -125,6 +122,7 @@ public class BlockGenerator {
 	public List<CodeBlock> getblockPool(){
 		return blockpool;
 	}
+	
 	public void addNewBlockToPool(CodeBlock block,boolean original){
 		//2. //"Block ID","Type","Method(IF)","Class"
 		if(!blockpool.contains(block)){
