@@ -43,7 +43,6 @@ public class MainFrame extends JFrame {
 	
 	// 2. Contents
 	private JPanel contentPane;
-	private final JTextField textField;
 	private List<File> target;
 	private List<File> supporingjars;
 	private List<File> sources;
@@ -240,24 +239,6 @@ public class MainFrame extends JFrame {
 		ToolTipManager.sharedInstance().registerComponent(source_annotatedDisplayArea);
 		source_annotatedDisplayArea.setEditable(false);
 		source_annotateDisplayPane.setViewportView(source_annotatedDisplayArea);
-		
-		JPanel searchPanel = new JPanel();
-		FlowLayout fl_searchPanel = (FlowLayout) searchPanel.getLayout();
-		fl_searchPanel.setAlignment(FlowLayout.LEFT);
-		sourcepanel.add(searchPanel, BorderLayout.SOUTH);
-		
-		textField = new JTextField();
-		searchPanel.add(textField);
-		textField.setColumns(40);
-		
-		JButton btnSearch = new JButton("Search");
-		searchPanel.add(btnSearch);
-		
-		JButton btnForwardSearch = new JButton("Forward Search");
-		searchPanel.add(btnForwardSearch);
-		
-		JButton btnBackwardSearch = new JButton("Backward Search");
-		searchPanel.add(btnBackwardSearch);
 		
 		JScrollPane sourceDirPane = new JScrollPane();
 		sourceDirPane.setViewportView(source_annotateDirTree);

@@ -612,6 +612,7 @@ public class Variant {
 			quickSort(arr,index,right);
 		}
 	}
+	
 	public int partition(int arr[],int left,int right){
 		int i = left, j = right;
 		int temp;
