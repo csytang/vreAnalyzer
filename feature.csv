@@ -1,1 +1,3 @@
 JobName,Stmt,SootMethod,SootClass,File
+r5,"r5 = staticinvoke <org.apache.hadoop.mapreduce.Job: org.apache.hadoop.mapreduce.Job getInstance(org.apache.hadoop.conf.Configuration,java.lang.String)>(r1, 'word count')","main","WordCount2","/Users/tangchris/Documents/workspace/WordCount2.0/src/WordCount2.java"
+r6,"r6 = staticinvoke <org.apache.hadoop.mapreduce.Job: org.apache.hadoop.mapreduce.Job getInstance(org.apache.hadoop.conf.Configuration,java.lang.String)>(r2, 'word count')","main","WordCount2","/Users/tangchris/Documents/workspace/WordCount2.0/src/WordCount2.java"

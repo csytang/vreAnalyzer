@@ -28,9 +28,9 @@ public class BindingResolver {
     private boolean verbose = true;
     private List<SootMethod> allAppMethod = null;
     // 包含函数调用的函数
-    private List<SootMethod> callerMethod = null;
+    protected List<SootMethod> callerMethod = null;
     // 不包含任何函数调用的函数
-    private List<SootMethod> calleeMethod = null;
+    protected List<SootMethod> calleeMethod = null;
   
     // 将部分未绑定(PRBTag)的Stack
     private Stack<CFGNode> PRBAnalysisStack = new Stack<CFGNode>();
@@ -44,9 +44,13 @@ public class BindingResolver {
     // Map 从SootMethod 到 valueToVariant
     private Map<SootMethod,List<ValueToVariant>> methodToValueToVariant = new HashMap<SootMethod,List<ValueToVariant>>();
     
+    // SootMethod 到Variants 的 对应
+    private Map<SootMethod,List<Variant>> methodToVariants = new HashMap<SootMethod,List<Variant>>();
+
     private boolean containPRBValue = false;//是否包含部分 未绑定值
     // 包含所有的Varaint
     private List<Variant> fullVariantList = new LinkedList<Variant>();
+    
     
     public BindingResolver(){
     	methodToArgsList = new HashMap<SootMethod,List<Args>>();
@@ -80,13 +84,16 @@ public class BindingResolver {
 		allAppMethod.addAll(ProgramFlowBuilder.inst().getAppConcreteMethods());
 		// 定义的变量
 		List<Variable> defVars = null;
+		
 		// 使用的变量
 		List<Variable> useVars = null;
+		
 		callerMethod = new LinkedList<SootMethod>();
 		boolean containappmethodcallee = false;
 		for(SootMethod method:allAppMethod){
 			MethodTag mTag = (MethodTag) method.getTag(MethodTag.TAG_NAME);
 			List<CallSite> callsites = mTag.getAllCallSites();
+			
 			
 			// 初始化methodToUnbindValue
 			methodToUnbindValues.put(method, new HashSet<Value>());
@@ -94,6 +101,8 @@ public class BindingResolver {
 			methodToParitalUnbindValues.put(method, new HashSet<Value>());
 			// 初始化methodToValueToVariant
 			methodToValueToVariant.put(method, new LinkedList<ValueToVariant>());
+			// 初始化methodToVariant
+			methodToVariants.put(method, new LinkedList<Variant>());
 			
 			for(CallSite site:callsites){
 				
@@ -142,23 +151,26 @@ public class BindingResolver {
 				callerMethod.add(method);
 			}
 		}
+		
 		/////////////////////////////
 		calleeMethod = new LinkedList<SootMethod>();
 		calleeMethod.addAll(methodToArgsList.keySet());
 		
 		// ValueToVariant 对应检查
 		boolean isParaAssignStmt = false;
+		
 		for(SootMethod method:callerMethod) {
 			PRBAnalysisStack.clear();
-			if(verbose)
+			if(verbose){
 				System.out.println("当前处理函数: "+method.getName());
+			}
 			CFGDefUse cfg = (CFGDefUse) ProgramFlowBuilder.inst().getCFG(method);
 			List<CFGNode> nodes = cfg.getNodes();
+			
 			// 获得vtVariant
 			ValueToVariant vtVariant = new ValueToVariant(null);
 			methodToValueToVariant.get(method).add(vtVariant);
 			for(CFGNode node:nodes){
-				
 				if(node.isSpecial())
 					continue;
 				//////////////////////
@@ -261,6 +273,10 @@ public class BindingResolver {
 					variantId++;
 					// 加入到fullVariant list中
 					fullVariantList.add(variant);
+					
+					// 加入到SooMethod 到 Variant的对应
+					methodToVariants.get(method).add(variant);
+					
 					continue;
 				}
 				////////////////////////////////////////////////////////
@@ -584,8 +600,8 @@ public class BindingResolver {
 		}
 		
 		
-		
-		System.out.println("--------------------Finish caller method----------------------------");
+		if(verbose)
+			System.out.println("--------------------Finish caller method----------------------------");
 		
 		/////////////////////////////////////////////////////////
 		//实参 形参对应列表
@@ -613,14 +629,7 @@ public class BindingResolver {
 					// SootMethod callerMethod = argument.getCallerMethod();
 					localParameterToRemoteArgu.clear();
 					PRBAnalysisStack.clear();
-					/*
-					 * TODO
-					 * 1. 为什么要get(0)
-					 * 2. 如果自己调用自己 怎么办 
-					 * 3. methodToValueToVariant.get(argument.getCallerMethod()) 获得所有内容 都是什么
-					 * 4. 如果远程调用端 不是variant 怎么办 ---> 沒有argument
-					 * 
-					 */
+					
 					ValueToVariant callervtVariant = methodToValueToVariant.get(argument.getCallerMethod()).get(0);// ---- 调用函数的Value To Variant
 					
 					ValueToVariant localvtVariant = new ValueToVariant(argument.getCallSite());
@@ -744,6 +753,8 @@ public class BindingResolver {
 									for(Variant variant:callerVariants){
 										variant.addBindingStmts(stmt, argument.getCallSite());
 										variant.addPaddingValue(argu, argument.getCallSite());
+										// methodToVariant加入 
+										methodToVariants.get(method).add(variant);
 									}
 									localvtVariant.addValueToVariant(argu, callerVariants);
 									continue;
@@ -1044,7 +1055,6 @@ public class BindingResolver {
 			}
 			
 		}
-		
 	}
 	
 	public void removeHiddenVariant(List<Variant> variants){
@@ -1086,8 +1096,7 @@ public class BindingResolver {
 		    stack.push(x);
 		  }
 		}
-	
-	// 
+		
 	private void variantcolorannotation(){
 		
 		String variantId = "";
@@ -1101,5 +1110,13 @@ public class BindingResolver {
 	public List<Variant> getfullVariantList(){
 		return fullVariantList;
 	}
-
+	public Map<SootMethod,List<Variant>> getmethodToVariants(){
+		return methodToVariants;
+	}
+	public List<SootMethod> getCallerMethods(){
+		return callerMethod;
+	}
+	public List<SootMethod> getCalleeMethods(){
+		return calleeMethod;
+	}
 }

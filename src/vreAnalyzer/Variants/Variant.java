@@ -37,6 +37,11 @@ public class Variant {
 	private boolean verbose = true;
 	int id = 0;
 	
+	// 前后关系
+	private List<Variant> callersucceeds = new LinkedList<Variant>();
+	private Variant callerprecursor = null;
+	private Map<CallSite,List<Variant>> calleesucceeds = new HashMap<CallSite,List<Variant>>();
+	private Map<CallSite,Variant> calleeprecursor = new HashMap<CallSite,Variant>();
 	
 	public Variant(Value vi,List<Stmt>stmts,CallSite callsite,SootMethod method,int id){
 		if(callsite==null){
@@ -146,9 +151,44 @@ public class Variant {
     	}
     }
     
-    /////////////////////////////////////////////////////////
-    
-	public List<Stmt> getBindingStmts(CallSite callsite) {
+    ///加入前驱Variant和后继Variant//////////////////////////////////////////////////////
+    public void addPrecursorVariant(Variant variant,CallSite callsite){
+    	//加入前驱variant
+    	if(callsite==null){
+    		callerprecursor = variant;
+    	}else{
+    		if(!calleeprecursor.containsKey(callsite)){
+    			calleeprecursor.put(callsite, variant);
+    		}
+    	}
+    }
+    public void addSucceedVariant(Variant variant,CallSite callsite){
+    	//加入后继variant
+    	if(callsite==null){
+    		callersucceeds.add(variant);
+    	}else{
+    		if(!calleesucceeds.containsKey(callsite)){
+    			List<Variant>succeeds = new LinkedList<Variant>();
+    			succeeds.add(variant);
+    			calleesucceeds.put(callsite, succeeds);
+    		}else{
+    			if(!calleesucceeds.get(callsite).contains(variant)){
+    				calleesucceeds.get(callsite).add(variant);
+    			}
+    		}
+    	}
+    }
+    public void addBrachSucceedVariants(List<Variant>succeeds,CallSite callsite){
+    	if(callsite==null){
+    		callersucceeds.addAll(succeeds);
+    	}else{
+    		if(!calleesucceeds.containsKey(callsite)){
+    			calleesucceeds.put(callsite, succeeds);
+    		}
+    	}
+    }
+    ////////////////////////////////////////////////////////
+ 	public List<Stmt> getBindingStmts(CallSite callsite) {
 		if(callsite==null){
 			return this.bindingStmts; 
 		}else{

@@ -1,7 +1,6 @@
 package vreAnalyzer.UI;
 
 import org.apache.commons.lang3.StringUtils;
-
 import Patch.Hadoop.ProjectParser;
 import Patch.Hadoop.Job.ColorMap;
 import vreAnalyzer.Text2HTML.Text2HTML;
@@ -64,6 +63,7 @@ public class MainFrame extends JFrame {
 	private final JTable legendtable;
 	private static Map<String,String>htmlToJava;
 	private final JTable statistictable;
+	private JTable variantPathtable;
 	private JTable reusetable;
 	private JTable variantstable;
 	private JTable blocktable;
@@ -289,6 +289,15 @@ public class MainFrame extends JFrame {
 		variantstable = new JTable(varitableModel);
 		variantstable.getTableHeader().setReorderingAllowed(false);
 		variantBlockPane.setViewportView(variantstable);
+		
+		// 将Variant Path加入到这个列表中 并且判断各个Variant之间的执行 顺序
+		JScrollPane VariantPathPane = new JScrollPane();
+		tabbedPane.addTab("Variant Path", new ImageIcon(MainFrame.class.getResource("/image/path.png")), VariantPathPane, null);
+		String variantPathHeader[] = {"Path ID","Path(in Id)"};
+		DefaultTableModel variantPathModel = new DefaultTableModel(null,variantPathHeader);
+		variantPathtable = new JTable(variantPathModel);
+		variantPathtable.getTableHeader().setReorderingAllowed(false);
+		VariantPathPane.setViewportView(variantPathtable);
 		
 		JScrollPane statisticsPane = new JScrollPane();
 		
