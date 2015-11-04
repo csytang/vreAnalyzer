@@ -51,6 +51,8 @@ public class BindingResolver {
     // 包含所有的Varaint
     private List<Variant> fullVariantList = new LinkedList<Variant>();
     
+    // 包含所有的callsite
+    private Map<SootMethod,List<CallSite>> methodToCallSites = new HashMap<SootMethod,List<CallSite>>();
     
     public BindingResolver(){
     	methodToArgsList = new HashMap<SootMethod,List<Args>>();
@@ -1118,5 +1120,8 @@ public class BindingResolver {
 	}
 	public List<SootMethod> getCalleeMethods(){
 		return calleeMethod;
+	}
+	public Map<SootMethod,List<CallSite>> getMethodToCallSites(){
+		return methodToCallSites;
 	}
 }

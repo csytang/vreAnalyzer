@@ -83,18 +83,19 @@ public class VariantAnnotate {
                 int startline = slcTag.getStartLineNumber();
                 lines[i] = startline;
             }
-            if(startFromSource) {
-            	if(!shouldbeHide(positions)){
-            		hide = false;
-            	}
-                HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,htmlFile, positions, annotatedColor, MainFrame.inst().getHTMLToJava());
-            }else{
-            	if(!shouldbeHide(lines)){
-            		hide = false;
-            	}
-                HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,htmlFile, lines, annotatedColor, MainFrame.inst().getHTMLToJava());
-            }
         }
+        if(startFromSource) {
+            if(!shouldbeHide(positions)){
+            		hide = false;
+            }
+            HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,htmlFile, positions, annotatedColor, MainFrame.inst().getHTMLToJava());
+        }else{
+            if(!shouldbeHide(lines)){
+            	hide = false;
+            }
+            HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,htmlFile, lines, annotatedColor, MainFrame.inst().getHTMLToJava());
+        }
+        
         
         // 处理在Callee中的部分
         // 1. 获得所有的callsite
@@ -139,19 +140,18 @@ public class VariantAnnotate {
                          int startline = slcTag.getStartLineNumber();
                          lines[i] = startline;
                      }
-                     if(startFromSource) {
-                    	 if(!shouldbeHide(positions)){
-                    		hide = false; 
-                    	 }
-                         HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,calleehtmlFile, positions, annotatedColor, MainFrame.inst().getHTMLToJava());
-                     }else{
-                    	 if(!shouldbeHide(lines)){
-                     		hide = false;
-                     	}
-                         HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,calleehtmlFile, lines, annotatedColor, MainFrame.inst().getHTMLToJava());
-                     }
+          		 }
+                 if(startFromSource) {
+                    if(!shouldbeHide(positions)){
+                    	hide = false; 
+                    }
+                    HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,calleehtmlFile, positions, annotatedColor, MainFrame.inst().getHTMLToJava());
+                  }else{
+                    if(!shouldbeHide(lines)){
+                     	hide = false;
+                    }
+                    HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,calleehtmlFile, lines, annotatedColor, MainFrame.inst().getHTMLToJava());
                  }
-          		  
              }
         }
         if(hide){

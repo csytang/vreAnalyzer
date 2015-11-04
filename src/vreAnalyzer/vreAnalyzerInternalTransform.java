@@ -6,6 +6,8 @@ import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder.EntryNotFoundException;
 import vreAnalyzer.Variants.BindingResolver;
+import vreAnalyzer.Variants.VariantPathAnalysis;
+
 import java.util.Map;
 
 import Patch.Hadoop.ProjectParser;
@@ -39,6 +41,7 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 		System.out.println("[vreAnalyzer] Internal transform[Finish]");
 		System.out.println("[vreAnalyzer] BindingResolve[Start]");
 		BindingResolver.inst().run();
+		VariantPathAnalysis.inst().parse(BindingResolver.inst().getmethodToVariants());
 		
 		System.out.println("[vreAnalyzer] BindingResolve[Finish]");
 		System.out.println("[vreAnalyzer] Project analysis[Start]");

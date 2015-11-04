@@ -477,7 +477,7 @@ public class HTMLAnnotation {
 		}
 	}
 	
-	/*
+	/**
 	 * 为Variant上颜色 对于同一个语句当有多个Variant上
 	 * 生成新的颜色
 	 */
