@@ -103,7 +103,7 @@ public class VariantPathAnalysis {
 						curr = variantPath;
 						isFirstVariant = false;
 					}else if(!panddingVariants.isEmpty()){
-						if(overlapList(panddingVariants,bindingVariants)){// 存在overlap 而不是全部包含关系
+						if(overlapList(panddingVariants,nodebindingVariants)){// 存在overlap 而不是全部包含关系
 							for(Map.Entry<Variant, List<Stmt>>entry:panddingVariantToUnProcessedStmt.entrySet()){
 								// 删除掉相关的 stmt
 								List<Stmt> unsolvedStmts = entry.getValue();
@@ -143,7 +143,7 @@ public class VariantPathAnalysis {
 							}
 							
 							// 3. 将这个在这个语句上绑定的Variant加入到stack中
-							for(Variant needaddedVariant:bindingVariants){
+							for(Variant needaddedVariant:nodebindingVariants){
 								panddingVariants.add(needaddedVariant);
 								List<Stmt>bindingstmts = needaddedVariant.getBindingStmts(null);
 								bindingstmts.remove(node.getStmt());
@@ -209,7 +209,7 @@ public class VariantPathAnalysis {
 								}
 								curr = callervariantPath;
 							}else{// paddingVariants不是空
-								if(overlapList(panddingVariants,bindingVariants)){// 存在overlap 而不是全部包含关系
+								if(overlapList(panddingVariants,nodebindingVariants)){// 存在overlap 而不是全部包含关系
 									for(Map.Entry<Variant, List<Stmt>>paddingentry:panddingVariantToUnProcessedStmt.entrySet()){
 										// 删除掉相关的 stmt
 										List<Stmt> unsolvedStmts = paddingentry.getValue();
@@ -247,7 +247,7 @@ public class VariantPathAnalysis {
 									}
 									
 									// 3. 将这个在这个语句上绑定的Variant加入到stack中
-									for(Variant needaddedVariant:bindingVariants){
+									for(Variant needaddedVariant:nodebindingVariants){
 										panddingVariants.add(needaddedVariant);
 										List<Stmt>bindingstmts = needaddedVariant.getBindingStmts(null);
 										bindingstmts.remove(node.getStmt());
