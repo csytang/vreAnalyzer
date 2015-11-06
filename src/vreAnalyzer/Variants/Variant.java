@@ -38,11 +38,14 @@ public class Variant {
 	int id = 0;
 	
 	// 前后关系
-	private List<Variant> callersucceeds = new LinkedList<Variant>();
-	private Variant callerprecursor = null;
-	private Map<CallSite,List<Variant>> calleesucceeds = new HashMap<CallSite,List<Variant>>();
-	private Map<CallSite,Variant> calleeprecursor = new HashMap<CallSite,Variant>();
+	private Set<Variant> callersucceeds = new HashSet<Variant>();
+	private Set<Variant> callerprecursors = new HashSet<Variant>();
+	private Map<CallSite,Set<Variant>> calleesucceeds = new HashMap<CallSite,Set<Variant>>();
+	private Map<CallSite,Set<Variant>> calleeprecursors = new HashMap<CallSite,Set<Variant>>();
 	
+	public Variant(){
+		
+	}
 	public Variant(Value vi,List<Stmt>stmts,CallSite callsite,SootMethod method,int id){
 		if(callsite==null){
 			paddingValues = new LinkedList<Value>();
@@ -78,7 +81,6 @@ public class Variant {
 		}
 		this.id = id;
 	}
-	
 	
 	//////////////////////////////////////////////////////////////
 	
@@ -155,10 +157,14 @@ public class Variant {
     public void addPrecursorVariant(Variant variant,CallSite callsite){
     	//加入前驱variant
     	if(callsite==null){
-    		callerprecursor = variant;
+    		callerprecursors.add(variant);
     	}else{
-    		if(!calleeprecursor.containsKey(callsite)){
-    			calleeprecursor.put(callsite, variant);
+    		if(!calleeprecursors.containsKey(callsite)){
+    			Set<Variant>calleepreset = new HashSet<Variant>();
+    			calleepreset.add(variant);
+    			calleeprecursors.put(callsite, calleepreset);
+    		}else{
+    			calleeprecursors.get(callsite).add(variant);
     		}
     	}
     }
@@ -168,7 +174,7 @@ public class Variant {
     		callersucceeds.add(variant);
     	}else{
     		if(!calleesucceeds.containsKey(callsite)){
-    			List<Variant>succeeds = new LinkedList<Variant>();
+    			Set<Variant>succeeds = new HashSet<Variant>();
     			succeeds.add(variant);
     			calleesucceeds.put(callsite, succeeds);
     		}else{
@@ -178,7 +184,7 @@ public class Variant {
     		}
     	}
     }
-    public void addBrachSucceedVariants(List<Variant>succeeds,CallSite callsite){
+    public void addBrachSucceedVariants(Set<Variant>succeeds,CallSite callsite){
     	if(callsite==null){
     		callersucceeds.addAll(succeeds);
     	}else{
@@ -187,6 +193,29 @@ public class Variant {
     		}
     	}
     }
+  
+    public Set<Variant> getPrecursorVariants(CallSite callsite){
+    	if(callsite==null){
+    		return callerprecursors;
+    	}else{
+    		if(calleeprecursors.containsKey(callsite))
+    			return calleeprecursors.get(callsite);
+    		else
+    			return null;
+    	}
+    }
+    public Set<Variant> getSucceedVariants(CallSite callsite){
+    	if(callsite==null){
+    		return callersucceeds;
+    	}else{
+    		if(calleesucceeds.containsKey(callsite)){
+    			return calleesucceeds.get(callsite);
+    		}else{
+    			return null;
+    		}
+    	}
+    }
+  
     ////////////////////////////////////////////////////////
  	public List<Stmt> getBindingStmts(CallSite callsite) {
 		if(callsite==null){
@@ -330,8 +359,6 @@ public class Variant {
 		}
 		return blockidArray;
 	}
-	
-	
 	
 	// 判断两个集合关系 是否为 有交集
 	private boolean isOverlap(Set<Stmt> remainsstmts, Set<Stmt> allstmts){
@@ -679,5 +706,8 @@ public class Variant {
 		}
 		return updateIds;
 	}
-
+	public boolean isSpecial() 
+	{ 
+		return false; 
+	}
 }

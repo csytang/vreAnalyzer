@@ -81,19 +81,19 @@ public class WordCount2$IntSumReducer extends org.apache.hadoop.mapreduce.Reduce
 
         r0 := @this: WordCount2$IntSumReducer;
 
-        r1 := @parameter0: java.lang.Object;
+        ##r1 := @parameter0: java.lang.Object;#v1#
 
-        r2 := @parameter1: java.lang.Iterable;
+        ##r2 := @parameter1: java.lang.Iterable;#v2#
 
-        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+        ##r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;#v3#
 
-        $r6 = (org.apache.hadoop.io.Text) r1;
+        ##$r6 = (org.apache.hadoop.io.Text) r1;#v1#
 
-        $r5 = (java.lang.Iterable) r2;
+        ##$r5 = (java.lang.Iterable) r2;#v2#
 
-        $r4 = (org.apache.hadoop.mapreduce.Reducer$Context) r3;
+        ##$r4 = (org.apache.hadoop.mapreduce.Reducer$Context) r3;#v3#
 
-        virtualinvoke r0.<WordCount2$IntSumReducer: void reduce(org.apache.hadoop.io.Text,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r6, $r5, $r4);
+        ##virtualinvoke r0.<WordCount2$IntSumReducer: void reduce(org.apache.hadoop.io.Text,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r6, $r5, $r4);#v1,v2,v3#
 
         return;
     }

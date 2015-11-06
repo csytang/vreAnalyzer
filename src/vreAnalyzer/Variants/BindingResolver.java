@@ -150,7 +150,9 @@ public class BindingResolver {
 				
 			}
 			if(!callsites.isEmpty() && containappmethodcallee){
-				callerMethod.add(method);
+				if(callerMethod.contains(method)){
+					callerMethod.add(method);
+				}
 			}
 		}
 		

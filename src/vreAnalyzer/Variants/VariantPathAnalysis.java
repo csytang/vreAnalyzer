@@ -40,6 +40,7 @@ public class VariantPathAnalysis {
 	
 	public void parse(Map<SootMethod,List<Variant>> methodToVariants){
 		// 1. 获得所有的Caller函数
+
 		List<SootMethod> callerMethods = BindingResolver.inst().getCallerMethods();
 		List<Variant> nodebindingVariants = new LinkedList<Variant>();
 		VariantPath curr = null;
@@ -49,14 +50,35 @@ public class VariantPathAnalysis {
 			}
 			List<Variant>bindingVariants = methodToVariants.get(caller);
 			CFG cfg = ProgramFlowBuilder.inst().getCFG(caller);
-			List<CFGNode>cfgNodes = cfg.getNodes();
+			List<CFGNode> cfgNodes = cfg.getNodes();
 			isFirstVariant = true;
 			for(CFGNode node:cfgNodes){
 				if(node.isSpecial()){
 					continue;
 				}
+				if(verbose){
+					System.out.println("当前分析语句:"+node.getStmt().toString());
+				}
 				nodebindingVariants.clear();
 				nodebindingVariants = getBindingVaraints(bindingVariants,node,null);
+				
+				if(verbose){
+					if(!nodebindingVariants.isEmpty()){
+						String nodebindingVIds = "[";
+						for(Variant variant:nodebindingVariants){
+							nodebindingVIds += variant.getVariantId();
+							nodebindingVIds += ",";
+						}
+						if(!nodebindingVariants.isEmpty()){
+							nodebindingVIds = nodebindingVIds.substring(0, nodebindingVIds.length()-1);
+						}
+						nodebindingVIds+="]";
+						System.out.println("当前语句中的Variant包括:"+nodebindingVIds);
+					}else{
+						System.out.println("当前语句不涉及任何Variant");
+					}
+					
+				}
 				if(!nodebindingVariants.isEmpty()){// 有variant涉及到这个语句
 					if(isFirstVariant){// 如果是第一个涉及到Variant的语句
 						// 创建一个VariantPath
@@ -95,6 +117,15 @@ public class VariantPathAnalysis {
 						for(Variant variant:nodebindingVariants){
 							panddingVariants.add(variant);
 							List<Stmt>bindingStmts = variant.getBindingStmts(null);
+							if(verbose){
+								System.out.println("Variant(ID):"+variant.getVariantId()+"的绑定语句有:");
+								System.out.println("------------------------------------");
+								for(Stmt stmt:bindingStmts){
+									System.out.println("语句:"+stmt);
+								}
+								System.out.println("------------------------------------");
+								System.out.println("删除掉绑定语句:"+node.getStmt());
+							}
 							bindingStmts.remove(node.getStmt());
 							panddingVariantToUnProcessedStmt.put(variant, bindingStmts);
 						}
@@ -106,16 +137,16 @@ public class VariantPathAnalysis {
 						if(overlapList(panddingVariants,nodebindingVariants)){// 存在overlap 而不是全部包含关系
 							for(Map.Entry<Variant, List<Stmt>>entry:panddingVariantToUnProcessedStmt.entrySet()){
 								// 删除掉相关的 stmt
-								List<Stmt> unsolvedStmts = entry.getValue();
-								unsolvedStmts.remove(node.getStmt());
+								if(nodebindingVariants.contains(entry.getKey())){
+									List<Stmt> unsolvedStmts = entry.getValue();
+									unsolvedStmts.remove(node.getStmt());
+								}
 							}
 						}else{// 如果当前的Variant正在分析 未结束 并且获得了新的Variant
 							// 1. 遍历所有在paddingVariants中的Variant
-							
 							/*
-							 *  2. 如果有一个Variant的stmt已经全部经过 那么移除这个Variant
-							 *     将这个Variant建立到下一个Variant的链接 使用前后链接link
-							 *     
+							 * 2. 如果有一个Variant的stmt已经全部经过 那么移除这个Variant
+							 *    将这个Variant建立到下一个Variant的链接 使用前后链接link
 							 */
 							List<Variant>needToRemoveList = new LinkedList<Variant>();
 							needToRemoveList.clear();
@@ -131,7 +162,9 @@ public class VariantPathAnalysis {
 							if(!needToRemoveList.isEmpty()){
 								for(Variant variant:needToRemoveList){
 									for(Variant succeed:bindingVariants){
-										curr.linkNodes(variant, succeed, null);
+										//curr.linkNodes(variant, succeed, null);
+										
+										curr.addNextNode(succeed, null);
 										if(verbose){
 											// 将这个连接加入到VariantPath中
 											System.out.println("VariantPath连接两个节点从:"+variant.getVariantId()+" 到 "+succeed.getVariantId());
@@ -153,9 +186,16 @@ public class VariantPathAnalysis {
 					}	
 				}	
 			}
-			// 确认检查 
+			
 			if(!panddingVariants.isEmpty()){
-				System.err.println("Error in not all variants are resolved at method:"+caller.getName());
+				// 将里面所有内容并列加入
+				List<Variant> paddingVariantList = new LinkedList<Variant>();
+				paddingVariantList.addAll(panddingVariants);
+				curr.addParallelNode(paddingVariantList, null);
+			}
+			if(verbose){
+				// 遍历这个path VariantPath curr
+				curr.layertraverse(caller,null);
 			}
 		}
 		
@@ -196,8 +236,31 @@ public class VariantPathAnalysis {
 					for(CFGNode node:cfgNodes){
 						if(node.isSpecial())
 							continue;
+						if(verbose){
+							System.out.println("当前分析语句:"+node.getStmt().toString());
+						}
+
 						nodebindingVariants.clear();
 						nodebindingVariants = getBindingVaraints(bindingVariants,node,callsite);
+						
+						if(verbose){
+							if(!nodebindingVariants.isEmpty()){
+								String nodebindingVIds = "[";
+								for(Variant variant:nodebindingVariants){
+									nodebindingVIds += variant.getVariantId();
+									nodebindingVIds += ",";
+								}
+								if(!nodebindingVariants.isEmpty()){
+									nodebindingVIds = nodebindingVIds.substring(0, nodebindingVIds.length()-1);
+								}
+								nodebindingVIds+="]";
+								System.out.println("当前语句中的Variant包括:"+nodebindingVIds);
+							}else{
+								System.out.println("当前语句不涉及任何Variant");
+							}
+							
+						}
+						
 						if(!nodebindingVariants.isEmpty()){// 有variant涉及到这个语句
 							if(panddingVariants.isEmpty()){// 将当前的Variant及需要绑定的语句加入
 								// 进入队列
@@ -212,8 +275,10 @@ public class VariantPathAnalysis {
 								if(overlapList(panddingVariants,nodebindingVariants)){// 存在overlap 而不是全部包含关系
 									for(Map.Entry<Variant, List<Stmt>>paddingentry:panddingVariantToUnProcessedStmt.entrySet()){
 										// 删除掉相关的 stmt
-										List<Stmt> unsolvedStmts = paddingentry.getValue();
-										unsolvedStmts.remove(node.getStmt());
+										if(nodebindingVariants.contains(paddingentry.getKey())){
+											List<Stmt> unsolvedStmts = paddingentry.getValue();
+											unsolvedStmts.remove(node.getStmt());
+										}
 									}
 								}else{// 如果当前的Variant正在分析 未结束 并且获得了新的Variant
 									// 1. 遍历所有在paddingVariants中的Variant
@@ -235,7 +300,7 @@ public class VariantPathAnalysis {
 									if(!needToRemoveList.isEmpty()){
 										for(Variant variant:needToRemoveList){
 											for(Variant succeed:bindingVariants){
-												curr.linkNodes(variant, succeed, null);
+												curr.addNextNode(succeed, callsite);
 												if(verbose){
 													System.out.println("caller:"+callermethod.getName()+"的callee:"
 													+callee+"中连接variant从"+variant.getVariantId()+"到"+succeed.getVariantId());
@@ -259,12 +324,19 @@ public class VariantPathAnalysis {
 					}
 					// 确认检查 
 					if(!panddingVariants.isEmpty()){
-						System.err.println("Error in not all variants are resolved at method:"+callee.getName());
-					}	
+						// 将里面所有内容并列加入
+						List<Variant>paddingVariantList = new LinkedList<Variant>();
+						paddingVariantList.addAll(panddingVariants);
+						curr.addParallelNode(paddingVariantList, callsite);
+					}
+					
+					if(verbose){
+						// 遍历这个path
+						curr.layertraverse(callermethod,callsite);
+					}
+					
 				}
-				
-			}
-			
+			}			
 		}
 		
 	}
