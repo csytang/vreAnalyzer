@@ -1,17 +1,22 @@
-package vreAnalyzer.Variants;
+package vreAnalyzer.VariantPath;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import soot.SootMethod;
 import soot.jimple.Stmt;
 import vreAnalyzer.ControlFlowGraph.CFG;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Elements.CallSite;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
+import vreAnalyzer.Util.Graphviz.GraphvizController;
+import vreAnalyzer.Variants.BindingResolver;
+import vreAnalyzer.Variants.Variant;
 
 public class VariantPathAnalysis {
 	public static VariantPathAnalysis instance;
@@ -27,7 +32,13 @@ public class VariantPathAnalysis {
 	private Queue<Variant> panddingVariants = new LinkedList <Variant>();
 	private Map<Variant,List<Stmt>> panddingVariantToUnProcessedStmt = new HashMap<Variant,List<Stmt>>();
 	
+	private int variantPathIndex = 1;
 	private boolean verbose = true;
+	private Set<Variant> analyzedSet = new HashSet<Variant>();
+	
+	// 从VariantPath到图像的对应
+	
+	private Map<VariantPath,GraphvizController> variantToGraphvizCont = new HashMap<VariantPath,GraphvizController>();
 	
 	public static VariantPathAnalysis inst(){
 		if(instance==null)
@@ -52,6 +63,10 @@ public class VariantPathAnalysis {
 			CFG cfg = ProgramFlowBuilder.inst().getCFG(caller);
 			List<CFGNode> cfgNodes = cfg.getNodes();
 			isFirstVariant = true;
+			// 清空
+			panddingVariants.clear();
+			panddingVariantToUnProcessedStmt.clear();
+			curr = null;
 			for(CFGNode node:cfgNodes){
 				if(node.isSpecial()){
 					continue;
@@ -84,7 +99,8 @@ public class VariantPathAnalysis {
 						// 创建一个VariantPath
 						VariantPath variantPath = null;
 						if(nodebindingVariants.size()==1){
-							variantPath = new VariantPath(nodebindingVariants.get(0),caller);
+							variantPath = new VariantPath(nodebindingVariants.get(0),caller,variantPathIndex);
+							variantPathIndex++;
 							if(verbose){
 								String variantIds = "[";
 								for(Variant bindVariant:nodebindingVariants){
@@ -99,7 +115,8 @@ public class VariantPathAnalysis {
 							}
 							
 						}else{
-							variantPath = new VariantPath(nodebindingVariants,caller);
+							variantPath = new VariantPath(nodebindingVariants,caller,variantPathIndex);
+							variantPathIndex++;
 							if(verbose){
 								String variantIds = "[";
 								for(Variant bindVariant:nodebindingVariants){
@@ -148,7 +165,7 @@ public class VariantPathAnalysis {
 							 * 2. 如果有一个Variant的stmt已经全部经过 那么移除这个Variant
 							 *    将这个Variant建立到下一个Variant的链接 使用前后链接link
 							 */
-							List<Variant>needToRemoveList = new LinkedList<Variant>();
+							List<Variant>needToRemoveList = new LinkedList<Variant>();// 判断哪些是可以移走的
 							needToRemoveList.clear();
 							for(Map.Entry<Variant, List<Stmt>>entry:panddingVariantToUnProcessedStmt.entrySet()){
 								// 删除掉相关的 stmt
@@ -162,8 +179,6 @@ public class VariantPathAnalysis {
 							if(!needToRemoveList.isEmpty()){
 								for(Variant variant:needToRemoveList){
 									for(Variant succeed:bindingVariants){
-										//curr.linkNodes(variant, succeed, null);
-										
 										curr.addNextNode(succeed, null);
 										if(verbose){
 											// 将这个连接加入到VariantPath中
@@ -195,11 +210,12 @@ public class VariantPathAnalysis {
 			}
 			if(verbose){
 				// 遍历这个path VariantPath curr
-				curr.layertraverse(caller,null);
+				if(curr!=null){
+					curr.layertraverse(caller,null);
+					variantToGraphvizCont.put(curr, curr.getgraphvizController());
+				}
 			}
 		}
-		
-		
 		
 		// 2. 获得所有的callsite
 		List<SootMethod> calleeMethods = BindingResolver.inst().getCalleeMethods();
@@ -231,6 +247,10 @@ public class VariantPathAnalysis {
 					CFG cfg = ProgramFlowBuilder.inst().getCFG(callee);
 					List<CFGNode> cfgNodes = cfg.getNodes();
 					isFirstVariant = true;
+					// 清空
+					panddingVariants.clear();
+					panddingVariantToUnProcessedStmt.clear();
+					curr = null;
 					List<Variant>bindingVariants = methodToVariants.get(callee);
 					// 2. 遍历所有的节点
 					for(CFGNode node:cfgNodes){
@@ -332,13 +352,15 @@ public class VariantPathAnalysis {
 					
 					if(verbose){
 						// 遍历这个path
-						curr.layertraverse(callermethod,callsite);
+						if(curr!=null){
+							curr.layertraverse(callermethod,callsite);
+							variantToGraphvizCont.put(curr, curr.getgraphvizController());
+						}
 					}
 					
 				}
 			}			
 		}
-		
 	}
 	
 	public List<Variant> getBindingVaraints(List<Variant> variantlist,CFGNode cfgNode,CallSite callsite){

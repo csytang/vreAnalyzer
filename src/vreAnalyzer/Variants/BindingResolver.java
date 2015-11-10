@@ -95,8 +95,7 @@ public class BindingResolver {
 		for(SootMethod method:allAppMethod){
 			MethodTag mTag = (MethodTag) method.getTag(MethodTag.TAG_NAME);
 			List<CallSite> callsites = mTag.getAllCallSites();
-			
-			
+			containappmethodcallee = false;
 			// 初始化methodToUnbindValue
 			methodToUnbindValues.put(method, new HashSet<Value>());
 			// 初始化methodToParitalUnbindValues
@@ -141,16 +140,14 @@ public class BindingResolver {
 						methodToArgsList.put(callee, argsList);
 					}
 					if(allAppMethod.contains(callee)){
-						if(!containappmethodcallee){
+						if(containappmethodcallee==false){
 							containappmethodcallee = true;
 						}
 					}
 				}
-				
-				
 			}
 			if(!callsites.isEmpty() && containappmethodcallee){
-				if(callerMethod.contains(method)){
+				if(!callerMethod.contains(method)){
 					callerMethod.add(method);
 				}
 			}

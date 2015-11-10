@@ -5,8 +5,8 @@ import vreAnalyzer.Blocks.BlockToFile;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder.EntryNotFoundException;
+import vreAnalyzer.VariantPath.VariantPathAnalysis;
 import vreAnalyzer.Variants.BindingResolver;
-import vreAnalyzer.Variants.VariantPathAnalysis;
 
 import java.util.Map;
 

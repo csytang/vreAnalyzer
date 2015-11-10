@@ -63,10 +63,10 @@ public class MainFrame extends JFrame {
 	private final JTable legendtable;
 	private static Map<String,String>htmlToJava;
 	private final JTable statistictable;
-	private JTable variantPathtable;
 	private JTable reusetable;
 	private JTable variantstable;
 	private JTable blocktable;
+	private JTable variantPathtable;
 	
 	public static void main(String[] args) {
 		classnametoSource = new HashMap<String,File>();
@@ -290,14 +290,22 @@ public class MainFrame extends JFrame {
 		variantstable.getTableHeader().setReorderingAllowed(false);
 		variantBlockPane.setViewportView(variantstable);
 		
-		// 将Variant Path加入到这个列表中 并且判断各个Variant之间的执行 顺序
-		JScrollPane VariantPathPane = new JScrollPane();
-		tabbedPane.addTab("Variant Path", new ImageIcon(MainFrame.class.getResource("/image/path.png")), VariantPathPane, null);
-		String variantPathHeader[] = {"Path ID","Path(in Id)"};
+		
+		JSplitPane variantPathPane = new JSplitPane();
+		variantPathPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		tabbedPane.addTab("Variant Path", new ImageIcon(MainFrame.class.getResource("/image/path.png")), variantPathPane, null);
+		
+		JScrollPane variantPathLeftPane = new JScrollPane();
+		variantPathPane.setLeftComponent(variantPathLeftPane);
+		
+		JScrollPane variantPathRightPane = new JScrollPane();
+		variantPathPane.setRightComponent(variantPathRightPane);
+		String variantPathHeader[] = {"Path ID","Variants(in Id)"};
 		DefaultTableModel variantPathModel = new DefaultTableModel(null,variantPathHeader);
+		
 		variantPathtable = new JTable(variantPathModel);
-		variantPathtable.getTableHeader().setReorderingAllowed(false);
-		VariantPathPane.setViewportView(variantPathtable);
+		
+		variantPathRightPane.setViewportView(variantPathtable);
 		
 		JScrollPane statisticsPane = new JScrollPane();
 		
@@ -343,14 +351,12 @@ public class MainFrame extends JFrame {
 		this.sources = source;
 	}
 	/**
-	 * 
 	 * -cp "/Users/tangchris/Desktop/bin/:
 	 * /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/rt.jar:
 	 * /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/jce.jar:
 	 * /Users/tangchris/hadoop_jars/mapreduce/*:/Users/tangchris/hadoop_jars/hdfs/*:
 	 * /Users/tangchris/hadoop_jars/yarn/*:/Users/tangchris/hadoop_jars/common/*:/Users/tangchris/otherjars/*"  
 	 * -hadoop -process-dir "/Users/tangchris/Desktop/bin/"  -entry:WordCount2
-	 * 
 	 */
 	public void generateSootCommand(){
 		List<String>sootCommand = new ArrayList<String>();
@@ -402,7 +408,6 @@ public class MainFrame extends JFrame {
 			
 		}
 		comm = sootCommand.toArray(new String[sootCommand.size()]);
-		
 		
 	}
 	public void runCommand(boolean bindingsource){
@@ -477,7 +482,6 @@ public class MainFrame extends JFrame {
 				}
 			}
 		}
-
 
 		root.add(filelist);
 		root.add(htmllist);
@@ -610,13 +614,12 @@ public class MainFrame extends JFrame {
 	}
 	
 	public String[] getCommand() {
-		// TODO Auto-generated method stub
 		return comm;
 	}
-	public Map<String,String> getHTMLToJava(){
+	public Map<String,String> getHTMLToJava() {
 		return htmlToJava;
 	}
-	public void writeConsole(final String str){
+	public void writeConsole(final String str) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run(){
 				textArealinecount++;
@@ -634,16 +637,16 @@ public class MainFrame extends JFrame {
 			classnametoSource = new HashMap<String,File>();
 		classnametoSource.put(className, source);
 	}
-	public static JEditorPane getSrcTextPane(){
+	public static JEditorPane getSrcTextPane() {
 		return source_annotatedDisplayArea;
 	}
-	public JTable getJobColorMapTable(){
+	public JTable getJobColorMapTable() {
 		return legendtable;
 	}
-	public JTable getStatisticTable(){
+	public JTable getStatisticTable() {
 		return statistictable;
 	}
-	public JTable getCommonAssetTable(){
+	public JTable getCommonAssetTable() {
 		return reusetable;
 	}
 	public JTree getTree(){
@@ -653,7 +656,6 @@ public class MainFrame extends JFrame {
 		return variantstable;
 	}
 	public JTable getBlockTable() {
-		// TODO Auto-generated method stub
 		return blocktable;
 	}
 	class TooltipEditorKit extends HTMLEditorKit {
@@ -681,5 +683,9 @@ public class MainFrame extends JFrame {
 	            }
 	        };
 	    }
+	}
+	public JTable getVariantPathTable() {
+		// TODO Auto-generated method stub
+		return variantPathtable;
 	}
 }
