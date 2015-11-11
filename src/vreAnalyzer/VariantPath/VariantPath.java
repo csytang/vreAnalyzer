@@ -1,5 +1,6 @@
 package vreAnalyzer.VariantPath;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,7 +33,9 @@ public class VariantPath {
 	
 	// 创建一个GraphvizController 
 	private GraphvizController graphvizController = null;
+	private Set<Variant> fullVariantSet = new HashSet<Variant>();
 	
+	private File imageFile = null;
 	
 	public VariantPath(Variant headVariant,SootMethod caller,int id){
 		head = headVariant;
@@ -40,6 +43,7 @@ public class VariantPath {
 		curr = headVariant;
 		status = VariantStat.single;
 		pathId = id;
+		fullVariantSet.add(headVariant);
 	}
 	
 	public VariantPath(List<Variant>headVariants, SootMethod caller,int id){
@@ -48,6 +52,7 @@ public class VariantPath {
 		currSet.addAll(headVariants);
 		status = VariantStat.branch;
 		pathId = id;
+		fullVariantSet.addAll(headVariants);
 	}
 	
 	public void addNextNode(Variant variant,CallSite site){
@@ -82,6 +87,7 @@ public class VariantPath {
 				status = VariantStat.single;
 			}
 		}
+		fullVariantSet.add(variant);
 	}
 	
 	public void addNextNode(List<Variant>variants,CallSite site){
@@ -128,6 +134,7 @@ public class VariantPath {
 				currSet.addAll(variants);
 			}
 		}
+		fullVariantSet.addAll(variants);
 	}
 	
 	public void addParallelNode(Variant variant,CallSite site){
@@ -165,8 +172,6 @@ public class VariantPath {
 					variant.addPrecursorVariant(prevar, null);
 				}
 			}
-			
-			
 		}else{
 			Set<Variant> precursors = curr.getPrecursorVariants(site);// 当前节点的前驱节点
 			if(precursors.isEmpty()){
@@ -192,6 +197,7 @@ public class VariantPath {
 				}
 			}
 		}
+		fullVariantSet.add(variant);
 	}
 	
 	public void addParallelNode(List<Variant>variants,CallSite site){
@@ -250,6 +256,7 @@ public class VariantPath {
 				}
 			}
 		}
+		fullVariantSet.addAll(variants);
 	}
 	
 	public Set<Variant> getLastVariantInPath(){
@@ -375,9 +382,28 @@ public class VariantPath {
 		graphvizController.endScript();
 		// 输出路径
 		graphvizController.drawGraph(".", pathId+"");
+		
+		imageFile = graphvizController.getOutputFile();
 	}
 
+	public void addToTable(){
+		VariantPathToTable vtTable = new VariantPathToTable();
+		vtTable.addARowToTable(pathId, fullVariantSet);
+	}
+	
 	public GraphvizController getgraphvizController(){
 		return graphvizController;
+	}
+	
+	public Set<Variant> getfullVariants(){
+		return fullVariantSet;
+	}
+	
+	public int getPathId(){
+		return pathId;
+	}
+	
+	public File getImageFile(){
+		return imageFile;
 	}
 }

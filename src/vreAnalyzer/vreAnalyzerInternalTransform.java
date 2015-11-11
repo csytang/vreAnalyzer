@@ -41,7 +41,7 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 		System.out.println("[vreAnalyzer] Internal transform[Finish]");
 		System.out.println("[vreAnalyzer] BindingResolve[Start]");
 		BindingResolver.inst().run();
-		VariantPathAnalysis.inst().parse(BindingResolver.inst().getmethodToVariants());
+		//VariantPathAnalysis.inst().parse(BindingResolver.inst().getmethodToVariants());
 		
 		System.out.println("[vreAnalyzer] BindingResolve[Finish]");
 		System.out.println("[vreAnalyzer] Project analysis[Start]");

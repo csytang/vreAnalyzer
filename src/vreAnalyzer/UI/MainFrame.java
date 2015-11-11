@@ -50,6 +50,7 @@ public class MainFrame extends JFrame {
 	private final JTextArea consoletextArea;
 	private final JTree source_annotateDirTree;
 	private static int textArealinecount = 0;
+	private final JScrollPane variantPathLeftPane;
 	private DefaultMutableTreeNode root;
 	
 	// 3. 
@@ -136,6 +137,7 @@ public class MainFrame extends JFrame {
 				About abtinstance = About.inst(instance);
 			}
 		});
+		
 		mnHelp.add(mntmAbout);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -295,13 +297,13 @@ public class MainFrame extends JFrame {
 		variantPathPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		tabbedPane.addTab("Variant Path", new ImageIcon(MainFrame.class.getResource("/image/path.png")), variantPathPane, null);
 		
-		JScrollPane variantPathLeftPane = new JScrollPane();
+		variantPathLeftPane = new JScrollPane();
 		variantPathPane.setLeftComponent(variantPathLeftPane);
 		
 		JScrollPane variantPathRightPane = new JScrollPane();
 		variantPathPane.setRightComponent(variantPathRightPane);
 		String variantPathHeader[] = {"Path ID","Variants(in Id)"};
-		DefaultTableModel variantPathModel = new DefaultTableModel(null,variantPathHeader);
+		NonEditableModel variantPathModel = new NonEditableModel(null,variantPathHeader);
 		
 		variantPathtable = new JTable(variantPathModel);
 		
@@ -687,5 +689,8 @@ public class MainFrame extends JFrame {
 	public JTable getVariantPathTable() {
 		// TODO Auto-generated method stub
 		return variantPathtable;
+	}
+	public JScrollPane getImageDisplayPanel(){
+		return variantPathLeftPane;
 	}
 }

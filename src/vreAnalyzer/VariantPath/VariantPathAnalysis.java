@@ -1,13 +1,12 @@
 package vreAnalyzer.VariantPath;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Set;
 import soot.SootMethod;
 import soot.jimple.Stmt;
 import vreAnalyzer.ControlFlowGraph.CFG;
@@ -31,10 +30,13 @@ public class VariantPathAnalysis {
 	
 	private Queue<Variant> panddingVariants = new LinkedList <Variant>();
 	private Map<Variant,List<Stmt>> panddingVariantToUnProcessedStmt = new HashMap<Variant,List<Stmt>>();
+	// 从路径id 对应到 图片文件上
+	private Map<Integer,File> pathIdToFile = new HashMap<Integer,File>();
+	
 	
 	private int variantPathIndex = 1;
 	private boolean verbose = true;
-	private Set<Variant> analyzedSet = new HashSet<Variant>();
+	
 	
 	// 从VariantPath到图像的对应
 	
@@ -213,6 +215,8 @@ public class VariantPathAnalysis {
 				if(curr!=null){
 					curr.layertraverse(caller,null);
 					variantToGraphvizCont.put(curr, curr.getgraphvizController());
+					curr.addToTable();
+					pathIdToFile.put(curr.getPathId(), curr.getImageFile());
 				}
 			}
 		}
@@ -355,12 +359,18 @@ public class VariantPathAnalysis {
 						if(curr!=null){
 							curr.layertraverse(callermethod,callsite);
 							variantToGraphvizCont.put(curr, curr.getgraphvizController());
+							curr.addToTable();
+							pathIdToFile.put(curr.getPathId(), curr.getImageFile());
 						}
 					}
 					
 				}
 			}			
 		}
+		
+		
+		// 将路径加入listener
+		VariantPathToTable.inst().addPathListener();
 	}
 	
 	public List<Variant> getBindingVaraints(List<Variant> variantlist,CFGNode cfgNode,CallSite callsite){
@@ -404,4 +414,8 @@ public class VariantPathAnalysis {
         return list;
     }
 	
+	// 从路径id 对应到 图片文件上
+	public Map<Integer,File> getpathIdToFile(){
+		return pathIdToFile;
+	}
 }
