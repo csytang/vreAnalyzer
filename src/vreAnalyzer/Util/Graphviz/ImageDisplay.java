@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class ImageDisplay {
+	private JPanel localimagePanel;
 	public ImageDisplay(File imageFile,JPanel imagePanel) throws IOException{
 		// 生成image实例根据文件
 		BufferedImage image = ImageIO.read(imageFile);
@@ -22,5 +23,9 @@ public class ImageDisplay {
 		
 		imagePanel = new JPanel(new BorderLayout());
 		imagePanel.add(imglabel);
+		localimagePanel = imagePanel;
+	}
+	public JPanel getImagePanel(){
+		return localimagePanel;
 	}
 }
