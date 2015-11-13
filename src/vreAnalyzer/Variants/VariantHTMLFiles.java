@@ -16,11 +16,14 @@ import java.io.File;
 import java.util.List;
 import java.util.Stack;
 
-/**
- * Created by tangchris on 15/9/22.
- */
+
 public class VariantHTMLFiles {
     private DefaultMutableTreeNode varianthtmllist;
+    
+    /*
+     * 根据文件创建HTML內容
+     */
+    
     public VariantHTMLFiles(List<File> sources){
         Stack<File> sourcefiles = new Stack<File>();
         sourcefiles.addAll(sources);
@@ -57,6 +60,7 @@ public class VariantHTMLFiles {
             }
         }
     }
+    
     public DefaultMutableTreeNode getRootTreeNode(){
         return varianthtmllist;
     }

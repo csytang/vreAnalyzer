@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.io.File;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,7 @@ public class ProjectParser {
 	private static int numShadow = 0;
 	private CFGNode exitNode;
 	private List<Context<SootMethod,CFGNode,PointsToGraph>> currContexts;
-	private List<File>allannotatedFiles = new LinkedList<File>();
+	private Set<File>allannotatedFiles = new HashSet<File>();
 	private MethodBlock mblock = null;
 	public static boolean isfeatureAnnotatedReady = false;
 	/* 
@@ -95,13 +96,13 @@ public class ProjectParser {
 	    }
 	    return null;
 	}
+	
 	/**
 	 * this method will link the jobColor legend to the file,
 	 * if user double click the cell in legend, it will show the file in the 
 	 * textarea;
 	 */
 	public void annotateallJobs(){
-		
 		for(Map.Entry<JobVariable, JobHub>entry:jobtoHub.entrySet()){
 			JobVariable job = entry.getKey();
 			
@@ -128,8 +129,15 @@ public class ProjectParser {
 			Patch.Hadoop.Job.JobAnnotate jobannot = new Patch.Hadoop.Job.JobAnnotate(job,htmlFile);
 		}
 		
-		JTree mainFrameTree = MainFrame.inst().getTree();
-		mainFrameTree.setCellRenderer(new TreeCellRender(allannotatedFiles));
+		JTree mainFrameTree = MainFrame.inst().getFeatureAnnotatedTree();
+		
+		TreeCellRender treeRender = (TreeCellRender)mainFrameTree.getCellRenderer();
+		if(treeRender!=null){
+			treeRender.addCells(allannotatedFiles);
+		}else{
+			// 加入tree节点渲染
+			mainFrameTree.setCellRenderer(new TreeCellRender(allannotatedFiles));
+		}
 	}
 	public void annotateallJobUses(){
 		for(Map.Entry<JobVariable, JobHub>entry:jobtoHub.entrySet()){
@@ -348,10 +356,7 @@ public class ProjectParser {
 								if(verbose)
 									System.err.println("Should create a job:\t"+defvar.getValue().toString());
 							}
-							
-							
 						}
-			
 					}
 				}
 			}
@@ -412,7 +417,6 @@ public class ProjectParser {
 									ClassBlock cBlock = ClassBlock.tryToCreate(bindcfgnodess, bindsc);
 									BlockGenerator.inst().addNewBlockToPool(cBlock,false);
 									jobinstance.addUse(bindsc, cBlock);
-									
 								}else if(bindType==BlockType.Method){
 									CFG bindcfg = ProgramFlowBuilder.inst().getCFG(bindingsm.get(0));
 									List<CFGNode>bindcfgnodess = bindcfg.getNodes();
@@ -422,8 +426,6 @@ public class ProjectParser {
 									BlockGenerator.inst().addNewBlockToPool(mBlock,false);
 									jobinstance.addUse(bindingsm.get(0).getDeclaringClass(), mBlock);
 								}
-								
-								
 							}
 						}
 						
@@ -472,21 +474,18 @@ public class ProjectParser {
 					SimpleBlock cb = SimpleBlock.tryToCreate(tempnodes, sootmethod,mblock.getBlockId());
 					//add to table
 					BlockGenerator.inst().addNewBlockToPool(cb,false);
-					jobhub.addUse(sootmethod.getDeclaringClass(),cb);
-									
+					jobhub.addUse(sootmethod.getDeclaringClass(),cb);			
 				}else if(endIndex==startIndex){
 					SimpleBlock cb = SimpleBlock.tryToCreate(cfg.getNodes().get(coderange[startIndex]), sootmethod,mblock.getBlockId());
 					//add to table
 					BlockGenerator.inst().addNewBlockToPool(cb,false);
 					jobhub.addUse(sootmethod.getDeclaringClass(), cb);
 				}
-					
 			}
-			
-
 		}
-		
 	}
+	
+	
 	public void quickSort(int arr[],int left,int right){
 		int index = partition(arr,left,right);
 		if(left< index-1){
@@ -496,6 +495,8 @@ public class ProjectParser {
 			quickSort(arr,index,right);
 		}
 	}
+	
+	
 	public int partition(int arr[],int left,int right){
 		int i = left, j = right;
 		int temp;
@@ -516,6 +517,7 @@ public class ProjectParser {
 		return i;
 	}
 
+	
 	public void defineJob(Variable defvar,NodeDefUses cfgNode,Stmt stmt){
 		SimpleBlock jobblock = SimpleBlock.tryToCreate(cfgNode,cfgNode.getMethod(),mblock.getBlockId());
 		BlockGenerator.inst().addNewBlockToPool(jobblock,false);
@@ -532,9 +534,11 @@ public class ProjectParser {
 			jobId++;
 		}
 	}
+	
 	public JobHub getjobHub(JobVariable job){
 		return jobtoHub.get(job);
 	}
+	
 	public JobHub getjobHub(Variable jobvar){
 		// see the pointer part, if the associated $(partial use the temperate value)
 		@SuppressWarnings("unchecked")
@@ -566,6 +570,8 @@ public class ProjectParser {
 		}
 		return null;
 	}
+	
+	
 	public boolean containjobvar(JobVariable jvb){
 		for(JobVariable curr:jobtoHub.keySet()){
 			if(curr.equals(jvb))
@@ -586,6 +592,8 @@ public class ProjectParser {
 		}
 		return null;
 	}
+	
+	
 	public Map<JobVariable,JobHub> getjobtoHub(){
 		return jobtoHub;
 	}

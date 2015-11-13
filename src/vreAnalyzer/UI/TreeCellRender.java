@@ -3,17 +3,18 @@ package vreAnalyzer.UI;
 import java.awt.Color;
 import java.awt.Component;
 import java.io.File;
-import java.util.List;
-
-import javax.swing.JComponent;
+import java.util.Set;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 public class TreeCellRender extends DefaultTreeCellRenderer{
-	List<File>targets;
-	public TreeCellRender(List<File>renders){
+	Set<File>targets;
+	public TreeCellRender(Set<File>renders){
 		targets = renders;
+	}
+	public void addCells(Set<File>cells){
+		targets.addAll(cells);
 	}
 	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value,

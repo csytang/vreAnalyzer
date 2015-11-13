@@ -6,8 +6,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
+
+import soot.SootClass;
 import soot.SootMethod;
 import vreAnalyzer.Elements.CallSite;
+import vreAnalyzer.UI.SourceClassBinding;
 import vreAnalyzer.Util.Graphviz.GraphvizController;
 import vreAnalyzer.Variants.Variant;
 
@@ -19,11 +22,13 @@ public class VariantPath {
 	// 路径中当前节点
 	private Variant curr = null;// 当前路径的最后一个单一节点
 	private Set<Variant> currSet = new HashSet<Variant>();// 当前路径的最后一个多节点集合
+	// 当前路径上前一个节点
+	private Set<Variant> precursors = new HashSet<Variant>();
 	
 	// 开始节点
 	private Variant head = null;
 	private Set<Variant> headSet = new HashSet<Variant>();
-	
+
 	// 当前路径状态
 	private VariantStat status = null;
 	
@@ -37,6 +42,10 @@ public class VariantPath {
 	
 	private File imageFile = null;
 	
+	private Set<File> variantPathFiles = new HashSet<File>();
+	private Set<SootClass> variantPathClass = new HashSet<SootClass>();
+	
+	
 	public VariantPath(Variant headVariant,SootMethod caller,int id){
 		head = headVariant;
 		callerMethod = caller;
@@ -44,6 +53,9 @@ public class VariantPath {
 		status = VariantStat.single;
 		pathId = id;
 		fullVariantSet.add(headVariant);
+		
+		// 加入到Path涉及的类中
+		variantPathClass.addAll(headVariant.getAllClasses());
 	}
 	
 	public VariantPath(List<Variant>headVariants, SootMethod caller,int id){
@@ -53,16 +65,29 @@ public class VariantPath {
 		status = VariantStat.branch;
 		pathId = id;
 		fullVariantSet.addAll(headVariants);
+		
+		// 加入到Path涉及的类中
+		for(Variant variant:headVariants){
+			variantPathClass.addAll(variant.getAllClasses());
+		}
 	}
 	
 	public void addNextNode(Variant variant,CallSite site){
 		if(site==null){
 			if(status==VariantStat.single){// 前驱节点为单一节点
+				// 设置前驱节点
+				precursors.clear();
+				precursors.add(curr);
+				
 				curr.addSucceedVariant(variant, null);
 				variant.addPrecursorVariant(curr, null);
 				curr = variant;
 				status = VariantStat.single;
 			}else{
+				// 设置前驱节点
+				precursors.clear();
+				precursors.addAll(currSet);
+				
 				for(Variant var:currSet){
 					var.addSucceedVariant(variant, null);
 					variant.addPrecursorVariant(var, null);
@@ -71,13 +96,22 @@ public class VariantPath {
 				curr = variant;
 				status = VariantStat.single;
 			}
+			
 		}else{
 			if(status==VariantStat.single){
+				// 设置前驱节点
+				precursors.clear();
+				precursors.add(curr);
+				
 				curr.addSucceedVariant(variant, site);
 				variant.addPrecursorVariant(curr, null);
 				curr = variant;
 				status = VariantStat.single;
 			}else{
+				// 设置前驱节点
+				precursors.clear();
+				precursors.addAll(currSet);
+				
 				for(Variant var:currSet){
 					var.addSucceedVariant(variant, site);
 					variant.addPrecursorVariant(var, site);
@@ -88,11 +122,17 @@ public class VariantPath {
 			}
 		}
 		fullVariantSet.add(variant);
+		// 加入到Path涉及的类中
+		variantPathClass.addAll(variant.getAllClasses());
 	}
 	
 	public void addNextNode(List<Variant>variants,CallSite site){
 		if(site==null){
 			if(status==VariantStat.single){
+				// 设置前驱节点
+				precursors.clear();
+				precursors.add(curr);
+				
 				for(Variant var:variants){
 					curr.addSucceedVariant(var, null);
 					var.addPrecursorVariant(curr, null);
@@ -102,6 +142,10 @@ public class VariantPath {
 				currSet.clear();
 				currSet.addAll(variants);
 			}else{
+				// 设置前驱节点
+				precursors.clear();
+				precursors.addAll(currSet);
+				
 				for(Variant pre:currSet){
 					for(Variant var:variants){
 						pre.addSucceedVariant(var, null);
@@ -114,6 +158,10 @@ public class VariantPath {
 			}
 		}else{
 			if(status==VariantStat.single){
+				// 设置前驱节点
+				precursors.clear();
+				precursors.add(curr);
+				
 				for(Variant var:variants){
 					curr.addSucceedVariant(var, site);
 					var.addPrecursorVariant(curr, site);
@@ -123,6 +171,10 @@ public class VariantPath {
 				currSet.clear();
 				currSet.addAll(variants);
 			}else{
+				// 设置前驱节点
+				precursors.clear();
+				precursors.addAll(currSet);
+				
 				for(Variant pre:currSet){
 					for(Variant var:variants){
 						pre.addSucceedVariant(var, site);
@@ -135,74 +187,55 @@ public class VariantPath {
 			}
 		}
 		fullVariantSet.addAll(variants);
+		for(Variant variant:variants){
+			// 加入到Path涉及的类中
+			variantPathClass.addAll(variant.getAllClasses());
+		}
 	}
 	
 	public void addParallelNode(Variant variant,CallSite site){
 		if(site==null){
-			Set<Variant> precursors = curr.getPrecursorVariants(null);// 当前节点的前驱节点
-			// 1. 对于所有的precursor来讲, 在所有的上加入新的 后继节点
-			if(precursors.isEmpty()){
-				if(head!=null && headSet.isEmpty()){
-					headSet.add(head);
-					headSet.add(variant);
-					head = null;
-					currSet.clear();
-					currSet.addAll(headSet);
-					status = VariantStat.branch;
-				}else if(!headSet.isEmpty()){
-					headSet.add(variant);
-					currSet.clear();
-					currSet.addAll(headSet);
-					status = VariantStat.branch;
-				}
-			}else{
-				// 不需要改变currentSet
-				for(Variant prevar:precursors){
-					// 2.  额外检查所有并行点的后继
-					if(prevar.getSucceedVariants(null).isEmpty()){
-						prevar.addSucceedVariant(variant, null);
-					}else{
-						Set<Variant>varSucceeds = prevar.getSucceedVariants(null);
-						for(Variant varsucc:varSucceeds){
-							prevar.addSucceedVariant(variant, null);
-							variant.addSucceedVariant(varsucc, null);
-						}
-					}
-					// 3. 对于新加入的后继设计 前驱
-					variant.addPrecursorVariant(prevar, null);
-				}
-			}
-		}else{
-			Set<Variant> precursors = curr.getPrecursorVariants(site);// 当前节点的前驱节点
-			if(precursors.isEmpty()){
-				Set<Variant>varSucceeds = curr.getSucceedVariants(site);
-				for(Variant varsucc:varSucceeds){
-					variant.addSucceedVariant(varsucc, site);
-				}
-			}else{
 				// 1. 对于所有的precursor来讲, 在所有的上加入新的 后继节点
-				for(Variant prevar:precursors){
-					// 2.  额外检查所有并行点的后继
-					if(prevar.getSucceedVariants(site).isEmpty()){
-						prevar.addSucceedVariant(variant, site);
-					}else{
-						Set<Variant>varSucceeds = prevar.getSucceedVariants(site);
-						for(Variant varsucc:varSucceeds){
-							prevar.addSucceedVariant(variant, site);
-							variant.addSucceedVariant(varsucc, site);
-						}
+				if(precursors.isEmpty()){
+					if(head!=null && headSet.isEmpty()){
+						headSet.add(head);
+						headSet.add(variant);
+						head = null;
+						currSet.clear();
+						currSet.addAll(headSet);
+						status = VariantStat.branch;
+					}else if(!headSet.isEmpty()){
+						headSet.add(variant);
+						currSet.clear();
+						currSet.addAll(headSet);
+						status = VariantStat.branch;
 					}
-					// 3. 对于新加入的后继设计 前驱
-					variant.addPrecursorVariant(prevar, site);
+				}else{
+					// 不需要改变currentSet
+					for(Variant prevar:precursors){
+						prevar.addSucceedVariant(variant, null);	
+					}
 				}
-			}
+				status = VariantStat.branch;
+		}else{
+				if(precursors.isEmpty()){
+					Set<Variant>varSucceeds = curr.getSucceedVariants(site);
+					for(Variant varsucc:varSucceeds){
+						variant.addSucceedVariant(varsucc, site);
+					}
+				}else{
+					// 1. 对于所有的precursor来讲, 在所有的上加入新的 后继节点
+					for(Variant prevar:precursors){
+						prevar.addSucceedVariant(variant, site);
+					}
+				}
 		}
 		fullVariantSet.add(variant);
+		variantPathClass.addAll(variant.getAllClasses());
 	}
 	
-	public void addParallelNode(List<Variant>variants,CallSite site){
+	public void addParallelNode (List<Variant>variants,CallSite site){
 		if(site==null){
-			Set<Variant> precursors = curr.getPrecursorVariants(null);// 当前节点的前驱节点
 			// 1. 对于所有的precursor来讲, 在所有的上加入新的 后继节点
 			if(precursors.isEmpty()){
 				if(head!=null && headSet.isEmpty()){
@@ -219,44 +252,28 @@ public class VariantPath {
 					status = VariantStat.branch;
 				}
 			}else{
-				for(Variant prevar:precursors){
-					for(Variant var:variants){
-						// 2.  额外检查所有并行点的后继
-						if(var.getSucceedVariants(null).isEmpty())
-							prevar.addSucceedVariant(var, null);
-						else{
-							Set<Variant>varSucceeds = var.getSucceedVariants(null);
-							for(Variant varsucc:varSucceeds){
-								prevar.addSucceedVariant(var, null);
-								var.addSucceedVariant(varsucc, null);
-							}
-						}
-						// 3. 对于新加入的后继设计 前驱
-						var.addPrecursorVariant(prevar, null);
+				for(Variant var:variants){
+					for(Variant prevar:precursors){
+						// 用前驱连接当前节点
+						prevar.addSucceedVariant(var, null);
 					}
+					// 当前的后继是不存在的
 				}
 			}
 		}else{
-			Set<Variant> precursors = curr.getPrecursorVariants(site);// 当前节点的前驱节点
+			
 			// 1. 对于所有的precursor来讲, 在所有的上加入新的 后继节点
 			for(Variant prevar:precursors){
-				for(Variant var:variants){
-					// 2.  额外检查所有并行点的后继	
-					if(var.getSucceedVariants(site).isEmpty()){
-						prevar.addSucceedVariant(var, site);
-					}else{
-						Set<Variant>varSucceeds = var.getSucceedVariants(site);
-						for(Variant varsucc:varSucceeds){
-							prevar.addSucceedVariant(var, site);
-							var.addSucceedVariant(varsucc, site);
-						}
-					}		
-					// 3. 对于新加入的后继设计 前驱
-					var.addPrecursorVariant(prevar, site);
+				for(Variant var:variants){		
+					// 用前驱连接当前节点
+					prevar.addSucceedVariant(var, site);
 				}
 			}
 		}
 		fullVariantSet.addAll(variants);
+		for(Variant variant:variants){
+			variantPathClass.addAll(variant.getAllClasses());
+		}
 	}
 	
 	public Set<Variant> getLastVariantInPath(){
@@ -388,7 +405,32 @@ public class VariantPath {
 
 	public void addToTable(){
 		VariantPathToTable vtTable = new VariantPathToTable();
-		vtTable.addARowToTable(pathId, fullVariantSet);
+		vtTable.addARowToTable(pathId, fullVariantSet,getAssociatedFiles());
+	}
+	
+	public Set<File> getAssociatedFiles(){
+		variantPathFiles = new HashSet<File>();
+		for(SootClass cls:variantPathClass){
+			File sourceFile = SourceClassBinding.getSourceFileFromClassName(cls.toString());
+			if(sourceFile==null){
+				continue;
+			}
+			String htmlfileNametemp = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
+			String htmlfileName = "";
+			String[] subpatharray = htmlfileNametemp.split("/");
+			for(int i = 0;i < subpatharray.length;i++){
+				if(i!=(subpatharray.length-1)){
+					htmlfileName += subpatharray[i];
+					htmlfileName+="/";
+				}else{
+					htmlfileName += "variant_"+subpatharray[i];
+					htmlfileName += ".html";
+				}
+			}
+			File htmlFile = new File(htmlfileName);
+			variantPathFiles.add(htmlFile);
+		}
+		return variantPathFiles;
 	}
 	
 	public GraphvizController getgraphvizController(){

@@ -11,7 +11,6 @@ import vreAnalyzer.ControlFlowGraph.CFG;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Elements.CallSite;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -43,9 +42,12 @@ public class Variant {
 	private Map<CallSite,Set<Variant>> calleesucceeds = new HashMap<CallSite,Set<Variant>>();
 	private Map<CallSite,Set<Variant>> calleeprecursors = new HashMap<CallSite,Set<Variant>>();
 	
+
+	
 	public Variant(){
 		
 	}
+	
 	public Variant(Value vi,List<Stmt>stmts,CallSite callsite,SootMethod method,int id){
 		if(callsite==null){
 			paddingValues = new LinkedList<Value>();
@@ -53,6 +55,7 @@ public class Variant {
 			paddingValues.add(vi);
 			bindingStmts.addAll(stmts);
 			callerMethod = method;
+			
 		}else{
 			List<Stmt>remotebindings = new LinkedList<Stmt>();
 			List<Value>remotevalues = new LinkedList<Value>();
@@ -60,6 +63,7 @@ public class Variant {
 			remotevalues.add(vi);
 			callSiteToBindingStmt.put(callsite, remotebindings);
 			callSiteToBindingValue.put(callsite, remotevalues);
+			
 		}
 		this.id = id;
 	}
@@ -71,6 +75,7 @@ public class Variant {
 			paddingValues.add(vi);
 			bindingStmts.add(stmt);
 			callerMethod = method;
+			
 		}else{
 			List<Stmt>remotebindings = new LinkedList<Stmt>();
 			List<Value>remotevalues = new LinkedList<Value>();
@@ -78,6 +83,7 @@ public class Variant {
 			remotevalues.add(vi);
 			callSiteToBindingStmt.put(callsite, remotebindings);
 			callSiteToBindingValue.put(callsite, remotevalues);
+			
 		}
 		this.id = id;
 	}
@@ -699,6 +705,7 @@ public class Variant {
 		}
 		return i;
 	}
+	
 	public Set<Integer> removeRepeateValues(int []codeIds){
 		Set<Integer>updateIds = new HashSet<Integer>();
 		for(int i:codeIds){
@@ -706,8 +713,9 @@ public class Variant {
 		}
 		return updateIds;
 	}
-	public boolean isSpecial() 
-	{ 
+	
+	public boolean isSpecial() { 
 		return false; 
 	}
+	
 }

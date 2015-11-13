@@ -69,6 +69,7 @@ public class VariantPathAnalysis {
 			panddingVariants.clear();
 			panddingVariantToUnProcessedStmt.clear();
 			curr = null;
+			
 			for(CFGNode node:cfgNodes){
 				if(node.isSpecial()){
 					continue;
@@ -78,7 +79,6 @@ public class VariantPathAnalysis {
 				}
 				nodebindingVariants.clear();
 				nodebindingVariants = getBindingVaraints(bindingVariants,node,null);
-				
 				if(verbose){
 					if(!nodebindingVariants.isEmpty()){
 						String nodebindingVIds = "[";
@@ -94,7 +94,6 @@ public class VariantPathAnalysis {
 					}else{
 						System.out.println("当前语句不涉及任何Variant");
 					}
-					
 				}
 				if(!nodebindingVariants.isEmpty()){// 有variant涉及到这个语句
 					if(isFirstVariant){// 如果是第一个涉及到Variant的语句
@@ -179,16 +178,18 @@ public class VariantPathAnalysis {
 								}
 							}
 							if(!needToRemoveList.isEmpty()){
-								for(Variant variant:needToRemoveList){
-									for(Variant succeed:bindingVariants){
-										curr.addNextNode(succeed, null);
-										if(verbose){
-											// 将这个连接加入到VariantPath中
-											System.out.println("VariantPath连接两个节点从:"+variant.getVariantId()+" 到 "+succeed.getVariantId());
+								if(curr!=null){
+									for(Variant variant:needToRemoveList){
+										for(Variant succeed:bindingVariants){
+											curr.addNextNode(succeed, null);
+											if(verbose){
+												// 将这个连接加入到VariantPath中
+												System.out.println("VariantPath连接两个节点从:"+variant.getVariantId()+" 到 "+succeed.getVariantId());
+											}
 										}
+										// 将这个Variant从 paddingVariantToProcessStmt中删除
+										panddingVariantToUnProcessedStmt.remove(variant);
 									}
-									// 将这个Variant从 paddingVariantToProcessStmt中删除
-									panddingVariantToUnProcessedStmt.remove(variant);
 								}
 							}
 							
@@ -208,7 +209,8 @@ public class VariantPathAnalysis {
 				// 将里面所有内容并列加入
 				List<Variant> paddingVariantList = new LinkedList<Variant>();
 				paddingVariantList.addAll(panddingVariants);
-				curr.addParallelNode(paddingVariantList, null);
+				if(curr!=null)
+					curr.addParallelNode(paddingVariantList, null);
 			}
 			if(verbose){
 				// 遍历这个path VariantPath curr
@@ -255,6 +257,8 @@ public class VariantPathAnalysis {
 					panddingVariants.clear();
 					panddingVariantToUnProcessedStmt.clear();
 					curr = null;
+					
+					
 					List<Variant>bindingVariants = methodToVariants.get(callee);
 					// 2. 遍历所有的节点
 					for(CFGNode node:cfgNodes){
@@ -415,7 +419,7 @@ public class VariantPathAnalysis {
     }
 	
 	// 从路径id 对应到 图片文件上
-	public Map<Integer,File> getpathIdToFile(){
+	public Map<Integer,File> getpathIdToImgFile(){
 		return pathIdToFile;
 	}
 }

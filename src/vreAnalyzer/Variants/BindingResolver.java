@@ -12,13 +12,19 @@ import soot.jimple.Stmt;
 import soot.jimple.SwitchStmt;
 import soot.jimple.ThisRef;
 import vreAnalyzer.Tag.MethodTag;
+import vreAnalyzer.UI.MainFrame;
+import vreAnalyzer.UI.TreeCellRender;
 import vreAnalyzer.ControlFlowGraph.DefUse.CFGDefUse;
 import vreAnalyzer.ControlFlowGraph.DefUse.NodeDefUses;
 import vreAnalyzer.ControlFlowGraph.DefUse.Variable.Variable;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Elements.CallSite;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
+
+import java.io.File;
 import java.util.*;
+
+import javax.swing.JTree;
 
 public class BindingResolver {
 
@@ -266,6 +272,7 @@ public class BindingResolver {
 						System.out.println("line@189: Add RBTag to stmt:"+stmt);
 						System.out.println("line@190: ----Value:"+argu.toString());
 					}
+					
 					// 创建一个Variant
 					Variant variant = new Variant(argu, stmt, null,method,variantId);
 					
@@ -378,7 +385,6 @@ public class BindingResolver {
 					for(Variant usedvariant:usedVariantSet){
 						usedvariant.addBindingStmts(stmt, null);
 					}
-					
 					
 					// 对于这里的def 由于 存在未绑定的使用 那么def 也是未绑定
 					// 检查一下 多少个variant绑定在上面
@@ -622,7 +628,6 @@ public class BindingResolver {
 			List<CFGNode> nodes = cfg.getNodes();
 			// 获得对应的实际参数列表
 			List<Args> args = methodToArgsList.get(method);
-			
 			
 			// 对于每一次调用进行一次运算
 			if(args!=null){
@@ -1000,8 +1005,8 @@ public class BindingResolver {
 								CFGNode prbnode = PRBAnalysisStack.pop();
 								Stmt prbstmt = prbnode.getStmt();
 								
-								 // 删除stmt上绑定的PRBTag 加入新的RBTag
-								 // 在新加入的RBTag上绑定 lastnode上的values 
+								// 删除stmt上绑定的PRBTag 加入新的RBTag
+								// 在新加入的RBTag上绑定 lastnode上的values 
 								 
 								PRBTag prbTag = (PRBTag)prbstmt.getTag(PRBTag.TAG_NAME);
 								if(prbTag==null){
@@ -1055,7 +1060,6 @@ public class BindingResolver {
 					}
 				}
 			}
-			
 		}
 	}
 	
@@ -1071,7 +1075,6 @@ public class BindingResolver {
 	}
 	
 	private boolean usedOverlap_Variable(List<Variable> useVars, Set<Value> list) {
-		// TODO Auto-generated method stub
 		for(Variable use:useVars){
 			if(list.contains(use.getValue()))
 				return true;
@@ -1084,6 +1087,7 @@ public class BindingResolver {
 		for(Variant variant:fullVariantList){
 			VariantColorMap.inst().registerColorForVariant(variant);
 		}
+		
 	}
 	
 	public static <T> T getStackElement(Stack<T> stack, int index) {
@@ -1097,16 +1101,25 @@ public class BindingResolver {
 		  } finally {
 		    stack.push(x);
 		  }
-		}
+	}
 		
 	private void variantcolorannotation(){
-		
+		Set<File>shouldbeRendered = new HashSet<File>();
 		String variantId = "";
 		for(Variant variant:fullVariantList){
 			variantId = "";
 			variantId += variant.getVariantId();
-			new VariantAnnotate(variant,variantId,VariantColorMap.inst().getColorforVariant(variant));
+			// annotate
+			VariantAnnotate varAnnotate = new VariantAnnotate(variant,variantId,VariantColorMap.inst().getColorforVariant(variant));
+			// 获得这个varAnnotate的中需要被rendered的文件
+			List<File> shouldAnnotate = varAnnotate.getShouldAnnotate();
+			if(!shouldAnnotate.isEmpty()){
+				shouldbeRendered.addAll(shouldAnnotate);
+			}
 		}
+		JTree mainannotatedTree = MainFrame.inst().getFeatureAnnotatedTree();
+		// 加入tree节点渲染
+		mainannotatedTree.setCellRenderer(new TreeCellRender(shouldbeRendered));
 	}
 	
 	public List<Variant> getfullVariantList(){

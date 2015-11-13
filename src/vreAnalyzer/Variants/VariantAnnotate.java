@@ -25,21 +25,27 @@ import java.util.List;
 
 public class VariantAnnotate {
     boolean startFromSource;
-    int[][]positions;
-    int[]lines;
-    private boolean hide = false;
+    int[][] positions; // 使用源代码输入 获取准确的location位置
+    int[]lines; // .class 获取行位置
+    private boolean perminenthide = false;
+    private boolean temphide = false;
     public static boolean variantready = false;
     private static List<Variant> shouldremoveVariants = new LinkedList<Variant>();
+    // 应该被加入节点
+ 	private List<File> shouldannotatedFiles = new LinkedList<File>();
+ 	
     public static void setvariantready(){
     	variantready = true;
     }
     public static List<Variant> getShouldBeHideVariants(){
     	return shouldremoveVariants;
     }
+    
     public VariantAnnotate(Variant variant,String variantId, Color annotatedColor){
         startFromSource = vreAnalyzerCommandLine.isStartFromSource();
         // 先处理在Caller中的部分
-        hide = true;
+        perminenthide = true;
+        temphide = true;
         List<Stmt> callerstmts = variant.getBindingStmts(null);
         if(startFromSource) {
             positions = new int[callerstmts.size()][4];
@@ -86,16 +92,21 @@ public class VariantAnnotate {
         }
         if(startFromSource) {
             if(!shouldbeHide(positions)){
-            		hide = false;
+            	perminenthide = false;
+            	temphide = false;
             }
             HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,htmlFile, positions, annotatedColor, MainFrame.inst().getHTMLToJava());
         }else{
             if(!shouldbeHide(lines)){
-            	hide = false;
+            	perminenthide = false;
+            	temphide = false;
             }
             HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,htmlFile, lines, annotatedColor, MainFrame.inst().getHTMLToJava());
         }
-        
+        // 不应该隐藏htmlFile加入
+        if(temphide==false){
+        	shouldannotatedFiles.add(htmlFile);
+        }
         
         // 处理在Callee中的部分
         // 1. 获得所有的callsite
@@ -109,6 +120,7 @@ public class VariantAnnotate {
              }
              List<SootMethod> calleemethods = callsite.getAppCallees();
              for(SootMethod calleemethod:calleemethods){
+            	 temphide = true;
             	 SootClass calleecls = calleemethod.getDeclaringClass();
             	 File calleesourceFile = SourceClassBinding.getSourceFileFromClassName(calleecls.toString());
             	 String calleehtmlfileNametemp = calleesourceFile.getPath().substring(0, calleesourceFile.getPath().length()-".java".length());
@@ -143,23 +155,29 @@ public class VariantAnnotate {
           		 }
                  if(startFromSource) {
                     if(!shouldbeHide(positions)){
-                    	hide = false; 
+                    	perminenthide = false; 
+                    	temphide = false;
                     }
                     HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,calleehtmlFile, positions, annotatedColor, MainFrame.inst().getHTMLToJava());
                   }else{
                     if(!shouldbeHide(lines)){
-                     	hide = false;
+                    	perminenthide = false;
+                    	temphide = false; 
                     }
                     HTMLAnnotation.annotatemultipleLineHTML_Variant(variant,variantId,calleehtmlFile, lines, annotatedColor, MainFrame.inst().getHTMLToJava());
                  }
+                 if(temphide==false){
+                 	shouldannotatedFiles.add(calleehtmlFile);
+                 }
              }
         }
-        if(hide){
+        if(perminenthide){
         	// 刪除掉这个Variant
         	// BindingResolver.inst().removeHiddenVariant(variant);
         	shouldremoveVariants.add(variant);
         }
     }
+    
 	private boolean shouldbeHide(int[][] positions) {
 		// TODO Auto-generated method stub
 		for(int i = 0;i < positions.length;i++){
@@ -170,6 +188,7 @@ public class VariantAnnotate {
 		}
 		return true;
 	}
+	
 	private boolean shouldbeHide(int[] lines) {
 		// 判断一个variant是否应该被隐藏
 		
@@ -181,4 +200,7 @@ public class VariantAnnotate {
 		
 	}
 	
+	public List<File> getShouldAnnotate() {
+		return shouldannotatedFiles;
+	}
 }

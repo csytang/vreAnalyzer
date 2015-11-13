@@ -37,10 +37,10 @@ public class MainFrame extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 
-	// 1. Instance
+	// 1. 单例模式
 	private static MainFrame instance;
 	
-	// 2. Contents
+	// 2. UI面板
 	private JPanel contentPane;
 	private List<File> target;
 	private List<File> supporingjars;
@@ -53,16 +53,19 @@ public class MainFrame extends JFrame {
 	private final JScrollPane variantPathLeftPane;
 	private DefaultMutableTreeNode root;
 	
-	// 3. 
+	// 3. Soot 命令  
 	private String[] comm;
+	
+	// 4. 类名指向源文件
 	private static Map<String,File> classnametoSource;
 	private List<File> allsourcefiles = new LinkedList<File>();
 	private boolean startFromSource = false;
 	
-	// 4. Output redirect
-	PrintStream printStream;
+	// 5. 输出重定向
+	private PrintStream printStream;
+	
 	private final JTable legendtable;
-	private static Map<String,String>htmlToJava;
+	private static Map<String,String> htmlToJava;
 	private final JTable statistictable;
 	private JTable reusetable;
 	private JTable variantstable;
@@ -75,9 +78,6 @@ public class MainFrame extends JFrame {
 		inst();
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public static MainFrame inst(){
 		if(instance==null){
 			instance = new MainFrame();
@@ -238,6 +238,8 @@ public class MainFrame extends JFrame {
 		    }
 			
 		};
+		
+		
 		ToolTipManager.sharedInstance().registerComponent(source_annotatedDisplayArea);
 		source_annotatedDisplayArea.setEditable(false);
 		source_annotateDisplayPane.setViewportView(source_annotatedDisplayArea);
@@ -261,8 +263,8 @@ public class MainFrame extends JFrame {
 		
 		// Redirect output stream
 		printStream = new PrintStream(new CustomOutputStream(consoletextArea));
-		//System.setOut(printStream);
-		//System.setErr(printStream);
+		// System.setOut(printStream);
+		// System.setErr(printStream);
         
 		consolePane.setViewportView(consoletextArea);
 		
@@ -352,13 +354,9 @@ public class MainFrame extends JFrame {
 	public void setSourceCode(List<File>source){
 		this.sources = source;
 	}
-	/**
-	 * -cp "/Users/tangchris/Desktop/bin/:
-	 * /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/rt.jar:
-	 * /Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/jre/lib/jce.jar:
-	 * /Users/tangchris/hadoop_jars/mapreduce/*:/Users/tangchris/hadoop_jars/hdfs/*:
-	 * /Users/tangchris/hadoop_jars/yarn/*:/Users/tangchris/hadoop_jars/common/*:/Users/tangchris/otherjars/*"  
-	 * -hadoop -process-dir "/Users/tangchris/Desktop/bin/"  -entry:WordCount2
+	
+	/*
+	 * 生成soot命令
 	 */
 	public void generateSootCommand(){
 		List<String>sootCommand = new ArrayList<String>();
@@ -412,9 +410,18 @@ public class MainFrame extends JFrame {
 		comm = sootCommand.toArray(new String[sootCommand.size()]);
 		
 	}
+	
+	/*
+	 * 运行这个命令和绑定的语句
+	 */
 	public void runCommand(boolean bindingsource){
 		vreAnalyzerCommandLine.inst(MainFrame.inst().getCommand(), bindingsource,startFromSource);		
 	}
+	
+	/*
+	 * 加入sootcommand 命令
+	 * @param command
+	 */
 	public void generateSootCommand(String command){
 		command = command.trim();
 		String commandtemp = "";
@@ -444,16 +451,21 @@ public class MainFrame extends JFrame {
 				}
 			}
 		}
-		
 	}
+	
+	/*
+	 * 创建Variant的HTML文件
+	 */
 	public void createVariantHTML(){
-		VariantHTMLFiles variantHTMLFiles = new VariantHTMLFiles(sources);
+		VariantHTMLFiles variantHTMLFiles = new VariantHTMLFiles (sources);
 		DefaultMutableTreeNode variantlist = variantHTMLFiles.getRootTreeNode();
 		root.add(variantlist);
 	}
-
+	
+	/*
+	 * 加载源代码和HTML
+	 */
 	public void loadSourceCodeandHTML() {
-		// TODO Auto-generated method stub
 		Stack<File> sourcefiles = new Stack<File>();
 		sourcefiles.addAll(sources);
 		root = new DefaultMutableTreeNode("Root");
@@ -484,22 +496,36 @@ public class MainFrame extends JFrame {
 				}
 			}
 		}
-
 		root.add(filelist);
 		root.add(htmllist);
-
 	}
+	
+	/*
+	 * 将dir 加入树中
+	 */
 	public void finishDirLoad(){
 		DefaultTreeModel treeModel = (DefaultTreeModel) source_annotateDirTree.getModel();
 		treeModel.setRoot(root);
 		treeModel.reload();
 	}
+	
+	/*
+	 * 是否variant 已经准备好
+	 */
 	public boolean isVariantReady(){
 		return VariantAnnotate.variantready;
 	}
+	
+	/*
+	 * 是否feature 已经准备好
+	 */
 	public boolean isFeatureReady(){
 		return ProjectParser.isfeatureAnnotatedReady;
 	}
+	
+	/*
+	 * 叶子文件按钮点击事件
+	 */
 	public void addDirTreeListener(){
 		source_annotateDirTree.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent e){
@@ -511,14 +537,12 @@ public class MainFrame extends JFrame {
 								legendtable.setModel(ColorMap.inst().getTableModel());
 								// 删除现有的listener 加入feature listener
 								ColorMap.inst().addLegendListener();
-								
 							}
 						}else if(selected.getParent().toString().equals("variantanno_list")){
 							if(isVariantReady()){
 								legendtable.setModel(VariantColorMap.inst().getTableModel());
 								// 删除现有的listener 加入variant legacy listener
-								ColorMap.inst().removeLegendListener();
-								
+								ColorMap.inst().removeLegendListener();								
 							}
 						}
 					}
@@ -538,23 +562,22 @@ public class MainFrame extends JFrame {
 							public void hyperlinkUpdate(HyperlinkEvent e) {
 								// TODO Auto-generated method stub
 								JEditorPane editor = (JEditorPane) e.getSource();
-						        if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+						        if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED){
 						          
-						        } else if (e.getEventType() == HyperlinkEvent.EventType.ENTERED) {
-						          tooltip = editor.getToolTipText();
-						          javax.swing.text.Element elem = e.getSourceElement();
-						          if (elem != null) {
-						            AttributeSet attr = elem.getAttributes();
-						            AttributeSet a = (AttributeSet) attr.getAttribute(HTML.Tag.A);
-						            if (a != null) {
-						              editor.setToolTipText((String) a.getAttribute(HTML.Attribute.TITLE));
-						            }
-						          }
-						        } else if (e.getEventType() == HyperlinkEvent.EventType.EXITED) {
-						          editor.setToolTipText(tooltip);
+						        }else if (e.getEventType() == HyperlinkEvent.EventType.ENTERED){
+							          tooltip = editor.getToolTipText();
+							          javax.swing.text.Element elem = e.getSourceElement();
+							          if (elem != null) {
+								            AttributeSet attr = elem.getAttributes();
+								            AttributeSet a = (AttributeSet) attr.getAttribute(HTML.Tag.A);
+								            if (a != null) {
+								            	editor.setToolTipText((String) a.getAttribute(HTML.Attribute.TITLE));
+								            }
+							          }
+						        }else if (e.getEventType() == HyperlinkEvent.EventType.EXITED){
+						        	editor.setToolTipText(tooltip);
 						        }
 							}
-							
 						});
 					}
 					List<String> content;
@@ -570,7 +593,6 @@ public class MainFrame extends JFrame {
 							source_annotatedDisplayArea.setText(allString);
 							source_annotatedDisplayArea.setCaretPosition(0);
 					} catch (IOException e1) {
-							// TODO Auto-generated catch block
 							e1.printStackTrace();
 					}
 				}	
@@ -578,21 +600,24 @@ public class MainFrame extends JFrame {
 		});
 	}
 	
+	/*
+	 * 把原代码和类代码绑定 
+	 * @param sourcePattern
+	 * @param classPattern
+	 */
 	public void bindSource(String sourcePattern,String classPattern){
-		
 		/** 
 		 *  1. First, clean the allsourcefiles and all target files to ensure
 		 *  (1) in target: it can only contains .jar and .class file, no directories are included;
 		 *  (2) in allsourcefile: it can only contain .java file;(is already cleaned in {@link loadSourceCodeandHTML()})
 		 */
 		List<File>purtaget = getPureClassandJar(target);
-		
-		
-		@SuppressWarnings("unused")
 		SourceClassBinding bindinginstance = SourceClassBinding.inst(purtaget,allsourcefiles,classPattern,sourcePattern);
 	}
 	
-	// get all classes and jar from given filelist, which could be a directory 
+	/*
+	 * 从给定的filelist中获得所有的类和 jar
+	 */
 	public List<File> getPureClassandJar(List<File>rawtarget){
 		List<File>pureclassJar = new LinkedList<File>();
 		Stack<File>classjarfilesStack = new Stack<File>();
@@ -611,16 +636,34 @@ public class MainFrame extends JFrame {
 		}
 		return pureclassJar;
 	}
+	
+	/*
+	 * 是否是叶子节点 
+	 */
 	public boolean isLeaf(Object node) {
 	    return (node instanceof File);
 	}
 	
+	/*
+	 * 获得这个命令 
+	 * @return
+	 */
 	public String[] getCommand() {
 		return comm;
 	}
+	
+	/*
+	 * 从HTML到转化java 
+	 * @return
+	 */
 	public Map<String,String> getHTMLToJava() {
 		return htmlToJava;
 	}
+	
+	/*
+	 * 控制台写入
+	 * @param str
+	 */
 	public void writeConsole(final String str) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run(){
@@ -634,32 +677,49 @@ public class MainFrame extends JFrame {
 			}
 		});
 	}
+	
+	/*
+	 * 类名 文件绑定
+	 * @param className
+	 * @param source
+	 */
 	public void addBinding(String className,File source){
 		if(classnametoSource==null)
 			classnametoSource = new HashMap<String,File>();
 		classnametoSource.put(className, source);
 	}
+	
 	public static JEditorPane getSrcTextPane() {
 		return source_annotatedDisplayArea;
 	}
+	
 	public JTable getJobColorMapTable() {
 		return legendtable;
 	}
+	
 	public JTable getStatisticTable() {
 		return statistictable;
 	}
+	
 	public JTable getCommonAssetTable() {
 		return reusetable;
 	}
-	public JTree getTree(){
+	
+	public JTree getFeatureAnnotatedTree(){
 		return source_annotateDirTree;
 	}
+	
 	public JTable getVariantTable(){
 		return variantstable;
 	}
+	
 	public JTable getBlockTable() {
 		return blocktable;
 	}
+	
+	/*
+	 * HTML 显示	
+	 */
 	class TooltipEditorKit extends HTMLEditorKit {
 	    @Override public ViewFactory getViewFactory() {
 	        return new HTMLFactory() {
@@ -686,11 +746,25 @@ public class MainFrame extends JFrame {
 	        };
 	    }
 	}
+	
+	/*
+	 * 获得variantpath列表
+	 */
 	public JTable getVariantPathTable() {
-		// TODO Auto-generated method stub
 		return variantPathtable;
 	}
+
+	/*
+	 * 获得image表示panel
+	 */
 	public JScrollPane getImageDisplayPanel(){
 		return variantPathLeftPane;
+	}
+
+	/**
+	 * 获得原文件显示层
+	 */
+	public JEditorPane getSrcTextDisplayArea(){
+		return source_annotatedDisplayArea;
 	}
 }
