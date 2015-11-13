@@ -2,6 +2,7 @@ package vreAnalyzer;
 import soot.SceneTransformer;
 import vreAnalyzer.Blocks.BlockGenerator;
 import vreAnalyzer.Blocks.BlockToFile;
+import vreAnalyzer.InformationRetrieve.FullBasicInfoToCSV;
 import vreAnalyzer.PointsTo.PointsToAnalysis;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder.EntryNotFoundException;
@@ -48,6 +49,10 @@ public class vreAnalyzerInternalTransform extends SceneTransformer{
 		// Display Reusable Result by checking the mode
 		ProjectParser.inst().runProjectParser();
 		BlockToFile.inst().endWrite();
+		
+		// 写基本信息进入CSV中
+		FullBasicInfoToCSV.inst().run();
+		
 		System.out.println("[vreAnalyzer] Project analysis[Finish]");
 	}
 

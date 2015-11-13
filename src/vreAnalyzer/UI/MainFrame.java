@@ -473,7 +473,6 @@ public class MainFrame extends JFrame {
 		DefaultMutableTreeNode htmllist = new DefaultMutableTreeNode("annotated_list");
 		while (!sourcefiles.isEmpty()) {
 			File subfile = sourcefiles.pop();
-
 			if (subfile.isDirectory()) {
 				File[] childdir = subfile.listFiles();
 				for (File child : childdir) {
@@ -581,19 +580,18 @@ public class MainFrame extends JFrame {
 						});
 					}
 					List<String> content;
-						
 					try {
-							content = Files.readAllLines(selectedfile.toPath(),Charset.defaultCharset());
-							String allString = "";
-							for(String subcontent:content){
-								allString+=subcontent;
-								allString+="\n";
-							}
-							source_annotatedDisplayArea.setText("");
-							source_annotatedDisplayArea.setText(allString);
-							source_annotatedDisplayArea.setCaretPosition(0);
-					} catch (IOException e1) {
-							e1.printStackTrace();
+						content = Files.readAllLines(selectedfile.toPath(),Charset.defaultCharset());
+						String allString = "";
+						for(String subcontent:content){
+							allString+=subcontent;
+							allString+="\n";
+						}
+						source_annotatedDisplayArea.setText("");
+						source_annotatedDisplayArea.setText(allString);
+						source_annotatedDisplayArea.setCaretPosition(0);
+					}catch (IOException e1) {
+						e1.printStackTrace();
 					}
 				}	
 			}
@@ -767,4 +765,5 @@ public class MainFrame extends JFrame {
 	public JEditorPane getSrcTextDisplayArea(){
 		return source_annotatedDisplayArea;
 	}
+
 }

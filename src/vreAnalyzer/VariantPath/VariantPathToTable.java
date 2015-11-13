@@ -27,8 +27,6 @@ import javax.swing.text.ViewFactory;
 import javax.swing.text.html.BlockView;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLEditorKit;
-import javax.swing.text.html.HTMLEditorKit.HTMLFactory;
-
 import vreAnalyzer.UI.MainFrame;
 import vreAnalyzer.UI.NonEditableModel;
 import vreAnalyzer.Util.Graphviz.ImageDisplay;
@@ -122,7 +120,6 @@ public class VariantPathToTable {
 							String tooltip;
 								@Override
 								public void hyperlinkUpdate(HyperlinkEvent e) {
-									// TODO Auto-generated method stub
 									JEditorPane editor = (JEditorPane) e.getSource();
 							        if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED){
 							          
@@ -142,23 +139,19 @@ public class VariantPathToTable {
 								}
 							});
 							List<String> content;
-							
 							try {
-									content = Files.readAllLines(selectedfile.toPath(),Charset.defaultCharset());
-									String allString = "";
-									for(String subcontent:content){
-										allString+=subcontent;
-										allString+="\n";
-									}
-									source_annotatedDisplayArea.setText("");
-									source_annotatedDisplayArea.setText(allString);
-									source_annotatedDisplayArea.setCaretPosition(0);
+								content = Files.readAllLines(selectedfile.toPath(),Charset.defaultCharset());
+								String allString = "";
+								for(String subcontent:content){
+									allString+=subcontent;
+									allString+="\n";
+								}
+								source_annotatedDisplayArea.setText("");
+								source_annotatedDisplayArea.setText(allString);
+								source_annotatedDisplayArea.setCaretPosition(0);
 							} catch (IOException e1) {
-									e1.printStackTrace();
+								e1.printStackTrace();
 							}
-							
-							
-							
 						}else{
 							//有多个文件绑定在这个path上
 							System.err.println("Multiple files associated, check!!! for pathId:"+pathId);
@@ -172,6 +165,7 @@ public class VariantPathToTable {
 			}
 		});
 	}
+	
 	/*
 	 * HTML 显示	
 	 */

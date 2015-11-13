@@ -15,16 +15,15 @@ public class Options {
 	
 	// All possible mode
 	public enum reusableMode {
-			Normal("Normal"),Hadoop("Hadoop");
-			private final String name;
-			private reusableMode(String s){
-				name = s;
-			}
-			public String toString(){
-				return this.name();
-			}
+		Normal("Normal"),Hadoop("Hadoop");
+		private final String name;
+		private reusableMode(String s){
+			name = s;
+		}
+		public String toString(){
+			return this.name();
+		}
 	}
-	
 	
 	public static reusableMode mode = reusableMode.Normal;
 	
@@ -41,6 +40,7 @@ public class Options {
 	public Options(){
 		
 	}
+	
 	/** 
 	 * Parses argument list (command line args), and gets settings for this program, removing them and returning soot-only args
 	 * @throws ConflictModelExpection 
@@ -151,6 +151,7 @@ public class Options {
 		String[] filteredArgs = new String[argsSoot.size()];
 		return argsSoot.toArray(filteredArgs);
 	}
+
 	private static String findjarsReplaceWithFiles(File subclassPath) {
 		// TODO Auto-generated method stub
 		String alljarPaths = "";
@@ -172,16 +173,20 @@ public class Options {
 			alljarPaths = alljarPaths.substring(0, alljarPaths.length()-1);
 		return alljarPaths;
 	}
+	
 	public static String entryClassName()
 	{
 		return entryClassName; 
 	}
+	
 	public static reusableMode getMode(){
 		return mode;
 	}
+	
 	public static Set<String> getComparedinNormal(){
 		return normalClassList;
 	}
+	
 	public static boolean allowParmsRetUseDefs() { return allowParmsRetUseDefs; }
 	
 	public static DUModelBehavior duModelBehavior() { return duModelBehavior; }

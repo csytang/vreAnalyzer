@@ -131,7 +131,7 @@ public class ProjectParser {
 		
 		JTree mainFrameTree = MainFrame.inst().getFeatureAnnotatedTree();
 		
-		TreeCellRender treeRender = (TreeCellRender)mainFrameTree.getCellRenderer();
+		TreeCellRender treeRender = (TreeCellRender) mainFrameTree.getCellRenderer();
 		if(treeRender!=null){
 			treeRender.addCells(allannotatedFiles);
 		}else{
@@ -139,6 +139,8 @@ public class ProjectParser {
 			mainFrameTree.setCellRenderer(new TreeCellRender(allannotatedFiles));
 		}
 	}
+	
+	
 	public void annotateallJobUses(){
 		for(Map.Entry<JobVariable, JobHub>entry:jobtoHub.entrySet()){
 			JobVariable job = entry.getKey();
