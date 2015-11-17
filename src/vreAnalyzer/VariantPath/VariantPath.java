@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
-
 import soot.SootClass;
 import soot.SootMethod;
 import vreAnalyzer.Elements.CallSite;
@@ -45,7 +44,7 @@ public class VariantPath {
 	private Set<File> variantPathFiles = new HashSet<File>();
 	private Set<SootClass> variantPathClass = new HashSet<SootClass>();
 	
-	
+	// variant路径
 	public VariantPath(Variant headVariant,SootMethod caller,int id){
 		head = headVariant;
 		callerMethod = caller;
@@ -58,6 +57,7 @@ public class VariantPath {
 		variantPathClass.addAll(headVariant.getAllClasses());
 	}
 	
+	// variant 路径
 	public VariantPath(List<Variant>headVariants, SootMethod caller,int id){
 		headSet.addAll(headVariants);
 		callerMethod = caller;
@@ -72,6 +72,7 @@ public class VariantPath {
 		}
 	}
 	
+	// 在路径上加入下一个节点
 	public void addNextNode(Variant variant,CallSite site){
 		if(site==null){
 			if(status==VariantStat.single){// 前驱节点为单一节点
@@ -126,6 +127,7 @@ public class VariantPath {
 		variantPathClass.addAll(variant.getAllClasses());
 	}
 	
+	// 在路径上加入下一个节点
 	public void addNextNode(List<Variant>variants,CallSite site){
 		if(site==null){
 			if(status==VariantStat.single){
@@ -193,6 +195,7 @@ public class VariantPath {
 		}
 	}
 	
+	// 在路径上加入当前节点的并行节点
 	public void addParallelNode(Variant variant,CallSite site){
 		if(site==null){
 				// 1. 对于所有的precursor来讲, 在所有的上加入新的 后继节点
@@ -234,6 +237,7 @@ public class VariantPath {
 		variantPathClass.addAll(variant.getAllClasses());
 	}
 	
+	// 在路径上加入当前节点的并行节点
 	public void addParallelNode (List<Variant>variants,CallSite site){
 		if(site==null){
 			// 1. 对于所有的precursor来讲, 在所有的上加入新的 后继节点
@@ -276,6 +280,7 @@ public class VariantPath {
 		}
 	}
 	
+	// 获得路径中当前节点 或称作 最后的节点
 	public Set<Variant> getLastVariantInPath(){
 		if(status==VariantStat.single){
 			// 构造一个list并且返回这个list
@@ -408,6 +413,7 @@ public class VariantPath {
 		vtTable.addARowToTable(pathId, fullVariantSet,getAssociatedFiles());
 	}
 	
+	// 本路径涉及到的文件
 	public Set<File> getAssociatedFiles(){
 		variantPathFiles = new HashSet<File>();
 		for(SootClass cls:variantPathClass){

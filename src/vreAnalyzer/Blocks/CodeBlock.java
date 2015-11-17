@@ -1,5 +1,6 @@
 package vreAnalyzer.Blocks;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import Patch.Hadoop.Tag.BlockJobTag;
@@ -16,7 +17,7 @@ public class CodeBlock {
 	 * variable, method, class and even a package.
 	 */
 	private BlockType blockType = null;
-	private List<CFGNode>blocks;
+	private List<CFGNode>blocks = new LinkedList<CFGNode>();
 	private SootMethod method;// if applicable
 	private String codeRange = "";
 	private SootClass cls;
@@ -38,7 +39,6 @@ public class CodeBlock {
 		return this.blocks;
 	}
 	public void setBlocks(List<CFGNode>blocks){
-		
 		this.blocks = blocks;
 	}
 	
@@ -93,6 +93,14 @@ public class CodeBlock {
 		if(!codeRange.trim().equals(""))
 			return codeRange;
 		CFG cfg = ProgramFlowBuilder.inst().getCFG(method);
+		if(cfg==null){
+			return "[]";
+		}
+		if(this.blocks.isEmpty())
+			this.blocks = cfg.getNodes();
+		if(this.blocks.isEmpty()){
+			return "[]";
+		}
 		int blockrealSize = this.blocks.size();
 		if(this.blocks.contains(cfg.ENTRY))
 			blockrealSize--;

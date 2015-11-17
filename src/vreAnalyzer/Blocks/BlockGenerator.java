@@ -1,8 +1,12 @@
 package vreAnalyzer.Blocks;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 import javax.swing.JTable;
@@ -21,12 +25,19 @@ public class BlockGenerator {
 	public static BlockGenerator instance;
 	private static int blockid = 0;
 	private static ArrayList<CodeBlock> blockpool = new ArrayList<CodeBlock>();
+	// sootmethod 到 codeblock集合
+	private static Map<SootMethod,Set<SimpleBlock>> simpleCodeBlockpool = new HashMap<SootMethod,Set<SimpleBlock>>();
+	private static Map<SootClass,ClassBlock> classBlockpool = new HashMap<SootClass,ClassBlock>();
+	private static Map<SootMethod,MethodBlock> methodBlockpool = new HashMap<SootMethod,MethodBlock>();
+	
 	private DefaultTableModel blockmodel;
+	
 	public static BlockGenerator inst(List<SootClass> appClasses){
 		if(instance==null)
 			instance = new BlockGenerator(appClasses);
 		return instance;
 	}
+
 	public static BlockGenerator inst(){
 		return instance;
 	}
@@ -53,6 +64,13 @@ public class BlockGenerator {
 			}
 			// 2. Create class block
 			ClassBlock clsblock = ClassBlock.tryToCreate(classallnode, cls);
+			if(classBlockpool.containsKey(cls)){
+				continue;
+			}else{
+				classBlockpool.put(cls, clsblock);
+			}
+			
+			
 			addNewBlockToPool(clsblock,true);
 			for(SootMethod method:clsmethods){
 				if(method.getTag(MethodTag.TAG_NAME)!=null && !Modifier.isVolatile(method.getModifiers())){
@@ -62,7 +80,11 @@ public class BlockGenerator {
 					List<CFGNode>nodes = cfg.getNodes();
 					MethodBlock methodBlock = MethodBlock.tryToCreate(nodes, method,clsblock.getBlockId());
 					addNewBlockToPool(methodBlock,true);
-					
+					if(methodBlockpool.containsKey(method)){
+						continue;
+					}else{
+						methodBlockpool.put(method, methodBlock);
+					}
 					@SuppressWarnings("unused")
 					MethodTag mTag = (MethodTag) method.getTag(MethodTag.TAG_NAME);
 					
@@ -83,6 +105,13 @@ public class BlockGenerator {
 							CFGNode curr = analysisstack.pop();
 							if(marked.contains(curr)&&!temp.isEmpty()){
 								SimpleBlock sblock = SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId());
+								if(simpleCodeBlockpool.containsKey(method)){
+									simpleCodeBlockpool.get(method).add(sblock);
+								}else{
+									Set<SimpleBlock>blockset = new HashSet<SimpleBlock>();
+									blockset.add(sblock);
+									simpleCodeBlockpool.put(method, blockset);
+								}
 								addNewBlockToPool(sblock,true);// sub block
 								// 1. add a new static variant
 								temp.clear();
@@ -95,24 +124,39 @@ public class BlockGenerator {
 								analysisstack.push(next);
 							}
 							if(curr.getSuccs().size()>1&&!temp.isEmpty()){
-								addNewBlockToPool(SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId()),true);// prior block
+								SimpleBlock sblock = SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId());
+								if(simpleCodeBlockpool.containsKey(method)){
+									simpleCodeBlockpool.get(method).add(sblock);
+								}else{
+									Set<SimpleBlock>blockset = new HashSet<SimpleBlock>();
+									blockset.add(sblock);
+									simpleCodeBlockpool.put(method, blockset);
+								}
+								addNewBlockToPool(sblock,true);// prior block
 								temp.clear();
 							}
 							marked.add(curr);
 						}
 						
 						if(!temp.isEmpty()){
-							addNewBlockToPool(SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId()),true);
+							SimpleBlock sblock = SimpleBlock.tryToCreate(temp, method,methodBlock.getBlockId());
+							if(simpleCodeBlockpool.containsKey(method)){
+								simpleCodeBlockpool.get(method).add(sblock);
+							}else{
+								Set<SimpleBlock>blockset = new HashSet<SimpleBlock>();
+								blockset.add(sblock);
+								simpleCodeBlockpool.put(method, blockset);
+							}
+							addNewBlockToPool(sblock,true);
 							temp.clear();
 						}
 					}
 				}
 			}
-			
 		}
-		
-		
 	}
+	
+	
 	public static void increaseId(){
 		blockid++;
 	}
@@ -152,6 +196,14 @@ public class BlockGenerator {
 			blockpool.add(block);
 		}
 	}
-	
-	
+
+	public Map<SootMethod, Set<SimpleBlock>> getSimpleCodeBlockMap() {
+		return simpleCodeBlockpool;
+	}
+	public Map<SootClass,ClassBlock> getClassCodeBlockMap(){
+		return classBlockpool;
+	}
+	public Map<SootMethod,MethodBlock> getMethodBlockMap(){
+		return methodBlockpool;
+	}
 }

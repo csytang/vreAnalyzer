@@ -258,7 +258,6 @@ public class VariantPathAnalysis {
 					panddingVariantToUnProcessedStmt.clear();
 					curr = null;
 					
-					
 					List<Variant>bindingVariants = methodToVariants.get(callee);
 					// 2. 遍历所有的节点
 					for(CFGNode node:cfgNodes){
