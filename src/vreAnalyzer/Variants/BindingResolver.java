@@ -60,6 +60,13 @@ public class BindingResolver {
     // 包含所有的callsite
     private Map<SootMethod,List<CallSite>> methodToCallSites = new HashMap<SootMethod,List<CallSite>>();
     
+    // 设置一个Map从variantId 到block Ids的对应
+    private Map<Integer,Set<Integer>> variantIdToblockIds = new HashMap<Integer,Set<Integer>>();
+    
+    // 设置SootMethod 到 ConditionCheck的对应
+    private Map<SootMethod,ConditionCheck> methodToConditionCheck = new HashMap<SootMethod,ConditionCheck>();
+    
+    
     public BindingResolver(){
     	methodToArgsList = new HashMap<SootMethod,List<Args>>();
     	allAppMethod = new LinkedList<SootMethod>();
@@ -158,6 +165,7 @@ public class BindingResolver {
 			if(!callsites.isEmpty() && containappmethodcallee){
 				callerMethod.add(method);
 			}
+			
 		}
 		
 		/////////////////////////////
@@ -202,27 +210,30 @@ public class BindingResolver {
 							// 如果操作符是 ＝ 赋值
 							// 左侧是定义 右侧是使用						
 							if(vtVariant.containsValue(rOperator)){
-								Set<Variant> rightVariants = vtVariant.getVariantsByValue(rOperator);
-								for(Variant variant:rightVariants){
-									variant.setInitialConditionStmt(ifstmt, null);
-									variant.addInitialConditionValue(rOperator, null);
+								if(!methodToConditionCheck.containsKey(method)){
+									ConditionCheck conditionCheck = new ConditionCheck(method,null);
+									conditionCheck.setInitialConditionCFGNode(node, null);
+									conditionCheck.addInitialConditionValue(rOperator, null);
+									methodToConditionCheck.put(method, conditionCheck);
 								}
 							}
 							
 						}else{
 							// 其他--- 两侧都是使用
 							if(vtVariant.containsValue(lOperator)){
-								Set<Variant> leftVariants = vtVariant.getVariantsByValue(lOperator);
-								for(Variant variant:leftVariants){
-									variant.setInitialConditionStmt (ifstmt, null);
-									variant.addInitialConditionValue (lOperator, null);
+								if(!methodToConditionCheck.containsKey(method)){
+									ConditionCheck conditionCheck = new ConditionCheck(method,null);
+									conditionCheck.setInitialConditionCFGNode(node, null);
+									conditionCheck.addInitialConditionValue(lOperator, null);
+									methodToConditionCheck.put(method, conditionCheck);
 								}
 							}
 							if(vtVariant.containsValue(rOperator)){
-								Set<Variant> rightVariants = vtVariant.getVariantsByValue(rOperator);
-								for(Variant variant:rightVariants){
-									variant.setInitialConditionStmt(ifstmt, null);
-									variant.addInitialConditionValue(rOperator, null);
+								if(!methodToConditionCheck.containsKey(method)){
+									ConditionCheck conditionCheck = new ConditionCheck(method,null);
+									conditionCheck.setInitialConditionCFGNode(node, null);
+									conditionCheck.addInitialConditionValue(rOperator, null);
+									methodToConditionCheck.put(method, conditionCheck);
 								}
 							}
 							
@@ -230,20 +241,24 @@ public class BindingResolver {
 					}else if(stmt instanceof SwitchStmt){
 						SwitchStmt switchstmt = (SwitchStmt) stmt;
 						Value keyValue = switchstmt.getKey();
-						if(verbose)
+						if(verbose){
 							System.out.println("Key is:"+keyValue);
+						}
 						if(vtVariant.containsValue(keyValue)){
-							Set<Variant> Variants = vtVariant.getVariantsByValue(keyValue);
-							for(Variant variant:Variants){
-								variant.setInitialConditionStmt(switchstmt, null);
-								variant.addInitialConditionValue(keyValue, null);
+							if(!methodToConditionCheck.containsKey(method)){
+								ConditionCheck conditionCheck = new ConditionCheck(method,null);
+								conditionCheck.setInitialConditionCFGNode(node, null);
+								conditionCheck.addInitialConditionValue(keyValue, null);
+								methodToConditionCheck.put(method, conditionCheck);
 							}
 						}
 					}
 				}
 				
-				if(verbose)
+				if(verbose){
 					System.out.println("Currently process statement:"+stmt.toString());
+				}
+				
 				useVars = defusenode.getUsedVars();// 在当前语句中的使用
 				defVars = defusenode.getDefinedVars();// 当前语句中的定义
 				///////////////////////
@@ -278,6 +293,7 @@ public class BindingResolver {
 					
 					// 加入到localToVariant表中
 					vtVariant.addValueToVariant(argu, variant);
+					
 					
 					variantId++;
 					// 加入到fullVariant list中
@@ -676,27 +692,42 @@ public class BindingResolver {
 									// 如果操作符是 ＝ 赋值
 									// 左侧是定义 右侧是使用						
 									if(localvtVariant.containsValue(rOperator)){
-										Set<Variant> rightVariants = localvtVariant.getVariantsByValue(rOperator);
-										for(Variant variant:rightVariants){
-											variant.setInitialConditionStmt(ifstmt, null);
-											variant.addInitialConditionValue(rOperator, null);
+										if(!methodToConditionCheck.containsKey(method)){
+											ConditionCheck conditionCheck = new ConditionCheck(method,argument.getCallSite());
+											conditionCheck.setInitialConditionCFGNode(node, argument.getCallSite());
+											conditionCheck.addInitialConditionValue(rOperator, argument.getCallSite());
+											methodToConditionCheck.put(method, conditionCheck);
+										}else{
+											ConditionCheck conditionCheck = methodToConditionCheck.get(method);
+											conditionCheck.setInitialConditionCFGNode(node, argument.getCallSite());
+											conditionCheck.addInitialConditionValue(rOperator, argument.getCallSite());
 										}
 									}
 									
 								}else{
 									// 其他--- 两侧都是使用
 									if(localvtVariant.containsValue(lOperator)){
-										Set<Variant> leftVariants = localvtVariant.getVariantsByValue(lOperator);
-										for(Variant variant:leftVariants){
-											variant.setInitialConditionStmt (ifstmt, null);
-											variant.addInitialConditionValue (lOperator, null);
+										if(!methodToConditionCheck.containsKey(method)){
+											ConditionCheck conditionCheck = new ConditionCheck(method,argument.getCallSite());
+											conditionCheck.setInitialConditionCFGNode(node, argument.getCallSite());
+											conditionCheck.addInitialConditionValue(lOperator, argument.getCallSite());
+											methodToConditionCheck.put(method, conditionCheck);
+										}else{
+											ConditionCheck conditionCheck = methodToConditionCheck.get(method);
+											conditionCheck.setInitialConditionCFGNode(node, argument.getCallSite());
+											conditionCheck.addInitialConditionValue(lOperator, argument.getCallSite());
 										}
 									}
 									if(localvtVariant.containsValue(rOperator)){
-										Set<Variant> rightVariants = localvtVariant.getVariantsByValue(rOperator);
-										for(Variant variant:rightVariants){
-											variant.setInitialConditionStmt(ifstmt, null);
-											variant.addInitialConditionValue(rOperator, null);
+										if(!methodToConditionCheck.containsKey(method)){
+											ConditionCheck conditionCheck = new ConditionCheck(method,argument.getCallSite());
+											conditionCheck.setInitialConditionCFGNode(node, argument.getCallSite());
+											conditionCheck.addInitialConditionValue(rOperator, argument.getCallSite());
+											methodToConditionCheck.put(method, conditionCheck);
+										}else{
+											ConditionCheck conditionCheck = methodToConditionCheck.get(method);
+											conditionCheck.setInitialConditionCFGNode(node, argument.getCallSite());
+											conditionCheck.addInitialConditionValue(rOperator, argument.getCallSite());
 										}
 									}
 									
@@ -707,10 +738,15 @@ public class BindingResolver {
 								if(verbose)
 									System.out.println("Key is:"+keyValue);
 								if(localvtVariant.containsValue(keyValue)){
-									Set<Variant> Variants = localvtVariant.getVariantsByValue(keyValue);
-									for(Variant variant:Variants){
-										variant.setInitialConditionStmt(switchstmt, null);
-										variant.addInitialConditionValue(keyValue, null);
+									if(!methodToConditionCheck.containsKey(method)){
+										ConditionCheck conditionCheck = new ConditionCheck(method,argument.getCallSite());
+										conditionCheck.setInitialConditionCFGNode(node, argument.getCallSite());
+										conditionCheck.addInitialConditionValue(keyValue, argument.getCallSite());
+										methodToConditionCheck.put(method, conditionCheck);
+									}else{
+										ConditionCheck conditionCheck = methodToConditionCheck.get(method);
+										conditionCheck.setInitialConditionCFGNode(node, argument.getCallSite());
+										conditionCheck.addInitialConditionValue(keyValue, argument.getCallSite());
 									}
 								}
 							}
@@ -1055,12 +1091,12 @@ public class BindingResolver {
 							}
 							PRBAnalysisStack.clear();
 							containPRBValue = false;
-							
 						}
 					}
 				}
 			}
 		}
+		
 	}
 	
 	public void removeHiddenVariant(List<Variant> variants){
@@ -1137,4 +1173,26 @@ public class BindingResolver {
 	public Map<SootMethod,List<CallSite>> getMethodToCallSites(){
 		return methodToCallSites;
 	}
+	public Map<Integer,Set<Integer>> getvariantIdToBlockIds(){
+		if(variantIdToblockIds.isEmpty()){
+			for(Variant variant:fullVariantList){
+				int variantId = variant.getVariantId();
+				Set<Integer> blockIds = variant.getBlockIdsInSet();
+				variantIdToblockIds.put(variantId, blockIds);
+			}
+		}
+		return variantIdToblockIds;
+	}
+	/**
+	 * 返回从SootMethod 到 检查条件的对应
+	 * @return
+	 */
+	public Map<SootMethod,ConditionCheck> getmethodToConditionCheck(){
+		return methodToConditionCheck;
+	}
+	public boolean isCallerMethod(SootMethod method){
+		return callerMethod.contains(method);
+	
+	}
+	
 }

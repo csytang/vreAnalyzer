@@ -25,13 +25,9 @@ public class Variant {
 	private SootMethod callerMethod  = null;// 如果有
 	private Map<CallSite,List<Stmt>> callSiteToBindingStmt = new HashMap<CallSite,List<Stmt>>();
 	private Map<CallSite,List<Value>> callSiteToBindingValue = new HashMap<CallSite,List<Value>>();
-	private List<CallSite> callsiteList = null;
+	private List<CallSite> callsiteList = new LinkedList<CallSite>();
 	
-	// 第一个判别条件和语句
-	private Map<CallSite,Set<Value>> calleeinitConditionalValues = new HashMap<CallSite,Set<Value>>();
-	private Map<CallSite,Stmt> calleeinitConditionalStmt = new HashMap<CallSite,Stmt>();
-	private Set<Value> callerinitConditionalValues = new HashSet<Value>();
-	private Stmt callerinitConditionalStmt = null;
+	
 	private String codeRange = "";
 	private boolean verbose = true;
 	int id = 0;
@@ -42,7 +38,9 @@ public class Variant {
 	private Map<CallSite,Set<Variant>> calleesucceeds = new HashMap<CallSite,Set<Variant>>();
 	private Map<CallSite,Set<Variant>> calleeprecursors = new HashMap<CallSite,Set<Variant>>();
 	
-
+	// 这个Variant所包含的blocks
+	private Set<Integer> blockIds = new HashSet<Integer>();
+	private int[] blockIdsInArray;
 	
 	public Variant(){
 		
@@ -174,6 +172,7 @@ public class Variant {
     		}
     	}
     }
+    
     public void addSucceedVariant(Variant variant,CallSite callsite){
     	//加入后继variant
     	if(callsite==null){
@@ -190,6 +189,7 @@ public class Variant {
     		}
     	}
     }
+     
     public void addBrachSucceedVariants(Set<Variant>succeeds,CallSite callsite){
     	if(callsite==null){
     		callersucceeds.addAll(succeeds);
@@ -210,6 +210,7 @@ public class Variant {
     			return null;
     	}
     }
+    
     public Set<Variant> getSucceedVariants(CallSite callsite){
     	if(callsite==null){
     		return callersucceeds;
@@ -253,17 +254,54 @@ public class Variant {
 			callsiteList = new LinkedList<CallSite>(callSiteToBindingStmt.keySet());
 		return callsiteList;
 	}
+	
 	public SootMethod getCallerMethod() {
 		// TODO Auto-generated method stub
 		return callerMethod;
 	}
+	
+	// 获得callee method
+	public Set<SootMethod> getCalleeMethod(){
+		Set<SootMethod> calleeSet = new HashSet<SootMethod>();
+		if(callsiteList.isEmpty()){
+			callsiteList.addAll(callSiteToBindingStmt.keySet());
+		}
+		for(CallSite site:callsiteList){
+			calleeSet.addAll(site.getAppCallees());
+		}
+		return calleeSet;
+	}
+	
+	public String getCalleeMethodString(){
+		String calleeMethod = "";
+		if(callsiteList.isEmpty()){
+			callsiteList.addAll(callSiteToBindingStmt.keySet());
+		}
+		for(CallSite site:callsiteList){
+			calleeMethod += "[";			
+			List<SootMethod> calleemethods = site.getAppCallees();
+			for(SootMethod method:calleemethods){
+				calleeMethod += method.getName();
+				calleeMethod += ",";
+			}
+			if(calleemethods.size()>=1){
+				calleeMethod = calleeMethod.substring(0, calleeMethod.length()-1);
+			}
+			calleeMethod += "]";
+		}
+		return calleeMethod;
+	}
+ 
 	public int getVariantId() {
 		// TODO Auto-generated method stub
 		return id;
 	}
 	
 	// 获得一个Variant在code block中对应
-	public int[] getBlockIds() {
+	public int[] getBlockIdsInArray() {
+		if(blockIdsInArray!=null){
+			return blockIdsInArray;
+		}
 		// TODO Auto-generated method stub
 		if(verbose){
 			String range =  getCodeRangeforVariant();
@@ -363,7 +401,18 @@ public class Variant {
 		if(blockidArray.length > 1){
 			quickSort(blockidArray,0,blockidArray.length-1);
 		}
+		blockIdsInArray = blockidArray;
 		return blockidArray;
+	}
+	public Set<Integer> getBlockIdsInSet() {
+		if(blockIdsInArray.length==0){
+			getBlockIdsInArray();
+		}
+		blockIds.clear();
+		for(int i:blockIdsInArray){
+			blockIds.add(i);
+		}
+		return blockIds;
 	}
 	
 	// 判断两个集合关系 是否为 有交集
@@ -399,7 +448,6 @@ public class Variant {
 	}
 	
 	// 获得这个Variant所涉及的所有函数
-	
 	public List<SootMethod> getAllCalleeMethods() {
 		
 		Set<SootMethod> methodset = new HashSet<SootMethod>();
@@ -433,53 +481,11 @@ public class Variant {
 		List<SootClass> allclasses = new LinkedList<SootClass> (classset);
 		return allclasses;
 	}
-		
-	// 初始化 条件 stmt 和 callsite
-	public void setInitialConditionStmt(Stmt stmt,CallSite callsite){
-		if(callsite==null){
-			callerinitConditionalStmt = stmt;
-		}else{
-			calleeinitConditionalStmt.put(callsite,stmt);
-		}
-	}
 	
-	// 初始化 条件 stmt 和 callsite
-	public void addInitialConditionValue(Value value,CallSite callsite){
-		if(callsite==null){
-			// 对于callsite 无 Caller
-			if(callerinitConditionalValues.isEmpty()){
-				Set<Value>values = new HashSet<Value>();
-				values.add(value);
-				callerinitConditionalValues.addAll(values);
-			}else{
-				callerinitConditionalValues.add(value);
-			}
-		}else{
-			if(!calleeinitConditionalValues.containsKey(callsite)){
-				Set<Value>values = new HashSet<Value>();
-				values.add(value);
-				calleeinitConditionalValues.put(callsite, values);
-			}else{
-				calleeinitConditionalValues.get(callsite).add(value);
-			}
-		}
-	}
-	
-	// 初始化条件值
-	public void addInitialConditionValue(Set<Value> values, CallSite callsite){
-		if(callsite==null){
-			callerinitConditionalValues.addAll(values);
-		}else{
-			if(!calleeinitConditionalValues.containsKey(callsite)){
-				calleeinitConditionalValues.put(callsite, values);
-			}else{
-				calleeinitConditionalValues.get(callsite).addAll(values);
-			}
-		}
-	}
 	
 	// 获得Variant的分隔符号
-	public String getSeperatorValues() {
+	/*
+ 	public String getSeperatorValues() {
 		
 		// 返回一个字符串 这个字符串中
 		String seperatorValueString = "";
@@ -491,10 +497,12 @@ public class Variant {
 			seperatorValueString += callerMethod.getName();
 			seperatorValueString += "_";
 		}
+		
 		for(Value value:callerinitConditionalValues){
 			seperatorValueString += value;
 			seperatorValueString += ":";
 		}
+		
 		if(!callerinitConditionalValues.isEmpty()){
 			seperatorValueString = seperatorValueString.substring(0,seperatorValueString.length()-1);
 			seperatorValueString += ")";
@@ -532,7 +540,7 @@ public class Variant {
 		seperatorValueString += "]";
 		return seperatorValueString;
 		
-	}
+	}*/
 
 	public String getCodeRangeforVariant() {
 		
@@ -604,7 +612,7 @@ public class Variant {
 		codeRange = callerCodeRange;
 		// 5. 在Callee中处理
 		String calleeCodeRange = "";
-		if(callsiteList==null){
+		if(callsiteList.isEmpty()){
 			callsiteList.addAll(callSiteToBindingStmt.keySet());
 		}
 		

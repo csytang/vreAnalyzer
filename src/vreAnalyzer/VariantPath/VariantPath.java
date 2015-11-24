@@ -8,6 +8,7 @@ import java.util.Queue;
 import java.util.Set;
 import soot.SootClass;
 import soot.SootMethod;
+import vreAnalyzer.CSV.CSVWriter;
 import vreAnalyzer.Elements.CallSite;
 import vreAnalyzer.UI.SourceClassBinding;
 import vreAnalyzer.Util.Graphviz.GraphvizController;
@@ -407,10 +408,10 @@ public class VariantPath {
 		
 		imageFile = graphvizController.getOutputFile();
 	}
-
-	public void addToTable(){
+	
+	public void addToTable(CSVWriter writer){
 		VariantPathToTable vtTable = new VariantPathToTable();
-		vtTable.addARowToTable(pathId, fullVariantSet,getAssociatedFiles());
+		vtTable.addARowToTable(pathId, fullVariantSet,getAssociatedFiles(),writer);
 	}
 	
 	// 本路径涉及到的文件

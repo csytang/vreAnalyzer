@@ -25,11 +25,11 @@ public class VariantToTable {
 		DefaultTableModel varitableModel = (DefaultTableModel) jvariantTable.getModel();
 		for(Variant variant:fullvaraintlist){
 			int id = variant.getVariantId();	
-			int[] blocksIds = variant.getBlockIds();
+			int[] blocksIds = variant.getBlockIdsInArray();
 			
 			
 			List<SootClass> classes = variant.getAllClasses();
-			String separatorString  = variant.getSeperatorValues();
+			
 			// 获得这个Variant的code range
 			String coderange = variant.getCodeRangeforVariant();
 			
@@ -39,13 +39,14 @@ public class VariantToTable {
 			String methodsString = MethodsToString(variant);
 			String classString = ClassesToString(classes);
 			
-			varitableModel.addRow(new Object[]{variantId,blockidString,coderange,separatorString,methodsString,classString});
-			VariantToFile.inst().writeRow(variantId, blockidString, coderange, separatorString, methodsString, classString);
+			varitableModel.addRow(new Object[]{variantId,blockidString,coderange,methodsString,classString});
+			VariantToFile.inst().writeRow(variantId, blockidString, coderange, methodsString, classString);
 		}		
 	}
 	
 	
 	public String IdsToString(int[]blockIds){
+		
 		String ids = "[";
 		for(int id:blockIds){
 			ids += id;
@@ -56,6 +57,7 @@ public class VariantToTable {
 		}
 		ids += "]";
 		return ids;
+		
 	}
 	
 	// Variant的方法的集合转化为字符串

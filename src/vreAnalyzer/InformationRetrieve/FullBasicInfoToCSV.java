@@ -7,22 +7,22 @@ import java.util.Map;
 import java.util.Set;
 import soot.SootClass;
 import soot.SootMethod;
+import soot.Value;
 import vreAnalyzer.Blocks.BlockGenerator;
 import vreAnalyzer.Blocks.ClassBlock;
 import vreAnalyzer.Blocks.CodeBlock;
 import vreAnalyzer.Blocks.MethodBlock;
 import vreAnalyzer.Blocks.SimpleBlock;
 import vreAnalyzer.CSV.CSVWriter;
+import vreAnalyzer.Elements.CFGNode;
+import vreAnalyzer.Elements.CallSite;
 import vreAnalyzer.ProgramFlow.ProgramFlowBuilder;
 import vreAnalyzer.Variants.BindingResolver;
+import vreAnalyzer.Variants.ConditionCheck;
 
 public class FullBasicInfoToCSV {
 	/*
-	 * Package
-	 * Class
-	 * Method
-	 * Code Block
-	 * Variant
+	 * Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,Variant Belongs,ContainVariantBrach,VariantBrachStart,VaraintBranchOrder" 
 	 */
 	public static FullBasicInfoToCSV instance;
 	// package 对应所有的 app 类
@@ -39,9 +39,6 @@ public class FullBasicInfoToCSV {
 	private int index = 1;
 	
 	public FullBasicInfoToCSV(){
-		/*
-		 * Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type
-		 */
 		fullInfoWriter = new CSVWriter(outputDirectory+"/full.csv");
 	}
 	
@@ -55,14 +52,22 @@ public class FullBasicInfoToCSV {
 		// sootmethod 到 methodblock 的对应
 		Map<SootMethod,MethodBlock> methodCodeBlockpool = BlockGenerator.inst().getMethodBlockMap();
 		
+		// SootMethod 到 variants的 对应
+		
+		
 		// variantId 的 blocksIds
 		Map<Integer,Set<Integer>> variantIdToblockIds = BindingResolver.inst().getvariantIdToBlockIds();
 		
 		// 转化为 block to Variant ids
 		Map<Integer,Set<Integer>> blockIdToVariantId = convertVaraintwithBlock(variantIdToblockIds);
 		
+		/*
+		 *  SootMethod 到 ConditionalCheck
+		 */
+		Map<SootMethod,ConditionCheck> methodToConditionCheck = BindingResolver.inst().getmethodToConditionCheck();
+		
 		// 写入标题
-		fullInfoWriter.println("Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,Variant Belongs");
+		fullInfoWriter.println("Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,CallerMethod/CalleeMethod,Variant Belongs/Contains,ContainVariantBrach,VariantBrachStart");
 		// 写入正文内容
 		List<SootClass>appclasses = ProgramFlowBuilder.inst().getAppClasses();
 		for(SootClass cls:appclasses){
@@ -78,11 +83,12 @@ public class FullBasicInfoToCSV {
 				packageWithClasses.put(packageName, clsSet);
 			}
 		}
-		
+		// 包 Package
 		for(String packageName:packageWithClasses.keySet()){
 			String packInfoTxt = new String();
 			/*
-			 * Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,Variant Belongs"
+			 *Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,CallerMethod/CalleeMethod,Variant Belongs,ContainVariantBrach,VariantBrachStart"
+			 *
 			 */
 			packInfoTxt += index+",";// Id
 			packInfoTxt += packageName+",";// Name
@@ -91,17 +97,20 @@ public class FullBasicInfoToCSV {
 			packInfoTxt += "-,";// Parent Name
 			packInfoTxt += "-,";// Parent Type
 			packInfoTxt += "-,";// Code Range
+			packInfoTxt += "-,";// CallerMethod/CalleeMethod
 			packInfoTxt += "-,";// Variant
+			packInfoTxt += "?,";// ContainVariantBrach
+			packInfoTxt += "-";// VariantBrachStart
 			
 			fullInfoWriter.println(packInfoTxt);
 			int packageId = index;
 			index++;
 			
-			// 加入在这个package内部的类
+			// 类 Class
 			Set<SootClass> packclassset = packageWithClasses.get(packageName);
 			for(SootClass cls:packclassset){
 				/*
-				 * Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,Variant Belongs"
+				 * Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,CallerMethod/CalleeMethod,Variant Belongs,ContainVariantBrach,VariantBrachStart"
 				 */
 				String clsInfoTxt = new String();
 				clsInfoTxt += index+",";// Id
@@ -111,22 +120,28 @@ public class FullBasicInfoToCSV {
 				clsInfoTxt += packageName+",";// Parent Name
 				clsInfoTxt += "Package,";// Parent Type
 				clsInfoTxt += "\""+classCodeBlockpool.get(cls).getCodeRange()+"\",";// code range
+				clsInfoTxt += "-,";// CallerMethod/CalleeMethod
 				clsInfoTxt += "-,";// variant belongings
+				clsInfoTxt += "?,";// ContainVariantBrach
+				clsInfoTxt += "-";// VariantBrachStart
 				
 				fullInfoWriter.println(clsInfoTxt);
 				int classId = index;
 				index++;
 				
-				// 写入这个Class中的method
+				// 函数 Method 
 				for(SootMethod method:cls.getMethods()){
 					int methodId = 0;
+					// 这个method上绑定的conditioncheck
+					ConditionCheck conditionCheck = null;
 					// 判断是不是app method
 					if(ProgramFlowBuilder.inst().getAppConcreteMethods().contains(method)){
 						/*
-						 * Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,Variant Belongs"
+						 * Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,CallerMethod/CalleeMethod,Variant Belongs,ContainVariantBrach,VariantBrachStart"
 						 */
 						MethodBlock methodblock = methodCodeBlockpool.get(method);
-						//Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type
+						
+						
 						String methodInfoTxt = new String();
 						methodInfoTxt += index+",";// id
 						methodInfoTxt += method.getName()+",";// name
@@ -140,19 +155,67 @@ public class FullBasicInfoToCSV {
 							String codeRange = methodblock.getCodeRange();
 							methodInfoTxt += "\""+codeRange+"\",";// code range
 						}
-						methodInfoTxt += "-";// variant belongs
+						// CallerMethod/CalleeMethod
+						if(BindingResolver.inst().getCallerMethods().contains(method)){
+							methodInfoTxt += "caller,";
+						}else if(BindingResolver.inst().getCalleeMethods().contains(method)){
+							methodInfoTxt += "callee,";
+						}else{
+							methodInfoTxt += "-,";
+						}
+						
+						
+						
+						
+						methodInfoTxt += "-,";// variant contains
+						
+						// 这个method上绑定的conditioncheck
+						conditionCheck = methodToConditionCheck.get(method);
+						
+						//ContainVariantBrach,VariantBrachStart
+						boolean containsVariantBrach = false;
+						
+						String variantBrachStart = "-";// VariantBrachStart
+						if(conditionCheck!=null){
+							variantBrachStart = getBrachStartFromVariantList(conditionCheck,method);
+							if(variantBrachStart!="-"){
+								containsVariantBrach = true;
+							}else{
+								containsVariantBrach = false;
+							}
+						}
+						if(containsVariantBrach){
+							methodInfoTxt += "Y,";
+						}else{
+							methodInfoTxt += "N,";
+						}
+						
+						
+						variantBrachStart = "\""+variantBrachStart+"\"";
+						methodInfoTxt += variantBrachStart;
 						
 						fullInfoWriter.println(methodInfoTxt);
 						methodId = index;
 						index++;
+					}else{
+						continue;
+					}
+					CFGNode conditionCFGNode = null;
+					Map<CallSite,CFGNode> callsiteToCFGNodeMap = null;
+					if(conditionCheck!=null){
+						if(conditionCheck.isCallerMethod()){
+							conditionCFGNode = conditionCheck.getinitConditionalCFGNode(null);
+						}else{
+							callsiteToCFGNodeMap = conditionCheck.getcalleeinitCFGNodes();
+						}
 					}
 					
-					// 在这个Method下加入下面的code block
+					// 代码块 Code Block
 					Set<SimpleBlock> methodCodeBlockSet = simpleCodeBlockpool.get(method);
 					if(methodCodeBlockSet!=null){
 						for(CodeBlock cblock:methodCodeBlockSet){
 							/*
-							 * Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,Variant Belongs"
+							 * Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,CallerMethod/CalleeMethod,Variant Belongs,ContainVariantBrach,VariantBrachStart"
 							 */
 							String simpleInfoTxt = new String();
 							simpleInfoTxt += index+",";// id
@@ -163,9 +226,54 @@ public class FullBasicInfoToCSV {
 							simpleInfoTxt += "Method,";// Parent type
 							String codeRange = cblock.getCodeRange();
 							simpleInfoTxt += "\""+codeRange+"\",";// Code Range
+							simpleInfoTxt += "-,";// CallerMethod or CalleeMethod
 							// get variant this code block belongs to
 							Set<Integer> variantIds = blockIdToVariantId.get(cblock.getBlockId());// Variant belongs
-							simpleInfoTxt += "\""+covertVariantIdsToString(variantIds)+"\"";
+							simpleInfoTxt += "\""+covertVariantIdsToString(variantIds)+"\",";
+							
+							//ContainVariantBrach,VariantBrachStart
+							boolean containsVariantBrach = false;
+							
+							String variantBrachStart = "-";
+							
+							if(conditionCheck!=null){
+								if(conditionCheck.isCallerMethod()){
+									//conditionCFGNode
+									if(cblock.getCFGNodes().contains(conditionCFGNode)){
+										// 条件语句在这个范围内
+										Set<Value>values = conditionCheck.getinitConditionalValues(null);
+										if(!values.isEmpty()){
+											variantBrachStart = covertValueSetToString(values);
+										}
+									}else{
+										// 条件语句不在这个范围内
+										variantBrachStart = "-";
+									}
+								}else{
+									//callsiteToCFGNodeMap
+									variantBrachStart = "-";
+									for(Map.Entry<CallSite, CFGNode>entry:callsiteToCFGNodeMap.entrySet()){
+										CallSite site = entry.getKey();
+										Set<Value> initConditionalValueSite = conditionCheck.getinitConditionalValues(site);
+										variantBrachStart = covertValueSetToString(initConditionalValueSite,site,method);
+									}
+								}
+							}
+							if(variantBrachStart.equals("-")){
+								containsVariantBrach = false;
+							}else{
+								containsVariantBrach = true;
+							}
+							
+							if(containsVariantBrach){
+								simpleInfoTxt += "Y,";
+							}else{
+								simpleInfoTxt += "N,";
+							}
+							
+							variantBrachStart = "\""+variantBrachStart+"\"";
+							simpleInfoTxt += variantBrachStart;
+							
 							fullInfoWriter.println(simpleInfoTxt);
 							index++;
 						}
@@ -175,6 +283,60 @@ public class FullBasicInfoToCSV {
 		}
 		fullInfoWriter.close();	
 	}
+	
+	/**
+	 * 
+	 * @param methodAssociatedVariants
+	 * @return 
+	 */
+	private String getBrachStartFromVariantList(ConditionCheck conditionCheck,SootMethod method) {
+		String branchOrder = "";
+		boolean isCaller = conditionCheck.isCallerMethod();// 判断入口函数是否为caller函数 
+		if(isCaller){
+			Set<Value>conditionvalues = conditionCheck.getinitConditionalValues(null);
+			if(conditionvalues.isEmpty()){
+				return "";
+			}else{
+				branchOrder = "";
+				branchOrder+="[";
+				for(Value value:conditionvalues){
+					branchOrder += value;
+					branchOrder += ",";
+				}
+				if(conditionvalues.size()>=1){
+					branchOrder = branchOrder.substring(0, branchOrder.length()-1);
+				}
+				branchOrder+="]";
+			}
+		}else{
+			Map<CallSite,Set<Value>> calleeinitConditionalValues = conditionCheck.getcalleeinitConditionalValues();
+			branchOrder = "";
+			branchOrder+="[";
+			for(Map.Entry<CallSite, Set<Value>>entry:calleeinitConditionalValues.entrySet()){
+				CallSite callsite = entry.getKey();
+				Set<Value> values = entry.getValue();
+				if(values.isEmpty()){
+					continue;
+				}else{
+					SootMethod callerMethod = callsite.getLoc().getMethod();
+					branchOrder += callerMethod;
+					branchOrder += "@";
+					for(Value value:values){
+						branchOrder += value;
+						branchOrder += ",";
+					}
+					if(values.size()>=1){
+						branchOrder = branchOrder.substring(0, branchOrder.length()-1);
+					}
+				}						
+			}
+			branchOrder+="]";
+		}
+		return branchOrder;
+	}
+
+	
+
 	/*
 	 * 将varianttoBlockids 转化为 blockto VariantIds
 	 */
@@ -213,5 +375,35 @@ public class FullBasicInfoToCSV {
 		}
 		variantString += "]";
 		return variantString;
+	}
+	
+	public String covertValueSetToString(Set<Value>values){
+		String valueString = "[";
+		for(Value value:values){
+			valueString += value.toString();
+			valueString += ",";
+		}
+		if(values.size()>=1){
+			valueString = valueString.substring(0,valueString.length()-1);
+		}
+		valueString += "]";
+		return valueString;
+	}
+	public String covertValueSetToString(Set<Value>values,CallSite site,SootMethod callee){
+		SootMethod caller = site.getCallCFGNode().getMethod();
+		String valueString = "[";
+		valueString += caller.getName();
+		valueString += "->";
+		valueString += callee.getName();
+		valueString += ":";
+		for(Value value:values){
+			valueString += value.toString();
+			valueString += ",";
+		}
+		if(values.size()>=1){
+			valueString = valueString.substring(0,valueString.length()-1);
+		}
+		valueString += "]";
+		return valueString;
 	}
 }

@@ -157,9 +157,8 @@ public class ProjectParser {
 				JobUseAnnotate jobuseannot = new JobUseAnnotate(job, useentry.getValue(), htmlFile);
 			}
 		}
-		
-		
 	}
+	
 	public void annotate(){
 		// 1. Following will only be allowed if it is started from GUI and source is binded
 		// Annotated all jobs with selected color;

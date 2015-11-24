@@ -18,10 +18,10 @@ public class VariantToFile {
 		/*
 		 * "Variant ID","Block_Id","Code Range(jimple)","Separators","SootMethod","SootClass"
 		 */
-		variantswriter.println("Variant ID,Block_Id,Code Range(jimple),Separators,SootMethod,SootClass");
+		variantswriter.println("Variant ID,Block_Id,Code Range(jimple),SootMethod,SootClass");
 	}
-	public void writeRow(String variantId,String blockidString,String coderange,String separatorString,String methodsString,String classString){
-		variantswriter.println("\""+variantId+"\","+"\""+blockidString+"\","+"\""+coderange+"\","+"\""+separatorString+"\","+"\""+methodsString+"\","+"\""+classString+"\"");
+	public void writeRow(String variantId,String blockidString,String coderange,String methodsString,String classString){
+		variantswriter.println("\""+variantId+"\","+"\""+blockidString+"\","+"\""+coderange+"\","+"\""+methodsString+"\","+"\""+classString+"\"");
 	}
 	public void endWrite(){
 		variantswriter.close();

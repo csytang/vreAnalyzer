@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -27,6 +27,9 @@ import javax.swing.text.ViewFactory;
 import javax.swing.text.html.BlockView;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLEditorKit;
+import soot.SootClass;
+import soot.SootMethod;
+import vreAnalyzer.CSV.CSVWriter;
 import vreAnalyzer.UI.MainFrame;
 import vreAnalyzer.UI.NonEditableModel;
 import vreAnalyzer.Util.Graphviz.ImageDisplay;
@@ -62,7 +65,8 @@ public class VariantPathToTable {
 		variantPathTable = MainFrame.inst().getVariantPathTable();
 		varitablePathModel = (NonEditableModel) variantPathTable.getModel();
 	}
-	public void addARowToTable(int pathId,Set<Variant>variants,Set<File> variantfile){
+	
+	public void addARowToTable(int pathId,Set<Variant>variants,Set<File> variantfile,CSVWriter writer){
 		String idList = "";
 		idList += "[";
 		
@@ -80,13 +84,48 @@ public class VariantPathToTable {
 		idList += "]";
 		varitablePathModel.addRow(new Object[]{pathId,idList});
 		pathIdToVarFiles.put(pathId, variantfile);
+		/*
+		 * 写入csv文件
+		 * VariantPath Id,Variants List,Classes,Methods
+		 */
+		Set<SootClass> classSet = new HashSet<SootClass>();
+		Map<SootMethod,Set<SootMethod>> callerToCallees = new HashMap<SootMethod,Set<SootMethod>>(); 
+		for(Variant variant:variants){
+			classSet.addAll(variant.getAllClasses());
+			Set<SootMethod> callees = new HashSet<SootMethod>();
+			callees.addAll(variant.getCalleeMethod());
+			if(callerToCallees.containsKey(variant.getCallerMethod())){
+				callerToCallees.get(variant.getCallerMethod()).addAll(callees);
+			}else{
+				callerToCallees.put(variant.getCallerMethod(), callees);
+			}
+		}
+		String classsetString = convertClassessetToString(classSet);
+		String csvString = pathId+",\""+idList+"\",\""+classsetString+"\","+"\""+coverMethodMaptoString(callerToCallees)+"\"";
+		writer.println(csvString);
+		if(verbose){
+			System.out.println("Write to csv:"+csvString);
+		}
 		VariantPathToTable.tableRowIndex++;
 	}
 	
+	private String convertClassessetToString(Set<SootClass> classSet) {
+		String classString = "[";
+		for(SootClass cls:classSet){
+			classString += cls.getName();
+			classString += ",";
+		}
+		if(classSet.size()>=1){
+			classString = classString.substring(0, classString.length()-1);
+		}
+		classString += "]";
+		return classString;
+	}
 	/**
 	 * 加入路径的按键监听
 	 */
 	public void addPathListener(){
+		
 		pathIdToImgFile = VariantPathAnalysis.inst().getpathIdToImgFile();
 		variantPathTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 			@Override
@@ -154,8 +193,7 @@ public class VariantPathToTable {
 							}
 						}else{
 							//有多个文件绑定在这个path上
-							System.err.println("Multiple files associated, check!!! for pathId:"+pathId);
-							System.exit(-1);
+							new PopupMenu(variantFiles,variantPathTable);
 						}
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
@@ -166,7 +204,7 @@ public class VariantPathToTable {
 		});
 	}
 	
-	/*
+	/**
 	 * HTML 显示	
 	 */
 	class TooltipEditorKit extends HTMLEditorKit {
@@ -194,6 +232,29 @@ public class VariantPathToTable {
 	            }
 	        };
 	    }
+	}
+
+	public String coverMethodMaptoString(Map<SootMethod,Set<SootMethod>> callerToCallees){
+		/**
+		 * [caller->callee]@[XXX->XXX]
+		 */
+		String callerToCalleesString = "";
+		for(Map.Entry<SootMethod, Set<SootMethod>>entry:callerToCallees.entrySet()){
+			callerToCalleesString += "[";
+			SootMethod caller = entry.getKey();
+			callerToCalleesString += caller.getName();
+			callerToCalleesString += "->";
+			Set<SootMethod> callees = entry.getValue();
+			for(SootMethod callee:callees){
+				callerToCalleesString += callee.getName();
+				callerToCalleesString += ",";
+			}
+			if(callees.size()>=1){
+				callerToCalleesString = callerToCalleesString.substring(0, callerToCalleesString.length()-1);
+			}
+			callerToCalleesString += "]";
+		}
+		return callerToCalleesString;
 	}
 	
 }

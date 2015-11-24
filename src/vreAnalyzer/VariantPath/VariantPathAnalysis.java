@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Queue;
 import soot.SootMethod;
 import soot.jimple.Stmt;
+import vreAnalyzer.CSV.CSVWriter;
 import vreAnalyzer.ControlFlowGraph.CFG;
 import vreAnalyzer.Elements.CFGNode;
 import vreAnalyzer.Elements.CallSite;
@@ -18,6 +19,7 @@ import vreAnalyzer.Variants.BindingResolver;
 import vreAnalyzer.Variants.Variant;
 
 public class VariantPathAnalysis {
+	
 	public static VariantPathAnalysis instance;
 	// 包含函数调用的函数
     protected List<SootMethod> callerMethod = null;
@@ -33,6 +35,8 @@ public class VariantPathAnalysis {
 	// 从路径id 对应到 图片文件上
 	private Map<Integer,File> pathIdToFile = new HashMap<Integer,File>();
 	
+	// CSVWriter 将内容写入的CSV文件中
+	private CSVWriter csvwriter = new CSVWriter("./variantPath.csv");;
 	
 	private int variantPathIndex = 1;
 	private boolean verbose = true;
@@ -53,7 +57,8 @@ public class VariantPathAnalysis {
 	
 	public void parse(Map<SootMethod,List<Variant>> methodToVariants){
 		// 1. 获得所有的Caller函数
-
+		csvwriter.println("VariantPath Id,Variants List,Classes,Methods");
+		
 		List<SootMethod> callerMethods = BindingResolver.inst().getCallerMethods();
 		List<Variant> nodebindingVariants = new LinkedList<Variant>();
 		VariantPath curr = null;
@@ -212,12 +217,14 @@ public class VariantPathAnalysis {
 				if(curr!=null)
 					curr.addParallelNode(paddingVariantList, null);
 			}
+			
+			
 			if(verbose){
 				// 遍历这个path VariantPath curr
 				if(curr!=null){
 					curr.layertraverse(caller,null);
 					variantToGraphvizCont.put(curr, curr.getgraphvizController());
-					curr.addToTable();
+					curr.addToTable(csvwriter);
 					pathIdToFile.put(curr.getPathId(), curr.getImageFile());
 				}
 			}
@@ -284,8 +291,7 @@ public class VariantPathAnalysis {
 								System.out.println("当前语句中的Variant包括:"+nodebindingVIds);
 							}else{
 								System.out.println("当前语句不涉及任何Variant");
-							}
-							
+							}						
 						}
 						
 						if(!nodebindingVariants.isEmpty()){// 有variant涉及到这个语句
@@ -362,7 +368,7 @@ public class VariantPathAnalysis {
 						if(curr!=null){
 							curr.layertraverse(callermethod,callsite);
 							variantToGraphvizCont.put(curr, curr.getgraphvizController());
-							curr.addToTable();
+							curr.addToTable(csvwriter);
 							pathIdToFile.put(curr.getPathId(), curr.getImageFile());
 						}
 					}
@@ -371,7 +377,7 @@ public class VariantPathAnalysis {
 			}			
 		}
 		
-		
+		csvwriter.close();
 		// 将路径加入listener
 		VariantPathToTable.inst().addPathListener();
 	}

@@ -162,9 +162,9 @@ public class ProgramFlowBuilder {
 				CFGDefUse defcfg = (CFGDefUse)cfg;
 				defcfg.analyze();
 			}
-			else
+			else{
 				cfg.analyze();
-			
+			}
 		}
 	}
 	
@@ -309,7 +309,7 @@ public class ProgramFlowBuilder {
 		// TODO Auto-generated method stub
 		return entryMethods.get(0).getDeclaringClass();
 	}
-	 **/
+	**/
 	public SootClass findLibClassByName(String string) {
 		// TODO Auto-generated method stub
 		for (Iterator<SootClass> itCls = Scene.v().getLibraryClasses().iterator();itCls.hasNext();){
