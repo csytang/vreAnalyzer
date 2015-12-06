@@ -1,0 +1,609 @@
+public class org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch extends org.apache.mahout.math.neighborhood.UpdatableSearcher
+{
+    private static final int BITS;
+    private static final long BIT_MASK;
+    private static final int MAX_HASH_LIMIT;
+    private static final int MIN_DISTRIBUTION_COUNT;
+    private final com.google.common.collect.Multiset trainingVectors;
+    private org.apache.mahout.math.Matrix projection;
+    private int searchSize;
+    private double hashLimitStrategy;
+    private int distanceEvaluations;
+    private boolean initialized;
+
+    public void <init>(org.apache.mahout.common.distance.DistanceMeasure, int)
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch r0;
+        org.apache.mahout.common.distance.DistanceMeasure r1;
+        int i0;
+        com.google.common.collect.HashMultiset $r2;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch;
+
+        r1 := @parameter0: org.apache.mahout.common.distance.DistanceMeasure;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<org.apache.mahout.math.neighborhood.UpdatableSearcher: void <init>(org.apache.mahout.common.distance.DistanceMeasure)>(r1);
+
+        $r2 = staticinvoke <com.google.common.collect.HashMultiset: com.google.common.collect.HashMultiset create()>();
+
+        r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: com.google.common.collect.Multiset trainingVectors> = $r2;
+
+        r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: double hashLimitStrategy> = 0.9;
+
+        r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: int distanceEvaluations> = 0;
+
+        r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: boolean initialized> = 0;
+
+        r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: int searchSize> = i0;
+
+        r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: org.apache.mahout.math.Matrix projection> = null;
+
+        return;
+    }
+
+    private void initialize(int)
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch r0;
+        int i0;
+        boolean $z0;
+        org.apache.mahout.math.Matrix $r1;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch;
+
+        i0 := @parameter0: int;
+
+        $z0 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: boolean initialized>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: boolean initialized> = 1;
+
+        $r1 = staticinvoke <org.apache.mahout.math.random.RandomProjector: org.apache.mahout.math.Matrix generateBasisNormal(int,int)>(64, i0);
+
+        r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: org.apache.mahout.math.Matrix projection> = $r1;
+
+        return;
+    }
+
+    private org.apache.lucene.util.PriorityQueue searchInternal(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch r0;
+        org.apache.mahout.math.Vector r1;
+        long l0;
+        org.apache.lucene.util.PriorityQueue r2;
+        org.apache.mahout.math.stats.OnlineSummarizer[] r3;
+        java.util.Iterator r4;
+        org.apache.mahout.math.neighborhood.HashedVector r5;
+        int i1, $i2, $i3, $i4, $i6, $i7, $i9, $i10, $i11, $i12, $i14, $i15, $i16, $i17, $i18, i20, i21, i22;
+        double d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, d10;
+        org.apache.mahout.math.Matrix $r6;
+        com.google.common.collect.Multiset $r7;
+        java.lang.Object $r8, $r18;
+        boolean $z0;
+        org.apache.mahout.common.distance.DistanceMeasure $r9;
+        byte $b5, $b8, $b13;
+        org.apache.mahout.math.stats.OnlineSummarizer $r10, $r13, $r14, $r15, $r17;
+        org.apache.mahout.math.random.WeightedThing $r11, $r19;
+        int[] r20;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $r6 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: org.apache.mahout.math.Matrix projection>;
+
+        l0 = staticinvoke <org.apache.mahout.math.neighborhood.HashedVector: long computeHash64(org.apache.mahout.math.Vector,org.apache.mahout.math.Matrix)>(r1, $r6);
+
+        $i2 = virtualinvoke r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: int getSearchSize()>();
+
+        r2 = staticinvoke <org.apache.mahout.math.neighborhood.Searcher: org.apache.lucene.util.PriorityQueue getCandidateQueue(int)>($i2);
+
+        r3 = newarray (org.apache.mahout.math.stats.OnlineSummarizer)[65];
+
+        i20 = 0;
+
+     label1:
+        if i20 >= 65 goto label2;
+
+        $r17 = new org.apache.mahout.math.stats.OnlineSummarizer;
+
+        specialinvoke $r17.<org.apache.mahout.math.stats.OnlineSummarizer: void <init>()>();
+
+        r3[i20] = $r17;
+
+        i20 = i20 + 1;
+
+        goto label1;
+
+     label2:
+        r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: int distanceEvaluations> = 0;
+
+        r20 = newarray (int)[65];
+
+        i21 = 64;
+
+        i22 = 0;
+
+        d10 = #Infinity;
+
+        $r7 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: com.google.common.collect.Multiset trainingVectors>;
+
+        r4 = interfaceinvoke $r7.<com.google.common.collect.Multiset: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label8;
+
+        $r8 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.neighborhood.HashedVector) $r8;
+
+        i1 = virtualinvoke r5.<org.apache.mahout.math.neighborhood.HashedVector: int hammingDistance(long)>(l0);
+
+        if i1 > i21 goto label3;
+
+        $i4 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: int distanceEvaluations>;
+
+        $i3 = $i4 + 1;
+
+        r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: int distanceEvaluations> = $i3;
+
+        $r9 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: org.apache.mahout.common.distance.DistanceMeasure distanceMeasure>;
+
+        d0 = interfaceinvoke $r9.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r1, r5);
+
+        $r10 = r3[i1];
+
+        virtualinvoke $r10.<org.apache.mahout.math.stats.OnlineSummarizer: void add(double)>(d0);
+
+        $b5 = d0 cmpg d10;
+
+        if $b5 >= 0 goto label3;
+
+        $r11 = new org.apache.mahout.math.random.WeightedThing;
+
+        specialinvoke $r11.<org.apache.mahout.math.random.WeightedThing: void <init>(java.lang.Object,double)>(r5, d0);
+
+        virtualinvoke r2.<org.apache.lucene.util.PriorityQueue: java.lang.Object insertWithOverflow(java.lang.Object)>($r11);
+
+        $i6 = virtualinvoke r2.<org.apache.lucene.util.PriorityQueue: int size()>();
+
+        $i7 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: int searchSize>;
+
+        if $i6 != $i7 goto label4;
+
+        $r18 = virtualinvoke r2.<org.apache.lucene.util.PriorityQueue: java.lang.Object top()>();
+
+        $r19 = (org.apache.mahout.math.random.WeightedThing) $r18;
+
+        d10 = virtualinvoke $r19.<org.apache.mahout.math.random.WeightedThing: double getWeight()>();
+
+     label4:
+        $i9 = r20[i1];
+
+        $i10 = $i9 + 1;
+
+        r20[i1] = $i10;
+
+        i22 = i22 + 1;
+
+     label5:
+        if i21 <= 0 goto label6;
+
+        $i17 = i21 - 1;
+
+        $i16 = r20[$i17];
+
+        $i14 = i22 - $i16;
+
+        $i15 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: int searchSize>;
+
+        if $i14 <= $i15 goto label6;
+
+        i21 = i21 + -1;
+
+        $i18 = r20[i21];
+
+        i22 = i22 - $i18;
+
+        goto label5;
+
+     label6:
+        $d1 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: double hashLimitStrategy>;
+
+        $b8 = $d1 cmpl 0.0;
+
+        if $b8 < 0 goto label3;
+
+     label7:
+        if i21 >= 32 goto label3;
+
+        $r14 = r3[i21];
+
+        $i11 = virtualinvoke $r14.<org.apache.mahout.math.stats.OnlineSummarizer: int getCount()>();
+
+        if $i11 <= 10 goto label3;
+
+        $d2 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: double hashLimitStrategy>;
+
+        $d4 = 1.0 - $d2;
+
+        $r13 = r3[i21];
+
+        $d5 = virtualinvoke $r13.<org.apache.mahout.math.stats.OnlineSummarizer: double getQuartile(int)>(0);
+
+        $d3 = $d4 * $d5;
+
+        $d9 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: double hashLimitStrategy>;
+
+        $r15 = r3[i21];
+
+        $d8 = virtualinvoke $r15.<org.apache.mahout.math.stats.OnlineSummarizer: double getQuartile(int)>(1);
+
+        $d7 = $d9 * $d8;
+
+        $d6 = $d3 + $d7;
+
+        $b13 = $d6 cmpg d10;
+
+        if $b13 >= 0 goto label3;
+
+        $i12 = r20[i21];
+
+        i22 = i22 + $i12;
+
+        i21 = i21 + 1;
+
+        goto label7;
+
+     label8:
+        return r2;
+    }
+
+    public java.util.List search(org.apache.mahout.math.Vector, int)
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch r0;
+        org.apache.mahout.math.Vector r1, $r7;
+        int i0, $i1, $i2, $i3;
+        org.apache.lucene.util.PriorityQueue r2;
+        org.apache.mahout.math.random.WeightedThing r3, r10;
+        java.lang.Object $r4, $r6, r9;
+        org.apache.mahout.math.neighborhood.HashedVector $r8;
+        double $d0;
+        java.util.List r11, r12, r13, r14, r15;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        i0 := @parameter1: int;
+
+        r2 = specialinvoke r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: org.apache.lucene.util.PriorityQueue searchInternal(org.apache.mahout.math.Vector)>(r1);
+
+        $i1 = virtualinvoke r2.<org.apache.lucene.util.PriorityQueue: int size()>();
+
+        r9 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayListWithExpectedSize(int)>($i1);
+
+     label1:
+        $i2 = virtualinvoke r2.<org.apache.lucene.util.PriorityQueue: int size()>();
+
+        if $i2 == 0 goto label2;
+
+        $r4 = virtualinvoke r2.<org.apache.lucene.util.PriorityQueue: java.lang.Object pop()>();
+
+        r3 = (org.apache.mahout.math.random.WeightedThing) $r4;
+
+        r10 = new org.apache.mahout.math.random.WeightedThing;
+
+        $r6 = virtualinvoke r3.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        $r8 = (org.apache.mahout.math.neighborhood.HashedVector) $r6;
+
+        $r7 = virtualinvoke $r8.<org.apache.mahout.math.neighborhood.HashedVector: org.apache.mahout.math.Vector getVector()>();
+
+        $d0 = virtualinvoke r3.<org.apache.mahout.math.random.WeightedThing: double getWeight()>();
+
+        specialinvoke r10.<org.apache.mahout.math.random.WeightedThing: void <init>(java.lang.Object,double)>($r7, $d0);
+
+        r11 = (java.util.List) r9;
+
+        interfaceinvoke r11.<java.util.List: boolean add(java.lang.Object)>(r10);
+
+        goto label1;
+
+     label2:
+        r12 = (java.util.List) r9;
+
+        staticinvoke <java.util.Collections: void reverse(java.util.List)>(r12);
+
+        r13 = (java.util.List) r9;
+
+        $i3 = interfaceinvoke r13.<java.util.List: int size()>();
+
+        if i0 >= $i3 goto label3;
+
+        r14 = (java.util.List) r9;
+
+        r9 = interfaceinvoke r14.<java.util.List: java.util.List subList(int,int)>(0, i0);
+
+     label3:
+        r15 = (java.util.List) r9;
+
+        return r15;
+    }
+
+    public org.apache.mahout.math.random.WeightedThing searchFirst(org.apache.mahout.math.Vector, boolean)
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch r0;
+        org.apache.mahout.math.Vector r1, $r7;
+        boolean z0, $z1;
+        org.apache.lucene.util.PriorityQueue r2;
+        org.apache.mahout.math.random.WeightedThing r3, $r8, $r11, r12, $r13;
+        int $i0, $i1;
+        java.lang.Object $r4, $r5, $r6, $r9;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        z0 := @parameter1: boolean;
+
+        r2 = specialinvoke r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: org.apache.lucene.util.PriorityQueue searchInternal(org.apache.mahout.math.Vector)>(r1);
+
+     label1:
+        $i0 = virtualinvoke r2.<org.apache.lucene.util.PriorityQueue: int size()>();
+
+        if $i0 <= 2 goto label2;
+
+        virtualinvoke r2.<org.apache.lucene.util.PriorityQueue: java.lang.Object pop()>();
+
+        goto label1;
+
+     label2:
+        $i1 = virtualinvoke r2.<org.apache.lucene.util.PriorityQueue: int size()>();
+
+        if $i1 >= 2 goto label3;
+
+        $r9 = virtualinvoke r2.<org.apache.lucene.util.PriorityQueue: java.lang.Object pop()>();
+
+        $r8 = (org.apache.mahout.math.random.WeightedThing) $r9;
+
+        $r11 = staticinvoke <org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: org.apache.mahout.math.random.WeightedThing removeHash(org.apache.mahout.math.random.WeightedThing)>($r8);
+
+        return $r11;
+
+     label3:
+        $r4 = virtualinvoke r2.<org.apache.lucene.util.PriorityQueue: java.lang.Object pop()>();
+
+        r3 = (org.apache.mahout.math.random.WeightedThing) $r4;
+
+        $r5 = virtualinvoke r2.<org.apache.lucene.util.PriorityQueue: java.lang.Object pop()>();
+
+        r12 = (org.apache.mahout.math.random.WeightedThing) $r5;
+
+        if z0 == 0 goto label4;
+
+        $r6 = virtualinvoke r12.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        $r7 = (org.apache.mahout.math.Vector) $r6;
+
+        $z1 = virtualinvoke $r7.<java.lang.Object: boolean equals(java.lang.Object)>(r1);
+
+        if $z1 == 0 goto label4;
+
+        r12 = r3;
+
+     label4:
+        $r13 = staticinvoke <org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: org.apache.mahout.math.random.WeightedThing removeHash(org.apache.mahout.math.random.WeightedThing)>(r12);
+
+        return $r13;
+    }
+
+    protected static org.apache.mahout.math.random.WeightedThing removeHash(org.apache.mahout.math.random.WeightedThing)
+    {
+        org.apache.mahout.math.random.WeightedThing r0, $r1;
+        java.lang.Object $r2;
+        org.apache.mahout.math.neighborhood.HashedVector $r3;
+        org.apache.mahout.math.Vector $r4;
+        double $d0;
+
+        r0 := @parameter0: org.apache.mahout.math.random.WeightedThing;
+
+        $r1 = new org.apache.mahout.math.random.WeightedThing;
+
+        $r2 = virtualinvoke r0.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        $r3 = (org.apache.mahout.math.neighborhood.HashedVector) $r2;
+
+        $r4 = virtualinvoke $r3.<org.apache.mahout.math.neighborhood.HashedVector: org.apache.mahout.math.Vector getVector()>();
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.math.random.WeightedThing: double getWeight()>();
+
+        specialinvoke $r1.<org.apache.mahout.math.random.WeightedThing: void <init>(java.lang.Object,double)>($r4, $d0);
+
+        return $r1;
+    }
+
+    public void add(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch r0;
+        org.apache.mahout.math.Vector r1;
+        int $i0;
+        org.apache.mahout.math.neighborhood.HashedVector $r2;
+        org.apache.mahout.math.Matrix $r3;
+        com.google.common.collect.Multiset $r4;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $i0 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int size()>();
+
+        specialinvoke r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: void initialize(int)>($i0);
+
+        $r4 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: com.google.common.collect.Multiset trainingVectors>;
+
+        $r2 = new org.apache.mahout.math.neighborhood.HashedVector;
+
+        $r3 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: org.apache.mahout.math.Matrix projection>;
+
+        specialinvoke $r2.<org.apache.mahout.math.neighborhood.HashedVector: void <init>(org.apache.mahout.math.Vector,org.apache.mahout.math.Matrix,int,long)>(r1, $r3, -1, -1L);
+
+        interfaceinvoke $r4.<com.google.common.collect.Multiset: boolean add(java.lang.Object)>($r2);
+
+        return;
+    }
+
+    public int size()
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch r0;
+        com.google.common.collect.Multiset $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch;
+
+        $r1 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: com.google.common.collect.Multiset trainingVectors>;
+
+        $i0 = interfaceinvoke $r1.<com.google.common.collect.Multiset: int size()>();
+
+        return $i0;
+    }
+
+    public int getSearchSize()
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch;
+
+        $i0 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: int searchSize>;
+
+        return $i0;
+    }
+
+    public void setSearchSize(int)
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: int searchSize> = i0;
+
+        return;
+    }
+
+    public void setRaiseHashLimitStrategy(double)
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: double hashLimitStrategy> = d0;
+
+        return;
+    }
+
+    public int resetEvaluationCount()
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch;
+
+        i0 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: int distanceEvaluations>;
+
+        r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: int distanceEvaluations> = 0;
+
+        return i0;
+    }
+
+    public java.util.Iterator iterator()
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch r0;
+        com.google.common.collect.Multiset $r1;
+        java.util.Iterator $r2, $r4;
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch$1 $r3;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch;
+
+        $r1 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: com.google.common.collect.Multiset trainingVectors>;
+
+        $r2 = interfaceinvoke $r1.<com.google.common.collect.Multiset: java.util.Iterator iterator()>();
+
+        $r3 = new org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch$1;
+
+        specialinvoke $r3.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch$1: void <init>(org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch)>(r0);
+
+        $r4 = staticinvoke <com.google.common.collect.Iterators: java.util.Iterator transform(java.util.Iterator,com.google.common.base.Function)>($r2, $r3);
+
+        return $r4;
+    }
+
+    public boolean remove(org.apache.mahout.math.Vector, double)
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch r0;
+        org.apache.mahout.math.Vector r1;
+        double d0;
+        org.apache.mahout.math.neighborhood.HashedVector $r2;
+        org.apache.mahout.math.Matrix $r3;
+        com.google.common.collect.Multiset $r4;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        d0 := @parameter1: double;
+
+        $r4 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: com.google.common.collect.Multiset trainingVectors>;
+
+        $r2 = new org.apache.mahout.math.neighborhood.HashedVector;
+
+        $r3 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: org.apache.mahout.math.Matrix projection>;
+
+        specialinvoke $r2.<org.apache.mahout.math.neighborhood.HashedVector: void <init>(org.apache.mahout.math.Vector,org.apache.mahout.math.Matrix,int,long)>(r1, $r3, -1, -1L);
+
+        $z0 = interfaceinvoke $r4.<com.google.common.collect.Multiset: boolean remove(java.lang.Object)>($r2);
+
+        return $z0;
+    }
+
+    public void clear()
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch r0;
+        com.google.common.collect.Multiset $r1;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch;
+
+        $r1 = r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: com.google.common.collect.Multiset trainingVectors>;
+
+        interfaceinvoke $r1.<com.google.common.collect.Multiset: void clear()>();
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: int MIN_DISTRIBUTION_COUNT> = 10;
+
+        <org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: int MAX_HASH_LIMIT> = 32;
+
+        <org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: long BIT_MASK> = -1L;
+
+        <org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch: int BITS> = 64;
+
+        return;
+    }
+}

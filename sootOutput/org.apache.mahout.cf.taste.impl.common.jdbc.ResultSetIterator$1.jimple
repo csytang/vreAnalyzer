@@ -1,0 +1,70 @@
+class org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator$1 extends java.lang.Object implements com.google.common.base.Function
+{
+    final org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator this$0;
+
+    void <init>(org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator)
+    {
+        org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator$1 r0;
+        org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator$1;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator$1: org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public java.lang.Object apply(java.sql.ResultSet)
+    {
+        org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator$1 r0;
+        java.sql.ResultSet r1;
+        org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator $r3;
+        java.lang.Object $r4;
+        java.sql.SQLException $r5;
+        java.lang.IllegalStateException $r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator$1;
+
+        r1 := @parameter0: java.sql.ResultSet;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator$1: org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator this$0>;
+
+        $r4 = virtualinvoke $r3.<org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator: java.lang.Object parseElement(java.sql.ResultSet)>(r1);
+
+     label2:
+        return $r4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r5);
+
+        throw $r6;
+
+        catch java.sql.SQLException from label1 to label2 with label3;
+    }
+
+    public volatile java.lang.Object apply(java.lang.Object)
+    {
+        org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator$1 r0;
+        java.lang.Object r1, $r3;
+        java.sql.ResultSet $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.sql.ResultSet) r1;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.common.jdbc.ResultSetIterator$1: java.lang.Object apply(java.sql.ResultSet)>($r2);
+
+        return $r3;
+    }
+}

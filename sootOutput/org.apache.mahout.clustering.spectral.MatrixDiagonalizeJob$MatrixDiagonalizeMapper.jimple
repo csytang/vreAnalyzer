@@ -1,0 +1,76 @@
+public class org.apache.mahout.clustering.spectral.MatrixDiagonalizeJob$MatrixDiagonalizeMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.spectral.MatrixDiagonalizeJob$MatrixDiagonalizeMapper r0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.MatrixDiagonalizeJob$MatrixDiagonalizeMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.IntWritable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.spectral.MatrixDiagonalizeJob$MatrixDiagonalizeMapper r0;
+        org.apache.hadoop.io.IntWritable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.clustering.spectral.IntDoublePairWritable $r5;
+        int $i0;
+        org.apache.mahout.math.Vector $r6;
+        double $d0;
+        org.apache.hadoop.io.NullWritable $r7;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.MatrixDiagonalizeJob$MatrixDiagonalizeMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = new org.apache.mahout.clustering.spectral.IntDoublePairWritable;
+
+        $i0 = virtualinvoke r1.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $r6 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $d0 = interfaceinvoke $r6.<org.apache.mahout.math.Vector: double zSum()>();
+
+        specialinvoke $r5.<org.apache.mahout.clustering.spectral.IntDoublePairWritable: void <init>(int,double)>($i0, $d0);
+
+        $r7 = staticinvoke <org.apache.hadoop.io.NullWritable: org.apache.hadoop.io.NullWritable get()>();
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r7, $r5);
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.spectral.MatrixDiagonalizeJob$MatrixDiagonalizeMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.IntWritable $r5;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.MatrixDiagonalizeJob$MatrixDiagonalizeMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.IntWritable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.spectral.MatrixDiagonalizeJob$MatrixDiagonalizeMapper: void map(org.apache.hadoop.io.IntWritable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

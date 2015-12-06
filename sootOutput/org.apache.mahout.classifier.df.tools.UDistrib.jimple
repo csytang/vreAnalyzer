@@ -1,0 +1,457 @@
+public final class org.apache.mahout.classifier.df.tools.UDistrib extends java.lang.Object
+{
+    private static final org.slf4j.Logger log;
+
+    private void <init>()
+    {
+        org.apache.mahout.classifier.df.tools.UDistrib r0;
+
+        r0 := @this: org.apache.mahout.classifier.df.tools.UDistrib;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void main(java.lang.String[]) throws java.io.IOException
+    {
+        java.lang.String[] r0;
+        org.apache.commons.cli2.option.DefaultOption r4, r5, r6, r7, r8;
+        org.apache.commons.cli2.Group r9;
+        org.apache.commons.cli2.CommandLine r10;
+        java.lang.String r11, r12, r13, $r63, $r68;
+        int i0;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r14, $r20, $r21, $r23, $r31, $r32, $r36, $r37, $r39, $r43, $r49, $r50;
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r15, $r16, $r18, $r19, $r24, $r25, $r26, $r27, $r28, $r30, $r33, $r34, $r35, $r38, $r40, $r42, $r44, $r45, $r46, $r47, $r51, $r52, $r53, $r56;
+        org.apache.commons.cli2.builder.GroupBuilder $r17, $r54, $r55, $r58, $r59, $r60, $r61;
+        org.apache.commons.cli2.Argument $r22, $r29, $r41, $r48;
+        org.apache.commons.cli2.commandline.Parser $r57;
+        boolean $z0;
+        java.lang.Object $r62, $r64, $r65, $r66;
+        org.apache.commons.cli2.OptionException $r67;
+        org.slf4j.Logger $r69;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r15 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r15.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r14 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r14.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r17 = new org.apache.commons.cli2.builder.GroupBuilder;
+
+        specialinvoke $r17.<org.apache.commons.cli2.builder.GroupBuilder: void <init>()>();
+
+        $r16 = virtualinvoke $r15.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("data");
+
+        $r19 = virtualinvoke $r16.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("d");
+
+        $r18 = virtualinvoke $r19.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(1);
+
+        $r21 = virtualinvoke $r14.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("data");
+
+        $r20 = virtualinvoke $r21.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r23 = virtualinvoke $r20.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r22 = virtualinvoke $r23.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r25 = virtualinvoke $r18.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r22);
+
+        $r24 = virtualinvoke $r25.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Data path");
+
+        r4 = virtualinvoke $r24.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r26 = virtualinvoke $r15.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("dataset");
+
+        $r28 = virtualinvoke $r26.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("ds");
+
+        $r27 = virtualinvoke $r28.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(1);
+
+        $r31 = virtualinvoke $r14.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("dataset");
+
+        $r32 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r29 = virtualinvoke $r32.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r30 = virtualinvoke $r27.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r29);
+
+        $r35 = virtualinvoke $r30.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Dataset path");
+
+        r5 = virtualinvoke $r35.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r33 = virtualinvoke $r15.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("output");
+
+        $r34 = virtualinvoke $r33.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("o");
+
+        $r38 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(1);
+
+        $r39 = virtualinvoke $r14.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("output");
+
+        $r36 = virtualinvoke $r39.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r37 = virtualinvoke $r36.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r41 = virtualinvoke $r37.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r42 = virtualinvoke $r38.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r41);
+
+        $r40 = virtualinvoke $r42.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Path to generated files");
+
+        r6 = virtualinvoke $r40.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r46 = virtualinvoke $r15.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("numpartitions");
+
+        $r45 = virtualinvoke $r46.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("p");
+
+        $r44 = virtualinvoke $r45.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(1);
+
+        $r43 = virtualinvoke $r14.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("numparts");
+
+        $r50 = virtualinvoke $r43.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r49 = virtualinvoke $r50.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r48 = virtualinvoke $r49.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r47 = virtualinvoke $r44.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r48);
+
+        $r53 = virtualinvoke $r47.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Number of partitions to create");
+
+        r7 = virtualinvoke $r53.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r52 = virtualinvoke $r15.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("help");
+
+        $r51 = virtualinvoke $r52.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Print out help");
+
+        $r56 = virtualinvoke $r51.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("h");
+
+        r8 = virtualinvoke $r56.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r55 = virtualinvoke $r17.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withName(java.lang.String)>("Options");
+
+        $r54 = virtualinvoke $r55.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r4);
+
+        $r58 = virtualinvoke $r54.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r6);
+
+        $r59 = virtualinvoke $r58.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r5);
+
+        $r60 = virtualinvoke $r59.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r7);
+
+        $r61 = virtualinvoke $r60.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r8);
+
+        r9 = virtualinvoke $r61.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.Group create()>();
+
+     label1:
+        $r57 = new org.apache.commons.cli2.commandline.Parser;
+
+        specialinvoke $r57.<org.apache.commons.cli2.commandline.Parser: void <init>()>();
+
+        virtualinvoke $r57.<org.apache.commons.cli2.commandline.Parser: void setGroup(org.apache.commons.cli2.Group)>(r9);
+
+        r10 = virtualinvoke $r57.<org.apache.commons.cli2.commandline.Parser: org.apache.commons.cli2.CommandLine parse(java.lang.String[])>(r0);
+
+        $z0 = interfaceinvoke r10.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r8);
+
+        if $z0 == 0 goto label3;
+
+        staticinvoke <org.apache.mahout.common.CommandLineUtil: void printHelp(org.apache.commons.cli2.Group)>(r9);
+
+     label2:
+        return;
+
+     label3:
+        $r65 = interfaceinvoke r10.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r4);
+
+        r11 = virtualinvoke $r65.<java.lang.Object: java.lang.String toString()>();
+
+        $r66 = interfaceinvoke r10.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r5);
+
+        r12 = virtualinvoke $r66.<java.lang.Object: java.lang.String toString()>();
+
+        $r62 = interfaceinvoke r10.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r7);
+
+        $r63 = virtualinvoke $r62.<java.lang.Object: java.lang.String toString()>();
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r63);
+
+        $r64 = interfaceinvoke r10.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r6);
+
+        r13 = virtualinvoke $r64.<java.lang.Object: java.lang.String toString()>();
+
+        staticinvoke <org.apache.mahout.classifier.df.tools.UDistrib: void runTool(java.lang.String,java.lang.String,java.lang.String,int)>(r11, r12, r13, i0);
+
+     label4:
+        goto label6;
+
+     label5:
+        $r67 := @caughtexception;
+
+        $r69 = <org.apache.mahout.classifier.df.tools.UDistrib: org.slf4j.Logger log>;
+
+        $r68 = virtualinvoke $r67.<org.apache.commons.cli2.OptionException: java.lang.String toString()>();
+
+        interfaceinvoke $r69.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>($r68, $r67);
+
+        staticinvoke <org.apache.mahout.common.CommandLineUtil: void printHelp(org.apache.commons.cli2.Group)>(r9);
+
+     label6:
+        return;
+
+        catch org.apache.commons.cli2.OptionException from label1 to label2 with label5;
+        catch org.apache.commons.cli2.OptionException from label3 to label4 with label5;
+    }
+
+    private static void runTool(java.lang.String, java.lang.String, java.lang.String, int) throws java.io.IOException
+    {
+        java.lang.String r0, r1, r2, $r24, $r34, r41;
+        int i0, $i2, $i3, $i5, $i6, $i7, $i8, $i9, $i10, i11, i12, i13, i14, i15;
+        org.apache.hadoop.fs.FileSystem r5, r8, r14;
+        java.io.File r6, $r21;
+        org.apache.hadoop.fs.Path[] r9;
+        org.apache.hadoop.fs.FSDataOutputStream[] r10;
+        org.apache.mahout.classifier.df.data.Dataset r11;
+        int[] r12;
+        org.apache.mahout.common.RandomWrapper r13;
+        org.apache.hadoop.fs.FSDataInputStream r16;
+        org.apache.hadoop.fs.FSDataOutputStream r18, $r28, $r29, $r36;
+        org.apache.hadoop.conf.Configuration $r19;
+        org.apache.hadoop.fs.Path $r20, $r22, $r23, $r26, $r31, $r35;
+        boolean $z0, $z2, $z3, $z4, $z5;
+        java.util.Scanner $r25;
+        org.apache.mahout.classifier.df.data.DataConverter $r27;
+        double $d0;
+        org.slf4j.Logger $r30;
+        java.lang.Object[] $r32;
+        java.lang.Integer $r33, $r38;
+        java.util.Locale $r37;
+        org.apache.mahout.classifier.df.data.Instance r42;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: java.lang.String;
+
+        r2 := @parameter2: java.lang.String;
+
+        i0 := @parameter3: int;
+
+        if i0 <= 0 goto label01;
+
+        $z3 = 1;
+
+        goto label02;
+
+     label01:
+        $z3 = 0;
+
+     label02:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z3, "numPartitions <= 0");
+
+        $r20 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r20.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r2);
+
+        $r19 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r19.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        r5 = virtualinvoke $r20.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>($r19);
+
+        $z0 = virtualinvoke r5.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>($r20);
+
+        if $z0 != 0 goto label03;
+
+        $z4 = 1;
+
+        goto label04;
+
+     label03:
+        $z4 = 0;
+
+     label04:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z4, "Output path already exists");
+
+        $r21 = new java.io.File;
+
+        specialinvoke $r21.<java.io.File: void <init>(java.lang.String)>("");
+
+        r6 = staticinvoke <org.apache.hadoop.fs.FileUtil: java.io.File createLocalTempFile(java.io.File,java.lang.String,boolean)>($r21, "df.tools.UDistrib", 1);
+
+        $r23 = new org.apache.hadoop.fs.Path;
+
+        $r24 = virtualinvoke r6.<java.io.File: java.lang.String toString()>();
+
+        specialinvoke $r23.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r24);
+
+        r8 = virtualinvoke $r23.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>($r19);
+
+        r9 = newarray (org.apache.hadoop.fs.Path)[i0];
+
+        r10 = newarray (org.apache.hadoop.fs.FSDataOutputStream)[i0];
+
+        i11 = 0;
+
+     label05:
+        if i11 >= i0 goto label06;
+
+        $r31 = new org.apache.hadoop.fs.Path;
+
+        $r37 = <java.util.Locale: java.util.Locale ENGLISH>;
+
+        $r32 = newarray (java.lang.Object)[1];
+
+        $r38 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i11);
+
+        $r32[0] = $r38;
+
+        $r34 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r37, "part.%03d", $r32);
+
+        specialinvoke $r31.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r23, $r34);
+
+        r9[i11] = $r31;
+
+        $r35 = r9[i11];
+
+        $r36 = virtualinvoke r8.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataOutputStream create(org.apache.hadoop.fs.Path)>($r35);
+
+        r10[i11] = $r36;
+
+        i11 = i11 + 1;
+
+        goto label05;
+
+     label06:
+        $r22 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r22.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r1);
+
+        r11 = staticinvoke <org.apache.mahout.classifier.df.data.Dataset: org.apache.mahout.classifier.df.data.Dataset load(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path)>($r19, $r22);
+
+        $i3 = virtualinvoke r11.<org.apache.mahout.classifier.df.data.Dataset: int nblabels()>();
+
+        r12 = newarray (int)[$i3];
+
+        r13 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        i12 = 0;
+
+     label07:
+        $i2 = lengthof r12;
+
+        if i12 >= $i2 goto label08;
+
+        $i10 = virtualinvoke r13.<java.util.Random: int nextInt(int)>(i0);
+
+        r12[i12] = $i10;
+
+        i12 = i12 + 1;
+
+        goto label07;
+
+     label08:
+        $r26 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r26.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r0);
+
+        r14 = virtualinvoke $r26.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>($r19);
+
+        r16 = virtualinvoke r14.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataInputStream open(org.apache.hadoop.fs.Path)>($r26);
+
+        $r25 = new java.util.Scanner;
+
+        specialinvoke $r25.<java.util.Scanner: void <init>(java.io.InputStream,java.lang.String)>(r16, "UTF-8");
+
+        $r27 = new org.apache.mahout.classifier.df.data.DataConverter;
+
+        specialinvoke $r27.<org.apache.mahout.classifier.df.data.DataConverter: void <init>(org.apache.mahout.classifier.df.data.Dataset)>(r11);
+
+     label09:
+        $z5 = virtualinvoke $r25.<java.util.Scanner: boolean hasNextLine()>();
+
+        if $z5 == 0 goto label11;
+
+        $r30 = <org.apache.mahout.classifier.df.tools.UDistrib: org.slf4j.Logger log>;
+
+        $r33 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(0);
+
+        interfaceinvoke $r30.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("progress : {}", $r33);
+
+        r41 = virtualinvoke $r25.<java.util.Scanner: java.lang.String nextLine()>();
+
+        $z2 = virtualinvoke r41.<java.lang.String: boolean isEmpty()>();
+
+        if $z2 == 0 goto label10;
+
+        goto label09;
+
+     label10:
+        r42 = virtualinvoke $r27.<org.apache.mahout.classifier.df.data.DataConverter: org.apache.mahout.classifier.df.data.Instance convert(java.lang.CharSequence)>(r41);
+
+        $d0 = virtualinvoke r11.<org.apache.mahout.classifier.df.data.Dataset: double getLabel(org.apache.mahout.classifier.df.data.Instance)>(r42);
+
+        i13 = (int) $d0;
+
+        $i5 = r12[i13];
+
+        $r28 = r10[$i5];
+
+        virtualinvoke $r28.<org.apache.hadoop.fs.FSDataOutputStream: void writeBytes(java.lang.String)>(r41);
+
+        $i8 = r12[i13];
+
+        $r29 = r10[$i8];
+
+        virtualinvoke $r29.<org.apache.hadoop.fs.FSDataOutputStream: void writeChar(int)>(10);
+
+        $i7 = r12[i13];
+
+        $i6 = $i7 + 1;
+
+        r12[i13] = $i6;
+
+        $i9 = r12[i13];
+
+        if $i9 != i0 goto label09;
+
+        r12[i13] = 0;
+
+        goto label09;
+
+     label11:
+        virtualinvoke $r25.<java.util.Scanner: void close()>();
+
+        i14 = lengthof r10;
+
+        i15 = 0;
+
+     label12:
+        if i15 >= i14 goto label13;
+
+        r18 = r10[i15];
+
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>(r18, 0);
+
+        i15 = i15 + 1;
+
+        goto label12;
+
+     label13:
+        staticinvoke <org.apache.hadoop.fs.FileUtil: boolean copyMerge(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path,boolean,org.apache.hadoop.conf.Configuration,java.lang.String)>(r8, $r23, r5, $r20, 1, $r19, null);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/classifier/df/tools/UDistrib");
+
+        <org.apache.mahout.classifier.df.tools.UDistrib: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

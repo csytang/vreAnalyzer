@@ -1,0 +1,145 @@
+final class org.apache.mahout.cf.taste.impl.eval.StatsCallable extends java.lang.Object implements java.util.concurrent.Callable
+{
+    private static final org.slf4j.Logger log;
+    private final java.util.concurrent.Callable delegate;
+    private final boolean logStats;
+    private final org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev timing;
+    private final java.util.concurrent.atomic.AtomicInteger noEstimateCounter;
+
+    void <init>(java.util.concurrent.Callable, boolean, org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev, java.util.concurrent.atomic.AtomicInteger)
+    {
+        org.apache.mahout.cf.taste.impl.eval.StatsCallable r0;
+        java.util.concurrent.Callable r1;
+        boolean z0;
+        org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev r2;
+        java.util.concurrent.atomic.AtomicInteger r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.eval.StatsCallable;
+
+        r1 := @parameter0: java.util.concurrent.Callable;
+
+        z0 := @parameter1: boolean;
+
+        r2 := @parameter2: org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev;
+
+        r3 := @parameter3: java.util.concurrent.atomic.AtomicInteger;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.eval.StatsCallable: java.util.concurrent.Callable delegate> = r1;
+
+        r0.<org.apache.mahout.cf.taste.impl.eval.StatsCallable: boolean logStats> = z0;
+
+        r0.<org.apache.mahout.cf.taste.impl.eval.StatsCallable: org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev timing> = r2;
+
+        r0.<org.apache.mahout.cf.taste.impl.eval.StatsCallable: java.util.concurrent.atomic.AtomicInteger noEstimateCounter> = r3;
+
+        return;
+    }
+
+    public java.lang.Void call() throws java.lang.Exception
+    {
+        org.apache.mahout.cf.taste.impl.eval.StatsCallable r0;
+        long l0, l1, l3, l4, $l5, $l6, $l7, $l8;
+        java.lang.Runtime r1;
+        int i2, $i9;
+        java.util.concurrent.Callable $r2;
+        org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev $r4, $r5;
+        double $d0, $d1;
+        boolean $z0;
+        org.slf4j.Logger $r6, $r8, $r10;
+        java.lang.Integer $r7, $r13;
+        java.lang.Long $r9, $r11;
+        java.util.concurrent.atomic.AtomicInteger $r12;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.eval.StatsCallable;
+
+        l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.eval.StatsCallable: java.util.concurrent.Callable delegate>;
+
+        interfaceinvoke $r2.<java.util.concurrent.Callable: java.lang.Object call()>();
+
+        l1 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.eval.StatsCallable: org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev timing>;
+
+        $l5 = l1 - l0;
+
+        $d0 = (double) $l5;
+
+        interfaceinvoke $r4.<org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev: void addDatum(double)>($d0);
+
+        $z0 = r0.<org.apache.mahout.cf.taste.impl.eval.StatsCallable: boolean logStats>;
+
+        if $z0 == 0 goto label1;
+
+        r1 = staticinvoke <java.lang.Runtime: java.lang.Runtime getRuntime()>();
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.eval.StatsCallable: org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev timing>;
+
+        $d1 = interfaceinvoke $r5.<org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev: double getAverage()>();
+
+        i2 = (int) $d1;
+
+        $r6 = <org.apache.mahout.cf.taste.impl.eval.StatsCallable: org.slf4j.Logger log>;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i2);
+
+        interfaceinvoke $r6.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Average time per recommendation: {}ms", $r7);
+
+        l3 = virtualinvoke r1.<java.lang.Runtime: long totalMemory()>();
+
+        $l7 = virtualinvoke r1.<java.lang.Runtime: long freeMemory()>();
+
+        l4 = l3 - $l7;
+
+        $r8 = <org.apache.mahout.cf.taste.impl.eval.StatsCallable: org.slf4j.Logger log>;
+
+        $l6 = l4 / 1000000L;
+
+        $r9 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l6);
+
+        $l8 = l3 / 1000000L;
+
+        $r11 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l8);
+
+        interfaceinvoke $r8.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object,java.lang.Object)>("Approximate memory used: {}MB / {}MB", $r9, $r11);
+
+        $r10 = <org.apache.mahout.cf.taste.impl.eval.StatsCallable: org.slf4j.Logger log>;
+
+        $r12 = r0.<org.apache.mahout.cf.taste.impl.eval.StatsCallable: java.util.concurrent.atomic.AtomicInteger noEstimateCounter>;
+
+        $i9 = virtualinvoke $r12.<java.util.concurrent.atomic.AtomicInteger: int get()>();
+
+        $r13 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i9);
+
+        interfaceinvoke $r10.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Unable to recommend in {} cases", $r13);
+
+     label1:
+        return null;
+    }
+
+    public volatile java.lang.Object call() throws java.lang.Exception
+    {
+        org.apache.mahout.cf.taste.impl.eval.StatsCallable r0;
+        java.lang.Void $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.eval.StatsCallable;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.eval.StatsCallable: java.lang.Void call()>();
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/cf/taste/impl/eval/StatsCallable");
+
+        <org.apache.mahout.cf.taste.impl.eval.StatsCallable: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

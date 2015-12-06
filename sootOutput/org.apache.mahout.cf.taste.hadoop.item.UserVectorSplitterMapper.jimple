@@ -1,0 +1,324 @@
+public final class org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private static final org.slf4j.Logger log;
+    static final java.lang.String USERS_FILE;
+    static final java.lang.String MAX_PREFS_PER_USER_CONSIDERED;
+    static final int DEFAULT_MAX_PREFS_PER_USER_CONSIDERED;
+    private int maxPrefsPerUserConsidered;
+    private org.apache.mahout.cf.taste.impl.common.FastIDSet usersToRecommendFor;
+    private final org.apache.mahout.math.VarIntWritable itemIndexWritable;
+    private final org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable vectorOrPref;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper r0;
+        org.apache.mahout.math.VarIntWritable $r1;
+        org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.VarIntWritable;
+
+        specialinvoke $r1.<org.apache.mahout.math.VarIntWritable: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: org.apache.mahout.math.VarIntWritable itemIndexWritable> = $r1;
+
+        $r2 = new org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable;
+
+        specialinvoke $r2.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable vectorOrPref> = $r2;
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        int $i0;
+        org.apache.mahout.cf.taste.hadoop.item.IDReader $r4;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $i0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("maxPrefsPerUserConsidered", 10);
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: int maxPrefsPerUserConsidered> = $i0;
+
+        $r4 = new org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.hadoop.item.IDReader: void <init>(org.apache.hadoop.conf.Configuration)>(r2);
+
+        virtualinvoke $r4.<org.apache.mahout.cf.taste.hadoop.item.IDReader: void readIDs()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.mahout.cf.taste.hadoop.item.IDReader: org.apache.mahout.cf.taste.impl.common.FastIDSet getUserIds()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: org.apache.mahout.cf.taste.impl.common.FastIDSet usersToRecommendFor> = $r5;
+
+        return;
+    }
+
+    protected void map(org.apache.mahout.math.VarLongWritable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper r0;
+        org.apache.mahout.math.VarLongWritable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        long l0;
+        org.apache.mahout.math.Vector r4, $r10;
+        java.util.Iterator r5;
+        org.apache.mahout.math.Vector$Element r6;
+        org.slf4j.Logger $r7;
+        java.lang.Long $r8;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r9, $r17;
+        java.lang.Iterable $r11;
+        java.lang.Object $r12;
+        int $i1;
+        org.apache.mahout.math.VarIntWritable $r13, $r16;
+        double $d0;
+        org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable $r14, $r15;
+        float $f0;
+        boolean $z0, $z1;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper;
+
+        r1 := @parameter0: org.apache.mahout.math.VarLongWritable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        l0 = virtualinvoke r1.<org.apache.mahout.math.VarLongWritable: long get()>();
+
+        $r7 = <org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: org.slf4j.Logger log>;
+
+        $r8 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l0);
+
+        interfaceinvoke $r7.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("UserID = {}", $r8);
+
+        $r9 = r0.<org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: org.apache.mahout.cf.taste.impl.common.FastIDSet usersToRecommendFor>;
+
+        if $r9 == null goto label1;
+
+        $r17 = r0.<org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: org.apache.mahout.cf.taste.impl.common.FastIDSet usersToRecommendFor>;
+
+        $z0 = virtualinvoke $r17.<org.apache.mahout.cf.taste.impl.common.FastIDSet: boolean contains(long)>(l0);
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r10 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        r4 = specialinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: org.apache.mahout.math.Vector maybePruneUserVector(org.apache.mahout.math.Vector)>($r10);
+
+        $r11 = interfaceinvoke r4.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r5 = interfaceinvoke $r11.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label2:
+        $z1 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label3;
+
+        $r12 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.math.Vector$Element) $r12;
+
+        $r13 = r0.<org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: org.apache.mahout.math.VarIntWritable itemIndexWritable>;
+
+        $i1 = interfaceinvoke r6.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        virtualinvoke $r13.<org.apache.mahout.math.VarIntWritable: void set(int)>($i1);
+
+        $r14 = r0.<org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable vectorOrPref>;
+
+        $d0 = interfaceinvoke r6.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        $f0 = (float) $d0;
+
+        virtualinvoke $r14.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: void set(long,float)>(l0, $f0);
+
+        $r16 = r0.<org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: org.apache.mahout.math.VarIntWritable itemIndexWritable>;
+
+        $r15 = r0.<org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable vectorOrPref>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r16, $r15);
+
+        goto label2;
+
+     label3:
+        return;
+    }
+
+    private org.apache.mahout.math.Vector maybePruneUserVector(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper r0;
+        org.apache.mahout.math.Vector r1;
+        float f0, f1, $f2;
+        java.util.Iterator r2;
+        org.apache.mahout.math.Vector$Element r3;
+        int $i0, $i1;
+        java.lang.Iterable $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+        double $d0;
+        byte $b2;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $i0 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int getNumNondefaultElements()>();
+
+        $i1 = r0.<org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: int maxPrefsPerUserConsidered>;
+
+        if $i0 > $i1 goto label1;
+
+        return r1;
+
+     label1:
+        f0 = specialinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: float findSmallestLargeValue(org.apache.mahout.math.Vector)>(r1);
+
+        $r4 = interfaceinvoke r1.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r2 = interfaceinvoke $r4.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.math.Vector$Element) $r5;
+
+        $d0 = interfaceinvoke r3.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        $f2 = (float) $d0;
+
+        f1 = staticinvoke <java.lang.Math: float abs(float)>($f2);
+
+        $b2 = f1 cmpg f0;
+
+        if $b2 >= 0 goto label2;
+
+        interfaceinvoke r3.<org.apache.mahout.math.Vector$Element: void set(double)>(#NaN);
+
+        goto label2;
+
+     label3:
+        return r1;
+    }
+
+    private float findSmallestLargeValue(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper r0;
+        org.apache.mahout.math.Vector r1;
+        java.util.Iterator r3;
+        org.apache.mahout.math.Vector$Element r4;
+        float f0, $f1, $f2;
+        org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper$1 $r5;
+        int $i0;
+        java.lang.Iterable $r6;
+        boolean $z0;
+        java.lang.Object $r7, $r9;
+        java.lang.Float $r8, $r11;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $r5 = new org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper$1;
+
+        $i0 = r0.<org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: int maxPrefsPerUserConsidered>;
+
+        specialinvoke $r5.<org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper$1: void <init>(org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper,int)>(r0, $i0);
+
+        $r6 = interfaceinvoke r1.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r3 = interfaceinvoke $r6.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r9 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.math.Vector$Element) $r9;
+
+        $d0 = interfaceinvoke r4.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        $f2 = (float) $d0;
+
+        f0 = staticinvoke <java.lang.Math: float abs(float)>($f2);
+
+        $r11 = staticinvoke <java.lang.Float: java.lang.Float valueOf(float)>(f0);
+
+        virtualinvoke $r5.<org.apache.lucene.util.PriorityQueue: java.lang.Object insertWithOverflow(java.lang.Object)>($r11);
+
+        goto label1;
+
+     label2:
+        $r7 = virtualinvoke $r5.<org.apache.lucene.util.PriorityQueue: java.lang.Object top()>();
+
+        $r8 = (java.lang.Float) $r7;
+
+        $f1 = virtualinvoke $r8.<java.lang.Float: float floatValue()>();
+
+        return $f1;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.mahout.math.VarLongWritable $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.mahout.math.VarLongWritable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: void map(org.apache.mahout.math.VarLongWritable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: int DEFAULT_MAX_PREFS_PER_USER_CONSIDERED> = 10;
+
+        <org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: java.lang.String MAX_PREFS_PER_USER_CONSIDERED> = "maxPrefsPerUserConsidered";
+
+        <org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: java.lang.String USERS_FILE> = "usersFile";
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/cf/taste/hadoop/item/UserVectorSplitterMapper");
+
+        <org.apache.mahout.cf.taste.hadoop.item.UserVectorSplitterMapper: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

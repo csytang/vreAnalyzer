@@ -1,0 +1,17 @@
+public interface  org.apache.mahout.cf.taste.eval.IRStatistics extends java.lang.Object
+{
+
+    public abstract double getPrecision();
+
+    public abstract double getRecall();
+
+    public abstract double getFallOut();
+
+    public abstract double getF1Measure();
+
+    public abstract double getFNMeasure(double);
+
+    public abstract double getNormalizedDiscountedCumulativeGain();
+
+    public abstract double getReach();
+}

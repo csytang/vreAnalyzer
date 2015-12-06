@@ -1,0 +1,268 @@
+public class org.apache.mahout.cf.taste.hadoop.als.RecommenderJob extends org.apache.mahout.common.AbstractJob
+{
+    static final java.lang.String NUM_RECOMMENDATIONS;
+    static final java.lang.String USER_FEATURES_PATH;
+    static final java.lang.String ITEM_FEATURES_PATH;
+    static final java.lang.String MAX_RATING;
+    static final java.lang.String USER_INDEX_PATH;
+    static final java.lang.String ITEM_INDEX_PATH;
+    static final int DEFAULT_NUM_RECOMMENDATIONS;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.als.RecommenderJob r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.RecommenderJob;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        return;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.mahout.cf.taste.hadoop.als.RecommenderJob $r1;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.mahout.cf.taste.hadoop.als.RecommenderJob;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.util.Tool,java.lang.String[])>($r1, r0);
+
+        return;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.cf.taste.hadoop.als.RecommenderJob r0;
+        java.lang.String[] r1;
+        java.util.Map r2;
+        org.apache.hadoop.mapreduce.Job r3;
+        org.apache.hadoop.conf.Configuration r4;
+        int i0, $i1;
+        boolean z0, z1;
+        java.lang.String $r5, $r6, $r9, $r10, $r11, $r12, $r13, $r14, $r15, $r16, $r17, $r18, $r19, $r20, $r21, $r22, $r23, $r24;
+        org.apache.hadoop.fs.Path $r7, $r8;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.RecommenderJob;
+
+        r1 := @parameter0: java.lang.String[];
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: void addInputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("userFeatures", null, "path to the user feature matrix", 1);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("itemFeatures", null, "path to the item feature matrix", 1);
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(10);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("numRecommendations", null, "number of recommendations per user", $r5);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("maxRating", null, "maximum rating available", 1);
+
+        $r6 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(1);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("numThreads", null, "threads per mapper", $r6);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String)>("usesLongIDs", null, "input contains long IDs that need to be translated");
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String)>("userIDIndex", null, "index for user long IDs (necessary if usesLongIDs is true)");
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String)>("itemIDIndex", null, "index for user long IDs (necessary if usesLongIDs is true)");
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: void addOutputOption()>();
+
+        r2 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.util.Map parseArguments(java.lang.String[])>(r1);
+
+        if r2 != null goto label1;
+
+        return -1;
+
+     label1:
+        $r7 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: org.apache.hadoop.fs.Path getInputPath()>();
+
+        $r8 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>($r7, $r8, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", class "org/apache/mahout/cf/taste/hadoop/als/MultithreadedSharingMapper", class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/cf/taste/hadoop/RecommendedItemsWritable", class "org/apache/hadoop/mapreduce/lib/output/TextOutputFormat");
+
+        r4 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r9 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String getOption(java.lang.String)>("numThreads");
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r9);
+
+        $r10 = <org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String NUM_RECOMMENDATIONS>;
+
+        $r11 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String getOption(java.lang.String)>("numRecommendations");
+
+        $i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r11);
+
+        virtualinvoke r4.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>($r10, $i1);
+
+        $r13 = <org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String USER_FEATURES_PATH>;
+
+        $r12 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String getOption(java.lang.String)>("userFeatures");
+
+        virtualinvoke r4.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r13, $r12);
+
+        $r15 = <org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String ITEM_FEATURES_PATH>;
+
+        $r14 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String getOption(java.lang.String)>("itemFeatures");
+
+        virtualinvoke r4.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r15, $r14);
+
+        $r17 = <org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String MAX_RATING>;
+
+        $r16 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String getOption(java.lang.String)>("maxRating");
+
+        virtualinvoke r4.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r17, $r16);
+
+        $r19 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String getOption(java.lang.String)>("usesLongIDs");
+
+        z0 = staticinvoke <java.lang.Boolean: boolean parseBoolean(java.lang.String)>($r19);
+
+        if z0 == 0 goto label2;
+
+        $r18 = <org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob: java.lang.String USES_LONG_IDS>;
+
+        $r22 = staticinvoke <java.lang.String: java.lang.String valueOf(boolean)>(1);
+
+        virtualinvoke r4.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r18, $r22);
+
+        $r23 = <org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String USER_INDEX_PATH>;
+
+        $r20 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String getOption(java.lang.String)>("userIDIndex");
+
+        virtualinvoke r4.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r23, $r20);
+
+        $r21 = <org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String ITEM_INDEX_PATH>;
+
+        $r24 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String getOption(java.lang.String)>("itemIDIndex");
+
+        virtualinvoke r4.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r21, $r24);
+
+     label2:
+        staticinvoke <org.apache.hadoop.mapreduce.lib.map.MultithreadedMapper: void setMapperClass(org.apache.hadoop.mapreduce.Job,java.lang.Class)>(r3, class "org/apache/mahout/cf/taste/hadoop/als/PredictionMapper");
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.map.MultithreadedMapper: void setNumberOfThreads(org.apache.hadoop.mapreduce.Job,int)>(r3, i0);
+
+        z1 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z1 != 0 goto label3;
+
+        return -1;
+
+     label3:
+        return 0;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.StringBuilder $r0, $r3, $r4, $r6, $r9, $r10, $r12, $r15, $r17, $r19, $r20, $r23, $r25, $r26, $r29, $r31, $r32, $r35;
+        java.lang.Class $r1, $r7, $r13, $r18, $r24, $r30;
+        java.lang.String $r2, $r5, $r8, $r11, $r14, $r16, $r21, $r22, $r27, $r28, $r33, $r34;
+
+        <org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: int DEFAULT_NUM_RECOMMENDATIONS> = 10;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = class "org/apache/mahout/cf/taste/hadoop/als/RecommenderJob";
+
+        $r2 = virtualinvoke $r1.<java.lang.Class: java.lang.String getName()>();
+
+        $r3 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".numRecommendations");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String NUM_RECOMMENDATIONS> = $r5;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = class "org/apache/mahout/cf/taste/hadoop/als/RecommenderJob";
+
+        $r8 = virtualinvoke $r7.<java.lang.Class: java.lang.String getName()>();
+
+        $r9 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".userFeatures");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String USER_FEATURES_PATH> = $r11;
+
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>()>();
+
+        $r13 = class "org/apache/mahout/cf/taste/hadoop/als/RecommenderJob";
+
+        $r14 = virtualinvoke $r13.<java.lang.Class: java.lang.String getName()>();
+
+        $r15 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r14);
+
+        $r17 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".itemFeatures");
+
+        $r16 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String ITEM_FEATURES_PATH> = $r16;
+
+        $r19 = new java.lang.StringBuilder;
+
+        specialinvoke $r19.<java.lang.StringBuilder: void <init>()>();
+
+        $r18 = class "org/apache/mahout/cf/taste/hadoop/als/RecommenderJob";
+
+        $r21 = virtualinvoke $r18.<java.lang.Class: java.lang.String getName()>();
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r21);
+
+        $r23 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".maxRating");
+
+        $r22 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String MAX_RATING> = $r22;
+
+        $r25 = new java.lang.StringBuilder;
+
+        specialinvoke $r25.<java.lang.StringBuilder: void <init>()>();
+
+        $r24 = class "org/apache/mahout/cf/taste/hadoop/als/RecommenderJob";
+
+        $r27 = virtualinvoke $r24.<java.lang.Class: java.lang.String getName()>();
+
+        $r26 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r27);
+
+        $r29 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".userIndex");
+
+        $r28 = virtualinvoke $r29.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String USER_INDEX_PATH> = $r28;
+
+        $r31 = new java.lang.StringBuilder;
+
+        specialinvoke $r31.<java.lang.StringBuilder: void <init>()>();
+
+        $r30 = class "org/apache/mahout/cf/taste/hadoop/als/RecommenderJob";
+
+        $r34 = virtualinvoke $r30.<java.lang.Class: java.lang.String getName()>();
+
+        $r35 = virtualinvoke $r31.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r34);
+
+        $r32 = virtualinvoke $r35.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".itemIndex");
+
+        $r33 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.cf.taste.hadoop.als.RecommenderJob: java.lang.String ITEM_INDEX_PATH> = $r33;
+
+        return;
+    }
+}

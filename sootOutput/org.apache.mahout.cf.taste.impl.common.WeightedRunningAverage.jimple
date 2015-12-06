@@ -1,0 +1,280 @@
+public class org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage extends java.lang.Object implements org.apache.mahout.cf.taste.impl.common.RunningAverage, java.io.Serializable
+{
+    private double totalWeight;
+    private double average;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight> = 0.0;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double average> = #NaN;
+
+        return;
+    }
+
+    public synchronized void addDatum(double)
+    {
+        org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage;
+
+        d0 := @parameter0: double;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: void addDatum(double,double)>(d0, 1.0);
+
+        return;
+    }
+
+    public synchronized void addDatum(double, double)
+    {
+        org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage r0;
+        double d0, d1, d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10, $d11, $d12;
+        byte $b0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        d2 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight>;
+
+        $d3 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight>;
+
+        $d4 = $d3 + d1;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight> = $d4;
+
+        $b0 = d2 cmpg 0.0;
+
+        if $b0 > 0 goto label1;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double average> = d0;
+
+        goto label2;
+
+     label1:
+        $d5 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double average>;
+
+        $d7 = $d5 * d2;
+
+        $d6 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight>;
+
+        $d12 = $d7 / $d6;
+
+        $d9 = d0 * d1;
+
+        $d8 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight>;
+
+        $d10 = $d9 / $d8;
+
+        $d11 = $d12 + $d10;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double average> = $d11;
+
+     label2:
+        return;
+    }
+
+    public synchronized void removeDatum(double)
+    {
+        org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage;
+
+        d0 := @parameter0: double;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: void removeDatum(double,double)>(d0, 1.0);
+
+        return;
+    }
+
+    public synchronized void removeDatum(double, double)
+    {
+        org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage r0;
+        double d0, d1, d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10, $d11, $d12, $d13;
+        byte $b0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        d2 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight>;
+
+        $d3 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight>;
+
+        $d4 = $d3 - d1;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight> = $d4;
+
+        $d5 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight>;
+
+        $b0 = $d5 cmpg 0.0;
+
+        if $b0 > 0 goto label1;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double average> = #NaN;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight> = 0.0;
+
+        goto label2;
+
+     label1:
+        $d6 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double average>;
+
+        $d8 = $d6 * d2;
+
+        $d7 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight>;
+
+        $d11 = $d8 / $d7;
+
+        $d10 = d0 * d1;
+
+        $d9 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight>;
+
+        $d12 = $d10 / $d9;
+
+        $d13 = $d11 - $d12;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double average> = $d13;
+
+     label2:
+        return;
+    }
+
+    public synchronized void changeDatum(double)
+    {
+        org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage;
+
+        d0 := @parameter0: double;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: void changeDatum(double,double)>(d0, 1.0);
+
+        return;
+    }
+
+    public synchronized void changeDatum(double, double)
+    {
+        org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage r0;
+        double d0, d1, $d2, $d3, $d4, $d5, $d6, $d7;
+        byte $b0;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        $d2 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight>;
+
+        $b0 = d1 cmpg $d2;
+
+        if $b0 > 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "weight must be <= totalWeight");
+
+        $d6 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double average>;
+
+        $d4 = d0 * d1;
+
+        $d3 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight>;
+
+        $d5 = $d4 / $d3;
+
+        $d7 = $d6 + $d5;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double average> = $d7;
+
+        return;
+    }
+
+    public synchronized double getTotalWeight()
+    {
+        org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage;
+
+        $d0 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight>;
+
+        return $d0;
+    }
+
+    public synchronized int getCount()
+    {
+        org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage r0;
+        double $d0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage;
+
+        $d0 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double totalWeight>;
+
+        $i0 = (int) $d0;
+
+        return $i0;
+    }
+
+    public synchronized double getAverage()
+    {
+        org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage;
+
+        $d0 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double average>;
+
+        return $d0;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.RunningAverage inverse()
+    {
+        org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage r0;
+        org.apache.mahout.cf.taste.impl.common.InvertedRunningAverage $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage;
+
+        $r1 = new org.apache.mahout.cf.taste.impl.common.InvertedRunningAverage;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.impl.common.InvertedRunningAverage: void <init>(org.apache.mahout.cf.taste.impl.common.RunningAverage)>(r0);
+
+        return $r1;
+    }
+
+    public synchronized java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage r0;
+        double $d0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage;
+
+        $d0 = r0.<org.apache.mahout.cf.taste.impl.common.WeightedRunningAverage: double average>;
+
+        $r1 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>($d0);
+
+        return $r1;
+    }
+}

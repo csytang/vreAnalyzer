@@ -1,0 +1,122 @@
+final class org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator extends java.lang.Object implements org.apache.mahout.cf.taste.impl.recommender.TopItems$Estimator
+{
+    private final org.apache.mahout.cf.taste.similarity.UserSimilarity userSimilarityImpl;
+    private final long theUserID;
+    private final double minSim;
+
+    private void <init>(org.apache.mahout.cf.taste.similarity.UserSimilarity, long, double)
+    {
+        org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator r0;
+        org.apache.mahout.cf.taste.similarity.UserSimilarity r1;
+        long l0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.UserSimilarity;
+
+        l0 := @parameter1: long;
+
+        d0 := @parameter2: double;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator: org.apache.mahout.cf.taste.similarity.UserSimilarity userSimilarityImpl> = r1;
+
+        r0.<org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator: long theUserID> = l0;
+
+        r0.<org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator: double minSim> = d0;
+
+        return;
+    }
+
+    public double estimate(java.lang.Long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator r0;
+        java.lang.Long r1;
+        double d0, $d1, $d2;
+        long $l0, $l1, $l3, $l4;
+        byte $b2, $b5;
+        org.apache.mahout.cf.taste.similarity.UserSimilarity $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator;
+
+        r1 := @parameter0: java.lang.Long;
+
+        $l0 = virtualinvoke r1.<java.lang.Long: long longValue()>();
+
+        $l1 = r0.<org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator: long theUserID>;
+
+        $b2 = $l0 cmp $l1;
+
+        if $b2 != 0 goto label1;
+
+        return #NaN;
+
+     label1:
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator: org.apache.mahout.cf.taste.similarity.UserSimilarity userSimilarityImpl>;
+
+        $l3 = r0.<org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator: long theUserID>;
+
+        $l4 = virtualinvoke r1.<java.lang.Long: long longValue()>();
+
+        d0 = interfaceinvoke $r2.<org.apache.mahout.cf.taste.similarity.UserSimilarity: double userSimilarity(long,long)>($l3, $l4);
+
+        $d1 = r0.<org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator: double minSim>;
+
+        $b5 = d0 cmpl $d1;
+
+        if $b5 < 0 goto label2;
+
+        $d2 = d0;
+
+        goto label3;
+
+     label2:
+        $d2 = #NaN;
+
+     label3:
+        return $d2;
+    }
+
+    public volatile double estimate(java.lang.Object) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator r0;
+        java.lang.Object r1;
+        java.lang.Long $r2;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.lang.Long) r1;
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator: double estimate(java.lang.Long)>($r2);
+
+        return $d0;
+    }
+
+    void <init>(org.apache.mahout.cf.taste.similarity.UserSimilarity, long, double, org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$1)
+    {
+        org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator r0;
+        org.apache.mahout.cf.taste.similarity.UserSimilarity r1;
+        long l0;
+        double d0;
+        org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$1 r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.UserSimilarity;
+
+        l0 := @parameter1: long;
+
+        d0 := @parameter2: double;
+
+        r2 := @parameter3: org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$1;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.neighborhood.NearestNUserNeighborhood$Estimator: void <init>(org.apache.mahout.cf.taste.similarity.UserSimilarity,long,double)>(r1, l0, d0);
+
+        return;
+    }
+}

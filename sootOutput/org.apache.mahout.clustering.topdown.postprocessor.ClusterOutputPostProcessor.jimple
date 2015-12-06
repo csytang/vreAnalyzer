@@ -1,0 +1,317 @@
+public final class org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor extends java.lang.Object
+{
+    private org.apache.hadoop.fs.Path clusteredPoints;
+    private final org.apache.hadoop.fs.FileSystem fileSystem;
+    private final org.apache.hadoop.conf.Configuration conf;
+    private final org.apache.hadoop.fs.Path clusterPostProcessorOutput;
+    private final java.util.Map postProcessedClusterDirectories;
+    private long uniqueVectorId;
+    private final java.util.Map writersForClusters;
+
+    public void <init>(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor r0;
+        org.apache.hadoop.fs.Path r1, r2, $r5, $r8;
+        org.apache.hadoop.conf.Configuration r3, $r7;
+        java.util.HashMap $r4, $r6;
+        org.apache.hadoop.fs.FileSystem $r9;
+
+        r0 := @this: org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: org.apache.hadoop.conf.Configuration;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r4 = new java.util.HashMap;
+
+        specialinvoke $r4.<java.util.HashMap: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: java.util.Map postProcessedClusterDirectories> = $r4;
+
+        r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: long uniqueVectorId> = 0L;
+
+        r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.fs.Path clusterPostProcessorOutput> = r2;
+
+        $r5 = staticinvoke <org.apache.mahout.clustering.topdown.PathDirectory: org.apache.hadoop.fs.Path getClusterOutputClusteredPoints(org.apache.hadoop.fs.Path)>(r1);
+
+        r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.fs.Path clusteredPoints> = $r5;
+
+        r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.conf.Configuration conf> = r3;
+
+        $r6 = new java.util.HashMap;
+
+        specialinvoke $r6.<java.util.HashMap: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: java.util.Map writersForClusters> = $r6;
+
+        $r8 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.fs.Path clusteredPoints>;
+
+        $r7 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.conf.Configuration conf>;
+
+        $r9 = virtualinvoke $r8.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>($r7);
+
+        r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.fs.FileSystem fileSystem> = $r9;
+
+        return;
+    }
+
+    public void process() throws java.io.IOException
+    {
+        org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor r0;
+        java.util.Iterator r1;
+        org.apache.mahout.common.Pair r2;
+        java.lang.String r3, $r14;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable $r4;
+        org.apache.hadoop.fs.Path $r5;
+        org.apache.mahout.common.iterator.sequencefile.PathType $r6;
+        org.apache.hadoop.fs.PathFilter $r7;
+        org.apache.hadoop.conf.Configuration $r8;
+        boolean $z0;
+        java.util.Map $r9, $r11;
+        java.util.Collection $r10;
+        java.lang.Object $r12, $r13, $r16;
+        org.apache.mahout.clustering.classify.WeightedVectorWritable $r15;
+
+        r0 := @this: org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor;
+
+        specialinvoke r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: void createPostProcessDirectory()>();
+
+        $r4 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable;
+
+        $r5 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.fs.Path clusteredPoints>;
+
+        $r6 = <org.apache.mahout.common.iterator.sequencefile.PathType: org.apache.mahout.common.iterator.sequencefile.PathType GLOB>;
+
+        $r7 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter partFilter()>();
+
+        $r8 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.conf.Configuration conf>;
+
+        specialinvoke $r4.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable: void <init>(org.apache.hadoop.fs.Path,org.apache.mahout.common.iterator.sequencefile.PathType,org.apache.hadoop.fs.PathFilter,java.util.Comparator,boolean,org.apache.hadoop.conf.Configuration)>($r5, $r6, $r7, null, 0, $r8);
+
+        r1 = virtualinvoke $r4.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r12 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (org.apache.mahout.common.Pair) $r12;
+
+        $r13 = virtualinvoke r2.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r14 = virtualinvoke $r13.<java.lang.Object: java.lang.String toString()>();
+
+        r3 = virtualinvoke $r14.<java.lang.String: java.lang.String trim()>();
+
+        $r16 = virtualinvoke r2.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r15 = (org.apache.mahout.clustering.classify.WeightedVectorWritable) $r16;
+
+        specialinvoke r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: void putVectorInRespectiveCluster(java.lang.String,org.apache.mahout.clustering.classify.WeightedVectorWritable)>(r3, $r15);
+
+        goto label1;
+
+     label2:
+        $r9 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: java.util.Map writersForClusters>;
+
+        $r10 = interfaceinvoke $r9.<java.util.Map: java.util.Collection values()>();
+
+        staticinvoke <org.apache.mahout.common.IOUtils: void close(java.util.Collection)>($r10);
+
+        $r11 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: java.util.Map writersForClusters>;
+
+        interfaceinvoke $r11.<java.util.Map: void clear()>();
+
+        return;
+    }
+
+    private void createPostProcessDirectory() throws java.io.IOException
+    {
+        org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor r0;
+        org.apache.hadoop.fs.Path $r1, $r3;
+        org.apache.hadoop.fs.FileSystem $r2, $r4;
+        boolean $z0, $z1;
+        java.io.IOException $r5;
+
+        r0 := @this: org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor;
+
+        $r2 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.fs.FileSystem fileSystem>;
+
+        $r1 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.fs.Path clusterPostProcessorOutput>;
+
+        $z0 = virtualinvoke $r2.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>($r1);
+
+        if $z0 != 0 goto label1;
+
+        $r4 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.fs.FileSystem fileSystem>;
+
+        $r3 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.fs.Path clusterPostProcessorOutput>;
+
+        $z1 = virtualinvoke $r4.<org.apache.hadoop.fs.FileSystem: boolean mkdirs(org.apache.hadoop.fs.Path)>($r3);
+
+        if $z1 != 0 goto label1;
+
+        $r5 = new java.io.IOException;
+
+        specialinvoke $r5.<java.io.IOException: void <init>(java.lang.String)>("Error creating cluster post processor directory");
+
+        throw $r5;
+
+     label1:
+        return;
+    }
+
+    private void putVectorInRespectiveCluster(java.lang.String, org.apache.mahout.clustering.classify.WeightedVectorWritable) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor r0;
+        java.lang.String r1;
+        org.apache.mahout.clustering.classify.WeightedVectorWritable r2;
+        org.apache.hadoop.io.SequenceFile$Writer r3;
+        org.apache.hadoop.fs.Path $r4, $r6;
+        java.util.Map $r5;
+
+        r0 := @this: org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: org.apache.mahout.clustering.classify.WeightedVectorWritable;
+
+        r3 = specialinvoke r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.io.SequenceFile$Writer findWriterForVector(java.lang.String)>(r1);
+
+        $r5 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: java.util.Map postProcessedClusterDirectories>;
+
+        $r4 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.fs.Path clusterPostProcessorOutput>;
+
+        $r6 = staticinvoke <org.apache.mahout.clustering.topdown.PathDirectory: org.apache.hadoop.fs.Path getClusterPathForClusterId(org.apache.hadoop.fs.Path,java.lang.String)>($r4, r1);
+
+        interfaceinvoke $r5.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, $r6);
+
+        specialinvoke r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: void writeVectorToCluster(org.apache.hadoop.io.SequenceFile$Writer,org.apache.mahout.clustering.classify.WeightedVectorWritable)>(r3, r2);
+
+        return;
+    }
+
+    private org.apache.hadoop.io.SequenceFile$Writer findWriterForVector(java.lang.String) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor r0;
+        java.lang.String r1;
+        org.apache.hadoop.fs.Path r2, $r4, $r7, $r8;
+        java.util.Map $r5, $r12;
+        java.lang.Object $r6;
+        org.apache.hadoop.io.SequenceFile$Writer $r9, r14;
+        org.apache.hadoop.conf.Configuration $r10;
+        org.apache.hadoop.fs.FileSystem $r11;
+
+        r0 := @this: org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r4 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.fs.Path clusterPostProcessorOutput>;
+
+        r2 = staticinvoke <org.apache.mahout.clustering.topdown.PathDirectory: org.apache.hadoop.fs.Path getClusterPathForClusterId(org.apache.hadoop.fs.Path,java.lang.String)>($r4, r1);
+
+        $r5 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: java.util.Map writersForClusters>;
+
+        $r6 = interfaceinvoke $r5.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        r14 = (org.apache.hadoop.io.SequenceFile$Writer) $r6;
+
+        if r14 != null goto label1;
+
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        $r8 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r8.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>("part-m-0");
+
+        specialinvoke $r7.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>(r2, $r8);
+
+        $r9 = new org.apache.hadoop.io.SequenceFile$Writer;
+
+        $r11 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.fs.FileSystem fileSystem>;
+
+        $r10 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.conf.Configuration conf>;
+
+        specialinvoke $r9.<org.apache.hadoop.io.SequenceFile$Writer: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>($r11, $r10, $r7, class "org/apache/hadoop/io/LongWritable", class "org/apache/mahout/math/VectorWritable");
+
+        r14 = $r9;
+
+        $r12 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: java.util.Map writersForClusters>;
+
+        interfaceinvoke $r12.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, $r9);
+
+     label1:
+        return r14;
+    }
+
+    private void writeVectorToCluster(org.apache.hadoop.io.SequenceFile$Writer, org.apache.mahout.clustering.classify.WeightedVectorWritable) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor r0;
+        org.apache.hadoop.io.SequenceFile$Writer r1;
+        org.apache.mahout.clustering.classify.WeightedVectorWritable r2;
+        org.apache.hadoop.io.LongWritable $r3;
+        long $l0, $l1;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.mahout.math.Vector $r5;
+
+        r0 := @this: org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor;
+
+        r1 := @parameter0: org.apache.hadoop.io.SequenceFile$Writer;
+
+        r2 := @parameter1: org.apache.mahout.clustering.classify.WeightedVectorWritable;
+
+        $r3 = new org.apache.hadoop.io.LongWritable;
+
+        $l0 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: long uniqueVectorId>;
+
+        $l1 = $l0 + 1L;
+
+        r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: long uniqueVectorId> = $l1;
+
+        specialinvoke $r3.<org.apache.hadoop.io.LongWritable: void <init>(long)>($l0);
+
+        $r4 = new org.apache.mahout.math.VectorWritable;
+
+        $r5 = virtualinvoke r2.<org.apache.mahout.clustering.classify.WeightedVectorWritable: org.apache.mahout.math.Vector getVector()>();
+
+        specialinvoke $r4.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r5);
+
+        virtualinvoke r1.<org.apache.hadoop.io.SequenceFile$Writer: void append(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r3, $r4);
+
+        virtualinvoke r1.<org.apache.hadoop.io.SequenceFile$Writer: void sync()>();
+
+        return;
+    }
+
+    public java.util.Map getPostProcessedClusterDirectories()
+    {
+        org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor r0;
+        java.util.Map $r1;
+
+        r0 := @this: org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor;
+
+        $r1 = r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: java.util.Map postProcessedClusterDirectories>;
+
+        return $r1;
+    }
+
+    public void setClusteredPoints(org.apache.hadoop.fs.Path)
+    {
+        org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor r0;
+        org.apache.hadoop.fs.Path r1;
+
+        r0 := @this: org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: org.apache.hadoop.fs.Path clusteredPoints> = r1;
+
+        return;
+    }
+}

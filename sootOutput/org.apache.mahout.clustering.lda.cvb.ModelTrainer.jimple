@@ -1,0 +1,890 @@
+public class org.apache.mahout.clustering.lda.cvb.ModelTrainer extends java.lang.Object
+{
+    private static final org.slf4j.Logger log;
+    private final int numTopics;
+    private final int numTerms;
+    private org.apache.mahout.clustering.lda.cvb.TopicModel readModel;
+    private org.apache.mahout.clustering.lda.cvb.TopicModel writeModel;
+    private java.util.concurrent.ThreadPoolExecutor threadPool;
+    private java.util.concurrent.BlockingQueue workQueue;
+    private final int numTrainThreads;
+    private final boolean isReadWrite;
+
+    public void <init>(org.apache.mahout.clustering.lda.cvb.TopicModel, org.apache.mahout.clustering.lda.cvb.TopicModel, int, int, int)
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer r0;
+        org.apache.mahout.clustering.lda.cvb.TopicModel r1, r2;
+        int i0, i1, i2;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        r1 := @parameter0: org.apache.mahout.clustering.lda.cvb.TopicModel;
+
+        r2 := @parameter1: org.apache.mahout.clustering.lda.cvb.TopicModel;
+
+        i0 := @parameter2: int;
+
+        i1 := @parameter3: int;
+
+        i2 := @parameter4: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel readModel> = r1;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel writeModel> = r2;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTrainThreads> = i0;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTopics> = i1;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTerms> = i2;
+
+        if r1 != r2 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: boolean isReadWrite> = $z0;
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.clustering.lda.cvb.TopicModel, int, int, int)
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer r0;
+        org.apache.mahout.clustering.lda.cvb.TopicModel r1;
+        int i0, i1, i2;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        r1 := @parameter0: org.apache.mahout.clustering.lda.cvb.TopicModel;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        i2 := @parameter3: int;
+
+        specialinvoke r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void <init>(org.apache.mahout.clustering.lda.cvb.TopicModel,org.apache.mahout.clustering.lda.cvb.TopicModel,int,int,int)>(r1, r1, i0, i1, i2);
+
+        return;
+    }
+
+    public org.apache.mahout.clustering.lda.cvb.TopicModel getReadModel()
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer r0;
+        org.apache.mahout.clustering.lda.cvb.TopicModel $r1;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        $r1 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel readModel>;
+
+        return $r1;
+    }
+
+    public void start()
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer r0;
+        int $i0, $i1, $i2, $i3, $i4;
+        org.slf4j.Logger $r1;
+        java.lang.Integer $r2;
+        java.util.concurrent.ArrayBlockingQueue $r3;
+        java.util.concurrent.ThreadPoolExecutor $r4, $r7, $r8;
+        java.util.concurrent.BlockingQueue $r5;
+        java.util.concurrent.TimeUnit $r6;
+        org.apache.mahout.clustering.lda.cvb.TopicModel $r9;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        $r1 = <org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.slf4j.Logger log>;
+
+        $i0 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTrainThreads>;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        interfaceinvoke $r1.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Starting training threadpool with {} threads", $r2);
+
+        $r3 = new java.util.concurrent.ArrayBlockingQueue;
+
+        $i1 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTrainThreads>;
+
+        $i2 = $i1 * 10;
+
+        specialinvoke $r3.<java.util.concurrent.ArrayBlockingQueue: void <init>(int)>($i2);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: java.util.concurrent.BlockingQueue workQueue> = $r3;
+
+        $r4 = new java.util.concurrent.ThreadPoolExecutor;
+
+        $i4 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTrainThreads>;
+
+        $i3 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTrainThreads>;
+
+        $r6 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $r5 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: java.util.concurrent.BlockingQueue workQueue>;
+
+        specialinvoke $r4.<java.util.concurrent.ThreadPoolExecutor: void <init>(int,int,long,java.util.concurrent.TimeUnit,java.util.concurrent.BlockingQueue)>($i4, $i3, 0L, $r6, $r5);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: java.util.concurrent.ThreadPoolExecutor threadPool> = $r4;
+
+        $r7 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: java.util.concurrent.ThreadPoolExecutor threadPool>;
+
+        virtualinvoke $r7.<java.util.concurrent.ThreadPoolExecutor: void allowCoreThreadTimeOut(boolean)>(0);
+
+        $r8 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: java.util.concurrent.ThreadPoolExecutor threadPool>;
+
+        virtualinvoke $r8.<java.util.concurrent.ThreadPoolExecutor: int prestartAllCoreThreads()>();
+
+        $r9 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel writeModel>;
+
+        virtualinvoke $r9.<org.apache.mahout.clustering.lda.cvb.TopicModel: void reset()>();
+
+        return;
+    }
+
+    public void train(org.apache.mahout.math.VectorIterable, org.apache.mahout.math.VectorIterable)
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer r0;
+        org.apache.mahout.math.VectorIterable r1, r2;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        r1 := @parameter0: org.apache.mahout.math.VectorIterable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorIterable;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void train(org.apache.mahout.math.VectorIterable,org.apache.mahout.math.VectorIterable,int)>(r1, r2, 1);
+
+        return;
+    }
+
+    public double calculatePerplexity(org.apache.mahout.math.VectorIterable, org.apache.mahout.math.VectorIterable)
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer r0;
+        org.apache.mahout.math.VectorIterable r1, r2;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        r1 := @parameter0: org.apache.mahout.math.VectorIterable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorIterable;
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: double calculatePerplexity(org.apache.mahout.math.VectorIterable,org.apache.mahout.math.VectorIterable,double)>(r1, r2, 0.0);
+
+        return $d0;
+    }
+
+    public double calculatePerplexity(org.apache.mahout.math.VectorIterable, org.apache.mahout.math.VectorIterable, double)
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer r0;
+        org.apache.mahout.math.VectorIterable r1, r2;
+        double d0, $d1, $d2, $d3, $d4, $d5, $d6, d7, d8;
+        java.util.Iterator r3, r4;
+        org.apache.mahout.math.MatrixSlice r5, r6;
+        int i0;
+        org.apache.mahout.math.Vector r7, r8;
+        boolean $z0, $z1;
+        java.lang.Object $r9, $r10;
+        org.apache.mahout.clustering.lda.cvb.TopicModel $r11;
+        byte $b1, $b2;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        r1 := @parameter0: org.apache.mahout.math.VectorIterable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorIterable;
+
+        d0 := @parameter2: double;
+
+        r3 = interfaceinvoke r1.<org.apache.mahout.math.VectorIterable: java.util.Iterator iterator()>();
+
+        r4 = interfaceinvoke r2.<org.apache.mahout.math.VectorIterable: java.util.Iterator iterator()>();
+
+        d7 = 0.0;
+
+        d8 = 0.0;
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $z1 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label3;
+
+        $r9 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.MatrixSlice) $r9;
+
+        $r10 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.math.MatrixSlice) $r10;
+
+        i0 = virtualinvoke r5.<org.apache.mahout.math.MatrixSlice: int index()>();
+
+        r7 = virtualinvoke r5.<org.apache.mahout.math.MatrixSlice: org.apache.mahout.math.Vector vector()>();
+
+        r8 = virtualinvoke r6.<org.apache.mahout.math.MatrixSlice: org.apache.mahout.math.Vector vector()>();
+
+        $b1 = d0 cmpl 0.0;
+
+        if $b1 == 0 goto label2;
+
+        $d4 = (double) i0;
+
+        $d6 = 1.0 / d0;
+
+        $d5 = $d4 % $d6;
+
+        $b2 = $d5 cmpl 0.0;
+
+        if $b2 != 0 goto label1;
+
+     label2:
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void trainSync(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector,boolean,int)>(r7, r8, 0, 10);
+
+        $r11 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel readModel>;
+
+        $d3 = virtualinvoke $r11.<org.apache.mahout.clustering.lda.cvb.TopicModel: double perplexity(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r7, r8);
+
+        d7 = d7 + $d3;
+
+        $d2 = interfaceinvoke r7.<org.apache.mahout.math.Vector: double norm(double)>(1.0);
+
+        d8 = d8 + $d2;
+
+        goto label1;
+
+     label3:
+        $d1 = d7 / d8;
+
+        return $d1;
+    }
+
+    public void train(org.apache.mahout.math.VectorIterable, org.apache.mahout.math.VectorIterable, int)
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer r0;
+        org.apache.mahout.math.VectorIterable r1, r2;
+        int i0, $i3, $i5, $i7, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16, i17, i18;
+        java.util.Iterator r3, r4;
+        long l1, l2, $l4, $l6, $l8, l19, l20, l21;
+        double[] r5;
+        org.apache.mahout.math.Vector r7, r8;
+        java.util.HashMap $r9;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        org.apache.mahout.math.MatrixSlice $r10, $r13;
+        java.lang.Object $r11, $r12;
+        org.slf4j.Logger $r14, $r15, $r19, $r20, $r27;
+        double $d0, $d1, $d2, $d3, $d4, $d5, $d6;
+        java.lang.Integer $r16, $r25, $r26;
+        java.lang.Double $r17, $r18;
+        java.lang.Object[] $r21;
+        java.lang.Long $r22, $r23;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        r1 := @parameter0: org.apache.mahout.math.VectorIterable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorIterable;
+
+        i0 := @parameter2: int;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void start()>();
+
+        r3 = interfaceinvoke r1.<org.apache.mahout.math.VectorIterable: java.util.Iterator iterator()>();
+
+        r4 = interfaceinvoke r2.<org.apache.mahout.math.VectorIterable: java.util.Iterator iterator()>();
+
+        l1 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        i17 = 0;
+
+        r5 = newarray (double)[100];
+
+        $r9 = new java.util.HashMap;
+
+        specialinvoke $r9.<java.util.HashMap: void <init>()>();
+
+        i18 = 0;
+
+        l19 = staticinvoke <java.lang.System: long nanoTime()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $z1 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label4;
+
+        i17 = i17 + 1;
+
+        $r11 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r10 = (org.apache.mahout.math.MatrixSlice) $r11;
+
+        r7 = virtualinvoke $r10.<org.apache.mahout.math.MatrixSlice: org.apache.mahout.math.Vector vector()>();
+
+        $r12 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r13 = (org.apache.mahout.math.MatrixSlice) $r12;
+
+        r8 = virtualinvoke $r13.<org.apache.mahout.math.MatrixSlice: org.apache.mahout.math.Vector vector()>();
+
+        $z2 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: boolean isReadWrite>;
+
+        if $z2 == 0 goto label3;
+
+        $i14 = interfaceinvoke $r9.<java.util.Map: int size()>();
+
+        $i15 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTrainThreads>;
+
+        if $i14 >= $i15 goto label2;
+
+        interfaceinvoke $r9.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r7, r8);
+
+        $r27 = <org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.slf4j.Logger log>;
+
+        $z4 = interfaceinvoke $r27.<org.slf4j.Logger: boolean isDebugEnabled()>();
+
+        if $z4 == 0 goto label1;
+
+        $i16 = interfaceinvoke r7.<org.apache.mahout.math.Vector: int getNumNondefaultElements()>();
+
+        i18 = i18 + $i16;
+
+        goto label1;
+
+     label2:
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void batchTrain(java.util.Map,boolean,int)>($r9, 1, i0);
+
+        l20 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $r20 = <org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.slf4j.Logger log>;
+
+        $r21 = newarray (java.lang.Object)[4];
+
+        $i13 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTrainThreads>;
+
+        $r25 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i13);
+
+        $r21[0] = $r25;
+
+        $r26 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i18);
+
+        $r21[1] = $r26;
+
+        $r22 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l19);
+
+        $r21[2] = $r22;
+
+        $r23 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l20);
+
+        $r21[3] = $r23;
+
+        interfaceinvoke $r20.<org.slf4j.Logger: void debug(java.lang.String,java.lang.Object[])>("trained {} docs with {} tokens, start time {}, end time {}", $r21);
+
+        l19 = l20;
+
+        i18 = 0;
+
+        goto label1;
+
+     label3:
+        l21 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void train(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector,boolean,int)>(r7, r8, 1, i0);
+
+        $r14 = <org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.slf4j.Logger log>;
+
+        $z3 = interfaceinvoke $r14.<org.slf4j.Logger: boolean isDebugEnabled()>();
+
+        if $z3 == 0 goto label1;
+
+        $i3 = lengthof r5;
+
+        $i5 = i17 % $i3;
+
+        $l6 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l4 = $l6 - l21;
+
+        $d0 = (double) $l4;
+
+        $i7 = interfaceinvoke r7.<org.apache.mahout.math.Vector: int getNumNondefaultElements()>();
+
+        $d1 = (double) $i7;
+
+        $d2 = 1000000.0 * $d1;
+
+        $d3 = $d0 / $d2;
+
+        r5[$i5] = $d3;
+
+        $i9 = i17 % 100;
+
+        if $i9 != 0 goto label1;
+
+        $l8 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        l2 = $l8 - l1;
+
+        $r15 = <org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.slf4j.Logger log>;
+
+        $r16 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i17);
+
+        $d5 = (double) l2;
+
+        $d4 = $d5 / 1000000.0;
+
+        $r17 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d4);
+
+        interfaceinvoke $r15.<org.slf4j.Logger: void debug(java.lang.String,java.lang.Object,java.lang.Object)>("trained {} documents in {}ms", $r16, $r17);
+
+        $i12 = i17 % 500;
+
+        if $i12 != 0 goto label1;
+
+        staticinvoke <java.util.Arrays: void sort(double[])>(r5);
+
+        $r19 = <org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.slf4j.Logger log>;
+
+        $i11 = lengthof r5;
+
+        $i10 = $i11 / 2;
+
+        $d6 = r5[$i10];
+
+        $r18 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d6);
+
+        interfaceinvoke $r19.<org.slf4j.Logger: void debug(java.lang.String,java.lang.Object)>("training took median {}ms per token-instance", $r18);
+
+        goto label1;
+
+     label4:
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void stop()>();
+
+        return;
+    }
+
+    public void batchTrain(java.util.Map, boolean, int)
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer r0;
+        java.util.Map r1;
+        boolean z0, $z1, $z3;
+        int i0, $i1, $i2;
+        java.util.ArrayList $r2;
+        java.util.Set $r3;
+        java.util.concurrent.ThreadPoolExecutor $r4;
+        java.lang.Object $r6, $r9, $r12, $r13;
+        org.apache.mahout.math.Matrix $r7;
+        org.apache.mahout.clustering.lda.cvb.TopicModel $r8, $r10;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable $r11, r23;
+        org.apache.mahout.math.Vector $r14, $r16;
+        org.apache.mahout.math.SparseRowMatrix $r15;
+        java.lang.InterruptedException $r17;
+        org.slf4j.Logger $r18;
+        java.util.Iterator r20, r22;
+        java.util.Map$Entry r21;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        r1 := @parameter0: java.util.Map;
+
+        z0 := @parameter1: boolean;
+
+        i0 := @parameter2: int;
+
+     label1:
+        $r2 = new java.util.ArrayList;
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>()>();
+
+        $r3 = interfaceinvoke r1.<java.util.Map: java.util.Set entrySet()>();
+
+        r20 = interfaceinvoke $r3.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z3 = interfaceinvoke r20.<java.util.Iterator: boolean hasNext()>();
+
+        if $z3 == 0 goto label3;
+
+        $r9 = interfaceinvoke r20.<java.util.Iterator: java.lang.Object next()>();
+
+        r21 = (java.util.Map$Entry) $r9;
+
+        $r11 = new org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable;
+
+        $r10 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel readModel>;
+
+        $r12 = interfaceinvoke r21.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r14 = (org.apache.mahout.math.Vector) $r12;
+
+        $r13 = interfaceinvoke r21.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r16 = (org.apache.mahout.math.Vector) $r13;
+
+        $r15 = new org.apache.mahout.math.SparseRowMatrix;
+
+        $i2 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTopics>;
+
+        $i1 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTerms>;
+
+        specialinvoke $r15.<org.apache.mahout.math.SparseRowMatrix: void <init>(int,int,boolean)>($i2, $i1, 1);
+
+        specialinvoke $r11.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: void <init>(org.apache.mahout.clustering.lda.cvb.TopicModel,org.apache.mahout.clustering.lda.cvb.TopicModel,org.apache.mahout.math.Vector,org.apache.mahout.math.Vector,org.apache.mahout.math.Matrix,int,org.apache.mahout.clustering.lda.cvb.ModelTrainer$1)>($r10, null, $r14, $r16, $r15, i0, null);
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>($r11);
+
+        goto label2;
+
+     label3:
+        $r4 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: java.util.concurrent.ThreadPoolExecutor threadPool>;
+
+        virtualinvoke $r4.<java.util.concurrent.ThreadPoolExecutor: java.util.List invokeAll(java.util.Collection)>($r2);
+
+        if z0 == 0 goto label6;
+
+        r22 = interfaceinvoke $r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label4:
+        $z1 = interfaceinvoke r22.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label6;
+
+        $r6 = interfaceinvoke r22.<java.util.Iterator: java.lang.Object next()>();
+
+        r23 = (org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable) $r6;
+
+        $r8 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel writeModel>;
+
+        $r7 = staticinvoke <org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.math.Matrix access$100(org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable)>(r23);
+
+        virtualinvoke $r8.<org.apache.mahout.clustering.lda.cvb.TopicModel: void update(org.apache.mahout.math.Matrix)>($r7);
+
+        goto label4;
+
+     label5:
+        $r17 := @caughtexception;
+
+        $r18 = <org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.slf4j.Logger log>;
+
+        interfaceinvoke $r18.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Interrupted during batch training, retrying!", $r17);
+
+        goto label1;
+
+     label6:
+        return;
+
+        catch java.lang.InterruptedException from label1 to label5 with label5;
+    }
+
+    public void train(org.apache.mahout.math.Vector, org.apache.mahout.math.Vector, boolean, int)
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer r0;
+        org.apache.mahout.math.Vector r1, r2;
+        boolean z0;
+        int i0, $i1, $i2;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable $r4;
+        org.apache.mahout.math.SparseRowMatrix $r5;
+        java.util.concurrent.BlockingQueue $r6;
+        org.apache.mahout.clustering.lda.cvb.TopicModel $r7, $r10;
+        java.lang.InterruptedException $r8;
+        org.slf4j.Logger $r9;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 := @parameter1: org.apache.mahout.math.Vector;
+
+        z0 := @parameter2: boolean;
+
+        i0 := @parameter3: int;
+
+     label1:
+        $r6 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: java.util.concurrent.BlockingQueue workQueue>;
+
+        $r4 = new org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable;
+
+        $r7 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel readModel>;
+
+        if z0 == 0 goto label2;
+
+        $r10 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel writeModel>;
+
+        goto label3;
+
+     label2:
+        $r10 = null;
+
+     label3:
+        $r5 = new org.apache.mahout.math.SparseRowMatrix;
+
+        $i2 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTopics>;
+
+        $i1 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTerms>;
+
+        specialinvoke $r5.<org.apache.mahout.math.SparseRowMatrix: void <init>(int,int,boolean)>($i2, $i1, 1);
+
+        specialinvoke $r4.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: void <init>(org.apache.mahout.clustering.lda.cvb.TopicModel,org.apache.mahout.clustering.lda.cvb.TopicModel,org.apache.mahout.math.Vector,org.apache.mahout.math.Vector,org.apache.mahout.math.Matrix,int,org.apache.mahout.clustering.lda.cvb.ModelTrainer$1)>($r7, $r10, r1, r2, $r5, i0, null);
+
+        interfaceinvoke $r6.<java.util.concurrent.BlockingQueue: void put(java.lang.Object)>($r4);
+
+     label4:
+        return;
+
+     label5:
+        $r8 := @caughtexception;
+
+        $r9 = <org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.slf4j.Logger log>;
+
+        interfaceinvoke $r9.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Object,java.lang.Object)>("Interrupted waiting to submit document to work queue: {}", r1, $r8);
+
+        goto label1;
+
+        catch java.lang.InterruptedException from label1 to label4 with label5;
+    }
+
+    public void trainSync(org.apache.mahout.math.Vector, org.apache.mahout.math.Vector, boolean, int)
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer r0;
+        org.apache.mahout.math.Vector r1, r2;
+        boolean z0;
+        int i0, $i1, $i2;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable $r3;
+        org.apache.mahout.math.SparseRowMatrix $r4;
+        org.apache.mahout.clustering.lda.cvb.TopicModel $r5, $r6;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 := @parameter1: org.apache.mahout.math.Vector;
+
+        z0 := @parameter2: boolean;
+
+        i0 := @parameter3: int;
+
+        $r3 = new org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable;
+
+        $r5 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel readModel>;
+
+        if z0 == 0 goto label1;
+
+        $r6 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel writeModel>;
+
+        goto label2;
+
+     label1:
+        $r6 = null;
+
+     label2:
+        $r4 = new org.apache.mahout.math.SparseRowMatrix;
+
+        $i2 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTopics>;
+
+        $i1 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTerms>;
+
+        specialinvoke $r4.<org.apache.mahout.math.SparseRowMatrix: void <init>(int,int,boolean)>($i2, $i1, 1);
+
+        specialinvoke $r3.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: void <init>(org.apache.mahout.clustering.lda.cvb.TopicModel,org.apache.mahout.clustering.lda.cvb.TopicModel,org.apache.mahout.math.Vector,org.apache.mahout.math.Vector,org.apache.mahout.math.Matrix,int,org.apache.mahout.clustering.lda.cvb.ModelTrainer$1)>($r5, $r6, r1, r2, $r4, i0, null);
+
+        virtualinvoke $r3.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: void run()>();
+
+        return;
+    }
+
+    public double calculatePerplexity(org.apache.mahout.math.Vector, org.apache.mahout.math.Vector, int)
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer r0;
+        org.apache.mahout.math.Vector r1, r2;
+        int i0, $i1, $i2;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable $r4;
+        org.apache.mahout.math.SparseRowMatrix $r5;
+        org.apache.mahout.clustering.lda.cvb.TopicModel $r6;
+        java.lang.Double $r7;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 := @parameter1: org.apache.mahout.math.Vector;
+
+        i0 := @parameter2: int;
+
+        $r4 = new org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable;
+
+        $r6 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel readModel>;
+
+        $r5 = new org.apache.mahout.math.SparseRowMatrix;
+
+        $i2 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTopics>;
+
+        $i1 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: int numTerms>;
+
+        specialinvoke $r5.<org.apache.mahout.math.SparseRowMatrix: void <init>(int,int,boolean)>($i2, $i1, 1);
+
+        specialinvoke $r4.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: void <init>(org.apache.mahout.clustering.lda.cvb.TopicModel,org.apache.mahout.clustering.lda.cvb.TopicModel,org.apache.mahout.math.Vector,org.apache.mahout.math.Vector,org.apache.mahout.math.Matrix,int,org.apache.mahout.clustering.lda.cvb.ModelTrainer$1)>($r6, null, r1, r2, $r5, i0, null);
+
+        $r7 = virtualinvoke $r4.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: java.lang.Double call()>();
+
+        $d0 = virtualinvoke $r7.<java.lang.Double: double doubleValue()>();
+
+        return $d0;
+    }
+
+    public void stop()
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer r0;
+        org.apache.mahout.clustering.lda.cvb.TopicModel r1, $r7, $r10, $r13;
+        org.slf4j.Logger $r2, $r6, $r9, $r14, $r15, $r16;
+        java.util.concurrent.ThreadPoolExecutor $r3, $r5;
+        java.util.concurrent.TimeUnit $r4;
+        boolean $z0;
+        long $l0, $l1, $l2, l3, l4, l6, l8;
+        double $d0, $d1, $d2, $d3, $d4, $d5;
+        java.lang.Double $r8, $r11, $r12;
+        java.lang.InterruptedException $r17;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        l3 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $r2 = <org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.slf4j.Logger log>;
+
+        interfaceinvoke $r2.<org.slf4j.Logger: void info(java.lang.String)>("Initiating stopping of training threadpool");
+
+     label1:
+        $r3 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: java.util.concurrent.ThreadPoolExecutor threadPool>;
+
+        virtualinvoke $r3.<java.util.concurrent.ThreadPoolExecutor: void shutdown()>();
+
+        $r5 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: java.util.concurrent.ThreadPoolExecutor threadPool>;
+
+        $r4 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $z0 = virtualinvoke $r5.<java.util.concurrent.ThreadPoolExecutor: boolean awaitTermination(long,java.util.concurrent.TimeUnit)>(60L, $r4);
+
+        if $z0 != 0 goto label2;
+
+        $r15 = <org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.slf4j.Logger log>;
+
+        interfaceinvoke $r15.<org.slf4j.Logger: void warn(java.lang.String)>("Threadpool timed out on await termination - jobs still running!");
+
+     label2:
+        l4 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $r6 = <org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.slf4j.Logger log>;
+
+        $l0 = l4 - l3;
+
+        $d0 = (double) $l0;
+
+        $d1 = $d0 / 1000000.0;
+
+        $r8 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d1);
+
+        interfaceinvoke $r6.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("threadpool took: {}ms", $r8);
+
+        $r7 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel readModel>;
+
+        virtualinvoke $r7.<org.apache.mahout.clustering.lda.cvb.TopicModel: void stop()>();
+
+        l6 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $r9 = <org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.slf4j.Logger log>;
+
+        $l1 = l6 - l4;
+
+        $d3 = (double) $l1;
+
+        $d2 = $d3 / 1000000.0;
+
+        $r11 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d2);
+
+        interfaceinvoke $r9.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("readModel.stop() took {}ms", $r11);
+
+        $r10 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel writeModel>;
+
+        virtualinvoke $r10.<org.apache.mahout.clustering.lda.cvb.TopicModel: void stop()>();
+
+        l8 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $r14 = <org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.slf4j.Logger log>;
+
+        $l2 = l8 - l6;
+
+        $d5 = (double) $l2;
+
+        $d4 = $d5 / 1000000.0;
+
+        $r12 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d4);
+
+        interfaceinvoke $r14.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("writeModel.stop() took {}ms", $r12);
+
+        r1 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel writeModel>;
+
+        $r13 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel readModel>;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel writeModel> = $r13;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel readModel> = r1;
+
+     label3:
+        goto label5;
+
+     label4:
+        $r17 := @caughtexception;
+
+        $r16 = <org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.slf4j.Logger log>;
+
+        interfaceinvoke $r16.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>("Interrupted shutting down!", $r17);
+
+     label5:
+        return;
+
+        catch java.lang.InterruptedException from label1 to label3 with label4;
+    }
+
+    public void persist(org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer r0;
+        org.apache.hadoop.fs.Path r1;
+        org.apache.mahout.clustering.lda.cvb.TopicModel $r2;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        $r2 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel readModel>;
+
+        virtualinvoke $r2.<org.apache.mahout.clustering.lda.cvb.TopicModel: void persist(org.apache.hadoop.fs.Path,boolean)>(r1, 1);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/clustering/lda/cvb/ModelTrainer");
+
+        <org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

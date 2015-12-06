@@ -1,0 +1,359 @@
+public class org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private static final org.slf4j.Logger log;
+    private org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer;
+    private org.apache.mahout.clustering.lda.cvb.TopicModel readModel;
+    private org.apache.mahout.clustering.lda.cvb.TopicModel writeModel;
+    private int maxIters;
+    private int numTopics;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper r0;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    protected org.apache.mahout.clustering.lda.cvb.ModelTrainer getModelTrainer()
+    {
+        org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper r0;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer $r1;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper;
+
+        $r1 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer>;
+
+        return $r1;
+    }
+
+    protected int getMaxIters()
+    {
+        org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper;
+
+        $i0 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: int maxIters>;
+
+        return $i0;
+    }
+
+    protected int getNumTopics()
+    {
+        org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper;
+
+        $i0 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: int numTopics>;
+
+        return $i0;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        float f0, f1, f2;
+        long l0;
+        int i1, i2, i3, $i4, $i5, $i6, $i7, $i8, $i9;
+        org.apache.hadoop.fs.Path[] r3;
+        org.slf4j.Logger $r4, $r5, $r6, $r9, $r16;
+        org.apache.mahout.clustering.lda.cvb.TopicModel $r7, $r10, $r11, $r15, $r17;
+        double $d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8;
+        java.util.Random $r8;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer $r12, $r13;
+        byte $b10;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r4 = <org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r4.<org.slf4j.Logger: void info(java.lang.String)>("Retrieving configuration");
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        f0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: float getFloat(java.lang.String,float)>("term_topic_smoothing", #NaNF);
+
+        f1 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: float getFloat(java.lang.String,float)>("doc_topic_smoothing", #NaNF);
+
+        l0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: long getLong(java.lang.String,long)>("random_seed", 1234L);
+
+        $i4 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("num_topics", -1);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: int numTopics> = $i4;
+
+        i1 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("num_terms", -1);
+
+        i2 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("num_update_threads", 1);
+
+        i3 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("num_train_threads", 4);
+
+        $i5 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("max_doc_topic_iters", 10);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: int maxIters> = $i5;
+
+        f2 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: float getFloat(java.lang.String,float)>("prev_iter_mult", 1.0F);
+
+        $r5 = <org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r5.<org.slf4j.Logger: void info(java.lang.String)>("Initializing read model");
+
+        r3 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.fs.Path[] getModelPaths(org.apache.hadoop.conf.Configuration)>(r2);
+
+        if r3 == null goto label1;
+
+        $i9 = lengthof r3;
+
+        if $i9 <= 0 goto label1;
+
+        $r15 = new org.apache.mahout.clustering.lda.cvb.TopicModel;
+
+        $d8 = (double) f0;
+
+        $d7 = (double) f1;
+
+        $d6 = (double) f2;
+
+        specialinvoke $r15.<org.apache.mahout.clustering.lda.cvb.TopicModel: void <init>(org.apache.hadoop.conf.Configuration,double,double,java.lang.String[],int,double,org.apache.hadoop.fs.Path[])>(r2, $d8, $d7, null, i2, $d6, r3);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.apache.mahout.clustering.lda.cvb.TopicModel readModel> = $r15;
+
+        goto label2;
+
+     label1:
+        $r6 = <org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r6.<org.slf4j.Logger: void info(java.lang.String)>("No model files found");
+
+        $r7 = new org.apache.mahout.clustering.lda.cvb.TopicModel;
+
+        $i6 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: int numTopics>;
+
+        $d1 = (double) f0;
+
+        $d0 = (double) f1;
+
+        $r8 = staticinvoke <org.apache.mahout.common.RandomUtils: java.util.Random getRandom(long)>(l0);
+
+        $d2 = (double) f2;
+
+        specialinvoke $r7.<org.apache.mahout.clustering.lda.cvb.TopicModel: void <init>(int,int,double,double,java.util.Random,java.lang.String[],int,double)>($i6, i1, $d1, $d0, $r8, null, i3, $d2);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.apache.mahout.clustering.lda.cvb.TopicModel readModel> = $r7;
+
+     label2:
+        $r16 = <org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r16.<org.slf4j.Logger: void info(java.lang.String)>("Initializing write model");
+
+        $b10 = f2 cmpl 1.0F;
+
+        if $b10 != 0 goto label3;
+
+        $r17 = new org.apache.mahout.clustering.lda.cvb.TopicModel;
+
+        $i8 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: int numTopics>;
+
+        $d5 = (double) f0;
+
+        $d4 = (double) f1;
+
+        $d3 = (double) i2;
+
+        specialinvoke $r17.<org.apache.mahout.clustering.lda.cvb.TopicModel: void <init>(int,int,double,double,java.lang.String[],double)>($i8, i1, $d5, $d4, null, $d3);
+
+        goto label4;
+
+     label3:
+        $r17 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.apache.mahout.clustering.lda.cvb.TopicModel readModel>;
+
+     label4:
+        r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.apache.mahout.clustering.lda.cvb.TopicModel writeModel> = $r17;
+
+        $r9 = <org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r9.<org.slf4j.Logger: void info(java.lang.String)>("Initializing model trainer");
+
+        $r12 = new org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        $r11 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.apache.mahout.clustering.lda.cvb.TopicModel readModel>;
+
+        $r10 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.apache.mahout.clustering.lda.cvb.TopicModel writeModel>;
+
+        $i7 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: int numTopics>;
+
+        specialinvoke $r12.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void <init>(org.apache.mahout.clustering.lda.cvb.TopicModel,org.apache.mahout.clustering.lda.cvb.TopicModel,int,int,int)>($r11, $r10, i3, $i7, i1);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer> = $r12;
+
+        $r13 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer>;
+
+        virtualinvoke $r13.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void start()>();
+
+        return;
+    }
+
+    public void map(org.apache.hadoop.io.IntWritable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper r0;
+        org.apache.hadoop.io.IntWritable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.Vector r4, $r7;
+        org.apache.mahout.math.DenseVector $r5;
+        int $i0, $i1, $i2;
+        double $d0, $d1;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer $r6;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = new org.apache.mahout.math.DenseVector;
+
+        $i0 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: int numTopics>;
+
+        specialinvoke $r5.<org.apache.mahout.math.DenseVector: void <init>(int)>($i0);
+
+        $i1 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: int numTopics>;
+
+        $d0 = (double) $i1;
+
+        $d1 = 1.0 / $d0;
+
+        r4 = virtualinvoke $r5.<org.apache.mahout.math.DenseVector: org.apache.mahout.math.Vector assign(double)>($d1);
+
+        $r6 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer>;
+
+        $r7 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $i2 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: int maxIters>;
+
+        virtualinvoke $r6.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void train(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector,boolean,int)>($r7, r4, 1, $i2);
+
+        return;
+    }
+
+    protected void cleanup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.mahout.clustering.lda.cvb.TopicModel r2, $r9, $r10;
+        java.util.Iterator r3;
+        org.apache.mahout.math.MatrixSlice r4;
+        org.slf4j.Logger $r5, $r7;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer $r6, $r8;
+        boolean $z0;
+        java.lang.Object $r11;
+        org.apache.hadoop.io.IntWritable $r12;
+        org.apache.mahout.math.VectorWritable $r13;
+        int $i0;
+        org.apache.mahout.math.Vector $r14;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = <org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r5.<org.slf4j.Logger: void info(java.lang.String)>("Stopping model trainer");
+
+        $r6 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer>;
+
+        virtualinvoke $r6.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void stop()>();
+
+        $r7 = <org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r7.<org.slf4j.Logger: void info(java.lang.String)>("Writing model");
+
+        $r8 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer>;
+
+        r2 = virtualinvoke $r8.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel getReadModel()>();
+
+        r3 = virtualinvoke r2.<org.apache.mahout.clustering.lda.cvb.TopicModel: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r11 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.math.MatrixSlice) $r11;
+
+        $r12 = new org.apache.hadoop.io.IntWritable;
+
+        $i0 = virtualinvoke r4.<org.apache.mahout.math.MatrixSlice: int index()>();
+
+        specialinvoke $r12.<org.apache.hadoop.io.IntWritable: void <init>(int)>($i0);
+
+        $r13 = new org.apache.mahout.math.VectorWritable;
+
+        $r14 = virtualinvoke r4.<org.apache.mahout.math.MatrixSlice: org.apache.mahout.math.Vector vector()>();
+
+        specialinvoke $r13.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r14);
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r12, $r13);
+
+        goto label1;
+
+     label2:
+        $r9 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.apache.mahout.clustering.lda.cvb.TopicModel readModel>;
+
+        virtualinvoke $r9.<org.apache.mahout.clustering.lda.cvb.TopicModel: void stop()>();
+
+        $r10 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.apache.mahout.clustering.lda.cvb.TopicModel writeModel>;
+
+        virtualinvoke $r10.<org.apache.mahout.clustering.lda.cvb.TopicModel: void stop()>();
+
+        return;
+    }
+
+    public volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.IntWritable $r5;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.IntWritable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: void map(org.apache.hadoop.io.IntWritable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/clustering/lda/cvb/CachingCVB0Mapper");
+
+        <org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

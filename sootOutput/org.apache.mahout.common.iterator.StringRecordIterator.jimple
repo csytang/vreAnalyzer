@@ -1,0 +1,96 @@
+public class org.apache.mahout.common.iterator.StringRecordIterator extends com.google.common.collect.ForwardingIterator
+{
+    private static final java.lang.Long ONE;
+    private final java.util.regex.Pattern splitter;
+    private final java.util.Iterator delegate;
+
+    public void <init>(java.lang.Iterable, java.lang.String)
+    {
+        org.apache.mahout.common.iterator.StringRecordIterator r0;
+        java.lang.Iterable r1;
+        java.lang.String r2;
+        java.util.regex.Pattern $r3;
+        java.util.Iterator $r4, $r6;
+        org.apache.mahout.common.iterator.StringRecordIterator$1 $r5;
+
+        r0 := @this: org.apache.mahout.common.iterator.StringRecordIterator;
+
+        r1 := @parameter0: java.lang.Iterable;
+
+        r2 := @parameter1: java.lang.String;
+
+        specialinvoke r0.<com.google.common.collect.ForwardingIterator: void <init>()>();
+
+        $r3 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>(r2);
+
+        r0.<org.apache.mahout.common.iterator.StringRecordIterator: java.util.regex.Pattern splitter> = $r3;
+
+        $r4 = interfaceinvoke r1.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        $r5 = new org.apache.mahout.common.iterator.StringRecordIterator$1;
+
+        specialinvoke $r5.<org.apache.mahout.common.iterator.StringRecordIterator$1: void <init>(org.apache.mahout.common.iterator.StringRecordIterator)>(r0);
+
+        $r6 = staticinvoke <com.google.common.collect.Iterators: java.util.Iterator transform(java.util.Iterator,com.google.common.base.Function)>($r4, $r5);
+
+        r0.<org.apache.mahout.common.iterator.StringRecordIterator: java.util.Iterator delegate> = $r6;
+
+        return;
+    }
+
+    protected java.util.Iterator delegate()
+    {
+        org.apache.mahout.common.iterator.StringRecordIterator r0;
+        java.util.Iterator $r1;
+
+        r0 := @this: org.apache.mahout.common.iterator.StringRecordIterator;
+
+        $r1 = r0.<org.apache.mahout.common.iterator.StringRecordIterator: java.util.Iterator delegate>;
+
+        return $r1;
+    }
+
+    protected volatile java.lang.Object delegate()
+    {
+        org.apache.mahout.common.iterator.StringRecordIterator r0;
+        java.util.Iterator $r1;
+
+        r0 := @this: org.apache.mahout.common.iterator.StringRecordIterator;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.common.iterator.StringRecordIterator: java.util.Iterator delegate()>();
+
+        return $r1;
+    }
+
+    static java.util.regex.Pattern access$000(org.apache.mahout.common.iterator.StringRecordIterator)
+    {
+        org.apache.mahout.common.iterator.StringRecordIterator r0;
+        java.util.regex.Pattern $r1;
+
+        r0 := @parameter0: org.apache.mahout.common.iterator.StringRecordIterator;
+
+        $r1 = r0.<org.apache.mahout.common.iterator.StringRecordIterator: java.util.regex.Pattern splitter>;
+
+        return $r1;
+    }
+
+    static java.lang.Long access$100()
+    {
+        java.lang.Long $r0;
+
+        $r0 = <org.apache.mahout.common.iterator.StringRecordIterator: java.lang.Long ONE>;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.Long $r0;
+
+        $r0 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(1L);
+
+        <org.apache.mahout.common.iterator.StringRecordIterator: java.lang.Long ONE> = $r0;
+
+        return;
+    }
+}

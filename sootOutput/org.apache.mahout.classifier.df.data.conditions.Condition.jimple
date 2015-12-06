@@ -1,0 +1,67 @@
+public abstract class org.apache.mahout.classifier.df.data.conditions.Condition extends java.lang.Object
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.df.data.conditions.Condition r0;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.conditions.Condition;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public abstract boolean isTrueFor(org.apache.mahout.classifier.df.data.Instance);
+
+    public static org.apache.mahout.classifier.df.data.conditions.Condition equals(int, double)
+    {
+        int i0;
+        double d0;
+        org.apache.mahout.classifier.df.data.conditions.Equals $r0;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        $r0 = new org.apache.mahout.classifier.df.data.conditions.Equals;
+
+        specialinvoke $r0.<org.apache.mahout.classifier.df.data.conditions.Equals: void <init>(int,double)>(i0, d0);
+
+        return $r0;
+    }
+
+    public static org.apache.mahout.classifier.df.data.conditions.Condition lesser(int, double)
+    {
+        int i0;
+        double d0;
+        org.apache.mahout.classifier.df.data.conditions.Lesser $r0;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        $r0 = new org.apache.mahout.classifier.df.data.conditions.Lesser;
+
+        specialinvoke $r0.<org.apache.mahout.classifier.df.data.conditions.Lesser: void <init>(int,double)>(i0, d0);
+
+        return $r0;
+    }
+
+    public static org.apache.mahout.classifier.df.data.conditions.Condition greaterOrEquals(int, double)
+    {
+        int i0;
+        double d0;
+        org.apache.mahout.classifier.df.data.conditions.GreaterOrEquals $r0;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        $r0 = new org.apache.mahout.classifier.df.data.conditions.GreaterOrEquals;
+
+        specialinvoke $r0.<org.apache.mahout.classifier.df.data.conditions.GreaterOrEquals: void <init>(int,double)>(i0, d0);
+
+        return $r0;
+    }
+}

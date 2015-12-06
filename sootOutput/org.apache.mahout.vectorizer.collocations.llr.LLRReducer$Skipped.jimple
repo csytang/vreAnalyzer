@@ -1,0 +1,128 @@
+public final enum class org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped extends java.lang.Enum
+{
+    public static final enum org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped EXTRA_HEAD;
+    public static final enum org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped EXTRA_TAIL;
+    public static final enum org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped MISSING_HEAD;
+    public static final enum org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped MISSING_TAIL;
+    public static final enum org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped LESS_THAN_MIN_LLR;
+    public static final enum org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped LLR_CALCULATION_ERROR;
+    private static final org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped[] $VALUES;
+
+    public static org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped[] values()
+    {
+        org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped[] $r0, $r2;
+        java.lang.Object $r1;
+
+        $r0 = <org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped[] $VALUES>;
+
+        $r1 = virtualinvoke $r0.<java.lang.Object: java.lang.Object clone()>();
+
+        $r2 = (org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped[]) $r1;
+
+        return $r2;
+    }
+
+    public static org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped valueOf(java.lang.String)
+    {
+        java.lang.String r0;
+        java.lang.Enum $r1;
+        org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <java.lang.Enum: java.lang.Enum valueOf(java.lang.Class,java.lang.String)>(class "org/apache/mahout/vectorizer/collocations/llr/LLRReducer$Skipped", r0);
+
+        $r2 = (org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped) $r1;
+
+        return $r2;
+    }
+
+    private void <init>(java.lang.String, int)
+    {
+        org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped r0;
+        java.lang.String r1;
+        int i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Enum: void <init>(java.lang.String,int)>(r1, i0);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped $r0, $r1, $r2, $r3, $r4, $r5, $r7, $r8, $r9, $r10, $r11, $r12;
+        org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped[] $r6;
+
+        $r0 = new org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped;
+
+        specialinvoke $r0.<org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: void <init>(java.lang.String,int)>("EXTRA_HEAD", 0);
+
+        <org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped EXTRA_HEAD> = $r0;
+
+        $r1 = new org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped;
+
+        specialinvoke $r1.<org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: void <init>(java.lang.String,int)>("EXTRA_TAIL", 1);
+
+        <org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped EXTRA_TAIL> = $r1;
+
+        $r2 = new org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped;
+
+        specialinvoke $r2.<org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: void <init>(java.lang.String,int)>("MISSING_HEAD", 2);
+
+        <org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped MISSING_HEAD> = $r2;
+
+        $r3 = new org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped;
+
+        specialinvoke $r3.<org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: void <init>(java.lang.String,int)>("MISSING_TAIL", 3);
+
+        <org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped MISSING_TAIL> = $r3;
+
+        $r4 = new org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped;
+
+        specialinvoke $r4.<org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: void <init>(java.lang.String,int)>("LESS_THAN_MIN_LLR", 4);
+
+        <org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped LESS_THAN_MIN_LLR> = $r4;
+
+        $r5 = new org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped;
+
+        specialinvoke $r5.<org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: void <init>(java.lang.String,int)>("LLR_CALCULATION_ERROR", 5);
+
+        <org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped LLR_CALCULATION_ERROR> = $r5;
+
+        $r6 = newarray (org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped)[6];
+
+        $r7 = <org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped EXTRA_HEAD>;
+
+        $r6[0] = $r7;
+
+        $r8 = <org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped EXTRA_TAIL>;
+
+        $r6[1] = $r8;
+
+        $r9 = <org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped MISSING_HEAD>;
+
+        $r6[2] = $r9;
+
+        $r10 = <org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped MISSING_TAIL>;
+
+        $r6[3] = $r10;
+
+        $r11 = <org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped LESS_THAN_MIN_LLR>;
+
+        $r6[4] = $r11;
+
+        $r12 = <org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped LLR_CALCULATION_ERROR>;
+
+        $r6[5] = $r12;
+
+        <org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$Skipped[] $VALUES> = $r6;
+
+        return;
+    }
+}

@@ -1,0 +1,493 @@
+public final class org.apache.mahout.common.TimingStatistics extends java.lang.Object implements java.io.Serializable
+{
+    private static final java.text.DecimalFormat DF;
+    private int nCalls;
+    private long minTime;
+    private long maxTime;
+    private long sumTime;
+    private long leadSumTime;
+    private double sumSquaredTime;
+
+    public void <init>()
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+
+        r0 := @this: org.apache.mahout.common.TimingStatistics;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void <init>(int, long, long, long, double)
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        int i0;
+        long l1, l2, l3;
+        double d0;
+
+        r0 := @this: org.apache.mahout.common.TimingStatistics;
+
+        i0 := @parameter0: int;
+
+        l1 := @parameter1: long;
+
+        l2 := @parameter2: long;
+
+        l3 := @parameter3: long;
+
+        d0 := @parameter4: double;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.common.TimingStatistics: int nCalls> = i0;
+
+        r0.<org.apache.mahout.common.TimingStatistics: long minTime> = l1;
+
+        r0.<org.apache.mahout.common.TimingStatistics: long maxTime> = l2;
+
+        r0.<org.apache.mahout.common.TimingStatistics: long sumTime> = l3;
+
+        r0.<org.apache.mahout.common.TimingStatistics: double sumSquaredTime> = d0;
+
+        return;
+    }
+
+    public synchronized int getNCalls()
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.common.TimingStatistics;
+
+        $i0 = r0.<org.apache.mahout.common.TimingStatistics: int nCalls>;
+
+        return $i0;
+    }
+
+    public synchronized long getMinTime()
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        long $l0, $l1;
+
+        r0 := @this: org.apache.mahout.common.TimingStatistics;
+
+        $l0 = r0.<org.apache.mahout.common.TimingStatistics: long minTime>;
+
+        $l1 = staticinvoke <java.lang.Math: long max(long,long)>(0L, $l0);
+
+        return $l1;
+    }
+
+    public synchronized long getMaxTime()
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.common.TimingStatistics;
+
+        $l0 = r0.<org.apache.mahout.common.TimingStatistics: long maxTime>;
+
+        return $l0;
+    }
+
+    public synchronized long getSumTime()
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.common.TimingStatistics;
+
+        $l0 = r0.<org.apache.mahout.common.TimingStatistics: long sumTime>;
+
+        return $l0;
+    }
+
+    public synchronized double getSumSquaredTime()
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.common.TimingStatistics;
+
+        $d0 = r0.<org.apache.mahout.common.TimingStatistics: double sumSquaredTime>;
+
+        return $d0;
+    }
+
+    public synchronized long getMeanTime()
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        int $i0, $i1;
+        long $l2, $l3, $l4;
+
+        r0 := @this: org.apache.mahout.common.TimingStatistics;
+
+        $i0 = r0.<org.apache.mahout.common.TimingStatistics: int nCalls>;
+
+        if $i0 != 0 goto label1;
+
+        $l4 = 0L;
+
+        goto label2;
+
+     label1:
+        $l3 = r0.<org.apache.mahout.common.TimingStatistics: long sumTime>;
+
+        $i1 = r0.<org.apache.mahout.common.TimingStatistics: int nCalls>;
+
+        $l2 = (long) $i1;
+
+        $l4 = $l3 / $l2;
+
+     label2:
+        return $l4;
+    }
+
+    public synchronized long getStdDevTime()
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        double d0, d1, d2, d3, $d4, $d5, $d6;
+        int $i0, $i2;
+        long $l1, $l4;
+        byte $b3;
+
+        r0 := @this: org.apache.mahout.common.TimingStatistics;
+
+        $i0 = r0.<org.apache.mahout.common.TimingStatistics: int nCalls>;
+
+        if $i0 != 0 goto label1;
+
+        return 0L;
+
+     label1:
+        $l1 = virtualinvoke r0.<org.apache.mahout.common.TimingStatistics: long getMeanTime()>();
+
+        d0 = (double) $l1;
+
+        d1 = d0 * d0;
+
+        $d5 = r0.<org.apache.mahout.common.TimingStatistics: double sumSquaredTime>;
+
+        $i2 = r0.<org.apache.mahout.common.TimingStatistics: int nCalls>;
+
+        $d4 = (double) $i2;
+
+        d2 = $d5 / $d4;
+
+        d3 = d2 - d1;
+
+        $b3 = d3 cmpg 0.0;
+
+        if $b3 >= 0 goto label2;
+
+        return 0L;
+
+     label2:
+        $d6 = staticinvoke <java.lang.Math: double sqrt(double)>(d3);
+
+        $l4 = (long) $d6;
+
+        return $l4;
+    }
+
+    public synchronized java.lang.String toString()
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        java.lang.StringBuilder $r1, $r2, $r3, $r4, $r5, $r8, $r9, $r10, $r13, $r14, $r15, $r18, $r19, $r21, $r23, $r25, $r26, $r29, $r30;
+        int $i0;
+        long $l1, $l2, $l3, $l4, $l5;
+        double $d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9;
+        java.text.DecimalFormat $r6, $r12, $r17, $r20, $r24;
+        java.lang.String $r7, $r11, $r16, $r22, $r27, $r28;
+
+        r0 := @this: org.apache.mahout.common.TimingStatistics;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\nnCalls = ");
+
+        $i0 = r0.<org.apache.mahout.common.TimingStatistics: int nCalls>;
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(";\n");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("sum    = ");
+
+        $r6 = <org.apache.mahout.common.TimingStatistics: java.text.DecimalFormat DF>;
+
+        $l1 = r0.<org.apache.mahout.common.TimingStatistics: long sumTime>;
+
+        $d0 = (double) $l1;
+
+        $d1 = $d0 / 1.0E9;
+
+        $r7 = virtualinvoke $r6.<java.text.DecimalFormat: java.lang.String format(double)>($d1);
+
+        $r8 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("s;\n");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("min    = ");
+
+        $r12 = <org.apache.mahout.common.TimingStatistics: java.text.DecimalFormat DF>;
+
+        $l2 = r0.<org.apache.mahout.common.TimingStatistics: long minTime>;
+
+        $d3 = (double) $l2;
+
+        $d2 = $d3 / 1000000.0;
+
+        $r11 = virtualinvoke $r12.<java.text.DecimalFormat: java.lang.String format(double)>($d2);
+
+        $r14 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        $r13 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("ms;\n");
+
+        $r15 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("max    = ");
+
+        $r17 = <org.apache.mahout.common.TimingStatistics: java.text.DecimalFormat DF>;
+
+        $l3 = r0.<org.apache.mahout.common.TimingStatistics: long maxTime>;
+
+        $d5 = (double) $l3;
+
+        $d4 = $d5 / 1000000.0;
+
+        $r16 = virtualinvoke $r17.<java.text.DecimalFormat: java.lang.String format(double)>($d4);
+
+        $r19 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r16);
+
+        $r18 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("ms;\n");
+
+        $r21 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("mean   = ");
+
+        $r20 = <org.apache.mahout.common.TimingStatistics: java.text.DecimalFormat DF>;
+
+        $l4 = virtualinvoke r0.<org.apache.mahout.common.TimingStatistics: long getMeanTime()>();
+
+        $d7 = (double) $l4;
+
+        $d6 = $d7 / 1000.0;
+
+        $r22 = virtualinvoke $r20.<java.text.DecimalFormat: java.lang.String format(double)>($d6);
+
+        $r25 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r22);
+
+        $r26 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("us;\n");
+
+        $r23 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("stdDev = ");
+
+        $r24 = <org.apache.mahout.common.TimingStatistics: java.text.DecimalFormat DF>;
+
+        $l5 = virtualinvoke r0.<org.apache.mahout.common.TimingStatistics: long getStdDevTime()>();
+
+        $d9 = (double) $l5;
+
+        $d8 = $d9 / 1000.0;
+
+        $r27 = virtualinvoke $r24.<java.text.DecimalFormat: java.lang.String format(double)>($d8);
+
+        $r29 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r27);
+
+        $r30 = virtualinvoke $r29.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("us;");
+
+        $r28 = virtualinvoke $r30.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r28;
+    }
+
+    public org.apache.mahout.common.TimingStatistics$Call newCall(long)
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        long l0, $l1;
+        byte $b2;
+        org.apache.mahout.common.TimingStatistics$LeadTimeCall $r1;
+        org.apache.mahout.common.TimingStatistics$Call $r2;
+
+        r0 := @this: org.apache.mahout.common.TimingStatistics;
+
+        l0 := @parameter0: long;
+
+        $l1 = r0.<org.apache.mahout.common.TimingStatistics: long leadSumTime>;
+
+        $b2 = $l1 cmp l0;
+
+        if $b2 <= 0 goto label1;
+
+        $r2 = new org.apache.mahout.common.TimingStatistics$Call;
+
+        specialinvoke $r2.<org.apache.mahout.common.TimingStatistics$Call: void <init>(org.apache.mahout.common.TimingStatistics,org.apache.mahout.common.TimingStatistics$1)>(r0, null);
+
+        return $r2;
+
+     label1:
+        $r1 = new org.apache.mahout.common.TimingStatistics$LeadTimeCall;
+
+        specialinvoke $r1.<org.apache.mahout.common.TimingStatistics$LeadTimeCall: void <init>(org.apache.mahout.common.TimingStatistics,org.apache.mahout.common.TimingStatistics$1)>(r0, null);
+
+        return $r1;
+    }
+
+    static long access$214(org.apache.mahout.common.TimingStatistics, long)
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        long l0, $l1, $l2;
+
+        r0 := @parameter0: org.apache.mahout.common.TimingStatistics;
+
+        l0 := @parameter1: long;
+
+        $l1 = r0.<org.apache.mahout.common.TimingStatistics: long leadSumTime>;
+
+        $l2 = $l1 + l0;
+
+        r0.<org.apache.mahout.common.TimingStatistics: long leadSumTime> = $l2;
+
+        return $l2;
+    }
+
+    static int access$308(org.apache.mahout.common.TimingStatistics)
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        int $i0, $i1;
+
+        r0 := @parameter0: org.apache.mahout.common.TimingStatistics;
+
+        $i0 = r0.<org.apache.mahout.common.TimingStatistics: int nCalls>;
+
+        $i1 = $i0 + 1;
+
+        r0.<org.apache.mahout.common.TimingStatistics: int nCalls> = $i1;
+
+        return $i0;
+    }
+
+    static long access$400(org.apache.mahout.common.TimingStatistics)
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        long $l0;
+
+        r0 := @parameter0: org.apache.mahout.common.TimingStatistics;
+
+        $l0 = r0.<org.apache.mahout.common.TimingStatistics: long minTime>;
+
+        return $l0;
+    }
+
+    static int access$300(org.apache.mahout.common.TimingStatistics)
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        int $i0;
+
+        r0 := @parameter0: org.apache.mahout.common.TimingStatistics;
+
+        $i0 = r0.<org.apache.mahout.common.TimingStatistics: int nCalls>;
+
+        return $i0;
+    }
+
+    static long access$402(org.apache.mahout.common.TimingStatistics, long)
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        long l0;
+
+        r0 := @parameter0: org.apache.mahout.common.TimingStatistics;
+
+        l0 := @parameter1: long;
+
+        r0.<org.apache.mahout.common.TimingStatistics: long minTime> = l0;
+
+        return l0;
+    }
+
+    static long access$500(org.apache.mahout.common.TimingStatistics)
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        long $l0;
+
+        r0 := @parameter0: org.apache.mahout.common.TimingStatistics;
+
+        $l0 = r0.<org.apache.mahout.common.TimingStatistics: long maxTime>;
+
+        return $l0;
+    }
+
+    static long access$502(org.apache.mahout.common.TimingStatistics, long)
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        long l0;
+
+        r0 := @parameter0: org.apache.mahout.common.TimingStatistics;
+
+        l0 := @parameter1: long;
+
+        r0.<org.apache.mahout.common.TimingStatistics: long maxTime> = l0;
+
+        return l0;
+    }
+
+    static long access$614(org.apache.mahout.common.TimingStatistics, long)
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        long l0, $l1, $l2;
+
+        r0 := @parameter0: org.apache.mahout.common.TimingStatistics;
+
+        l0 := @parameter1: long;
+
+        $l1 = r0.<org.apache.mahout.common.TimingStatistics: long sumTime>;
+
+        $l2 = $l1 + l0;
+
+        r0.<org.apache.mahout.common.TimingStatistics: long sumTime> = $l2;
+
+        return $l2;
+    }
+
+    static double access$718(org.apache.mahout.common.TimingStatistics, double)
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        double d0, $d1, $d2;
+
+        r0 := @parameter0: org.apache.mahout.common.TimingStatistics;
+
+        d0 := @parameter1: double;
+
+        $d1 = r0.<org.apache.mahout.common.TimingStatistics: double sumSquaredTime>;
+
+        $d2 = $d1 + d0;
+
+        r0.<org.apache.mahout.common.TimingStatistics: double sumSquaredTime> = $d2;
+
+        return $d2;
+    }
+
+    static long access$600(org.apache.mahout.common.TimingStatistics)
+    {
+        org.apache.mahout.common.TimingStatistics r0;
+        long $l0;
+
+        r0 := @parameter0: org.apache.mahout.common.TimingStatistics;
+
+        $l0 = r0.<org.apache.mahout.common.TimingStatistics: long sumTime>;
+
+        return $l0;
+    }
+
+    static void <clinit>()
+    {
+        java.text.DecimalFormat $r0;
+
+        $r0 = new java.text.DecimalFormat;
+
+        specialinvoke $r0.<java.text.DecimalFormat: void <init>(java.lang.String)>("#.##");
+
+        <org.apache.mahout.common.TimingStatistics: java.text.DecimalFormat DF> = $r0;
+
+        return;
+    }
+}

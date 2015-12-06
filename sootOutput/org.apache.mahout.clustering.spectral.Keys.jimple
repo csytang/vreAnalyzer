@@ -1,0 +1,25 @@
+public class org.apache.mahout.clustering.spectral.Keys extends java.lang.Object
+{
+    public static final int DIAGONAL_CACHE_INDEX;
+    public static final java.lang.String AFFINITY_DIMENSIONS;
+
+    private void <init>()
+    {
+        org.apache.mahout.clustering.spectral.Keys r0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.Keys;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.clustering.spectral.Keys: java.lang.String AFFINITY_DIMENSIONS> = "org.apache.mahout.clustering.spectral.common.affinitydimensions";
+
+        <org.apache.mahout.clustering.spectral.Keys: int DIAGONAL_CACHE_INDEX> = 1;
+
+        return;
+    }
+}

@@ -27,7 +27,6 @@ public class Variant {
 	private Map<CallSite,List<Value>> callSiteToBindingValue = new HashMap<CallSite,List<Value>>();
 	private List<CallSite> callsiteList = new LinkedList<CallSite>();
 	
-	
 	private String codeRange = "";
 	private boolean verbose = true;
 	int id = 0;
@@ -223,7 +222,6 @@ public class Variant {
     	}
     }
   
-    ////////////////////////////////////////////////////////
  	public List<Stmt> getBindingStmts(CallSite callsite) {
 		if(callsite==null){
 			return this.bindingStmts; 
@@ -404,6 +402,7 @@ public class Variant {
 		blockIdsInArray = blockidArray;
 		return blockidArray;
 	}
+	
 	public Set<Integer> getBlockIdsInSet() {
 		if(blockIdsInArray.length==0){
 			getBlockIdsInArray();
@@ -435,21 +434,18 @@ public class Variant {
 		/*
 		 * 对于这个block中 包含的 进行处理
 		 */
-		
 		Set<Stmt>remainstmts = new HashSet<Stmt>();
 		remainstmts.addAll(allstmts);
 		for(CFGNode node:blocknodes){
 			Stmt stmt = node.getStmt();
 			if(remainstmts.contains(stmt))
 				remainstmts.remove(stmt);
-		}
-		
+		}		
 		return remainstmts;
 	}
 	
 	// 获得这个Variant所涉及的所有函数
 	public List<SootMethod> getAllCalleeMethods() {
-		
 		Set<SootMethod> methodset = new HashSet<SootMethod>();
 		if(callsiteList==null) {
 			callsiteList = new LinkedList<CallSite>(callSiteToBindingStmt.keySet());
@@ -482,65 +478,6 @@ public class Variant {
 		return allclasses;
 	}
 	
-	
-	// 获得Variant的分隔符号
-	/*
- 	public String getSeperatorValues() {
-		
-		// 返回一个字符串 这个字符串中
-		String seperatorValueString = "";
-		seperatorValueString += "[";
-		
-		// 1. 加入在caller中的value
-		if(!callerinitConditionalValues.isEmpty()){
-			seperatorValueString += "(caller@";
-			seperatorValueString += callerMethod.getName();
-			seperatorValueString += "_";
-		}
-		
-		for(Value value:callerinitConditionalValues){
-			seperatorValueString += value;
-			seperatorValueString += ":";
-		}
-		
-		if(!callerinitConditionalValues.isEmpty()){
-			seperatorValueString = seperatorValueString.substring(0,seperatorValueString.length()-1);
-			seperatorValueString += ")";
-		}
-		
-		
-		// 遍历所有的callsite
-		if(callsiteList==null)
-			callsiteList = new LinkedList<CallSite>(callSiteToBindingStmt.keySet());
-		
-		boolean isFirst = true;// 是否为第一个callee
-		for(CallSite site:callsiteList){
-			Set<Value> calleeValues = calleeinitConditionalValues.get(site);
-			
-			// 加入method
-			if(calleeValues==null)
-				continue;
-			if(isFirst){
-				isFirst = false;
-				seperatorValueString += "(callee@";
-			}
-			for(Value calleeValue:calleeValues){
-				seperatorValueString += calleeValue;
-				seperatorValueString += ":";
-			}
-			if(!calleeValues.isEmpty()){
-				seperatorValueString = seperatorValueString.substring(0,seperatorValueString.length()-1);
-			}
-			seperatorValueString += ")";
-		}
-		if(!callsiteList.isEmpty() && !isFirst){
-			seperatorValueString = seperatorValueString.substring(0,seperatorValueString.length()-1);
-		}
-		
-		seperatorValueString += "]";
-		return seperatorValueString;
-		
-	}*/
 
 	public String getCodeRangeforVariant() {
 		

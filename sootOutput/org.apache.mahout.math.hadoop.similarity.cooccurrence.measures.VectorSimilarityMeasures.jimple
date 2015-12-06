@@ -1,0 +1,172 @@
+public final enum class org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures extends java.lang.Enum
+{
+    public static final enum org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_COOCCURRENCE;
+    public static final enum org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_LOGLIKELIHOOD;
+    public static final enum org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_TANIMOTO_COEFFICIENT;
+    public static final enum org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_CITY_BLOCK;
+    public static final enum org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_COSINE;
+    public static final enum org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_PEARSON_CORRELATION;
+    public static final enum org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_EUCLIDEAN_DISTANCE;
+    private final java.lang.Class implementingClass;
+    private static final org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures[] $VALUES;
+
+    public static org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures[] values()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures[] $r0, $r2;
+        java.lang.Object $r1;
+
+        $r0 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures[] $VALUES>;
+
+        $r1 = virtualinvoke $r0.<java.lang.Object: java.lang.Object clone()>();
+
+        $r2 = (org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures[]) $r1;
+
+        return $r2;
+    }
+
+    public static org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures valueOf(java.lang.String)
+    {
+        java.lang.String r0;
+        java.lang.Enum $r1;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <java.lang.Enum: java.lang.Enum valueOf(java.lang.Class,java.lang.String)>(class "org/apache/mahout/math/hadoop/similarity/cooccurrence/measures/VectorSimilarityMeasures", r0);
+
+        $r2 = (org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures) $r1;
+
+        return $r2;
+    }
+
+    private void <init>(java.lang.String, int, java.lang.Class)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures r0;
+        java.lang.String r1;
+        int i0;
+        java.lang.Class r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: java.lang.Class;
+
+        specialinvoke r0.<java.lang.Enum: void <init>(java.lang.String,int)>(r1, i0);
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: java.lang.Class implementingClass> = r2;
+
+        return;
+    }
+
+    public java.lang.String getClassname()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures r0;
+        java.lang.Class $r1;
+        java.lang.String $r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: java.lang.Class implementingClass>;
+
+        $r2 = virtualinvoke $r1.<java.lang.Class: java.lang.String getName()>();
+
+        return $r2;
+    }
+
+    public static java.lang.String list()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures[] $r0;
+        java.lang.String $r1;
+
+        $r0 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures[] values()>();
+
+        $r1 = staticinvoke <java.util.Arrays: java.lang.String toString(java.lang.Object[])>($r0);
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures $r0, $r1, $r2, $r3, $r4, $r5, $r6, $r8, $r9, $r10, $r11, $r12, $r13, $r14;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures[] $r7;
+
+        $r0 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures;
+
+        specialinvoke $r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: void <init>(java.lang.String,int,java.lang.Class)>("SIMILARITY_COOCCURRENCE", 0, class "org/apache/mahout/math/hadoop/similarity/cooccurrence/measures/CooccurrenceCountSimilarity");
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_COOCCURRENCE> = $r0;
+
+        $r1 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures;
+
+        specialinvoke $r1.<org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: void <init>(java.lang.String,int,java.lang.Class)>("SIMILARITY_LOGLIKELIHOOD", 1, class "org/apache/mahout/math/hadoop/similarity/cooccurrence/measures/LoglikelihoodSimilarity");
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_LOGLIKELIHOOD> = $r1;
+
+        $r2 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures;
+
+        specialinvoke $r2.<org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: void <init>(java.lang.String,int,java.lang.Class)>("SIMILARITY_TANIMOTO_COEFFICIENT", 2, class "org/apache/mahout/math/hadoop/similarity/cooccurrence/measures/TanimotoCoefficientSimilarity");
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_TANIMOTO_COEFFICIENT> = $r2;
+
+        $r3 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures;
+
+        specialinvoke $r3.<org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: void <init>(java.lang.String,int,java.lang.Class)>("SIMILARITY_CITY_BLOCK", 3, class "org/apache/mahout/math/hadoop/similarity/cooccurrence/measures/CityBlockSimilarity");
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_CITY_BLOCK> = $r3;
+
+        $r4 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures;
+
+        specialinvoke $r4.<org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: void <init>(java.lang.String,int,java.lang.Class)>("SIMILARITY_COSINE", 4, class "org/apache/mahout/math/hadoop/similarity/cooccurrence/measures/CosineSimilarity");
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_COSINE> = $r4;
+
+        $r5 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures;
+
+        specialinvoke $r5.<org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: void <init>(java.lang.String,int,java.lang.Class)>("SIMILARITY_PEARSON_CORRELATION", 5, class "org/apache/mahout/math/hadoop/similarity/cooccurrence/measures/PearsonCorrelationSimilarity");
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_PEARSON_CORRELATION> = $r5;
+
+        $r6 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures;
+
+        specialinvoke $r6.<org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: void <init>(java.lang.String,int,java.lang.Class)>("SIMILARITY_EUCLIDEAN_DISTANCE", 6, class "org/apache/mahout/math/hadoop/similarity/cooccurrence/measures/EuclideanDistanceSimilarity");
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_EUCLIDEAN_DISTANCE> = $r6;
+
+        $r7 = newarray (org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures)[7];
+
+        $r8 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_COOCCURRENCE>;
+
+        $r7[0] = $r8;
+
+        $r9 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_LOGLIKELIHOOD>;
+
+        $r7[1] = $r9;
+
+        $r10 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_TANIMOTO_COEFFICIENT>;
+
+        $r7[2] = $r10;
+
+        $r11 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_CITY_BLOCK>;
+
+        $r7[3] = $r11;
+
+        $r12 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_COSINE>;
+
+        $r7[4] = $r12;
+
+        $r13 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_PEARSON_CORRELATION>;
+
+        $r7[5] = $r13;
+
+        $r14 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures SIMILARITY_EUCLIDEAN_DISTANCE>;
+
+        $r7[6] = $r14;
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures[] $VALUES> = $r7;
+
+        return;
+    }
+}

@@ -1,0 +1,35 @@
+public class org.apache.mahout.cf.taste.impl.recommender.svd.NoPersistenceStrategy extends java.lang.Object implements org.apache.mahout.cf.taste.impl.recommender.svd.PersistenceStrategy
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.NoPersistenceStrategy r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.NoPersistenceStrategy;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.mahout.cf.taste.impl.recommender.svd.Factorization load() throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.NoPersistenceStrategy r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.NoPersistenceStrategy;
+
+        return null;
+    }
+
+    public void maybePersist(org.apache.mahout.cf.taste.impl.recommender.svd.Factorization) throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.NoPersistenceStrategy r0;
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.NoPersistenceStrategy;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        return;
+    }
+}

@@ -1,0 +1,47 @@
+public class org.apache.mahout.common.parameters.DoubleParameter extends org.apache.mahout.common.parameters.AbstractParameter
+{
+
+    public void <init>(java.lang.String, java.lang.String, org.apache.hadoop.conf.Configuration, double, java.lang.String)
+    {
+        org.apache.mahout.common.parameters.DoubleParameter r0;
+        java.lang.String r1, r2, r4;
+        org.apache.hadoop.conf.Configuration r3;
+        double d0;
+        java.lang.Double $r5;
+
+        r0 := @this: org.apache.mahout.common.parameters.DoubleParameter;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.lang.String;
+
+        r3 := @parameter2: org.apache.hadoop.conf.Configuration;
+
+        d0 := @parameter3: double;
+
+        r4 := @parameter4: java.lang.String;
+
+        $r5 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d0);
+
+        specialinvoke r0.<org.apache.mahout.common.parameters.AbstractParameter: void <init>(java.lang.Class,java.lang.String,java.lang.String,org.apache.hadoop.conf.Configuration,java.lang.Object,java.lang.String)>(class "java/lang/Double", r1, r2, r3, $r5, r4);
+
+        return;
+    }
+
+    public void setStringValue(java.lang.String)
+    {
+        org.apache.mahout.common.parameters.DoubleParameter r0;
+        java.lang.String r1;
+        java.lang.Double $r2;
+
+        r0 := @this: org.apache.mahout.common.parameters.DoubleParameter;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = staticinvoke <java.lang.Double: java.lang.Double valueOf(java.lang.String)>(r1);
+
+        virtualinvoke r0.<org.apache.mahout.common.parameters.DoubleParameter: void set(java.lang.Object)>($r2);
+
+        return;
+    }
+}

@@ -49,6 +49,7 @@ public class HTMLAnnotation {
 			String startjavaString = htmlToJava.get(startlinecontent + "<br>");
 			String substartjavaString = startjavaString.substring(startcolumn-1, startjavaString.length());
 			String starthtmlreverse = Text2HTML.txtToHtml(substartjavaString);
+			
 			if(starthtmlreverse.endsWith("<br>")){
 				starthtmlreverse = starthtmlreverse.substring(0, starthtmlreverse.length()-"<br>".length());
 			}
@@ -173,11 +174,7 @@ public class HTMLAnnotation {
 	public static void annotatemultipleLineHTML_Feature(String hovertext,File htmlFile,int[][] position,Color annotatedColor,Map<String,String> htmlToJava){
 		try {
 			annotateColor = annotatedColor;
-			String hex = Integer.toHexString(annotateColor.getRGB() & 0xffffff);
-			if (hex.length() < 6) {
-			    hex = "0" + hex;
-			}
-			hex = "#" + hex;
+			String hex = String.format("#%02x%02x%02x", annotateColor.getRed(), annotateColor.getGreen(), annotateColor.getBlue());
 			FileReader htmlReader = new FileReader(htmlFile);
 			
 			BufferedReader brhtml = new BufferedReader(htmlReader);
@@ -263,11 +260,7 @@ public class HTMLAnnotation {
 	public static void annotatemultipleLineHTML_Feature(String hovertext,File htmlFile,int[] lines,Color annotatedColor,Map<String,String> htmlToJava){
 		try {
 			annotateColor = annotatedColor;
-			String hex = Integer.toHexString(annotateColor.getRGB() & 0xffffff);
-			if (hex.length() < 6) {
-			    hex = "0" + hex;
-			}
-			hex = "#" + hex;
+			String hex = String.format("#%02x%02x%02x", annotateColor.getRed(), annotateColor.getGreen(), annotateColor.getBlue());
 			FileReader htmlReader = new FileReader(htmlFile);
 			BufferedReader brhtml = new BufferedReader(htmlReader);
 			String allhtmlcontent = "";
@@ -365,12 +358,8 @@ public class HTMLAnnotation {
 					Set<JobVariable>currjobs = new HashSet<JobVariable>();		
 					currjobs.addAll(jbvars);
 					currjobs.add(currJob);
-					Color mergedColor = ColorMap.inst().getCombinedColor(currjobs);
-					String hex = Integer.toHexString(mergedColor.getRGB() & 0xffffff);
-					if (hex.length() < 6) {
-					    hex = "0" + hex;
-					}
-					hex = "#" + hex;
+					Color mergedColor = ColorMap.inst().getCombinedColor(currjobs);					
+					String hex = String.format("#%02x%02x%02x", mergedColor.getRed(), mergedColor.getGreen(), mergedColor.getBlue());
 					// add this mapping to the set
 					ColorMap.inst().addHexColorToJob(hex, currjobs);
 					merged = new StringBuilder(merged).replace(orcolorindex, orcolorendindex, hex).toString();
@@ -388,11 +377,7 @@ public class HTMLAnnotation {
 		try {
 			currVar = variant;
 			annotateColor = annotatedColor;
-			String hex = Integer.toHexString(annotateColor.getRGB() & 0xffffff);
-			if (hex.length() < 6) {
-			    hex = "0" + hex;
-			}
-			hex = "#" + hex;
+			String hex = String.format("#%02x%02x%02x", annotateColor.getRed(), annotateColor.getGreen(), annotateColor.getBlue());
 			FileReader htmlReader = new FileReader(htmlFile);
 			
 			BufferedReader brhtml = new BufferedReader(htmlReader);
@@ -490,12 +475,7 @@ public class HTMLAnnotation {
 			annotateColor = annotatedColor;
 			
 			// 颜色的十六进制字符串表示
-			String hex = Integer.toHexString(annotateColor.getRGB() & 0xffffff);
-			
-			if (hex.length() < 6) {
-			    hex = "0" + hex;
-			}
-			hex = "#" + hex;
+			String hex = String.format("#%02x%02x%02x", annotateColor.getRed(), annotateColor.getGreen(), annotateColor.getBlue());
 			
 			// Variant对应的HTML
 			FileReader htmlReader = new FileReader (htmlFile);
@@ -628,11 +608,7 @@ public class HTMLAnnotation {
 	 */
 	public static void annotatemultipleLinesingleColor(File htmlFile,int[] lines,Color annotatedColor,Map<String,String> htmlToJava){
 		annotateColor = annotatedColor;
-		String hex = Integer.toHexString(annotateColor.getRGB() & 0xffffff);
-		if (hex.length() < 6) {
-		    hex = "0" + hex;
-		}
-		hex = "#" + hex;
+		String hex = String.format("#%02x%02x%02x", annotateColor.getRed(), annotateColor.getGreen(), annotateColor.getBlue());
 		FileReader htmlReader;
 		try {
 			htmlReader = new FileReader(htmlFile);

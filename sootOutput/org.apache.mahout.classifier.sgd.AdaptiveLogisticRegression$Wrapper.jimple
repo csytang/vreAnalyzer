@@ -1,0 +1,313 @@
+public class org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper extends java.lang.Object implements org.apache.mahout.ep.Payload
+{
+    private org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped;
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper r0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void <init>(int, int, org.apache.mahout.classifier.sgd.PriorFunction)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper r0;
+        int i0, i1;
+        org.apache.mahout.classifier.sgd.PriorFunction r1;
+        org.apache.mahout.classifier.sgd.CrossFoldLearner $r2;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        r1 := @parameter2: org.apache.mahout.classifier.sgd.PriorFunction;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new org.apache.mahout.classifier.sgd.CrossFoldLearner;
+
+        specialinvoke $r2.<org.apache.mahout.classifier.sgd.CrossFoldLearner: void <init>(int,int,int,org.apache.mahout.classifier.sgd.PriorFunction)>(5, i0, i1, r1);
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped> = $r2;
+
+        return;
+    }
+
+    public org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper copy()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper r0, $r2;
+        org.apache.mahout.classifier.sgd.CrossFoldLearner $r3, $r4;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper;
+
+        $r2 = new org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper;
+
+        specialinvoke $r2.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: void <init>()>();
+
+        $r3 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped>;
+
+        $r4 = virtualinvoke $r3.<org.apache.mahout.classifier.sgd.CrossFoldLearner: org.apache.mahout.classifier.sgd.CrossFoldLearner copy()>();
+
+        $r2.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped> = $r4;
+
+        return $r2;
+    }
+
+    public void update(double[])
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper r0;
+        double[] r1;
+        double $d0, $d1;
+        org.apache.mahout.classifier.sgd.CrossFoldLearner $r2, $r4, $r6, $r8, $r10;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper;
+
+        r1 := @parameter0: double[];
+
+        $r2 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped>;
+
+        $d0 = r1[0];
+
+        virtualinvoke $r2.<org.apache.mahout.classifier.sgd.CrossFoldLearner: org.apache.mahout.classifier.sgd.CrossFoldLearner lambda(double)>($d0);
+
+        $r4 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped>;
+
+        $d1 = r1[1];
+
+        virtualinvoke $r4.<org.apache.mahout.classifier.sgd.CrossFoldLearner: org.apache.mahout.classifier.sgd.CrossFoldLearner learningRate(double)>($d1);
+
+        $r6 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped>;
+
+        virtualinvoke $r6.<org.apache.mahout.classifier.sgd.CrossFoldLearner: org.apache.mahout.classifier.sgd.CrossFoldLearner stepOffset(int)>(1);
+
+        $r8 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped>;
+
+        virtualinvoke $r8.<org.apache.mahout.classifier.sgd.CrossFoldLearner: org.apache.mahout.classifier.sgd.CrossFoldLearner alpha(double)>(1.0);
+
+        $r10 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped>;
+
+        virtualinvoke $r10.<org.apache.mahout.classifier.sgd.CrossFoldLearner: org.apache.mahout.classifier.sgd.CrossFoldLearner decayExponent(double)>(0.0);
+
+        return;
+    }
+
+    public static void freeze(org.apache.mahout.ep.State)
+    {
+        org.apache.mahout.ep.State r0;
+        double[] r1, r2;
+        double $d0, $d1, $d2, $d3, $d4, $d5;
+        int $i0, i1;
+
+        r0 := @parameter0: org.apache.mahout.ep.State;
+
+        r1 = virtualinvoke r0.<org.apache.mahout.ep.State: double[] getParams()>();
+
+        $d0 = r1[1];
+
+        $d1 = $d0 - 10.0;
+
+        r1[1] = $d1;
+
+        $d2 = virtualinvoke r0.<org.apache.mahout.ep.State: double getOmni()>();
+
+        $d3 = $d2 / 20.0;
+
+        virtualinvoke r0.<org.apache.mahout.ep.State: void setOmni(double)>($d3);
+
+        r2 = virtualinvoke r0.<org.apache.mahout.ep.State: double[] getStep()>();
+
+        i1 = 0;
+
+     label1:
+        $i0 = lengthof r2;
+
+        if i1 >= $i0 goto label2;
+
+        $d4 = r2[i1];
+
+        $d5 = $d4 / 20.0;
+
+        r2[i1] = $d5;
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public static void setMappings(org.apache.mahout.ep.State)
+    {
+        org.apache.mahout.ep.State r0;
+        org.apache.mahout.ep.Mapping $r1, $r2;
+
+        r0 := @parameter0: org.apache.mahout.ep.State;
+
+        $r1 = staticinvoke <org.apache.mahout.ep.Mapping: org.apache.mahout.ep.Mapping logLimit(double,double)>(1.0E-8, 0.1);
+
+        virtualinvoke r0.<org.apache.mahout.ep.State: void setMap(int,org.apache.mahout.ep.Mapping)>(0, $r1);
+
+        $r2 = staticinvoke <org.apache.mahout.ep.Mapping: org.apache.mahout.ep.Mapping logLimit(double,double)>(1.0E-8, 1.0);
+
+        virtualinvoke r0.<org.apache.mahout.ep.State: void setMap(int,org.apache.mahout.ep.Mapping)>(1, $r2);
+
+        return;
+    }
+
+    public void train(org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper r0;
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample r1;
+        org.apache.mahout.classifier.sgd.CrossFoldLearner $r2;
+        long $l0;
+        java.lang.String $r3;
+        int $i1;
+        org.apache.mahout.math.Vector $r4;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper;
+
+        r1 := @parameter0: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample;
+
+        $r2 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped>;
+
+        $l0 = virtualinvoke r1.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: long getKey()>();
+
+        $r3 = virtualinvoke r1.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: java.lang.String getGroupKey()>();
+
+        $i1 = virtualinvoke r1.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: int getActual()>();
+
+        $r4 = virtualinvoke r1.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: org.apache.mahout.math.Vector getInstance()>();
+
+        virtualinvoke $r2.<org.apache.mahout.classifier.sgd.CrossFoldLearner: void train(long,java.lang.String,int,org.apache.mahout.math.Vector)>($l0, $r3, $i1, $r4);
+
+        return;
+    }
+
+    public org.apache.mahout.classifier.sgd.CrossFoldLearner getLearner()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper r0;
+        org.apache.mahout.classifier.sgd.CrossFoldLearner $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped>;
+
+        return $r1;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper r0;
+        java.lang.Object[] $r1;
+        org.apache.mahout.classifier.sgd.CrossFoldLearner $r2;
+        java.util.Locale $r3;
+        double $d0;
+        java.lang.Double $r4;
+        java.lang.String $r5;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper;
+
+        $r3 = <java.util.Locale: java.util.Locale ENGLISH>;
+
+        $r1 = newarray (java.lang.Object)[1];
+
+        $r2 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped>;
+
+        $d0 = virtualinvoke $r2.<org.apache.mahout.classifier.sgd.CrossFoldLearner: double auc()>();
+
+        $r4 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d0);
+
+        $r1[0] = $r4;
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r3, "auc=%.2f", $r1);
+
+        return $r5;
+    }
+
+    public void setAucEvaluator(org.apache.mahout.math.stats.OnlineAuc)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper r0;
+        org.apache.mahout.math.stats.OnlineAuc r1;
+        org.apache.mahout.classifier.sgd.CrossFoldLearner $r2;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper;
+
+        r1 := @parameter0: org.apache.mahout.math.stats.OnlineAuc;
+
+        $r2 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped>;
+
+        virtualinvoke $r2.<org.apache.mahout.classifier.sgd.CrossFoldLearner: void setAucEvaluator(org.apache.mahout.math.stats.OnlineAuc)>(r1);
+
+        return;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper r0;
+        java.io.DataOutput r1;
+        org.apache.mahout.classifier.sgd.CrossFoldLearner $r2;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $r2 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped>;
+
+        virtualinvoke $r2.<org.apache.mahout.classifier.sgd.CrossFoldLearner: void write(java.io.DataOutput)>(r1);
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper r0;
+        java.io.DataInput r1;
+        org.apache.mahout.classifier.sgd.CrossFoldLearner $r2, $r3;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $r2 = new org.apache.mahout.classifier.sgd.CrossFoldLearner;
+
+        specialinvoke $r2.<org.apache.mahout.classifier.sgd.CrossFoldLearner: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped> = $r2;
+
+        $r3 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped>;
+
+        virtualinvoke $r3.<org.apache.mahout.classifier.sgd.CrossFoldLearner: void readFields(java.io.DataInput)>(r1);
+
+        return;
+    }
+
+    public volatile org.apache.mahout.ep.Payload copy()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper r0, $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper copy()>();
+
+        return $r1;
+    }
+
+    static org.apache.mahout.classifier.sgd.CrossFoldLearner access$100(org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper r0;
+        org.apache.mahout.classifier.sgd.CrossFoldLearner $r1;
+
+        r0 := @parameter0: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner wrapped>;
+
+        return $r1;
+    }
+}

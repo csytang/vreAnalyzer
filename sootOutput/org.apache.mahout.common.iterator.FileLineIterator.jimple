@@ -1,0 +1,443 @@
+public final class org.apache.mahout.common.iterator.FileLineIterator extends com.google.common.collect.AbstractIterator implements org.apache.mahout.cf.taste.impl.common.SkippingIterator, java.io.Closeable
+{
+    private final java.io.BufferedReader reader;
+    private static final org.slf4j.Logger log;
+
+    public void <init>(java.io.File) throws java.io.IOException
+    {
+        org.apache.mahout.common.iterator.FileLineIterator r0;
+        java.io.File r1;
+        java.nio.charset.Charset $r2;
+
+        r0 := @this: org.apache.mahout.common.iterator.FileLineIterator;
+
+        r1 := @parameter0: java.io.File;
+
+        $r2 = <com.google.common.base.Charsets: java.nio.charset.Charset UTF_8>;
+
+        specialinvoke r0.<org.apache.mahout.common.iterator.FileLineIterator: void <init>(java.io.File,java.nio.charset.Charset,boolean)>(r1, $r2, 0);
+
+        return;
+    }
+
+    public void <init>(java.io.File, boolean) throws java.io.IOException
+    {
+        org.apache.mahout.common.iterator.FileLineIterator r0;
+        java.io.File r1;
+        boolean z0;
+        java.nio.charset.Charset $r2;
+
+        r0 := @this: org.apache.mahout.common.iterator.FileLineIterator;
+
+        r1 := @parameter0: java.io.File;
+
+        z0 := @parameter1: boolean;
+
+        $r2 = <com.google.common.base.Charsets: java.nio.charset.Charset UTF_8>;
+
+        specialinvoke r0.<org.apache.mahout.common.iterator.FileLineIterator: void <init>(java.io.File,java.nio.charset.Charset,boolean)>(r1, $r2, z0);
+
+        return;
+    }
+
+    public void <init>(java.io.File, java.nio.charset.Charset, boolean) throws java.io.IOException
+    {
+        org.apache.mahout.common.iterator.FileLineIterator r0;
+        java.io.File r1;
+        java.nio.charset.Charset r2;
+        boolean z0;
+        java.io.InputStream $r3;
+
+        r0 := @this: org.apache.mahout.common.iterator.FileLineIterator;
+
+        r1 := @parameter0: java.io.File;
+
+        r2 := @parameter1: java.nio.charset.Charset;
+
+        z0 := @parameter2: boolean;
+
+        $r3 = staticinvoke <org.apache.mahout.common.iterator.FileLineIterator: java.io.InputStream getFileInputStream(java.io.File)>(r1);
+
+        specialinvoke r0.<org.apache.mahout.common.iterator.FileLineIterator: void <init>(java.io.InputStream,java.nio.charset.Charset,boolean)>($r3, r2, z0);
+
+        return;
+    }
+
+    public void <init>(java.io.InputStream) throws java.io.IOException
+    {
+        org.apache.mahout.common.iterator.FileLineIterator r0;
+        java.io.InputStream r1;
+        java.nio.charset.Charset $r2;
+
+        r0 := @this: org.apache.mahout.common.iterator.FileLineIterator;
+
+        r1 := @parameter0: java.io.InputStream;
+
+        $r2 = <com.google.common.base.Charsets: java.nio.charset.Charset UTF_8>;
+
+        specialinvoke r0.<org.apache.mahout.common.iterator.FileLineIterator: void <init>(java.io.InputStream,java.nio.charset.Charset,boolean)>(r1, $r2, 0);
+
+        return;
+    }
+
+    public void <init>(java.io.InputStream, boolean) throws java.io.IOException
+    {
+        org.apache.mahout.common.iterator.FileLineIterator r0;
+        java.io.InputStream r1;
+        boolean z0;
+        java.nio.charset.Charset $r2;
+
+        r0 := @this: org.apache.mahout.common.iterator.FileLineIterator;
+
+        r1 := @parameter0: java.io.InputStream;
+
+        z0 := @parameter1: boolean;
+
+        $r2 = <com.google.common.base.Charsets: java.nio.charset.Charset UTF_8>;
+
+        specialinvoke r0.<org.apache.mahout.common.iterator.FileLineIterator: void <init>(java.io.InputStream,java.nio.charset.Charset,boolean)>(r1, $r2, z0);
+
+        return;
+    }
+
+    public void <init>(java.io.InputStream, java.nio.charset.Charset, boolean) throws java.io.IOException
+    {
+        org.apache.mahout.common.iterator.FileLineIterator r0;
+        java.io.InputStream r1;
+        java.nio.charset.Charset r2;
+        boolean z0;
+        java.io.BufferedReader $r3, $r5;
+        java.io.InputStreamReader $r4;
+
+        r0 := @this: org.apache.mahout.common.iterator.FileLineIterator;
+
+        r1 := @parameter0: java.io.InputStream;
+
+        r2 := @parameter1: java.nio.charset.Charset;
+
+        z0 := @parameter2: boolean;
+
+        specialinvoke r0.<com.google.common.collect.AbstractIterator: void <init>()>();
+
+        $r3 = new java.io.BufferedReader;
+
+        $r4 = new java.io.InputStreamReader;
+
+        specialinvoke $r4.<java.io.InputStreamReader: void <init>(java.io.InputStream,java.nio.charset.Charset)>(r1, r2);
+
+        specialinvoke $r3.<java.io.BufferedReader: void <init>(java.io.Reader)>($r4);
+
+        r0.<org.apache.mahout.common.iterator.FileLineIterator: java.io.BufferedReader reader> = $r3;
+
+        if z0 == 0 goto label1;
+
+        $r5 = r0.<org.apache.mahout.common.iterator.FileLineIterator: java.io.BufferedReader reader>;
+
+        virtualinvoke $r5.<java.io.BufferedReader: java.lang.String readLine()>();
+
+     label1:
+        return;
+    }
+
+    public void <init>(java.io.InputStream, java.nio.charset.Charset, boolean, java.lang.String) throws java.io.IOException
+    {
+        org.apache.mahout.common.iterator.FileLineIterator r0;
+        java.io.InputStream r1, r21;
+        java.nio.charset.Charset r2;
+        boolean z0, $z1, $z2;
+        java.lang.String r3, $r4, $r5, $r6, $r7, $r8, $r9;
+        java.io.BufferedReader $r11, r20;
+        java.lang.Object r14;
+        java.util.zip.GZIPInputStream r17;
+        java.util.zip.ZipInputStream r18;
+        java.io.InputStreamReader r19;
+
+        r0 := @this: org.apache.mahout.common.iterator.FileLineIterator;
+
+        r1 := @parameter0: java.io.InputStream;
+
+        r2 := @parameter1: java.nio.charset.Charset;
+
+        z0 := @parameter2: boolean;
+
+        r3 := @parameter3: java.lang.String;
+
+        specialinvoke r0.<com.google.common.collect.AbstractIterator: void <init>()>();
+
+        $r4 = "gz";
+
+        $r5 = virtualinvoke r3.<java.lang.String: java.lang.String toLowerCase()>();
+
+        $r6 = staticinvoke <com.google.common.io.Files: java.lang.String getFileExtension(java.lang.String)>($r5);
+
+        $z1 = virtualinvoke $r4.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>($r6);
+
+        if $z1 == 0 goto label1;
+
+        r17 = new java.util.zip.GZIPInputStream;
+
+        specialinvoke r17.<java.util.zip.GZIPInputStream: void <init>(java.io.InputStream)>(r1);
+
+        r14 = r17;
+
+        goto label3;
+
+     label1:
+        $r7 = "zip";
+
+        $r8 = virtualinvoke r3.<java.lang.String: java.lang.String toLowerCase()>();
+
+        $r9 = staticinvoke <com.google.common.io.Files: java.lang.String getFileExtension(java.lang.String)>($r8);
+
+        $z2 = virtualinvoke $r7.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>($r9);
+
+        if $z2 == 0 goto label2;
+
+        r18 = new java.util.zip.ZipInputStream;
+
+        specialinvoke r18.<java.util.zip.ZipInputStream: void <init>(java.io.InputStream)>(r1);
+
+        r14 = r18;
+
+        goto label3;
+
+     label2:
+        r14 = r1;
+
+     label3:
+        r20 = new java.io.BufferedReader;
+
+        r19 = new java.io.InputStreamReader;
+
+        r21 = (java.io.InputStream) r14;
+
+        specialinvoke r19.<java.io.InputStreamReader: void <init>(java.io.InputStream,java.nio.charset.Charset)>(r21, r2);
+
+        specialinvoke r20.<java.io.BufferedReader: void <init>(java.io.Reader)>(r19);
+
+        r0.<org.apache.mahout.common.iterator.FileLineIterator: java.io.BufferedReader reader> = r20;
+
+        if z0 == 0 goto label4;
+
+        $r11 = r0.<org.apache.mahout.common.iterator.FileLineIterator: java.io.BufferedReader reader>;
+
+        virtualinvoke $r11.<java.io.BufferedReader: java.lang.String readLine()>();
+
+     label4:
+        return;
+    }
+
+    static java.io.InputStream getFileInputStream(java.io.File) throws java.io.IOException
+    {
+        java.io.File r0;
+        java.lang.String r2, $r4, $r5, $r6, $r7, $r8, $r9;
+        java.io.FileInputStream $r3;
+        boolean $z0, $z1;
+        java.util.zip.ZipInputStream $r10;
+        java.util.zip.GZIPInputStream $r11;
+
+        r0 := @parameter0: java.io.File;
+
+        $r3 = new java.io.FileInputStream;
+
+        specialinvoke $r3.<java.io.FileInputStream: void <init>(java.io.File)>(r0);
+
+        r2 = virtualinvoke r0.<java.io.File: java.lang.String getName()>();
+
+        $r4 = "gz";
+
+        $r5 = virtualinvoke r2.<java.lang.String: java.lang.String toLowerCase()>();
+
+        $r6 = staticinvoke <com.google.common.io.Files: java.lang.String getFileExtension(java.lang.String)>($r5);
+
+        $z0 = virtualinvoke $r4.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>($r6);
+
+        if $z0 == 0 goto label1;
+
+        $r11 = new java.util.zip.GZIPInputStream;
+
+        specialinvoke $r11.<java.util.zip.GZIPInputStream: void <init>(java.io.InputStream)>($r3);
+
+        return $r11;
+
+     label1:
+        $r7 = "zip";
+
+        $r8 = virtualinvoke r2.<java.lang.String: java.lang.String toLowerCase()>();
+
+        $r9 = staticinvoke <com.google.common.io.Files: java.lang.String getFileExtension(java.lang.String)>($r8);
+
+        $z1 = virtualinvoke $r7.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>($r9);
+
+        if $z1 == 0 goto label2;
+
+        $r10 = new java.util.zip.ZipInputStream;
+
+        specialinvoke $r10.<java.util.zip.ZipInputStream: void <init>(java.io.InputStream)>($r3);
+
+        return $r10;
+
+     label2:
+        return $r3;
+    }
+
+    protected java.lang.String computeNext()
+    {
+        org.apache.mahout.common.iterator.FileLineIterator r0;
+        java.lang.String r1, $r8, $r11;
+        java.io.BufferedReader $r4;
+        java.lang.Object $r5;
+        java.io.IOException $r6, $r10;
+        org.slf4j.Logger $r7;
+        java.lang.IllegalStateException $r9;
+
+        r0 := @this: org.apache.mahout.common.iterator.FileLineIterator;
+
+     label01:
+        $r4 = r0.<org.apache.mahout.common.iterator.FileLineIterator: java.io.BufferedReader reader>;
+
+        r1 = virtualinvoke $r4.<java.io.BufferedReader: java.lang.String readLine()>();
+
+     label02:
+        goto label08;
+
+     label03:
+        $r10 := @caughtexception;
+
+     label04:
+        virtualinvoke r0.<org.apache.mahout.common.iterator.FileLineIterator: void close()>();
+
+     label05:
+        goto label07;
+
+     label06:
+        $r6 := @caughtexception;
+
+        $r7 = <org.apache.mahout.common.iterator.FileLineIterator: org.slf4j.Logger log>;
+
+        $r8 = virtualinvoke $r6.<java.io.IOException: java.lang.String getMessage()>();
+
+        interfaceinvoke $r7.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>($r8, $r6);
+
+     label07:
+        $r9 = new java.lang.IllegalStateException;
+
+        specialinvoke $r9.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r10);
+
+        throw $r9;
+
+     label08:
+        if r1 != null goto label09;
+
+        $r5 = virtualinvoke r0.<org.apache.mahout.common.iterator.FileLineIterator: java.lang.Object endOfData()>();
+
+        $r11 = (java.lang.String) $r5;
+
+        goto label10;
+
+     label09:
+        $r11 = r1;
+
+     label10:
+        return $r11;
+
+        catch java.io.IOException from label01 to label02 with label03;
+        catch java.io.IOException from label04 to label05 with label06;
+    }
+
+    public void skip(int)
+    {
+        org.apache.mahout.common.iterator.FileLineIterator r0;
+        int i0, i1;
+        java.io.BufferedReader $r2;
+        java.lang.String $r3;
+        java.io.IOException $r4, $r6;
+        java.lang.IllegalStateException $r5;
+
+        r0 := @this: org.apache.mahout.common.iterator.FileLineIterator;
+
+        i0 := @parameter0: int;
+
+     label1:
+        i1 = 0;
+
+     label2:
+        if i1 >= i0 goto label8;
+
+        $r2 = r0.<org.apache.mahout.common.iterator.FileLineIterator: java.io.BufferedReader reader>;
+
+        $r3 = virtualinvoke $r2.<java.io.BufferedReader: java.lang.String readLine()>();
+
+        if $r3 != null goto label3;
+
+        goto label8;
+
+     label3:
+        i1 = i1 + 1;
+
+        goto label2;
+
+     label4:
+        $r6 := @caughtexception;
+
+     label5:
+        virtualinvoke r0.<org.apache.mahout.common.iterator.FileLineIterator: void close()>();
+
+     label6:
+        goto label8;
+
+     label7:
+        $r4 := @caughtexception;
+
+        $r5 = new java.lang.IllegalStateException;
+
+        specialinvoke $r5.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r4);
+
+        throw $r5;
+
+     label8:
+        return;
+
+        catch java.io.IOException from label1 to label4 with label4;
+        catch java.io.IOException from label5 to label6 with label7;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        org.apache.mahout.common.iterator.FileLineIterator r0;
+        java.io.BufferedReader $r2;
+
+        r0 := @this: org.apache.mahout.common.iterator.FileLineIterator;
+
+        virtualinvoke r0.<org.apache.mahout.common.iterator.FileLineIterator: java.lang.Object endOfData()>();
+
+        $r2 = r0.<org.apache.mahout.common.iterator.FileLineIterator: java.io.BufferedReader reader>;
+
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r2, 1);
+
+        return;
+    }
+
+    protected volatile java.lang.Object computeNext()
+    {
+        org.apache.mahout.common.iterator.FileLineIterator r0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.common.iterator.FileLineIterator;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.common.iterator.FileLineIterator: java.lang.String computeNext()>();
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/common/iterator/FileLineIterator");
+
+        <org.apache.mahout.common.iterator.FileLineIterator: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

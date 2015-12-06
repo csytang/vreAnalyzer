@@ -1,0 +1,141 @@
+public final class org.apache.mahout.cf.taste.impl.recommender.NullRescorer extends java.lang.Object implements org.apache.mahout.cf.taste.recommender.Rescorer, org.apache.mahout.cf.taste.recommender.IDRescorer
+{
+    private static final org.apache.mahout.cf.taste.recommender.IDRescorer USER_OR_ITEM_INSTANCE;
+    private static final org.apache.mahout.cf.taste.recommender.Rescorer ITEM_ITEM_PAIR_INSTANCE;
+    private static final org.apache.mahout.cf.taste.recommender.Rescorer USER_USER_PAIR_INSTANCE;
+
+    private void <init>()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.NullRescorer r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.NullRescorer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.mahout.cf.taste.recommender.IDRescorer getItemInstance()
+    {
+        org.apache.mahout.cf.taste.recommender.IDRescorer $r0;
+
+        $r0 = <org.apache.mahout.cf.taste.impl.recommender.NullRescorer: org.apache.mahout.cf.taste.recommender.IDRescorer USER_OR_ITEM_INSTANCE>;
+
+        return $r0;
+    }
+
+    public static org.apache.mahout.cf.taste.recommender.IDRescorer getUserInstance()
+    {
+        org.apache.mahout.cf.taste.recommender.IDRescorer $r0;
+
+        $r0 = <org.apache.mahout.cf.taste.impl.recommender.NullRescorer: org.apache.mahout.cf.taste.recommender.IDRescorer USER_OR_ITEM_INSTANCE>;
+
+        return $r0;
+    }
+
+    public static org.apache.mahout.cf.taste.recommender.Rescorer getItemItemPairInstance()
+    {
+        org.apache.mahout.cf.taste.recommender.Rescorer $r0;
+
+        $r0 = <org.apache.mahout.cf.taste.impl.recommender.NullRescorer: org.apache.mahout.cf.taste.recommender.Rescorer ITEM_ITEM_PAIR_INSTANCE>;
+
+        return $r0;
+    }
+
+    public static org.apache.mahout.cf.taste.recommender.Rescorer getUserUserPairInstance()
+    {
+        org.apache.mahout.cf.taste.recommender.Rescorer $r0;
+
+        $r0 = <org.apache.mahout.cf.taste.impl.recommender.NullRescorer: org.apache.mahout.cf.taste.recommender.Rescorer USER_USER_PAIR_INSTANCE>;
+
+        return $r0;
+    }
+
+    public double rescore(java.lang.Object, double)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.NullRescorer r0;
+        java.lang.Object r1;
+        double d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.NullRescorer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        d0 := @parameter1: double;
+
+        return d0;
+    }
+
+    public boolean isFiltered(java.lang.Object)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.NullRescorer r0;
+        java.lang.Object r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.NullRescorer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        return 0;
+    }
+
+    public double rescore(long, double)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.NullRescorer r0;
+        long l0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.NullRescorer;
+
+        l0 := @parameter0: long;
+
+        d0 := @parameter1: double;
+
+        return d0;
+    }
+
+    public boolean isFiltered(long)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.NullRescorer r0;
+        long l0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.NullRescorer;
+
+        l0 := @parameter0: long;
+
+        return 0;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.NullRescorer r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.NullRescorer;
+
+        return "NullRescorer";
+    }
+
+    static void <clinit>()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.NullRescorer $r0, $r1, $r2;
+
+        $r0 = new org.apache.mahout.cf.taste.impl.recommender.NullRescorer;
+
+        specialinvoke $r0.<org.apache.mahout.cf.taste.impl.recommender.NullRescorer: void <init>()>();
+
+        <org.apache.mahout.cf.taste.impl.recommender.NullRescorer: org.apache.mahout.cf.taste.recommender.IDRescorer USER_OR_ITEM_INSTANCE> = $r0;
+
+        $r1 = new org.apache.mahout.cf.taste.impl.recommender.NullRescorer;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.impl.recommender.NullRescorer: void <init>()>();
+
+        <org.apache.mahout.cf.taste.impl.recommender.NullRescorer: org.apache.mahout.cf.taste.recommender.Rescorer ITEM_ITEM_PAIR_INSTANCE> = $r1;
+
+        $r2 = new org.apache.mahout.cf.taste.impl.recommender.NullRescorer;
+
+        specialinvoke $r2.<org.apache.mahout.cf.taste.impl.recommender.NullRescorer: void <init>()>();
+
+        <org.apache.mahout.cf.taste.impl.recommender.NullRescorer: org.apache.mahout.cf.taste.recommender.Rescorer USER_USER_PAIR_INSTANCE> = $r2;
+
+        return;
+    }
+}

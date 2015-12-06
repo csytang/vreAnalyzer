@@ -1,0 +1,27 @@
+public class org.apache.mahout.vectorizer.encoders.CachingTextValueEncoder extends org.apache.mahout.vectorizer.encoders.TextValueEncoder
+{
+
+    public void <init>(java.lang.String, int)
+    {
+        org.apache.mahout.vectorizer.encoders.CachingTextValueEncoder r0;
+        java.lang.String r1;
+        int i0;
+        org.apache.mahout.vectorizer.encoders.CachingStaticWordValueEncoder $r2;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.CachingTextValueEncoder;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: void <init>(java.lang.String)>(r1);
+
+        $r2 = new org.apache.mahout.vectorizer.encoders.CachingStaticWordValueEncoder;
+
+        specialinvoke $r2.<org.apache.mahout.vectorizer.encoders.CachingStaticWordValueEncoder: void <init>(java.lang.String,int)>(r1, i0);
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.CachingTextValueEncoder: void setWordEncoder(org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder)>($r2);
+
+        return;
+    }
+}

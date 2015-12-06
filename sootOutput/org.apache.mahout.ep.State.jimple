@@ -1,0 +1,975 @@
+public class org.apache.mahout.ep.State extends java.lang.Object implements java.lang.Comparable, org.apache.hadoop.io.Writable
+{
+    private static final java.util.concurrent.atomic.AtomicInteger OBJECT_COUNT;
+    private int id;
+    private java.util.Random gen;
+    private double[] params;
+    private org.apache.mahout.ep.Mapping[] maps;
+    private double omni;
+    private double[] step;
+    private double value;
+    private org.apache.mahout.ep.Payload payload;
+
+    public void <init>()
+    {
+        org.apache.mahout.ep.State r0;
+        java.util.concurrent.atomic.AtomicInteger $r1;
+        int $i0;
+        org.apache.mahout.common.RandomWrapper $r2;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = <org.apache.mahout.ep.State: java.util.concurrent.atomic.AtomicInteger OBJECT_COUNT>;
+
+        $i0 = virtualinvoke $r1.<java.util.concurrent.atomic.AtomicInteger: int getAndIncrement()>();
+
+        r0.<org.apache.mahout.ep.State: int id> = $i0;
+
+        $r2 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        r0.<org.apache.mahout.ep.State: java.util.Random gen> = $r2;
+
+        return;
+    }
+
+    public void <init>(double[], double)
+    {
+        org.apache.mahout.ep.State r0;
+        double[] r1, $r4, $r5, $r6, $r7;
+        double d0;
+        java.util.concurrent.atomic.AtomicInteger $r2;
+        int $i0, $i1, $i2, $i3;
+        org.apache.mahout.common.RandomWrapper $r3;
+        org.apache.mahout.ep.Mapping[] $r8;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        r1 := @parameter0: double[];
+
+        d0 := @parameter1: double;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = <org.apache.mahout.ep.State: java.util.concurrent.atomic.AtomicInteger OBJECT_COUNT>;
+
+        $i0 = virtualinvoke $r2.<java.util.concurrent.atomic.AtomicInteger: int getAndIncrement()>();
+
+        r0.<org.apache.mahout.ep.State: int id> = $i0;
+
+        $r3 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        r0.<org.apache.mahout.ep.State: java.util.Random gen> = $r3;
+
+        $i1 = lengthof r1;
+
+        $r4 = staticinvoke <java.util.Arrays: double[] copyOf(double[],int)>(r1, $i1);
+
+        r0.<org.apache.mahout.ep.State: double[] params> = $r4;
+
+        r0.<org.apache.mahout.ep.State: double omni> = d0;
+
+        $r5 = r0.<org.apache.mahout.ep.State: double[] params>;
+
+        $i2 = lengthof $r5;
+
+        $r6 = newarray (double)[$i2];
+
+        r0.<org.apache.mahout.ep.State: double[] step> = $r6;
+
+        $r7 = r0.<org.apache.mahout.ep.State: double[] params>;
+
+        $i3 = lengthof $r7;
+
+        $r8 = newarray (org.apache.mahout.ep.Mapping)[$i3];
+
+        r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Mapping[] maps> = $r8;
+
+        return;
+    }
+
+    public org.apache.mahout.ep.State copy()
+    {
+        org.apache.mahout.ep.State r0, $r2;
+        double[] $r3, $r4, $r5, $r6, $r7, $r8;
+        int $i0, $i1, $i2;
+        double $d0;
+        org.apache.mahout.ep.Mapping[] $r9, $r10, $r13;
+        java.lang.Object[] $r11;
+        org.apache.mahout.ep.Payload $r12, $r14, $r16;
+        java.util.Random $r15;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        $r2 = new org.apache.mahout.ep.State;
+
+        specialinvoke $r2.<org.apache.mahout.ep.State: void <init>()>();
+
+        $r4 = r0.<org.apache.mahout.ep.State: double[] params>;
+
+        $r3 = r0.<org.apache.mahout.ep.State: double[] params>;
+
+        $i0 = lengthof $r3;
+
+        $r5 = staticinvoke <java.util.Arrays: double[] copyOf(double[],int)>($r4, $i0);
+
+        $r2.<org.apache.mahout.ep.State: double[] params> = $r5;
+
+        $d0 = r0.<org.apache.mahout.ep.State: double omni>;
+
+        $r2.<org.apache.mahout.ep.State: double omni> = $d0;
+
+        $r7 = r0.<org.apache.mahout.ep.State: double[] step>;
+
+        $r6 = r0.<org.apache.mahout.ep.State: double[] step>;
+
+        $i1 = lengthof $r6;
+
+        $r8 = staticinvoke <java.util.Arrays: double[] copyOf(double[],int)>($r7, $i1);
+
+        $r2.<org.apache.mahout.ep.State: double[] step> = $r8;
+
+        $r10 = r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Mapping[] maps>;
+
+        $r9 = r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Mapping[] maps>;
+
+        $i2 = lengthof $r9;
+
+        $r11 = staticinvoke <java.util.Arrays: java.lang.Object[] copyOf(java.lang.Object[],int)>($r10, $i2);
+
+        $r13 = (org.apache.mahout.ep.Mapping[]) $r11;
+
+        $r2.<org.apache.mahout.ep.State: org.apache.mahout.ep.Mapping[] maps> = $r13;
+
+        $r12 = r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Payload payload>;
+
+        if $r12 == null goto label1;
+
+        $r14 = r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Payload payload>;
+
+        $r16 = interfaceinvoke $r14.<org.apache.mahout.ep.Payload: org.apache.mahout.ep.Payload copy()>();
+
+        $r2.<org.apache.mahout.ep.State: org.apache.mahout.ep.Payload payload> = $r16;
+
+     label1:
+        $r15 = r0.<org.apache.mahout.ep.State: java.util.Random gen>;
+
+        $r2.<org.apache.mahout.ep.State: java.util.Random gen> = $r15;
+
+        return $r2;
+    }
+
+    public org.apache.mahout.ep.State mutate()
+    {
+        org.apache.mahout.ep.State r0, r13;
+        int i0, $i1, i2, i3;
+        java.util.Random $r1, $r2, $r8;
+        double $d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10, $d11, $d12, $d13, $d14, $d15, $d16, $d17, $d18, d19, d20, d21, d22, d23;
+        double[] $r3, $r5, $r7, $r9, $r10, $r11, r12;
+        org.apache.mahout.ep.Payload $r4, $r6;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        d19 = 0.0;
+
+        r12 = r0.<org.apache.mahout.ep.State: double[] step>;
+
+        i0 = lengthof r12;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label2;
+
+        d20 = r12[i2];
+
+        $d18 = d20 * d20;
+
+        d19 = d19 + $d18;
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        d21 = staticinvoke <java.lang.Math: double sqrt(double)>(d19);
+
+        $r1 = r0.<org.apache.mahout.ep.State: java.util.Random gen>;
+
+        $d0 = virtualinvoke $r1.<java.util.Random: double nextGaussian()>();
+
+        d22 = 1.0 + $d0;
+
+        r13 = virtualinvoke r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.State copy()>();
+
+        $d1 = r0.<org.apache.mahout.ep.State: double omni>;
+
+        $d3 = 0.9 * $d1;
+
+        $d2 = d21 / 10.0;
+
+        d23 = $d3 + $d2;
+
+        $r2 = r0.<org.apache.mahout.ep.State: java.util.Random gen>;
+
+        $d5 = virtualinvoke $r2.<java.util.Random: double nextDouble()>();
+
+        $d4 = neg $d5;
+
+        $d7 = staticinvoke <java.lang.Math: double log1p(double)>($d4);
+
+        $d6 = neg $d7;
+
+        $d8 = d23 * $d6;
+
+        r13.<org.apache.mahout.ep.State: double omni> = $d8;
+
+        i3 = 0;
+
+     label3:
+        $r3 = r0.<org.apache.mahout.ep.State: double[] step>;
+
+        $i1 = lengthof $r3;
+
+        if i3 >= $i1 goto label4;
+
+        $r9 = r13.<org.apache.mahout.ep.State: double[] step>;
+
+        $r7 = r0.<org.apache.mahout.ep.State: double[] step>;
+
+        $d9 = $r7[i3];
+
+        $d12 = d22 * $d9;
+
+        $d10 = r13.<org.apache.mahout.ep.State: double omni>;
+
+        $r8 = r0.<org.apache.mahout.ep.State: java.util.Random gen>;
+
+        $d11 = virtualinvoke $r8.<java.util.Random: double nextGaussian()>();
+
+        $d13 = $d10 * $d11;
+
+        $d14 = $d12 + $d13;
+
+        $r9[i3] = $d14;
+
+        $r10 = r13.<org.apache.mahout.ep.State: double[] params>;
+
+        $d17 = $r10[i3];
+
+        $r11 = r13.<org.apache.mahout.ep.State: double[] step>;
+
+        $d16 = $r11[i3];
+
+        $d15 = $d17 + $d16;
+
+        $r10[i3] = $d15;
+
+        i3 = i3 + 1;
+
+        goto label3;
+
+     label4:
+        $r4 = r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Payload payload>;
+
+        if $r4 == null goto label5;
+
+        $r6 = r13.<org.apache.mahout.ep.State: org.apache.mahout.ep.Payload payload>;
+
+        $r5 = virtualinvoke r13.<org.apache.mahout.ep.State: double[] getMappedParams()>();
+
+        interfaceinvoke $r6.<org.apache.mahout.ep.Payload: void update(double[])>($r5);
+
+     label5:
+        return r13;
+    }
+
+    public void setMap(int, org.apache.mahout.ep.Mapping)
+    {
+        org.apache.mahout.ep.State r0;
+        int i0;
+        org.apache.mahout.ep.Mapping r1;
+        org.apache.mahout.ep.Mapping[] $r2;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: org.apache.mahout.ep.Mapping;
+
+        $r2 = r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Mapping[] maps>;
+
+        $r2[i0] = r1;
+
+        return;
+    }
+
+    public double get(int)
+    {
+        org.apache.mahout.ep.State r0;
+        int i0;
+        org.apache.mahout.ep.Mapping r1;
+        org.apache.mahout.ep.Mapping[] $r2;
+        double[] $r3, $r4;
+        double $d0, $d1;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        i0 := @parameter0: int;
+
+        $r2 = r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Mapping[] maps>;
+
+        r1 = $r2[i0];
+
+        if r1 != null goto label1;
+
+        $r4 = r0.<org.apache.mahout.ep.State: double[] params>;
+
+        $d1 = $r4[i0];
+
+        goto label2;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.ep.State: double[] params>;
+
+        $d0 = $r3[i0];
+
+        $d1 = virtualinvoke r1.<org.apache.mahout.ep.Mapping: double apply(double)>($d0);
+
+     label2:
+        return $d1;
+    }
+
+    public int getId()
+    {
+        org.apache.mahout.ep.State r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        $i0 = r0.<org.apache.mahout.ep.State: int id>;
+
+        return $i0;
+    }
+
+    public double[] getParams()
+    {
+        org.apache.mahout.ep.State r0;
+        double[] $r1;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        $r1 = r0.<org.apache.mahout.ep.State: double[] params>;
+
+        return $r1;
+    }
+
+    public org.apache.mahout.ep.Mapping[] getMaps()
+    {
+        org.apache.mahout.ep.State r0;
+        org.apache.mahout.ep.Mapping[] $r1;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        $r1 = r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Mapping[] maps>;
+
+        return $r1;
+    }
+
+    public double[] getMappedParams()
+    {
+        org.apache.mahout.ep.State r0;
+        double[] r1, $r2, $r3, $r4;
+        int $i0, $i1, i2;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        $r3 = r0.<org.apache.mahout.ep.State: double[] params>;
+
+        $r2 = r0.<org.apache.mahout.ep.State: double[] params>;
+
+        $i0 = lengthof $r2;
+
+        r1 = staticinvoke <java.util.Arrays: double[] copyOf(double[],int)>($r3, $i0);
+
+        i2 = 0;
+
+     label1:
+        $r4 = r0.<org.apache.mahout.ep.State: double[] params>;
+
+        $i1 = lengthof $r4;
+
+        if i2 >= $i1 goto label2;
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.ep.State: double get(int)>(i2);
+
+        r1[i2] = $d0;
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        return r1;
+    }
+
+    public double getOmni()
+    {
+        org.apache.mahout.ep.State r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        $d0 = r0.<org.apache.mahout.ep.State: double omni>;
+
+        return $d0;
+    }
+
+    public double[] getStep()
+    {
+        org.apache.mahout.ep.State r0;
+        double[] $r1;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        $r1 = r0.<org.apache.mahout.ep.State: double[] step>;
+
+        return $r1;
+    }
+
+    public org.apache.mahout.ep.Payload getPayload()
+    {
+        org.apache.mahout.ep.State r0;
+        org.apache.mahout.ep.Payload $r1;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        $r1 = r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Payload payload>;
+
+        return $r1;
+    }
+
+    public double getValue()
+    {
+        org.apache.mahout.ep.State r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        $d0 = r0.<org.apache.mahout.ep.State: double value>;
+
+        return $d0;
+    }
+
+    public void setOmni(double)
+    {
+        org.apache.mahout.ep.State r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.ep.State: double omni> = d0;
+
+        return;
+    }
+
+    public void setId(int)
+    {
+        org.apache.mahout.ep.State r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.ep.State: int id> = i0;
+
+        return;
+    }
+
+    public void setStep(double[])
+    {
+        org.apache.mahout.ep.State r0;
+        double[] r1;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        r1 := @parameter0: double[];
+
+        r0.<org.apache.mahout.ep.State: double[] step> = r1;
+
+        return;
+    }
+
+    public void setMaps(org.apache.mahout.ep.Mapping[])
+    {
+        org.apache.mahout.ep.State r0;
+        org.apache.mahout.ep.Mapping[] r1;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        r1 := @parameter0: org.apache.mahout.ep.Mapping[];
+
+        r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Mapping[] maps> = r1;
+
+        return;
+    }
+
+    public void setMaps(java.lang.Iterable)
+    {
+        org.apache.mahout.ep.State r0;
+        java.lang.Iterable r1;
+        java.util.ArrayList r2;
+        int $i0;
+        org.apache.mahout.ep.Mapping[] $r3, $r5;
+        java.lang.Object[] $r4;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        r1 := @parameter0: java.lang.Iterable;
+
+        r2 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList(java.lang.Iterable)>(r1);
+
+        $i0 = interfaceinvoke r2.<java.util.Collection: int size()>();
+
+        $r3 = newarray (org.apache.mahout.ep.Mapping)[$i0];
+
+        $r4 = interfaceinvoke r2.<java.util.Collection: java.lang.Object[] toArray(java.lang.Object[])>($r3);
+
+        $r5 = (org.apache.mahout.ep.Mapping[]) $r4;
+
+        r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Mapping[] maps> = $r5;
+
+        return;
+    }
+
+    public void setValue(double)
+    {
+        org.apache.mahout.ep.State r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.ep.State: double value> = d0;
+
+        return;
+    }
+
+    public void setPayload(org.apache.mahout.ep.Payload)
+    {
+        org.apache.mahout.ep.State r0;
+        org.apache.mahout.ep.Payload r1;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        r1 := @parameter0: org.apache.mahout.ep.Payload;
+
+        r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Payload payload> = r1;
+
+        return;
+    }
+
+    public boolean equals(java.lang.Object)
+    {
+        org.apache.mahout.ep.State r0, r2;
+        java.lang.Object r1;
+        boolean $z0, $z1;
+        int $i0, $i1;
+        double $d0, $d1;
+        byte $b2;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $z0 = r1 instanceof org.apache.mahout.ep.State;
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        r2 = (org.apache.mahout.ep.State) r1;
+
+        $i1 = r0.<org.apache.mahout.ep.State: int id>;
+
+        $i0 = r2.<org.apache.mahout.ep.State: int id>;
+
+        if $i1 != $i0 goto label2;
+
+        $d1 = r0.<org.apache.mahout.ep.State: double value>;
+
+        $d0 = r2.<org.apache.mahout.ep.State: double value>;
+
+        $b2 = $d1 cmpl $d0;
+
+        if $b2 != 0 goto label2;
+
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        return $z1;
+    }
+
+    public int hashCode()
+    {
+        org.apache.mahout.ep.State r0;
+        double $d0;
+        int $i0, $i1, $i2;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        $d0 = r0.<org.apache.mahout.ep.State: double value>;
+
+        $i0 = staticinvoke <org.apache.mahout.common.RandomUtils: int hashDouble(double)>($d0);
+
+        $i1 = r0.<org.apache.mahout.ep.State: int id>;
+
+        $i2 = $i0 ^ $i1;
+
+        return $i2;
+    }
+
+    public int compareTo(org.apache.mahout.ep.State)
+    {
+        org.apache.mahout.ep.State r0, r1;
+        int i0, $i1, $i2, $i3, $i4;
+        double $d0, $d1;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        r1 := @parameter0: org.apache.mahout.ep.State;
+
+        $d1 = r1.<org.apache.mahout.ep.State: double value>;
+
+        $d0 = r0.<org.apache.mahout.ep.State: double value>;
+
+        i0 = staticinvoke <java.lang.Double: int compare(double,double)>($d1, $d0);
+
+        if i0 == 0 goto label1;
+
+        return i0;
+
+     label1:
+        $i2 = r0.<org.apache.mahout.ep.State: int id>;
+
+        $i1 = r1.<org.apache.mahout.ep.State: int id>;
+
+        if $i2 >= $i1 goto label2;
+
+        return -1;
+
+     label2:
+        $i4 = r0.<org.apache.mahout.ep.State: int id>;
+
+        $i3 = r1.<org.apache.mahout.ep.State: int id>;
+
+        if $i4 <= $i3 goto label3;
+
+        return 1;
+
+     label3:
+        return 0;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.ep.State r0;
+        double[] r1;
+        int i0, i1;
+        double d0, $d1, $d2, $d3, $d4, $d5, d6;
+        java.lang.Object[] $r2;
+        org.apache.mahout.ep.Payload $r3;
+        java.util.Locale $r4;
+        java.lang.Double $r5, $r6;
+        java.lang.String $r7;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        d6 = 0.0;
+
+        r1 = r0.<org.apache.mahout.ep.State: double[] step>;
+
+        i0 = lengthof r1;
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label2;
+
+        d0 = r1[i1];
+
+        $d5 = d0 * d0;
+
+        d6 = d6 + $d5;
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r4 = <java.util.Locale: java.util.Locale ENGLISH>;
+
+        $r2 = newarray (java.lang.Object)[3];
+
+        $r3 = r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Payload payload>;
+
+        $r2[0] = $r3;
+
+        $d1 = r0.<org.apache.mahout.ep.State: double omni>;
+
+        $d2 = staticinvoke <java.lang.Math: double sqrt(double)>(d6);
+
+        $d3 = $d1 + $d2;
+
+        $r5 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d3);
+
+        $r2[1] = $r5;
+
+        $d4 = r0.<org.apache.mahout.ep.State: double value>;
+
+        $r6 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d4);
+
+        $r2[2] = $r6;
+
+        $r7 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r4, "<S/%s %.3f %.3f>", $r2);
+
+        return $r7;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.ep.State r0;
+        java.io.DataOutput r1;
+        int $i0, $i1, i2, i3, i4, i5, i6, i7;
+        double[] $r2, r4, r7;
+        double $d0, $d1, d2, d3;
+        org.apache.mahout.ep.Payload $r3;
+        org.apache.mahout.ep.Mapping[] r5;
+        org.apache.mahout.ep.Mapping r6;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $i0 = r0.<org.apache.mahout.ep.State: int id>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i0);
+
+        $r2 = r0.<org.apache.mahout.ep.State: double[] params>;
+
+        $i1 = lengthof $r2;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i1);
+
+        r4 = r0.<org.apache.mahout.ep.State: double[] params>;
+
+        i2 = lengthof r4;
+
+        i3 = 0;
+
+     label1:
+        if i3 >= i2 goto label2;
+
+        d2 = r4[i3];
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>(d2);
+
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label2:
+        r5 = r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Mapping[] maps>;
+
+        i4 = lengthof r5;
+
+        i5 = 0;
+
+     label3:
+        if i5 >= i4 goto label4;
+
+        r6 = r5[i5];
+
+        staticinvoke <org.apache.mahout.classifier.sgd.PolymorphicWritable: void write(java.io.DataOutput,org.apache.hadoop.io.Writable)>(r1, r6);
+
+        i5 = i5 + 1;
+
+        goto label3;
+
+     label4:
+        $d0 = r0.<org.apache.mahout.ep.State: double omni>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d0);
+
+        r7 = r0.<org.apache.mahout.ep.State: double[] step>;
+
+        i6 = lengthof r7;
+
+        i7 = 0;
+
+     label5:
+        if i7 >= i6 goto label6;
+
+        d3 = r7[i7];
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>(d3);
+
+        i7 = i7 + 1;
+
+        goto label5;
+
+     label6:
+        $d1 = r0.<org.apache.mahout.ep.State: double value>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d1);
+
+        $r3 = r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Payload payload>;
+
+        staticinvoke <org.apache.mahout.classifier.sgd.PolymorphicWritable: void write(java.io.DataOutput,org.apache.hadoop.io.Writable)>(r1, $r3);
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.ep.State r0;
+        java.io.DataInput r1;
+        int i0, $i1, i2, i3, i4;
+        double[] $r2, $r4, $r7, $r11;
+        org.apache.mahout.ep.Mapping[] $r3, $r8;
+        double $d0, $d1, $d2, $d3;
+        org.apache.hadoop.io.Writable $r5, $r10;
+        org.apache.mahout.ep.Payload $r6;
+        org.apache.mahout.ep.Mapping $r9;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $i1 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.ep.State: int id> = $i1;
+
+        i0 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        $r2 = newarray (double)[i0];
+
+        r0.<org.apache.mahout.ep.State: double[] params> = $r2;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label2;
+
+        $r11 = r0.<org.apache.mahout.ep.State: double[] params>;
+
+        $d3 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        $r11[i2] = $d3;
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        $r3 = newarray (org.apache.mahout.ep.Mapping)[i0];
+
+        r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Mapping[] maps> = $r3;
+
+        i3 = 0;
+
+     label3:
+        if i3 >= i0 goto label4;
+
+        $r8 = r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Mapping[] maps>;
+
+        $r10 = staticinvoke <org.apache.mahout.classifier.sgd.PolymorphicWritable: org.apache.hadoop.io.Writable read(java.io.DataInput,java.lang.Class)>(r1, class "org/apache/mahout/ep/Mapping");
+
+        $r9 = (org.apache.mahout.ep.Mapping) $r10;
+
+        $r8[i3] = $r9;
+
+        i3 = i3 + 1;
+
+        goto label3;
+
+     label4:
+        $d0 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.ep.State: double omni> = $d0;
+
+        $r4 = newarray (double)[i0];
+
+        r0.<org.apache.mahout.ep.State: double[] step> = $r4;
+
+        i4 = 0;
+
+     label5:
+        if i4 >= i0 goto label6;
+
+        $r7 = r0.<org.apache.mahout.ep.State: double[] step>;
+
+        $d2 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        $r7[i4] = $d2;
+
+        i4 = i4 + 1;
+
+        goto label5;
+
+     label6:
+        $d1 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.ep.State: double value> = $d1;
+
+        $r5 = staticinvoke <org.apache.mahout.classifier.sgd.PolymorphicWritable: org.apache.hadoop.io.Writable read(java.io.DataInput,java.lang.Class)>(r1, class "org/apache/mahout/ep/Payload");
+
+        $r6 = (org.apache.mahout.ep.Payload) $r5;
+
+        r0.<org.apache.mahout.ep.State: org.apache.mahout.ep.Payload payload> = $r6;
+
+        return;
+    }
+
+    public volatile int compareTo(java.lang.Object)
+    {
+        org.apache.mahout.ep.State r0, $r2;
+        java.lang.Object r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.ep.State;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (org.apache.mahout.ep.State) r1;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.ep.State: int compareTo(org.apache.mahout.ep.State)>($r2);
+
+        return $i0;
+    }
+
+    static void <clinit>()
+    {
+        java.util.concurrent.atomic.AtomicInteger $r0;
+
+        $r0 = new java.util.concurrent.atomic.AtomicInteger;
+
+        specialinvoke $r0.<java.util.concurrent.atomic.AtomicInteger: void <init>()>();
+
+        <org.apache.mahout.ep.State: java.util.concurrent.atomic.AtomicInteger OBJECT_COUNT> = $r0;
+
+        return;
+    }
+}

@@ -1,0 +1,5 @@
+public interface  org.apache.mahout.vectorizer.Weight extends java.lang.Object
+{
+
+    public abstract double calculate(int, int, int, int);
+}

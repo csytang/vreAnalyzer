@@ -1,0 +1,411 @@
+public class org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+    private static final java.text.NumberFormat NUMBER_FORMAT;
+    private final java.util.Deque closeables;
+    protected int blockHeight;
+    protected int lastTaskId;
+    protected org.apache.hadoop.mapred.OutputCollector qhatCollector;
+    protected org.apache.hadoop.mapred.OutputCollector rhatCollector;
+    protected org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep qr;
+    protected org.apache.mahout.math.Vector yiRow;
+    protected org.apache.mahout.math.Vector sb;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer r0;
+        java.util.LinkedList $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        $r1 = staticinvoke <com.google.common.collect.Lists: java.util.LinkedList newLinkedList()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: java.util.Deque closeables> = $r1;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: int lastTaskId> = -1;
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        java.lang.String r3;
+        int $i0;
+        org.apache.hadoop.fs.Path $r4;
+        org.apache.mahout.math.Vector $r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $i0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("ssvd.outerProdBlockHeight", -1);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: int blockHeight> = $i0;
+
+        r3 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvdpca.sb.path");
+
+        if r3 == null goto label1;
+
+        $r4 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r4.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r3);
+
+        $r5 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper: org.apache.mahout.math.Vector loadAndSumUpVectors(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r4, r2);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.mahout.math.Vector sb> = $r5;
+
+     label1:
+        return;
+    }
+
+    protected void setupBlock(org.apache.hadoop.mapreduce.Reducer$Context, org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable) throws java.lang.InterruptedException, java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable r2;
+        java.util.Deque $r3, $r11;
+        org.apache.hadoop.mapred.OutputCollector $r4, $r5, $r8, $r9;
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep $r6, $r10;
+        org.apache.hadoop.conf.Configuration $r7;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        r2 := @parameter1: org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable;
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: java.util.Deque closeables>;
+
+        staticinvoke <org.apache.mahout.common.IOUtils: void close(java.util.Collection)>($r3);
+
+        $r4 = specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.hadoop.mapred.OutputCollector createOutputCollector(java.lang.String,org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable,org.apache.hadoop.mapreduce.Reducer$Context,java.lang.Class)>("QHat", r2, r1, class "org/apache/mahout/math/hadoop/stochasticsvd/DenseBlockWritable");
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.hadoop.mapred.OutputCollector qhatCollector> = $r4;
+
+        $r5 = specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.hadoop.mapred.OutputCollector createOutputCollector(java.lang.String,org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable,org.apache.hadoop.mapreduce.Reducer$Context,java.lang.Class)>("R", r2, r1, class "org/apache/mahout/math/VectorWritable");
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.hadoop.mapred.OutputCollector rhatCollector> = $r5;
+
+        $r6 = new org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+        $r7 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.hadoop.mapred.OutputCollector qhatCollector>;
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.hadoop.mapred.OutputCollector rhatCollector>;
+
+        specialinvoke $r6.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: void <init>(org.apache.hadoop.conf.Configuration,org.apache.hadoop.mapred.OutputCollector,org.apache.hadoop.mapred.OutputCollector)>($r7, $r9, $r8);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep qr> = $r6;
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: java.util.Deque closeables>;
+
+        $r10 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep qr>;
+
+        interfaceinvoke $r11.<java.util.Deque: void addFirst(java.lang.Object)>($r10);
+
+        $i0 = virtualinvoke r2.<org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable: int getTaskId()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: int lastTaskId> = $i0;
+
+        return;
+    }
+
+    protected void reduce(org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer r0;
+        org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        java.util.Iterator r4;
+        org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable r5;
+        double[][] r6;
+        long l0, $l5, $l6, $l8, $l9;
+        int i1, $i2, $i3, $i4, $i7, $i10, i11, i12;
+        java.lang.Object $r7;
+        boolean $z0;
+        double[] $r8, $r17;
+        org.apache.mahout.math.Vector $r9, $r10, $r11, $r15, $r16, $r19;
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep $r12;
+        org.apache.mahout.math.function.DoubleDoubleFunction $r13;
+        double $d0;
+        org.apache.mahout.math.DenseVector $r18;
+        java.io.IOException $r20;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer;
+
+        r1 := @parameter0: org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $i2 = virtualinvoke r1.<org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable: int getTaskId()>();
+
+        $i3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: int lastTaskId>;
+
+        if $i2 == $i3 goto label1;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: void setupBlock(org.apache.hadoop.mapreduce.Reducer$Context,org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable)>(r3, r1);
+
+     label1:
+        r4 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        $r7 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable) $r7;
+
+        r6 = virtualinvoke r5.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] getBlock()>();
+
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r20 = new java.io.IOException;
+
+        specialinvoke $r20.<java.io.IOException: void <init>(java.lang.String)>("Unexpected extra Y_i block in reducer input.");
+
+        throw $r20;
+
+     label2:
+        $l5 = virtualinvoke r1.<org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable: long getTaskItemOrdinal()>();
+
+        $i4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: int blockHeight>;
+
+        $l6 = (long) $i4;
+
+        l0 = $l5 * $l6;
+
+        $r8 = r6[0];
+
+        i1 = lengthof $r8;
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.mahout.math.Vector yiRow>;
+
+        if $r9 != null goto label3;
+
+        $r18 = new org.apache.mahout.math.DenseVector;
+
+        $i10 = lengthof r6;
+
+        specialinvoke $r18.<org.apache.mahout.math.DenseVector: void <init>(int)>($i10);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.mahout.math.Vector yiRow> = $r18;
+
+     label3:
+        i11 = 0;
+
+     label4:
+        if i11 >= i1 goto label8;
+
+        i12 = 0;
+
+     label5:
+        $i7 = lengthof r6;
+
+        if i12 >= $i7 goto label6;
+
+        $r19 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.mahout.math.Vector yiRow>;
+
+        $r17 = r6[i12];
+
+        $d0 = $r17[i11];
+
+        interfaceinvoke $r19.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i12, $d0);
+
+        i12 = i12 + 1;
+
+        goto label5;
+
+     label6:
+        $l9 = (long) i11;
+
+        $l8 = l0 + $l9;
+
+        virtualinvoke r1.<org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable: void setTaskItemOrdinal(long)>($l8);
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.mahout.math.Vector sb>;
+
+        if $r11 == null goto label7;
+
+        $r16 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.mahout.math.Vector yiRow>;
+
+        $r15 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.mahout.math.Vector sb>;
+
+        $r13 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction MINUS>;
+
+        interfaceinvoke $r16.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>($r15, $r13);
+
+     label7:
+        $r12 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep qr>;
+
+        $r10 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.mahout.math.Vector yiRow>;
+
+        virtualinvoke $r12.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: void collect(org.apache.hadoop.io.Writable,org.apache.mahout.math.Vector)>(r1, $r10);
+
+        i11 = i11 + 1;
+
+        goto label4;
+
+     label8:
+        return;
+    }
+
+    private org.apache.hadoop.fs.Path getSplitFilePath(java.lang.String, org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.lang.InterruptedException, java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer r0;
+        java.lang.String r1, $r5, $r6, r9, r10, r11;
+        org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        java.text.NumberFormat $r4;
+        int $i0;
+        long $l1;
+        org.apache.hadoop.fs.Path $r7, $r8;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        r9 = staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: java.lang.String getUniqueFile(org.apache.hadoop.mapreduce.TaskAttemptContext,java.lang.String,java.lang.String)>(r3, r1, "");
+
+        r10 = virtualinvoke r9.<java.lang.String: java.lang.String replaceFirst(java.lang.String,java.lang.String)>("-r-", "-m-");
+
+        $r4 = <org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: java.text.NumberFormat NUMBER_FORMAT>;
+
+        $i0 = virtualinvoke r2.<org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable: int getTaskId()>();
+
+        $l1 = (long) $i0;
+
+        $r5 = virtualinvoke $r4.<java.text.NumberFormat: java.lang.String format(long)>($l1);
+
+        $r6 = staticinvoke <java.util.regex.Matcher: java.lang.String quoteReplacement(java.lang.String)>($r5);
+
+        r11 = virtualinvoke r10.<java.lang.String: java.lang.String replaceFirst(java.lang.String,java.lang.String)>("\\d+$", $r6);
+
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        $r8 = staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: org.apache.hadoop.fs.Path getWorkOutputPath(org.apache.hadoop.mapreduce.TaskInputOutputContext)>(r3);
+
+        specialinvoke $r7.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r8, r11);
+
+        return $r7;
+    }
+
+    private org.apache.hadoop.mapred.OutputCollector createOutputCollector(java.lang.String, org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable, org.apache.hadoop.mapreduce.Reducer$Context, java.lang.Class) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer r0;
+        java.lang.String r1;
+        org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        java.lang.Class r4;
+        org.apache.hadoop.fs.Path r5;
+        org.apache.hadoop.io.SequenceFile$Writer r6;
+        java.net.URI $r7;
+        org.apache.hadoop.conf.Configuration $r8, $r10;
+        org.apache.hadoop.fs.FileSystem $r9;
+        java.util.Deque $r11;
+        org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer$1 $r12;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        r4 := @parameter3: java.lang.Class;
+
+        r5 = specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: org.apache.hadoop.fs.Path getSplitFilePath(java.lang.String,org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable,org.apache.hadoop.mapreduce.Reducer$Context)>(r1, r2, r3);
+
+        $r7 = virtualinvoke r5.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        $r8 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r9 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r7, $r8);
+
+        $r10 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        r6 = staticinvoke <org.apache.hadoop.io.SequenceFile: org.apache.hadoop.io.SequenceFile$Writer createWriter(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>($r9, $r10, r5, class "org/apache/mahout/math/hadoop/stochasticsvd/SplitPartitionedWritable", r4);
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: java.util.Deque closeables>;
+
+        interfaceinvoke $r11.<java.util.Deque: void addFirst(java.lang.Object)>(r6);
+
+        $r12 = new org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer$1;
+
+        specialinvoke $r12.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer$1: void <init>(org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer,org.apache.hadoop.io.SequenceFile$Writer,org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable)>(r0, r6, r2);
+
+        return $r12;
+    }
+
+    protected void cleanup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        java.util.Deque $r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: java.util.Deque closeables>;
+
+        staticinvoke <org.apache.mahout.common.IOUtils: void close(java.util.Collection)>($r2);
+
+        return;
+    }
+
+    protected volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable $r4;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable) r1;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: void reduce(org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        java.text.NumberFormat $r0, $r1, $r2;
+
+        $r0 = staticinvoke <java.text.NumberFormat: java.text.NumberFormat getInstance()>();
+
+        <org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: java.text.NumberFormat NUMBER_FORMAT> = $r0;
+
+        $r1 = <org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: java.text.NumberFormat NUMBER_FORMAT>;
+
+        virtualinvoke $r1.<java.text.NumberFormat: void setMinimumIntegerDigits(int)>(5);
+
+        $r2 = <org.apache.mahout.math.hadoop.stochasticsvd.ABtDenseOutJob$QRReducer: java.text.NumberFormat NUMBER_FORMAT>;
+
+        virtualinvoke $r2.<java.text.NumberFormat: void setGroupingUsed(boolean)>(0);
+
+        return;
+    }
+}

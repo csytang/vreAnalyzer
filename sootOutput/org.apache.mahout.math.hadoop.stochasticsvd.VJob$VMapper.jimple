@@ -1,0 +1,291 @@
+public final class org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private org.apache.mahout.math.Matrix uHat;
+    private org.apache.mahout.math.Vector vRow;
+    private org.apache.mahout.math.Vector sValues;
+    private org.apache.mahout.math.VectorWritable vRowWritable;
+    private int kp;
+    private int k;
+    private org.apache.mahout.math.Vector xi;
+    private org.apache.mahout.math.Vector sq;
+    private final org.apache.mahout.math.function.PlusMult plusMult;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper r0;
+        org.apache.mahout.math.function.PlusMult $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.function.PlusMult;
+
+        specialinvoke $r1.<org.apache.mahout.math.function.PlusMult: void <init>(double)>(0.0);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.function.PlusMult plusMult> = $r1;
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.IntWritable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper r0;
+        org.apache.hadoop.io.IntWritable r1;
+        org.apache.mahout.math.VectorWritable r2, $r6;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.Vector r4, $r5, $r8, $r9, $r10, $r11, $r13, $r16;
+        org.apache.mahout.math.Matrix $r7;
+        double $d1, $d2, $d3, $d4, $d5;
+        int $i0, i1, i2, $i3;
+        org.apache.mahout.math.function.PlusMult $r12, $r14;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        r4 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Vector xi>;
+
+        if $r5 == null goto label3;
+
+        i1 = virtualinvoke r1.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Vector xi>;
+
+        $i0 = interfaceinvoke $r11.<org.apache.mahout.math.Vector: int size()>();
+
+        if $i0 <= i1 goto label1;
+
+        $r16 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Vector xi>;
+
+        $d5 = interfaceinvoke $r16.<org.apache.mahout.math.Vector: double getQuick(int)>(i1);
+
+        goto label2;
+
+     label1:
+        $d5 = 0.0;
+
+     label2:
+        $r12 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.function.PlusMult plusMult>;
+
+        $d4 = neg $d5;
+
+        virtualinvoke $r12.<org.apache.mahout.math.function.PlusMult: void setMultiplicator(double)>($d4);
+
+        $r13 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Vector sq>;
+
+        $r14 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.function.PlusMult plusMult>;
+
+        interfaceinvoke r4.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>($r13, $r14);
+
+     label3:
+        i2 = 0;
+
+     label4:
+        $i3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: int k>;
+
+        if i2 >= $i3 goto label5;
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Vector vRow>;
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Matrix uHat>;
+
+        $r9 = interfaceinvoke $r7.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Vector viewColumn(int)>(i2);
+
+        $d1 = interfaceinvoke r4.<org.apache.mahout.math.Vector: double dot(org.apache.mahout.math.Vector)>($r9);
+
+        $r10 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Vector sValues>;
+
+        $d2 = interfaceinvoke $r10.<org.apache.mahout.math.Vector: double getQuick(int)>(i2);
+
+        $d3 = $d1 / $d2;
+
+        interfaceinvoke $r8.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i2, $d3);
+
+        i2 = i2 + 1;
+
+        goto label4;
+
+     label5:
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.VectorWritable vRowWritable>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r6);
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2, $r14, $r18, $r22;
+        org.apache.hadoop.fs.FileSystem r3;
+        org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver$OutputScalingEnum r6;
+        java.lang.String r7, $r9, $r11, $r20, $r32;
+        org.apache.hadoop.fs.Path $r8, $r10, $r28, $r29;
+        org.apache.mahout.math.DenseMatrix $r12;
+        org.apache.mahout.math.Matrix $r13;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        org.apache.mahout.math.DenseVector $r15;
+        org.apache.mahout.math.Vector $r16, $r19, $r23, $r25, $r27, $r30, $r33;
+        org.apache.mahout.math.VectorWritable $r17;
+        int[] $r21;
+        org.apache.mahout.math.function.DoubleFunction $r26;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void setup(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        r3 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(org.apache.hadoop.conf.Configuration)>(r2);
+
+        $r8 = new org.apache.hadoop.fs.Path;
+
+        $r9 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvd.uhat.path");
+
+        specialinvoke $r8.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r9);
+
+        $r10 = new org.apache.hadoop.fs.Path;
+
+        $r11 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvd.sigma.path");
+
+        specialinvoke $r10.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r11);
+
+        $r12 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper: org.apache.mahout.math.DenseMatrix drmLoadAsDense(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r3, $r8, r2);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Matrix uHat> = $r12;
+
+        $r13 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Matrix uHat>;
+
+        $i0 = interfaceinvoke $r13.<org.apache.mahout.math.Matrix: int columnSize()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: int kp> = $i0;
+
+        $r14 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $i2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: int kp>;
+
+        $i1 = virtualinvoke $r14.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("ssvd.k", $i2);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: int k> = $i1;
+
+        $r15 = new org.apache.mahout.math.DenseVector;
+
+        $i3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: int k>;
+
+        specialinvoke $r15.<org.apache.mahout.math.DenseVector: void <init>(int)>($i3);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Vector vRow> = $r15;
+
+        $r17 = new org.apache.mahout.math.VectorWritable;
+
+        $r16 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Vector vRow>;
+
+        specialinvoke $r17.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r16);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.VectorWritable vRowWritable> = $r17;
+
+        $r19 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper: org.apache.mahout.math.Vector loadVector(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r10, r2);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Vector sValues> = $r19;
+
+        $r18 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r20 = virtualinvoke $r18.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvd.v.output.scaling");
+
+        r6 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver$OutputScalingEnum: org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver$OutputScalingEnum valueOf(java.lang.String)>($r20);
+
+        $r21 = <org.apache.mahout.math.hadoop.stochasticsvd.VJob$1: int[] $SwitchMap$org$apache$mahout$math$hadoop$stochasticsvd$SSVDSolver$OutputScalingEnum>;
+
+        $i4 = virtualinvoke r6.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver$OutputScalingEnum: int ordinal()>();
+
+        $i5 = $r21[$i4];
+
+        lookupswitch($i5)
+        {
+            case 1: goto label1;
+            case 2: goto label2;
+            default: goto label3;
+        };
+
+     label1:
+        $r30 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Vector sValues>;
+
+        interfaceinvoke $r30.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(double)>(1.0);
+
+        goto label3;
+
+     label2:
+        $r22 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r25 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper: org.apache.mahout.math.Vector loadVector(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r10, $r22);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Vector sValues> = $r25;
+
+        $r23 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Vector sValues>;
+
+        $r26 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleFunction SQRT>;
+
+        interfaceinvoke $r23.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.function.DoubleFunction)>($r26);
+
+     label3:
+        r7 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvdpca.xi.path");
+
+        if r7 == null goto label4;
+
+        $r29 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r29.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r7);
+
+        $r27 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper: org.apache.mahout.math.Vector loadAndSumUpVectors(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r29, r2);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Vector xi> = $r27;
+
+        $r28 = new org.apache.hadoop.fs.Path;
+
+        $r32 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvdpca.sq.path");
+
+        specialinvoke $r28.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r32);
+
+        $r33 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper: org.apache.mahout.math.Vector loadAndSumUpVectors(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r28, r2);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: org.apache.mahout.math.Vector sq> = $r33;
+
+     label4:
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.IntWritable $r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.IntWritable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.VJob$VMapper: void map(org.apache.hadoop.io.IntWritable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

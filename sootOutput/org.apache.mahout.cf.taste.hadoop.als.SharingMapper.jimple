@@ -1,0 +1,58 @@
+public abstract class org.apache.mahout.cf.taste.hadoop.als.SharingMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private static java.lang.Object SHARED_INSTANCE;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.als.SharingMapper r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.SharingMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    abstract java.lang.Object createSharedInstance(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException;
+
+    final void setupSharedInstance(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.hadoop.als.SharingMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        java.lang.Object $r2, $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.SharingMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r2 = <org.apache.mahout.cf.taste.hadoop.als.SharingMapper: java.lang.Object SHARED_INSTANCE>;
+
+        if $r2 != null goto label1;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.SharingMapper: java.lang.Object createSharedInstance(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        <org.apache.mahout.cf.taste.hadoop.als.SharingMapper: java.lang.Object SHARED_INSTANCE> = $r3;
+
+     label1:
+        return;
+    }
+
+    final java.lang.Object getSharedInstance()
+    {
+        org.apache.mahout.cf.taste.hadoop.als.SharingMapper r0;
+        java.lang.Object $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.SharingMapper;
+
+        $r1 = <org.apache.mahout.cf.taste.hadoop.als.SharingMapper: java.lang.Object SHARED_INSTANCE>;
+
+        return $r1;
+    }
+
+    static void reset()
+    {
+        <org.apache.mahout.cf.taste.hadoop.als.SharingMapper: java.lang.Object SHARED_INSTANCE> = null;
+
+        return;
+    }
+}

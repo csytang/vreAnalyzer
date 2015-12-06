@@ -1,0 +1,298 @@
+public class org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity extends java.lang.Object implements org.apache.mahout.cf.taste.similarity.ItemSimilarity
+{
+    public static final long DEFAULT_MIN_RELOAD_INTERVAL_MS;
+    private org.apache.mahout.cf.taste.similarity.ItemSimilarity delegate;
+    private final java.util.concurrent.locks.ReentrantLock reloadLock;
+    private final java.io.File dataFile;
+    private long lastModified;
+    private final long minReloadIntervalMS;
+    private static final org.slf4j.Logger log;
+
+    public void <init>(java.io.File)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity r0;
+        java.io.File r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity;
+
+        r1 := @parameter0: java.io.File;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: void <init>(java.io.File,long)>(r1, 60000L);
+
+        return;
+    }
+
+    public void <init>(java.io.File, long)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity r0;
+        java.io.File r1, $r4;
+        long l0, $l1;
+        boolean $z0, $z1, $z2, $z3;
+        java.lang.Object[] $r2;
+        org.slf4j.Logger $r3;
+        java.util.concurrent.locks.ReentrantLock $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity;
+
+        r1 := @parameter0: java.io.File;
+
+        l0 := @parameter1: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        if r1 == null goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z2, "dataFile is null");
+
+        $z0 = virtualinvoke r1.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label3;
+
+        $z1 = virtualinvoke r1.<java.io.File: boolean isDirectory()>();
+
+        if $z1 != 0 goto label3;
+
+        $z3 = 1;
+
+        goto label4;
+
+     label3:
+        $z3 = 0;
+
+     label4:
+        $r2 = newarray (java.lang.Object)[1];
+
+        $r2[0] = r1;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.String,java.lang.Object[])>($z3, "dataFile is missing or a directory: %s", $r2);
+
+        $r3 = <org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: org.slf4j.Logger log>;
+
+        interfaceinvoke $r3.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Creating FileItemSimilarity for file {}", r1);
+
+        $r4 = virtualinvoke r1.<java.io.File: java.io.File getAbsoluteFile()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: java.io.File dataFile> = $r4;
+
+        $l1 = virtualinvoke r1.<java.io.File: long lastModified()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: long lastModified> = $l1;
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: long minReloadIntervalMS> = l0;
+
+        $r5 = new java.util.concurrent.locks.ReentrantLock;
+
+        specialinvoke $r5.<java.util.concurrent.locks.ReentrantLock: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: java.util.concurrent.locks.ReentrantLock reloadLock> = $r5;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: void reload()>();
+
+        return;
+    }
+
+    public double[] itemSimilarities(long, long[]) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity r0;
+        long l0;
+        long[] r1;
+        org.apache.mahout.cf.taste.similarity.ItemSimilarity $r2;
+        double[] $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: long[];
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: org.apache.mahout.cf.taste.similarity.ItemSimilarity delegate>;
+
+        $r3 = interfaceinvoke $r2.<org.apache.mahout.cf.taste.similarity.ItemSimilarity: double[] itemSimilarities(long,long[])>(l0, r1);
+
+        return $r3;
+    }
+
+    public long[] allSimilarItemIDs(long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity r0;
+        long l0;
+        org.apache.mahout.cf.taste.similarity.ItemSimilarity $r1;
+        long[] $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity;
+
+        l0 := @parameter0: long;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: org.apache.mahout.cf.taste.similarity.ItemSimilarity delegate>;
+
+        $r2 = interfaceinvoke $r1.<org.apache.mahout.cf.taste.similarity.ItemSimilarity: long[] allSimilarItemIDs(long)>(l0);
+
+        return $r2;
+    }
+
+    public double itemSimilarity(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity r0;
+        long l0, l1;
+        org.apache.mahout.cf.taste.similarity.ItemSimilarity $r1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: org.apache.mahout.cf.taste.similarity.ItemSimilarity delegate>;
+
+        $d0 = interfaceinvoke $r1.<org.apache.mahout.cf.taste.similarity.ItemSimilarity: double itemSimilarity(long,long)>(l0, l1);
+
+        return $d0;
+    }
+
+    public void refresh(java.util.Collection)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity r0;
+        java.util.Collection r1;
+        java.io.File $r2;
+        long $l0, $l1, $l2, $l3;
+        byte $b4;
+        org.slf4j.Logger $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity;
+
+        r1 := @parameter0: java.util.Collection;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: java.io.File dataFile>;
+
+        $l0 = virtualinvoke $r2.<java.io.File: long lastModified()>();
+
+        $l2 = r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: long lastModified>;
+
+        $l1 = r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: long minReloadIntervalMS>;
+
+        $l3 = $l2 + $l1;
+
+        $b4 = $l0 cmp $l3;
+
+        if $b4 <= 0 goto label1;
+
+        $r3 = <org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: org.slf4j.Logger log>;
+
+        interfaceinvoke $r3.<org.slf4j.Logger: void debug(java.lang.String)>("File has changed; reloading...");
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: void reload()>();
+
+     label1:
+        return;
+    }
+
+    protected void reload()
+    {
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity r0;
+        long l0;
+        java.util.concurrent.locks.ReentrantLock $r2, $r7, $r9;
+        boolean $z0;
+        java.io.File $r3, $r6;
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity $r4;
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterable $r5;
+        java.lang.Throwable $r8;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: java.util.concurrent.locks.ReentrantLock reloadLock>;
+
+        $z0 = virtualinvoke $r2.<java.util.concurrent.locks.ReentrantLock: boolean tryLock()>();
+
+        if $z0 == 0 goto label5;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: java.io.File dataFile>;
+
+        l0 = virtualinvoke $r3.<java.io.File: long lastModified()>();
+
+        $r4 = new org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity;
+
+        $r5 = new org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterable;
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: java.io.File dataFile>;
+
+        specialinvoke $r5.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterable: void <init>(java.io.File)>($r6);
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: void <init>(java.lang.Iterable)>($r5);
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: org.apache.mahout.cf.taste.similarity.ItemSimilarity delegate> = $r4;
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: long lastModified> = l0;
+
+     label2:
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: java.util.concurrent.locks.ReentrantLock reloadLock>;
+
+        virtualinvoke $r7.<java.util.concurrent.locks.ReentrantLock: void unlock()>();
+
+        goto label5;
+
+     label3:
+        $r8 := @caughtexception;
+
+     label4:
+        $r9 = r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: java.util.concurrent.locks.ReentrantLock reloadLock>;
+
+        virtualinvoke $r9.<java.util.concurrent.locks.ReentrantLock: void unlock()>();
+
+        throw $r8;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity r0;
+        java.lang.StringBuilder $r1, $r2, $r4, $r5;
+        java.io.File $r3;
+        java.lang.String $r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("FileItemSimilarity[dataFile:");
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: java.io.File dataFile>;
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(93);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r6;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: long DEFAULT_MIN_RELOAD_INTERVAL_MS> = 60000L;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/cf/taste/impl/similarity/file/FileItemSimilarity");
+
+        <org.apache.mahout.cf.taste.impl.similarity.file.FileItemSimilarity: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

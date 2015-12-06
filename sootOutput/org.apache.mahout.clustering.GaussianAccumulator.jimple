@@ -1,0 +1,17 @@
+public interface  org.apache.mahout.clustering.GaussianAccumulator extends java.lang.Object
+{
+
+    public abstract double getN();
+
+    public abstract org.apache.mahout.math.Vector getMean();
+
+    public abstract org.apache.mahout.math.Vector getStd();
+
+    public abstract double getAverageStd();
+
+    public abstract org.apache.mahout.math.Vector getVariance();
+
+    public abstract void observe(org.apache.mahout.math.Vector, double);
+
+    public abstract void compute();
+}

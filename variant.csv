@@ -1,12 +1,2 @@
-Variant ID,Block_Id,Code Range(jimple),Separators,SootMethod,SootClass
-"4","[3,5]","caller@reduce[1,16]","[]","[caller@reduce;]","WordCount2$IntSumReducer"
-"5","[3,4,5]","caller@reduce[2,5,7:12,14]","[(caller@reduce_$z0)]","[caller@reduce;]","WordCount2$IntSumReducer"
-"6","[3,5]","caller@reduce[3,16]","[]","[caller@reduce;]","WordCount2$IntSumReducer"
-"8","[8]","caller@<init>[1,3]","[]","[caller@<init>;]","WordCount2$TokenizerMapper$CountersEnum"
-"9","[8]","caller@<init>[2,3]","[]","[caller@<init>;]","WordCount2$TokenizerMapper$CountersEnum"
-"14","[23,24,25,26,27,28]","caller@map[2,6,8:10,16,20,21,24,25,35,36]","[(caller@map_$z2)]","[caller@map;]","WordCount2$TokenizerMapper"
-"15","[23,27]","caller@map[3,28,33,34]","[]","[caller@map;]","WordCount2$TokenizerMapper"
-"16","[19,20]","caller@parseSkipFile[1,4,6,8:13]","[(caller@parseSkipFile_$r5)]","[caller@parseSkipFile;]","WordCount2$TokenizerMapper"
-"17","[18]","caller@parseSkipFile[15,16,20:23]","[]","[caller@parseSkipFile;]","WordCount2$TokenizerMapper"
-"18","[15]","caller@setup[1:3]","[]","[caller@setup;]","WordCount2$TokenizerMapper"
-"19","[32,33,34,35,36,37,38,39,40,42]","caller@main[0,8:14,18:24,38:40,43:48,51:53,56:61,63,64,66,67,69:72,74:77,79:82,84:91]","[(caller@main_$z0:$z1:$i1:$z4:$i2:$z3:$i0)]","[caller@main;]","WordCount2"
+Variant ID,Block_Id,Code Range(jimple),SootMethod,SootClass
+"7","[15]","caller@setup[1:3]","[caller@setup;]","WordCount2$TokenizerMapper"

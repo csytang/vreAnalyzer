@@ -1,0 +1,45 @@
+class org.apache.mahout.cf.taste.impl.model.file.FileDataModel$1 extends java.lang.Object implements java.io.FileFilter
+{
+    final org.apache.mahout.cf.taste.impl.model.file.FileDataModel this$0;
+
+    void <init>(org.apache.mahout.cf.taste.impl.model.file.FileDataModel)
+    {
+        org.apache.mahout.cf.taste.impl.model.file.FileDataModel$1 r0;
+        org.apache.mahout.cf.taste.impl.model.file.FileDataModel r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.file.FileDataModel$1;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.model.file.FileDataModel;
+
+        r0.<org.apache.mahout.cf.taste.impl.model.file.FileDataModel$1: org.apache.mahout.cf.taste.impl.model.file.FileDataModel this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public boolean accept(java.io.File)
+    {
+        org.apache.mahout.cf.taste.impl.model.file.FileDataModel$1 r0;
+        java.io.File r1;
+        boolean $z0, $z1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.file.FileDataModel$1;
+
+        r1 := @parameter0: java.io.File;
+
+        $z0 = virtualinvoke r1.<java.io.File: boolean isDirectory()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+}

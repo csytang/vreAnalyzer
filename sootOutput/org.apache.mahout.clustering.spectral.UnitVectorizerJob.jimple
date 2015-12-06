@@ -1,0 +1,66 @@
+public final class org.apache.mahout.clustering.spectral.UnitVectorizerJob extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.clustering.spectral.UnitVectorizerJob r0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.UnitVectorizerJob;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void runJob(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.fs.Path r0, r1;
+        boolean z0;
+        org.apache.hadoop.conf.Configuration $r4;
+        org.apache.hadoop.mapreduce.Job $r5;
+        java.lang.IllegalStateException $r6;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        $r4 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r4.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r5 = new org.apache.hadoop.mapreduce.Job;
+
+        specialinvoke $r5.<org.apache.hadoop.mapreduce.Job: void <init>(org.apache.hadoop.conf.Configuration,java.lang.String)>($r4, "UnitVectorizerJob");
+
+        virtualinvoke $r5.<org.apache.hadoop.mapreduce.Job: void setInputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat");
+
+        virtualinvoke $r5.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/IntWritable");
+
+        virtualinvoke $r5.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke $r5.<org.apache.hadoop.mapreduce.Job: void setOutputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        virtualinvoke $r5.<org.apache.hadoop.mapreduce.Job: void setMapperClass(java.lang.Class)>(class "org/apache/mahout/clustering/spectral/UnitVectorizerJob$UnitVectorizerMapper");
+
+        virtualinvoke $r5.<org.apache.hadoop.mapreduce.Job: void setNumReduceTasks(int)>(0);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void addInputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r5, r0);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r5, r1);
+
+        virtualinvoke $r5.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(class "org/apache/mahout/clustering/spectral/UnitVectorizerJob");
+
+        z0 = virtualinvoke $r5.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z0 != 0 goto label1;
+
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Job failed!");
+
+        throw $r6;
+
+     label1:
+        return;
+    }
+}

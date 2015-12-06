@@ -1,0 +1,106 @@
+public final class org.apache.mahout.common.lucene.AnalyzerUtils extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.common.lucene.AnalyzerUtils r0;
+
+        r0 := @this: org.apache.mahout.common.lucene.AnalyzerUtils;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.lucene.analysis.Analyzer createAnalyzer(java.lang.String) throws java.lang.ClassNotFoundException
+    {
+        java.lang.String r0;
+        org.apache.lucene.util.Version $r1;
+        org.apache.lucene.analysis.Analyzer $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = <org.apache.lucene.util.Version: org.apache.lucene.util.Version LUCENE_46>;
+
+        $r2 = staticinvoke <org.apache.mahout.common.lucene.AnalyzerUtils: org.apache.lucene.analysis.Analyzer createAnalyzer(java.lang.String,org.apache.lucene.util.Version)>(r0, $r1);
+
+        return $r2;
+    }
+
+    public static org.apache.lucene.analysis.Analyzer createAnalyzer(java.lang.String, org.apache.lucene.util.Version) throws java.lang.ClassNotFoundException
+    {
+        java.lang.String r0;
+        org.apache.lucene.util.Version r1;
+        java.lang.Class r2, $r3;
+        org.apache.lucene.analysis.Analyzer $r4;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: org.apache.lucene.util.Version;
+
+        $r3 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>(r0);
+
+        r2 = virtualinvoke $r3.<java.lang.Class: java.lang.Class asSubclass(java.lang.Class)>(class "org/apache/lucene/analysis/Analyzer");
+
+        $r4 = staticinvoke <org.apache.mahout.common.lucene.AnalyzerUtils: org.apache.lucene.analysis.Analyzer createAnalyzer(java.lang.Class,org.apache.lucene.util.Version)>(r2, r1);
+
+        return $r4;
+    }
+
+    public static org.apache.lucene.analysis.Analyzer createAnalyzer(java.lang.Class)
+    {
+        java.lang.Class r0;
+        org.apache.lucene.util.Version $r1;
+        org.apache.lucene.analysis.Analyzer $r2;
+
+        r0 := @parameter0: java.lang.Class;
+
+        $r1 = <org.apache.lucene.util.Version: org.apache.lucene.util.Version LUCENE_46>;
+
+        $r2 = staticinvoke <org.apache.mahout.common.lucene.AnalyzerUtils: org.apache.lucene.analysis.Analyzer createAnalyzer(java.lang.Class,org.apache.lucene.util.Version)>(r0, $r1);
+
+        return $r2;
+    }
+
+    public static org.apache.lucene.analysis.Analyzer createAnalyzer(java.lang.Class, org.apache.lucene.util.Version)
+    {
+        java.lang.Class r0;
+        org.apache.lucene.util.Version r1;
+        java.lang.Class[] $r3;
+        java.lang.Object[] $r4;
+        java.lang.Object $r5, $r8;
+        org.apache.lucene.analysis.Analyzer $r6, $r9;
+        java.lang.IllegalStateException $r7;
+
+        r0 := @parameter0: java.lang.Class;
+
+        r1 := @parameter1: org.apache.lucene.util.Version;
+
+     label1:
+        $r3 = newarray (java.lang.Class)[1];
+
+        $r3[0] = class "org/apache/lucene/util/Version";
+
+        $r4 = newarray (java.lang.Object)[1];
+
+        $r4[0] = r1;
+
+        $r5 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.Class,java.lang.Class,java.lang.Class[],java.lang.Object[])>(r0, class "org/apache/lucene/analysis/Analyzer", $r3, $r4);
+
+        $r6 = (org.apache.lucene.analysis.Analyzer) $r5;
+
+     label2:
+        return $r6;
+
+     label3:
+        $r7 := @caughtexception;
+
+        $r8 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.Class,java.lang.Class)>(r0, class "org/apache/lucene/analysis/Analyzer");
+
+        $r9 = (org.apache.lucene.analysis.Analyzer) $r8;
+
+        return $r9;
+
+        catch java.lang.IllegalStateException from label1 to label2 with label3;
+    }
+}

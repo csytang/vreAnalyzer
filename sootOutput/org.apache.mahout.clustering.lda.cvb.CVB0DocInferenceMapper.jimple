@@ -1,0 +1,137 @@
+public class org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper extends org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper
+{
+    private final org.apache.mahout.math.VectorWritable topics;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper r0;
+        org.apache.mahout.math.VectorWritable $r1;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper;
+
+        specialinvoke r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0Mapper: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r1.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper: org.apache.mahout.math.VectorWritable topics> = $r1;
+
+        return;
+    }
+
+    public void map(org.apache.hadoop.io.IntWritable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper r0;
+        org.apache.hadoop.io.IntWritable r1;
+        org.apache.mahout.math.VectorWritable r2, $r10, $r11;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        int i0, i1, $i2, i3;
+        org.apache.mahout.math.Vector r4, $r9, $r12;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer r6;
+        org.apache.mahout.math.DenseVector $r7;
+        double $d0, $d1;
+        org.apache.mahout.math.SparseRowMatrix $r8;
+        org.apache.mahout.clustering.lda.cvb.TopicModel $r13;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        i0 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper: int getNumTopics()>();
+
+        $r7 = new org.apache.mahout.math.DenseVector;
+
+        specialinvoke $r7.<org.apache.mahout.math.DenseVector: void <init>(int)>(i0);
+
+        $d0 = (double) i0;
+
+        $d1 = 1.0 / $d0;
+
+        r4 = virtualinvoke $r7.<org.apache.mahout.math.DenseVector: org.apache.mahout.math.Vector assign(double)>($d1);
+
+        $r8 = new org.apache.mahout.math.SparseRowMatrix;
+
+        $r9 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $i2 = interfaceinvoke $r9.<org.apache.mahout.math.Vector: int size()>();
+
+        specialinvoke $r8.<org.apache.mahout.math.SparseRowMatrix: void <init>(int,int)>(i0, $i2);
+
+        i1 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper: int getMaxIters()>();
+
+        r6 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper: org.apache.mahout.clustering.lda.cvb.ModelTrainer getModelTrainer()>();
+
+        i3 = 0;
+
+     label1:
+        if i3 >= i1 goto label2;
+
+        $r13 = virtualinvoke r6.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel getReadModel()>();
+
+        $r12 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        virtualinvoke $r13.<org.apache.mahout.clustering.lda.cvb.TopicModel: void trainDocTopicModel(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector,org.apache.mahout.math.Matrix)>($r12, r4, $r8);
+
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label2:
+        $r11 = r0.<org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper: org.apache.mahout.math.VectorWritable topics>;
+
+        virtualinvoke $r11.<org.apache.mahout.math.VectorWritable: void set(org.apache.mahout.math.Vector)>(r4);
+
+        $r10 = r0.<org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper: org.apache.mahout.math.VectorWritable topics>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r10);
+
+        return;
+    }
+
+    protected void cleanup(org.apache.hadoop.mapreduce.Mapper$Context)
+    {
+        org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer $r2;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r2 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper: org.apache.mahout.clustering.lda.cvb.ModelTrainer getModelTrainer()>();
+
+        virtualinvoke $r2.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void stop()>();
+
+        return;
+    }
+
+    public volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.IntWritable $r5;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.IntWritable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0DocInferenceMapper: void map(org.apache.hadoop.io.IntWritable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

@@ -1,0 +1,301 @@
+public class org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator extends org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator
+{
+    public static final long DEFAULT_MIN_RELOAD_INTERVAL_MS;
+    private final java.io.File dataFile;
+    private org.apache.mahout.cf.taste.impl.common.FastByIDMap longToString;
+    private final java.util.concurrent.locks.ReentrantLock reloadLock;
+    private long lastModified;
+    private final long minReloadIntervalMS;
+    private static final org.slf4j.Logger log;
+
+    public void <init>(java.io.File) throws java.io.FileNotFoundException
+    {
+        org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator r0;
+        java.io.File r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator;
+
+        r1 := @parameter0: java.io.File;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: void <init>(java.io.File,long)>(r1, 60000L);
+
+        return;
+    }
+
+    public void <init>(java.io.File, long) throws java.io.FileNotFoundException
+    {
+        org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator r0;
+        java.io.File r1, $r4;
+        long l0, $l1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r2;
+        java.lang.Object $r3;
+        boolean $z0, $z1;
+        java.io.FileNotFoundException $r5;
+        java.lang.String $r6;
+        org.slf4j.Logger $r7;
+        java.util.concurrent.locks.ReentrantLock $r8;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator;
+
+        r1 := @parameter0: java.io.File;
+
+        l0 := @parameter1: long;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator: void <init>()>();
+
+        $r2 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>(int)>(100);
+
+        r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: org.apache.mahout.cf.taste.impl.common.FastByIDMap longToString> = $r2;
+
+        $r3 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r4 = (java.io.File) $r3;
+
+        r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: java.io.File dataFile> = $r4;
+
+        $z0 = virtualinvoke r1.<java.io.File: boolean exists()>();
+
+        if $z0 == 0 goto label1;
+
+        $z1 = virtualinvoke r1.<java.io.File: boolean isDirectory()>();
+
+        if $z1 == 0 goto label2;
+
+     label1:
+        $r5 = new java.io.FileNotFoundException;
+
+        $r6 = virtualinvoke r1.<java.io.File: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.io.FileNotFoundException: void <init>(java.lang.String)>($r6);
+
+        throw $r5;
+
+     label2:
+        $r7 = <org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: org.slf4j.Logger log>;
+
+        interfaceinvoke $r7.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Creating FileReadonlyIDMigrator for file {}", r1);
+
+        $r8 = new java.util.concurrent.locks.ReentrantLock;
+
+        specialinvoke $r8.<java.util.concurrent.locks.ReentrantLock: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: java.util.concurrent.locks.ReentrantLock reloadLock> = $r8;
+
+        $l1 = virtualinvoke r1.<java.io.File: long lastModified()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: long lastModified> = $l1;
+
+        r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: long minReloadIntervalMS> = l0;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: void reload()>();
+
+        return;
+    }
+
+    public java.lang.String toStringID(long)
+    {
+        org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator r0;
+        long l0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r1;
+        java.lang.Object $r2;
+        java.lang.String $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator;
+
+        l0 := @parameter0: long;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: org.apache.mahout.cf.taste.impl.common.FastByIDMap longToString>;
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        $r3 = (java.lang.String) $r2;
+
+        return $r3;
+    }
+
+    private void reload()
+    {
+        org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator r0;
+        java.util.concurrent.locks.ReentrantLock $r3, $r5, $r9;
+        boolean $z0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r4;
+        java.io.IOException $r6;
+        java.lang.IllegalStateException $r7;
+        java.lang.Throwable $r8;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: java.util.concurrent.locks.ReentrantLock reloadLock>;
+
+        $z0 = virtualinvoke $r3.<java.util.concurrent.locks.ReentrantLock: boolean tryLock()>();
+
+        if $z0 == 0 goto label6;
+
+     label1:
+        $r4 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: org.apache.mahout.cf.taste.impl.common.FastByIDMap buildMapping()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: org.apache.mahout.cf.taste.impl.common.FastByIDMap longToString> = $r4;
+
+     label2:
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: java.util.concurrent.locks.ReentrantLock reloadLock>;
+
+        virtualinvoke $r5.<java.util.concurrent.locks.ReentrantLock: void unlock()>();
+
+        goto label6;
+
+     label3:
+        $r6 := @caughtexception;
+
+        $r7 = new java.lang.IllegalStateException;
+
+        specialinvoke $r7.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r6);
+
+        throw $r7;
+
+     label4:
+        $r8 := @caughtexception;
+
+     label5:
+        $r9 = r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: java.util.concurrent.locks.ReentrantLock reloadLock>;
+
+        virtualinvoke $r9.<java.util.concurrent.locks.ReentrantLock: void unlock()>();
+
+        throw $r8;
+
+     label6:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+        catch java.lang.Throwable from label1 to label2 with label4;
+        catch java.lang.Throwable from label3 to label5 with label4;
+    }
+
+    private org.apache.mahout.cf.taste.impl.common.FastByIDMap buildMapping() throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator r0;
+        java.util.Iterator r2;
+        java.lang.String r3;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r4;
+        org.apache.mahout.common.iterator.FileLineIterable $r5;
+        java.io.File $r6, $r7;
+        boolean $z0;
+        long $l0, $l1;
+        java.lang.Object $r8;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator;
+
+        $r4 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>()>();
+
+        $r5 = new org.apache.mahout.common.iterator.FileLineIterable;
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: java.io.File dataFile>;
+
+        specialinvoke $r5.<org.apache.mahout.common.iterator.FileLineIterable: void <init>(java.io.File)>($r6);
+
+        r2 = virtualinvoke $r5.<org.apache.mahout.common.iterator.FileLineIterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r8 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.lang.String) $r8;
+
+        $l1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: long toLongID(java.lang.String)>(r3);
+
+        virtualinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object put(long,java.lang.Object)>($l1, r3);
+
+        goto label1;
+
+     label2:
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: java.io.File dataFile>;
+
+        $l0 = virtualinvoke $r7.<java.io.File: long lastModified()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: long lastModified> = $l0;
+
+        return $r4;
+    }
+
+    public void refresh(java.util.Collection)
+    {
+        org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator r0;
+        java.util.Collection r1;
+        java.io.File $r2;
+        long $l0, $l1, $l2, $l3;
+        byte $b4;
+        org.slf4j.Logger $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator;
+
+        r1 := @parameter0: java.util.Collection;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: java.io.File dataFile>;
+
+        $l0 = virtualinvoke $r2.<java.io.File: long lastModified()>();
+
+        $l2 = r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: long lastModified>;
+
+        $l1 = r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: long minReloadIntervalMS>;
+
+        $l3 = $l2 + $l1;
+
+        $b4 = $l0 cmp $l3;
+
+        if $b4 <= 0 goto label1;
+
+        $r3 = <org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: org.slf4j.Logger log>;
+
+        interfaceinvoke $r3.<org.slf4j.Logger: void debug(java.lang.String)>("File has changed; reloading...");
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: void reload()>();
+
+     label1:
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator r0;
+        java.lang.StringBuilder $r1, $r2, $r4, $r5;
+        java.io.File $r3;
+        java.lang.String $r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("FileIDMigrator[dataFile:");
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: java.io.File dataFile>;
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(93);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r6;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: long DEFAULT_MIN_RELOAD_INTERVAL_MS> = 60000L;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/cf/taste/impl/model/file/FileIDMigrator");
+
+        <org.apache.mahout.cf.taste.impl.model.file.FileIDMigrator: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

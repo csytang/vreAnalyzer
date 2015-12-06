@@ -1,0 +1,91 @@
+public class org.apache.mahout.classifier.naivebayes.ComplementaryNaiveBayesClassifier extends org.apache.mahout.classifier.naivebayes.AbstractNaiveBayesClassifier
+{
+
+    public void <init>(org.apache.mahout.classifier.naivebayes.NaiveBayesModel)
+    {
+        org.apache.mahout.classifier.naivebayes.ComplementaryNaiveBayesClassifier r0;
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel r1;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.ComplementaryNaiveBayesClassifier;
+
+        r1 := @parameter0: org.apache.mahout.classifier.naivebayes.NaiveBayesModel;
+
+        specialinvoke r0.<org.apache.mahout.classifier.naivebayes.AbstractNaiveBayesClassifier: void <init>(org.apache.mahout.classifier.naivebayes.NaiveBayesModel)>(r1);
+
+        return;
+    }
+
+    public double getScoreForLabelFeature(int, int)
+    {
+        org.apache.mahout.classifier.naivebayes.ComplementaryNaiveBayesClassifier r0;
+        int i0, i1;
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel r1;
+        double d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.ComplementaryNaiveBayesClassifier;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        r1 = virtualinvoke r0.<org.apache.mahout.classifier.naivebayes.ComplementaryNaiveBayesClassifier: org.apache.mahout.classifier.naivebayes.NaiveBayesModel getModel()>();
+
+        $d1 = virtualinvoke r1.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: double featureWeight(int)>(i1);
+
+        $d2 = virtualinvoke r1.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: double weight(int,int)>(i0, i1);
+
+        $d3 = virtualinvoke r1.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: double totalWeightSum()>();
+
+        $d4 = virtualinvoke r1.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: double labelWeight(int)>(i0);
+
+        $f0 = virtualinvoke r1.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: float alphaI()>();
+
+        $d5 = (double) $f0;
+
+        $d6 = virtualinvoke r1.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: double numFeatures()>();
+
+        d0 = staticinvoke <org.apache.mahout.classifier.naivebayes.ComplementaryNaiveBayesClassifier: double computeWeight(double,double,double,double,double,double)>($d1, $d2, $d3, $d4, $d5, $d6);
+
+        $d7 = virtualinvoke r1.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: double thetaNormalizer(int)>(i0);
+
+        $d8 = d0 / $d7;
+
+        return $d8;
+    }
+
+    public static double computeWeight(double, double, double, double, double, double)
+    {
+        double d0, d1, d2, d3, d4, d5, d6, d7, $d8, $d9, $d10, $d11, $d12, $d13;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        d2 := @parameter2: double;
+
+        d3 := @parameter3: double;
+
+        d4 := @parameter4: double;
+
+        d5 := @parameter5: double;
+
+        $d9 = d0 - d1;
+
+        d6 = $d9 + d4;
+
+        $d11 = d2 - d3;
+
+        $d8 = d4 * d5;
+
+        d7 = $d11 + $d8;
+
+        $d10 = d6 / d7;
+
+        $d13 = staticinvoke <java.lang.Math: double log(double)>($d10);
+
+        $d12 = neg $d13;
+
+        return $d12;
+    }
+}

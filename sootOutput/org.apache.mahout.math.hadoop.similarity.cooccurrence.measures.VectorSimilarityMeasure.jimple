@@ -1,0 +1,21 @@
+public interface  org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasure extends java.lang.Object
+{
+    public static final double NO_NORM;
+
+    public abstract org.apache.mahout.math.Vector normalize(org.apache.mahout.math.Vector);
+
+    public abstract double norm(org.apache.mahout.math.Vector);
+
+    public abstract double aggregate(double, double);
+
+    public abstract double similarity(double, double, double, int);
+
+    public abstract boolean consider(int, int, double, double, double);
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasure: double NO_NORM> = 0.0;
+
+        return;
+    }
+}

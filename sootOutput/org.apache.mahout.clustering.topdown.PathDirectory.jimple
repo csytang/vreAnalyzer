@@ -1,0 +1,190 @@
+public final class org.apache.mahout.clustering.topdown.PathDirectory extends java.lang.Object
+{
+    public static final java.lang.String TOP_LEVEL_CLUSTER_DIRECTORY;
+    public static final java.lang.String POST_PROCESS_DIRECTORY;
+    public static final java.lang.String CLUSTERED_POINTS_DIRECTORY;
+    public static final java.lang.String BOTTOM_LEVEL_CLUSTER_DIRECTORY;
+
+    private void <init>()
+    {
+        org.apache.mahout.clustering.topdown.PathDirectory r0;
+
+        r0 := @this: org.apache.mahout.clustering.topdown.PathDirectory;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.hadoop.fs.Path getTopLevelClusterPath(org.apache.hadoop.fs.Path)
+    {
+        org.apache.hadoop.fs.Path r0, $r1;
+        java.lang.StringBuilder $r2, $r3, $r5, $r6;
+        java.lang.String $r4, $r7;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        $r1 = new org.apache.hadoop.fs.Path;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r0);
+
+        $r4 = <java.io.File: java.lang.String separator>;
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("topLevelCluster");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r7);
+
+        return $r1;
+    }
+
+    public static org.apache.hadoop.fs.Path getClusterPostProcessorOutputDirectory(org.apache.hadoop.fs.Path)
+    {
+        org.apache.hadoop.fs.Path r0, $r1;
+        java.lang.StringBuilder $r2, $r3, $r5, $r6;
+        java.lang.String $r4, $r7;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        $r1 = new org.apache.hadoop.fs.Path;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r0);
+
+        $r4 = <java.io.File: java.lang.String separator>;
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("clusterPostProcessed");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r7);
+
+        return $r1;
+    }
+
+    public static org.apache.hadoop.fs.Path getClusterOutputClusteredPoints(org.apache.hadoop.fs.Path)
+    {
+        org.apache.hadoop.fs.Path r0, $r1;
+        java.lang.StringBuilder $r2, $r3, $r5, $r6, $r8;
+        java.lang.String $r4, $r7, $r9;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        $r1 = new org.apache.hadoop.fs.Path;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r0);
+
+        $r4 = <java.io.File: java.lang.String separator>;
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("clusteredPoints");
+
+        $r7 = <java.io.File: java.lang.String separator>;
+
+        $r8 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<org.apache.hadoop.fs.Path: void <init>(java.lang.String,java.lang.String)>($r9, "*");
+
+        return $r1;
+    }
+
+    public static org.apache.hadoop.fs.Path getBottomLevelClusterPath(org.apache.hadoop.fs.Path, java.lang.String)
+    {
+        org.apache.hadoop.fs.Path r0, $r2;
+        java.lang.String r1, $r5, $r8, $r11;
+        java.lang.StringBuilder $r3, $r4, $r6, $r7, $r9, $r10;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r2 = new org.apache.hadoop.fs.Path;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r0);
+
+        $r5 = <java.io.File: java.lang.String separator>;
+
+        $r6 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("bottomLevelCluster");
+
+        $r8 = <java.io.File: java.lang.String separator>;
+
+        $r9 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r11);
+
+        return $r2;
+    }
+
+    public static org.apache.hadoop.fs.Path getClusterPathForClusterId(org.apache.hadoop.fs.Path, java.lang.String)
+    {
+        org.apache.hadoop.fs.Path r0, $r2;
+        java.lang.String r1, $r5, $r8;
+        java.lang.StringBuilder $r3, $r4, $r6, $r7;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r2 = new org.apache.hadoop.fs.Path;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r0);
+
+        $r5 = <java.io.File: java.lang.String separator>;
+
+        $r6 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r8);
+
+        return $r2;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.clustering.topdown.PathDirectory: java.lang.String BOTTOM_LEVEL_CLUSTER_DIRECTORY> = "bottomLevelCluster";
+
+        <org.apache.mahout.clustering.topdown.PathDirectory: java.lang.String CLUSTERED_POINTS_DIRECTORY> = "clusteredPoints";
+
+        <org.apache.mahout.clustering.topdown.PathDirectory: java.lang.String POST_PROCESS_DIRECTORY> = "clusterPostProcessed";
+
+        <org.apache.mahout.clustering.topdown.PathDirectory: java.lang.String TOP_LEVEL_CLUSTER_DIRECTORY> = "topLevelCluster";
+
+        return;
+    }
+}

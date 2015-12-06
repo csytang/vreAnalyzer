@@ -1,0 +1,653 @@
+public class org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver extends org.apache.mahout.math.decomposer.lanczos.LanczosSolver implements org.apache.hadoop.util.Tool
+{
+    public static final java.lang.String RAW_EIGENVECTORS;
+    private static final org.slf4j.Logger log;
+    private org.apache.hadoop.conf.Configuration conf;
+    private java.util.Map parsedArgs;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver;
+
+        specialinvoke r0.<org.apache.mahout.math.decomposer.lanczos.LanczosSolver: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.mahout.math.Vector getInitialVector(org.apache.mahout.math.VectorIterable)
+    {
+        org.apache.mahout.math.VectorIterable r0;
+        org.apache.mahout.math.DenseVector $r2;
+        int $i0, $i1;
+        double $d0, $d1, $d2;
+
+        r0 := @parameter0: org.apache.mahout.math.VectorIterable;
+
+        $r2 = new org.apache.mahout.math.DenseVector;
+
+        $i0 = interfaceinvoke r0.<org.apache.mahout.math.VectorIterable: int numCols()>();
+
+        specialinvoke $r2.<org.apache.mahout.math.DenseVector: void <init>(int)>($i0);
+
+        $i1 = interfaceinvoke r0.<org.apache.mahout.math.VectorIterable: int numCols()>();
+
+        $d0 = (double) $i1;
+
+        $d1 = staticinvoke <java.lang.Math: double sqrt(double)>($d0);
+
+        $d2 = 1.0 / $d1;
+
+        interfaceinvoke $r2.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(double)>($d2);
+
+        return $r2;
+    }
+
+    public org.apache.mahout.math.decomposer.lanczos.LanczosState runJob(org.apache.hadoop.conf.Configuration, org.apache.mahout.math.decomposer.lanczos.LanczosState, int, boolean, java.lang.String) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver r0;
+        org.apache.hadoop.conf.Configuration r1, $r5;
+        org.apache.mahout.math.decomposer.lanczos.LanczosState r2;
+        int i0;
+        boolean z0;
+        java.lang.String r3;
+        org.apache.mahout.math.VectorIterable $r4;
+        org.apache.hadoop.conf.Configurable $r6;
+        org.apache.hadoop.fs.Path $r7;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r2 := @parameter1: org.apache.mahout.math.decomposer.lanczos.LanczosState;
+
+        i0 := @parameter2: int;
+
+        z0 := @parameter3: boolean;
+
+        r3 := @parameter4: java.lang.String;
+
+        $r4 = virtualinvoke r2.<org.apache.mahout.math.decomposer.lanczos.LanczosState: org.apache.mahout.math.VectorIterable getCorpus()>();
+
+        $r6 = (org.apache.hadoop.conf.Configurable) $r4;
+
+        $r5 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r5.<org.apache.hadoop.conf.Configuration: void <init>(org.apache.hadoop.conf.Configuration)>(r1);
+
+        interfaceinvoke $r6.<org.apache.hadoop.conf.Configurable: void setConf(org.apache.hadoop.conf.Configuration)>($r5);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: void setConf(org.apache.hadoop.conf.Configuration)>(r1);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: void solve(org.apache.mahout.math.decomposer.lanczos.LanczosState,int,boolean)>(r2, i0, z0);
+
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r7.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r3);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: void serializeOutput(org.apache.mahout.math.decomposer.lanczos.LanczosState,org.apache.hadoop.fs.Path)>(r2, $r7);
+
+        return r2;
+    }
+
+    public org.apache.mahout.math.decomposer.lanczos.LanczosState runJob(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int, int, boolean, int, java.lang.String) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver r0;
+        org.apache.hadoop.conf.Configuration r1, $r8;
+        org.apache.hadoop.fs.Path r2, r3;
+        int i0, i1, i2;
+        boolean z0;
+        java.lang.String r4;
+        org.apache.mahout.math.hadoop.DistributedRowMatrix $r7;
+        org.apache.mahout.math.decomposer.lanczos.LanczosState $r9, $r11;
+        org.apache.mahout.math.Vector $r10;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter3: int;
+
+        i1 := @parameter4: int;
+
+        z0 := @parameter5: boolean;
+
+        i2 := @parameter6: int;
+
+        r4 := @parameter7: java.lang.String;
+
+        $r7 = new org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        specialinvoke $r7.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int)>(r2, r3, i0, i1);
+
+        $r8 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r8.<org.apache.hadoop.conf.Configuration: void <init>(org.apache.hadoop.conf.Configuration)>(r1);
+
+        virtualinvoke $r7.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void setConf(org.apache.hadoop.conf.Configuration)>($r8);
+
+        $r9 = new org.apache.mahout.math.decomposer.lanczos.LanczosState;
+
+        $r10 = staticinvoke <org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: org.apache.mahout.math.Vector getInitialVector(org.apache.mahout.math.VectorIterable)>($r7);
+
+        specialinvoke $r9.<org.apache.mahout.math.decomposer.lanczos.LanczosState: void <init>(org.apache.mahout.math.VectorIterable,int,org.apache.mahout.math.Vector)>($r7, i2, $r10);
+
+        $r11 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: org.apache.mahout.math.decomposer.lanczos.LanczosState runJob(org.apache.hadoop.conf.Configuration,org.apache.mahout.math.decomposer.lanczos.LanczosState,int,boolean,java.lang.String)>(r1, $r9, i2, z0, r4);
+
+        return $r11;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver r0;
+        java.lang.String[] r1;
+        int i0, i1, i2, $i3, $i4;
+        boolean z0, z1, z2;
+        double d0, d1;
+        java.util.Map $r6, $r11, $r12, $r14, $r16, $r20, $r22, $r23, $r24, $r26, $r28, $r32, $r34;
+        org.apache.hadoop.fs.Path $r7, $r8, $r13, $r35;
+        java.lang.String $r9, $r10, $r15, $r17, $r18, $r19, $r21, $r25, $r27, $r29, $r30, $r31, $r33;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver;
+
+        r1 := @parameter0: java.lang.String[];
+
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: java.util.Map parsedArgs>;
+
+        $r9 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r6, "--input");
+
+        specialinvoke $r7.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r9);
+
+        $r8 = new org.apache.hadoop.fs.Path;
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: java.util.Map parsedArgs>;
+
+        $r10 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r11, "--output");
+
+        specialinvoke $r8.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r10);
+
+        $r13 = new org.apache.hadoop.fs.Path;
+
+        $r12 = r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: java.util.Map parsedArgs>;
+
+        $r15 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r12, "--tempDir");
+
+        specialinvoke $r13.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r15);
+
+        $r14 = r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: java.util.Map parsedArgs>;
+
+        $r17 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r14, "--workingDir");
+
+        if $r17 == null goto label1;
+
+        $r35 = new org.apache.hadoop.fs.Path;
+
+        $r34 = r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: java.util.Map parsedArgs>;
+
+        $r33 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r34, "--workingDir");
+
+        specialinvoke $r35.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r33);
+
+        goto label2;
+
+     label1:
+        $r35 = null;
+
+     label2:
+        $r16 = r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: java.util.Map parsedArgs>;
+
+        $r18 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r16, "--numRows");
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r18);
+
+        $r20 = r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: java.util.Map parsedArgs>;
+
+        $r19 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r20, "--numCols");
+
+        i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r19);
+
+        $r22 = r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: java.util.Map parsedArgs>;
+
+        $r21 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r22, "--symmetric");
+
+        z0 = staticinvoke <java.lang.Boolean: boolean parseBoolean(java.lang.String)>($r21);
+
+        $r24 = r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: java.util.Map parsedArgs>;
+
+        $r25 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r24, "--rank");
+
+        i2 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r25);
+
+        $r23 = r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: java.util.Map parsedArgs>;
+
+        $r27 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r23, "--cleansvd");
+
+        z1 = staticinvoke <java.lang.Boolean: boolean parseBoolean(java.lang.String)>($r27);
+
+        if z1 == 0 goto label3;
+
+        $r26 = r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: java.util.Map parsedArgs>;
+
+        $r30 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r26, "--maxError");
+
+        d0 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r30);
+
+        $r28 = r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: java.util.Map parsedArgs>;
+
+        $r29 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r28, "--minEigenvalue");
+
+        d1 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r29);
+
+        $r32 = r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: java.util.Map parsedArgs>;
+
+        $r31 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r32, "--inMemory");
+
+        z2 = staticinvoke <java.lang.Boolean: boolean parseBoolean(java.lang.String)>($r31);
+
+        $i4 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: int run(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int,boolean,int,double,double,boolean)>($r7, $r8, $r13, $r35, i0, i1, z0, i2, d0, d1, z2);
+
+        return $i4;
+
+     label3:
+        $i3 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: int run(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int,boolean,int)>($r7, $r8, $r13, $r35, i0, i1, z0, i2);
+
+        return $i3;
+    }
+
+    public int run(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int, int, boolean, int, double, double, boolean) throws java.lang.Exception
+    {
+        org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver r0;
+        org.apache.hadoop.fs.Path r1, r2, r3, r4, $r6;
+        int i0, i1, i2, i3, $i4;
+        boolean z0, z1;
+        double d0, d1;
+        org.apache.hadoop.conf.Configuration $r7, $r9, $r14;
+        org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob $r8;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r4 := @parameter3: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter4: int;
+
+        i1 := @parameter5: int;
+
+        z0 := @parameter6: boolean;
+
+        i2 := @parameter7: int;
+
+        d0 := @parameter8: double;
+
+        d1 := @parameter9: double;
+
+        z1 := @parameter10: boolean;
+
+        i3 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: int run(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int,boolean,int)>(r1, r2, r3, r4, i0, i1, z0, i2);
+
+        if i3 == 0 goto label1;
+
+        return i3;
+
+     label1:
+        $r6 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r6.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r2, "rawEigenvectors");
+
+        $r8 = new org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob;
+
+        specialinvoke $r8.<org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob: void <init>()>();
+
+        $r7 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: org.apache.hadoop.conf.Configuration getConf()>();
+
+        if $r7 == null goto label2;
+
+        $r14 = new org.apache.hadoop.conf.Configuration;
+
+        $r9 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: org.apache.hadoop.conf.Configuration getConf()>();
+
+        specialinvoke $r14.<org.apache.hadoop.conf.Configuration: void <init>(org.apache.hadoop.conf.Configuration)>($r9);
+
+        goto label3;
+
+     label2:
+        $r14 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r14.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+     label3:
+        $i4 = virtualinvoke $r8.<org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob: int run(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,double,double,boolean,org.apache.hadoop.conf.Configuration)>(r1, $r6, r2, r3, d0, d1, z1, $r14);
+
+        return $i4;
+    }
+
+    public int run(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int, int, boolean, int) throws java.lang.Exception
+    {
+        org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver r0;
+        org.apache.hadoop.fs.Path r1, r2, r3, r4, $r11;
+        int i0, i1, i2;
+        boolean z0;
+        org.apache.mahout.math.hadoop.DistributedRowMatrix $r6;
+        org.apache.hadoop.conf.Configuration $r7, $r8, $r12, $r16;
+        org.apache.mahout.math.Vector $r9, $r13;
+        org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState $r10;
+        org.apache.mahout.math.decomposer.lanczos.LanczosState $r14, r17;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r4 := @parameter3: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter4: int;
+
+        i1 := @parameter5: int;
+
+        z0 := @parameter6: boolean;
+
+        i2 := @parameter7: int;
+
+        $r6 = new org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        specialinvoke $r6.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int)>(r1, r3, i0, i1);
+
+        $r7 = new org.apache.hadoop.conf.Configuration;
+
+        $r8 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: org.apache.hadoop.conf.Configuration getConf()>();
+
+        if $r8 == null goto label1;
+
+        $r16 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: org.apache.hadoop.conf.Configuration getConf()>();
+
+        goto label2;
+
+     label1:
+        $r16 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r16.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+     label2:
+        specialinvoke $r7.<org.apache.hadoop.conf.Configuration: void <init>(org.apache.hadoop.conf.Configuration)>($r16);
+
+        virtualinvoke $r6.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void setConf(org.apache.hadoop.conf.Configuration)>($r7);
+
+        if r4 != null goto label3;
+
+        $r14 = new org.apache.mahout.math.decomposer.lanczos.LanczosState;
+
+        $r13 = staticinvoke <org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: org.apache.mahout.math.Vector getInitialVector(org.apache.mahout.math.VectorIterable)>($r6);
+
+        specialinvoke $r14.<org.apache.mahout.math.decomposer.lanczos.LanczosState: void <init>(org.apache.mahout.math.VectorIterable,int,org.apache.mahout.math.Vector)>($r6, i2, $r13);
+
+        r17 = $r14;
+
+        goto label4;
+
+     label3:
+        $r10 = new org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState;
+
+        $r9 = staticinvoke <org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: org.apache.mahout.math.Vector getInitialVector(org.apache.mahout.math.VectorIterable)>($r6);
+
+        specialinvoke $r10.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: void <init>(org.apache.mahout.math.VectorIterable,int,org.apache.mahout.math.Vector,org.apache.hadoop.fs.Path)>($r6, i2, $r9, r4);
+
+        $r12 = virtualinvoke $r6.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration getConf()>();
+
+        virtualinvoke $r10.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: void setConf(org.apache.hadoop.conf.Configuration)>($r12);
+
+        r17 = $r10;
+
+     label4:
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: void solve(org.apache.mahout.math.decomposer.lanczos.LanczosState,int,boolean)>(r17, i2, z0);
+
+        $r11 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r11.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r2, "rawEigenvectors");
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: void serializeOutput(org.apache.mahout.math.decomposer.lanczos.LanczosState,org.apache.hadoop.fs.Path)>(r17, $r11);
+
+        return 0;
+    }
+
+    public void serializeOutput(org.apache.mahout.math.decomposer.lanczos.LanczosState, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver r0;
+        org.apache.mahout.math.decomposer.lanczos.LanczosState r1;
+        org.apache.hadoop.fs.Path r2;
+        int i0, $i1, $i2, $i3, $i4, i5;
+        org.apache.hadoop.fs.FileSystem r4;
+        org.slf4j.Logger $r10;
+        java.lang.Integer $r11;
+        org.apache.hadoop.conf.Configuration $r12, $r27;
+        java.net.URI $r13;
+        org.apache.hadoop.io.IntWritable $r14;
+        org.apache.hadoop.io.SequenceFile$Writer $r15;
+        org.apache.mahout.math.NamedVector $r16;
+        org.apache.mahout.math.Vector $r17;
+        java.lang.StringBuilder $r18, $r19, $r20, $r21, $r25;
+        java.lang.String $r22;
+        org.apache.mahout.math.VectorWritable $r23;
+        java.lang.Double $r24;
+        java.lang.Throwable $r26;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver;
+
+        r1 := @parameter0: org.apache.mahout.math.decomposer.lanczos.LanczosState;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        i0 = virtualinvoke r1.<org.apache.mahout.math.decomposer.lanczos.LanczosState: int getIterationNumber()>();
+
+        $r10 = <org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: org.slf4j.Logger log>;
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r10.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object,java.lang.Object)>("Persisting {} eigenVectors and eigenValues to: {}", $r11, r2);
+
+        $r12 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: org.apache.hadoop.conf.Configuration getConf()>();
+
+        if $r12 == null goto label1;
+
+        $r27 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: org.apache.hadoop.conf.Configuration getConf()>();
+
+        goto label2;
+
+     label1:
+        $r27 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r27.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+     label2:
+        $r13 = virtualinvoke r2.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r4 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r13, $r27);
+
+        $r15 = new org.apache.hadoop.io.SequenceFile$Writer;
+
+        specialinvoke $r15.<org.apache.hadoop.io.SequenceFile$Writer: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>(r4, $r27, r2, class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable");
+
+     label3:
+        $r14 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r14.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+        i5 = 0;
+
+     label4:
+        if i5 >= i0 goto label5;
+
+        $r16 = new org.apache.mahout.math.NamedVector;
+
+        $i1 = i0 - 1;
+
+        $i2 = $i1 - i5;
+
+        $r17 = virtualinvoke r1.<org.apache.mahout.math.decomposer.lanczos.LanczosState: org.apache.mahout.math.Vector getRightSingularVector(int)>($i2);
+
+        $r19 = new java.lang.StringBuilder;
+
+        specialinvoke $r19.<java.lang.StringBuilder: void <init>()>();
+
+        $r18 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("eigenVector");
+
+        $r21 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i5);
+
+        $r20 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", eigenvalue = ");
+
+        $i4 = i0 - 1;
+
+        $i3 = $i4 - i5;
+
+        $r24 = virtualinvoke r1.<org.apache.mahout.math.decomposer.lanczos.LanczosState: java.lang.Double getSingularValue(int)>($i3);
+
+        $r25 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r24);
+
+        $r22 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r16.<org.apache.mahout.math.NamedVector: void <init>(org.apache.mahout.math.Vector,java.lang.String)>($r17, $r22);
+
+        $r23 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r23.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r16);
+
+        virtualinvoke $r14.<org.apache.hadoop.io.IntWritable: void set(int)>(i5);
+
+        virtualinvoke $r15.<org.apache.hadoop.io.SequenceFile$Writer: void append(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r14, $r23);
+
+        i5 = i5 + 1;
+
+        goto label4;
+
+     label5:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r15, 0);
+
+        goto label8;
+
+     label6:
+        $r26 := @caughtexception;
+
+     label7:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r15, 0);
+
+        throw $r26;
+
+     label8:
+        return;
+
+        catch java.lang.Throwable from label3 to label5 with label6;
+        catch java.lang.Throwable from label6 to label7 with label6;
+    }
+
+    public void setConf(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver r0;
+        org.apache.hadoop.conf.Configuration r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: org.apache.hadoop.conf.Configuration conf> = r1;
+
+        return;
+    }
+
+    public org.apache.hadoop.conf.Configuration getConf()
+    {
+        org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver r0;
+        org.apache.hadoop.conf.Configuration $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: org.apache.hadoop.conf.Configuration conf>;
+
+        return $r1;
+    }
+
+    public org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver$DistributedLanczosSolverJob job()
+    {
+        org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver r0;
+        org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver$DistributedLanczosSolverJob $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver;
+
+        $r1 = new org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver$DistributedLanczosSolverJob;
+
+        specialinvoke $r1.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver$DistributedLanczosSolverJob: void <init>(org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver)>(r0);
+
+        return $r1;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver $r1;
+        org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver$DistributedLanczosSolverJob $r2;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver;
+
+        specialinvoke $r1.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver$DistributedLanczosSolverJob job()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.util.Tool,java.lang.String[])>($r2, r0);
+
+        return;
+    }
+
+    static java.util.Map access$002(org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver, java.util.Map)
+    {
+        org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver r0;
+        java.util.Map r1;
+
+        r0 := @parameter0: org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver;
+
+        r1 := @parameter1: java.util.Map;
+
+        r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: java.util.Map parsedArgs> = r1;
+
+        return r1;
+    }
+
+    static java.util.Map access$000(org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver)
+    {
+        org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver r0;
+        java.util.Map $r1;
+
+        r0 := @parameter0: org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: java.util.Map parsedArgs>;
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: java.lang.String RAW_EIGENVECTORS> = "rawEigenvectors";
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/math/hadoop/decomposer/DistributedLanczosSolver");
+
+        <org.apache.mahout.math.hadoop.decomposer.DistributedLanczosSolver: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

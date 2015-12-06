@@ -1,0 +1,7 @@
+public interface  org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev extends java.lang.Object implements org.apache.mahout.cf.taste.impl.common.RunningAverage
+{
+
+    public abstract double getStandardDeviation();
+
+    public abstract org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev inverse();
+}

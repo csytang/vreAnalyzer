@@ -1,0 +1,7 @@
+public interface  org.apache.mahout.cf.taste.eval.RelevantItemsDataSplitter extends java.lang.Object
+{
+
+    public abstract org.apache.mahout.cf.taste.impl.common.FastIDSet getRelevantItemsIDs(long, int, double, org.apache.mahout.cf.taste.model.DataModel) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract void processOtherUser(long, org.apache.mahout.cf.taste.impl.common.FastIDSet, org.apache.mahout.cf.taste.impl.common.FastByIDMap, long, org.apache.mahout.cf.taste.model.DataModel) throws org.apache.mahout.cf.taste.common.TasteException;
+}

@@ -1,0 +1,130 @@
+public class org.apache.mahout.cf.taste.impl.common.FixedRunningAverage extends java.lang.Object implements org.apache.mahout.cf.taste.impl.common.RunningAverage, java.io.Serializable
+{
+    private final double average;
+    private final int count;
+
+    public void <init>(double, int)
+    {
+        org.apache.mahout.cf.taste.impl.common.FixedRunningAverage r0;
+        double d0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FixedRunningAverage;
+
+        d0 := @parameter0: double;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FixedRunningAverage: double average> = d0;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FixedRunningAverage: int count> = i0;
+
+        return;
+    }
+
+    public synchronized void addDatum(double)
+    {
+        org.apache.mahout.cf.taste.impl.common.FixedRunningAverage r0;
+        double d0;
+        java.lang.UnsupportedOperationException $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FixedRunningAverage;
+
+        d0 := @parameter0: double;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r1;
+    }
+
+    public synchronized void removeDatum(double)
+    {
+        org.apache.mahout.cf.taste.impl.common.FixedRunningAverage r0;
+        double d0;
+        java.lang.UnsupportedOperationException $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FixedRunningAverage;
+
+        d0 := @parameter0: double;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r1;
+    }
+
+    public synchronized void changeDatum(double)
+    {
+        org.apache.mahout.cf.taste.impl.common.FixedRunningAverage r0;
+        double d0;
+        java.lang.UnsupportedOperationException $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FixedRunningAverage;
+
+        d0 := @parameter0: double;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r1;
+    }
+
+    public synchronized int getCount()
+    {
+        org.apache.mahout.cf.taste.impl.common.FixedRunningAverage r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FixedRunningAverage;
+
+        $i0 = r0.<org.apache.mahout.cf.taste.impl.common.FixedRunningAverage: int count>;
+
+        return $i0;
+    }
+
+    public synchronized double getAverage()
+    {
+        org.apache.mahout.cf.taste.impl.common.FixedRunningAverage r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FixedRunningAverage;
+
+        $d0 = r0.<org.apache.mahout.cf.taste.impl.common.FixedRunningAverage: double average>;
+
+        return $d0;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.RunningAverage inverse()
+    {
+        org.apache.mahout.cf.taste.impl.common.FixedRunningAverage r0;
+        org.apache.mahout.cf.taste.impl.common.InvertedRunningAverage $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FixedRunningAverage;
+
+        $r1 = new org.apache.mahout.cf.taste.impl.common.InvertedRunningAverage;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.impl.common.InvertedRunningAverage: void <init>(org.apache.mahout.cf.taste.impl.common.RunningAverage)>(r0);
+
+        return $r1;
+    }
+
+    public synchronized java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.common.FixedRunningAverage r0;
+        double $d0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FixedRunningAverage;
+
+        $d0 = r0.<org.apache.mahout.cf.taste.impl.common.FixedRunningAverage: double average>;
+
+        $r1 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>($d0);
+
+        return $r1;
+    }
+}

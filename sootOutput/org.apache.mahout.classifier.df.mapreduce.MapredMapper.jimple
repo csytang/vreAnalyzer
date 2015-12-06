@@ -1,0 +1,137 @@
+public class org.apache.mahout.classifier.df.mapreduce.MapredMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private boolean noOutput;
+    private org.apache.mahout.classifier.df.builder.TreeBuilder treeBuilder;
+    private org.apache.mahout.classifier.df.data.Dataset dataset;
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredMapper r0;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    protected boolean isOutput()
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredMapper r0;
+        boolean $z0, $z1;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredMapper;
+
+        $z0 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredMapper: boolean noOutput>;
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        return $z1;
+    }
+
+    protected org.apache.mahout.classifier.df.builder.TreeBuilder getTreeBuilder()
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredMapper r0;
+        org.apache.mahout.classifier.df.builder.TreeBuilder $r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredMapper;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredMapper: org.apache.mahout.classifier.df.builder.TreeBuilder treeBuilder>;
+
+        return $r1;
+    }
+
+    protected org.apache.mahout.classifier.df.data.Dataset getDataset()
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredMapper r0;
+        org.apache.mahout.classifier.df.data.Dataset $r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredMapper;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredMapper: org.apache.mahout.classifier.df.data.Dataset dataset>;
+
+        return $r1;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        boolean $z0, $z1;
+        org.apache.mahout.classifier.df.builder.TreeBuilder $r3;
+        org.apache.mahout.classifier.df.data.Dataset $r4;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void setup(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $z0 = staticinvoke <org.apache.mahout.classifier.df.mapreduce.Builder: boolean isOutput(org.apache.hadoop.conf.Configuration)>(r2);
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        $r3 = staticinvoke <org.apache.mahout.classifier.df.mapreduce.Builder: org.apache.mahout.classifier.df.builder.TreeBuilder getTreeBuilder(org.apache.hadoop.conf.Configuration)>(r2);
+
+        $r4 = staticinvoke <org.apache.mahout.classifier.df.mapreduce.Builder: org.apache.mahout.classifier.df.data.Dataset loadDataset(org.apache.hadoop.conf.Configuration)>(r2);
+
+        virtualinvoke r0.<org.apache.mahout.classifier.df.mapreduce.MapredMapper: void configure(boolean,org.apache.mahout.classifier.df.builder.TreeBuilder,org.apache.mahout.classifier.df.data.Dataset)>($z1, $r3, $r4);
+
+        return;
+    }
+
+    protected void configure(boolean, org.apache.mahout.classifier.df.builder.TreeBuilder, org.apache.mahout.classifier.df.data.Dataset)
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredMapper r0;
+        boolean z0, $z1;
+        org.apache.mahout.classifier.df.builder.TreeBuilder r1;
+        org.apache.mahout.classifier.df.data.Dataset r2;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredMapper;
+
+        z0 := @parameter0: boolean;
+
+        r1 := @parameter1: org.apache.mahout.classifier.df.builder.TreeBuilder;
+
+        r2 := @parameter2: org.apache.mahout.classifier.df.data.Dataset;
+
+        if r1 == null goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, "TreeBuilder not found in the Job parameters");
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.MapredMapper: boolean noOutput> = z0;
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.MapredMapper: org.apache.mahout.classifier.df.builder.TreeBuilder treeBuilder> = r1;
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.MapredMapper: org.apache.mahout.classifier.df.data.Dataset dataset> = r2;
+
+        return;
+    }
+}

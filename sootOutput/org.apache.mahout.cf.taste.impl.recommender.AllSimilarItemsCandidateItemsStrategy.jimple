@@ -1,0 +1,84 @@
+public class org.apache.mahout.cf.taste.impl.recommender.AllSimilarItemsCandidateItemsStrategy extends org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy
+{
+    private final org.apache.mahout.cf.taste.similarity.ItemSimilarity similarity;
+
+    public void <init>(org.apache.mahout.cf.taste.similarity.ItemSimilarity)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.AllSimilarItemsCandidateItemsStrategy r0;
+        org.apache.mahout.cf.taste.similarity.ItemSimilarity r1;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.AllSimilarItemsCandidateItemsStrategy;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.ItemSimilarity;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy: void <init>()>();
+
+        if r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "similarity is null");
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.AllSimilarItemsCandidateItemsStrategy: org.apache.mahout.cf.taste.similarity.ItemSimilarity similarity> = r1;
+
+        return;
+    }
+
+    protected org.apache.mahout.cf.taste.impl.common.FastIDSet doGetCandidateItems(long[], org.apache.mahout.cf.taste.model.DataModel, boolean) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.AllSimilarItemsCandidateItemsStrategy r0;
+        long[] r1, $r7;
+        org.apache.mahout.cf.taste.model.DataModel r2;
+        boolean z0;
+        int i0, i2;
+        long l1;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r5;
+        org.apache.mahout.cf.taste.similarity.ItemSimilarity $r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.AllSimilarItemsCandidateItemsStrategy;
+
+        r1 := @parameter0: long[];
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.model.DataModel;
+
+        z0 := @parameter2: boolean;
+
+        $r5 = new org.apache.mahout.cf.taste.impl.common.FastIDSet;
+
+        specialinvoke $r5.<org.apache.mahout.cf.taste.impl.common.FastIDSet: void <init>()>();
+
+        i0 = lengthof r1;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label2;
+
+        l1 = r1[i2];
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.recommender.AllSimilarItemsCandidateItemsStrategy: org.apache.mahout.cf.taste.similarity.ItemSimilarity similarity>;
+
+        $r7 = interfaceinvoke $r6.<org.apache.mahout.cf.taste.similarity.ItemSimilarity: long[] allSimilarItemIDs(long)>(l1);
+
+        virtualinvoke $r5.<org.apache.mahout.cf.taste.impl.common.FastIDSet: boolean addAll(long[])>($r7);
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        if z0 != 0 goto label3;
+
+        virtualinvoke $r5.<org.apache.mahout.cf.taste.impl.common.FastIDSet: boolean removeAll(long[])>(r1);
+
+     label3:
+        return $r5;
+    }
+}

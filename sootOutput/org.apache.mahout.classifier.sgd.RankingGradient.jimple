@@ -1,0 +1,193 @@
+public class org.apache.mahout.classifier.sgd.RankingGradient extends java.lang.Object implements org.apache.mahout.classifier.sgd.Gradient
+{
+    private static final org.apache.mahout.classifier.sgd.Gradient BASIC;
+    private int window;
+    private final java.util.List history;
+
+    public void <init>(int)
+    {
+        org.apache.mahout.classifier.sgd.RankingGradient r0;
+        int i0;
+        java.util.ArrayList $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.RankingGradient;
+
+        i0 := @parameter0: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.RankingGradient: int window> = 10;
+
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.RankingGradient: java.util.List history> = $r1;
+
+        r0.<org.apache.mahout.classifier.sgd.RankingGradient: int window> = i0;
+
+        return;
+    }
+
+    public final org.apache.mahout.math.Vector apply(java.lang.String, int, org.apache.mahout.math.Vector, org.apache.mahout.classifier.AbstractVectorClassifier)
+    {
+        org.apache.mahout.classifier.sgd.RankingGradient r0;
+        java.lang.String r1;
+        int i0, i1, $i2;
+        org.apache.mahout.math.Vector r2, r6, r7, $r11, r15;
+        org.apache.mahout.classifier.AbstractVectorClassifier r3;
+        java.util.Deque r4;
+        java.util.Iterator r5;
+        java.util.List $r8;
+        java.lang.Object $r9, $r10;
+        boolean $z0;
+        org.apache.mahout.classifier.sgd.Gradient $r12;
+        double $d0, $d1;
+        org.apache.mahout.math.function.DoubleDoubleFunction $r13;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.RankingGradient;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: org.apache.mahout.math.Vector;
+
+        r3 := @parameter3: org.apache.mahout.classifier.AbstractVectorClassifier;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.RankingGradient: void addToHistory(int,org.apache.mahout.math.Vector)>(i0, r2);
+
+        $r8 = r0.<org.apache.mahout.classifier.sgd.RankingGradient: java.util.List history>;
+
+        $i2 = 1 - i0;
+
+        $r9 = interfaceinvoke $r8.<java.util.List: java.lang.Object get(int)>($i2);
+
+        r4 = (java.util.Deque) $r9;
+
+        i1 = interfaceinvoke r4.<java.util.Deque: int size()>();
+
+        r15 = null;
+
+        r5 = interfaceinvoke r4.<java.util.Deque: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r10 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.math.Vector) $r10;
+
+        $r12 = <org.apache.mahout.classifier.sgd.RankingGradient: org.apache.mahout.classifier.sgd.Gradient BASIC>;
+
+        $r11 = interfaceinvoke r2.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector minus(org.apache.mahout.math.Vector)>(r6);
+
+        r7 = interfaceinvoke $r12.<org.apache.mahout.classifier.sgd.Gradient: org.apache.mahout.math.Vector apply(java.lang.String,int,org.apache.mahout.math.Vector,org.apache.mahout.classifier.AbstractVectorClassifier)>(r1, i0, $r11, r3);
+
+        if r15 != null goto label2;
+
+        r15 = r7;
+
+        goto label1;
+
+     label2:
+        $d0 = (double) i1;
+
+        $d1 = 1.0 / $d0;
+
+        $r13 = staticinvoke <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction plusMult(double)>($d1);
+
+        interfaceinvoke r15.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>(r7, $r13);
+
+        goto label1;
+
+     label3:
+        return r15;
+    }
+
+    public void addToHistory(int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.RankingGradient r0;
+        int i0, $i1, $i2, $i3, $i4;
+        org.apache.mahout.math.Vector r1;
+        java.util.Deque r2;
+        java.util.List $r3, $r4, $r8;
+        java.lang.Object $r5;
+        java.util.ArrayDeque $r7;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.RankingGradient;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.classifier.sgd.RankingGradient: java.util.List history>;
+
+        $i1 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        if $i1 > i0 goto label2;
+
+        $r8 = r0.<org.apache.mahout.classifier.sgd.RankingGradient: java.util.List history>;
+
+        $r7 = new java.util.ArrayDeque;
+
+        $i4 = r0.<org.apache.mahout.classifier.sgd.RankingGradient: int window>;
+
+        specialinvoke $r7.<java.util.ArrayDeque: void <init>(int)>($i4);
+
+        interfaceinvoke $r8.<java.util.List: boolean add(java.lang.Object)>($r7);
+
+        goto label1;
+
+     label2:
+        $r4 = r0.<org.apache.mahout.classifier.sgd.RankingGradient: java.util.List history>;
+
+        $r5 = interfaceinvoke $r4.<java.util.List: java.lang.Object get(int)>(i0);
+
+        r2 = (java.util.Deque) $r5;
+
+        interfaceinvoke r2.<java.util.Deque: boolean add(java.lang.Object)>(r1);
+
+     label3:
+        $i2 = interfaceinvoke r2.<java.util.Deque: int size()>();
+
+        $i3 = r0.<org.apache.mahout.classifier.sgd.RankingGradient: int window>;
+
+        if $i2 < $i3 goto label4;
+
+        interfaceinvoke r2.<java.util.Deque: java.lang.Object pollFirst()>();
+
+        goto label3;
+
+     label4:
+        return;
+    }
+
+    public org.apache.mahout.classifier.sgd.Gradient getBaseGradient()
+    {
+        org.apache.mahout.classifier.sgd.RankingGradient r0;
+        org.apache.mahout.classifier.sgd.Gradient $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.RankingGradient;
+
+        $r1 = <org.apache.mahout.classifier.sgd.RankingGradient: org.apache.mahout.classifier.sgd.Gradient BASIC>;
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        org.apache.mahout.classifier.sgd.DefaultGradient $r0;
+
+        $r0 = new org.apache.mahout.classifier.sgd.DefaultGradient;
+
+        specialinvoke $r0.<org.apache.mahout.classifier.sgd.DefaultGradient: void <init>()>();
+
+        <org.apache.mahout.classifier.sgd.RankingGradient: org.apache.mahout.classifier.sgd.Gradient BASIC> = $r0;
+
+        return;
+    }
+}

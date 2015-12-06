@@ -1,0 +1,147 @@
+final class org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator extends java.lang.Object implements org.apache.mahout.cf.taste.impl.recommender.TopItems$Estimator
+{
+    private final long toUserID;
+    private final org.apache.mahout.cf.taste.similarity.UserSimilarity similarity;
+    private final org.apache.mahout.cf.taste.recommender.Rescorer rescorer;
+
+    private void <init>(long, org.apache.mahout.cf.taste.similarity.UserSimilarity, org.apache.mahout.cf.taste.recommender.Rescorer)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator r0;
+        long l0;
+        org.apache.mahout.cf.taste.similarity.UserSimilarity r1;
+        org.apache.mahout.cf.taste.recommender.Rescorer r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: org.apache.mahout.cf.taste.similarity.UserSimilarity;
+
+        r2 := @parameter2: org.apache.mahout.cf.taste.recommender.Rescorer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator: long toUserID> = l0;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator: org.apache.mahout.cf.taste.similarity.UserSimilarity similarity> = r1;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator: org.apache.mahout.cf.taste.recommender.Rescorer rescorer> = r2;
+
+        return;
+    }
+
+    public double estimate(java.lang.Long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator r0;
+        java.lang.Long r1;
+        double d0, $d1, $d2;
+        long $l0, $l1, $l3, $l4, $l5, $l6, $l7, $l8;
+        byte $b2;
+        org.apache.mahout.cf.taste.recommender.Rescorer $r3, $r5, $r7;
+        org.apache.mahout.common.LongPair $r4;
+        boolean $z0;
+        org.apache.mahout.cf.taste.similarity.UserSimilarity $r6, $r8;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator;
+
+        r1 := @parameter0: java.lang.Long;
+
+        $l0 = virtualinvoke r1.<java.lang.Long: long longValue()>();
+
+        $l1 = r0.<org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator: long toUserID>;
+
+        $b2 = $l0 cmp $l1;
+
+        if $b2 != 0 goto label1;
+
+        return #NaN;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator: org.apache.mahout.cf.taste.recommender.Rescorer rescorer>;
+
+        if $r3 != null goto label2;
+
+        $r8 = r0.<org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator: org.apache.mahout.cf.taste.similarity.UserSimilarity similarity>;
+
+        $l7 = r0.<org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator: long toUserID>;
+
+        $l8 = virtualinvoke r1.<java.lang.Long: long longValue()>();
+
+        $d2 = interfaceinvoke $r8.<org.apache.mahout.cf.taste.similarity.UserSimilarity: double userSimilarity(long,long)>($l7, $l8);
+
+        return $d2;
+
+     label2:
+        $r4 = new org.apache.mahout.common.LongPair;
+
+        $l3 = r0.<org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator: long toUserID>;
+
+        $l4 = virtualinvoke r1.<java.lang.Long: long longValue()>();
+
+        specialinvoke $r4.<org.apache.mahout.common.LongPair: void <init>(long,long)>($l3, $l4);
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator: org.apache.mahout.cf.taste.recommender.Rescorer rescorer>;
+
+        $z0 = interfaceinvoke $r5.<org.apache.mahout.cf.taste.recommender.Rescorer: boolean isFiltered(java.lang.Object)>($r4);
+
+        if $z0 == 0 goto label3;
+
+        return #NaN;
+
+     label3:
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator: org.apache.mahout.cf.taste.similarity.UserSimilarity similarity>;
+
+        $l5 = r0.<org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator: long toUserID>;
+
+        $l6 = virtualinvoke r1.<java.lang.Long: long longValue()>();
+
+        d0 = interfaceinvoke $r6.<org.apache.mahout.cf.taste.similarity.UserSimilarity: double userSimilarity(long,long)>($l5, $l6);
+
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator: org.apache.mahout.cf.taste.recommender.Rescorer rescorer>;
+
+        $d1 = interfaceinvoke $r7.<org.apache.mahout.cf.taste.recommender.Rescorer: double rescore(java.lang.Object,double)>($r4, d0);
+
+        return $d1;
+    }
+
+    public volatile double estimate(java.lang.Object) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator r0;
+        java.lang.Object r1;
+        java.lang.Long $r2;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.lang.Long) r1;
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator: double estimate(java.lang.Long)>($r2);
+
+        return $d0;
+    }
+
+    void <init>(long, org.apache.mahout.cf.taste.similarity.UserSimilarity, org.apache.mahout.cf.taste.recommender.Rescorer, org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$1)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator r0;
+        long l0;
+        org.apache.mahout.cf.taste.similarity.UserSimilarity r1;
+        org.apache.mahout.cf.taste.recommender.Rescorer r2;
+        org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$1 r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: org.apache.mahout.cf.taste.similarity.UserSimilarity;
+
+        r2 := @parameter2: org.apache.mahout.cf.taste.recommender.Rescorer;
+
+        r3 := @parameter3: org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$1;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.GenericUserBasedRecommender$MostSimilarEstimator: void <init>(long,org.apache.mahout.cf.taste.similarity.UserSimilarity,org.apache.mahout.cf.taste.recommender.Rescorer)>(l0, r1, r2);
+
+        return;
+    }
+}

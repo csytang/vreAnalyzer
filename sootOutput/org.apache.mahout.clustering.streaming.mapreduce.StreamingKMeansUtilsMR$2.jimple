@@ -1,0 +1,71 @@
+final class org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$2 extends java.lang.Object implements com.google.common.base.Function
+{
+    private int numVectors;
+
+    void <init>()
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$2 r0;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$2: int numVectors> = 0;
+
+        return;
+    }
+
+    public org.apache.mahout.math.Centroid apply(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$2 r0;
+        org.apache.mahout.math.Vector r1;
+        boolean $z0;
+        org.apache.mahout.math.Centroid $r3, $r4;
+        int $i0, $i1;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$2;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $z0 = r1 instanceof org.apache.mahout.math.Centroid;
+
+        if $z0 == 0 goto label1;
+
+        $r4 = (org.apache.mahout.math.Centroid) r1;
+
+        return $r4;
+
+     label1:
+        $r3 = new org.apache.mahout.math.Centroid;
+
+        $i0 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$2: int numVectors>;
+
+        $i1 = $i0 + 1;
+
+        r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$2: int numVectors> = $i1;
+
+        specialinvoke $r3.<org.apache.mahout.math.Centroid: void <init>(int,org.apache.mahout.math.Vector,double)>($i0, r1, 1.0);
+
+        return $r3;
+    }
+
+    public volatile java.lang.Object apply(java.lang.Object)
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$2 r0;
+        java.lang.Object r1;
+        org.apache.mahout.math.Vector $r2;
+        org.apache.mahout.math.Centroid $r3;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$2;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (org.apache.mahout.math.Vector) r1;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$2: org.apache.mahout.math.Centroid apply(org.apache.mahout.math.Vector)>($r2);
+
+        return $r3;
+    }
+}

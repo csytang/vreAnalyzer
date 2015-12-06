@@ -1,0 +1,776 @@
+public class org.apache.mahout.clustering.canopy.CanopyDriver extends org.apache.mahout.common.AbstractJob
+{
+    public static final java.lang.String DEFAULT_CLUSTERED_POINTS_DIRECTORY;
+    private static final org.slf4j.Logger log;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.canopy.CanopyDriver r0;
+
+        r0 := @this: org.apache.mahout.clustering.canopy.CanopyDriver;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        return;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.hadoop.conf.Configuration $r1;
+        org.apache.mahout.clustering.canopy.CanopyDriver $r2;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r1.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r2 = new org.apache.mahout.clustering.canopy.CanopyDriver;
+
+        specialinvoke $r2.<org.apache.mahout.clustering.canopy.CanopyDriver: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.util.Tool,java.lang.String[])>($r1, $r2, r0);
+
+        return;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.clustering.canopy.CanopyDriver r0;
+        java.lang.String[] r1;
+        org.apache.hadoop.fs.Path r2, r3;
+        org.apache.hadoop.conf.Configuration r4;
+        java.lang.String r5, $r38, $r39, $r40, $r41, $r43, $r44, $r45;
+        double d0, d1, d2, d3, d4;
+        boolean z0, z1, $z2, $z3, $z4, $z5, $z6;
+        org.apache.mahout.common.distance.DistanceMeasure r6;
+        org.apache.commons.cli2.option.DefaultOption $r7, $r12, $r13, $r18, $r22, $r24, $r25, $r27, $r34, $r37;
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r8, $r9, $r14, $r15, $r20, $r21, $r23, $r30, $r32, $r33;
+        java.util.Map $r35;
+        java.lang.Object $r42;
+        org.apache.hadoop.fs.Path[] $r46;
+        int i0;
+
+        r0 := @this: org.apache.mahout.clustering.canopy.CanopyDriver;
+
+        r1 := @parameter0: java.lang.String[];
+
+        virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: void addInputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: void addOutputOption()>();
+
+        $r8 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder distanceMeasureOption()>();
+
+        $r7 = virtualinvoke $r8.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r7);
+
+        $r9 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder t1Option()>();
+
+        $r12 = virtualinvoke $r9.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r12);
+
+        $r14 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder t2Option()>();
+
+        $r13 = virtualinvoke $r14.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r13);
+
+        $r15 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder t3Option()>();
+
+        $r18 = virtualinvoke $r15.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r18);
+
+        $r21 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder t4Option()>();
+
+        $r22 = virtualinvoke $r21.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r22);
+
+        $r20 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder clusterFilterOption()>();
+
+        $r25 = virtualinvoke $r20.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r25);
+
+        $r23 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder overwriteOption()>();
+
+        $r24 = virtualinvoke $r23.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r24);
+
+        $r30 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder clusteringOption()>();
+
+        $r27 = virtualinvoke $r30.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r27);
+
+        $r33 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder methodOption()>();
+
+        $r34 = virtualinvoke $r33.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r34);
+
+        $r32 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder outlierThresholdOption()>();
+
+        $r37 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r37);
+
+        $r35 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: java.util.Map parseArguments(java.lang.String[])>(r1);
+
+        if $r35 != null goto label1;
+
+        return -1;
+
+     label1:
+        r2 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.hadoop.fs.Path getInputPath()>();
+
+        r3 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        r4 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $z2 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: boolean hasOption(java.lang.String)>("overwrite");
+
+        if $z2 == 0 goto label2;
+
+        $r46 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r46[0] = r3;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>(r4, $r46);
+
+     label2:
+        r5 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: java.lang.String getOption(java.lang.String)>("distanceMeasure");
+
+        $r39 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: java.lang.String getOption(java.lang.String)>("t1");
+
+        d0 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r39);
+
+        $r38 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: java.lang.String getOption(java.lang.String)>("t2");
+
+        d1 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r38);
+
+        d2 = d0;
+
+        $z5 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: boolean hasOption(java.lang.String)>("t3");
+
+        if $z5 == 0 goto label3;
+
+        $r44 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: java.lang.String getOption(java.lang.String)>("t3");
+
+        d2 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r44);
+
+     label3:
+        d3 = d1;
+
+        $z4 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: boolean hasOption(java.lang.String)>("t4");
+
+        if $z4 == 0 goto label4;
+
+        $r45 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: java.lang.String getOption(java.lang.String)>("t4");
+
+        d3 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r45);
+
+     label4:
+        i0 = 0;
+
+        $z3 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: boolean hasOption(java.lang.String)>("clusterFilter");
+
+        if $z3 == 0 goto label5;
+
+        $r43 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: java.lang.String getOption(java.lang.String)>("clusterFilter");
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r43);
+
+     label5:
+        z0 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: boolean hasOption(java.lang.String)>("clustering");
+
+        $r41 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: java.lang.String getOption(java.lang.String)>("method");
+
+        z1 = virtualinvoke $r41.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>("sequential");
+
+        $r42 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.String,java.lang.Class)>(r5, class "org/apache/mahout/common/distance/DistanceMeasure");
+
+        r6 = (org.apache.mahout.common.distance.DistanceMeasure) $r42;
+
+        d4 = 0.0;
+
+        $z6 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: boolean hasOption(java.lang.String)>("outlierThreshold");
+
+        if $z6 == 0 goto label6;
+
+        $r40 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyDriver: java.lang.String getOption(java.lang.String)>("outlierThreshold");
+
+        d4 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r40);
+
+     label6:
+        staticinvoke <org.apache.mahout.clustering.canopy.CanopyDriver: void run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.mahout.common.distance.DistanceMeasure,double,double,double,double,int,boolean,double,boolean)>(r4, r2, r3, r6, d0, d1, d2, d3, i0, z0, d4, z1);
+
+        return 0;
+    }
+
+    public static void run(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.mahout.common.distance.DistanceMeasure, double, double, double, double, int, boolean, double, boolean) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r2, r4;
+        org.apache.mahout.common.distance.DistanceMeasure r3;
+        double d0, d1, d2, d3, d4;
+        int i0;
+        boolean z0, z1;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter3: org.apache.mahout.common.distance.DistanceMeasure;
+
+        d0 := @parameter4: double;
+
+        d1 := @parameter5: double;
+
+        d2 := @parameter6: double;
+
+        d3 := @parameter7: double;
+
+        i0 := @parameter8: int;
+
+        z0 := @parameter9: boolean;
+
+        d4 := @parameter10: double;
+
+        z1 := @parameter11: boolean;
+
+        r4 = staticinvoke <org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.hadoop.fs.Path buildClusters(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.mahout.common.distance.DistanceMeasure,double,double,double,double,int,boolean)>(r0, r1, r2, r3, d0, d1, d2, d3, i0, z1);
+
+        if z0 == 0 goto label1;
+
+        staticinvoke <org.apache.mahout.clustering.canopy.CanopyDriver: void clusterData(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,double,boolean)>(r0, r1, r4, r2, d4, z1);
+
+     label1:
+        return;
+    }
+
+    public static void run(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.mahout.common.distance.DistanceMeasure, double, double, boolean, double, boolean) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r2;
+        org.apache.mahout.common.distance.DistanceMeasure r3;
+        double d0, d1, d2;
+        boolean z0, z1;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter3: org.apache.mahout.common.distance.DistanceMeasure;
+
+        d0 := @parameter4: double;
+
+        d1 := @parameter5: double;
+
+        z0 := @parameter6: boolean;
+
+        d2 := @parameter7: double;
+
+        z1 := @parameter8: boolean;
+
+        staticinvoke <org.apache.mahout.clustering.canopy.CanopyDriver: void run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.mahout.common.distance.DistanceMeasure,double,double,double,double,int,boolean,double,boolean)>(r0, r1, r2, r3, d0, d1, d0, d1, 0, z0, d2, z1);
+
+        return;
+    }
+
+    public static void run(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.mahout.common.distance.DistanceMeasure, double, double, boolean, double, boolean) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.fs.Path r0, r1;
+        org.apache.mahout.common.distance.DistanceMeasure r2;
+        double d0, d1, d2;
+        boolean z0, z1;
+        org.apache.hadoop.conf.Configuration $r3;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.mahout.common.distance.DistanceMeasure;
+
+        d0 := @parameter3: double;
+
+        d1 := @parameter4: double;
+
+        z0 := @parameter5: boolean;
+
+        d2 := @parameter6: double;
+
+        z1 := @parameter7: boolean;
+
+        $r3 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r3.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        staticinvoke <org.apache.mahout.clustering.canopy.CanopyDriver: void run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.mahout.common.distance.DistanceMeasure,double,double,boolean,double,boolean)>($r3, r0, r1, r2, d0, d1, z0, d2, z1);
+
+        return;
+    }
+
+    public static org.apache.hadoop.fs.Path buildClusters(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.mahout.common.distance.DistanceMeasure, double, double, int, boolean) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r2, $r4;
+        org.apache.mahout.common.distance.DistanceMeasure r3;
+        double d0, d1;
+        int i0;
+        boolean z0;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter3: org.apache.mahout.common.distance.DistanceMeasure;
+
+        d0 := @parameter4: double;
+
+        d1 := @parameter5: double;
+
+        i0 := @parameter6: int;
+
+        z0 := @parameter7: boolean;
+
+        $r4 = staticinvoke <org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.hadoop.fs.Path buildClusters(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.mahout.common.distance.DistanceMeasure,double,double,double,double,int,boolean)>(r0, r1, r2, r3, d0, d1, d0, d1, i0, z0);
+
+        return $r4;
+    }
+
+    public static org.apache.hadoop.fs.Path buildClusters(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.mahout.common.distance.DistanceMeasure, double, double, double, double, int, boolean) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r2, $r7, $r9;
+        org.apache.mahout.common.distance.DistanceMeasure r3;
+        double d0, d1, d2, d3;
+        int i0;
+        boolean z0;
+        java.lang.Object[] $r4;
+        org.slf4j.Logger $r5;
+        java.lang.Double $r6, $r8;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter3: org.apache.mahout.common.distance.DistanceMeasure;
+
+        d0 := @parameter4: double;
+
+        d1 := @parameter5: double;
+
+        d2 := @parameter6: double;
+
+        d3 := @parameter7: double;
+
+        i0 := @parameter8: int;
+
+        z0 := @parameter9: boolean;
+
+        $r5 = <org.apache.mahout.clustering.canopy.CanopyDriver: org.slf4j.Logger log>;
+
+        $r4 = newarray (java.lang.Object)[5];
+
+        $r4[0] = r1;
+
+        $r4[1] = r2;
+
+        $r4[2] = r3;
+
+        $r6 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d0);
+
+        $r4[3] = $r6;
+
+        $r8 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d1);
+
+        $r4[4] = $r8;
+
+        interfaceinvoke $r5.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object[])>("Build Clusters Input: {} Out: {} Measure: {} t1: {} t2: {}", $r4);
+
+        if z0 == 0 goto label1;
+
+        $r9 = staticinvoke <org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.hadoop.fs.Path buildClustersSeq(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.mahout.common.distance.DistanceMeasure,double,double,int)>(r1, r2, r3, d0, d1, i0);
+
+        return $r9;
+
+     label1:
+        $r7 = staticinvoke <org.apache.mahout.clustering.canopy.CanopyDriver: org.apache.hadoop.fs.Path buildClustersMR(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.mahout.common.distance.DistanceMeasure,double,double,double,double,int)>(r0, r1, r2, r3, d0, d1, d2, d3, i0);
+
+        return $r7;
+    }
+
+    private static org.apache.hadoop.fs.Path buildClustersSeq(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.mahout.common.distance.DistanceMeasure, double, double, int) throws java.io.IOException
+    {
+        org.apache.hadoop.fs.Path r0, r1, $r18, $r20;
+        org.apache.mahout.common.distance.DistanceMeasure r2;
+        double d0, d1;
+        int i0;
+        java.util.ArrayList r4;
+        org.apache.hadoop.fs.FileSystem r6;
+        org.apache.mahout.clustering.canopy.Canopy r9;
+        java.util.Iterator r10, r37;
+        org.apache.mahout.clustering.canopy.CanopyClusterer $r11;
+        org.apache.hadoop.conf.Configuration $r13;
+        java.net.URI $r14;
+        org.apache.mahout.common.iterator.sequencefile.PathType $r15;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterable $r16;
+        org.apache.hadoop.fs.PathFilter $r17;
+        boolean $z0, $z1, $z2;
+        org.apache.hadoop.io.SequenceFile$Writer $r19;
+        java.lang.Object $r21, $r36;
+        org.apache.mahout.clustering.iterator.ClusterWritable $r22;
+        long $l1, $l2, $l4;
+        org.slf4j.Logger $r23, $r27;
+        org.apache.hadoop.io.Text $r24;
+        java.lang.String $r25, $r28, $r30, $r32;
+        byte $b3;
+        java.lang.Object[] $r26;
+        org.apache.mahout.math.Vector $r29, $r33, $r35;
+        java.lang.Long $r31;
+        java.lang.Throwable $r34;
+        org.apache.mahout.math.VectorWritable r38;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.mahout.common.distance.DistanceMeasure;
+
+        d0 := @parameter3: double;
+
+        d1 := @parameter4: double;
+
+        i0 := @parameter5: int;
+
+        $r11 = new org.apache.mahout.clustering.canopy.CanopyClusterer;
+
+        specialinvoke $r11.<org.apache.mahout.clustering.canopy.CanopyClusterer: void <init>(org.apache.mahout.common.distance.DistanceMeasure,double,double)>(r2, d0, d1);
+
+        r4 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList()>();
+
+        $r13 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r13.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r14 = virtualinvoke r0.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r6 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r14, $r13);
+
+        $r16 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterable;
+
+        $r15 = <org.apache.mahout.common.iterator.sequencefile.PathType: org.apache.mahout.common.iterator.sequencefile.PathType LIST>;
+
+        $r17 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter logsCRCFilter()>();
+
+        specialinvoke $r16.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterable: void <init>(org.apache.hadoop.fs.Path,org.apache.mahout.common.iterator.sequencefile.PathType,org.apache.hadoop.fs.PathFilter,org.apache.hadoop.conf.Configuration)>(r0, $r15, $r17, $r13);
+
+        r37 = virtualinvoke $r16.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r37.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r36 = interfaceinvoke r37.<java.util.Iterator: java.lang.Object next()>();
+
+        r38 = (org.apache.mahout.math.VectorWritable) $r36;
+
+        $r35 = virtualinvoke r38.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        virtualinvoke $r11.<org.apache.mahout.clustering.canopy.CanopyClusterer: void addPointToCanopies(org.apache.mahout.math.Vector,java.util.Collection)>($r35, r4);
+
+        goto label1;
+
+     label2:
+        $r18 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r18.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r1, "clusters-0-final");
+
+        $r20 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r20.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r18, "part-r-00000");
+
+        $r19 = new org.apache.hadoop.io.SequenceFile$Writer;
+
+        specialinvoke $r19.<org.apache.hadoop.io.SequenceFile$Writer: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>(r6, $r13, $r20, class "org/apache/hadoop/io/Text", class "org/apache/mahout/clustering/iterator/ClusterWritable");
+
+     label3:
+        $r22 = new org.apache.mahout.clustering.iterator.ClusterWritable;
+
+        specialinvoke $r22.<org.apache.mahout.clustering.iterator.ClusterWritable: void <init>()>();
+
+        r10 = interfaceinvoke r4.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label4:
+        $z1 = interfaceinvoke r10.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label6;
+
+        $r21 = interfaceinvoke r10.<java.util.Iterator: java.lang.Object next()>();
+
+        r9 = (org.apache.mahout.clustering.canopy.Canopy) $r21;
+
+        virtualinvoke r9.<org.apache.mahout.clustering.canopy.Canopy: void computeParameters()>();
+
+        $r23 = <org.apache.mahout.clustering.canopy.CanopyDriver: org.slf4j.Logger log>;
+
+        $z2 = interfaceinvoke $r23.<org.slf4j.Logger: boolean isDebugEnabled()>();
+
+        if $z2 == 0 goto label5;
+
+        $r27 = <org.apache.mahout.clustering.canopy.CanopyDriver: org.slf4j.Logger log>;
+
+        $r26 = newarray (java.lang.Object)[4];
+
+        $r30 = virtualinvoke r9.<org.apache.mahout.clustering.canopy.Canopy: java.lang.String getIdentifier()>();
+
+        $r26[0] = $r30;
+
+        $r29 = virtualinvoke r9.<org.apache.mahout.clustering.canopy.Canopy: org.apache.mahout.math.Vector getCenter()>();
+
+        $r28 = staticinvoke <org.apache.mahout.clustering.AbstractCluster: java.lang.String formatVector(org.apache.mahout.math.Vector,java.lang.String[])>($r29, null);
+
+        $r26[1] = $r28;
+
+        $l4 = virtualinvoke r9.<org.apache.mahout.clustering.canopy.Canopy: long getNumObservations()>();
+
+        $r31 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l4);
+
+        $r26[2] = $r31;
+
+        $r33 = virtualinvoke r9.<org.apache.mahout.clustering.canopy.Canopy: org.apache.mahout.math.Vector getRadius()>();
+
+        $r32 = staticinvoke <org.apache.mahout.clustering.AbstractCluster: java.lang.String formatVector(org.apache.mahout.math.Vector,java.lang.String[])>($r33, null);
+
+        $r26[3] = $r32;
+
+        interfaceinvoke $r27.<org.slf4j.Logger: void debug(java.lang.String,java.lang.Object[])>("Writing Canopy:{} center:{} numPoints:{} radius:{}", $r26);
+
+     label5:
+        $l1 = virtualinvoke r9.<org.apache.mahout.clustering.canopy.Canopy: long getNumObservations()>();
+
+        $l2 = (long) i0;
+
+        $b3 = $l1 cmp $l2;
+
+        if $b3 <= 0 goto label4;
+
+        virtualinvoke $r22.<org.apache.mahout.clustering.iterator.ClusterWritable: void setValue(org.apache.mahout.clustering.Cluster)>(r9);
+
+        $r24 = new org.apache.hadoop.io.Text;
+
+        $r25 = virtualinvoke r9.<org.apache.mahout.clustering.canopy.Canopy: java.lang.String getIdentifier()>();
+
+        specialinvoke $r24.<org.apache.hadoop.io.Text: void <init>(java.lang.String)>($r25);
+
+        virtualinvoke $r19.<org.apache.hadoop.io.SequenceFile$Writer: void append(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r24, $r22);
+
+        goto label4;
+
+     label6:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r19, 0);
+
+        goto label9;
+
+     label7:
+        $r34 := @caughtexception;
+
+     label8:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r19, 0);
+
+        throw $r34;
+
+     label9:
+        return $r18;
+
+        catch java.lang.Throwable from label3 to label6 with label7;
+        catch java.lang.Throwable from label7 to label8 with label7;
+    }
+
+    private static org.apache.hadoop.fs.Path buildClustersMR(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.mahout.common.distance.DistanceMeasure, double, double, double, double, int) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r2, $r19;
+        org.apache.mahout.common.distance.DistanceMeasure r3;
+        double d0, d1, d2, d3;
+        int i0;
+        java.lang.String $r6, $r8, $r9, $r10, $r11, $r12, $r18, $r21;
+        java.lang.Class $r7;
+        java.lang.StringBuilder $r13, $r15, $r16, $r20, $r22, $r23;
+        org.apache.hadoop.mapreduce.Job $r14;
+        boolean $z0;
+        java.lang.InterruptedException $r17;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter3: org.apache.mahout.common.distance.DistanceMeasure;
+
+        d0 := @parameter4: double;
+
+        d1 := @parameter5: double;
+
+        d2 := @parameter6: double;
+
+        d3 := @parameter7: double;
+
+        i0 := @parameter8: int;
+
+        $r7 = virtualinvoke r3.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r6 = virtualinvoke $r7.<java.lang.Class: java.lang.String getName()>();
+
+        virtualinvoke r0.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("org.apache.mahout.clustering.canopy.measure", $r6);
+
+        $r8 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(d0);
+
+        virtualinvoke r0.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("org.apache.mahout.clustering.canopy.t1", $r8);
+
+        $r9 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(d1);
+
+        virtualinvoke r0.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("org.apache.mahout.clustering.canopy.t2", $r9);
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(d2);
+
+        virtualinvoke r0.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("org.apache.mahout.clustering.canopy.t3", $r10);
+
+        $r11 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(d3);
+
+        virtualinvoke r0.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("org.apache.mahout.clustering.canopy.t4", $r11);
+
+        $r12 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i0);
+
+        virtualinvoke r0.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("org.apache.mahout.clustering.canopy.canopyFilter", $r12);
+
+        $r14 = new org.apache.hadoop.mapreduce.Job;
+
+        $r13 = new java.lang.StringBuilder;
+
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>()>();
+
+        $r16 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Canopy Driver running buildClusters over input: ");
+
+        $r15 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r18 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r14.<org.apache.hadoop.mapreduce.Job: void <init>(org.apache.hadoop.conf.Configuration,java.lang.String)>(r0, $r18);
+
+        virtualinvoke $r14.<org.apache.hadoop.mapreduce.Job: void setInputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat");
+
+        virtualinvoke $r14.<org.apache.hadoop.mapreduce.Job: void setOutputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        virtualinvoke $r14.<org.apache.hadoop.mapreduce.Job: void setMapperClass(java.lang.Class)>(class "org/apache/mahout/clustering/canopy/CanopyMapper");
+
+        virtualinvoke $r14.<org.apache.hadoop.mapreduce.Job: void setMapOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/Text");
+
+        virtualinvoke $r14.<org.apache.hadoop.mapreduce.Job: void setMapOutputValueClass(java.lang.Class)>(class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke $r14.<org.apache.hadoop.mapreduce.Job: void setReducerClass(java.lang.Class)>(class "org/apache/mahout/clustering/canopy/CanopyReducer");
+
+        virtualinvoke $r14.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/Text");
+
+        virtualinvoke $r14.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(class "org/apache/mahout/clustering/iterator/ClusterWritable");
+
+        virtualinvoke $r14.<org.apache.hadoop.mapreduce.Job: void setNumReduceTasks(int)>(1);
+
+        virtualinvoke $r14.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(class "org/apache/mahout/clustering/canopy/CanopyDriver");
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void addInputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r14, r1);
+
+        $r19 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r19.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r2, "clusters-0-final");
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r14, $r19);
+
+        $z0 = virtualinvoke $r14.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if $z0 != 0 goto label1;
+
+        $r17 = new java.lang.InterruptedException;
+
+        $r22 = new java.lang.StringBuilder;
+
+        specialinvoke $r22.<java.lang.StringBuilder: void <init>()>();
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Canopy Job failed processing ");
+
+        $r20 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r17.<java.lang.InterruptedException: void <init>(java.lang.String)>($r21);
+
+        throw $r17;
+
+     label1:
+        return $r19;
+    }
+
+    private static void clusterData(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, double, boolean) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r2, r3, $r5;
+        double d0;
+        boolean z0;
+        org.apache.mahout.clustering.iterator.CanopyClusteringPolicy $r4;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter3: org.apache.hadoop.fs.Path;
+
+        d0 := @parameter4: double;
+
+        z0 := @parameter5: boolean;
+
+        $r4 = new org.apache.mahout.clustering.iterator.CanopyClusteringPolicy;
+
+        specialinvoke $r4.<org.apache.mahout.clustering.iterator.CanopyClusteringPolicy: void <init>()>();
+
+        staticinvoke <org.apache.mahout.clustering.classify.ClusterClassifier: void writePolicy(org.apache.mahout.clustering.iterator.ClusteringPolicy,org.apache.hadoop.fs.Path)>($r4, r2);
+
+        $r5 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r5.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r3, "clusteredPoints");
+
+        staticinvoke <org.apache.mahout.clustering.classify.ClusterClassificationDriver: void run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,double,boolean,boolean)>(r0, r1, r3, $r5, d0, 1, z0);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.clustering.canopy.CanopyDriver: java.lang.String DEFAULT_CLUSTERED_POINTS_DIRECTORY> = "clusteredPoints";
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/clustering/canopy/CanopyDriver");
+
+        <org.apache.mahout.clustering.canopy.CanopyDriver: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

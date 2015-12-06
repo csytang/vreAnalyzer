@@ -1,0 +1,307 @@
+public class org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable extends org.apache.mahout.clustering.classify.WeightedVectorWritable
+{
+    private java.util.Map properties;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable r0;
+
+        r0 := @this: org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable;
+
+        specialinvoke r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: void <init>()>();
+
+        return;
+    }
+
+    public void <init>(java.util.Map)
+    {
+        org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable r0;
+        java.util.Map r1;
+
+        r0 := @this: org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable;
+
+        r1 := @parameter0: java.util.Map;
+
+        specialinvoke r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable: java.util.Map properties> = r1;
+
+        return;
+    }
+
+    public void <init>(double, org.apache.mahout.math.Vector, java.util.Map)
+    {
+        org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable r0;
+        double d0;
+        org.apache.mahout.math.Vector r1;
+        java.util.Map r2;
+
+        r0 := @this: org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable;
+
+        d0 := @parameter0: double;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        r2 := @parameter2: java.util.Map;
+
+        specialinvoke r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: void <init>(double,org.apache.mahout.math.Vector)>(d0, r1);
+
+        r0.<org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable: java.util.Map properties> = r2;
+
+        return;
+    }
+
+    public java.util.Map getProperties()
+    {
+        org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable r0;
+        java.util.Map $r1;
+
+        r0 := @this: org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable;
+
+        $r1 = r0.<org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable: java.util.Map properties>;
+
+        return $r1;
+    }
+
+    public void setProperties(java.util.Map)
+    {
+        org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable r0;
+        java.util.Map r1;
+
+        r0 := @this: org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable;
+
+        r1 := @parameter0: java.util.Map;
+
+        r0.<org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable: java.util.Map properties> = r1;
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable r0;
+        java.io.DataInput r1;
+        int i0, i1;
+        java.util.HashMap $r4;
+        org.apache.hadoop.io.Text $r5, $r7;
+        java.lang.String $r6, $r8;
+        java.util.Map $r9;
+
+        r0 := @this: org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        specialinvoke r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: void readFields(java.io.DataInput)>(r1);
+
+        i0 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        if i0 <= 0 goto label2;
+
+        $r4 = new java.util.HashMap;
+
+        specialinvoke $r4.<java.util.HashMap: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable: java.util.Map properties> = $r4;
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label2;
+
+        $r5 = new org.apache.hadoop.io.Text;
+
+        $r6 = interfaceinvoke r1.<java.io.DataInput: java.lang.String readUTF()>();
+
+        specialinvoke $r5.<org.apache.hadoop.io.Text: void <init>(java.lang.String)>($r6);
+
+        $r7 = new org.apache.hadoop.io.Text;
+
+        $r8 = interfaceinvoke r1.<java.io.DataInput: java.lang.String readUTF()>();
+
+        specialinvoke $r7.<org.apache.hadoop.io.Text: void <init>(java.lang.String)>($r8);
+
+        $r9 = r0.<org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable: java.util.Map properties>;
+
+        interfaceinvoke $r9.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r5, $r7);
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable r0;
+        java.io.DataOutput r1;
+        java.util.Iterator r2;
+        java.util.Map$Entry r3;
+        java.util.Map $r4, $r5, $r6, $r15;
+        java.util.Set $r7;
+        boolean $z0;
+        java.lang.Object $r8, $r9, $r12;
+        org.apache.hadoop.io.Text $r10, $r13;
+        java.lang.String $r11, $r14;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        specialinvoke r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: void write(java.io.DataOutput)>(r1);
+
+        $r4 = r0.<org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable: java.util.Map properties>;
+
+        if $r4 == null goto label1;
+
+        $r15 = r0.<org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable: java.util.Map properties>;
+
+        $i0 = interfaceinvoke $r15.<java.util.Map: int size()>();
+
+        goto label2;
+
+     label1:
+        $i0 = 0;
+
+     label2:
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i0);
+
+        $r5 = r0.<org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable: java.util.Map properties>;
+
+        if $r5 == null goto label4;
+
+        $r6 = r0.<org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable: java.util.Map properties>;
+
+        $r7 = interfaceinvoke $r6.<java.util.Map: java.util.Set entrySet()>();
+
+        r2 = interfaceinvoke $r7.<java.util.Set: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r8 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.util.Map$Entry) $r8;
+
+        $r9 = interfaceinvoke r3.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r10 = (org.apache.hadoop.io.Text) $r9;
+
+        $r11 = virtualinvoke $r10.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeUTF(java.lang.String)>($r11);
+
+        $r12 = interfaceinvoke r3.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r13 = (org.apache.hadoop.io.Text) $r12;
+
+        $r14 = virtualinvoke $r13.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeUTF(java.lang.String)>($r14);
+
+        goto label3;
+
+     label4:
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable r0;
+        org.apache.mahout.math.Vector r1;
+        java.lang.StringBuilder r2, $r5, $r6, $r8, $r17, $r20, $r21;
+        java.util.Iterator r3;
+        java.util.Map$Entry r4;
+        double $d0;
+        java.util.Map $r7, $r11, $r12;
+        java.lang.String $r10, $r18, $r24, $r25;
+        boolean $z0, $z1;
+        java.util.Set $r13;
+        java.lang.Object $r14, $r16, $r19;
+        org.apache.hadoop.io.Text $r15, $r23;
+
+        r0 := @this: org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable;
+
+        r1 = virtualinvoke r0.<org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable: org.apache.mahout.math.Vector getVector()>();
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>(java.lang.String)>("wt: ");
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable: double getWeight()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(double)>($d0);
+
+        r2 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(32);
+
+        $r7 = r0.<org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable: java.util.Map properties>;
+
+        if $r7 == null goto label2;
+
+        $r11 = r0.<org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable: java.util.Map properties>;
+
+        $z0 = interfaceinvoke $r11.<java.util.Map: boolean isEmpty()>();
+
+        if $z0 != 0 goto label2;
+
+        $r12 = r0.<org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable: java.util.Map properties>;
+
+        $r13 = interfaceinvoke $r12.<java.util.Map: java.util.Set entrySet()>();
+
+        r3 = interfaceinvoke $r13.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z1 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label2;
+
+        $r14 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (java.util.Map$Entry) $r14;
+
+        $r16 = interfaceinvoke r4.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r15 = (org.apache.hadoop.io.Text) $r16;
+
+        $r18 = virtualinvoke $r15.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        $r17 = virtualinvoke r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r18);
+
+        $r20 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(": ");
+
+        $r19 = interfaceinvoke r4.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r23 = (org.apache.hadoop.io.Text) $r19;
+
+        $r24 = virtualinvoke $r23.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r24);
+
+        virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(32);
+
+        goto label1;
+
+     label2:
+        $r8 = virtualinvoke r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" vec: ");
+
+        if r1 != null goto label3;
+
+        $r25 = "null";
+
+        goto label4;
+
+     label3:
+        $r25 = staticinvoke <org.apache.mahout.clustering.AbstractCluster: java.lang.String formatVector(org.apache.mahout.math.Vector,java.lang.String[])>(r1, null);
+
+     label4:
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r25);
+
+        $r10 = virtualinvoke r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r10;
+    }
+}

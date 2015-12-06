@@ -1,0 +1,129 @@
+public class org.apache.mahout.vectorizer.encoders.Dictionary extends java.lang.Object
+{
+    private final java.util.Map dict;
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.encoders.Dictionary r0;
+        java.util.LinkedHashMap $r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.Dictionary;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = staticinvoke <com.google.common.collect.Maps: java.util.LinkedHashMap newLinkedHashMap()>();
+
+        r0.<org.apache.mahout.vectorizer.encoders.Dictionary: java.util.Map dict> = $r1;
+
+        return;
+    }
+
+    public int intern(java.lang.String)
+    {
+        org.apache.mahout.vectorizer.encoders.Dictionary r0;
+        java.lang.String r1;
+        java.util.Map $r2, $r3, $r6, $r7;
+        boolean $z0;
+        java.lang.Object $r4;
+        java.lang.Integer $r5, $r8;
+        int $i0, $i1;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.Dictionary;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = r0.<org.apache.mahout.vectorizer.encoders.Dictionary: java.util.Map dict>;
+
+        $z0 = interfaceinvoke $r2.<java.util.Map: boolean containsKey(java.lang.Object)>(r1);
+
+        if $z0 != 0 goto label1;
+
+        $r7 = r0.<org.apache.mahout.vectorizer.encoders.Dictionary: java.util.Map dict>;
+
+        $r6 = r0.<org.apache.mahout.vectorizer.encoders.Dictionary: java.util.Map dict>;
+
+        $i1 = interfaceinvoke $r6.<java.util.Map: int size()>();
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        interfaceinvoke $r7.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, $r8);
+
+     label1:
+        $r3 = r0.<org.apache.mahout.vectorizer.encoders.Dictionary: java.util.Map dict>;
+
+        $r4 = interfaceinvoke $r3.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        $r5 = (java.lang.Integer) $r4;
+
+        $i0 = virtualinvoke $r5.<java.lang.Integer: int intValue()>();
+
+        return $i0;
+    }
+
+    public java.util.List values()
+    {
+        org.apache.mahout.vectorizer.encoders.Dictionary r0;
+        java.util.Map $r1;
+        java.util.Set $r2;
+        java.util.ArrayList $r3;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.Dictionary;
+
+        $r1 = r0.<org.apache.mahout.vectorizer.encoders.Dictionary: java.util.Map dict>;
+
+        $r2 = interfaceinvoke $r1.<java.util.Map: java.util.Set keySet()>();
+
+        $r3 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList(java.lang.Iterable)>($r2);
+
+        return $r3;
+    }
+
+    public int size()
+    {
+        org.apache.mahout.vectorizer.encoders.Dictionary r0;
+        java.util.Map $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.Dictionary;
+
+        $r1 = r0.<org.apache.mahout.vectorizer.encoders.Dictionary: java.util.Map dict>;
+
+        $i0 = interfaceinvoke $r1.<java.util.Map: int size()>();
+
+        return $i0;
+    }
+
+    public static org.apache.mahout.vectorizer.encoders.Dictionary fromList(java.lang.Iterable)
+    {
+        java.lang.Iterable r0;
+        java.util.Iterator r2;
+        java.lang.String r3;
+        org.apache.mahout.vectorizer.encoders.Dictionary $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+
+        r0 := @parameter0: java.lang.Iterable;
+
+        $r4 = new org.apache.mahout.vectorizer.encoders.Dictionary;
+
+        specialinvoke $r4.<org.apache.mahout.vectorizer.encoders.Dictionary: void <init>()>();
+
+        r2 = interfaceinvoke r0.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.lang.String) $r5;
+
+        virtualinvoke $r4.<org.apache.mahout.vectorizer.encoders.Dictionary: int intern(java.lang.String)>(r3);
+
+        goto label1;
+
+     label2:
+        return $r4;
+    }
+}

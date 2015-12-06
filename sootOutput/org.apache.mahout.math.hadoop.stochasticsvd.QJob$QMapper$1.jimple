@@ -1,0 +1,37 @@
+class org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$1 extends java.lang.Object implements java.io.Closeable
+{
+    final org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper this$0;
+
+    void <init>(org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$1 r0;
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$1;
+
+        r1 := @parameter0: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$1: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$1 r0;
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper $r1;
+        org.apache.hadoop.mapred.lib.MultipleOutputs $r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$1;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$1: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper this$0>;
+
+        $r2 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.hadoop.mapred.lib.MultipleOutputs access$000(org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper)>($r1);
+
+        virtualinvoke $r2.<org.apache.hadoop.mapred.lib.MultipleOutputs: void close()>();
+
+        return;
+    }
+}

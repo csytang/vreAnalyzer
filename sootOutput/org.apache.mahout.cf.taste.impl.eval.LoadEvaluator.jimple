@@ -1,0 +1,108 @@
+public final class org.apache.mahout.cf.taste.impl.eval.LoadEvaluator extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.cf.taste.impl.eval.LoadEvaluator r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.eval.LoadEvaluator;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.mahout.cf.taste.impl.eval.LoadStatistics runLoad(org.apache.mahout.cf.taste.recommender.Recommender) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.recommender.Recommender r0;
+        org.apache.mahout.cf.taste.impl.eval.LoadStatistics $r1;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.recommender.Recommender;
+
+        $r1 = staticinvoke <org.apache.mahout.cf.taste.impl.eval.LoadEvaluator: org.apache.mahout.cf.taste.impl.eval.LoadStatistics runLoad(org.apache.mahout.cf.taste.recommender.Recommender,int)>(r0, 10);
+
+        return $r1;
+    }
+
+    public static org.apache.mahout.cf.taste.impl.eval.LoadStatistics runLoad(org.apache.mahout.cf.taste.recommender.Recommender, int) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.recommender.Recommender r0;
+        int i0, i1;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        double d0, $d1;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator r2, $r6;
+        java.lang.Object $r7, $r14;
+        long $l2, $l3;
+        java.lang.Long $r8, $r16;
+        java.util.ArrayList $r9;
+        java.util.concurrent.atomic.AtomicInteger $r11;
+        boolean $z0;
+        org.apache.mahout.cf.taste.impl.eval.LoadStatistics $r12;
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverageAndStdDev $r13;
+        org.apache.mahout.cf.taste.impl.eval.LoadCallable $r15;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.recommender.Recommender;
+
+        i0 := @parameter1: int;
+
+        r1 = interfaceinvoke r0.<org.apache.mahout.cf.taste.recommender.Recommender: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        i1 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsers()>();
+
+        $d1 = (double) i1;
+
+        d0 = 1000.0 / $d1;
+
+        $r6 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs()>();
+
+        r2 = staticinvoke <org.apache.mahout.cf.taste.impl.common.SamplingLongPrimitiveIterator: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator maybeWrapIterator(org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator,double)>($r6, d0);
+
+        $r7 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: java.lang.Object next()>();
+
+        $r8 = (java.lang.Long) $r7;
+
+        $l2 = virtualinvoke $r8.<java.lang.Long: long longValue()>();
+
+        interfaceinvoke r0.<org.apache.mahout.cf.taste.recommender.Recommender: java.util.List recommend(long,int)>($l2, i0);
+
+        $r9 = new java.util.ArrayList;
+
+        specialinvoke $r9.<java.util.ArrayList: void <init>()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r15 = new org.apache.mahout.cf.taste.impl.eval.LoadCallable;
+
+        $r14 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: java.lang.Object next()>();
+
+        $r16 = (java.lang.Long) $r14;
+
+        $l3 = virtualinvoke $r16.<java.lang.Long: long longValue()>();
+
+        specialinvoke $r15.<org.apache.mahout.cf.taste.impl.eval.LoadCallable: void <init>(org.apache.mahout.cf.taste.recommender.Recommender,long)>(r0, $l3);
+
+        interfaceinvoke $r9.<java.util.Collection: boolean add(java.lang.Object)>($r15);
+
+        goto label1;
+
+     label2:
+        $r11 = new java.util.concurrent.atomic.AtomicInteger;
+
+        specialinvoke $r11.<java.util.concurrent.atomic.AtomicInteger: void <init>()>();
+
+        $r13 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverageAndStdDev;
+
+        specialinvoke $r13.<org.apache.mahout.cf.taste.impl.common.FullRunningAverageAndStdDev: void <init>()>();
+
+        staticinvoke <org.apache.mahout.cf.taste.impl.eval.AbstractDifferenceRecommenderEvaluator: void execute(java.util.Collection,java.util.concurrent.atomic.AtomicInteger,org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev)>($r9, $r11, $r13);
+
+        $r12 = new org.apache.mahout.cf.taste.impl.eval.LoadStatistics;
+
+        specialinvoke $r12.<org.apache.mahout.cf.taste.impl.eval.LoadStatistics: void <init>(org.apache.mahout.cf.taste.impl.common.RunningAverage)>($r13);
+
+        return $r12;
+    }
+}

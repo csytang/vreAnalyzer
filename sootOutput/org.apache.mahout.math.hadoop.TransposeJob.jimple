@@ -1,0 +1,151 @@
+public class org.apache.mahout.math.hadoop.TransposeJob extends org.apache.mahout.common.AbstractJob
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.TransposeJob r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.TransposeJob;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        return;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.mahout.math.hadoop.TransposeJob $r1;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.mahout.math.hadoop.TransposeJob;
+
+        specialinvoke $r1.<org.apache.mahout.math.hadoop.TransposeJob: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.util.Tool,java.lang.String[])>($r1, r0);
+
+        return;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.math.hadoop.TransposeJob r0;
+        java.lang.String[] r1;
+        java.util.Map r2;
+        int i0, i1;
+        java.lang.String $r4, $r5;
+        org.apache.mahout.math.hadoop.DistributedRowMatrix $r6;
+        org.apache.hadoop.fs.Path $r7, $r8;
+        org.apache.hadoop.conf.Configuration $r9, $r10;
+
+        r0 := @this: org.apache.mahout.math.hadoop.TransposeJob;
+
+        r1 := @parameter0: java.lang.String[];
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.TransposeJob: void addInputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.TransposeJob: void addOption(java.lang.String,java.lang.String,java.lang.String)>("numRows", "nr", "Number of rows of the input matrix");
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.TransposeJob: void addOption(java.lang.String,java.lang.String,java.lang.String)>("numCols", "nc", "Number of columns of the input matrix");
+
+        r2 = virtualinvoke r0.<org.apache.mahout.math.hadoop.TransposeJob: java.util.Map parseArguments(java.lang.String[])>(r1);
+
+        if r2 != null goto label1;
+
+        return -1;
+
+     label1:
+        $r4 = virtualinvoke r0.<org.apache.mahout.math.hadoop.TransposeJob: java.lang.String getOption(java.lang.String)>("numRows");
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r4);
+
+        $r5 = virtualinvoke r0.<org.apache.mahout.math.hadoop.TransposeJob: java.lang.String getOption(java.lang.String)>("numCols");
+
+        i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r5);
+
+        $r6 = new org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $r7 = virtualinvoke r0.<org.apache.mahout.math.hadoop.TransposeJob: org.apache.hadoop.fs.Path getInputPath()>();
+
+        $r8 = virtualinvoke r0.<org.apache.mahout.math.hadoop.TransposeJob: org.apache.hadoop.fs.Path getTempPath()>();
+
+        specialinvoke $r6.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int)>($r7, $r8, i0, i1);
+
+        $r9 = new org.apache.hadoop.conf.Configuration;
+
+        $r10 = virtualinvoke r0.<org.apache.mahout.math.hadoop.TransposeJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        specialinvoke $r9.<org.apache.hadoop.conf.Configuration: void <init>(org.apache.hadoop.conf.Configuration)>($r10);
+
+        virtualinvoke $r6.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void setConf(org.apache.hadoop.conf.Configuration)>($r9);
+
+        virtualinvoke $r6.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.mahout.math.hadoop.DistributedRowMatrix transpose()>();
+
+        return 0;
+    }
+
+    public static org.apache.hadoop.mapreduce.Job buildTransposeJob(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int) throws java.io.IOException
+    {
+        org.apache.hadoop.fs.Path r0, r1;
+        int i0;
+        org.apache.hadoop.conf.Configuration $r2;
+        org.apache.hadoop.mapreduce.Job $r3;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter2: int;
+
+        $r2 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r2.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r3 = staticinvoke <org.apache.mahout.math.hadoop.TransposeJob: org.apache.hadoop.mapreduce.Job buildTransposeJob(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int)>($r2, r0, r1, i0);
+
+        return $r3;
+    }
+
+    public static org.apache.hadoop.mapreduce.Job buildTransposeJob(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0, $r4;
+        org.apache.hadoop.fs.Path r1, r2;
+        int i0;
+        org.apache.hadoop.mapreduce.Job r3;
+        java.lang.String $r5, $r9;
+        java.lang.StringBuilder $r6, $r7, $r8;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter3: int;
+
+        r3 = staticinvoke <org.apache.mahout.common.HadoopUtil: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,org.apache.hadoop.conf.Configuration)>(r1, r2, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", class "org/apache/mahout/common/mapreduce/TransposeMapper", class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable", class "org/apache/mahout/common/mapreduce/MergeVectorsReducer", class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable", class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat", r0);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: void setCombinerClass(java.lang.Class)>(class "org/apache/mahout/common/mapreduce/MergeVectorsCombiner");
+
+        $r4 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r5 = <org.apache.mahout.common.mapreduce.TransposeMapper: java.lang.String NEW_NUM_COLS_PARAM>;
+
+        virtualinvoke $r4.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>($r5, i0);
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("TransposeJob: ");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: void setJobName(java.lang.String)>($r9);
+
+        return r3;
+    }
+}

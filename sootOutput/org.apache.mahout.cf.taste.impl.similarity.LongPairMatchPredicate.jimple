@@ -1,0 +1,78 @@
+final class org.apache.mahout.cf.taste.impl.similarity.LongPairMatchPredicate extends java.lang.Object implements org.apache.mahout.cf.taste.impl.common.Cache$MatchPredicate
+{
+    private final long id;
+
+    void <init>(long)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.LongPairMatchPredicate r0;
+        long l0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.LongPairMatchPredicate;
+
+        l0 := @parameter0: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.LongPairMatchPredicate: long id> = l0;
+
+        return;
+    }
+
+    public boolean matches(org.apache.mahout.common.LongPair)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.LongPairMatchPredicate r0;
+        org.apache.mahout.common.LongPair r1;
+        long $l0, $l1, $l3, $l4;
+        byte $b2, $b5;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.LongPairMatchPredicate;
+
+        r1 := @parameter0: org.apache.mahout.common.LongPair;
+
+        $l0 = virtualinvoke r1.<org.apache.mahout.common.LongPair: long getFirst()>();
+
+        $l1 = r0.<org.apache.mahout.cf.taste.impl.similarity.LongPairMatchPredicate: long id>;
+
+        $b2 = $l0 cmp $l1;
+
+        if $b2 == 0 goto label1;
+
+        $l3 = virtualinvoke r1.<org.apache.mahout.common.LongPair: long getSecond()>();
+
+        $l4 = r0.<org.apache.mahout.cf.taste.impl.similarity.LongPairMatchPredicate: long id>;
+
+        $b5 = $l3 cmp $l4;
+
+        if $b5 != 0 goto label2;
+
+     label1:
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        return $z0;
+    }
+
+    public volatile boolean matches(java.lang.Object)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.LongPairMatchPredicate r0;
+        java.lang.Object r1;
+        org.apache.mahout.common.LongPair $r2;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.LongPairMatchPredicate;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (org.apache.mahout.common.LongPair) r1;
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.LongPairMatchPredicate: boolean matches(org.apache.mahout.common.LongPair)>($r2);
+
+        return $z0;
+    }
+}

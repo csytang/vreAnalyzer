@@ -1,0 +1,97 @@
+public class org.apache.mahout.math.hadoop.TimesSquaredJob$TimesMapper extends org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.TimesSquaredJob$TimesMapper r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.TimesSquaredJob$TimesMapper;
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper: void <init>()>();
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.IntWritable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.TimesSquaredJob$TimesMapper r0;
+        org.apache.hadoop.io.IntWritable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        double d0;
+        byte $b0;
+        org.apache.mahout.math.Vector $r4;
+        int $i1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.TimesSquaredJob$TimesMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        d0 = virtualinvoke r0.<org.apache.mahout.math.hadoop.TimesSquaredJob$TimesMapper: double scale(org.apache.mahout.math.VectorWritable)>(r2);
+
+        $b0 = d0 cmpl 0.0;
+
+        if $b0 == 0 goto label1;
+
+        $r4 = virtualinvoke r0.<org.apache.mahout.math.hadoop.TimesSquaredJob$TimesMapper: org.apache.mahout.math.Vector getOutputVector()>();
+
+        $i1 = virtualinvoke r1.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        interfaceinvoke $r4.<org.apache.mahout.math.Vector: void setQuick(int,double)>($i1, d0);
+
+     label1:
+        return;
+    }
+
+    protected volatile void map(org.apache.hadoop.io.WritableComparable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.TimesSquaredJob$TimesMapper r0;
+        org.apache.hadoop.io.WritableComparable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.hadoop.io.IntWritable $r4;
+
+        r0 := @this: org.apache.mahout.math.hadoop.TimesSquaredJob$TimesMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.WritableComparable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r4 = (org.apache.hadoop.io.IntWritable) r1;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.TimesSquaredJob$TimesMapper: void map(org.apache.hadoop.io.IntWritable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r4, r2, r3);
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.TimesSquaredJob$TimesMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.IntWritable $r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.TimesSquaredJob$TimesMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.IntWritable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.TimesSquaredJob$TimesMapper: void map(org.apache.hadoop.io.IntWritable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

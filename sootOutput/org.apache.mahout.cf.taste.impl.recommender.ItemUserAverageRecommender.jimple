@@ -1,0 +1,747 @@
+public final class org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender extends org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender
+{
+    private static final org.slf4j.Logger log;
+    private final org.apache.mahout.cf.taste.impl.common.FastByIDMap itemAverages;
+    private final org.apache.mahout.cf.taste.impl.common.FastByIDMap userAverages;
+    private final org.apache.mahout.cf.taste.impl.common.RunningAverage overallAveragePrefValue;
+    private final java.util.concurrent.locks.ReadWriteLock buildAveragesLock;
+    private final org.apache.mahout.cf.taste.impl.common.RefreshHelper refreshHelper;
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r2, $r3;
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage $r4;
+        java.util.concurrent.locks.ReentrantReadWriteLock $r5;
+        org.apache.mahout.cf.taste.impl.common.RefreshHelper $r6, $r8;
+        org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender$1 $r7;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: void <init>(org.apache.mahout.cf.taste.model.DataModel)>(r1);
+
+        $r2 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.FastByIDMap itemAverages> = $r2;
+
+        $r3 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke $r3.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.FastByIDMap userAverages> = $r3;
+
+        $r4 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.RunningAverage overallAveragePrefValue> = $r4;
+
+        $r5 = new java.util.concurrent.locks.ReentrantReadWriteLock;
+
+        specialinvoke $r5.<java.util.concurrent.locks.ReentrantReadWriteLock: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock> = $r5;
+
+        $r6 = new org.apache.mahout.cf.taste.impl.common.RefreshHelper;
+
+        $r7 = new org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender$1;
+
+        specialinvoke $r7.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender$1: void <init>(org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender)>(r0);
+
+        specialinvoke $r6.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: void <init>(java.util.concurrent.Callable)>($r7);
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.RefreshHelper refreshHelper> = $r6;
+
+        $r8 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.RefreshHelper refreshHelper>;
+
+        virtualinvoke $r8.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: void addDependency(org.apache.mahout.cf.taste.common.Refreshable)>(r1);
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: void buildAverageDiffs()>();
+
+        return;
+    }
+
+    public java.util.List recommend(long, int, org.apache.mahout.cf.taste.recommender.IDRescorer, boolean) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender r0;
+        long l0;
+        int i1;
+        org.apache.mahout.cf.taste.recommender.IDRescorer r1;
+        boolean z0, $z1;
+        org.apache.mahout.cf.taste.model.PreferenceArray r2;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet r3;
+        java.util.List r5;
+        org.slf4j.Logger $r6, $r11;
+        java.lang.Long $r7;
+        org.apache.mahout.cf.taste.model.DataModel $r8;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator $r9;
+        org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender$Estimator $r10;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        r1 := @parameter2: org.apache.mahout.cf.taste.recommender.IDRescorer;
+
+        z0 := @parameter3: boolean;
+
+        if i1 < 1 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, "howMany must be at least 1");
+
+        $r6 = <org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.slf4j.Logger log>;
+
+        $r7 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l0);
+
+        interfaceinvoke $r6.<org.slf4j.Logger: void debug(java.lang.String,java.lang.Object)>("Recommending items for user ID \'{}\'", $r7);
+
+        $r8 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        r2 = interfaceinvoke $r8.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>(l0);
+
+        r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.FastIDSet getAllOtherItems(long,org.apache.mahout.cf.taste.model.PreferenceArray,boolean)>(l0, r2, z0);
+
+        $r10 = new org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender$Estimator;
+
+        specialinvoke $r10.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender$Estimator: void <init>(org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender,long,org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender$1)>(r0, l0, null);
+
+        $r9 = virtualinvoke r3.<org.apache.mahout.cf.taste.impl.common.FastIDSet: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator iterator()>();
+
+        r5 = staticinvoke <org.apache.mahout.cf.taste.impl.recommender.TopItems: java.util.List getTopItems(int,org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator,org.apache.mahout.cf.taste.recommender.IDRescorer,org.apache.mahout.cf.taste.impl.recommender.TopItems$Estimator)>(i1, $r9, r1, $r10);
+
+        $r11 = <org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.slf4j.Logger log>;
+
+        interfaceinvoke $r11.<org.slf4j.Logger: void debug(java.lang.String,java.lang.Object)>("Recommendations are: {}", r5);
+
+        return r5;
+    }
+
+    public float estimatePreference(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender r0;
+        long l0, l1;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        java.lang.Float r2;
+        float $f0, $f1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        r2 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: java.lang.Float getPreferenceValue(long,long)>(l0, l1);
+
+        if r2 == null goto label1;
+
+        $f1 = virtualinvoke r2.<java.lang.Float: float floatValue()>();
+
+        return $f1;
+
+     label1:
+        $f0 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: float doEstimatePreference(long,long)>(l0, l1);
+
+        return $f0;
+    }
+
+    private float doEstimatePreference(long, long)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender r0;
+        long l0, l1;
+        org.apache.mahout.cf.taste.impl.common.RunningAverage r1, $r9, r19;
+        float f0;
+        java.util.concurrent.locks.ReadWriteLock $r3, $r11, $r13, $r15, $r16;
+        java.util.concurrent.locks.Lock $r4, $r10, $r12, $r14, $r18;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r5, $r7;
+        java.lang.Object $r6, $r8;
+        double $d0, $d1, $d2, $d3, d4;
+        java.lang.Throwable $r17;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock>;
+
+        $r4 = interfaceinvoke $r3.<java.util.concurrent.locks.ReadWriteLock: java.util.concurrent.locks.Lock readLock()>();
+
+        interfaceinvoke $r4.<java.util.concurrent.locks.Lock: void lock()>();
+
+     label1:
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.FastByIDMap itemAverages>;
+
+        $r6 = virtualinvoke $r5.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l1);
+
+        r1 = (org.apache.mahout.cf.taste.impl.common.RunningAverage) $r6;
+
+        if r1 != null goto label3;
+
+     label2:
+        $r15 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock>;
+
+        $r14 = interfaceinvoke $r15.<java.util.concurrent.locks.ReadWriteLock: java.util.concurrent.locks.Lock readLock()>();
+
+        interfaceinvoke $r14.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return #NaNF;
+
+     label3:
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.FastByIDMap userAverages>;
+
+        $r8 = virtualinvoke $r7.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        r19 = (org.apache.mahout.cf.taste.impl.common.RunningAverage) $r8;
+
+        if r19 != null goto label5;
+
+     label4:
+        $r13 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock>;
+
+        $r12 = interfaceinvoke $r13.<java.util.concurrent.locks.ReadWriteLock: java.util.concurrent.locks.Lock readLock()>();
+
+        interfaceinvoke $r12.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return #NaNF;
+
+     label5:
+        $d0 = interfaceinvoke r19.<org.apache.mahout.cf.taste.impl.common.RunningAverage: double getAverage()>();
+
+        $r9 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.RunningAverage overallAveragePrefValue>;
+
+        $d1 = interfaceinvoke $r9.<org.apache.mahout.cf.taste.impl.common.RunningAverage: double getAverage()>();
+
+        d4 = $d0 - $d1;
+
+        $d3 = interfaceinvoke r1.<org.apache.mahout.cf.taste.impl.common.RunningAverage: double getAverage()>();
+
+        $d2 = $d3 + d4;
+
+        f0 = (float) $d2;
+
+     label6:
+        $r11 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock>;
+
+        $r10 = interfaceinvoke $r11.<java.util.concurrent.locks.ReadWriteLock: java.util.concurrent.locks.Lock readLock()>();
+
+        interfaceinvoke $r10.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        return f0;
+
+     label7:
+        $r17 := @caughtexception;
+
+     label8:
+        $r16 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock>;
+
+        $r18 = interfaceinvoke $r16.<java.util.concurrent.locks.ReadWriteLock: java.util.concurrent.locks.Lock readLock()>();
+
+        interfaceinvoke $r18.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r17;
+
+        catch java.lang.Throwable from label1 to label2 with label7;
+        catch java.lang.Throwable from label3 to label4 with label7;
+        catch java.lang.Throwable from label5 to label6 with label7;
+        catch java.lang.Throwable from label7 to label8 with label7;
+    }
+
+    private void buildAverageDiffs() throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator r2;
+        long l0, l2;
+        org.apache.mahout.cf.taste.model.PreferenceArray r3;
+        int i1, i3;
+        float f0;
+        java.util.concurrent.locks.ReadWriteLock $r5, $r7, $r13;
+        java.util.concurrent.locks.Lock $r6, $r8, $r14;
+        boolean $z0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r9, $r10;
+        double $d0;
+        org.apache.mahout.cf.taste.impl.common.RunningAverage $r11;
+        java.lang.Throwable $r12;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender;
+
+     label1:
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock>;
+
+        $r6 = interfaceinvoke $r5.<java.util.concurrent.locks.ReadWriteLock: java.util.concurrent.locks.Lock writeLock()>();
+
+        interfaceinvoke $r6.<java.util.concurrent.locks.Lock: void lock()>();
+
+        r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        r2 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs()>();
+
+     label2:
+        $z0 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        l0 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: long nextLong()>();
+
+        r3 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>(l0);
+
+        i1 = interfaceinvoke r3.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        i3 = 0;
+
+     label3:
+        if i3 >= i1 goto label2;
+
+        l2 = interfaceinvoke r3.<org.apache.mahout.cf.taste.model.PreferenceArray: long getItemID(int)>(i3);
+
+        f0 = interfaceinvoke r3.<org.apache.mahout.cf.taste.model.PreferenceArray: float getValue(int)>(i3);
+
+        $r9 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.FastByIDMap itemAverages>;
+
+        staticinvoke <org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: void addDatumAndCreateIfNeeded(long,float,org.apache.mahout.cf.taste.impl.common.FastByIDMap)>(l2, f0, $r9);
+
+        $r10 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.FastByIDMap userAverages>;
+
+        staticinvoke <org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: void addDatumAndCreateIfNeeded(long,float,org.apache.mahout.cf.taste.impl.common.FastByIDMap)>(l0, f0, $r10);
+
+        $r11 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.RunningAverage overallAveragePrefValue>;
+
+        $d0 = (double) f0;
+
+        interfaceinvoke $r11.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void addDatum(double)>($d0);
+
+        i3 = i3 + 1;
+
+        goto label3;
+
+     label4:
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock>;
+
+        $r8 = interfaceinvoke $r7.<java.util.concurrent.locks.ReadWriteLock: java.util.concurrent.locks.Lock writeLock()>();
+
+        interfaceinvoke $r8.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        goto label7;
+
+     label5:
+        $r12 := @caughtexception;
+
+     label6:
+        $r13 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock>;
+
+        $r14 = interfaceinvoke $r13.<java.util.concurrent.locks.ReadWriteLock: java.util.concurrent.locks.Lock writeLock()>();
+
+        interfaceinvoke $r14.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r12;
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    private static void addDatumAndCreateIfNeeded(long, float, org.apache.mahout.cf.taste.impl.common.FastByIDMap)
+    {
+        long l0;
+        float f0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap r0;
+        java.lang.Object $r1;
+        double $d0;
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage $r2;
+        org.apache.mahout.cf.taste.impl.common.RunningAverage r4;
+
+        l0 := @parameter0: long;
+
+        f0 := @parameter1: float;
+
+        r0 := @parameter2: org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        r4 = (org.apache.mahout.cf.taste.impl.common.RunningAverage) $r1;
+
+        if r4 != null goto label1;
+
+        $r2 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>()>();
+
+        r4 = $r2;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object put(long,java.lang.Object)>(l0, $r2);
+
+     label1:
+        $d0 = (double) f0;
+
+        interfaceinvoke r4.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void addDatum(double)>($d0);
+
+        return;
+    }
+
+    public void setPreference(long, long, float) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender r0;
+        long l0, l1;
+        float f0, $f1, $f2;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        java.util.concurrent.locks.ReadWriteLock $r4, $r12, $r20;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r5, $r7, $r13, $r18;
+        java.util.concurrent.locks.Lock $r6, $r11, $r22;
+        java.lang.Object $r8, $r10;
+        org.apache.mahout.cf.taste.impl.common.RunningAverage $r9, r25, r27;
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage $r14, $r17;
+        org.apache.mahout.cf.taste.common.NoSuchUserException $r19;
+        java.lang.Throwable $r21;
+        java.lang.Float r23;
+        double $d0, d1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        f0 := @parameter2: float;
+
+        r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+     label01:
+        r23 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: java.lang.Float getPreferenceValue(long,long)>(l0, l1);
+
+        if r23 != null goto label02;
+
+        $d0 = (double) f0;
+
+        goto label03;
+
+     label02:
+        $f1 = virtualinvoke r23.<java.lang.Float: float floatValue()>();
+
+        $f2 = f0 - $f1;
+
+        $d0 = (double) $f2;
+
+     label03:
+        d1 = $d0;
+
+     label04:
+        goto label06;
+
+     label05:
+        $r19 := @caughtexception;
+
+        d1 = (double) f0;
+
+     label06:
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: void setPreference(long,long,float)>(l0, l1, f0);
+
+     label07:
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock>;
+
+        $r6 = interfaceinvoke $r4.<java.util.concurrent.locks.ReadWriteLock: java.util.concurrent.locks.Lock writeLock()>();
+
+        interfaceinvoke $r6.<java.util.concurrent.locks.Lock: void lock()>();
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.FastByIDMap itemAverages>;
+
+        $r8 = virtualinvoke $r5.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l1);
+
+        r25 = (org.apache.mahout.cf.taste.impl.common.RunningAverage) $r8;
+
+        if r25 != null goto label08;
+
+        $r17 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke $r17.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>()>();
+
+        interfaceinvoke $r17.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void addDatum(double)>(d1);
+
+        $r18 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.FastByIDMap itemAverages>;
+
+        virtualinvoke $r18.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object put(long,java.lang.Object)>(l1, $r17);
+
+        goto label09;
+
+     label08:
+        interfaceinvoke r25.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void changeDatum(double)>(d1);
+
+     label09:
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.FastByIDMap userAverages>;
+
+        $r10 = virtualinvoke $r7.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        r27 = (org.apache.mahout.cf.taste.impl.common.RunningAverage) $r10;
+
+        if r27 != null goto label10;
+
+        $r14 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke $r14.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>()>();
+
+        interfaceinvoke $r14.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void addDatum(double)>(d1);
+
+        $r13 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.FastByIDMap userAverages>;
+
+        virtualinvoke $r13.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object put(long,java.lang.Object)>(l0, $r14);
+
+        goto label11;
+
+     label10:
+        interfaceinvoke r27.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void changeDatum(double)>(d1);
+
+     label11:
+        $r9 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.RunningAverage overallAveragePrefValue>;
+
+        interfaceinvoke $r9.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void changeDatum(double)>(d1);
+
+     label12:
+        $r12 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock>;
+
+        $r11 = interfaceinvoke $r12.<java.util.concurrent.locks.ReadWriteLock: java.util.concurrent.locks.Lock writeLock()>();
+
+        interfaceinvoke $r11.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        goto label15;
+
+     label13:
+        $r21 := @caughtexception;
+
+     label14:
+        $r20 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock>;
+
+        $r22 = interfaceinvoke $r20.<java.util.concurrent.locks.ReadWriteLock: java.util.concurrent.locks.Lock writeLock()>();
+
+        interfaceinvoke $r22.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r21;
+
+     label15:
+        return;
+
+        catch org.apache.mahout.cf.taste.common.NoSuchUserException from label01 to label04 with label05;
+        catch java.lang.Throwable from label07 to label12 with label13;
+        catch java.lang.Throwable from label13 to label14 with label13;
+    }
+
+    public void removePreference(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender r0;
+        long l0, l1;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        java.lang.Float r2;
+        org.apache.mahout.cf.taste.impl.common.RunningAverage r3, r4, $r12;
+        java.util.concurrent.locks.ReadWriteLock $r6, $r13, $r24;
+        java.util.concurrent.locks.Lock $r7, $r15, $r25;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r8, $r11;
+        java.lang.Object $r9, $r10;
+        double $d0, $d1, $d2;
+        float $f0, $f1, $f2;
+        java.lang.IllegalStateException $r14, $r22;
+        java.lang.StringBuilder $r16, $r17, $r19, $r20, $r21, $r23;
+        java.lang.String $r18, $r26;
+        java.lang.Throwable $r27;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        r2 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: java.lang.Float getPreferenceValue(long,long)>(l0, l1);
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: void removePreference(long,long)>(l0, l1);
+
+        if r2 == null goto label7;
+
+     label1:
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock>;
+
+        $r7 = interfaceinvoke $r6.<java.util.concurrent.locks.ReadWriteLock: java.util.concurrent.locks.Lock writeLock()>();
+
+        interfaceinvoke $r7.<java.util.concurrent.locks.Lock: void lock()>();
+
+        $r8 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.FastByIDMap itemAverages>;
+
+        $r9 = virtualinvoke $r8.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l1);
+
+        r3 = (org.apache.mahout.cf.taste.impl.common.RunningAverage) $r9;
+
+        if r3 != null goto label2;
+
+        $r22 = new java.lang.IllegalStateException;
+
+        $r23 = new java.lang.StringBuilder;
+
+        specialinvoke $r23.<java.lang.StringBuilder: void <init>()>();
+
+        $r20 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("No preferences exist for item ID: ");
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l1);
+
+        $r26 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r22.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r26);
+
+        throw $r22;
+
+     label2:
+        $f0 = virtualinvoke r2.<java.lang.Float: float floatValue()>();
+
+        $d0 = (double) $f0;
+
+        interfaceinvoke r3.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void removeDatum(double)>($d0);
+
+        $r11 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.FastByIDMap userAverages>;
+
+        $r10 = virtualinvoke $r11.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        r4 = (org.apache.mahout.cf.taste.impl.common.RunningAverage) $r10;
+
+        if r4 != null goto label3;
+
+        $r14 = new java.lang.IllegalStateException;
+
+        $r17 = new java.lang.StringBuilder;
+
+        specialinvoke $r17.<java.lang.StringBuilder: void <init>()>();
+
+        $r16 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("No preferences exist for user ID: ");
+
+        $r19 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l0);
+
+        $r18 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r14.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r18);
+
+        throw $r14;
+
+     label3:
+        $f1 = virtualinvoke r2.<java.lang.Float: float floatValue()>();
+
+        $d1 = (double) $f1;
+
+        interfaceinvoke r4.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void removeDatum(double)>($d1);
+
+        $r12 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.RunningAverage overallAveragePrefValue>;
+
+        $f2 = virtualinvoke r2.<java.lang.Float: float floatValue()>();
+
+        $d2 = (double) $f2;
+
+        interfaceinvoke $r12.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void removeDatum(double)>($d2);
+
+     label4:
+        $r13 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock>;
+
+        $r15 = interfaceinvoke $r13.<java.util.concurrent.locks.ReadWriteLock: java.util.concurrent.locks.Lock writeLock()>();
+
+        interfaceinvoke $r15.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        goto label7;
+
+     label5:
+        $r27 := @caughtexception;
+
+     label6:
+        $r24 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock>;
+
+        $r25 = interfaceinvoke $r24.<java.util.concurrent.locks.ReadWriteLock: java.util.concurrent.locks.Lock writeLock()>();
+
+        interfaceinvoke $r25.<java.util.concurrent.locks.Lock: void unlock()>();
+
+        throw $r27;
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    public void refresh(java.util.Collection)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender r0;
+        java.util.Collection r1;
+        org.apache.mahout.cf.taste.impl.common.RefreshHelper $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender;
+
+        r1 := @parameter0: java.util.Collection;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.apache.mahout.cf.taste.impl.common.RefreshHelper refreshHelper>;
+
+        virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: void refresh(java.util.Collection)>(r1);
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender;
+
+        return "ItemUserAverageRecommender";
+    }
+
+    static void access$000(org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender r0;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: void buildAverageDiffs()>();
+
+        return;
+    }
+
+    static float access$200(org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender, long, long)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender r0;
+        long l0, l1;
+        float $f0;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender;
+
+        l0 := @parameter1: long;
+
+        l1 := @parameter2: long;
+
+        $f0 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: float doEstimatePreference(long,long)>(l0, l1);
+
+        return $f0;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/cf/taste/impl/recommender/ItemUserAverageRecommender");
+
+        <org.apache.mahout.cf.taste.impl.recommender.ItemUserAverageRecommender: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

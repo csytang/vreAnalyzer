@@ -1,0 +1,7 @@
+public interface  org.apache.mahout.ep.Payload extends java.lang.Object implements org.apache.hadoop.io.Writable
+{
+
+    public abstract org.apache.mahout.ep.Payload copy();
+
+    public abstract void update(double[]);
+}

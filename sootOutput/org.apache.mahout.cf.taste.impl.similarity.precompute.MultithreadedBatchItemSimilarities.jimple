@@ -1,0 +1,392 @@
+public class org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities extends org.apache.mahout.cf.taste.similarity.precompute.BatchItemSimilarities
+{
+    private int batchSize;
+    private static final int DEFAULT_BATCH_SIZE;
+    private static final org.slf4j.Logger log;
+
+    public void <init>(org.apache.mahout.cf.taste.recommender.ItemBasedRecommender, int)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities r0;
+        org.apache.mahout.cf.taste.recommender.ItemBasedRecommender r1;
+        int i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.recommender.ItemBasedRecommender;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities: void <init>(org.apache.mahout.cf.taste.recommender.ItemBasedRecommender,int,int)>(r1, i0, 100);
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.cf.taste.recommender.ItemBasedRecommender, int, int)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities r0;
+        org.apache.mahout.cf.taste.recommender.ItemBasedRecommender r1;
+        int i0, i1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.recommender.ItemBasedRecommender;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.similarity.precompute.BatchItemSimilarities: void <init>(org.apache.mahout.cf.taste.recommender.ItemBasedRecommender,int)>(r1, i0);
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities: int batchSize> = i1;
+
+        return;
+    }
+
+    public int computeItemSimilarities(int, int, org.apache.mahout.cf.taste.similarity.precompute.SimilarItemsWriter) throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities r0;
+        int i0, i1, $i2, $i3, $i5, i7;
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItemsWriter r1;
+        java.util.concurrent.ExecutorService r2;
+        java.util.concurrent.BlockingQueue r3;
+        org.apache.mahout.cf.taste.recommender.ItemBasedRecommender $r7;
+        java.util.concurrent.LinkedBlockingQueue $r8;
+        org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output $r9;
+        java.util.concurrent.atomic.AtomicInteger $r10;
+        long $l4, $l6;
+        java.util.concurrent.TimeUnit $r11, $r21;
+        java.lang.StringBuilder $r12, $r14, $r15, $r17, $r22, $r23, $r24, $r25;
+        java.lang.RuntimeException $r13, $r20, $r26, $r30;
+        java.lang.String $r16, $r28;
+        java.lang.Throwable $r18;
+        org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$SimilarItemsWorker $r19;
+        java.lang.Exception $r27;
+        java.lang.InterruptedException $r29, $r31;
+        java.io.IOException $r32;
+        org.apache.mahout.cf.taste.model.DataModel r33;
+        boolean z0, z1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        r1 := @parameter2: org.apache.mahout.cf.taste.similarity.precompute.SimilarItemsWriter;
+
+        $i2 = i0 + 1;
+
+        r2 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ExecutorService newFixedThreadPool(int)>($i2);
+
+     label01:
+        interfaceinvoke r1.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItemsWriter: void open()>();
+
+        $r7 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities: org.apache.mahout.cf.taste.recommender.ItemBasedRecommender getRecommender()>();
+
+        r33 = interfaceinvoke $r7.<org.apache.mahout.cf.taste.recommender.ItemBasedRecommender: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        $i3 = r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities: int batchSize>;
+
+        r3 = staticinvoke <org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities: java.util.concurrent.BlockingQueue queueItemIDsInBatches(org.apache.mahout.cf.taste.model.DataModel,int,int)>(r33, $i3, i0);
+
+        $r8 = new java.util.concurrent.LinkedBlockingQueue;
+
+        specialinvoke $r8.<java.util.concurrent.LinkedBlockingQueue: void <init>()>();
+
+        $r10 = new java.util.concurrent.atomic.AtomicInteger;
+
+        specialinvoke $r10.<java.util.concurrent.atomic.AtomicInteger: void <init>(int)>(i0);
+
+        i7 = 0;
+
+     label02:
+        if i7 >= i0 goto label03;
+
+        $r19 = new org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$SimilarItemsWorker;
+
+        specialinvoke $r19.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$SimilarItemsWorker: void <init>(org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities,int,java.util.concurrent.BlockingQueue,java.util.concurrent.BlockingQueue,java.util.concurrent.atomic.AtomicInteger)>(r0, i7, r3, $r8, $r10);
+
+        interfaceinvoke r2.<java.util.concurrent.ExecutorService: void execute(java.lang.Runnable)>($r19);
+
+        i7 = i7 + 1;
+
+        goto label02;
+
+     label03:
+        $r9 = new org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output;
+
+        specialinvoke $r9.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output: void <init>(java.util.concurrent.BlockingQueue,org.apache.mahout.cf.taste.similarity.precompute.SimilarItemsWriter,java.util.concurrent.atomic.AtomicInteger)>($r8, r1, $r10);
+
+        interfaceinvoke r2.<java.util.concurrent.ExecutorService: void execute(java.lang.Runnable)>($r9);
+
+     label04:
+        interfaceinvoke r2.<java.util.concurrent.ExecutorService: void shutdown()>();
+
+     label05:
+        $l4 = (long) i1;
+
+        $r11 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit HOURS>;
+
+        z0 = interfaceinvoke r2.<java.util.concurrent.ExecutorService: boolean awaitTermination(long,java.util.concurrent.TimeUnit)>($l4, $r11);
+
+        if z0 != 0 goto label07;
+
+        $r13 = new java.lang.RuntimeException;
+
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>()>();
+
+        $r15 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to complete the computation in ");
+
+        $r14 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i1);
+
+        $r17 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" hours!");
+
+        $r16 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r13.<java.lang.RuntimeException: void <init>(java.lang.String)>($r16);
+
+        throw $r13;
+
+     label06:
+        $r31 := @caughtexception;
+
+        $r30 = new java.lang.RuntimeException;
+
+        specialinvoke $r30.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r31);
+
+        throw $r30;
+
+     label07:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>(r1, 0);
+
+        goto label14;
+
+     label08:
+        $r27 := @caughtexception;
+
+        $r32 = new java.io.IOException;
+
+        specialinvoke $r32.<java.io.IOException: void <init>(java.lang.Throwable)>($r27);
+
+        throw $r32;
+
+     label09:
+        $r18 := @caughtexception;
+
+     label10:
+        interfaceinvoke r2.<java.util.concurrent.ExecutorService: void shutdown()>();
+
+     label11:
+        $l6 = (long) i1;
+
+        $r21 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit HOURS>;
+
+        z1 = interfaceinvoke r2.<java.util.concurrent.ExecutorService: boolean awaitTermination(long,java.util.concurrent.TimeUnit)>($l6, $r21);
+
+        if z1 != 0 goto label13;
+
+        $r20 = new java.lang.RuntimeException;
+
+        $r24 = new java.lang.StringBuilder;
+
+        specialinvoke $r24.<java.lang.StringBuilder: void <init>()>();
+
+        $r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to complete the computation in ");
+
+        $r22 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i1);
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" hours!");
+
+        $r28 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r20.<java.lang.RuntimeException: void <init>(java.lang.String)>($r28);
+
+        throw $r20;
+
+     label12:
+        $r29 := @caughtexception;
+
+        $r26 = new java.lang.RuntimeException;
+
+        specialinvoke $r26.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r29);
+
+        throw $r26;
+
+     label13:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>(r1, 0);
+
+        throw $r18;
+
+     label14:
+        $i5 = staticinvoke <org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output: int access$000(org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output)>($r9);
+
+        return $i5;
+
+        catch java.lang.InterruptedException from label05 to label06 with label06;
+        catch java.lang.Exception from label01 to label04 with label08;
+        catch java.lang.Throwable from label01 to label04 with label09;
+        catch java.lang.InterruptedException from label11 to label12 with label12;
+        catch java.lang.Throwable from label08 to label10 with label09;
+    }
+
+    private static java.util.concurrent.BlockingQueue queueItemIDsInBatches(org.apache.mahout.cf.taste.model.DataModel, int, int) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.model.DataModel r0;
+        int i0, i1, i2, $i3, $i4, $i5, $i6, $i7, i9;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator r1;
+        long[] r3, r4;
+        java.util.concurrent.LinkedBlockingQueue $r5;
+        org.slf4j.Logger $r6;
+        java.lang.Integer $r7, $r9;
+        java.lang.IllegalStateException $r8;
+        java.lang.StringBuilder $r10, $r11, $r12, $r13, $r14, $r15, $r16;
+        java.lang.String $r17;
+        long $l8;
+        java.lang.Object $r18;
+        boolean $z2;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        r1 = interfaceinvoke r0.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getItemIDs()>();
+
+        i2 = interfaceinvoke r0.<org.apache.mahout.cf.taste.model.DataModel: int getNumItems()>();
+
+        $r5 = new java.util.concurrent.LinkedBlockingQueue;
+
+        $i3 = i2 / i0;
+
+        $i4 = $i3 + 1;
+
+        specialinvoke $r5.<java.util.concurrent.LinkedBlockingQueue: void <init>(int)>($i4);
+
+        r3 = newarray (long)[i0];
+
+        i9 = 0;
+
+     label1:
+        $z2 = interfaceinvoke r1.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label2;
+
+        $l8 = interfaceinvoke r1.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: long nextLong()>();
+
+        r3[i9] = $l8;
+
+        i9 = i9 + 1;
+
+        if i9 != i0 goto label1;
+
+        $r18 = virtualinvoke r3.<java.lang.Object: java.lang.Object clone()>();
+
+        interfaceinvoke $r5.<java.util.concurrent.BlockingQueue: boolean add(java.lang.Object)>($r18);
+
+        i9 = 0;
+
+        goto label1;
+
+     label2:
+        if i9 <= 0 goto label3;
+
+        r4 = newarray (long)[i9];
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>(r3, 0, r4, 0, i9);
+
+        interfaceinvoke $r5.<java.util.concurrent.BlockingQueue: boolean add(java.lang.Object)>(r4);
+
+     label3:
+        $i5 = interfaceinvoke $r5.<java.util.concurrent.BlockingQueue: int size()>();
+
+        if $i5 >= i1 goto label4;
+
+        $r8 = new java.lang.IllegalStateException;
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Degree of parallelism [");
+
+        $r13 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i1);
+
+        $r12 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("] ");
+
+        $r14 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" is larger than number of batches [");
+
+        $i7 = interfaceinvoke $r5.<java.util.concurrent.BlockingQueue: int size()>();
+
+        $r16 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i7);
+
+        $r15 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("].");
+
+        $r17 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r8.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r17);
+
+        throw $r8;
+
+     label4:
+        $r6 = <org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities: org.slf4j.Logger log>;
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i2);
+
+        $i6 = interfaceinvoke $r5.<java.util.concurrent.BlockingQueue: int size()>();
+
+        $r9 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i6);
+
+        interfaceinvoke $r6.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object,java.lang.Object)>("Queued {} items in {} batches", $r7, $r9);
+
+        return $r5;
+    }
+
+    static int access$100(org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities r0;
+        int $i0;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities: int getSimilarItemsPerItem()>();
+
+        return $i0;
+    }
+
+    static org.apache.mahout.cf.taste.recommender.ItemBasedRecommender access$200(org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities r0;
+        org.apache.mahout.cf.taste.recommender.ItemBasedRecommender $r1;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities: org.apache.mahout.cf.taste.recommender.ItemBasedRecommender getRecommender()>();
+
+        return $r1;
+    }
+
+    static org.slf4j.Logger access$300()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = <org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities: org.slf4j.Logger log>;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities: int DEFAULT_BATCH_SIZE> = 100;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/cf/taste/impl/similarity/precompute/MultithreadedBatchItemSimilarities");
+
+        <org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

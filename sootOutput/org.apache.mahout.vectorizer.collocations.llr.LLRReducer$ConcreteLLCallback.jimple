@@ -1,0 +1,35 @@
+public final class org.apache.mahout.vectorizer.collocations.llr.LLRReducer$ConcreteLLCallback extends java.lang.Object implements org.apache.mahout.vectorizer.collocations.llr.LLRReducer$LLCallback
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.collocations.llr.LLRReducer$ConcreteLLCallback r0;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$ConcreteLLCallback;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public double logLikelihoodRatio(long, long, long, long)
+    {
+        org.apache.mahout.vectorizer.collocations.llr.LLRReducer$ConcreteLLCallback r0;
+        long l0, l1, l2, l3;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.LLRReducer$ConcreteLLCallback;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        l2 := @parameter2: long;
+
+        l3 := @parameter3: long;
+
+        $d0 = staticinvoke <org.apache.mahout.math.stats.LogLikelihood: double logLikelihoodRatio(long,long,long,long)>(l0, l1, l2, l3);
+
+        return $d0;
+    }
+}

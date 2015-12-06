@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CallSite implements Comparable<CallSite>{
+	/*
+	 * 将这个Constructor的调用加入到Callsite中
+	 */
 	/////////////////////Fields/////////////////////////
 	private Location loc;
 	private List<SootMethod> mAppCallees;

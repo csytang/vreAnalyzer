@@ -1,0 +1,93 @@
+public final class org.apache.mahout.clustering.spectral.MatrixDiagonalizeJob extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.clustering.spectral.MatrixDiagonalizeJob r0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.MatrixDiagonalizeJob;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.mahout.math.Vector runJob(org.apache.hadoop.fs.Path, int) throws java.io.IOException, java.lang.ClassNotFoundException, java.lang.InterruptedException
+    {
+        org.apache.hadoop.fs.Path r0, $r5, $r6, $r9;
+        int i0;
+        boolean z0;
+        org.apache.hadoop.conf.Configuration $r4;
+        org.apache.hadoop.fs.Path[] $r7;
+        org.apache.hadoop.mapreduce.Job $r8;
+        org.apache.mahout.math.Vector $r10;
+        java.lang.IllegalStateException $r11;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter1: int;
+
+        $r4 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r4.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r5 = new org.apache.hadoop.fs.Path;
+
+        $r6 = virtualinvoke r0.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.Path getParent()>();
+
+        specialinvoke $r5.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r6, "diagonal");
+
+        $r7 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r7[0] = $r5;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r4, $r7);
+
+        virtualinvoke $r4.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>("org.apache.mahout.clustering.spectral.common.affinitydimensions", i0);
+
+        $r8 = new org.apache.hadoop.mapreduce.Job;
+
+        specialinvoke $r8.<org.apache.hadoop.mapreduce.Job: void <init>(org.apache.hadoop.conf.Configuration,java.lang.String)>($r4, "MatrixDiagonalizeJob");
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setInputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat");
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setMapOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/NullWritable");
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setMapOutputValueClass(java.lang.Class)>(class "org/apache/mahout/clustering/spectral/IntDoublePairWritable");
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/NullWritable");
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setOutputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setMapperClass(java.lang.Class)>(class "org/apache/mahout/clustering/spectral/MatrixDiagonalizeJob$MatrixDiagonalizeMapper");
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setReducerClass(java.lang.Class)>(class "org/apache/mahout/clustering/spectral/MatrixDiagonalizeJob$MatrixDiagonalizeReducer");
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void addInputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r8, r0);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r8, $r5);
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(class "org/apache/mahout/clustering/spectral/MatrixDiagonalizeJob");
+
+        z0 = virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z0 != 0 goto label1;
+
+        $r11 = new java.lang.IllegalStateException;
+
+        specialinvoke $r11.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Job failed!");
+
+        throw $r11;
+
+     label1:
+        $r9 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r9.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r5, "part-r-00000");
+
+        $r10 = staticinvoke <org.apache.mahout.clustering.spectral.VectorCache: org.apache.mahout.math.Vector load(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path)>($r4, $r9);
+
+        return $r10;
+    }
+}

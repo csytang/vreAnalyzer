@@ -1,0 +1,201 @@
+public class org.apache.mahout.vectorizer.common.PartialVectorMergeReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+    private double normPower;
+    private int dimension;
+    private boolean sequentialAccess;
+    private boolean namedVector;
+    private boolean logNormalize;
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.common.PartialVectorMergeReducer r0;
+
+        r0 := @this: org.apache.mahout.vectorizer.common.PartialVectorMergeReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        return;
+    }
+
+    protected void reduce(org.apache.hadoop.io.WritableComparable, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.common.PartialVectorMergeReducer r0;
+        org.apache.hadoop.io.WritableComparable r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.mahout.math.VectorWritable r4, $r7;
+        org.apache.mahout.math.RandomAccessSparseVector $r5;
+        int $i0, $i2;
+        boolean $z0, $z1, $z2, $z3;
+        double $d0, $d1, $d2;
+        byte $b1;
+        org.apache.mahout.math.NamedVector $r6;
+        java.lang.String $r8;
+        org.apache.mahout.math.SequentialAccessSparseVector $r9;
+        org.apache.mahout.math.Vector $r10, r14;
+        java.lang.Object $r11;
+        org.apache.mahout.math.function.DoubleDoubleFunction $r13;
+        java.util.Iterator r15;
+
+        r0 := @this: org.apache.mahout.vectorizer.common.PartialVectorMergeReducer;
+
+        r1 := @parameter0: org.apache.hadoop.io.WritableComparable;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r5 = new org.apache.mahout.math.RandomAccessSparseVector;
+
+        $i0 = r0.<org.apache.mahout.vectorizer.common.PartialVectorMergeReducer: int dimension>;
+
+        specialinvoke $r5.<org.apache.mahout.math.RandomAccessSparseVector: void <init>(int,int)>($i0, 10);
+
+        r14 = $r5;
+
+        r15 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r15.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r11 = interfaceinvoke r15.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.math.VectorWritable) $r11;
+
+        $r10 = virtualinvoke r4.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r13 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction PLUS>;
+
+        interfaceinvoke $r5.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>($r10, $r13);
+
+        goto label1;
+
+     label2:
+        $d0 = r0.<org.apache.mahout.vectorizer.common.PartialVectorMergeReducer: double normPower>;
+
+        $b1 = $d0 cmpl -1.0;
+
+        if $b1 == 0 goto label4;
+
+        $z2 = r0.<org.apache.mahout.vectorizer.common.PartialVectorMergeReducer: boolean logNormalize>;
+
+        if $z2 == 0 goto label3;
+
+        $d2 = r0.<org.apache.mahout.vectorizer.common.PartialVectorMergeReducer: double normPower>;
+
+        r14 = interfaceinvoke $r5.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector logNormalize(double)>($d2);
+
+        goto label4;
+
+     label3:
+        $d1 = r0.<org.apache.mahout.vectorizer.common.PartialVectorMergeReducer: double normPower>;
+
+        r14 = interfaceinvoke $r5.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector normalize(double)>($d1);
+
+     label4:
+        $z3 = r0.<org.apache.mahout.vectorizer.common.PartialVectorMergeReducer: boolean sequentialAccess>;
+
+        if $z3 == 0 goto label5;
+
+        $r9 = new org.apache.mahout.math.SequentialAccessSparseVector;
+
+        specialinvoke $r9.<org.apache.mahout.math.SequentialAccessSparseVector: void <init>(org.apache.mahout.math.Vector)>(r14);
+
+        r14 = $r9;
+
+     label5:
+        $z1 = r0.<org.apache.mahout.vectorizer.common.PartialVectorMergeReducer: boolean namedVector>;
+
+        if $z1 == 0 goto label6;
+
+        $r6 = new org.apache.mahout.math.NamedVector;
+
+        $r8 = virtualinvoke r1.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r6.<org.apache.mahout.math.NamedVector: void <init>(org.apache.mahout.math.Vector,java.lang.String)>(r14, $r8);
+
+        r14 = $r6;
+
+     label6:
+        $i2 = interfaceinvoke r14.<org.apache.mahout.math.Vector: int getNumNondefaultElements()>();
+
+        if $i2 <= 0 goto label7;
+
+        $r7 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r7.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r14);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r7);
+
+     label7:
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.common.PartialVectorMergeReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        float $f0;
+        double $d0;
+        int $i0;
+        boolean $z0, $z1, $z2;
+
+        r0 := @this: org.apache.mahout.vectorizer.common.PartialVectorMergeReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void setup(org.apache.hadoop.mapreduce.Reducer$Context)>(r1);
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $f0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: float getFloat(java.lang.String,float)>("normalization.power", -1.0F);
+
+        $d0 = (double) $f0;
+
+        r0.<org.apache.mahout.vectorizer.common.PartialVectorMergeReducer: double normPower> = $d0;
+
+        $i0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("vector.dimension", 2147483647);
+
+        r0.<org.apache.mahout.vectorizer.common.PartialVectorMergeReducer: int dimension> = $i0;
+
+        $z0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("vector.sequentialAccess", 0);
+
+        r0.<org.apache.mahout.vectorizer.common.PartialVectorMergeReducer: boolean sequentialAccess> = $z0;
+
+        $z1 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("vector.named", 0);
+
+        r0.<org.apache.mahout.vectorizer.common.PartialVectorMergeReducer: boolean namedVector> = $z1;
+
+        $z2 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("vector.lognormalize", 0);
+
+        r0.<org.apache.mahout.vectorizer.common.PartialVectorMergeReducer: boolean logNormalize> = $z2;
+
+        return;
+    }
+
+    protected volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.common.PartialVectorMergeReducer r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.hadoop.io.WritableComparable $r4;
+
+        r0 := @this: org.apache.mahout.vectorizer.common.PartialVectorMergeReducer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.hadoop.io.WritableComparable) r1;
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.common.PartialVectorMergeReducer: void reduce(org.apache.hadoop.io.WritableComparable,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+}

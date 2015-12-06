@@ -1,0 +1,885 @@
+public final class org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles extends org.apache.mahout.common.AbstractJob
+{
+    private static final org.slf4j.Logger log;
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles r0;
+
+        r0 := @this: org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        return;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles $r1;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles;
+
+        specialinvoke $r1.<org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.util.Tool,java.lang.String[])>($r1, r0);
+
+        return;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles r0;
+        java.lang.String[] r1;
+        org.apache.commons.cli2.option.DefaultOption r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20, r21, r23;
+        org.apache.commons.cli2.Group r22;
+        org.apache.commons.cli2.CommandLine r24;
+        org.apache.hadoop.conf.Configuration r28, $r196, $r228;
+        java.lang.String r29, $r168, $r171, $r199, $r201, $r203, $r209, $r213, $r215, $r216, $r223, $r225, $r226, r230, r235, r236, r237, $r238;
+        boolean z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z9, $z10, $z11, $z12, $z13, $z14, $z15, $z16, $z17, $z18, z19, z20, $z21, z22, z23, $z24;
+        long l0, $l2, $l5, l13, l14;
+        org.apache.commons.cli2.builder.GroupBuilder $r32, $r151, $r152, $r153, $r154, $r155, $r156, $r157, $r158, $r159, $r160, $r161, $r162, $r164, $r165, $r172, $r174, $r175, $r176, $r177;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r33, $r43, $r44, $r45, $r46, $r51, $r52, $r53, $r54, $r58, $r60, $r62, $r63, $r68, $r79, $r80, $r85, $r86, $r87, $r91, $r92, $r93, $r101, $r102, $r106, $r108, $r109, $r110, $r111, $r112, $r117, $r126, $r127, $r135;
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r34, $r36, $r37, $r39, $r40, $r41, $r42, $r48, $r49, $r50, $r55, $r57, $r59, $r61, $r64, $r65, $r66, $r67, $r69, $r70, $r71, $r73, $r74, $r75, $r76, $r78, $r81, $r82, $r83, $r88, $r89, $r94, $r95, $r96, $r98, $r99, $r100, $r103, $r104, $r105, $r107, $r114, $r115, $r116, $r119, $r120, $r121, $r122, $r123, $r124, $r128, $r129, $r130, $r131, $r132, $r133, $r134, $r136, $r137, $r138, $r139, $r140, $r141, $r142, $r143, $r144, $r145, $r146, $r147, $r148, $r149, $r150, $r163;
+        org.apache.commons.cli2.Argument $r38, $r47, $r56, $r72, $r77, $r84, $r90, $r97, $r113, $r118, $r125;
+        org.apache.hadoop.fs.Path $r166, $r169, $r182, $r184, $r186, $r188, $r189, $r193, $r194, $r195;
+        java.lang.Object $r167, $r170, $r191, $r200, $r202, $r204, $r206, $r208, $r210, $r211, $r212, $r221, $r222, $r224;
+        org.apache.commons.cli2.commandline.Parser $r173;
+        java.lang.Integer $r178, $r233;
+        org.slf4j.Logger $r179, $r181, $r183, $r185, $r187, $r198, $r218, $r220, $r232;
+        java.lang.Float $r180;
+        byte $b1, $b4, $b6;
+        double $d0, $d1, $d2, $d3, $d4, d5, d6;
+        int $i3, i7, i8, i9, i10, i11, i12;
+        java.lang.Long $r190;
+        java.lang.Long[] $r192;
+        float $f0, $f1, $f2, $f3, f4, f5;
+        org.apache.hadoop.fs.Path[] $r197, $r227;
+        java.lang.Class $r207, r234;
+        org.apache.commons.cli2.OptionException $r214, $r217;
+        java.lang.NumberFormatException $r219;
+        org.apache.mahout.common.Pair r239;
+
+        r0 := @this: org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles;
+
+        r1 := @parameter0: java.lang.String[];
+
+        $r34 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r33 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r33.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r32 = new org.apache.commons.cli2.builder.GroupBuilder;
+
+        specialinvoke $r32.<org.apache.commons.cli2.builder.GroupBuilder: void <init>()>();
+
+        $r37 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder inputOption()>();
+
+        r5 = virtualinvoke $r37.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r36 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder outputOption()>();
+
+        r6 = virtualinvoke $r36.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r42 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("minSupport");
+
+        $r43 = virtualinvoke $r33.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("minSupport");
+
+        $r44 = virtualinvoke $r43.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r45 = virtualinvoke $r44.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r38 = virtualinvoke $r45.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r39 = virtualinvoke $r42.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r38);
+
+        $r40 = virtualinvoke $r39.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("(Optional) Minimum Support. Default Value: 2");
+
+        $r41 = virtualinvoke $r40.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("s");
+
+        r7 = virtualinvoke $r41.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r50 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("analyzerName");
+
+        $r51 = virtualinvoke $r33.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("analyzerName");
+
+        $r52 = virtualinvoke $r51.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r46 = virtualinvoke $r52.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r47 = virtualinvoke $r46.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r48 = virtualinvoke $r50.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r47);
+
+        $r49 = virtualinvoke $r48.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The class name of the analyzer");
+
+        $r57 = virtualinvoke $r49.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("a");
+
+        r8 = virtualinvoke $r57.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r59 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("chunkSize");
+
+        $r58 = virtualinvoke $r33.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("chunkSize");
+
+        $r54 = virtualinvoke $r58.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r53 = virtualinvoke $r54.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r56 = virtualinvoke $r53.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r55 = virtualinvoke $r59.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r56);
+
+        $r65 = virtualinvoke $r55.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The chunkSize in MegaBytes. Default Value: 100MB");
+
+        $r64 = virtualinvoke $r65.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("chunk");
+
+        r9 = virtualinvoke $r64.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r66 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("weight");
+
+        $r61 = virtualinvoke $r66.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r60 = virtualinvoke $r33.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("weight");
+
+        $r63 = virtualinvoke $r60.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r62 = virtualinvoke $r63.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r72 = virtualinvoke $r62.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r73 = virtualinvoke $r61.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r72);
+
+        $r70 = virtualinvoke $r73.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The kind of weight to use. Currently TF or TFIDF. Default: TFIDF");
+
+        $r71 = virtualinvoke $r70.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("wt");
+
+        r10 = virtualinvoke $r71.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r69 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("minDF");
+
+        $r67 = virtualinvoke $r69.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r68 = virtualinvoke $r33.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("minDF");
+
+        $r79 = virtualinvoke $r68.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r80 = virtualinvoke $r79.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r77 = virtualinvoke $r80.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r78 = virtualinvoke $r67.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r77);
+
+        $r75 = virtualinvoke $r78.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The minimum document frequency.  Default is 1");
+
+        $r76 = virtualinvoke $r75.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("md");
+
+        r11 = virtualinvoke $r76.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r74 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("maxDFPercent");
+
+        $r88 = virtualinvoke $r74.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r87 = virtualinvoke $r33.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("maxDFPercent");
+
+        $r86 = virtualinvoke $r87.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r85 = virtualinvoke $r86.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r84 = virtualinvoke $r85.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r83 = virtualinvoke $r88.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r84);
+
+        $r82 = virtualinvoke $r83.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The max percentage of docs for the DF.  Can be used to remove really high frequency terms. Expressed as an integer between 0 and 100. Default is 99.  If maxDFSigma is also set, it will override this value.");
+
+        $r81 = virtualinvoke $r82.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("x");
+
+        r12 = virtualinvoke $r81.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r95 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("maxDFSigma");
+
+        $r94 = virtualinvoke $r95.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r93 = virtualinvoke $r33.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("maxDFSigma");
+
+        $r92 = virtualinvoke $r93.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r91 = virtualinvoke $r92.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r90 = virtualinvoke $r91.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r89 = virtualinvoke $r94.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r90);
+
+        $r104 = virtualinvoke $r89.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("What portion of the tf (tf-idf) vectors to be used, expressed in times the standard deviation (sigma) of the document frequencies of these vectors. Can be used to remove really high frequency terms. Expressed as a double value. Good value to be specified is 3.0. In case the value is less than 0 no vectors will be filtered out. Default is -1.0.  Overrides maxDFPercent");
+
+        $r103 = virtualinvoke $r104.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("xs");
+
+        r13 = virtualinvoke $r103.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r105 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("minLLR");
+
+        $r107 = virtualinvoke $r105.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r106 = virtualinvoke $r33.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("minLLR");
+
+        $r109 = virtualinvoke $r106.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r108 = virtualinvoke $r109.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r97 = virtualinvoke $r108.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r96 = virtualinvoke $r107.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r97);
+
+        $r99 = virtualinvoke $r96.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("(Optional)The minimum Log Likelihood Ratio(Float)  Default is 1.0");
+
+        $r98 = virtualinvoke $r99.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("ml");
+
+        r14 = virtualinvoke $r98.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r100 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("numReducers");
+
+        $r102 = virtualinvoke $r33.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("numReducers");
+
+        $r101 = virtualinvoke $r102.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r117 = virtualinvoke $r101.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r118 = virtualinvoke $r117.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r119 = virtualinvoke $r100.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r118);
+
+        $r120 = virtualinvoke $r119.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("(Optional) Number of reduce tasks. Default Value: 1");
+
+        $r121 = virtualinvoke $r120.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("nr");
+
+        r15 = virtualinvoke $r121.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r122 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("norm");
+
+        $r123 = virtualinvoke $r122.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r110 = virtualinvoke $r33.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("norm");
+
+        $r111 = virtualinvoke $r110.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r112 = virtualinvoke $r111.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r113 = virtualinvoke $r112.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r114 = virtualinvoke $r123.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r113);
+
+        $r115 = virtualinvoke $r114.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The norm to use, expressed as either a float or \"INF\" if you want to use the Infinite norm.  Must be greater or equal to 0.  The default is not to normalize");
+
+        $r116 = virtualinvoke $r115.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("n");
+
+        r17 = virtualinvoke $r116.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r134 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("logNormalize");
+
+        $r133 = virtualinvoke $r134.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r132 = virtualinvoke $r133.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("(Optional) Whether output vectors should be logNormalize. If set true else false");
+
+        $r131 = virtualinvoke $r132.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("lnorm");
+
+        r16 = virtualinvoke $r131.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r137 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("maxNGramSize");
+
+        $r136 = virtualinvoke $r137.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r135 = virtualinvoke $r33.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("ngramSize");
+
+        $r127 = virtualinvoke $r135.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r126 = virtualinvoke $r127.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r125 = virtualinvoke $r126.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r124 = virtualinvoke $r136.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r125);
+
+        $r130 = virtualinvoke $r124.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("(Optional) The maximum size of ngrams to create (2 = bigrams, 3 = trigrams, etc) Default Value:1");
+
+        $r129 = virtualinvoke $r130.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("ng");
+
+        r19 = virtualinvoke $r129.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r128 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("sequentialAccessVector");
+
+        $r145 = virtualinvoke $r128.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r146 = virtualinvoke $r145.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("(Optional) Whether output vectors should be SequentialAccessVectors. If set true else false");
+
+        $r144 = virtualinvoke $r146.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("seq");
+
+        r18 = virtualinvoke $r144.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r149 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("namedVector");
+
+        $r150 = virtualinvoke $r149.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r147 = virtualinvoke $r150.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("(Optional) Whether output vectors should be NamedVectors. If set true else false");
+
+        $r148 = virtualinvoke $r147.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("nv");
+
+        r21 = virtualinvoke $r148.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r140 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("overwrite");
+
+        $r138 = virtualinvoke $r140.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r139 = virtualinvoke $r138.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("If set, overwrite the output directory");
+
+        $r143 = virtualinvoke $r139.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("ow");
+
+        r20 = virtualinvoke $r143.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r141 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("help");
+
+        $r142 = virtualinvoke $r141.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Print out help");
+
+        $r163 = virtualinvoke $r142.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("h");
+
+        r23 = virtualinvoke $r163.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r165 = virtualinvoke $r32.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withName(java.lang.String)>("Options");
+
+        $r164 = virtualinvoke $r165.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r7);
+
+        $r160 = virtualinvoke $r164.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r8);
+
+        $r159 = virtualinvoke $r160.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r9);
+
+        $r162 = virtualinvoke $r159.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r6);
+
+        $r161 = virtualinvoke $r162.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r5);
+
+        $r156 = virtualinvoke $r161.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r11);
+
+        $r155 = virtualinvoke $r156.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r13);
+
+        $r158 = virtualinvoke $r155.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r12);
+
+        $r157 = virtualinvoke $r158.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r10);
+
+        $r152 = virtualinvoke $r157.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r17);
+
+        $r151 = virtualinvoke $r152.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r14);
+
+        $r154 = virtualinvoke $r151.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r15);
+
+        $r153 = virtualinvoke $r154.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r19);
+
+        $r174 = virtualinvoke $r153.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r20);
+
+        $r175 = virtualinvoke $r174.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r23);
+
+        $r176 = virtualinvoke $r175.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r18);
+
+        $r177 = virtualinvoke $r176.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r21);
+
+        $r172 = virtualinvoke $r177.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r16);
+
+        r22 = virtualinvoke $r172.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.Group create()>();
+
+     label01:
+        $r173 = new org.apache.commons.cli2.commandline.Parser;
+
+        specialinvoke $r173.<org.apache.commons.cli2.commandline.Parser: void <init>()>();
+
+        virtualinvoke $r173.<org.apache.commons.cli2.commandline.Parser: void setGroup(org.apache.commons.cli2.Group)>(r22);
+
+        virtualinvoke $r173.<org.apache.commons.cli2.commandline.Parser: void setHelpOption(org.apache.commons.cli2.Option)>(r23);
+
+        r24 = virtualinvoke $r173.<org.apache.commons.cli2.commandline.Parser: org.apache.commons.cli2.CommandLine parse(java.lang.String[])>(r1);
+
+        $z2 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r23);
+
+        if $z2 == 0 goto label03;
+
+        staticinvoke <org.apache.mahout.common.CommandLineUtil: void printHelp(org.apache.commons.cli2.Group)>(r22);
+
+     label02:
+        return -1;
+
+     label03:
+        $r169 = new org.apache.hadoop.fs.Path;
+
+        $r170 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r5);
+
+        $r171 = (java.lang.String) $r170;
+
+        specialinvoke $r169.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r171);
+
+        $r166 = new org.apache.hadoop.fs.Path;
+
+        $r167 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r6);
+
+        $r168 = (java.lang.String) $r167;
+
+        specialinvoke $r166.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r168);
+
+        i7 = 100;
+
+        $z1 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r9);
+
+        if $z1 == 0 goto label04;
+
+        $r222 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r9);
+
+        $r223 = (java.lang.String) $r222;
+
+        i7 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r223);
+
+     label04:
+        i8 = 2;
+
+        $z8 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r7);
+
+        if $z8 == 0 goto label05;
+
+        $r221 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r7);
+
+        r230 = (java.lang.String) $r221;
+
+        i8 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>(r230);
+
+     label05:
+        i9 = 1;
+
+        $z7 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r19);
+
+        if $z7 == 0 goto label09;
+
+     label06:
+        $r224 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r19);
+
+        $r225 = virtualinvoke $r224.<java.lang.Object: java.lang.String toString()>();
+
+        i9 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r225);
+
+     label07:
+        goto label09;
+
+     label08:
+        $r219 := @caughtexception;
+
+        $r220 = <org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.slf4j.Logger log>;
+
+        interfaceinvoke $r220.<org.slf4j.Logger: void warn(java.lang.String)>("Could not parse ngram size option");
+
+     label09:
+        $r232 = <org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.slf4j.Logger log>;
+
+        $r233 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i9);
+
+        interfaceinvoke $r232.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Maximum n-gram size is: {}", $r233);
+
+        $z18 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r20);
+
+        if $z18 == 0 goto label10;
+
+        $r228 = virtualinvoke r0.<org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $r227 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r227[0] = $r166;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r228, $r227);
+
+     label10:
+        f4 = 1.0F;
+
+        $z6 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r14);
+
+        if $z6 == 0 goto label11;
+
+        $r208 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r14);
+
+        $r226 = virtualinvoke $r208.<java.lang.Object: java.lang.String toString()>();
+
+        f4 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>($r226);
+
+     label11:
+        $r181 = <org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.slf4j.Logger log>;
+
+        $r180 = staticinvoke <java.lang.Float: java.lang.Float valueOf(float)>(f4);
+
+        interfaceinvoke $r181.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Minimum LLR value: {}", $r180);
+
+        i10 = 1;
+
+        $z5 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r15);
+
+        if $z5 == 0 goto label12;
+
+        $r210 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r15);
+
+        $r209 = virtualinvoke $r210.<java.lang.Object: java.lang.String toString()>();
+
+        i10 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r209);
+
+     label12:
+        $r179 = <org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.slf4j.Logger log>;
+
+        $r178 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i10);
+
+        interfaceinvoke $r179.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Number of reduce tasks: {}", $r178);
+
+        r234 = class "org/apache/lucene/analysis/standard/StandardAnalyzer";
+
+        $z4 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r8);
+
+        if $z4 == 0 goto label13;
+
+        $r206 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r8);
+
+        r235 = virtualinvoke $r206.<java.lang.Object: java.lang.String toString()>();
+
+        $r207 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>(r235);
+
+        r234 = virtualinvoke $r207.<java.lang.Class: java.lang.Class asSubclass(java.lang.Class)>(class "org/apache/lucene/analysis/Analyzer");
+
+        staticinvoke <org.apache.mahout.common.lucene.AnalyzerUtils: org.apache.lucene.analysis.Analyzer createAnalyzer(java.lang.Class)>(r234);
+
+     label13:
+        $z3 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r10);
+
+        if $z3 == 0 goto label16;
+
+        $r211 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r10);
+
+        r236 = virtualinvoke $r211.<java.lang.Object: java.lang.String toString()>();
+
+        $r215 = "tf";
+
+        $z17 = virtualinvoke $r215.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>(r236);
+
+        if $z17 == 0 goto label14;
+
+        z19 = 0;
+
+        goto label17;
+
+     label14:
+        $r216 = "tfidf";
+
+        $z16 = virtualinvoke $r216.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>(r236);
+
+        if $z16 == 0 goto label15;
+
+        z19 = 1;
+
+        goto label17;
+
+     label15:
+        $r214 = new org.apache.commons.cli2.OptionException;
+
+        specialinvoke $r214.<org.apache.commons.cli2.OptionException: void <init>(org.apache.commons.cli2.Option)>(r10);
+
+        throw $r214;
+
+     label16:
+        z19 = 1;
+
+     label17:
+        i11 = 1;
+
+        $z13 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r11);
+
+        if $z13 == 0 goto label18;
+
+        $r212 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r11);
+
+        $r213 = virtualinvoke $r212.<java.lang.Object: java.lang.String toString()>();
+
+        i11 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r213);
+
+     label18:
+        i12 = 99;
+
+        $z14 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r12);
+
+        if $z14 == 0 goto label19;
+
+        $r202 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r12);
+
+        $r201 = virtualinvoke $r202.<java.lang.Object: java.lang.String toString()>();
+
+        i12 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r201);
+
+     label19:
+        d5 = -1.0;
+
+        $z11 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r13);
+
+        if $z11 == 0 goto label20;
+
+        $r200 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r13);
+
+        $r199 = virtualinvoke $r200.<java.lang.Object: java.lang.String toString()>();
+
+        d5 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r199);
+
+     label20:
+        f5 = -1.0F;
+
+        $z12 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r17);
+
+        if $z12 == 0 goto label22;
+
+        $r204 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r17);
+
+        r237 = virtualinvoke $r204.<java.lang.Object: java.lang.String toString()>();
+
+        $r203 = "INF";
+
+        $z15 = virtualinvoke $r203.<java.lang.String: boolean equals(java.lang.Object)>(r237);
+
+        if $z15 == 0 goto label21;
+
+        f5 = #InfinityF;
+
+        goto label22;
+
+     label21:
+        f5 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>(r237);
+
+     label22:
+        z20 = 0;
+
+        $z21 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r16);
+
+        if $z21 == 0 goto label23;
+
+        z20 = 1;
+
+     label23:
+        $r187 = <org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.slf4j.Logger log>;
+
+        interfaceinvoke $r187.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Tokenizing documents in {}", $r169);
+
+        r28 = virtualinvoke r0.<org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $r186 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r186.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r166, "tokenized-documents");
+
+        staticinvoke <org.apache.mahout.vectorizer.DocumentProcessor: void tokenizeDocuments(org.apache.hadoop.fs.Path,java.lang.Class,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r169, r234, $r186, r28);
+
+        z22 = 0;
+
+        $z9 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r18);
+
+        if $z9 == 0 goto label24;
+
+        z22 = 1;
+
+     label24:
+        z23 = 0;
+
+        $z10 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r21);
+
+        if $z10 == 0 goto label25;
+
+        z23 = 1;
+
+     label25:
+        $b1 = d5 cmpl 0.0;
+
+        if $b1 >= 0 goto label26;
+
+        $d4 = (double) i12;
+
+        $b6 = $d4 cmpl 0.0;
+
+        if $b6 <= 0 goto label27;
+
+     label26:
+        $z24 = 1;
+
+        goto label28;
+
+     label27:
+        $z24 = 0;
+
+     label28:
+        z0 = $z24;
+
+        if $z24 == 0 goto label29;
+
+        $r238 = "tf-vectors-toprune";
+
+        goto label30;
+
+     label29:
+        $r238 = "tf-vectors";
+
+     label30:
+        r29 = $r238;
+
+        $r185 = <org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.slf4j.Logger log>;
+
+        interfaceinvoke $r185.<org.slf4j.Logger: void info(java.lang.String)>("Creating Term Frequency Vectors");
+
+        if z19 == 0 goto label31;
+
+        staticinvoke <org.apache.mahout.vectorizer.DictionaryVectorizer: void createTermFrequencyVectors(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.String,org.apache.hadoop.conf.Configuration,int,int,float,float,boolean,int,int,boolean,boolean)>($r186, $r166, $r238, r28, i8, i9, f4, -1.0F, 0, i10, i7, z22, z23);
+
+        goto label32;
+
+     label31:
+        staticinvoke <org.apache.mahout.vectorizer.DictionaryVectorizer: void createTermFrequencyVectors(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.String,org.apache.hadoop.conf.Configuration,int,int,float,float,boolean,int,int,boolean,boolean)>($r186, $r166, $r238, r28, i8, i9, f4, f5, z20, i10, i7, z22, z23);
+
+     label32:
+        r239 = null;
+
+        if z0 != 0 goto label33;
+
+        if z19 == 0 goto label34;
+
+     label33:
+        $r183 = <org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.slf4j.Logger log>;
+
+        interfaceinvoke $r183.<org.slf4j.Logger: void info(java.lang.String)>("Calculating IDF");
+
+        $r184 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r184.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r166, r29);
+
+        r239 = staticinvoke <org.apache.mahout.vectorizer.tfidf.TFIDFConverter: org.apache.mahout.common.Pair calculateDF(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration,int)>($r184, $r166, r28, i7);
+
+     label34:
+        l13 = (long) i12;
+
+        if z0 == 0 goto label38;
+
+        $r191 = virtualinvoke r239.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r192 = (java.lang.Long[]) $r191;
+
+        $r190 = $r192[1];
+
+        l0 = virtualinvoke $r190.<java.lang.Long: long longValue()>();
+
+        $b4 = d5 cmpl 0.0;
+
+        if $b4 < 0 goto label35;
+
+        $r189 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r189.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r166, "df-count");
+
+        $r188 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r188.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r166, "stdcalc");
+
+        d6 = staticinvoke <org.apache.mahout.math.hadoop.stats.BasicStats: double stdDevForGivenMean(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,double,org.apache.hadoop.conf.Configuration)>($r189, $r188, 0.0, r28);
+
+        $d2 = 100.0 * d5;
+
+        $d0 = $d2 * d6;
+
+        $d1 = (double) l0;
+
+        $d3 = $d0 / $d1;
+
+        $i3 = (int) $d3;
+
+        l13 = (long) $i3;
+
+     label35:
+        $f1 = (float) l0;
+
+        $f2 = (float) l13;
+
+        $f0 = $f2 / 100.0F;
+
+        $f3 = $f1 * $f0;
+
+        l14 = (long) $f3;
+
+        $r195 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r195.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r166, r29);
+
+        $r193 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r193.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r166, "tf-vectors");
+
+        $r194 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r194.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r166, "tf-vectors-partial");
+
+        $r198 = <org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.slf4j.Logger log>;
+
+        interfaceinvoke $r198.<org.slf4j.Logger: void info(java.lang.String)>("Pruning");
+
+        if z19 == 0 goto label36;
+
+        $l2 = (long) i11;
+
+        staticinvoke <org.apache.mahout.vectorizer.HighDFWordsPruner: void pruneVectors(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,long,long,org.apache.hadoop.conf.Configuration,org.apache.mahout.common.Pair,float,boolean,int)>($r195, $r193, $r194, l14, $l2, r28, r239, -1.0F, 0, i10);
+
+        goto label37;
+
+     label36:
+        $l5 = (long) i11;
+
+        staticinvoke <org.apache.mahout.vectorizer.HighDFWordsPruner: void pruneVectors(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,long,long,org.apache.hadoop.conf.Configuration,org.apache.mahout.common.Pair,float,boolean,int)>($r195, $r193, $r194, l14, $l5, r28, r239, f5, z20, i10);
+
+     label37:
+        $r196 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r196.<org.apache.hadoop.conf.Configuration: void <init>(org.apache.hadoop.conf.Configuration)>(r28);
+
+        $r197 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r197[0] = $r195;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r196, $r197);
+
+     label38:
+        if z19 == 0 goto label41;
+
+        $r182 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r182.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r166, "tf-vectors");
+
+        staticinvoke <org.apache.mahout.vectorizer.tfidf.TFIDFConverter: void processTfIdf(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration,org.apache.mahout.common.Pair,int,long,float,boolean,boolean,boolean,int)>($r182, $r166, r28, r239, i11, l13, f5, z20, z22, z23, i10);
+
+     label39:
+        goto label41;
+
+     label40:
+        $r217 := @caughtexception;
+
+        $r218 = <org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.slf4j.Logger log>;
+
+        interfaceinvoke $r218.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>("Exception", $r217);
+
+        staticinvoke <org.apache.mahout.common.CommandLineUtil: void printHelp(org.apache.commons.cli2.Group)>(r22);
+
+     label41:
+        return 0;
+
+        catch java.lang.NumberFormatException from label06 to label07 with label08;
+        catch org.apache.commons.cli2.OptionException from label01 to label02 with label40;
+        catch org.apache.commons.cli2.OptionException from label03 to label39 with label40;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/vectorizer/SparseVectorsFromSequenceFiles");
+
+        <org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

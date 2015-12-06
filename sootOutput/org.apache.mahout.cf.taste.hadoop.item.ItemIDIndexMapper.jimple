@@ -1,0 +1,141 @@
+public final class org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private boolean transpose;
+    private final org.apache.mahout.math.VarIntWritable indexWritable;
+    private final org.apache.mahout.math.VarLongWritable itemIDWritable;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper r0;
+        org.apache.mahout.math.VarIntWritable $r1;
+        org.apache.mahout.math.VarLongWritable $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.VarIntWritable;
+
+        specialinvoke $r1.<org.apache.mahout.math.VarIntWritable: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper: org.apache.mahout.math.VarIntWritable indexWritable> = $r1;
+
+        $r2 = new org.apache.mahout.math.VarLongWritable;
+
+        specialinvoke $r2.<org.apache.mahout.math.VarLongWritable: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper: org.apache.mahout.math.VarLongWritable itemIDWritable> = $r2;
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context)
+    {
+        org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        java.lang.String $r3;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r3 = <org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: java.lang.String TRANSPOSE_USER_ITEM>;
+
+        $z0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>($r3, 0);
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper: boolean transpose> = $z0;
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.LongWritable, org.apache.hadoop.io.Text, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper r0;
+        org.apache.hadoop.io.LongWritable r1;
+        org.apache.hadoop.io.Text r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        java.lang.String[] r4;
+        long l0;
+        int i1;
+        java.lang.String $r5, $r6;
+        boolean $z0;
+        org.apache.mahout.math.VarIntWritable $r7, $r9;
+        org.apache.mahout.math.VarLongWritable $r8, $r10;
+        byte $b2;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.LongWritable;
+
+        r2 := @parameter1: org.apache.hadoop.io.Text;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = virtualinvoke r2.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        r4 = staticinvoke <org.apache.mahout.cf.taste.hadoop.TasteHadoopUtils: java.lang.String[] splitPrefTokens(java.lang.CharSequence)>($r5);
+
+        $z0 = r0.<org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper: boolean transpose>;
+
+        if $z0 == 0 goto label1;
+
+        $b2 = 0;
+
+        goto label2;
+
+     label1:
+        $b2 = 1;
+
+     label2:
+        $r6 = r4[$b2];
+
+        l0 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r6);
+
+        i1 = staticinvoke <org.apache.mahout.cf.taste.hadoop.TasteHadoopUtils: int idToIndex(long)>(l0);
+
+        $r7 = r0.<org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper: org.apache.mahout.math.VarIntWritable indexWritable>;
+
+        virtualinvoke $r7.<org.apache.mahout.math.VarIntWritable: void set(int)>(i1);
+
+        $r8 = r0.<org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper: org.apache.mahout.math.VarLongWritable itemIDWritable>;
+
+        virtualinvoke $r8.<org.apache.mahout.math.VarLongWritable: void set(long)>(l0);
+
+        $r9 = r0.<org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper: org.apache.mahout.math.VarIntWritable indexWritable>;
+
+        $r10 = r0.<org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper: org.apache.mahout.math.VarLongWritable itemIDWritable>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r9, $r10);
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.hadoop.io.Text $r4;
+        org.apache.hadoop.io.LongWritable $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.LongWritable) r1;
+
+        $r4 = (org.apache.hadoop.io.Text) r2;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexMapper: void map(org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

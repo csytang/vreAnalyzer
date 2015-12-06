@@ -1,0 +1,842 @@
+public class org.apache.mahout.math.hadoop.DistributedRowMatrix extends java.lang.Object implements org.apache.mahout.math.VectorIterable, org.apache.hadoop.conf.Configurable
+{
+    public static final java.lang.String KEEP_TEMP_FILES;
+    private static final org.slf4j.Logger log;
+    private final org.apache.hadoop.fs.Path inputPath;
+    private final org.apache.hadoop.fs.Path outputTmpPath;
+    private org.apache.hadoop.conf.Configuration conf;
+    private org.apache.hadoop.fs.Path rowPath;
+    private org.apache.hadoop.fs.Path outputTmpBasePath;
+    private final int numRows;
+    private final int numCols;
+    private boolean keepTempFiles;
+
+    public void <init>(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int, int)
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        org.apache.hadoop.fs.Path r1, r2;
+        int i0, i1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter2: int;
+
+        i1 := @parameter3: int;
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int,boolean)>(r1, r2, i0, i1, 0);
+
+        return;
+    }
+
+    public void <init>(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int, int, boolean)
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        org.apache.hadoop.fs.Path r1, r2;
+        int i0, i1;
+        boolean z0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter2: int;
+
+        i1 := @parameter3: int;
+
+        z0 := @parameter4: boolean;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path inputPath> = r1;
+
+        r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path outputTmpPath> = r2;
+
+        r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: int numRows> = i0;
+
+        r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: int numCols> = i1;
+
+        r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: boolean keepTempFiles> = z0;
+
+        return;
+    }
+
+    public org.apache.hadoop.conf.Configuration getConf()
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        org.apache.hadoop.conf.Configuration $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration conf>;
+
+        return $r1;
+    }
+
+    public void setConf(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.hadoop.fs.Path $r2, $r4, $r5, $r6, $r7;
+        java.net.URI $r3;
+        boolean $z0;
+        java.io.IOException $r8;
+        java.lang.IllegalStateException $r9;
+        org.apache.hadoop.fs.FileSystem r10;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration conf> = r1;
+
+     label1:
+        $r2 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path inputPath>;
+
+        $r3 = virtualinvoke $r2.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r10 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r3, r1);
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path inputPath>;
+
+        $r5 = virtualinvoke r10.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.Path makeQualified(org.apache.hadoop.fs.Path)>($r4);
+
+        r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path rowPath> = $r5;
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path outputTmpPath>;
+
+        $r7 = virtualinvoke r10.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.Path makeQualified(org.apache.hadoop.fs.Path)>($r6);
+
+        r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path outputTmpBasePath> = $r7;
+
+        $z0 = virtualinvoke r1.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("DistributedMatrix.keep.temp.files", 0);
+
+        r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: boolean keepTempFiles> = $z0;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r8 := @caughtexception;
+
+        $r9 = new java.lang.IllegalStateException;
+
+        specialinvoke $r9.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r8);
+
+        throw $r9;
+
+     label4:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public org.apache.hadoop.fs.Path getRowPath()
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        org.apache.hadoop.fs.Path $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path rowPath>;
+
+        return $r1;
+    }
+
+    public org.apache.hadoop.fs.Path getOutputTempPath()
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        org.apache.hadoop.fs.Path $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path outputTmpBasePath>;
+
+        return $r1;
+    }
+
+    public void setOutputTempPathString(java.lang.String)
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        java.lang.String r1;
+        org.apache.hadoop.conf.Configuration $r3;
+        org.apache.hadoop.fs.FileSystem $r4;
+        org.apache.hadoop.fs.Path $r5, $r6, $r8;
+        java.io.IOException $r7;
+        org.slf4j.Logger $r9;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        r1 := @parameter0: java.lang.String;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration conf>;
+
+        $r4 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(org.apache.hadoop.conf.Configuration)>($r3);
+
+        $r5 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r5.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r1);
+
+        $r6 = virtualinvoke $r4.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.Path makeQualified(org.apache.hadoop.fs.Path)>($r5);
+
+        r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path outputTmpBasePath> = $r6;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r7 := @caughtexception;
+
+        $r9 = <org.apache.mahout.math.hadoop.DistributedRowMatrix: org.slf4j.Logger log>;
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path outputTmpBasePath>;
+
+        interfaceinvoke $r9.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Object,java.lang.Object)>("Unable to set outputBasePath to {}, leaving as {}", r1, $r8);
+
+     label4:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public java.util.Iterator iterateNonEmpty()
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        java.util.Iterator $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: java.util.Iterator iterator()>();
+
+        return $r1;
+    }
+
+    public java.util.Iterator iterateAll()
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        org.apache.hadoop.conf.Configuration $r1, $r8;
+        org.apache.hadoop.fs.FileSystem $r2;
+        org.apache.hadoop.fs.Path $r3, $r11, $r12, r15;
+        org.apache.hadoop.fs.FileStatus $r4;
+        boolean $z0;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator $r5;
+        org.apache.mahout.common.iterator.sequencefile.PathType $r6;
+        org.apache.hadoop.fs.PathFilter $r7;
+        org.apache.mahout.math.hadoop.DistributedRowMatrix$1 $r9;
+        java.util.Iterator $r10;
+        java.lang.IllegalStateException $r13;
+        java.io.IOException $r14;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+     label1:
+        r15 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path rowPath>;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration conf>;
+
+        $r2 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(org.apache.hadoop.conf.Configuration)>($r1);
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path rowPath>;
+
+        $r4 = virtualinvoke $r2.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus getFileStatus(org.apache.hadoop.fs.Path)>($r3);
+
+        $z0 = virtualinvoke $r4.<org.apache.hadoop.fs.FileStatus: boolean isDir()>();
+
+        if $z0 == 0 goto label2;
+
+        $r11 = new org.apache.hadoop.fs.Path;
+
+        $r12 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path rowPath>;
+
+        specialinvoke $r11.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r12, "*");
+
+        r15 = $r11;
+
+     label2:
+        $r5 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator;
+
+        $r6 = <org.apache.mahout.common.iterator.sequencefile.PathType: org.apache.mahout.common.iterator.sequencefile.PathType GLOB>;
+
+        $r7 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter logsCRCFilter()>();
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration conf>;
+
+        specialinvoke $r5.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator: void <init>(org.apache.hadoop.fs.Path,org.apache.mahout.common.iterator.sequencefile.PathType,org.apache.hadoop.fs.PathFilter,java.util.Comparator,boolean,org.apache.hadoop.conf.Configuration)>(r15, $r6, $r7, null, 1, $r8);
+
+        $r9 = new org.apache.mahout.math.hadoop.DistributedRowMatrix$1;
+
+        specialinvoke $r9.<org.apache.mahout.math.hadoop.DistributedRowMatrix$1: void <init>(org.apache.mahout.math.hadoop.DistributedRowMatrix)>(r0);
+
+        $r10 = staticinvoke <com.google.common.collect.Iterators: java.util.Iterator transform(java.util.Iterator,com.google.common.base.Function)>($r5, $r9);
+
+     label3:
+        return $r10;
+
+     label4:
+        $r14 := @caughtexception;
+
+        $r13 = new java.lang.IllegalStateException;
+
+        specialinvoke $r13.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r14);
+
+        throw $r13;
+
+        catch java.io.IOException from label1 to label3 with label4;
+    }
+
+    public int numSlices()
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: int numRows()>();
+
+        return $i0;
+    }
+
+    public int numRows()
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: int numRows>;
+
+        return $i0;
+    }
+
+    public int numCols()
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: int numCols>;
+
+        return $i0;
+    }
+
+    public org.apache.mahout.math.hadoop.DistributedRowMatrix times(org.apache.mahout.math.hadoop.DistributedRowMatrix) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0, r1, $r9;
+        org.apache.hadoop.fs.Path $r2, $r3, $r4;
+        java.lang.StringBuilder $r5, $r6, $r7;
+        long $l0, $l1;
+        java.lang.String $r8;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        r1 := @parameter0: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $r2 = new org.apache.hadoop.fs.Path;
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path outputTmpBasePath>;
+
+        $r4 = virtualinvoke $r3.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.Path getParent()>();
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("productWith-");
+
+        $l0 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l1 = $l0 & 255L;
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r4, $r8);
+
+        $r9 = virtualinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.mahout.math.hadoop.DistributedRowMatrix times(org.apache.mahout.math.hadoop.DistributedRowMatrix,org.apache.hadoop.fs.Path)>(r1, $r2);
+
+        return $r9;
+    }
+
+    public org.apache.mahout.math.hadoop.DistributedRowMatrix times(org.apache.mahout.math.hadoop.DistributedRowMatrix, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0, r1, $r12;
+        org.apache.hadoop.fs.Path r2, $r7, $r8, $r11;
+        org.apache.hadoop.conf.Configuration r4, $r6, $r14;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6;
+        org.apache.hadoop.mapred.JobConf $r9;
+        org.apache.mahout.math.CardinalityException $r13;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        r1 := @parameter0: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: int numRows>;
+
+        $i1 = virtualinvoke r1.<org.apache.mahout.math.hadoop.DistributedRowMatrix: int numRows()>();
+
+        if $i0 == $i1 goto label1;
+
+        $r13 = new org.apache.mahout.math.CardinalityException;
+
+        $i5 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: int numRows>;
+
+        $i6 = virtualinvoke r1.<org.apache.mahout.math.hadoop.DistributedRowMatrix: int numRows()>();
+
+        specialinvoke $r13.<org.apache.mahout.math.CardinalityException: void <init>(int,int)>($i5, $i6);
+
+        throw $r13;
+
+     label1:
+        $r6 = virtualinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration getConf()>();
+
+        if $r6 != null goto label2;
+
+        $r14 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r14.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        goto label3;
+
+     label2:
+        $r14 = virtualinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration getConf()>();
+
+     label3:
+        $r8 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path rowPath>;
+
+        $r7 = r1.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path rowPath>;
+
+        $i2 = r1.<org.apache.mahout.math.hadoop.DistributedRowMatrix: int numCols>;
+
+        r4 = staticinvoke <org.apache.mahout.math.hadoop.MatrixMultiplicationJob: org.apache.hadoop.conf.Configuration createMatrixMultiplyJobConf(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int)>($r14, $r8, $r7, r2, $i2);
+
+        $r9 = new org.apache.hadoop.mapred.JobConf;
+
+        specialinvoke $r9.<org.apache.hadoop.mapred.JobConf: void <init>(org.apache.hadoop.conf.Configuration)>(r4);
+
+        staticinvoke <org.apache.hadoop.mapred.JobClient: org.apache.hadoop.mapred.RunningJob runJob(org.apache.hadoop.mapred.JobConf)>($r9);
+
+        $r12 = new org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path outputTmpPath>;
+
+        $i4 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: int numCols>;
+
+        $i3 = virtualinvoke r1.<org.apache.mahout.math.hadoop.DistributedRowMatrix: int numCols()>();
+
+        specialinvoke $r12.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int)>(r2, $r11, $i4, $i3);
+
+        virtualinvoke $r12.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void setConf(org.apache.hadoop.conf.Configuration)>(r4);
+
+        return $r12;
+    }
+
+    public org.apache.mahout.math.Vector columnMeans() throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        org.apache.mahout.math.Vector $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.mahout.math.Vector columnMeans(java.lang.String)>("SequentialAccessSparseVector");
+
+        return $r1;
+    }
+
+    public org.apache.mahout.math.Vector columnMeans(java.lang.String) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        java.lang.String r1, r4, $r10;
+        org.apache.mahout.math.Vector r5;
+        org.apache.hadoop.fs.FileSystem r6;
+        org.apache.hadoop.fs.Path $r7, $r8, $r9, $r15;
+        long $l0;
+        org.apache.hadoop.conf.Configuration $r11, $r16, $r17;
+        java.lang.StringBuilder $r12, $r13, $r14;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path outputTmpBasePath>;
+
+        $r8 = new org.apache.hadoop.fs.Path;
+
+        $l0 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $r10 = staticinvoke <java.lang.Long: java.lang.String toString(long)>($l0);
+
+        specialinvoke $r8.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r10);
+
+        specialinvoke $r7.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r9, $r8);
+
+        $r11 = virtualinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration getConf()>();
+
+        if $r11 != null goto label1;
+
+        $r17 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r17.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        goto label2;
+
+     label1:
+        $r17 = virtualinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration getConf()>();
+
+     label2:
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>()>();
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("org.apache.mahout.math.");
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        r4 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r15 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path rowPath>;
+
+        r5 = staticinvoke <org.apache.mahout.math.hadoop.MatrixColumnMeansJob: org.apache.mahout.math.Vector run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.String)>($r17, $r15, $r7, r4);
+
+        $z0 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: boolean keepTempFiles>;
+
+        if $z0 != 0 goto label3;
+
+        $r16 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration conf>;
+
+        r6 = virtualinvoke $r7.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>($r16);
+
+        virtualinvoke r6.<org.apache.hadoop.fs.FileSystem: boolean delete(org.apache.hadoop.fs.Path,boolean)>($r7, 1);
+
+     label3:
+        return r5;
+    }
+
+    public org.apache.mahout.math.hadoop.DistributedRowMatrix transpose() throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0, $r13;
+        org.apache.hadoop.mapreduce.Job r3;
+        org.apache.hadoop.fs.Path $r4, $r5, $r6, $r12, $r14;
+        java.lang.StringBuilder $r7, $r8, $r9;
+        long $l0, $l1;
+        java.lang.String $r10;
+        org.apache.hadoop.conf.Configuration $r11, $r15, $r18;
+        int $i2, $i3, $i4;
+        java.lang.Exception $r16;
+        java.lang.IllegalStateException $r17;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $r4 = new org.apache.hadoop.fs.Path;
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path rowPath>;
+
+        $r6 = virtualinvoke $r5.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.Path getParent()>();
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("transpose-");
+
+        $l0 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l1 = $l0 & 255L;
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r4.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r6, $r10);
+
+        $r11 = virtualinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration getConf()>();
+
+        if $r11 != null goto label1;
+
+        $r18 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r18.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        goto label2;
+
+     label1:
+        $r18 = virtualinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration getConf()>();
+
+     label2:
+        $r12 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path rowPath>;
+
+        $i2 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: int numRows>;
+
+        r3 = staticinvoke <org.apache.mahout.math.hadoop.TransposeJob: org.apache.hadoop.mapreduce.Job buildTransposeJob(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int)>($r18, $r12, $r4, $i2);
+
+     label3:
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+     label4:
+        goto label6;
+
+     label5:
+        $r16 := @caughtexception;
+
+        $r17 = new java.lang.IllegalStateException;
+
+        specialinvoke $r17.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("transposition failed", $r16);
+
+        throw $r17;
+
+     label6:
+        $r13 = new org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $r14 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path outputTmpPath>;
+
+        $i4 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: int numCols>;
+
+        $i3 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: int numRows>;
+
+        specialinvoke $r13.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int)>($r4, $r14, $i4, $i3);
+
+        $r15 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration conf>;
+
+        virtualinvoke $r13.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void setConf(org.apache.hadoop.conf.Configuration)>($r15);
+
+        return $r13;
+
+        catch java.lang.Exception from label3 to label4 with label5;
+    }
+
+    public org.apache.mahout.math.Vector times(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        org.apache.mahout.math.Vector r1, r21;
+        org.apache.hadoop.mapreduce.Job r3;
+        org.apache.hadoop.fs.FileSystem r4;
+        org.apache.hadoop.conf.Configuration $r5, $r11, $r12, $r18;
+        org.apache.hadoop.fs.Path $r6, $r7, $r8, $r10;
+        long $l0;
+        java.lang.String $r9;
+        int $i1;
+        boolean $z1;
+        java.lang.Exception $r14;
+        java.lang.IllegalStateException $r15, $r17;
+        java.io.IOException $r16;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+     label1:
+        $r5 = virtualinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration getConf()>();
+
+        if $r5 != null goto label2;
+
+        $r18 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r18.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        goto label3;
+
+     label2:
+        $r18 = virtualinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration getConf()>();
+
+     label3:
+        $r6 = new org.apache.hadoop.fs.Path;
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path outputTmpBasePath>;
+
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        $l0 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $r9 = staticinvoke <java.lang.Long: java.lang.String toString(long)>($l0);
+
+        specialinvoke $r7.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r9);
+
+        specialinvoke $r6.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r8, $r7);
+
+        $i1 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: int numRows>;
+
+        $r10 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path rowPath>;
+
+        r3 = staticinvoke <org.apache.mahout.math.hadoop.TimesSquaredJob: org.apache.hadoop.mapreduce.Job createTimesJob(org.apache.hadoop.conf.Configuration,org.apache.mahout.math.Vector,int,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r18, r1, $i1, $r10, $r6);
+
+     label4:
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+     label5:
+        goto label7;
+
+     label6:
+        $r14 := @caughtexception;
+
+        $r15 = new java.lang.IllegalStateException;
+
+        specialinvoke $r15.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("times failed", $r14);
+
+        throw $r15;
+
+     label7:
+        $r11 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration conf>;
+
+        r21 = staticinvoke <org.apache.mahout.math.hadoop.TimesSquaredJob: org.apache.mahout.math.Vector retrieveTimesSquaredOutputVector(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r6, $r11);
+
+        $z1 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: boolean keepTempFiles>;
+
+        if $z1 != 0 goto label8;
+
+        $r12 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration conf>;
+
+        r4 = virtualinvoke $r6.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>($r12);
+
+        virtualinvoke r4.<org.apache.hadoop.fs.FileSystem: boolean delete(org.apache.hadoop.fs.Path,boolean)>($r6, 1);
+
+     label8:
+        return r21;
+
+     label9:
+        $r16 := @caughtexception;
+
+        $r17 = new java.lang.IllegalStateException;
+
+        specialinvoke $r17.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r16);
+
+        throw $r17;
+
+        catch java.lang.Exception from label4 to label5 with label6;
+        catch java.io.IOException from label1 to label8 with label9;
+    }
+
+    public org.apache.mahout.math.Vector timesSquared(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        org.apache.mahout.math.Vector r1, r21;
+        org.apache.hadoop.mapreduce.Job r3;
+        org.apache.hadoop.fs.FileSystem r4;
+        org.apache.hadoop.conf.Configuration $r5, $r11, $r12, $r18;
+        org.apache.hadoop.fs.Path $r6, $r7, $r8, $r10;
+        long $l0;
+        java.lang.String $r9;
+        boolean $z1;
+        java.lang.Exception $r14;
+        java.lang.IllegalStateException $r15, $r17;
+        java.io.IOException $r16;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+     label1:
+        $r5 = virtualinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration getConf()>();
+
+        if $r5 != null goto label2;
+
+        $r18 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r18.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        goto label3;
+
+     label2:
+        $r18 = virtualinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration getConf()>();
+
+     label3:
+        $r6 = new org.apache.hadoop.fs.Path;
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path outputTmpBasePath>;
+
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        $l0 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $r9 = staticinvoke <java.lang.Long: java.lang.String toString(long)>($l0);
+
+        specialinvoke $r7.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r9);
+
+        specialinvoke $r6.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r8, $r7);
+
+        $r10 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path rowPath>;
+
+        r3 = staticinvoke <org.apache.mahout.math.hadoop.TimesSquaredJob: org.apache.hadoop.mapreduce.Job createTimesSquaredJob(org.apache.hadoop.conf.Configuration,org.apache.mahout.math.Vector,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r18, r1, $r10, $r6);
+
+     label4:
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+     label5:
+        goto label7;
+
+     label6:
+        $r14 := @caughtexception;
+
+        $r15 = new java.lang.IllegalStateException;
+
+        specialinvoke $r15.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("timesSquared failed", $r14);
+
+        throw $r15;
+
+     label7:
+        $r11 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration conf>;
+
+        r21 = staticinvoke <org.apache.mahout.math.hadoop.TimesSquaredJob: org.apache.mahout.math.Vector retrieveTimesSquaredOutputVector(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r6, $r11);
+
+        $z1 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: boolean keepTempFiles>;
+
+        if $z1 != 0 goto label8;
+
+        $r12 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.conf.Configuration conf>;
+
+        r4 = virtualinvoke $r6.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>($r12);
+
+        virtualinvoke r4.<org.apache.hadoop.fs.FileSystem: boolean delete(org.apache.hadoop.fs.Path,boolean)>($r6, 1);
+
+     label8:
+        return r21;
+
+     label9:
+        $r16 := @caughtexception;
+
+        $r17 = new java.lang.IllegalStateException;
+
+        specialinvoke $r17.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r16);
+
+        throw $r17;
+
+        catch java.lang.Exception from label4 to label5 with label6;
+        catch java.io.IOException from label1 to label8 with label9;
+    }
+
+    public java.util.Iterator iterator()
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r0;
+        java.util.Iterator $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix: java.util.Iterator iterateAll()>();
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.math.hadoop.DistributedRowMatrix: java.lang.String KEEP_TEMP_FILES> = "DistributedMatrix.keep.temp.files";
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/math/hadoop/DistributedRowMatrix");
+
+        <org.apache.mahout.math.hadoop.DistributedRowMatrix: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

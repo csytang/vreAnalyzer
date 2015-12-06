@@ -1,0 +1,70 @@
+class org.apache.mahout.common.iterator.StringRecordIterator$1 extends java.lang.Object implements com.google.common.base.Function
+{
+    final org.apache.mahout.common.iterator.StringRecordIterator this$0;
+
+    void <init>(org.apache.mahout.common.iterator.StringRecordIterator)
+    {
+        org.apache.mahout.common.iterator.StringRecordIterator$1 r0;
+        org.apache.mahout.common.iterator.StringRecordIterator r1;
+
+        r0 := @this: org.apache.mahout.common.iterator.StringRecordIterator$1;
+
+        r1 := @parameter0: org.apache.mahout.common.iterator.StringRecordIterator;
+
+        r0.<org.apache.mahout.common.iterator.StringRecordIterator$1: org.apache.mahout.common.iterator.StringRecordIterator this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.mahout.common.Pair apply(java.lang.String)
+    {
+        org.apache.mahout.common.iterator.StringRecordIterator$1 r0;
+        java.lang.String r1;
+        java.lang.String[] r2;
+        org.apache.mahout.common.iterator.StringRecordIterator $r3;
+        java.util.regex.Pattern $r4;
+        org.apache.mahout.common.Pair $r5;
+        java.util.List $r6;
+        java.lang.Long $r7;
+
+        r0 := @this: org.apache.mahout.common.iterator.StringRecordIterator$1;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r3 = r0.<org.apache.mahout.common.iterator.StringRecordIterator$1: org.apache.mahout.common.iterator.StringRecordIterator this$0>;
+
+        $r4 = staticinvoke <org.apache.mahout.common.iterator.StringRecordIterator: java.util.regex.Pattern access$000(org.apache.mahout.common.iterator.StringRecordIterator)>($r3);
+
+        r2 = virtualinvoke $r4.<java.util.regex.Pattern: java.lang.String[] split(java.lang.CharSequence)>(r1);
+
+        $r5 = new org.apache.mahout.common.Pair;
+
+        $r6 = staticinvoke <java.util.Arrays: java.util.List asList(java.lang.Object[])>(r2);
+
+        $r7 = staticinvoke <org.apache.mahout.common.iterator.StringRecordIterator: java.lang.Long access$100()>();
+
+        specialinvoke $r5.<org.apache.mahout.common.Pair: void <init>(java.lang.Object,java.lang.Object)>($r6, $r7);
+
+        return $r5;
+    }
+
+    public volatile java.lang.Object apply(java.lang.Object)
+    {
+        org.apache.mahout.common.iterator.StringRecordIterator$1 r0;
+        java.lang.Object r1;
+        java.lang.String $r2;
+        org.apache.mahout.common.Pair $r3;
+
+        r0 := @this: org.apache.mahout.common.iterator.StringRecordIterator$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.lang.String) r1;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.common.iterator.StringRecordIterator$1: org.apache.mahout.common.Pair apply(java.lang.String)>($r2);
+
+        return $r3;
+    }
+}

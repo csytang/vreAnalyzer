@@ -1,0 +1,78 @@
+public class org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement extends java.lang.Object implements org.apache.mahout.math.Vector$Element
+{
+    private int index;
+    private double value;
+
+    void <init>(int, double)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement r0;
+        int i0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement: int index> = i0;
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement: double value> = d0;
+
+        return;
+    }
+
+    public double get()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement;
+
+        $d0 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement: double value>;
+
+        return $d0;
+    }
+
+    public int index()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement;
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement: int index>;
+
+        return $i0;
+    }
+
+    public void setIndex(int)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement: int index> = i0;
+
+        return;
+    }
+
+    public void set(double)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement: double value> = d0;
+
+        return;
+    }
+}

@@ -1,0 +1,756 @@
+public final class org.apache.mahout.clustering.ClusteringUtils extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.clustering.ClusteringUtils r0;
+
+        r0 := @this: org.apache.mahout.clustering.ClusteringUtils;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.util.List summarizeClusterDistances(java.lang.Iterable, java.lang.Iterable, org.apache.mahout.common.distance.DistanceMeasure)
+    {
+        java.lang.Iterable r0, r1;
+        org.apache.mahout.common.distance.DistanceMeasure r2;
+        org.apache.mahout.math.Vector r5;
+        org.apache.mahout.math.Centroid r6;
+        org.apache.mahout.math.stats.OnlineSummarizer r7, $r16;
+        org.apache.mahout.math.neighborhood.ProjectionSearch $r8;
+        java.util.ArrayList $r9;
+        int $i0, $i1, $i2, i3;
+        boolean $z0;
+        java.lang.Object $r10, $r11, $r13, $r15;
+        java.util.List $r12;
+        org.apache.mahout.math.random.WeightedThing $r14;
+        double $d0;
+        java.util.Iterator r17;
+
+        r0 := @parameter0: java.lang.Iterable;
+
+        r1 := @parameter1: java.lang.Iterable;
+
+        r2 := @parameter2: org.apache.mahout.common.distance.DistanceMeasure;
+
+        $r8 = new org.apache.mahout.math.neighborhood.ProjectionSearch;
+
+        specialinvoke $r8.<org.apache.mahout.math.neighborhood.ProjectionSearch: void <init>(org.apache.mahout.common.distance.DistanceMeasure,int,int)>(r2, 3, 1);
+
+        virtualinvoke $r8.<org.apache.mahout.math.neighborhood.UpdatableSearcher: void addAll(java.lang.Iterable)>(r1);
+
+        $r9 = new java.util.ArrayList;
+
+        specialinvoke $r9.<java.util.ArrayList: void <init>()>();
+
+        $i0 = virtualinvoke $r8.<org.apache.mahout.math.neighborhood.UpdatableSearcher: int size()>();
+
+        if $i0 != 0 goto label1;
+
+        return $r9;
+
+     label1:
+        i3 = 0;
+
+     label2:
+        $i1 = virtualinvoke $r8.<org.apache.mahout.math.neighborhood.UpdatableSearcher: int size()>();
+
+        if i3 >= $i1 goto label3;
+
+        $r16 = new org.apache.mahout.math.stats.OnlineSummarizer;
+
+        specialinvoke $r16.<org.apache.mahout.math.stats.OnlineSummarizer: void <init>()>();
+
+        interfaceinvoke $r9.<java.util.List: boolean add(java.lang.Object)>($r16);
+
+        i3 = i3 + 1;
+
+        goto label2;
+
+     label3:
+        r17 = interfaceinvoke r0.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label4:
+        $z0 = interfaceinvoke r17.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r10 = interfaceinvoke r17.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.Vector) $r10;
+
+        $r12 = virtualinvoke $r8.<org.apache.mahout.math.neighborhood.UpdatableSearcher: java.util.List search(org.apache.mahout.math.Vector,int)>(r5, 1);
+
+        $r11 = interfaceinvoke $r12.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r14 = (org.apache.mahout.math.random.WeightedThing) $r11;
+
+        $r13 = virtualinvoke $r14.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        r6 = (org.apache.mahout.math.Centroid) $r13;
+
+        $i2 = virtualinvoke r6.<org.apache.mahout.math.Centroid: int getIndex()>();
+
+        $r15 = interfaceinvoke $r9.<java.util.List: java.lang.Object get(int)>($i2);
+
+        r7 = (org.apache.mahout.math.stats.OnlineSummarizer) $r15;
+
+        $d0 = interfaceinvoke r2.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r5, r6);
+
+        virtualinvoke r7.<org.apache.mahout.math.stats.OnlineSummarizer: void add(double)>($d0);
+
+        goto label4;
+
+     label5:
+        return $r9;
+    }
+
+    public static double totalClusterCost(java.lang.Iterable, java.lang.Iterable)
+    {
+        java.lang.Iterable r0, r1;
+        org.apache.mahout.common.distance.EuclideanDistanceMeasure $r4;
+        org.apache.mahout.math.neighborhood.ProjectionSearch $r5;
+        double $d0;
+
+        r0 := @parameter0: java.lang.Iterable;
+
+        r1 := @parameter1: java.lang.Iterable;
+
+        $r4 = new org.apache.mahout.common.distance.EuclideanDistanceMeasure;
+
+        specialinvoke $r4.<org.apache.mahout.common.distance.EuclideanDistanceMeasure: void <init>()>();
+
+        $r5 = new org.apache.mahout.math.neighborhood.ProjectionSearch;
+
+        specialinvoke $r5.<org.apache.mahout.math.neighborhood.ProjectionSearch: void <init>(org.apache.mahout.common.distance.DistanceMeasure,int,int)>($r4, 3, 1);
+
+        virtualinvoke $r5.<org.apache.mahout.math.neighborhood.UpdatableSearcher: void addAll(java.lang.Iterable)>(r1);
+
+        $d0 = staticinvoke <org.apache.mahout.clustering.ClusteringUtils: double totalClusterCost(java.lang.Iterable,org.apache.mahout.math.neighborhood.Searcher)>(r0, $r5);
+
+        return $d0;
+    }
+
+    public static double totalClusterCost(java.lang.Iterable, org.apache.mahout.math.neighborhood.Searcher)
+    {
+        java.lang.Iterable r0;
+        org.apache.mahout.math.neighborhood.Searcher r1;
+        java.util.Iterator r2;
+        org.apache.mahout.math.Vector r3;
+        boolean $z0;
+        java.lang.Object $r4;
+        org.apache.mahout.math.random.WeightedThing $r5;
+        double $d0, d1;
+
+        r0 := @parameter0: java.lang.Iterable;
+
+        r1 := @parameter1: org.apache.mahout.math.neighborhood.Searcher;
+
+        d1 = 0.0;
+
+        r2 = interfaceinvoke r0.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.math.Vector) $r4;
+
+        $r5 = virtualinvoke r1.<org.apache.mahout.math.neighborhood.Searcher: org.apache.mahout.math.random.WeightedThing searchFirst(org.apache.mahout.math.Vector,boolean)>(r3, 0);
+
+        $d0 = virtualinvoke $r5.<org.apache.mahout.math.random.WeightedThing: double getWeight()>();
+
+        d1 = d1 + $d0;
+
+        goto label1;
+
+     label2:
+        return d1;
+    }
+
+    public static double estimateDistanceCutoff(java.util.List, org.apache.mahout.common.distance.DistanceMeasure)
+    {
+        java.util.List r0;
+        org.apache.mahout.common.distance.DistanceMeasure r1;
+        java.util.Iterator r3;
+        org.apache.mahout.math.Vector r4;
+        double d0, d1;
+        org.apache.mahout.math.neighborhood.BruteSearch $r5;
+        boolean $z0;
+        java.lang.Object $r6;
+        org.apache.mahout.math.random.WeightedThing $r7;
+        byte $b0, $b1;
+
+        r0 := @parameter0: java.util.List;
+
+        r1 := @parameter1: org.apache.mahout.common.distance.DistanceMeasure;
+
+        $r5 = new org.apache.mahout.math.neighborhood.BruteSearch;
+
+        specialinvoke $r5.<org.apache.mahout.math.neighborhood.BruteSearch: void <init>(org.apache.mahout.common.distance.DistanceMeasure)>(r1);
+
+        virtualinvoke $r5.<org.apache.mahout.math.neighborhood.BruteSearch: void addAll(java.lang.Iterable)>(r0);
+
+        d1 = #Infinity;
+
+        r3 = interfaceinvoke r0.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r6 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.math.Vector) $r6;
+
+        $r7 = virtualinvoke $r5.<org.apache.mahout.math.neighborhood.BruteSearch: org.apache.mahout.math.random.WeightedThing searchFirst(org.apache.mahout.math.Vector,boolean)>(r4, 1);
+
+        d0 = virtualinvoke $r7.<org.apache.mahout.math.random.WeightedThing: double getWeight()>();
+
+        $b0 = d1 cmpl 0.0;
+
+        if $b0 <= 0 goto label2;
+
+        $b1 = d0 cmpg d1;
+
+        if $b1 >= 0 goto label2;
+
+        d1 = d0;
+
+     label2:
+        virtualinvoke $r5.<org.apache.mahout.math.neighborhood.BruteSearch: void add(org.apache.mahout.math.Vector)>(r4);
+
+        goto label1;
+
+     label3:
+        return d1;
+    }
+
+    public static double estimateDistanceCutoff(java.lang.Iterable, org.apache.mahout.common.distance.DistanceMeasure, int)
+    {
+        java.lang.Iterable r0, $r2;
+        org.apache.mahout.common.distance.DistanceMeasure r1;
+        int i0;
+        java.util.ArrayList $r3;
+        double $d0;
+
+        r0 := @parameter0: java.lang.Iterable;
+
+        r1 := @parameter1: org.apache.mahout.common.distance.DistanceMeasure;
+
+        i0 := @parameter2: int;
+
+        $r2 = staticinvoke <com.google.common.collect.Iterables: java.lang.Iterable limit(java.lang.Iterable,int)>(r0, i0);
+
+        $r3 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList(java.lang.Iterable)>($r2);
+
+        $d0 = staticinvoke <org.apache.mahout.clustering.ClusteringUtils: double estimateDistanceCutoff(java.util.List,org.apache.mahout.common.distance.DistanceMeasure)>($r3, r1);
+
+        return $d0;
+    }
+
+    public static double daviesBouldinIndex(java.util.List, org.apache.mahout.common.distance.DistanceMeasure, java.util.List)
+    {
+        java.util.List r0, r2;
+        org.apache.mahout.common.distance.DistanceMeasure r1;
+        int i0, $i1, $i2, i4, i5;
+        double d0, d1, $d2, $d3, $d4, $d5, $d6, d7, d8;
+        java.lang.Object $r3, $r6, $r8, $r9;
+        org.apache.mahout.math.stats.OnlineSummarizer $r4, $r5;
+        org.apache.mahout.math.Vector $r7, $r10;
+        byte $b3;
+        boolean $z0;
+
+        r0 := @parameter0: java.util.List;
+
+        r1 := @parameter1: org.apache.mahout.common.distance.DistanceMeasure;
+
+        r2 := @parameter2: java.util.List;
+
+        $i1 = interfaceinvoke r0.<java.util.List: int size()>();
+
+        $i2 = interfaceinvoke r2.<java.util.List: int size()>();
+
+        if $i1 != $i2 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "Number of centroids and cluster summaries differ.");
+
+        i0 = interfaceinvoke r0.<java.util.List: int size()>();
+
+        d7 = 0.0;
+
+        i4 = 0;
+
+     label3:
+        if i4 >= i0 goto label7;
+
+        $r3 = interfaceinvoke r2.<java.util.List: java.lang.Object get(int)>(i4);
+
+        $r4 = (org.apache.mahout.math.stats.OnlineSummarizer) $r3;
+
+        d0 = virtualinvoke $r4.<org.apache.mahout.math.stats.OnlineSummarizer: double getMean()>();
+
+        d8 = 0.0;
+
+        i5 = 0;
+
+     label4:
+        if i5 >= i0 goto label6;
+
+        if i4 == i5 goto label5;
+
+        $r6 = interfaceinvoke r2.<java.util.List: java.lang.Object get(int)>(i5);
+
+        $r5 = (org.apache.mahout.math.stats.OnlineSummarizer) $r6;
+
+        $d5 = virtualinvoke $r5.<org.apache.mahout.math.stats.OnlineSummarizer: double getMean()>();
+
+        $d4 = d0 + $d5;
+
+        $r8 = interfaceinvoke r0.<java.util.List: java.lang.Object get(int)>(i4);
+
+        $r7 = (org.apache.mahout.math.Vector) $r8;
+
+        $r9 = interfaceinvoke r0.<java.util.List: java.lang.Object get(int)>(i5);
+
+        $r10 = (org.apache.mahout.math.Vector) $r9;
+
+        $d6 = interfaceinvoke r1.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>($r7, $r10);
+
+        d1 = $d4 / $d6;
+
+        $b3 = d1 cmpl d8;
+
+        if $b3 <= 0 goto label5;
+
+        d8 = d1;
+
+     label5:
+        i5 = i5 + 1;
+
+        goto label4;
+
+     label6:
+        d7 = d7 + d8;
+
+        i4 = i4 + 1;
+
+        goto label3;
+
+     label7:
+        $d2 = (double) i0;
+
+        $d3 = d7 / $d2;
+
+        return $d3;
+    }
+
+    public static double dunnIndex(java.util.List, org.apache.mahout.common.distance.DistanceMeasure, java.util.List)
+    {
+        java.util.List r0, r2;
+        org.apache.mahout.common.distance.DistanceMeasure r1;
+        int i0, $i1, $i2, $i4, $i5, i7, i8;
+        org.apache.mahout.math.stats.OnlineSummarizer r3;
+        double d0, $d1, d2, d3, d4;
+        org.apache.mahout.math.Vector $r4, $r6;
+        java.lang.Object $r5, $r7, $r8;
+        byte $b3, $b6;
+        boolean $z0, $z1;
+        java.util.Iterator r9;
+
+        r0 := @parameter0: java.util.List;
+
+        r1 := @parameter1: org.apache.mahout.common.distance.DistanceMeasure;
+
+        r2 := @parameter2: java.util.List;
+
+        $i1 = interfaceinvoke r0.<java.util.List: int size()>();
+
+        $i2 = interfaceinvoke r2.<java.util.List: int size()>();
+
+        if $i1 != $i2 goto label01;
+
+        $z0 = 1;
+
+        goto label02;
+
+     label01:
+        $z0 = 0;
+
+     label02:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "Number of centroids and cluster summaries differ.");
+
+        i0 = interfaceinvoke r0.<java.util.List: int size()>();
+
+        d2 = 0.0;
+
+        r9 = interfaceinvoke r2.<java.util.List: java.util.Iterator iterator()>();
+
+     label03:
+        $z1 = interfaceinvoke r9.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label06;
+
+        $r8 = interfaceinvoke r9.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.math.stats.OnlineSummarizer) $r8;
+
+        $i4 = virtualinvoke r3.<org.apache.mahout.math.stats.OnlineSummarizer: int getCount()>();
+
+        if $i4 <= 0 goto label03;
+
+        $i5 = virtualinvoke r3.<org.apache.mahout.math.stats.OnlineSummarizer: int getCount()>();
+
+        if $i5 != 1 goto label04;
+
+        d3 = virtualinvoke r3.<org.apache.mahout.math.stats.OnlineSummarizer: double getMean()>();
+
+        goto label05;
+
+     label04:
+        d3 = virtualinvoke r3.<org.apache.mahout.math.stats.OnlineSummarizer: double getMedian()>();
+
+     label05:
+        $b6 = d2 cmpg d3;
+
+        if $b6 >= 0 goto label03;
+
+        d2 = d3;
+
+        goto label03;
+
+     label06:
+        d4 = #Infinity;
+
+        i7 = 0;
+
+     label07:
+        if i7 >= i0 goto label11;
+
+        i8 = i7 + 1;
+
+     label08:
+        if i8 >= i0 goto label10;
+
+        $r5 = interfaceinvoke r0.<java.util.List: java.lang.Object get(int)>(i7);
+
+        $r4 = (org.apache.mahout.math.Vector) $r5;
+
+        $r7 = interfaceinvoke r0.<java.util.List: java.lang.Object get(int)>(i8);
+
+        $r6 = (org.apache.mahout.math.Vector) $r7;
+
+        d0 = interfaceinvoke r1.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>($r4, $r6);
+
+        $b3 = d4 cmpl d0;
+
+        if $b3 <= 0 goto label09;
+
+        d4 = d0;
+
+     label09:
+        i8 = i8 + 1;
+
+        goto label08;
+
+     label10:
+        i7 = i7 + 1;
+
+        goto label07;
+
+     label11:
+        $d1 = d4 / d2;
+
+        return $d1;
+    }
+
+    public static double choose2(double)
+    {
+        double d0, $d1, $d2, $d3;
+
+        d0 := @parameter0: double;
+
+        $d1 = d0 - 1.0;
+
+        $d2 = d0 * $d1;
+
+        $d3 = $d2 / 2.0;
+
+        return $d3;
+    }
+
+    public static org.apache.mahout.math.Matrix getConfusionMatrix(java.util.List, java.util.List, java.lang.Iterable, org.apache.mahout.common.distance.DistanceMeasure)
+    {
+        java.util.List r0, r1, $r14, $r16;
+        java.lang.Iterable r2;
+        org.apache.mahout.common.distance.DistanceMeasure r3;
+        int i0, i1, i2, i3;
+        java.util.Iterator r7;
+        org.apache.mahout.math.Vector r8;
+        org.apache.mahout.math.random.WeightedThing r9, r10;
+        org.apache.mahout.math.neighborhood.BruteSearch $r11, $r12;
+        org.apache.mahout.math.DenseMatrix $r13;
+        boolean $z0, $z1;
+        java.lang.Object $r15, $r17, $r18, $r19, $r21;
+        org.apache.mahout.math.Centroid $r20, $r22;
+        org.apache.mahout.math.WeightedVector $r23;
+        double $d0, $d1, d2;
+
+        r0 := @parameter0: java.util.List;
+
+        r1 := @parameter1: java.util.List;
+
+        r2 := @parameter2: java.lang.Iterable;
+
+        r3 := @parameter3: org.apache.mahout.common.distance.DistanceMeasure;
+
+        $r11 = new org.apache.mahout.math.neighborhood.BruteSearch;
+
+        specialinvoke $r11.<org.apache.mahout.math.neighborhood.BruteSearch: void <init>(org.apache.mahout.common.distance.DistanceMeasure)>(r3);
+
+        virtualinvoke $r11.<org.apache.mahout.math.neighborhood.Searcher: void addAll(java.lang.Iterable)>(r0);
+
+        $r12 = new org.apache.mahout.math.neighborhood.BruteSearch;
+
+        specialinvoke $r12.<org.apache.mahout.math.neighborhood.BruteSearch: void <init>(org.apache.mahout.common.distance.DistanceMeasure)>(r3);
+
+        virtualinvoke $r12.<org.apache.mahout.math.neighborhood.Searcher: void addAll(java.lang.Iterable)>(r1);
+
+        i0 = interfaceinvoke r0.<java.util.List: int size()>();
+
+        i1 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        $r13 = new org.apache.mahout.math.DenseMatrix;
+
+        specialinvoke $r13.<org.apache.mahout.math.DenseMatrix: void <init>(int,int)>(i0, i1);
+
+        r7 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r15 = interfaceinvoke r7.<java.util.Iterator: java.lang.Object next()>();
+
+        r8 = (org.apache.mahout.math.Vector) $r15;
+
+        $r14 = virtualinvoke $r11.<org.apache.mahout.math.neighborhood.Searcher: java.util.List search(org.apache.mahout.math.Vector,int)>(r8, 1);
+
+        $r17 = interfaceinvoke $r14.<java.util.List: java.lang.Object get(int)>(0);
+
+        r9 = (org.apache.mahout.math.random.WeightedThing) $r17;
+
+        $r16 = virtualinvoke $r12.<org.apache.mahout.math.neighborhood.Searcher: java.util.List search(org.apache.mahout.math.Vector,int)>(r8, 1);
+
+        $r19 = interfaceinvoke $r16.<java.util.List: java.lang.Object get(int)>(0);
+
+        r10 = (org.apache.mahout.math.random.WeightedThing) $r19;
+
+        $r18 = virtualinvoke r9.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        $r20 = (org.apache.mahout.math.Centroid) $r18;
+
+        i2 = virtualinvoke $r20.<org.apache.mahout.math.Centroid: int getIndex()>();
+
+        $r21 = virtualinvoke r10.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        $r22 = (org.apache.mahout.math.Centroid) $r21;
+
+        i3 = virtualinvoke $r22.<org.apache.mahout.math.Centroid: int getIndex()>();
+
+        $z1 = r8 instanceof org.apache.mahout.math.WeightedVector;
+
+        if $z1 == 0 goto label2;
+
+        $r23 = (org.apache.mahout.math.WeightedVector) r8;
+
+        d2 = virtualinvoke $r23.<org.apache.mahout.math.WeightedVector: double getWeight()>();
+
+        goto label3;
+
+     label2:
+        d2 = 1.0;
+
+     label3:
+        $d0 = interfaceinvoke $r13.<org.apache.mahout.math.Matrix: double get(int,int)>(i2, i3);
+
+        $d1 = $d0 + d2;
+
+        interfaceinvoke $r13.<org.apache.mahout.math.Matrix: void set(int,int,double)>(i2, i3, $d1);
+
+        goto label1;
+
+     label4:
+        return $r13;
+    }
+
+    public static double getAdjustedRandIndex(org.apache.mahout.math.Matrix)
+    {
+        org.apache.mahout.math.Matrix r0;
+        int i0, i1, i2, i3, i4, i5;
+        double $d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10, $d11, $d12, d13, d14, d15, d16, d17, d18, d19;
+
+        r0 := @parameter0: org.apache.mahout.math.Matrix;
+
+        i0 = interfaceinvoke r0.<org.apache.mahout.math.Matrix: int numRows()>();
+
+        i1 = interfaceinvoke r0.<org.apache.mahout.math.Matrix: int numCols()>();
+
+        d13 = 0.0;
+
+        d14 = 0.0;
+
+        d15 = 0.0;
+
+        d16 = 0.0;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label4;
+
+        d17 = 0.0;
+
+        i3 = 0;
+
+     label2:
+        if i3 >= i1 goto label3;
+
+        $d12 = interfaceinvoke r0.<org.apache.mahout.math.Matrix: double get(int,int)>(i2, i3);
+
+        d17 = d17 + $d12;
+
+        $d10 = interfaceinvoke r0.<org.apache.mahout.math.Matrix: double get(int,int)>(i2, i3);
+
+        $d11 = staticinvoke <org.apache.mahout.clustering.ClusteringUtils: double choose2(double)>($d10);
+
+        d15 = d15 + $d11;
+
+        i3 = i3 + 1;
+
+        goto label2;
+
+     label3:
+        d16 = d16 + d17;
+
+        $d9 = staticinvoke <org.apache.mahout.clustering.ClusteringUtils: double choose2(double)>(d17);
+
+        d13 = d13 + $d9;
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label4:
+        i4 = 0;
+
+     label5:
+        if i4 >= i1 goto label8;
+
+        d18 = 0.0;
+
+        i5 = 0;
+
+     label6:
+        if i5 >= i0 goto label7;
+
+        $d8 = interfaceinvoke r0.<org.apache.mahout.math.Matrix: double get(int,int)>(i5, i4);
+
+        d18 = d18 + $d8;
+
+        i5 = i5 + 1;
+
+        goto label6;
+
+     label7:
+        $d7 = staticinvoke <org.apache.mahout.clustering.ClusteringUtils: double choose2(double)>(d18);
+
+        d14 = d14 + $d7;
+
+        i4 = i4 + 1;
+
+        goto label5;
+
+     label8:
+        $d0 = d13 * d14;
+
+        $d2 = staticinvoke <org.apache.mahout.clustering.ClusteringUtils: double choose2(double)>(d16);
+
+        d19 = $d0 / $d2;
+
+        $d6 = d15 - d19;
+
+        $d1 = d13 + d14;
+
+        $d4 = $d1 / 2.0;
+
+        $d3 = $d4 - d19;
+
+        $d5 = $d6 / $d3;
+
+        return $d5;
+    }
+
+    public static double totalWeight(java.lang.Iterable)
+    {
+        java.lang.Iterable r0;
+        java.util.Iterator r1;
+        org.apache.mahout.math.Vector r2;
+        boolean $z0, $z1;
+        java.lang.Object $r3;
+        org.apache.mahout.math.WeightedVector $r5;
+        double $d0, d1;
+
+        r0 := @parameter0: java.lang.Iterable;
+
+        d1 = 0.0;
+
+        r1 = interfaceinvoke r0.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r3 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (org.apache.mahout.math.Vector) $r3;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r2);
+
+        $z1 = r2 instanceof org.apache.mahout.math.WeightedVector;
+
+        if $z1 == 0 goto label2;
+
+        $r5 = (org.apache.mahout.math.WeightedVector) r2;
+
+        $d0 = virtualinvoke $r5.<org.apache.mahout.math.WeightedVector: double getWeight()>();
+
+        d1 = d1 + $d0;
+
+        goto label1;
+
+     label2:
+        d1 = d1 + 1.0;
+
+        goto label1;
+
+     label3:
+        return d1;
+    }
+}

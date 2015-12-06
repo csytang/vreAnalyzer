@@ -1,0 +1,25 @@
+final class org.apache.mahout.common.MemoryUtil$2 extends java.lang.Object implements java.lang.Runnable
+{
+
+    void <init>()
+    {
+        org.apache.mahout.common.MemoryUtil$2 r0;
+
+        r0 := @this: org.apache.mahout.common.MemoryUtil$2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void run()
+    {
+        org.apache.mahout.common.MemoryUtil$2 r0;
+
+        r0 := @this: org.apache.mahout.common.MemoryUtil$2;
+
+        staticinvoke <org.apache.mahout.common.MemoryUtil: void logMemoryStatistics()>();
+
+        return;
+    }
+}

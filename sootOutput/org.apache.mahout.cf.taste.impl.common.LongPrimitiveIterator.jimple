@@ -1,0 +1,7 @@
+public interface  org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator extends java.lang.Object implements org.apache.mahout.cf.taste.impl.common.SkippingIterator
+{
+
+    public abstract long nextLong();
+
+    public abstract long peek();
+}

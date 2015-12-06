@@ -1,0 +1,329 @@
+public class org.apache.mahout.vectorizer.encoders.InteractionValueEncoder extends org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder
+{
+    private final org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder firstEncoder;
+    private final org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder secondEncoder;
+
+    public void <init>(java.lang.String, org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder, org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder)
+    {
+        org.apache.mahout.vectorizer.encoders.InteractionValueEncoder r0;
+        java.lang.String r1;
+        org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder r2, r3;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.InteractionValueEncoder;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder;
+
+        r3 := @parameter2: org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder;
+
+        specialinvoke r0.<org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder: void <init>(java.lang.String,int)>(r1, 2);
+
+        r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder firstEncoder> = r2;
+
+        r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder secondEncoder> = r3;
+
+        return;
+    }
+
+    public void addToVector(java.lang.String, double, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.vectorizer.encoders.InteractionValueEncoder r0;
+        java.lang.String r1;
+        double d0;
+        org.apache.mahout.math.Vector r2;
+        java.lang.UnsupportedOperationException $r3;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.InteractionValueEncoder;
+
+        r1 := @parameter0: java.lang.String;
+
+        d0 := @parameter1: double;
+
+        r2 := @parameter2: org.apache.mahout.math.Vector;
+
+        $r3 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r3.<java.lang.UnsupportedOperationException: void <init>(java.lang.String)>("addToVector is not supported for InteractionVectorEncoder");
+
+        throw $r3;
+    }
+
+    public void addToVector(byte[], double, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.vectorizer.encoders.InteractionValueEncoder r0;
+        byte[] r1;
+        double d0;
+        org.apache.mahout.math.Vector r2;
+        java.lang.UnsupportedOperationException $r3;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.InteractionValueEncoder;
+
+        r1 := @parameter0: byte[];
+
+        d0 := @parameter1: double;
+
+        r2 := @parameter2: org.apache.mahout.math.Vector;
+
+        $r3 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r3.<java.lang.UnsupportedOperationException: void <init>(java.lang.String)>("addToVector is not supported for InteractionVectorEncoder");
+
+        throw $r3;
+    }
+
+    public void addInteractionToVector(java.lang.String, java.lang.String, double, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.vectorizer.encoders.InteractionValueEncoder r0;
+        java.lang.String r1, r2;
+        double d0;
+        org.apache.mahout.math.Vector r3;
+        byte[] r4, r5;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.InteractionValueEncoder;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.lang.String;
+
+        d0 := @parameter2: double;
+
+        r3 := @parameter3: org.apache.mahout.math.Vector;
+
+        r4 = staticinvoke <org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: byte[] bytesForString(java.lang.String)>(r1);
+
+        r5 = staticinvoke <org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: byte[] bytesForString(java.lang.String)>(r2);
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: void addInteractionToVector(byte[],byte[],double,org.apache.mahout.math.Vector)>(r4, r5, d0, r3);
+
+        return;
+    }
+
+    public void addInteractionToVector(byte[], byte[], double, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.vectorizer.encoders.InteractionValueEncoder r0;
+        byte[] r1, r2;
+        double d0, d1, $d2, $d3;
+        org.apache.mahout.math.Vector r3;
+        java.lang.String r4, $r18, $r21, $r22;
+        java.lang.Iterable r5, $r14;
+        java.util.Iterator r6, r8;
+        java.lang.Integer r7, r9;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, i12;
+        org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder $r10, $r11, $r12, $r13;
+        java.lang.Object $r15, $r16;
+        boolean $z0, $z1, $z2;
+        java.nio.charset.Charset $r17, $r20;
+        java.lang.Object[] $r19;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.InteractionValueEncoder;
+
+        r1 := @parameter0: byte[];
+
+        r2 := @parameter1: byte[];
+
+        d0 := @parameter2: double;
+
+        r3 := @parameter3: org.apache.mahout.math.Vector;
+
+        r4 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: java.lang.String getName()>();
+
+        d1 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: double getWeight(byte[],byte[],double)>(r1, r2, d0);
+
+        i12 = 0;
+
+     label1:
+        $i1 = specialinvoke r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: int probes()>();
+
+        if i12 >= $i1 goto label6;
+
+        $r10 = r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder secondEncoder>;
+
+        $i2 = interfaceinvoke r3.<org.apache.mahout.math.Vector: int size()>();
+
+        $r11 = r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder secondEncoder>;
+
+        $i4 = virtualinvoke $r11.<org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder: int getProbes()>();
+
+        $i3 = i12 % $i4;
+
+        r5 = virtualinvoke $r10.<org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder: java.lang.Iterable hashesForProbe(byte[],int,java.lang.String,int)>(r2, $i2, r4, $i3);
+
+        $r12 = r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder firstEncoder>;
+
+        $i5 = interfaceinvoke r3.<org.apache.mahout.math.Vector: int size()>();
+
+        $r13 = r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder firstEncoder>;
+
+        $i7 = virtualinvoke $r13.<org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder: int getProbes()>();
+
+        $i6 = i12 % $i7;
+
+        $r14 = virtualinvoke $r12.<org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder: java.lang.Iterable hashesForProbe(byte[],int,java.lang.String,int)>(r1, $i5, r4, $i6);
+
+        r6 = interfaceinvoke $r14.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r15 = interfaceinvoke r6.<java.util.Iterator: java.lang.Object next()>();
+
+        r7 = (java.lang.Integer) $r15;
+
+        r8 = interfaceinvoke r5.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label3:
+        $z1 = interfaceinvoke r8.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label2;
+
+        $r16 = interfaceinvoke r8.<java.util.Iterator: java.lang.Object next()>();
+
+        r9 = (java.lang.Integer) $r16;
+
+        $i10 = virtualinvoke r7.<java.lang.Integer: int intValue()>();
+
+        $i11 = virtualinvoke r9.<java.lang.Integer: int intValue()>();
+
+        $i8 = $i10 + $i11;
+
+        $i9 = interfaceinvoke r3.<org.apache.mahout.math.Vector: int size()>();
+
+        i0 = $i8 % $i9;
+
+        $z2 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: boolean isTraceEnabled()>();
+
+        if $z2 == 0 goto label4;
+
+        $r19 = newarray (java.lang.Object)[2];
+
+        $r18 = new java.lang.String;
+
+        $r17 = <com.google.common.base.Charsets: java.nio.charset.Charset UTF_8>;
+
+        specialinvoke $r18.<java.lang.String: void <init>(byte[],java.nio.charset.Charset)>(r1, $r17);
+
+        $r19[0] = $r18;
+
+        $r21 = new java.lang.String;
+
+        $r20 = <com.google.common.base.Charsets: java.nio.charset.Charset UTF_8>;
+
+        specialinvoke $r21.<java.lang.String: void <init>(byte[],java.nio.charset.Charset)>(r2, $r20);
+
+        $r19[1] = $r21;
+
+        $r22 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("%s:%s", $r19);
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: void trace(java.lang.String,int)>($r22, i0);
+
+     label4:
+        $d3 = interfaceinvoke r3.<org.apache.mahout.math.Vector: double get(int)>(i0);
+
+        $d2 = $d3 + d1;
+
+        interfaceinvoke r3.<org.apache.mahout.math.Vector: void set(int,double)>(i0, $d2);
+
+        goto label3;
+
+     label5:
+        i12 = i12 + 1;
+
+        goto label1;
+
+     label6:
+        return;
+    }
+
+    private int probes()
+    {
+        org.apache.mahout.vectorizer.encoders.InteractionValueEncoder r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.InteractionValueEncoder;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: int getProbes()>();
+
+        return $i0;
+    }
+
+    protected double getWeight(byte[], byte[], double)
+    {
+        org.apache.mahout.vectorizer.encoders.InteractionValueEncoder r0;
+        byte[] r1, r2;
+        double d0, $d1, $d2, $d3, $d4;
+        org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder $r3, $r4;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.InteractionValueEncoder;
+
+        r1 := @parameter0: byte[];
+
+        r2 := @parameter1: byte[];
+
+        d0 := @parameter2: double;
+
+        $r3 = r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder firstEncoder>;
+
+        $d1 = virtualinvoke $r3.<org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder: double getWeight(byte[],double)>(r1, 1.0);
+
+        $r4 = r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder secondEncoder>;
+
+        $d2 = virtualinvoke $r4.<org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder: double getWeight(byte[],double)>(r2, 1.0);
+
+        $d3 = $d1 * $d2;
+
+        $d4 = $d3 * d0;
+
+        return $d4;
+    }
+
+    public java.lang.String asString(java.lang.String)
+    {
+        org.apache.mahout.vectorizer.encoders.InteractionValueEncoder r0;
+        java.lang.String r1, $r4, $r5;
+        java.lang.Object[] $r2;
+        java.util.Locale $r3;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.InteractionValueEncoder;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r3 = <java.util.Locale: java.util.Locale ENGLISH>;
+
+        $r2 = newarray (java.lang.Object)[2];
+
+        $r4 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: java.lang.String getName()>();
+
+        $r2[0] = $r4;
+
+        $r2[1] = r1;
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r3, "%s:%s", $r2);
+
+        return $r5;
+    }
+
+    protected int hashForProbe(byte[], int, java.lang.String, int)
+    {
+        org.apache.mahout.vectorizer.encoders.InteractionValueEncoder r0;
+        byte[] r1;
+        int i0, i1, $i2;
+        java.lang.String r2;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.InteractionValueEncoder;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: java.lang.String;
+
+        i1 := @parameter3: int;
+
+        $i2 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.InteractionValueEncoder: int hash(java.lang.String,int,int)>(r2, i1, i0);
+
+        return $i2;
+    }
+}

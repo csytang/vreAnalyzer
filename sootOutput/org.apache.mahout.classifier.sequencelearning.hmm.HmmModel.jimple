@@ -1,0 +1,749 @@
+public class org.apache.mahout.classifier.sequencelearning.hmm.HmmModel extends java.lang.Object implements java.lang.Cloneable
+{
+    private com.google.common.collect.BiMap outputStateNames;
+    private com.google.common.collect.BiMap hiddenStateNames;
+    private int nrOfHiddenStates;
+    private int nrOfOutputStates;
+    private org.apache.mahout.math.Matrix transitionMatrix;
+    private org.apache.mahout.math.Matrix emissionMatrix;
+    private org.apache.mahout.math.Vector initialProbabilities;
+
+    public org.apache.mahout.classifier.sequencelearning.hmm.HmmModel clone()
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0, $r2;
+        org.apache.mahout.math.Matrix $r3, $r4, $r5, $r6;
+        org.apache.mahout.math.Vector $r7, $r8;
+        com.google.common.collect.BiMap $r9, $r10, $r11, $r13;
+        com.google.common.collect.HashBiMap $r12, $r14;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        $r2 = new org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        $r3 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Matrix transitionMatrix>;
+
+        $r4 = interfaceinvoke $r3.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Matrix clone()>();
+
+        $r5 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Matrix emissionMatrix>;
+
+        $r6 = interfaceinvoke $r5.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Matrix clone()>();
+
+        $r7 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Vector initialProbabilities>;
+
+        $r8 = interfaceinvoke $r7.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        specialinvoke $r2.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: void <init>(org.apache.mahout.math.Matrix,org.apache.mahout.math.Matrix,org.apache.mahout.math.Vector)>($r4, $r6, $r8);
+
+        $r9 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap hiddenStateNames>;
+
+        if $r9 == null goto label1;
+
+        $r13 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap hiddenStateNames>;
+
+        $r14 = staticinvoke <com.google.common.collect.HashBiMap: com.google.common.collect.HashBiMap create(java.util.Map)>($r13);
+
+        $r2.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap hiddenStateNames> = $r14;
+
+     label1:
+        $r10 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap outputStateNames>;
+
+        if $r10 == null goto label2;
+
+        $r11 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap outputStateNames>;
+
+        $r12 = staticinvoke <com.google.common.collect.HashBiMap: com.google.common.collect.HashBiMap create(java.util.Map)>($r11);
+
+        $r2.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap outputStateNames> = $r12;
+
+     label2:
+        return $r2;
+    }
+
+    public void assign(org.apache.mahout.classifier.sequencelearning.hmm.HmmModel)
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0, r1;
+        int $i0, $i1;
+        com.google.common.collect.BiMap $r2, $r3;
+        org.apache.mahout.math.Vector $r4, $r5;
+        org.apache.mahout.math.Matrix $r6, $r7, $r8, $r9;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        r1 := @parameter0: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        $i0 = r1.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfHiddenStates>;
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfHiddenStates> = $i0;
+
+        $i1 = r1.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfOutputStates>;
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfOutputStates> = $i1;
+
+        $r2 = r1.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap hiddenStateNames>;
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap hiddenStateNames> = $r2;
+
+        $r3 = r1.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap outputStateNames>;
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap outputStateNames> = $r3;
+
+        $r4 = r1.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Vector initialProbabilities>;
+
+        $r5 = interfaceinvoke $r4.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Vector initialProbabilities> = $r5;
+
+        $r6 = r1.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Matrix emissionMatrix>;
+
+        $r7 = interfaceinvoke $r6.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Matrix clone()>();
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Matrix emissionMatrix> = $r7;
+
+        $r8 = r1.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Matrix transitionMatrix>;
+
+        $r9 = interfaceinvoke $r8.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Matrix clone()>();
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Matrix transitionMatrix> = $r9;
+
+        return;
+    }
+
+    public void <init>(int, int, long)
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        int i0, i1;
+        long l2;
+        org.apache.mahout.math.DenseMatrix $r1, $r2;
+        org.apache.mahout.math.DenseVector $r3;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        l2 := @parameter2: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfHiddenStates> = i0;
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfOutputStates> = i1;
+
+        $r1 = new org.apache.mahout.math.DenseMatrix;
+
+        specialinvoke $r1.<org.apache.mahout.math.DenseMatrix: void <init>(int,int)>(i0, i0);
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Matrix transitionMatrix> = $r1;
+
+        $r2 = new org.apache.mahout.math.DenseMatrix;
+
+        specialinvoke $r2.<org.apache.mahout.math.DenseMatrix: void <init>(int,int)>(i0, i1);
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Matrix emissionMatrix> = $r2;
+
+        $r3 = new org.apache.mahout.math.DenseVector;
+
+        specialinvoke $r3.<org.apache.mahout.math.DenseVector: void <init>(int)>(i0);
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Vector initialProbabilities> = $r3;
+
+        specialinvoke r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: void initRandomParameters(long)>(l2);
+
+        return;
+    }
+
+    public void <init>(int, int)
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        int i0, i1;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        specialinvoke r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: void <init>(int,int,long)>(i0, i1, 0L);
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.math.Matrix, org.apache.mahout.math.Matrix, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        org.apache.mahout.math.Matrix r1, r2;
+        org.apache.mahout.math.Vector r3;
+        int $i0, $i1;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        r1 := @parameter0: org.apache.mahout.math.Matrix;
+
+        r2 := @parameter1: org.apache.mahout.math.Matrix;
+
+        r3 := @parameter2: org.apache.mahout.math.Vector;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $i0 = interfaceinvoke r3.<org.apache.mahout.math.Vector: int size()>();
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfHiddenStates> = $i0;
+
+        $i1 = interfaceinvoke r2.<org.apache.mahout.math.Matrix: int numCols()>();
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfOutputStates> = $i1;
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Matrix transitionMatrix> = r1;
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Matrix emissionMatrix> = r2;
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Vector initialProbabilities> = r3;
+
+        return;
+    }
+
+    private void initRandomParameters(long)
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        long l0;
+        byte $b1;
+        org.apache.mahout.math.Vector $r1, $r2, $r5;
+        int $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, i10, $i11, i12, i13, i14, i15, i16, i17;
+        org.apache.mahout.math.Matrix $r3, $r4;
+        double $d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, d8, d9, d10, d11;
+        java.util.Random r6;
+        double[] r7, r8;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        l0 := @parameter0: long;
+
+        $b1 = l0 cmp 0L;
+
+        if $b1 != 0 goto label01;
+
+        r6 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        goto label02;
+
+     label01:
+        r6 = staticinvoke <org.apache.mahout.common.RandomUtils: java.util.Random getRandom(long)>(l0);
+
+     label02:
+        d8 = 0.0;
+
+        i10 = 0;
+
+     label03:
+        $i11 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfHiddenStates>;
+
+        if i10 >= $i11 goto label04;
+
+        d9 = virtualinvoke r6.<java.util.Random: double nextDouble()>();
+
+        $r5 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Vector initialProbabilities>;
+
+        interfaceinvoke $r5.<org.apache.mahout.math.Vector: void set(int,double)>(i10, d9);
+
+        d8 = d8 + d9;
+
+        i10 = i10 + 1;
+
+        goto label03;
+
+     label04:
+        $r1 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Vector initialProbabilities>;
+
+        $r2 = interfaceinvoke $r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector divide(double)>(d8);
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Vector initialProbabilities> = $r2;
+
+        $i2 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfHiddenStates>;
+
+        r7 = newarray (double)[$i2];
+
+        i12 = 0;
+
+     label05:
+        $i3 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfHiddenStates>;
+
+        if i12 >= $i3 goto label10;
+
+        d10 = 0.0;
+
+        i13 = 0;
+
+     label06:
+        $i8 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfHiddenStates>;
+
+        if i13 >= $i8 goto label07;
+
+        $d6 = virtualinvoke r6.<java.util.Random: double nextDouble()>();
+
+        r7[i13] = $d6;
+
+        $d7 = r7[i13];
+
+        d10 = d10 + $d7;
+
+        i13 = i13 + 1;
+
+        goto label06;
+
+     label07:
+        i14 = 0;
+
+     label08:
+        $i9 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfHiddenStates>;
+
+        if i14 >= $i9 goto label09;
+
+        $d4 = r7[i14];
+
+        $d5 = $d4 / d10;
+
+        r7[i14] = $d5;
+
+        i14 = i14 + 1;
+
+        goto label08;
+
+     label09:
+        $r4 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Matrix transitionMatrix>;
+
+        interfaceinvoke $r4.<org.apache.mahout.math.Matrix: void set(int,double[])>(i12, r7);
+
+        i12 = i12 + 1;
+
+        goto label05;
+
+     label10:
+        $i5 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfOutputStates>;
+
+        r8 = newarray (double)[$i5];
+
+        i15 = 0;
+
+     label11:
+        $i4 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfHiddenStates>;
+
+        if i15 >= $i4 goto label16;
+
+        d11 = 0.0;
+
+        i16 = 0;
+
+     label12:
+        $i7 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfOutputStates>;
+
+        if i16 >= $i7 goto label13;
+
+        $d2 = virtualinvoke r6.<java.util.Random: double nextDouble()>();
+
+        r8[i16] = $d2;
+
+        $d3 = r8[i16];
+
+        d11 = d11 + $d3;
+
+        i16 = i16 + 1;
+
+        goto label12;
+
+     label13:
+        i17 = 0;
+
+     label14:
+        $i6 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfOutputStates>;
+
+        if i17 >= $i6 goto label15;
+
+        $d0 = r8[i17];
+
+        $d1 = $d0 / d11;
+
+        r8[i17] = $d1;
+
+        i17 = i17 + 1;
+
+        goto label14;
+
+     label15:
+        $r3 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Matrix emissionMatrix>;
+
+        interfaceinvoke $r3.<org.apache.mahout.math.Matrix: void set(int,double[])>(i15, r8);
+
+        i15 = i15 + 1;
+
+        goto label11;
+
+     label16:
+        return;
+    }
+
+    public int getNrOfHiddenStates()
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        $i0 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfHiddenStates>;
+
+        return $i0;
+    }
+
+    public int getNrOfOutputStates()
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        $i0 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: int nrOfOutputStates>;
+
+        return $i0;
+    }
+
+    public org.apache.mahout.math.Matrix getTransitionMatrix()
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        org.apache.mahout.math.Matrix $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        $r1 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Matrix transitionMatrix>;
+
+        return $r1;
+    }
+
+    public org.apache.mahout.math.Matrix getEmissionMatrix()
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        org.apache.mahout.math.Matrix $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        $r1 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Matrix emissionMatrix>;
+
+        return $r1;
+    }
+
+    public org.apache.mahout.math.Vector getInitialProbabilities()
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        org.apache.mahout.math.Vector $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        $r1 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Vector initialProbabilities>;
+
+        return $r1;
+    }
+
+    public java.util.Map getHiddenStateNames()
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        com.google.common.collect.BiMap $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        $r1 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap hiddenStateNames>;
+
+        return $r1;
+    }
+
+    public void registerHiddenStateNames(java.lang.String[])
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        java.lang.String[] r1;
+        com.google.common.collect.HashBiMap $r2;
+        int $i0, i1;
+        com.google.common.collect.BiMap $r3;
+        java.lang.String $r4;
+        java.lang.Integer $r5;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        r1 := @parameter0: java.lang.String[];
+
+        if r1 == null goto label2;
+
+        $r2 = staticinvoke <com.google.common.collect.HashBiMap: com.google.common.collect.HashBiMap create()>();
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap hiddenStateNames> = $r2;
+
+        i1 = 0;
+
+     label1:
+        $i0 = lengthof r1;
+
+        if i1 >= $i0 goto label2;
+
+        $r3 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap hiddenStateNames>;
+
+        $r4 = r1[i1];
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        interfaceinvoke $r3.<com.google.common.collect.BiMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r4, $r5);
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void registerHiddenStateNames(java.util.Map)
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        java.util.Map r1;
+        com.google.common.collect.HashBiMap $r2;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        r1 := @parameter0: java.util.Map;
+
+        if r1 == null goto label1;
+
+        $r2 = staticinvoke <com.google.common.collect.HashBiMap: com.google.common.collect.HashBiMap create(java.util.Map)>(r1);
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap hiddenStateNames> = $r2;
+
+     label1:
+        return;
+    }
+
+    public java.lang.String getHiddenStateName(int)
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        int i0;
+        com.google.common.collect.BiMap $r1, $r2, $r3;
+        java.lang.Integer $r4;
+        java.lang.Object $r5;
+        java.lang.String $r6;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap hiddenStateNames>;
+
+        if $r1 != null goto label1;
+
+        return null;
+
+     label1:
+        $r2 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap hiddenStateNames>;
+
+        $r3 = interfaceinvoke $r2.<com.google.common.collect.BiMap: com.google.common.collect.BiMap inverse()>();
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r5 = interfaceinvoke $r3.<com.google.common.collect.BiMap: java.lang.Object get(java.lang.Object)>($r4);
+
+        $r6 = (java.lang.String) $r5;
+
+        return $r6;
+    }
+
+    public int getHiddenStateID(java.lang.String)
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        java.lang.String r1;
+        java.lang.Integer r2;
+        com.google.common.collect.BiMap $r3, $r4;
+        java.lang.Object $r5;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r3 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap hiddenStateNames>;
+
+        if $r3 != null goto label1;
+
+        return -1;
+
+     label1:
+        $r4 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap hiddenStateNames>;
+
+        $r5 = interfaceinvoke $r4.<com.google.common.collect.BiMap: java.lang.Object get(java.lang.Object)>(r1);
+
+        r2 = (java.lang.Integer) $r5;
+
+        if r2 != null goto label2;
+
+        $i0 = -1;
+
+        goto label3;
+
+     label2:
+        $i0 = virtualinvoke r2.<java.lang.Integer: int intValue()>();
+
+     label3:
+        return $i0;
+    }
+
+    public java.util.Map getOutputStateNames()
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        com.google.common.collect.BiMap $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        $r1 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap outputStateNames>;
+
+        return $r1;
+    }
+
+    public void registerOutputStateNames(java.lang.String[])
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        java.lang.String[] r1;
+        com.google.common.collect.HashBiMap $r2;
+        int $i0, i1;
+        com.google.common.collect.BiMap $r3;
+        java.lang.String $r4;
+        java.lang.Integer $r5;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        r1 := @parameter0: java.lang.String[];
+
+        if r1 == null goto label2;
+
+        $r2 = staticinvoke <com.google.common.collect.HashBiMap: com.google.common.collect.HashBiMap create()>();
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap outputStateNames> = $r2;
+
+        i1 = 0;
+
+     label1:
+        $i0 = lengthof r1;
+
+        if i1 >= $i0 goto label2;
+
+        $r3 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap outputStateNames>;
+
+        $r4 = r1[i1];
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        interfaceinvoke $r3.<com.google.common.collect.BiMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r4, $r5);
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void registerOutputStateNames(java.util.Map)
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        java.util.Map r1;
+        com.google.common.collect.HashBiMap $r2;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        r1 := @parameter0: java.util.Map;
+
+        if r1 == null goto label1;
+
+        $r2 = staticinvoke <com.google.common.collect.HashBiMap: com.google.common.collect.HashBiMap create(java.util.Map)>(r1);
+
+        r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap outputStateNames> = $r2;
+
+     label1:
+        return;
+    }
+
+    public java.lang.String getOutputStateName(int)
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        int i0;
+        com.google.common.collect.BiMap $r1, $r2, $r3;
+        java.lang.Integer $r4;
+        java.lang.Object $r5;
+        java.lang.String $r6;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap outputStateNames>;
+
+        if $r1 != null goto label1;
+
+        return null;
+
+     label1:
+        $r2 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap outputStateNames>;
+
+        $r3 = interfaceinvoke $r2.<com.google.common.collect.BiMap: com.google.common.collect.BiMap inverse()>();
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r5 = interfaceinvoke $r3.<com.google.common.collect.BiMap: java.lang.Object get(java.lang.Object)>($r4);
+
+        $r6 = (java.lang.String) $r5;
+
+        return $r6;
+    }
+
+    public int getOutputStateID(java.lang.String)
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        java.lang.String r1;
+        java.lang.Integer r2;
+        com.google.common.collect.BiMap $r3, $r4;
+        java.lang.Object $r5;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r3 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap outputStateNames>;
+
+        if $r3 != null goto label1;
+
+        return -1;
+
+     label1:
+        $r4 = r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: com.google.common.collect.BiMap outputStateNames>;
+
+        $r5 = interfaceinvoke $r4.<com.google.common.collect.BiMap: java.lang.Object get(java.lang.Object)>(r1);
+
+        r2 = (java.lang.Integer) $r5;
+
+        if r2 != null goto label2;
+
+        $i0 = -1;
+
+        goto label3;
+
+     label2:
+        $i0 = virtualinvoke r2.<java.lang.Integer: int intValue()>();
+
+     label3:
+        return $i0;
+    }
+
+    public volatile java.lang.Object clone() throws java.lang.CloneNotSupportedException
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0, $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel clone()>();
+
+        return $r1;
+    }
+}

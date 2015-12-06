@@ -1,0 +1,11 @@
+public interface  org.apache.mahout.clustering.iterator.ClusteringPolicy extends java.lang.Object implements org.apache.hadoop.io.Writable
+{
+
+    public abstract org.apache.mahout.math.Vector classify(org.apache.mahout.math.Vector, org.apache.mahout.clustering.classify.ClusterClassifier);
+
+    public abstract org.apache.mahout.math.Vector select(org.apache.mahout.math.Vector);
+
+    public abstract void update(org.apache.mahout.clustering.classify.ClusterClassifier);
+
+    public abstract void close(org.apache.mahout.clustering.classify.ClusterClassifier);
+}

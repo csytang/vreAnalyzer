@@ -1,0 +1,139 @@
+public class org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner extends org.apache.hadoop.mapreduce.Reducer
+{
+    protected final org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable accum;
+    protected final java.util.Deque closeables;
+    protected int blockHeight;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner r0;
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable $r1;
+        java.util.ArrayDeque $r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+        specialinvoke $r1.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable accum> = $r1;
+
+        $r2 = new java.util.ArrayDeque;
+
+        specialinvoke $r2.<java.util.ArrayDeque: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner: java.util.Deque closeables> = $r2;
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        org.apache.hadoop.conf.Configuration $r2;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $i0 = virtualinvoke $r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("ssvd.outerProdBlockHeight", -1);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner: int blockHeight> = $i0;
+
+        return;
+    }
+
+    protected void reduce(org.apache.hadoop.io.Writable, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner r0;
+        org.apache.hadoop.io.Writable r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        java.util.Iterator r4;
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable r5, $r6, $r7, $r9;
+        boolean $z0;
+        java.lang.Object $r8;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner;
+
+        r1 := @parameter0: org.apache.hadoop.io.Writable;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        r4 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r8 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable) $r8;
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable accum>;
+
+        virtualinvoke $r9.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: void plusBlock(org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable)>(r5);
+
+        goto label1;
+
+     label2:
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable accum>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r6);
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable accum>;
+
+        virtualinvoke $r7.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: void clear()>();
+
+        return;
+    }
+
+    protected void cleanup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        java.util.Deque $r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner: java.util.Deque closeables>;
+
+        staticinvoke <org.apache.mahout.common.IOUtils: void close(java.util.Collection)>($r2);
+
+        return;
+    }
+
+    protected volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.hadoop.io.Writable $r4;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.hadoop.io.Writable) r1;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductCombiner: void reduce(org.apache.hadoop.io.Writable,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+}

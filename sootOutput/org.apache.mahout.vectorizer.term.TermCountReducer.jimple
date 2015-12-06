@@ -1,0 +1,120 @@
+public class org.apache.mahout.vectorizer.term.TermCountReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+    private int minSupport;
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.term.TermCountReducer r0;
+
+        r0 := @this: org.apache.mahout.vectorizer.term.TermCountReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        return;
+    }
+
+    protected void reduce(org.apache.hadoop.io.Text, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.term.TermCountReducer r0;
+        org.apache.hadoop.io.Text r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        java.util.Iterator r4;
+        org.apache.hadoop.io.LongWritable r5, $r6;
+        boolean $z0;
+        int $i0;
+        long $l1, $l3, l4;
+        byte $b2;
+        java.lang.Object $r7;
+
+        r0 := @this: org.apache.mahout.vectorizer.term.TermCountReducer;
+
+        r1 := @parameter0: org.apache.hadoop.io.Text;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        l4 = 0L;
+
+        r4 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r7 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.hadoop.io.LongWritable) $r7;
+
+        $l3 = virtualinvoke r5.<org.apache.hadoop.io.LongWritable: long get()>();
+
+        l4 = l4 + $l3;
+
+        goto label1;
+
+     label2:
+        $i0 = r0.<org.apache.mahout.vectorizer.term.TermCountReducer: int minSupport>;
+
+        $l1 = (long) $i0;
+
+        $b2 = l4 cmp $l1;
+
+        if $b2 < 0 goto label3;
+
+        $r6 = new org.apache.hadoop.io.LongWritable;
+
+        specialinvoke $r6.<org.apache.hadoop.io.LongWritable: void <init>(long)>(l4);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r6);
+
+     label3:
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.term.TermCountReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        org.apache.hadoop.conf.Configuration $r2;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.term.TermCountReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void setup(org.apache.hadoop.mapreduce.Reducer$Context)>(r1);
+
+        $r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $i0 = virtualinvoke $r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("min.support", 2);
+
+        r0.<org.apache.mahout.vectorizer.term.TermCountReducer: int minSupport> = $i0;
+
+        return;
+    }
+
+    protected volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.term.TermCountReducer r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.hadoop.io.Text $r4;
+
+        r0 := @this: org.apache.mahout.vectorizer.term.TermCountReducer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.hadoop.io.Text) r1;
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.term.TermCountReducer: void reduce(org.apache.hadoop.io.Text,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+}

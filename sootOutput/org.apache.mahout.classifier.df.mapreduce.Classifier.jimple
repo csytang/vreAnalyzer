@@ -1,0 +1,376 @@
+public class org.apache.mahout.classifier.df.mapreduce.Classifier extends java.lang.Object
+{
+    private static final org.slf4j.Logger log;
+    private final org.apache.hadoop.fs.Path forestPath;
+    private final org.apache.hadoop.fs.Path inputPath;
+    private final org.apache.hadoop.fs.Path datasetPath;
+    private final org.apache.hadoop.conf.Configuration conf;
+    private final org.apache.hadoop.fs.Path outputPath;
+    private final org.apache.hadoop.fs.Path mappersOutputPath;
+    private double[][] results;
+
+    public double[][] getResults()
+    {
+        org.apache.mahout.classifier.df.mapreduce.Classifier r0;
+        double[][] $r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.Classifier;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: double[][] results>;
+
+        return $r1;
+    }
+
+    public void <init>(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.classifier.df.mapreduce.Classifier r0;
+        org.apache.hadoop.fs.Path r1, r2, r3, r4, $r6;
+        org.apache.hadoop.conf.Configuration r5;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.Classifier;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r4 := @parameter3: org.apache.hadoop.fs.Path;
+
+        r5 := @parameter4: org.apache.hadoop.conf.Configuration;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.fs.Path forestPath> = r1;
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.fs.Path inputPath> = r2;
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.fs.Path datasetPath> = r3;
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.fs.Path outputPath> = r4;
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.conf.Configuration conf> = r5;
+
+        $r6 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r6.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r4, "mappers");
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.fs.Path mappersOutputPath> = $r6;
+
+        return;
+    }
+
+    private void configureJob(org.apache.hadoop.mapreduce.Job) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.df.mapreduce.Classifier r0;
+        org.apache.hadoop.mapreduce.Job r1;
+        org.apache.hadoop.fs.Path[] $r2;
+        org.apache.hadoop.fs.Path $r3, $r4;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.Classifier;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Job;
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(class "org/apache/mahout/classifier/df/mapreduce/Classifier");
+
+        $r2 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r3 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.fs.Path inputPath>;
+
+        $r2[0] = $r3;
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void setInputPaths(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path[])>(r1, $r2);
+
+        $r4 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.fs.Path mappersOutputPath>;
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>(r1, $r4);
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/DoubleWritable");
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(class "org/apache/hadoop/io/Text");
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Job: void setMapperClass(java.lang.Class)>(class "org/apache/mahout/classifier/df/mapreduce/Classifier$CMapper");
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Job: void setNumReduceTasks(int)>(0);
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Job: void setInputFormatClass(java.lang.Class)>(class "org/apache/mahout/classifier/df/mapreduce/Classifier$CTextInputFormat");
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Job: void setOutputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        return;
+    }
+
+    public void run() throws java.io.IOException, java.lang.ClassNotFoundException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.Classifier r0;
+        org.apache.hadoop.fs.FileSystem r1;
+        org.apache.hadoop.conf.Configuration $r3, $r8, $r12, $r15, $r20;
+        org.apache.hadoop.fs.Path $r4, $r6, $r10, $r17, $r23;
+        boolean $z0, $z1;
+        org.slf4j.Logger $r5, $r9, $r14, $r16;
+        java.net.URI $r7, $r11;
+        org.apache.hadoop.mapreduce.Job $r13;
+        org.apache.hadoop.fs.Path[] $r18;
+        java.lang.IllegalStateException $r19;
+        java.lang.StringBuilder $r21, $r24, $r26;
+        java.io.IOException $r22;
+        java.lang.String $r25;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.Classifier;
+
+        $r3 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.conf.Configuration conf>;
+
+        r1 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(org.apache.hadoop.conf.Configuration)>($r3);
+
+        $r4 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.fs.Path outputPath>;
+
+        $z0 = virtualinvoke r1.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>($r4);
+
+        if $z0 == 0 goto label1;
+
+        $r22 = new java.io.IOException;
+
+        $r21 = new java.lang.StringBuilder;
+
+        specialinvoke $r21.<java.lang.StringBuilder: void <init>()>();
+
+        $r24 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Output path already exists : ");
+
+        $r23 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.fs.Path outputPath>;
+
+        $r26 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r23);
+
+        $r25 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r22.<java.io.IOException: void <init>(java.lang.String)>($r25);
+
+        throw $r22;
+
+     label1:
+        $r5 = <org.apache.mahout.classifier.df.mapreduce.Classifier: org.slf4j.Logger log>;
+
+        interfaceinvoke $r5.<org.slf4j.Logger: void info(java.lang.String)>("Adding the dataset to the DistributedCache");
+
+        $r6 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.fs.Path datasetPath>;
+
+        $r7 = virtualinvoke $r6.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        $r8 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.conf.Configuration conf>;
+
+        staticinvoke <org.apache.hadoop.filecache.DistributedCache: void addCacheFile(java.net.URI,org.apache.hadoop.conf.Configuration)>($r7, $r8);
+
+        $r9 = <org.apache.mahout.classifier.df.mapreduce.Classifier: org.slf4j.Logger log>;
+
+        interfaceinvoke $r9.<org.slf4j.Logger: void info(java.lang.String)>("Adding the decision forest to the DistributedCache");
+
+        $r10 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.fs.Path forestPath>;
+
+        $r11 = virtualinvoke $r10.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        $r12 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.conf.Configuration conf>;
+
+        staticinvoke <org.apache.hadoop.filecache.DistributedCache: void addCacheFile(java.net.URI,org.apache.hadoop.conf.Configuration)>($r11, $r12);
+
+        $r13 = new org.apache.hadoop.mapreduce.Job;
+
+        $r15 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.conf.Configuration conf>;
+
+        specialinvoke $r13.<org.apache.hadoop.mapreduce.Job: void <init>(org.apache.hadoop.conf.Configuration,java.lang.String)>($r15, "decision forest classifier");
+
+        $r14 = <org.apache.mahout.classifier.df.mapreduce.Classifier: org.slf4j.Logger log>;
+
+        interfaceinvoke $r14.<org.slf4j.Logger: void info(java.lang.String)>("Configuring the job...");
+
+        specialinvoke r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: void configureJob(org.apache.hadoop.mapreduce.Job)>($r13);
+
+        $r16 = <org.apache.mahout.classifier.df.mapreduce.Classifier: org.slf4j.Logger log>;
+
+        interfaceinvoke $r16.<org.slf4j.Logger: void info(java.lang.String)>("Running the job...");
+
+        $z1 = virtualinvoke $r13.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if $z1 != 0 goto label2;
+
+        $r19 = new java.lang.IllegalStateException;
+
+        specialinvoke $r19.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Job failed!");
+
+        throw $r19;
+
+     label2:
+        specialinvoke r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: void parseOutput(org.apache.hadoop.mapreduce.JobContext)>($r13);
+
+        $r20 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.conf.Configuration conf>;
+
+        $r18 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r17 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.fs.Path mappersOutputPath>;
+
+        $r18[0] = $r17;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r20, $r18);
+
+        return;
+    }
+
+    private void parseOutput(org.apache.hadoop.mapreduce.JobContext) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.df.mapreduce.Classifier r0;
+        org.apache.hadoop.mapreduce.JobContext r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.hadoop.fs.FileSystem r3;
+        org.apache.hadoop.fs.Path[] r4;
+        int i0, $i1, i2;
+        org.apache.hadoop.fs.Path r7, $r12, $r13, $r26, $r27, $r28;
+        java.util.Iterator r8;
+        org.apache.mahout.common.Pair r9;
+        double d0, $d1;
+        java.lang.String r10;
+        java.util.ArrayList $r14;
+        double[][] $r15, $r16;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable $r17;
+        boolean $z0;
+        org.apache.hadoop.io.DoubleWritable $r19;
+        java.lang.Object $r20, $r21, $r23;
+        double[] $r22;
+        org.apache.hadoop.io.Text $r24;
+        java.lang.Double $r25;
+        java.lang.Throwable $r29;
+        org.apache.hadoop.fs.FSDataOutputStream r30;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.Classifier;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.JobContext;
+
+        r2 = interfaceinvoke r1.<org.apache.hadoop.mapreduce.JobContext: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r12 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.fs.Path mappersOutputPath>;
+
+        r3 = virtualinvoke $r12.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r2);
+
+        $r13 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.fs.Path mappersOutputPath>;
+
+        r4 = staticinvoke <org.apache.mahout.classifier.df.DFUtils: org.apache.hadoop.fs.Path[] listOutputFiles(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path)>(r3, $r13);
+
+        $r14 = new java.util.ArrayList;
+
+        specialinvoke $r14.<java.util.ArrayList: void <init>()>();
+
+        i0 = lengthof r4;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label9;
+
+        r7 = r4[i2];
+
+        r30 = null;
+
+     label2:
+        $r17 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable;
+
+        specialinvoke $r17.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable: void <init>(org.apache.hadoop.fs.Path,boolean,org.apache.hadoop.conf.Configuration)>(r7, 1, r2);
+
+        r8 = virtualinvoke $r17.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke r8.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r20 = interfaceinvoke r8.<java.util.Iterator: java.lang.Object next()>();
+
+        r9 = (org.apache.mahout.common.Pair) $r20;
+
+        $r21 = virtualinvoke r9.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r19 = (org.apache.hadoop.io.DoubleWritable) $r21;
+
+        d0 = virtualinvoke $r19.<org.apache.hadoop.io.DoubleWritable: double get()>();
+
+        $r23 = virtualinvoke r9.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r24 = (org.apache.hadoop.io.Text) $r23;
+
+        r10 = virtualinvoke $r24.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        if r30 != null goto label4;
+
+        $r28 = new org.apache.hadoop.fs.Path;
+
+        $r26 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: org.apache.hadoop.fs.Path outputPath>;
+
+        specialinvoke $r28.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r26, r10);
+
+        $r27 = virtualinvoke $r28.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.Path suffix(java.lang.String)>(".out");
+
+        r30 = virtualinvoke r3.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataOutputStream create(org.apache.hadoop.fs.Path)>($r27);
+
+        goto label3;
+
+     label4:
+        virtualinvoke r30.<org.apache.hadoop.fs.FSDataOutputStream: void writeChars(java.lang.String)>(r10);
+
+        virtualinvoke r30.<org.apache.hadoop.fs.FSDataOutputStream: void writeChar(int)>(10);
+
+        $r22 = newarray (double)[2];
+
+        $r22[0] = d0;
+
+        $r25 = staticinvoke <java.lang.Double: java.lang.Double valueOf(java.lang.String)>(r10);
+
+        $d1 = virtualinvoke $r25.<java.lang.Double: double doubleValue()>();
+
+        $r22[1] = $d1;
+
+        interfaceinvoke $r14.<java.util.List: boolean add(java.lang.Object)>($r22);
+
+        goto label3;
+
+     label5:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>(r30, 0);
+
+        goto label8;
+
+     label6:
+        $r29 := @caughtexception;
+
+     label7:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>(r30, 0);
+
+        throw $r29;
+
+     label8:
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label9:
+        $i1 = interfaceinvoke $r14.<java.util.List: int size()>();
+
+        $r16 = newmultiarray (double)[$i1][2];
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: double[][] results> = $r16;
+
+        $r15 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier: double[][] results>;
+
+        interfaceinvoke $r14.<java.util.List: java.lang.Object[] toArray(java.lang.Object[])>($r15);
+
+        return;
+
+        catch java.lang.Throwable from label2 to label5 with label6;
+        catch java.lang.Throwable from label6 to label7 with label6;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/classifier/df/mapreduce/Classifier");
+
+        <org.apache.mahout.classifier.df.mapreduce.Classifier: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

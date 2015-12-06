@@ -1,0 +1,184 @@
+public class org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader extends org.apache.hadoop.mapreduce.RecordReader
+{
+    private final org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit split;
+    private int pos;
+    private org.apache.hadoop.io.IntWritable key;
+    private org.apache.hadoop.io.NullWritable value;
+
+    public void <init>(org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit)
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader r0;
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.RecordReader: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit split> = r1;
+
+        return;
+    }
+
+    public float getProgress() throws java.io.IOException
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader r0;
+        int $i0, $i1, $i2, $i3;
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit $r1;
+        float $f0, $f1, $f2;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader;
+
+        $i0 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: int pos>;
+
+        if $i0 != 0 goto label1;
+
+        $f2 = 0.0F;
+
+        goto label2;
+
+     label1:
+        $i1 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: int pos>;
+
+        $i2 = $i1 - 1;
+
+        $f0 = (float) $i2;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit split>;
+
+        $i3 = staticinvoke <org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit: int access$000(org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit)>($r1);
+
+        $f1 = (float) $i3;
+
+        $f2 = $f0 / $f1;
+
+     label2:
+        return $f2;
+    }
+
+    public org.apache.hadoop.io.IntWritable getCurrentKey() throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader r0;
+        org.apache.hadoop.io.IntWritable $r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: org.apache.hadoop.io.IntWritable key>;
+
+        return $r1;
+    }
+
+    public org.apache.hadoop.io.NullWritable getCurrentValue() throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader r0;
+        org.apache.hadoop.io.NullWritable $r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: org.apache.hadoop.io.NullWritable value>;
+
+        return $r1;
+    }
+
+    public void initialize(org.apache.hadoop.mapreduce.InputSplit, org.apache.hadoop.mapreduce.TaskAttemptContext) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.hadoop.io.NullWritable $r0;
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader r1;
+        org.apache.hadoop.mapreduce.InputSplit r2;
+        org.apache.hadoop.mapreduce.TaskAttemptContext r3;
+        org.apache.hadoop.io.IntWritable $r4;
+
+        r1 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader;
+
+        r2 := @parameter0: org.apache.hadoop.mapreduce.InputSplit;
+
+        r3 := @parameter1: org.apache.hadoop.mapreduce.TaskAttemptContext;
+
+        $r4 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r4.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+        r1.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: org.apache.hadoop.io.IntWritable key> = $r4;
+
+        $r0 = staticinvoke <org.apache.hadoop.io.NullWritable: org.apache.hadoop.io.NullWritable get()>();
+
+        r1.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: org.apache.hadoop.io.NullWritable value> = $r0;
+
+        return;
+    }
+
+    public boolean nextKeyValue() throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader r0;
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit $r1, $r2;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6;
+        org.apache.hadoop.io.IntWritable $r3;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader;
+
+        $i0 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: int pos>;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit split>;
+
+        $i1 = staticinvoke <org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit: int access$000(org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit)>($r1);
+
+        if $i0 >= $i1 goto label1;
+
+        $r3 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: org.apache.hadoop.io.IntWritable key>;
+
+        $r2 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit split>;
+
+        $i2 = staticinvoke <org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit: int access$100(org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit)>($r2);
+
+        $i3 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: int pos>;
+
+        $i4 = $i2 + $i3;
+
+        virtualinvoke $r3.<org.apache.hadoop.io.IntWritable: void set(int)>($i4);
+
+        $i5 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: int pos>;
+
+        $i6 = $i5 + 1;
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: int pos> = $i6;
+
+        return 1;
+
+     label1:
+        return 0;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader r0;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader;
+
+        return;
+    }
+
+    public volatile java.lang.Object getCurrentValue() throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader r0;
+        org.apache.hadoop.io.NullWritable $r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: org.apache.hadoop.io.NullWritable getCurrentValue()>();
+
+        return $r1;
+    }
+
+    public volatile java.lang.Object getCurrentKey() throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader r0;
+        org.apache.hadoop.io.IntWritable $r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: org.apache.hadoop.io.IntWritable getCurrentKey()>();
+
+        return $r1;
+    }
+}

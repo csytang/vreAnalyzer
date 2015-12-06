@@ -1,0 +1,7 @@
+public interface  org.apache.mahout.cf.taste.recommender.RecommendedItem extends java.lang.Object
+{
+
+    public abstract long getItemID();
+
+    public abstract float getValue();
+}

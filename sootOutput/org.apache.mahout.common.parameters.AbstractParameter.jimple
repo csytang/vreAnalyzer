@@ -1,0 +1,239 @@
+public abstract class org.apache.mahout.common.parameters.AbstractParameter extends java.lang.Object implements org.apache.mahout.common.parameters.Parameter
+{
+    private java.lang.Object value;
+    private final java.lang.String prefix;
+    private final java.lang.String name;
+    private final java.lang.String description;
+    private final java.lang.Class type;
+    private final java.lang.String defaultValue;
+
+    protected void <init>(java.lang.Class, java.lang.String, java.lang.String, org.apache.hadoop.conf.Configuration, java.lang.Object, java.lang.String)
+    {
+        org.apache.mahout.common.parameters.AbstractParameter r0;
+        java.lang.Class r1;
+        java.lang.String r2, r3, r6, r7, $r8, $r12;
+        org.apache.hadoop.conf.Configuration r4;
+        java.lang.Object r5;
+        java.lang.StringBuilder $r9, $r10, $r11;
+
+        r0 := @this: org.apache.mahout.common.parameters.AbstractParameter;
+
+        r1 := @parameter0: java.lang.Class;
+
+        r2 := @parameter1: java.lang.String;
+
+        r3 := @parameter2: java.lang.String;
+
+        r4 := @parameter3: org.apache.hadoop.conf.Configuration;
+
+        r5 := @parameter4: java.lang.Object;
+
+        r6 := @parameter5: java.lang.String;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.Class type> = r1;
+
+        r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.String name> = r3;
+
+        r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.String description> = r6;
+
+        r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.Object value> = r5;
+
+        $r8 = virtualinvoke r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.String getStringValue()>();
+
+        r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.String defaultValue> = $r8;
+
+        r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.String prefix> = r2;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r3);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        r7 = virtualinvoke r4.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>($r12);
+
+        if r7 == null goto label1;
+
+        virtualinvoke r0.<org.apache.mahout.common.parameters.AbstractParameter: void setStringValue(java.lang.String)>(r7);
+
+     label1:
+        return;
+    }
+
+    public void configure(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.common.parameters.AbstractParameter r0;
+        org.apache.hadoop.conf.Configuration r1;
+
+        r0 := @this: org.apache.mahout.common.parameters.AbstractParameter;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        return;
+    }
+
+    public void createParameters(java.lang.String, org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.common.parameters.AbstractParameter r0;
+        java.lang.String r1;
+        org.apache.hadoop.conf.Configuration r2;
+
+        r0 := @this: org.apache.mahout.common.parameters.AbstractParameter;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        return;
+    }
+
+    public java.lang.String getStringValue()
+    {
+        org.apache.mahout.common.parameters.AbstractParameter r0;
+        java.lang.Object $r1, $r2;
+        java.lang.String $r3;
+
+        r0 := @this: org.apache.mahout.common.parameters.AbstractParameter;
+
+        $r1 = r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.Object value>;
+
+        if $r1 != null goto label1;
+
+        return null;
+
+     label1:
+        $r2 = r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.Object value>;
+
+        $r3 = virtualinvoke $r2.<java.lang.Object: java.lang.String toString()>();
+
+        return $r3;
+    }
+
+    public java.util.Collection getParameters()
+    {
+        org.apache.mahout.common.parameters.AbstractParameter r0;
+        java.util.List $r1;
+
+        r0 := @this: org.apache.mahout.common.parameters.AbstractParameter;
+
+        $r1 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        return $r1;
+    }
+
+    public java.lang.String prefix()
+    {
+        org.apache.mahout.common.parameters.AbstractParameter r0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.common.parameters.AbstractParameter;
+
+        $r1 = r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.String prefix>;
+
+        return $r1;
+    }
+
+    public java.lang.String name()
+    {
+        org.apache.mahout.common.parameters.AbstractParameter r0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.common.parameters.AbstractParameter;
+
+        $r1 = r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.String name>;
+
+        return $r1;
+    }
+
+    public java.lang.String description()
+    {
+        org.apache.mahout.common.parameters.AbstractParameter r0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.common.parameters.AbstractParameter;
+
+        $r1 = r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.String description>;
+
+        return $r1;
+    }
+
+    public java.lang.Class type()
+    {
+        org.apache.mahout.common.parameters.AbstractParameter r0;
+        java.lang.Class $r1;
+
+        r0 := @this: org.apache.mahout.common.parameters.AbstractParameter;
+
+        $r1 = r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.Class type>;
+
+        return $r1;
+    }
+
+    public java.lang.String defaultValue()
+    {
+        org.apache.mahout.common.parameters.AbstractParameter r0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.common.parameters.AbstractParameter;
+
+        $r1 = r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.String defaultValue>;
+
+        return $r1;
+    }
+
+    public java.lang.Object get()
+    {
+        org.apache.mahout.common.parameters.AbstractParameter r0;
+        java.lang.Object $r1;
+
+        r0 := @this: org.apache.mahout.common.parameters.AbstractParameter;
+
+        $r1 = r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.Object value>;
+
+        return $r1;
+    }
+
+    public void set(java.lang.Object)
+    {
+        org.apache.mahout.common.parameters.AbstractParameter r0;
+        java.lang.Object r1;
+
+        r0 := @this: org.apache.mahout.common.parameters.AbstractParameter;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.Object value> = r1;
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.common.parameters.AbstractParameter r0;
+        java.lang.Object $r1, $r3;
+        java.lang.String $r2, $r4;
+
+        r0 := @this: org.apache.mahout.common.parameters.AbstractParameter;
+
+        $r1 = r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.Object value>;
+
+        if $r1 == null goto label1;
+
+        $r3 = r0.<org.apache.mahout.common.parameters.AbstractParameter: java.lang.Object value>;
+
+        $r4 = virtualinvoke $r3.<java.lang.Object: java.lang.String toString()>();
+
+        return $r4;
+
+     label1:
+        $r2 = specialinvoke r0.<java.lang.Object: java.lang.String toString()>();
+
+        return $r2;
+    }
+}

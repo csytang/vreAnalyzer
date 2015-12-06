@@ -1,0 +1,533 @@
+public class org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver extends org.apache.mahout.common.AbstractJob
+{
+    private static final org.slf4j.Logger log;
+    public static final int REDUCERS;
+    public static final int BLOCKHEIGHT;
+    public static final int OVERSAMPLING;
+    public static final int POWERITERS;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver r0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        return;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver $r1;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver;
+
+        specialinvoke $r1.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.util.Tool,java.lang.String[])>($r1, r0);
+
+        return;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver r0;
+        java.lang.String[] r1;
+        org.apache.hadoop.conf.Configuration r2;
+        java.util.Map r3;
+        org.apache.hadoop.fs.Path r4, r5, $r32, $r37, $r38;
+        int i0, i1, i2, i3, i4, i5, i6;
+        java.lang.String r6, $r21, $r22, $r23, $r24, $r25, $r26, $r27, $r28, $r30, $r31, $r33, $r35, $r36;
+        org.apache.mahout.common.distance.DistanceMeasure r7;
+        double d0;
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r9, $r13, $r14, $r19;
+        org.apache.commons.cli2.option.DefaultOption $r11, $r12, $r17, $r18;
+        boolean $z0;
+        java.lang.Object $r29;
+        org.apache.hadoop.fs.Path[] $r34, $r39;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver;
+
+        r1 := @parameter0: java.lang.String[];
+
+        r2 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: org.apache.hadoop.conf.Configuration getConf()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: void addInputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: void addOutputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("dimensions", "d", "Square dimensions of affinity matrix", 1);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("clusters", "k", "Number of clusters and top eigenvectors", 1);
+
+        $r9 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder distanceMeasureOption()>();
+
+        $r11 = virtualinvoke $r9.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r11);
+
+        $r13 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder convergenceOption()>();
+
+        $r12 = virtualinvoke $r13.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r12);
+
+        $r14 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder maxIterationsOption()>();
+
+        $r17 = virtualinvoke $r14.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r17);
+
+        $r19 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder overwriteOption()>();
+
+        $r18 = virtualinvoke $r19.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r18);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: void addFlag(java.lang.String,java.lang.String,java.lang.String)>("usessvd", "ssvd", "Uses SSVD as the eigensolver. Default is the Lanczos solver.");
+
+        $r21 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(10);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("reduceTasks", "t", "Number of reducers for SSVD", $r21);
+
+        $r22 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(30000);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("outerProdBlockHeight", "oh", "Block height of outer products for SSVD", $r22);
+
+        $r23 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(15);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("oversampling", "p", "Oversampling parameter for SSVD", $r23);
+
+        $r24 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(0);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("powerIter", "q", "Additional power iterations for SSVD", $r24);
+
+        r3 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: java.util.Map parseArguments(java.lang.String[])>(r1);
+
+        if r3 != null goto label1;
+
+        return 0;
+
+     label1:
+        r4 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: org.apache.hadoop.fs.Path getInputPath()>();
+
+        r5 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: boolean hasOption(java.lang.String)>("overwrite");
+
+        if $z0 == 0 goto label2;
+
+        $r34 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r38 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: org.apache.hadoop.fs.Path getTempPath()>();
+
+        $r34[0] = $r38;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>(r2, $r34);
+
+        $r39 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r37 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        $r39[0] = $r37;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>(r2, $r39);
+
+     label2:
+        $r25 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: java.lang.String getOption(java.lang.String)>("dimensions");
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r25);
+
+        $r26 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: java.lang.String getOption(java.lang.String)>("clusters");
+
+        i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r26);
+
+        r6 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: java.lang.String getOption(java.lang.String)>("distanceMeasure");
+
+        $r29 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.String,java.lang.Class)>(r6, class "org/apache/mahout/common/distance/DistanceMeasure");
+
+        r7 = (org.apache.mahout.common.distance.DistanceMeasure) $r29;
+
+        $r28 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: java.lang.String getOption(java.lang.String)>("convergenceDelta");
+
+        d0 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r28);
+
+        $r27 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: java.lang.String getOption(java.lang.String)>("maxIter");
+
+        i2 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r27);
+
+        $r32 = new org.apache.hadoop.fs.Path;
+
+        $r31 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: java.lang.String getOption(java.lang.String)>("tempDir");
+
+        specialinvoke $r32.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r31);
+
+        $r30 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: java.lang.String getOption(java.lang.String)>("reduceTasks");
+
+        i3 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r30);
+
+        $r35 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: java.lang.String getOption(java.lang.String)>("outerProdBlockHeight");
+
+        i4 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r35);
+
+        $r36 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: java.lang.String getOption(java.lang.String)>("oversampling");
+
+        i6 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r36);
+
+        $r33 = virtualinvoke r0.<org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: java.lang.String getOption(java.lang.String)>("powerIter");
+
+        i5 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r33);
+
+        staticinvoke <org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: void run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int,org.apache.mahout.common.distance.DistanceMeasure,double,int,org.apache.hadoop.fs.Path,int,int,int,int)>(r2, r4, r5, i0, i1, r7, d0, i2, $r32, i3, i4, i6, i5);
+
+        return 0;
+    }
+
+    public static void run(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int, int, org.apache.mahout.common.distance.DistanceMeasure, double, int, org.apache.hadoop.fs.Path) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r2, r4;
+        int i0, i1, i2;
+        org.apache.mahout.common.distance.DistanceMeasure r3;
+        double d0;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter3: int;
+
+        i1 := @parameter4: int;
+
+        r3 := @parameter5: org.apache.mahout.common.distance.DistanceMeasure;
+
+        d0 := @parameter6: double;
+
+        i2 := @parameter7: int;
+
+        r4 := @parameter8: org.apache.hadoop.fs.Path;
+
+        staticinvoke <org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: void run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int,org.apache.mahout.common.distance.DistanceMeasure,double,int,org.apache.hadoop.fs.Path,int,int,int,int)>(r0, r1, r2, i0, i1, r3, d0, i2, r4, 10, 30000, 15, 0);
+
+        return;
+    }
+
+    public static void run(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int, int, org.apache.mahout.common.distance.DistanceMeasure, double, int, org.apache.hadoop.fs.Path, int, int, int, int) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.conf.Configuration r0, $r27;
+        org.apache.hadoop.fs.Path r1, r2, r4, r16, $r22, $r23, $r26, $r28, $r30, $r31, $r33, $r34, $r36, $r38, $r39, $r40, $r42, $r43, $r44, $r46, $r47, r67;
+        int i0, i1, i2, i3, i4, i5, i6, $i7, $i8, $i9, $i10, i11;
+        org.apache.mahout.common.distance.DistanceMeasure r3;
+        double d0;
+        org.apache.mahout.math.Vector r9;
+        org.apache.mahout.math.hadoop.DistributedRowMatrix r11, $r29, $r35;
+        org.apache.hadoop.fs.Path[] r13, $r25, $r65;
+        org.apache.hadoop.fs.FileSystem r20;
+        org.apache.mahout.common.Pair r24;
+        org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver $r32;
+        java.lang.String $r37, $r41, r71;
+        org.slf4j.Logger $r45, $r51, $r54;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable $r48;
+        java.util.ArrayList $r49;
+        java.net.URI $r50;
+        boolean $z0, $z1, $z2, $z4;
+        java.lang.Integer $r52, $r57, $r59;
+        java.lang.Object $r53, $r56, $r62, $r63;
+        org.apache.hadoop.io.IntWritable $r55, $r60, $r64;
+        org.apache.hadoop.io.SequenceFile$Reader $r58;
+        org.apache.hadoop.io.Text $r61;
+        java.util.Iterator r74;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter3: int;
+
+        i1 := @parameter4: int;
+
+        r3 := @parameter5: org.apache.mahout.common.distance.DistanceMeasure;
+
+        d0 := @parameter6: double;
+
+        i2 := @parameter7: int;
+
+        r4 := @parameter8: org.apache.hadoop.fs.Path;
+
+        i3 := @parameter9: int;
+
+        i4 := @parameter10: int;
+
+        i5 := @parameter11: int;
+
+        i6 := @parameter12: int;
+
+        $r25 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r25[0] = r4;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>(r0, $r25);
+
+        $r22 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r22.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r4, "calculations");
+
+        $r23 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r23.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r4, "temporary");
+
+        $r28 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r28.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r22, "seqfile");
+
+        staticinvoke <org.apache.mahout.clustering.spectral.AffinityMatrixInputJob: void runJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int)>(r1, $r28, i0, i0);
+
+        $r29 = new org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $r26 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r26.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r23, "afftmp");
+
+        specialinvoke $r29.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int)>($r28, $r26, i0, i0);
+
+        $r27 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r27.<org.apache.hadoop.conf.Configuration: void <init>(org.apache.hadoop.conf.Configuration)>(r0);
+
+        virtualinvoke $r29.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void setConf(org.apache.hadoop.conf.Configuration)>($r27);
+
+        r9 = staticinvoke <org.apache.mahout.clustering.spectral.MatrixDiagonalizeJob: org.apache.mahout.math.Vector runJob(org.apache.hadoop.fs.Path,int)>($r28, i0);
+
+        $r31 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r31.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r22, "laplacian");
+
+        $r30 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r30.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r22, $r22);
+
+        r11 = staticinvoke <org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob: org.apache.mahout.math.hadoop.DistributedRowMatrix runJob(org.apache.hadoop.fs.Path,org.apache.mahout.math.Vector,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r28, r9, $r31, $r30);
+
+        virtualinvoke r11.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void setConf(org.apache.hadoop.conf.Configuration)>($r27);
+
+        r13 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r34 = virtualinvoke r11.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path getRowPath()>();
+
+        r13[0] = $r34;
+
+        $r33 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r33.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r22, "SSVD");
+
+        $r32 = new org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver;
+
+        specialinvoke $r32.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void <init>(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[],org.apache.hadoop.fs.Path,int,int,int,int)>($r27, r13, $r33, i4, i1, i5, i3);
+
+        virtualinvoke $r32.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void setComputeV(boolean)>(0);
+
+        virtualinvoke $r32.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void setComputeU(boolean)>(1);
+
+        virtualinvoke $r32.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void setOverwrite(boolean)>(1);
+
+        virtualinvoke $r32.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void setQ(int)>(i6);
+
+        virtualinvoke $r32.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void run()>();
+
+        $r38 = new org.apache.hadoop.fs.Path;
+
+        $r37 = virtualinvoke $r32.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: java.lang.String getUPath()>();
+
+        specialinvoke $r38.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r37);
+
+        $r36 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r36.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r22, "unitvectors");
+
+        staticinvoke <org.apache.mahout.clustering.spectral.UnitVectorizerJob: void runJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r38, $r36);
+
+        $r35 = new org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $r40 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r40.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r36, "tmp");
+
+        specialinvoke $r35.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int)>($r36, $r40, i1, i0);
+
+        virtualinvoke $r35.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void setConf(org.apache.hadoop.conf.Configuration)>($r27);
+
+        r67 = virtualinvoke $r35.<org.apache.mahout.math.hadoop.DistributedRowMatrix: org.apache.hadoop.fs.Path getRowPath()>();
+
+        $r39 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r39.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r2, "clusters-0");
+
+        r16 = staticinvoke <org.apache.mahout.clustering.spectral.kmeans.EigenSeedGenerator: org.apache.hadoop.fs.Path buildFromEigens(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,org.apache.mahout.common.distance.DistanceMeasure)>(r0, r67, $r39, i1, r3);
+
+        $r44 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r44.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r2, "kmeans_out");
+
+        staticinvoke <org.apache.mahout.clustering.kmeans.KMeansDriver: void run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,double,int,boolean,double,boolean)>(r0, r67, r16, $r44, d0, i2, 1, 0.0, 0);
+
+        $r43 = new org.apache.hadoop.fs.Path;
+
+        $r42 = new org.apache.hadoop.fs.Path;
+
+        $r41 = virtualinvoke r0.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("hadoop.tmp.dir");
+
+        specialinvoke $r42.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r41);
+
+        specialinvoke $r43.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r42, "generic_input_mapping");
+
+        $r49 = new java.util.ArrayList;
+
+        specialinvoke $r49.<java.util.ArrayList: void <init>()>();
+
+        $r50 = virtualinvoke $r43.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r20 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r50, r0);
+
+        $z0 = virtualinvoke r20.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>($r43);
+
+        if $z0 == 0 goto label3;
+
+        $r58 = new org.apache.hadoop.io.SequenceFile$Reader;
+
+        specialinvoke $r58.<org.apache.hadoop.io.SequenceFile$Reader: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r20, $r43, r0);
+
+        $r61 = new org.apache.hadoop.io.Text;
+
+        specialinvoke $r61.<org.apache.hadoop.io.Text: void <init>()>();
+
+        $r60 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r60.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+     label1:
+        $z2 = virtualinvoke $r58.<org.apache.hadoop.io.SequenceFile$Reader: boolean next(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r60, $r61);
+
+        if $z2 == 0 goto label2;
+
+        r71 = virtualinvoke $r61.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        interfaceinvoke $r49.<java.util.List: boolean add(java.lang.Object)>(r71);
+
+        goto label1;
+
+     label2:
+        $r65 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r65[0] = $r43;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>(r0, $r65);
+
+        goto label4;
+
+     label3:
+        $r45 = <org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: org.slf4j.Logger log>;
+
+        interfaceinvoke $r45.<org.slf4j.Logger: void warn(java.lang.String)>("generic input mapping file not found!");
+
+     label4:
+        $r46 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r46.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r44, "clusteredPoints");
+
+        $r47 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r47.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r46, "part-m-00000");
+
+        i11 = 0;
+
+        $r48 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable;
+
+        specialinvoke $r48.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r47, r0);
+
+        r74 = virtualinvoke $r48.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable: java.util.Iterator iterator()>();
+
+     label5:
+        $z4 = interfaceinvoke r74.<java.util.Iterator: boolean hasNext()>();
+
+        if $z4 == 0 goto label7;
+
+        $r53 = interfaceinvoke r74.<java.util.Iterator: java.lang.Object next()>();
+
+        r24 = (org.apache.mahout.common.Pair) $r53;
+
+        $z1 = interfaceinvoke $r49.<java.util.List: boolean isEmpty()>();
+
+        if $z1 != 0 goto label6;
+
+        $r54 = <org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: org.slf4j.Logger log>;
+
+        $i8 = i11;
+
+        i11 = i11 + 1;
+
+        $r63 = interfaceinvoke $r49.<java.util.List: java.lang.Object get(int)>($i8);
+
+        $r62 = virtualinvoke r24.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r64 = (org.apache.hadoop.io.IntWritable) $r62;
+
+        $i10 = virtualinvoke $r64.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $r59 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i10);
+
+        interfaceinvoke $r54.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object,java.lang.Object)>("{}: {}", $r63, $r59);
+
+        goto label5;
+
+     label6:
+        $r51 = <org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: org.slf4j.Logger log>;
+
+        $i7 = i11;
+
+        i11 = i11 + 1;
+
+        $r52 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i7);
+
+        $r56 = virtualinvoke r24.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r55 = (org.apache.hadoop.io.IntWritable) $r56;
+
+        $i9 = virtualinvoke $r55.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $r57 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i9);
+
+        interfaceinvoke $r51.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object,java.lang.Object)>("{}: {}", $r52, $r57);
+
+        goto label5;
+
+     label7:
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: int POWERITERS> = 0;
+
+        <org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: int OVERSAMPLING> = 15;
+
+        <org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: int BLOCKHEIGHT> = 30000;
+
+        <org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: int REDUCERS> = 10;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/clustering/spectral/kmeans/SpectralKMeansDriver");
+
+        <org.apache.mahout.clustering.spectral.kmeans.SpectralKMeansDriver: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

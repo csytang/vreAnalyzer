@@ -1,0 +1,173 @@
+final class org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable extends java.lang.Object implements java.lang.Runnable, java.util.concurrent.Callable
+{
+    private final org.apache.mahout.clustering.lda.cvb.TopicModel readModel;
+    private final org.apache.mahout.clustering.lda.cvb.TopicModel writeModel;
+    private final org.apache.mahout.math.Vector document;
+    private final org.apache.mahout.math.Vector docTopics;
+    private final org.apache.mahout.math.Matrix docTopicModel;
+    private final int numDocTopicIters;
+
+    private void <init>(org.apache.mahout.clustering.lda.cvb.TopicModel, org.apache.mahout.clustering.lda.cvb.TopicModel, org.apache.mahout.math.Vector, org.apache.mahout.math.Vector, org.apache.mahout.math.Matrix, int)
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable r0;
+        org.apache.mahout.clustering.lda.cvb.TopicModel r1, r2;
+        org.apache.mahout.math.Vector r3, r4;
+        org.apache.mahout.math.Matrix r5;
+        int i0;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable;
+
+        r1 := @parameter0: org.apache.mahout.clustering.lda.cvb.TopicModel;
+
+        r2 := @parameter1: org.apache.mahout.clustering.lda.cvb.TopicModel;
+
+        r3 := @parameter2: org.apache.mahout.math.Vector;
+
+        r4 := @parameter3: org.apache.mahout.math.Vector;
+
+        r5 := @parameter4: org.apache.mahout.math.Matrix;
+
+        i0 := @parameter5: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.clustering.lda.cvb.TopicModel readModel> = r1;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.clustering.lda.cvb.TopicModel writeModel> = r2;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.math.Vector document> = r3;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.math.Vector docTopics> = r4;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.math.Matrix docTopicModel> = r5;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: int numDocTopicIters> = i0;
+
+        return;
+    }
+
+    public void run()
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable r0;
+        int $i0, i1;
+        org.apache.mahout.clustering.lda.cvb.TopicModel $r1, $r3, $r7;
+        org.apache.mahout.math.Matrix $r2, $r4;
+        org.apache.mahout.math.Vector $r5, $r6;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable;
+
+        i1 = 0;
+
+     label1:
+        $i0 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: int numDocTopicIters>;
+
+        if i1 >= $i0 goto label2;
+
+        $r7 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.clustering.lda.cvb.TopicModel readModel>;
+
+        $r6 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.math.Vector document>;
+
+        $r5 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.math.Vector docTopics>;
+
+        $r4 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.math.Matrix docTopicModel>;
+
+        virtualinvoke $r7.<org.apache.mahout.clustering.lda.cvb.TopicModel: void trainDocTopicModel(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector,org.apache.mahout.math.Matrix)>($r6, $r5, $r4);
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r1 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.clustering.lda.cvb.TopicModel writeModel>;
+
+        if $r1 == null goto label3;
+
+        $r3 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.clustering.lda.cvb.TopicModel writeModel>;
+
+        $r2 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.math.Matrix docTopicModel>;
+
+        virtualinvoke $r3.<org.apache.mahout.clustering.lda.cvb.TopicModel: void update(org.apache.mahout.math.Matrix)>($r2);
+
+     label3:
+        return;
+    }
+
+    public java.lang.Double call()
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable r0;
+        org.apache.mahout.math.Vector $r1, $r2;
+        org.apache.mahout.clustering.lda.cvb.TopicModel $r3;
+        double $d0;
+        java.lang.Double $r4;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: void run()>();
+
+        $r3 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.clustering.lda.cvb.TopicModel readModel>;
+
+        $r2 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.math.Vector document>;
+
+        $r1 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.math.Vector docTopics>;
+
+        $d0 = virtualinvoke $r3.<org.apache.mahout.clustering.lda.cvb.TopicModel: double perplexity(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>($r2, $r1);
+
+        $r4 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d0);
+
+        return $r4;
+    }
+
+    public volatile java.lang.Object call() throws java.lang.Exception
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable r0;
+        java.lang.Double $r1;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: java.lang.Double call()>();
+
+        return $r1;
+    }
+
+    void <init>(org.apache.mahout.clustering.lda.cvb.TopicModel, org.apache.mahout.clustering.lda.cvb.TopicModel, org.apache.mahout.math.Vector, org.apache.mahout.math.Vector, org.apache.mahout.math.Matrix, int, org.apache.mahout.clustering.lda.cvb.ModelTrainer$1)
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable r0;
+        org.apache.mahout.clustering.lda.cvb.TopicModel r1, r2;
+        org.apache.mahout.math.Vector r3, r4;
+        org.apache.mahout.math.Matrix r5;
+        int i0;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer$1 r6;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable;
+
+        r1 := @parameter0: org.apache.mahout.clustering.lda.cvb.TopicModel;
+
+        r2 := @parameter1: org.apache.mahout.clustering.lda.cvb.TopicModel;
+
+        r3 := @parameter2: org.apache.mahout.math.Vector;
+
+        r4 := @parameter3: org.apache.mahout.math.Vector;
+
+        r5 := @parameter4: org.apache.mahout.math.Matrix;
+
+        i0 := @parameter5: int;
+
+        r6 := @parameter6: org.apache.mahout.clustering.lda.cvb.ModelTrainer$1;
+
+        specialinvoke r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: void <init>(org.apache.mahout.clustering.lda.cvb.TopicModel,org.apache.mahout.clustering.lda.cvb.TopicModel,org.apache.mahout.math.Vector,org.apache.mahout.math.Vector,org.apache.mahout.math.Matrix,int)>(r1, r2, r3, r4, r5, i0);
+
+        return;
+    }
+
+    static org.apache.mahout.math.Matrix access$100(org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable)
+    {
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable r0;
+        org.apache.mahout.math.Matrix $r1;
+
+        r0 := @parameter0: org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable;
+
+        $r1 = r0.<org.apache.mahout.clustering.lda.cvb.ModelTrainer$TrainerRunnable: org.apache.mahout.math.Matrix docTopicModel>;
+
+        return $r1;
+    }
+}

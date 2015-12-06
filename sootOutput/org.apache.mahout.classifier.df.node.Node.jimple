@@ -1,0 +1,153 @@
+public abstract class org.apache.mahout.classifier.df.node.Node extends java.lang.Object implements org.apache.hadoop.io.Writable
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.df.node.Node r0;
+
+        r0 := @this: org.apache.mahout.classifier.df.node.Node;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public abstract double classify(org.apache.mahout.classifier.df.data.Instance);
+
+    public abstract long nbNodes();
+
+    public abstract long maxDepth();
+
+    protected abstract org.apache.mahout.classifier.df.node.Node$Type getType();
+
+    public static org.apache.mahout.classifier.df.node.Node read(java.io.DataInput) throws java.io.IOException
+    {
+        java.io.DataInput r0;
+        org.apache.mahout.classifier.df.node.Node$Type r1;
+        org.apache.mahout.classifier.df.node.Node$Type[] $r2;
+        int $i0, $i1, $i2;
+        int[] $r3;
+        org.apache.mahout.classifier.df.node.Leaf $r4;
+        org.apache.mahout.classifier.df.node.CategoricalNode $r5;
+        org.apache.mahout.classifier.df.node.NumericalNode $r6;
+        java.lang.IllegalStateException $r7;
+        org.apache.mahout.classifier.df.node.Node r8;
+
+        r0 := @parameter0: java.io.DataInput;
+
+        $r2 = staticinvoke <org.apache.mahout.classifier.df.node.Node$Type: org.apache.mahout.classifier.df.node.Node$Type[] values()>();
+
+        $i0 = interfaceinvoke r0.<java.io.DataInput: int readInt()>();
+
+        r1 = $r2[$i0];
+
+        $r3 = <org.apache.mahout.classifier.df.node.Node$1: int[] $SwitchMap$org$apache$mahout$classifier$df$node$Node$Type>;
+
+        $i1 = virtualinvoke r1.<org.apache.mahout.classifier.df.node.Node$Type: int ordinal()>();
+
+        $i2 = $r3[$i1];
+
+        tableswitch($i2)
+        {
+            case 1: goto label1;
+            case 2: goto label2;
+            case 3: goto label3;
+            default: goto label4;
+        };
+
+     label1:
+        $r4 = new org.apache.mahout.classifier.df.node.Leaf;
+
+        specialinvoke $r4.<org.apache.mahout.classifier.df.node.Leaf: void <init>()>();
+
+        r8 = $r4;
+
+        goto label5;
+
+     label2:
+        $r6 = new org.apache.mahout.classifier.df.node.NumericalNode;
+
+        specialinvoke $r6.<org.apache.mahout.classifier.df.node.NumericalNode: void <init>()>();
+
+        r8 = $r6;
+
+        goto label5;
+
+     label3:
+        $r5 = new org.apache.mahout.classifier.df.node.CategoricalNode;
+
+        specialinvoke $r5.<org.apache.mahout.classifier.df.node.CategoricalNode: void <init>()>();
+
+        r8 = $r5;
+
+        goto label5;
+
+     label4:
+        $r7 = new java.lang.IllegalStateException;
+
+        specialinvoke $r7.<java.lang.IllegalStateException: void <init>(java.lang.String)>("This implementation is not currently supported");
+
+        throw $r7;
+
+     label5:
+        virtualinvoke r8.<org.apache.mahout.classifier.df.node.Node: void readFields(java.io.DataInput)>(r0);
+
+        return r8;
+    }
+
+    public final java.lang.String toString()
+    {
+        org.apache.mahout.classifier.df.node.Node r0;
+        java.lang.StringBuilder $r1, $r3, $r4, $r6, $r7;
+        org.apache.mahout.classifier.df.node.Node$Type $r2;
+        java.lang.String $r5, $r8;
+
+        r0 := @this: org.apache.mahout.classifier.df.node.Node;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke r0.<org.apache.mahout.classifier.df.node.Node: org.apache.mahout.classifier.df.node.Node$Type getType()>();
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r2);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(":");
+
+        $r5 = virtualinvoke r0.<org.apache.mahout.classifier.df.node.Node: java.lang.String getString()>();
+
+        $r6 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(59);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r8;
+    }
+
+    protected abstract java.lang.String getString();
+
+    public final void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.df.node.Node r0;
+        java.io.DataOutput r1;
+        org.apache.mahout.classifier.df.node.Node$Type $r2;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.df.node.Node;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $r2 = virtualinvoke r0.<org.apache.mahout.classifier.df.node.Node: org.apache.mahout.classifier.df.node.Node$Type getType()>();
+
+        $i0 = virtualinvoke $r2.<org.apache.mahout.classifier.df.node.Node$Type: int ordinal()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i0);
+
+        virtualinvoke r0.<org.apache.mahout.classifier.df.node.Node: void writeNode(java.io.DataOutput)>(r1);
+
+        return;
+    }
+
+    protected abstract void writeNode(java.io.DataOutput) throws java.io.IOException;
+}

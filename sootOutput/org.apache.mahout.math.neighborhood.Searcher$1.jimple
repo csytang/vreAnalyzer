@@ -1,0 +1,72 @@
+final class org.apache.mahout.math.neighborhood.Searcher$1 extends org.apache.lucene.util.PriorityQueue
+{
+
+    void <init>(int)
+    {
+        org.apache.mahout.math.neighborhood.Searcher$1 r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.Searcher$1;
+
+        i0 := @parameter0: int;
+
+        specialinvoke r0.<org.apache.lucene.util.PriorityQueue: void <init>(int)>(i0);
+
+        return;
+    }
+
+    protected boolean lessThan(org.apache.mahout.math.random.WeightedThing, org.apache.mahout.math.random.WeightedThing)
+    {
+        org.apache.mahout.math.neighborhood.Searcher$1 r0;
+        org.apache.mahout.math.random.WeightedThing r1, r2;
+        double $d0, $d1;
+        byte $b0;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.Searcher$1;
+
+        r1 := @parameter0: org.apache.mahout.math.random.WeightedThing;
+
+        r2 := @parameter1: org.apache.mahout.math.random.WeightedThing;
+
+        $d0 = virtualinvoke r1.<org.apache.mahout.math.random.WeightedThing: double getWeight()>();
+
+        $d1 = virtualinvoke r2.<org.apache.mahout.math.random.WeightedThing: double getWeight()>();
+
+        $b0 = $d0 cmpl $d1;
+
+        if $b0 <= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    protected volatile boolean lessThan(java.lang.Object, java.lang.Object)
+    {
+        org.apache.mahout.math.neighborhood.Searcher$1 r0;
+        java.lang.Object r1, r2;
+        org.apache.mahout.math.random.WeightedThing $r3, $r4;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.Searcher$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        $r4 = (org.apache.mahout.math.random.WeightedThing) r1;
+
+        $r3 = (org.apache.mahout.math.random.WeightedThing) r2;
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.math.neighborhood.Searcher$1: boolean lessThan(org.apache.mahout.math.random.WeightedThing,org.apache.mahout.math.random.WeightedThing)>($r4, $r3);
+
+        return $z0;
+    }
+}

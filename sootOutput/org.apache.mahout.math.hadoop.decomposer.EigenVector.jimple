@@ -1,0 +1,238 @@
+public class org.apache.mahout.math.hadoop.decomposer.EigenVector extends org.apache.mahout.math.NamedVector
+{
+    private static final java.util.regex.Pattern EQUAL_PATTERN;
+    private static final java.util.regex.Pattern PIPE_PATTERN;
+
+    public void <init>(org.apache.mahout.math.Vector, double, double, int)
+    {
+        org.apache.mahout.math.hadoop.decomposer.EigenVector r0;
+        org.apache.mahout.math.Vector r1;
+        double d0, d1;
+        int i0;
+        boolean $z0;
+        java.lang.StringBuilder $r2, $r3, $r4, $r5, $r6, $r7, $r8;
+        java.lang.String $r9;
+        org.apache.mahout.math.DenseVector $r11;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.EigenVector;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        d0 := @parameter1: double;
+
+        d1 := @parameter2: double;
+
+        i0 := @parameter3: int;
+
+        $z0 = r1 instanceof org.apache.mahout.math.DenseVector;
+
+        if $z0 == 0 goto label1;
+
+        $r11 = (org.apache.mahout.math.DenseVector) r1;
+
+        goto label2;
+
+     label1:
+        $r11 = new org.apache.mahout.math.DenseVector;
+
+        specialinvoke $r11.<org.apache.mahout.math.DenseVector: void <init>(org.apache.mahout.math.Vector)>(r1);
+
+     label2:
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("e|");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("| = |");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(double)>(d0);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("|, err = ");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(double)>(d1);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke r0.<org.apache.mahout.math.NamedVector: void <init>(org.apache.mahout.math.Vector,java.lang.String)>($r11, $r9);
+
+        return;
+    }
+
+    public double getEigenValue()
+    {
+        org.apache.mahout.math.hadoop.decomposer.EigenVector r0;
+        java.lang.String $r1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.EigenVector;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.EigenVector: java.lang.String getName()>();
+
+        $d0 = staticinvoke <org.apache.mahout.math.hadoop.decomposer.EigenVector: double getEigenValue(java.lang.CharSequence)>($r1);
+
+        return $d0;
+    }
+
+    public double getCosAngleError()
+    {
+        org.apache.mahout.math.hadoop.decomposer.EigenVector r0;
+        java.lang.String $r1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.EigenVector;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.EigenVector: java.lang.String getName()>();
+
+        $d0 = staticinvoke <org.apache.mahout.math.hadoop.decomposer.EigenVector: double getCosAngleError(java.lang.CharSequence)>($r1);
+
+        return $d0;
+    }
+
+    public int getIndex()
+    {
+        org.apache.mahout.math.hadoop.decomposer.EigenVector r0;
+        java.lang.String $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.EigenVector;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.EigenVector: java.lang.String getName()>();
+
+        $i0 = staticinvoke <org.apache.mahout.math.hadoop.decomposer.EigenVector: int getIndex(java.lang.CharSequence)>($r1);
+
+        return $i0;
+    }
+
+    public static double getEigenValue(java.lang.CharSequence)
+    {
+        java.lang.CharSequence r0;
+        double[] $r1;
+        double $d0;
+
+        r0 := @parameter0: java.lang.CharSequence;
+
+        $r1 = staticinvoke <org.apache.mahout.math.hadoop.decomposer.EigenVector: double[] parseMetaData(java.lang.CharSequence)>(r0);
+
+        $d0 = $r1[1];
+
+        return $d0;
+    }
+
+    public static double getCosAngleError(java.lang.CharSequence)
+    {
+        java.lang.CharSequence r0;
+        double[] $r1;
+        double $d0;
+
+        r0 := @parameter0: java.lang.CharSequence;
+
+        $r1 = staticinvoke <org.apache.mahout.math.hadoop.decomposer.EigenVector: double[] parseMetaData(java.lang.CharSequence)>(r0);
+
+        $d0 = $r1[2];
+
+        return $d0;
+    }
+
+    public static int getIndex(java.lang.CharSequence)
+    {
+        java.lang.CharSequence r0;
+        double[] $r1;
+        double $d0;
+        int $i0;
+
+        r0 := @parameter0: java.lang.CharSequence;
+
+        $r1 = staticinvoke <org.apache.mahout.math.hadoop.decomposer.EigenVector: double[] parseMetaData(java.lang.CharSequence)>(r0);
+
+        $d0 = $r1[0];
+
+        $i0 = (int) $d0;
+
+        return $i0;
+    }
+
+    public static double[] parseMetaData(java.lang.CharSequence)
+    {
+        java.lang.CharSequence r0;
+        double[] r1;
+        java.lang.String[] r2, $r6, $r10;
+        java.util.regex.Pattern $r3, $r5, $r9;
+        java.lang.String $r4, $r7, $r8, $r11, $r12, $r13;
+        double $d0, $d1, $d2;
+
+        r0 := @parameter0: java.lang.CharSequence;
+
+        r1 = newarray (double)[3];
+
+        $r3 = <org.apache.mahout.math.hadoop.decomposer.EigenVector: java.util.regex.Pattern EQUAL_PATTERN>;
+
+        r2 = virtualinvoke $r3.<java.util.regex.Pattern: java.lang.String[] split(java.lang.CharSequence)>(r0);
+
+        $r5 = <org.apache.mahout.math.hadoop.decomposer.EigenVector: java.util.regex.Pattern PIPE_PATTERN>;
+
+        $r4 = r2[0];
+
+        $r6 = virtualinvoke $r5.<java.util.regex.Pattern: java.lang.String[] split(java.lang.CharSequence)>($r4);
+
+        $r7 = $r6[1];
+
+        $d0 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r7);
+
+        r1[0] = $d0;
+
+        $r9 = <org.apache.mahout.math.hadoop.decomposer.EigenVector: java.util.regex.Pattern PIPE_PATTERN>;
+
+        $r8 = r2[1];
+
+        $r10 = virtualinvoke $r9.<java.util.regex.Pattern: java.lang.String[] split(java.lang.CharSequence)>($r8);
+
+        $r11 = $r10[1];
+
+        $d1 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r11);
+
+        r1[1] = $d1;
+
+        $r12 = r2[2];
+
+        $r13 = virtualinvoke $r12.<java.lang.String: java.lang.String substring(int)>(1);
+
+        $d2 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r13);
+
+        r1[2] = $d2;
+
+        return r1;
+    }
+
+    protected double[] parseMetaData()
+    {
+        org.apache.mahout.math.hadoop.decomposer.EigenVector r0;
+        java.lang.String $r1;
+        double[] $r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.EigenVector;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.EigenVector: java.lang.String getName()>();
+
+        $r2 = staticinvoke <org.apache.mahout.math.hadoop.decomposer.EigenVector: double[] parseMetaData(java.lang.CharSequence)>($r1);
+
+        return $r2;
+    }
+
+    static void <clinit>()
+    {
+        java.util.regex.Pattern $r0, $r1;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>(" = ");
+
+        <org.apache.mahout.math.hadoop.decomposer.EigenVector: java.util.regex.Pattern EQUAL_PATTERN> = $r0;
+
+        $r1 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("\\|");
+
+        <org.apache.mahout.math.hadoop.decomposer.EigenVector: java.util.regex.Pattern PIPE_PATTERN> = $r1;
+
+        return;
+    }
+}

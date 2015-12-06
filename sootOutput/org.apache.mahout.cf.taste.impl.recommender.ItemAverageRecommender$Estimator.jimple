@@ -1,0 +1,79 @@
+final class org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender$Estimator extends java.lang.Object implements org.apache.mahout.cf.taste.impl.recommender.TopItems$Estimator
+{
+    final org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender this$0;
+
+    private void <init>(org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender$Estimator r0;
+        org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender$Estimator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender$Estimator: org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public double estimate(java.lang.Long)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender$Estimator r0;
+        java.lang.Long r1;
+        org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender $r2;
+        long $l0;
+        float $f0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender$Estimator;
+
+        r1 := @parameter0: java.lang.Long;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender$Estimator: org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender this$0>;
+
+        $l0 = virtualinvoke r1.<java.lang.Long: long longValue()>();
+
+        $f0 = staticinvoke <org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender: float access$200(org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender,long)>($r2, $l0);
+
+        $d0 = (double) $f0;
+
+        return $d0;
+    }
+
+    public volatile double estimate(java.lang.Object) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender$Estimator r0;
+        java.lang.Object r1;
+        java.lang.Long $r2;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender$Estimator;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.lang.Long) r1;
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender$Estimator: double estimate(java.lang.Long)>($r2);
+
+        return $d0;
+    }
+
+    void <init>(org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender, org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender$1)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender$Estimator r0;
+        org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender r1;
+        org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender$1 r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender$Estimator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender$1;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender$Estimator: void <init>(org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender)>(r1);
+
+        return;
+    }
+}

@@ -118,6 +118,12 @@ public class BindingResolver {
 			methodToValueToVariant.put(method, new LinkedList<ValueToVariant>());
 			// 初始化methodToVariant
 			methodToVariants.put(method, new LinkedList<Variant>());
+			containappmethodcallee = false;
+			// 如果存在callsite列表 加入methodToCallSites 中
+			if(!callsites.isEmpty()){
+				methodToCallSites.put(method, callsites);
+			}
+			
 			
 			for(CallSite site:callsites){
 				
@@ -1194,5 +1200,38 @@ public class BindingResolver {
 		return callerMethod.contains(method);
 	
 	}
+	/**
+	 * 返回这个caller函数下的所有callee函数
+	 */
+	public Set<SootMethod> getCalleesForCaller(SootMethod caller){
+		Set<SootMethod> allcallees  = new HashSet<SootMethod>();
+		List<CallSite> callsites = methodToCallSites.get(caller);
+		if(callsites!=null){
+			for(CallSite site:callsites){
+				allcallees.addAll(site.getAppCallees());
+			}
+		}
+		return allcallees;
+	}
+
+	public Set<SootMethod> getCallerForCallee(SootMethod method) {
+		Set<SootMethod> allcallers = new HashSet<SootMethod>();
+		for(Map.Entry<SootMethod, List<CallSite>>map:methodToCallSites.entrySet()){
+			SootMethod mkey = map.getKey();
+			List<CallSite> lcallsite = map.getValue();
+			if(lcallsite!=null){
+				for(CallSite st:lcallsite){
+					if(st.getAppCallees().contains(method)){
+						allcallers.add(mkey);
+						break;
+					}
+				}
+			}
+		}
+		
+		return allcallers;
+	}
+	
+	
 	
 }

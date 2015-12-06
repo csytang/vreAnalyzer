@@ -1,0 +1,133 @@
+public final class org.apache.mahout.cf.taste.hadoop.item.PartialMultiplyMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private final org.apache.mahout.math.VarLongWritable userIDWritable;
+    private final org.apache.mahout.cf.taste.hadoop.item.PrefAndSimilarityColumnWritable prefAndSimilarityColumn;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.PartialMultiplyMapper r0;
+        org.apache.mahout.math.VarLongWritable $r1;
+        org.apache.mahout.cf.taste.hadoop.item.PrefAndSimilarityColumnWritable $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.PartialMultiplyMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.VarLongWritable;
+
+        specialinvoke $r1.<org.apache.mahout.math.VarLongWritable: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.PartialMultiplyMapper: org.apache.mahout.math.VarLongWritable userIDWritable> = $r1;
+
+        $r2 = new org.apache.mahout.cf.taste.hadoop.item.PrefAndSimilarityColumnWritable;
+
+        specialinvoke $r2.<org.apache.mahout.cf.taste.hadoop.item.PrefAndSimilarityColumnWritable: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.PartialMultiplyMapper: org.apache.mahout.cf.taste.hadoop.item.PrefAndSimilarityColumnWritable prefAndSimilarityColumn> = $r2;
+
+        return;
+    }
+
+    protected void map(org.apache.mahout.math.VarIntWritable, org.apache.mahout.cf.taste.hadoop.item.VectorAndPrefsWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.PartialMultiplyMapper r0;
+        org.apache.mahout.math.VarIntWritable r1;
+        org.apache.mahout.cf.taste.hadoop.item.VectorAndPrefsWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.Vector r4;
+        java.util.List r5, r6;
+        long l0;
+        float f0;
+        int $i1, i2;
+        java.lang.Object $r7, $r10;
+        java.lang.Long $r8;
+        java.lang.Float $r9;
+        boolean $z0;
+        org.apache.mahout.math.VarLongWritable $r11, $r13;
+        org.apache.mahout.cf.taste.hadoop.item.PrefAndSimilarityColumnWritable $r12, $r14;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.PartialMultiplyMapper;
+
+        r1 := @parameter0: org.apache.mahout.math.VarIntWritable;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.hadoop.item.VectorAndPrefsWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        r4 = virtualinvoke r2.<org.apache.mahout.cf.taste.hadoop.item.VectorAndPrefsWritable: org.apache.mahout.math.Vector getVector()>();
+
+        r5 = virtualinvoke r2.<org.apache.mahout.cf.taste.hadoop.item.VectorAndPrefsWritable: java.util.List getUserIDs()>();
+
+        r6 = virtualinvoke r2.<org.apache.mahout.cf.taste.hadoop.item.VectorAndPrefsWritable: java.util.List getValues()>();
+
+        i2 = 0;
+
+     label1:
+        $i1 = interfaceinvoke r5.<java.util.List: int size()>();
+
+        if i2 >= $i1 goto label3;
+
+        $r7 = interfaceinvoke r5.<java.util.List: java.lang.Object get(int)>(i2);
+
+        $r8 = (java.lang.Long) $r7;
+
+        l0 = virtualinvoke $r8.<java.lang.Long: long longValue()>();
+
+        $r10 = interfaceinvoke r6.<java.util.List: java.lang.Object get(int)>(i2);
+
+        $r9 = (java.lang.Float) $r10;
+
+        f0 = virtualinvoke $r9.<java.lang.Float: float floatValue()>();
+
+        $z0 = staticinvoke <java.lang.Float: boolean isNaN(float)>(f0);
+
+        if $z0 != 0 goto label2;
+
+        $r12 = r0.<org.apache.mahout.cf.taste.hadoop.item.PartialMultiplyMapper: org.apache.mahout.cf.taste.hadoop.item.PrefAndSimilarityColumnWritable prefAndSimilarityColumn>;
+
+        virtualinvoke $r12.<org.apache.mahout.cf.taste.hadoop.item.PrefAndSimilarityColumnWritable: void set(float,org.apache.mahout.math.Vector)>(f0, r4);
+
+        $r11 = r0.<org.apache.mahout.cf.taste.hadoop.item.PartialMultiplyMapper: org.apache.mahout.math.VarLongWritable userIDWritable>;
+
+        virtualinvoke $r11.<org.apache.mahout.math.VarLongWritable: void set(long)>(l0);
+
+        $r13 = r0.<org.apache.mahout.cf.taste.hadoop.item.PartialMultiplyMapper: org.apache.mahout.math.VarLongWritable userIDWritable>;
+
+        $r14 = r0.<org.apache.mahout.cf.taste.hadoop.item.PartialMultiplyMapper: org.apache.mahout.cf.taste.hadoop.item.PrefAndSimilarityColumnWritable prefAndSimilarityColumn>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r13, $r14);
+
+     label2:
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.PartialMultiplyMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.cf.taste.hadoop.item.VectorAndPrefsWritable $r4;
+        org.apache.mahout.math.VarIntWritable $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.PartialMultiplyMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.mahout.math.VarIntWritable) r1;
+
+        $r4 = (org.apache.mahout.cf.taste.hadoop.item.VectorAndPrefsWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.PartialMultiplyMapper: void map(org.apache.mahout.math.VarIntWritable,org.apache.mahout.cf.taste.hadoop.item.VectorAndPrefsWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

@@ -1,0 +1,123 @@
+public class org.apache.mahout.clustering.canopy.Canopy extends org.apache.mahout.clustering.iterator.DistanceMeasureCluster
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.canopy.Canopy r0;
+
+        r0 := @this: org.apache.mahout.clustering.canopy.Canopy;
+
+        specialinvoke r0.<org.apache.mahout.clustering.iterator.DistanceMeasureCluster: void <init>()>();
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.math.Vector, int, org.apache.mahout.common.distance.DistanceMeasure)
+    {
+        org.apache.mahout.clustering.canopy.Canopy r0;
+        org.apache.mahout.math.Vector r1;
+        int i0;
+        org.apache.mahout.common.distance.DistanceMeasure r2;
+
+        r0 := @this: org.apache.mahout.clustering.canopy.Canopy;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: org.apache.mahout.common.distance.DistanceMeasure;
+
+        specialinvoke r0.<org.apache.mahout.clustering.iterator.DistanceMeasureCluster: void <init>(org.apache.mahout.math.Vector,int,org.apache.mahout.common.distance.DistanceMeasure)>(r1, i0, r2);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.canopy.Canopy: void observe(org.apache.mahout.math.Vector)>(r1);
+
+        return;
+    }
+
+    public java.lang.String asFormatString()
+    {
+        org.apache.mahout.clustering.canopy.Canopy r0;
+        java.lang.StringBuilder $r1, $r2, $r3, $r4, $r7;
+        int $i0;
+        org.apache.mahout.math.Vector $r5;
+        java.lang.String $r6, $r8;
+
+        r0 := @this: org.apache.mahout.clustering.canopy.Canopy;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("C");
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.Canopy: int getId()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(": ");
+
+        $r5 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.Canopy: org.apache.mahout.math.Vector computeCentroid()>();
+
+        $r6 = interfaceinvoke $r5.<org.apache.mahout.math.Vector: java.lang.String asFormatString()>();
+
+        $r7 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r8;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.clustering.canopy.Canopy r0;
+        java.lang.StringBuilder $r1, $r3, $r4, $r7;
+        java.lang.String $r2, $r6, $r8;
+        org.apache.mahout.math.Vector $r5;
+
+        r0 := @this: org.apache.mahout.clustering.canopy.Canopy;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.Canopy: java.lang.String getIdentifier()>();
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(": ");
+
+        $r5 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.Canopy: org.apache.mahout.math.Vector getCenter()>();
+
+        $r6 = interfaceinvoke $r5.<org.apache.mahout.math.Vector: java.lang.String asFormatString()>();
+
+        $r7 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r8;
+    }
+
+    public java.lang.String getIdentifier()
+    {
+        org.apache.mahout.clustering.canopy.Canopy r0;
+        java.lang.StringBuilder $r1, $r2, $r3;
+        int $i0;
+        java.lang.String $r4;
+
+        r0 := @this: org.apache.mahout.clustering.canopy.Canopy;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("C-");
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.clustering.canopy.Canopy: int getId()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r4;
+    }
+}

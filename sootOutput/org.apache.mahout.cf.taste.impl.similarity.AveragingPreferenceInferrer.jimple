@@ -1,0 +1,126 @@
+public final class org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer extends java.lang.Object implements org.apache.mahout.cf.taste.similarity.PreferenceInferrer
+{
+    private static final java.lang.Float ZERO;
+    private final org.apache.mahout.cf.taste.model.DataModel dataModel;
+    private final org.apache.mahout.cf.taste.impl.common.Cache averagePreferenceValue;
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer$PrefRetriever $r3;
+        org.apache.mahout.cf.taste.impl.common.Cache $r4;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer: org.apache.mahout.cf.taste.model.DataModel dataModel> = r1;
+
+        $r3 = new org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer$PrefRetriever;
+
+        specialinvoke $r3.<org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer$PrefRetriever: void <init>(org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer,org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer$1)>(r0, null);
+
+        $r4 = new org.apache.mahout.cf.taste.impl.common.Cache;
+
+        $i0 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsers()>();
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.impl.common.Cache: void <init>(org.apache.mahout.cf.taste.impl.common.Retriever,int)>($r3, $i0);
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer: org.apache.mahout.cf.taste.impl.common.Cache averagePreferenceValue> = $r4;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer: void refresh(java.util.Collection)>(null);
+
+        return;
+    }
+
+    public float inferPreference(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer r0;
+        long l0, l1;
+        org.apache.mahout.cf.taste.impl.common.Cache $r1;
+        java.lang.Long $r2;
+        java.lang.Object $r3;
+        java.lang.Float $r4;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer: org.apache.mahout.cf.taste.impl.common.Cache averagePreferenceValue>;
+
+        $r2 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l0);
+
+        $r3 = virtualinvoke $r1.<org.apache.mahout.cf.taste.impl.common.Cache: java.lang.Object get(java.lang.Object)>($r2);
+
+        $r4 = (java.lang.Float) $r3;
+
+        $f0 = virtualinvoke $r4.<java.lang.Float: float floatValue()>();
+
+        return $f0;
+    }
+
+    public void refresh(java.util.Collection)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer r0;
+        java.util.Collection r1;
+        org.apache.mahout.cf.taste.impl.common.Cache $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer;
+
+        r1 := @parameter0: java.util.Collection;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer: org.apache.mahout.cf.taste.impl.common.Cache averagePreferenceValue>;
+
+        virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.Cache: void clear()>();
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer;
+
+        return "AveragingPreferenceInferrer";
+    }
+
+    static org.apache.mahout.cf.taste.model.DataModel access$100(org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer r0;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        return $r1;
+    }
+
+    static java.lang.Float access$200()
+    {
+        java.lang.Float $r0;
+
+        $r0 = <org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer: java.lang.Float ZERO>;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.Float $r0;
+
+        $r0 = staticinvoke <java.lang.Float: java.lang.Float valueOf(float)>(0.0F);
+
+        <org.apache.mahout.cf.taste.impl.similarity.AveragingPreferenceInferrer: java.lang.Float ZERO> = $r0;
+
+        return;
+    }
+}

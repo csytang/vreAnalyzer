@@ -1,0 +1,504 @@
+public class org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable extends java.lang.Object implements org.apache.hadoop.io.Writable
+{
+    private int[] rowIndices;
+    private org.apache.mahout.math.Vector[] rows;
+    private int numRows;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: void <init>(int)>(10);
+
+        return;
+    }
+
+    public void <init>(int)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable r0;
+        int i0;
+        int[] $r1;
+        org.apache.mahout.math.Vector[] $r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+        i0 := @parameter0: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = newarray (int)[i0];
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices> = $r1;
+
+        $r2 = newarray (org.apache.mahout.math.Vector)[i0];
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows> = $r2;
+
+        return;
+    }
+
+    public int[] getRowIndices()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable r0;
+        int[] $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices>;
+
+        return $r1;
+    }
+
+    public org.apache.mahout.math.Vector[] getRows()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable r0;
+        org.apache.mahout.math.Vector[] $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows>;
+
+        return $r1;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable r0;
+        java.io.DataInput r1;
+        int $i0, $i1, $i2, $i3, $i4, $i5, i6, $i7;
+        org.apache.mahout.math.Vector[] $r3, $r4, $r7, $r10;
+        int[] $r5, $r6;
+        org.apache.mahout.math.Vector $r8, $r9;
+        org.apache.mahout.math.VectorWritable $r11;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $i0 = staticinvoke <org.apache.mahout.math.Varint: int readUnsignedVarInt(java.io.DataInput)>(r1);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows> = $i0;
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows>;
+
+        if $r3 == null goto label1;
+
+        $r10 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows>;
+
+        $i4 = lengthof $r10;
+
+        $i5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        if $i4 >= $i5 goto label2;
+
+     label1:
+        $i1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        $r4 = newarray (org.apache.mahout.math.Vector)[$i1];
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows> = $r4;
+
+        $i2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        $r5 = newarray (int)[$i2];
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices> = $r5;
+
+     label2:
+        $r11 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r11.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        i6 = 0;
+
+     label3:
+        $i7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        if i6 >= $i7 goto label4;
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices>;
+
+        $i3 = staticinvoke <org.apache.mahout.math.Varint: int readUnsignedVarInt(java.io.DataInput)>(r1);
+
+        $r6[i6] = $i3;
+
+        virtualinvoke $r11.<org.apache.mahout.math.VectorWritable: void readFields(java.io.DataInput)>(r1);
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows>;
+
+        $r8 = virtualinvoke $r11.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r9 = interfaceinvoke $r8.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        $r7[i6] = $r9;
+
+        i6 = i6 + 1;
+
+        goto label3;
+
+     label4:
+        return;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable r0;
+        java.io.DataOutput r1;
+        int $i0, $i1, $i2, i3;
+        org.apache.mahout.math.VectorWritable $r3;
+        int[] $r4;
+        org.apache.mahout.math.Vector[] $r5;
+        org.apache.mahout.math.Vector $r6;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        staticinvoke <org.apache.mahout.math.Varint: void writeUnsignedVarInt(int,java.io.DataOutput)>($i0, r1);
+
+        $r3 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r3.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        i3 = 0;
+
+     label1:
+        $i1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        if i3 >= $i1 goto label2;
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices>;
+
+        $i2 = $r4[i3];
+
+        staticinvoke <org.apache.mahout.math.Varint: void writeUnsignedVarInt(int,java.io.DataOutput)>($i2, r1);
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows>;
+
+        $r6 = $r5[i3];
+
+        virtualinvoke $r3.<org.apache.mahout.math.VectorWritable: void set(org.apache.mahout.math.Vector)>($r6);
+
+        virtualinvoke $r3.<org.apache.mahout.math.VectorWritable: void write(java.io.DataOutput)>(r1);
+
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void plusRow(int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable r0;
+        int i0, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11;
+        org.apache.mahout.math.Vector r1, $r3;
+        org.apache.mahout.math.Vector[] $r2;
+        org.apache.mahout.math.function.PlusMult $r4;
+        int[] $r6, $r7;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        $i2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        if $i2 == 0 goto label1;
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices>;
+
+        $i7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        $i8 = $i7 - 1;
+
+        $i10 = $r6[$i8];
+
+        if $i10 >= i0 goto label2;
+
+     label1:
+        $i3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        $i4 = neg $i3;
+
+        $i11 = $i4 - 1;
+
+        goto label3;
+
+     label2:
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices>;
+
+        $i9 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        $i11 = staticinvoke <java.util.Arrays: int binarySearch(int[],int,int,int)>($r7, 0, $i9, i0);
+
+     label3:
+        if $i11 < 0 goto label4;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows>;
+
+        $r3 = $r2[$i11];
+
+        $r4 = staticinvoke <org.apache.mahout.math.function.PlusMult: org.apache.mahout.math.function.PlusMult plusMult(double)>(1.0);
+
+        interfaceinvoke $r3.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>(r1, $r4);
+
+        goto label5;
+
+     label4:
+        $i5 = neg $i11;
+
+        $i6 = $i5 - 1;
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: void insertIntoPos(int,int,org.apache.mahout.math.Vector)>($i6, i0, r1);
+
+     label5:
+        return;
+    }
+
+    private void insertIntoPos(int, int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable r0;
+        int i0, i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16, $i17;
+        org.apache.mahout.math.Vector r1, $r8;
+        org.apache.mahout.math.Vector[] $r2, $r3, $r4, $r9, $r10, $r11;
+        int[] $r5, $r6, $r7, $r13, $r14;
+        java.lang.Object[] $r12;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        r1 := @parameter2: org.apache.mahout.math.Vector;
+
+        $i3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows>;
+
+        $i2 = lengthof $r2;
+
+        if $i3 != $i2 goto label1;
+
+        $r10 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows>;
+
+        $i13 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        $i12 = $i13 + 1;
+
+        $i14 = $i12 << 1;
+
+        $r12 = staticinvoke <java.util.Arrays: java.lang.Object[] copyOf(java.lang.Object[],int)>($r10, $i14);
+
+        $r11 = (org.apache.mahout.math.Vector[]) $r12;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows> = $r11;
+
+        $r13 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices>;
+
+        $i16 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        $i15 = $i16 + 1;
+
+        $i17 = $i15 << 1;
+
+        $r14 = staticinvoke <java.util.Arrays: int[] copyOf(int[],int)>($r13, $i17);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices> = $r14;
+
+     label1:
+        $r4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows>;
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows>;
+
+        $i6 = i0 + 1;
+
+        $i4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        $i5 = $i4 - i0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r4, i0, $r3, $i6, $i5);
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices>;
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices>;
+
+        $i9 = i0 + 1;
+
+        $i7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        $i8 = $i7 - i0;
+
+        staticinvoke <java.lang.System: void arraycopy(java.lang.Object,int,java.lang.Object,int,int)>($r7, i0, $r5, $i9, $i8);
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices>;
+
+        $r6[i0] = i1;
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows>;
+
+        $r8 = interfaceinvoke r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        $r9[i0] = $r8;
+
+        $i11 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        $i10 = $i11 + 1;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows> = $i10;
+
+        return;
+    }
+
+    public void plusBlock(org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable r0, r1;
+        int[] $r2, $r5, $r6, $r8, $r16, $r17;
+        org.apache.mahout.math.Vector[] $r3, $r7, $r10, $r11;
+        org.apache.mahout.math.Vector $r4, $r9, $r12, $r13;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, i10, i11, $i12, $i13;
+        org.apache.mahout.math.function.PlusMult $r15;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+        r1 := @parameter0: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+        i10 = 0;
+
+        i11 = 0;
+
+     label1:
+        $i12 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        if i10 >= $i12 goto label6;
+
+        $i2 = r1.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        if i11 >= $i2 goto label6;
+
+     label2:
+        $i3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        if i10 >= $i3 goto label3;
+
+        $r16 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices>;
+
+        $i9 = $r16[i10];
+
+        $r17 = r1.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices>;
+
+        $i8 = $r17[i11];
+
+        if $i9 >= $i8 goto label3;
+
+        i10 = i10 + 1;
+
+        goto label2;
+
+     label3:
+        $i4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        if i10 >= $i4 goto label1;
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices>;
+
+        $i5 = $r6[i10];
+
+        $r5 = r1.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices>;
+
+        $i6 = $r5[i11];
+
+        if $i5 != $i6 goto label4;
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows>;
+
+        $r13 = $r11[i10];
+
+        $r10 = r1.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows>;
+
+        $r12 = $r10[i11];
+
+        $r15 = staticinvoke <org.apache.mahout.math.function.PlusMult: org.apache.mahout.math.function.PlusMult plusMult(double)>(1.0);
+
+        interfaceinvoke $r13.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>($r12, $r15);
+
+        goto label5;
+
+     label4:
+        $r8 = r1.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices>;
+
+        $i7 = $r8[i11];
+
+        $r7 = r1.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows>;
+
+        $r9 = $r7[i11];
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: void insertIntoPos(int,int,org.apache.mahout.math.Vector)>(i10, $i7, $r9);
+
+     label5:
+        i10 = i10 + 1;
+
+        i11 = i11 + 1;
+
+        goto label1;
+
+     label6:
+        $i13 = r1.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        if i11 >= $i13 goto label7;
+
+        $i1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        $r2 = r1.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] rowIndices>;
+
+        $i0 = $r2[i11];
+
+        $r3 = r1.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows>;
+
+        $r4 = $r3[i11];
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: void insertIntoPos(int,int,org.apache.mahout.math.Vector)>($i1, $i0, $r4);
+
+        i11 = i11 + 1;
+
+        goto label6;
+
+     label7:
+        return;
+    }
+
+    public int getNumRows()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows>;
+
+        return $i0;
+    }
+
+    public void clear()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable r0;
+        org.apache.mahout.math.Vector[] $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int numRows> = 0;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] rows>;
+
+        staticinvoke <java.util.Arrays: void fill(java.lang.Object[],java.lang.Object)>($r1, null);
+
+        return;
+    }
+}

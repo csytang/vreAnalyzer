@@ -1,0 +1,46 @@
+final class org.apache.mahout.common.iterator.sequencefile.PathFilters$2 extends java.lang.Object implements org.apache.hadoop.fs.PathFilter
+{
+
+    void <init>()
+    {
+        org.apache.mahout.common.iterator.sequencefile.PathFilters$2 r0;
+
+        r0 := @this: org.apache.mahout.common.iterator.sequencefile.PathFilters$2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public boolean accept(org.apache.hadoop.fs.Path)
+    {
+        org.apache.mahout.common.iterator.sequencefile.PathFilters$2 r0;
+        org.apache.hadoop.fs.Path r1;
+        java.lang.String r2;
+        boolean $z0, $z1, $z2;
+
+        r0 := @this: org.apache.mahout.common.iterator.sequencefile.PathFilters$2;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        $z0 = virtualinvoke r2.<java.lang.String: boolean startsWith(java.lang.String)>("clusters-");
+
+        if $z0 == 0 goto label1;
+
+        $z1 = virtualinvoke r2.<java.lang.String: boolean endsWith(java.lang.String)>("-final");
+
+        if $z1 == 0 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        return $z2;
+    }
+}

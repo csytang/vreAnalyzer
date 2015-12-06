@@ -1,0 +1,617 @@
+public class org.apache.mahout.classifier.df.builder.DefaultTreeBuilder extends java.lang.Object implements org.apache.mahout.classifier.df.builder.TreeBuilder
+{
+    private static final org.slf4j.Logger log;
+    private static final int[] NO_ATTRIBUTES;
+    private boolean[] selected;
+    private int m;
+    private final org.apache.mahout.classifier.df.split.IgSplit igSplit;
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.df.builder.DefaultTreeBuilder r0;
+        org.apache.mahout.classifier.df.split.OptIgSplit $r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.builder.DefaultTreeBuilder;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: int m> = 1;
+
+        $r1 = new org.apache.mahout.classifier.df.split.OptIgSplit;
+
+        specialinvoke $r1.<org.apache.mahout.classifier.df.split.OptIgSplit: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: org.apache.mahout.classifier.df.split.IgSplit igSplit> = $r1;
+
+        return;
+    }
+
+    public void setM(int)
+    {
+        org.apache.mahout.classifier.df.builder.DefaultTreeBuilder r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.classifier.df.builder.DefaultTreeBuilder;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: int m> = i0;
+
+        return;
+    }
+
+    public org.apache.mahout.classifier.df.node.Node build(java.util.Random, org.apache.mahout.classifier.df.data.Data)
+    {
+        org.apache.mahout.classifier.df.builder.DefaultTreeBuilder r0;
+        java.util.Random r1;
+        org.apache.mahout.classifier.df.data.Data r2, r39, r40, r45;
+        int[] r3;
+        org.apache.mahout.classifier.df.node.Node r4, $r13, r41, r42;
+        boolean[] $r5, $r6, $r8, $r10, $r11, $r17, $r18, $r21, $r22, $r31, $r32, r38;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, z6;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16, $i17, $i19, $i20, $i21, i22, i23, i24, i25;
+        org.apache.mahout.classifier.df.node.Leaf $r7, $r26, $r28, $r34;
+        double $d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8;
+        org.apache.mahout.classifier.df.data.Dataset $r9, $r20, $r29, $r30, $r33;
+        org.apache.mahout.classifier.df.node.CategoricalNode $r12;
+        org.apache.mahout.classifier.df.data.conditions.Condition $r14, $r15, $r16;
+        org.apache.mahout.classifier.df.node.NumericalNode $r19;
+        java.lang.Integer $r23;
+        org.slf4j.Logger $r24;
+        byte $b18;
+        org.apache.mahout.classifier.df.split.IgSplit $r25;
+        org.apache.mahout.classifier.df.data.Instance $r27;
+        org.apache.mahout.classifier.df.split.Split r35, r37;
+        double[] r43;
+        org.apache.mahout.classifier.df.node.Node[] r44;
+
+        r0 := @this: org.apache.mahout.classifier.df.builder.DefaultTreeBuilder;
+
+        r1 := @parameter0: java.util.Random;
+
+        r2 := @parameter1: org.apache.mahout.classifier.df.data.Data;
+
+        $r5 = r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean[] selected>;
+
+        if $r5 != null goto label01;
+
+        $r33 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        $i21 = virtualinvoke $r33.<org.apache.mahout.classifier.df.data.Dataset: int nbAttributes()>();
+
+        $r31 = newarray (boolean)[$i21];
+
+        r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean[] selected> = $r31;
+
+        $r32 = r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean[] selected>;
+
+        $r30 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        $i20 = virtualinvoke $r30.<org.apache.mahout.classifier.df.data.Dataset: int getLabelId()>();
+
+        $r32[$i20] = 1;
+
+     label01:
+        $z0 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Data: boolean isEmpty()>();
+
+        if $z0 == 0 goto label02;
+
+        $r34 = new org.apache.mahout.classifier.df.node.Leaf;
+
+        specialinvoke $r34.<org.apache.mahout.classifier.df.node.Leaf: void <init>(double)>(-1.0);
+
+        return $r34;
+
+     label02:
+        $z1 = specialinvoke r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean isIdentical(org.apache.mahout.classifier.df.data.Data)>(r2);
+
+        if $z1 == 0 goto label03;
+
+        $r26 = new org.apache.mahout.classifier.df.node.Leaf;
+
+        $i19 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Data: int majorityLabel(java.util.Random)>(r1);
+
+        $d8 = (double) $i19;
+
+        specialinvoke $r26.<org.apache.mahout.classifier.df.node.Leaf: void <init>(double)>($d8);
+
+        return $r26;
+
+     label03:
+        $z2 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Data: boolean identicalLabel()>();
+
+        if $z2 == 0 goto label04;
+
+        $r28 = new org.apache.mahout.classifier.df.node.Leaf;
+
+        $r29 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        $r27 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Instance get(int)>(0);
+
+        $d7 = virtualinvoke $r29.<org.apache.mahout.classifier.df.data.Dataset: double getLabel(org.apache.mahout.classifier.df.data.Instance)>($r27);
+
+        specialinvoke $r28.<org.apache.mahout.classifier.df.node.Leaf: void <init>(double)>($d7);
+
+        return $r28;
+
+     label04:
+        $r6 = r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean[] selected>;
+
+        $i0 = r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: int m>;
+
+        r3 = staticinvoke <org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: int[] randomAttributes(java.util.Random,boolean[],int)>(r1, $r6, $i0);
+
+        if r3 == null goto label05;
+
+        $i2 = lengthof r3;
+
+        if $i2 != 0 goto label06;
+
+     label05:
+        $r7 = new org.apache.mahout.classifier.df.node.Leaf;
+
+        $i1 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Data: int majorityLabel(java.util.Random)>(r1);
+
+        $d0 = (double) $i1;
+
+        specialinvoke $r7.<org.apache.mahout.classifier.df.node.Leaf: void <init>(double)>($d0);
+
+        return $r7;
+
+     label06:
+        r35 = null;
+
+        i22 = lengthof r3;
+
+        i23 = 0;
+
+     label07:
+        if i23 >= i22 goto label10;
+
+        i24 = r3[i23];
+
+        $r25 = r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: org.apache.mahout.classifier.df.split.IgSplit igSplit>;
+
+        r37 = virtualinvoke $r25.<org.apache.mahout.classifier.df.split.IgSplit: org.apache.mahout.classifier.df.split.Split computeSplit(org.apache.mahout.classifier.df.data.Data,int)>(r2, i24);
+
+        if r35 == null goto label08;
+
+        $d6 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: double getIg()>();
+
+        $d5 = virtualinvoke r37.<org.apache.mahout.classifier.df.split.Split: double getIg()>();
+
+        $b18 = $d6 cmpg $d5;
+
+        if $b18 >= 0 goto label09;
+
+     label08:
+        r35 = r37;
+
+     label09:
+        i23 = i23 + 1;
+
+        goto label07;
+
+     label10:
+        $r8 = r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean[] selected>;
+
+        $i3 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: int getAttr()>();
+
+        z6 = $r8[$i3];
+
+        if z6 == 0 goto label11;
+
+        $r24 = <org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: org.slf4j.Logger log>;
+
+        $i17 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: int getAttr()>();
+
+        $r23 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i17);
+
+        interfaceinvoke $r24.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Object)>("attribute {} already selected in a parent node", $r23);
+
+     label11:
+        $r9 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        $i4 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: int getAttr()>();
+
+        $z3 = virtualinvoke $r9.<org.apache.mahout.classifier.df.data.Dataset: boolean isNumerical(int)>($i4);
+
+        if $z3 == 0 goto label17;
+
+        r38 = null;
+
+        $i12 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: int getAttr()>();
+
+        $d2 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: double getSplit()>();
+
+        $r15 = staticinvoke <org.apache.mahout.classifier.df.data.conditions.Condition: org.apache.mahout.classifier.df.data.conditions.Condition lesser(int,double)>($i12, $d2);
+
+        r39 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Data subset(org.apache.mahout.classifier.df.data.conditions.Condition)>($r15);
+
+        $i13 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: int getAttr()>();
+
+        $d3 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: double getSplit()>();
+
+        $r16 = staticinvoke <org.apache.mahout.classifier.df.data.conditions.Condition: org.apache.mahout.classifier.df.data.conditions.Condition greaterOrEquals(int,double)>($i13, $d3);
+
+        r40 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Data subset(org.apache.mahout.classifier.df.data.conditions.Condition)>($r16);
+
+        $z4 = virtualinvoke r39.<org.apache.mahout.classifier.df.data.Data: boolean isEmpty()>();
+
+        if $z4 != 0 goto label12;
+
+        $z5 = virtualinvoke r40.<org.apache.mahout.classifier.df.data.Data: boolean isEmpty()>();
+
+        if $z5 == 0 goto label13;
+
+     label12:
+        $r17 = r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean[] selected>;
+
+        $i14 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: int getAttr()>();
+
+        $r17[$i14] = 1;
+
+        goto label14;
+
+     label13:
+        r38 = r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean[] selected>;
+
+        $r20 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        $r21 = r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean[] selected>;
+
+        $r22 = staticinvoke <org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean[] cloneCategoricalAttributes(org.apache.mahout.classifier.df.data.Dataset,boolean[])>($r20, $r21);
+
+        r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean[] selected> = $r22;
+
+     label14:
+        r41 = virtualinvoke r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: org.apache.mahout.classifier.df.node.Node build(java.util.Random,org.apache.mahout.classifier.df.data.Data)>(r1, r39);
+
+        r4 = virtualinvoke r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: org.apache.mahout.classifier.df.node.Node build(java.util.Random,org.apache.mahout.classifier.df.data.Data)>(r1, r40);
+
+        if r38 == null goto label15;
+
+        r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean[] selected> = r38;
+
+        goto label16;
+
+     label15:
+        $r18 = r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean[] selected>;
+
+        $i15 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: int getAttr()>();
+
+        $r18[$i15] = z6;
+
+     label16:
+        $r19 = new org.apache.mahout.classifier.df.node.NumericalNode;
+
+        $i16 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: int getAttr()>();
+
+        $d4 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: double getSplit()>();
+
+        specialinvoke $r19.<org.apache.mahout.classifier.df.node.NumericalNode: void <init>(int,double,org.apache.mahout.classifier.df.node.Node,org.apache.mahout.classifier.df.node.Node)>($i16, $d4, r41, r4);
+
+        r42 = $r19;
+
+        goto label20;
+
+     label17:
+        $r10 = r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean[] selected>;
+
+        $i5 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: int getAttr()>();
+
+        $r10[$i5] = 1;
+
+        $i6 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: int getAttr()>();
+
+        r43 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Data: double[] values(int)>($i6);
+
+        $i8 = lengthof r43;
+
+        r44 = newarray (org.apache.mahout.classifier.df.node.Node)[$i8];
+
+        i25 = 0;
+
+     label18:
+        $i9 = lengthof r43;
+
+        if i25 >= $i9 goto label19;
+
+        $i10 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: int getAttr()>();
+
+        $d1 = r43[i25];
+
+        $r14 = staticinvoke <org.apache.mahout.classifier.df.data.conditions.Condition: org.apache.mahout.classifier.df.data.conditions.Condition equals(int,double)>($i10, $d1);
+
+        r45 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Data subset(org.apache.mahout.classifier.df.data.conditions.Condition)>($r14);
+
+        $r13 = virtualinvoke r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: org.apache.mahout.classifier.df.node.Node build(java.util.Random,org.apache.mahout.classifier.df.data.Data)>(r1, r45);
+
+        r44[i25] = $r13;
+
+        i25 = i25 + 1;
+
+        goto label18;
+
+     label19:
+        $r11 = r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean[] selected>;
+
+        $i7 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: int getAttr()>();
+
+        $r11[$i7] = z6;
+
+        $r12 = new org.apache.mahout.classifier.df.node.CategoricalNode;
+
+        $i11 = virtualinvoke r35.<org.apache.mahout.classifier.df.split.Split: int getAttr()>();
+
+        specialinvoke $r12.<org.apache.mahout.classifier.df.node.CategoricalNode: void <init>(int,double[],org.apache.mahout.classifier.df.node.Node[])>($i11, r43, r44);
+
+        r42 = $r12;
+
+     label20:
+        return r42;
+    }
+
+    private boolean isIdentical(org.apache.mahout.classifier.df.data.Data)
+    {
+        org.apache.mahout.classifier.df.builder.DefaultTreeBuilder r0;
+        org.apache.mahout.classifier.df.data.Data r1;
+        org.apache.mahout.classifier.df.data.Instance r2, $r5;
+        boolean $z0, $z1;
+        boolean[] $r3, $r4;
+        int $i0, $i1, i3, i4;
+        double $d0, $d1;
+        byte $b2;
+
+        r0 := @this: org.apache.mahout.classifier.df.builder.DefaultTreeBuilder;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.data.Data;
+
+        $z0 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: boolean isEmpty()>();
+
+        if $z0 == 0 goto label1;
+
+        return 1;
+
+     label1:
+        r2 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Instance get(int)>(0);
+
+        i3 = 0;
+
+     label2:
+        $r3 = r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean[] selected>;
+
+        $i0 = lengthof $r3;
+
+        if i3 >= $i0 goto label7;
+
+        $r4 = r0.<org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: boolean[] selected>;
+
+        $z1 = $r4[i3];
+
+        if $z1 == 0 goto label3;
+
+        goto label6;
+
+     label3:
+        i4 = 1;
+
+     label4:
+        $i1 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        if i4 >= $i1 goto label6;
+
+        $r5 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Instance get(int)>(i4);
+
+        $d0 = virtualinvoke $r5.<org.apache.mahout.classifier.df.data.Instance: double get(int)>(i3);
+
+        $d1 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Instance: double get(int)>(i3);
+
+        $b2 = $d0 cmpl $d1;
+
+        if $b2 == 0 goto label5;
+
+        return 0;
+
+     label5:
+        i4 = i4 + 1;
+
+        goto label4;
+
+     label6:
+        i3 = i3 + 1;
+
+        goto label2;
+
+     label7:
+        return 1;
+    }
+
+    private static boolean[] cloneCategoricalAttributes(org.apache.mahout.classifier.df.data.Dataset, boolean[])
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        boolean[] r1, r2;
+        int $i0, $i1, i2, $i3;
+        boolean $z0, $z1, $z2;
+
+        r0 := @parameter0: org.apache.mahout.classifier.df.data.Dataset;
+
+        r1 := @parameter1: boolean[];
+
+        $i0 = lengthof r1;
+
+        r2 = newarray (boolean)[$i0];
+
+        i2 = 0;
+
+     label1:
+        $i1 = lengthof r1;
+
+        if i2 >= $i1 goto label4;
+
+        $i3 = i2;
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.classifier.df.data.Dataset: boolean isNumerical(int)>(i2);
+
+        if $z0 != 0 goto label2;
+
+        $z1 = r1[i2];
+
+        if $z1 == 0 goto label2;
+
+        $z2 = 1;
+
+        goto label3;
+
+     label2:
+        $z2 = 0;
+
+     label3:
+        r2[$i3] = $z2;
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label4:
+        return r2;
+    }
+
+    protected static int[] randomAttributes(java.util.Random, boolean[], int)
+    {
+        java.util.Random r0;
+        boolean[] r1;
+        int i0, i1, $i2, $i3, $i4, i5, i6, i7, i8, i9, i10, i11, i12, i13;
+        boolean $z0, $z1, z2;
+        int[] $r2, r5, r6;
+        org.slf4j.Logger $r3;
+
+        r0 := @parameter0: java.util.Random;
+
+        r1 := @parameter1: boolean[];
+
+        i0 := @parameter2: int;
+
+        i5 = 0;
+
+        i6 = lengthof r1;
+
+        i7 = 0;
+
+     label01:
+        if i7 >= i6 goto label03;
+
+        z2 = r1[i7];
+
+        if z2 != 0 goto label02;
+
+        i5 = i5 + 1;
+
+     label02:
+        i7 = i7 + 1;
+
+        goto label01;
+
+     label03:
+        if i5 != 0 goto label04;
+
+        $r3 = <org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: org.slf4j.Logger log>;
+
+        interfaceinvoke $r3.<org.slf4j.Logger: void warn(java.lang.String)>("All attributes are selected !");
+
+        $r2 = <org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: int[] NO_ATTRIBUTES>;
+
+        return $r2;
+
+     label04:
+        if i5 > i0 goto label07;
+
+        r5 = newarray (int)[i5];
+
+        i8 = 0;
+
+        i9 = 0;
+
+     label05:
+        $i3 = lengthof r1;
+
+        if i9 >= $i3 goto label12;
+
+        $z1 = r1[i9];
+
+        if $z1 != 0 goto label06;
+
+        $i4 = i8;
+
+        i8 = i8 + 1;
+
+        r5[$i4] = i9;
+
+     label06:
+        i9 = i9 + 1;
+
+        goto label05;
+
+     label07:
+        r5 = newarray (int)[i0];
+
+        i10 = 0;
+
+     label08:
+        if i10 >= i0 goto label10;
+
+     label09:
+        $i2 = lengthof r1;
+
+        i11 = virtualinvoke r0.<java.util.Random: int nextInt(int)>($i2);
+
+        $z0 = r1[i11];
+
+        if $z0 != 0 goto label09;
+
+        r5[i10] = i11;
+
+        r1[i11] = 1;
+
+        i10 = i10 + 1;
+
+        goto label08;
+
+     label10:
+        r6 = r5;
+
+        i12 = lengthof r5;
+
+        i13 = 0;
+
+     label11:
+        if i13 >= i12 goto label12;
+
+        i1 = r6[i13];
+
+        r1[i1] = 0;
+
+        i13 = i13 + 1;
+
+        goto label11;
+
+     label12:
+        return r5;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+        int[] $r1;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/classifier/df/builder/DefaultTreeBuilder");
+
+        <org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: org.slf4j.Logger log> = $r0;
+
+        $r1 = newarray (int)[0];
+
+        <org.apache.mahout.classifier.df.builder.DefaultTreeBuilder: int[] NO_ATTRIBUTES> = $r1;
+
+        return;
+    }
+}

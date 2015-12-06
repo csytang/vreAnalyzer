@@ -1,0 +1,183 @@
+final class org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator extends com.google.common.collect.AbstractIterator
+{
+    private final org.apache.mahout.cf.taste.similarity.ItemSimilarity otherSimilarity;
+    private final long[] itemIDs;
+    private int i;
+    private long itemID1;
+    private int j;
+
+    private void <init>(org.apache.mahout.cf.taste.similarity.ItemSimilarity, long[])
+    {
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator r0;
+        org.apache.mahout.cf.taste.similarity.ItemSimilarity r1;
+        long[] r2;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.ItemSimilarity;
+
+        r2 := @parameter1: long[];
+
+        specialinvoke r0.<com.google.common.collect.AbstractIterator: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: org.apache.mahout.cf.taste.similarity.ItemSimilarity otherSimilarity> = r1;
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: long[] itemIDs> = r2;
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: int i> = 0;
+
+        $l0 = r2[0];
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: long itemID1> = $l0;
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: int j> = 1;
+
+        return;
+    }
+
+    protected org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity computeNext()
+    {
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator r0;
+        int i0, $i2, $i3, $i4, $i6, $i7, $i8, $i9, $i10, $i12;
+        long l1, $l5, $l11, $l13;
+        double d0;
+        long[] $r2, $r5, $r7;
+        java.lang.Object $r3;
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity $r4, $r8, r12;
+        org.apache.mahout.cf.taste.similarity.ItemSimilarity $r6;
+        boolean $z0;
+        org.apache.mahout.cf.taste.common.TasteException $r10;
+        java.lang.IllegalStateException $r11;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: long[] itemIDs>;
+
+        i0 = lengthof $r2;
+
+        r12 = null;
+
+     label1:
+        if r12 != null goto label7;
+
+        $i3 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: int i>;
+
+        $i2 = i0 - 1;
+
+        if $i3 >= $i2 goto label7;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: long[] itemIDs>;
+
+        $i4 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: int j>;
+
+        l1 = $r5[$i4];
+
+     label2:
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: org.apache.mahout.cf.taste.similarity.ItemSimilarity otherSimilarity>;
+
+        $l5 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: long itemID1>;
+
+        d0 = interfaceinvoke $r6.<org.apache.mahout.cf.taste.similarity.ItemSimilarity: double itemSimilarity(long,long)>($l5, l1);
+
+     label3:
+        goto label5;
+
+     label4:
+        $r10 := @caughtexception;
+
+        $r11 = new java.lang.IllegalStateException;
+
+        specialinvoke $r11.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r10);
+
+        throw $r11;
+
+     label5:
+        $z0 = staticinvoke <java.lang.Double: boolean isNaN(double)>(d0);
+
+        if $z0 != 0 goto label6;
+
+        $r8 = new org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity;
+
+        $l13 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: long itemID1>;
+
+        specialinvoke $r8.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity: void <init>(long,long,double)>($l13, l1, d0);
+
+        r12 = $r8;
+
+     label6:
+        $i7 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: int j>;
+
+        $i6 = $i7 + 1;
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: int j> = $i6;
+
+        if $i6 != i0 goto label1;
+
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: long[] itemIDs>;
+
+        $i8 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: int i>;
+
+        $i9 = $i8 + 1;
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: int i> = $i9;
+
+        $l11 = $r7[$i9];
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: long itemID1> = $l11;
+
+        $i10 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: int i>;
+
+        $i12 = $i10 + 1;
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: int j> = $i12;
+
+        goto label1;
+
+     label7:
+        if r12 != null goto label8;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: java.lang.Object endOfData()>();
+
+        $r4 = (org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity) $r3;
+
+        return $r4;
+
+     label8:
+        return r12;
+
+        catch org.apache.mahout.cf.taste.common.TasteException from label2 to label3 with label4;
+    }
+
+    protected volatile java.lang.Object computeNext()
+    {
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator r0;
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity computeNext()>();
+
+        return $r1;
+    }
+
+    void <init>(org.apache.mahout.cf.taste.similarity.ItemSimilarity, long[], org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$1)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator r0;
+        org.apache.mahout.cf.taste.similarity.ItemSimilarity r1;
+        long[] r2;
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$1 r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.ItemSimilarity;
+
+        r2 := @parameter1: long[];
+
+        r3 := @parameter2: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$1;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: void <init>(org.apache.mahout.cf.taste.similarity.ItemSimilarity,long[])>(r1, r2);
+
+        return;
+    }
+}

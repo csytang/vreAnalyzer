@@ -1,0 +1,349 @@
+public class org.apache.mahout.classifier.df.mapreduce.MapredOutput extends java.lang.Object implements org.apache.hadoop.io.Writable, java.lang.Cloneable
+{
+    private org.apache.mahout.classifier.df.node.Node tree;
+    private int[] predictions;
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredOutput r0;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredOutput;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.classifier.df.node.Node, int[])
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredOutput r0;
+        org.apache.mahout.classifier.df.node.Node r1;
+        int[] r2;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredOutput;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.node.Node;
+
+        r2 := @parameter1: int[];
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.node.Node tree> = r1;
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: int[] predictions> = r2;
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.classifier.df.node.Node)
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredOutput r0;
+        org.apache.mahout.classifier.df.node.Node r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredOutput;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.node.Node;
+
+        specialinvoke r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: void <init>(org.apache.mahout.classifier.df.node.Node,int[])>(r1, null);
+
+        return;
+    }
+
+    public org.apache.mahout.classifier.df.node.Node getTree()
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredOutput r0;
+        org.apache.mahout.classifier.df.node.Node $r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredOutput;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.node.Node tree>;
+
+        return $r1;
+    }
+
+    int[] getPredictions()
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredOutput r0;
+        int[] $r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredOutput;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: int[] predictions>;
+
+        return $r1;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredOutput r0;
+        java.io.DataInput r1;
+        boolean z0, z1;
+        int[] $r2;
+        org.apache.mahout.classifier.df.node.Node $r3;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredOutput;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        z0 = interfaceinvoke r1.<java.io.DataInput: boolean readBoolean()>();
+
+        if z0 == 0 goto label1;
+
+        $r3 = staticinvoke <org.apache.mahout.classifier.df.node.Node: org.apache.mahout.classifier.df.node.Node read(java.io.DataInput)>(r1);
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.node.Node tree> = $r3;
+
+     label1:
+        z1 = interfaceinvoke r1.<java.io.DataInput: boolean readBoolean()>();
+
+        if z1 == 0 goto label2;
+
+        $r2 = staticinvoke <org.apache.mahout.classifier.df.DFUtils: int[] readIntArray(java.io.DataInput)>(r1);
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: int[] predictions> = $r2;
+
+     label2:
+        return;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredOutput r0;
+        java.io.DataOutput r1;
+        org.apache.mahout.classifier.df.node.Node $r2, $r3, $r8;
+        int[] $r4, $r5, $r6;
+        boolean $z0, $z1;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredOutput;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $r2 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.node.Node tree>;
+
+        if $r2 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        interfaceinvoke r1.<java.io.DataOutput: void writeBoolean(boolean)>($z0);
+
+        $r3 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.node.Node tree>;
+
+        if $r3 == null goto label3;
+
+        $r8 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.node.Node tree>;
+
+        virtualinvoke $r8.<org.apache.mahout.classifier.df.node.Node: void write(java.io.DataOutput)>(r1);
+
+     label3:
+        $r4 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: int[] predictions>;
+
+        if $r4 == null goto label4;
+
+        $z1 = 1;
+
+        goto label5;
+
+     label4:
+        $z1 = 0;
+
+     label5:
+        interfaceinvoke r1.<java.io.DataOutput: void writeBoolean(boolean)>($z1);
+
+        $r5 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: int[] predictions>;
+
+        if $r5 == null goto label6;
+
+        $r6 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: int[] predictions>;
+
+        staticinvoke <org.apache.mahout.classifier.df.DFUtils: void writeArray(java.io.DataOutput,int[])>(r1, $r6);
+
+     label6:
+        return;
+    }
+
+    public org.apache.mahout.classifier.df.mapreduce.MapredOutput clone()
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredOutput r0, $r1;
+        int[] $r2;
+        org.apache.mahout.classifier.df.node.Node $r3;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredOutput;
+
+        $r1 = new org.apache.mahout.classifier.df.mapreduce.MapredOutput;
+
+        $r3 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.node.Node tree>;
+
+        $r2 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: int[] predictions>;
+
+        specialinvoke $r1.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: void <init>(org.apache.mahout.classifier.df.node.Node,int[])>($r3, $r2);
+
+        return $r1;
+    }
+
+    public boolean equals(java.lang.Object)
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredOutput r0, r2;
+        java.lang.Object r1;
+        boolean $z0, $z1, $z2, $z3;
+        org.apache.mahout.classifier.df.node.Node $r3, $r4, $r5, $r6, $r9;
+        int[] $r7, $r8;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredOutput;
+
+        r1 := @parameter0: java.lang.Object;
+
+        if r0 != r1 goto label1;
+
+        return 1;
+
+     label1:
+        $z0 = r1 instanceof org.apache.mahout.classifier.df.mapreduce.MapredOutput;
+
+        if $z0 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        r2 = (org.apache.mahout.classifier.df.mapreduce.MapredOutput) r1;
+
+        $r3 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.node.Node tree>;
+
+        if $r3 != null goto label3;
+
+        $r9 = virtualinvoke r2.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.node.Node getTree()>();
+
+        if $r9 == null goto label4;
+
+     label3:
+        $r4 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.node.Node tree>;
+
+        if $r4 == null goto label5;
+
+        $r5 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.node.Node tree>;
+
+        $r6 = virtualinvoke r2.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.node.Node getTree()>();
+
+        $z1 = virtualinvoke $r5.<java.lang.Object: boolean equals(java.lang.Object)>($r6);
+
+        if $z1 == 0 goto label5;
+
+     label4:
+        $r7 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: int[] predictions>;
+
+        $r8 = virtualinvoke r2.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: int[] getPredictions()>();
+
+        $z2 = staticinvoke <java.util.Arrays: boolean equals(int[],int[])>($r7, $r8);
+
+        if $z2 == 0 goto label5;
+
+        $z3 = 1;
+
+        goto label6;
+
+     label5:
+        $z3 = 0;
+
+     label6:
+        return $z3;
+    }
+
+    public int hashCode()
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredOutput r0;
+        int[] r1;
+        int i0, i1, $i2, $i3, i4, i5;
+        org.apache.mahout.classifier.df.node.Node $r2, $r3;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredOutput;
+
+        $r2 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.node.Node tree>;
+
+        if $r2 != null goto label1;
+
+        $i3 = 1;
+
+        goto label2;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.node.Node tree>;
+
+        $i3 = virtualinvoke $r3.<java.lang.Object: int hashCode()>();
+
+     label2:
+        i4 = $i3;
+
+        r1 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: int[] predictions>;
+
+        i0 = lengthof r1;
+
+        i5 = 0;
+
+     label3:
+        if i5 >= i0 goto label4;
+
+        i1 = r1[i5];
+
+        $i2 = 31 * i4;
+
+        i4 = $i2 + i1;
+
+        i5 = i5 + 1;
+
+        goto label3;
+
+     label4:
+        return i4;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredOutput r0;
+        java.lang.StringBuilder $r1, $r2, $r4, $r5, $r8, $r9;
+        org.apache.mahout.classifier.df.node.Node $r3;
+        int[] $r6;
+        java.lang.String $r7, $r10;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredOutput;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("{");
+
+        $r3 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.node.Node tree>;
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" | ");
+
+        $r6 = r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: int[] predictions>;
+
+        $r7 = staticinvoke <java.util.Arrays: java.lang.String toString(int[])>($r6);
+
+        $r8 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r7);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(125);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r10;
+    }
+
+    public volatile java.lang.Object clone() throws java.lang.CloneNotSupportedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.MapredOutput r0, $r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.MapredOutput;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.mapreduce.MapredOutput clone()>();
+
+        return $r1;
+    }
+}

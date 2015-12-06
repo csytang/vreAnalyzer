@@ -1,0 +1,769 @@
+public class org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer extends org.apache.mahout.cf.taste.impl.recommender.svd.AbstractFactorizer
+{
+    protected static final int FEATURE_OFFSET;
+    protected final double learningRateDecay;
+    protected final double learningRate;
+    protected final double preventOverfitting;
+    protected final int numFeatures;
+    private final int numIterations;
+    protected final double randomNoise;
+    protected double[][] userVectors;
+    protected double[][] itemVectors;
+    protected final org.apache.mahout.cf.taste.model.DataModel dataModel;
+    private long[] cachedUserIDs;
+    private long[] cachedItemIDs;
+    protected double biasLearningRate;
+    protected double biasReg;
+    protected static final int USER_BIAS_INDEX;
+    protected static final int ITEM_BIAS_INDEX;
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel, int, int) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        int i0, i1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: void <init>(org.apache.mahout.cf.taste.model.DataModel,int,double,double,double,int,double)>(r1, i0, 0.01, 0.1, 0.01, i1, 1.0);
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel, int, double, double, double, int, double) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        int i0, i1, $i2;
+        double d0, d1, d2, d3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        i0 := @parameter1: int;
+
+        d0 := @parameter2: double;
+
+        d1 := @parameter3: double;
+
+        d2 := @parameter4: double;
+
+        i1 := @parameter5: int;
+
+        d3 := @parameter6: double;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.AbstractFactorizer: void <init>(org.apache.mahout.cf.taste.model.DataModel)>(r1);
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double biasLearningRate> = 0.5;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double biasReg> = 0.1;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: org.apache.mahout.cf.taste.model.DataModel dataModel> = r1;
+
+        $i2 = i0 + 3;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: int numFeatures> = $i2;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: int numIterations> = i1;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double learningRate> = d0;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double learningRateDecay> = d3;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double preventOverfitting> = d1;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double randomNoise> = d2;
+
+        return;
+    }
+
+    protected void prepareTraining() throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer r0;
+        org.apache.mahout.common.RandomWrapper r1;
+        double d0, $d1, $d2, $d3, $d4, $d5, $d6;
+        org.apache.mahout.cf.taste.model.DataModel $r2, $r4;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, i8, i9, i10, i11;
+        double[][] $r3, $r5, $r6, $r7, $r9, $r11, $r13, $r14, $r16, $r18, $r20, $r23;
+        double[] $r8, $r10, $r12, $r15, $r17, $r19, $r21, $r22;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer;
+
+        r1 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        $i0 = interfaceinvoke $r2.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsers()>();
+
+        $i1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: int numFeatures>;
+
+        $r3 = newmultiarray (double)[$i0][$i1];
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] userVectors> = $r3;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        $i2 = interfaceinvoke $r4.<org.apache.mahout.cf.taste.model.DataModel: int getNumItems()>();
+
+        $i3 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: int numFeatures>;
+
+        $r5 = newmultiarray (double)[$i2][$i3];
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] itemVectors> = $r5;
+
+        d0 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double getAveragePreference()>();
+
+        i8 = 0;
+
+     label1:
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] userVectors>;
+
+        $i4 = lengthof $r6;
+
+        if i8 >= $i4 goto label4;
+
+        $r18 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] userVectors>;
+
+        $r19 = $r18[i8];
+
+        $r19[0] = d0;
+
+        $r16 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] userVectors>;
+
+        $r17 = $r16[i8];
+
+        $r17[1] = 0.0;
+
+        $r20 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] userVectors>;
+
+        $r21 = $r20[i8];
+
+        $r21[2] = 1.0;
+
+        i9 = 3;
+
+     label2:
+        $i7 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: int numFeatures>;
+
+        if i9 >= $i7 goto label3;
+
+        $r23 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] userVectors>;
+
+        $r22 = $r23[i8];
+
+        $d4 = virtualinvoke r1.<org.apache.mahout.common.RandomWrapper: double nextGaussian()>();
+
+        $d6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double randomNoise>;
+
+        $d5 = $d4 * $d6;
+
+        $r22[i9] = $d5;
+
+        i9 = i9 + 1;
+
+        goto label2;
+
+     label3:
+        i8 = i8 + 1;
+
+        goto label1;
+
+     label4:
+        i10 = 0;
+
+     label5:
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] itemVectors>;
+
+        $i5 = lengthof $r7;
+
+        if i10 >= $i5 goto label8;
+
+        $r9 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] itemVectors>;
+
+        $r8 = $r9[i10];
+
+        $r8[0] = 1.0;
+
+        $r11 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] itemVectors>;
+
+        $r10 = $r11[i10];
+
+        $r10[1] = 1.0;
+
+        $r13 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] itemVectors>;
+
+        $r12 = $r13[i10];
+
+        $r12[2] = 0.0;
+
+        i11 = 3;
+
+     label6:
+        $i6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: int numFeatures>;
+
+        if i11 >= $i6 goto label7;
+
+        $r14 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] itemVectors>;
+
+        $r15 = $r14[i10];
+
+        $d1 = virtualinvoke r1.<org.apache.mahout.common.RandomWrapper: double nextGaussian()>();
+
+        $d2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double randomNoise>;
+
+        $d3 = $d1 * $d2;
+
+        $r15[i11] = $d3;
+
+        i11 = i11 + 1;
+
+        goto label6;
+
+     label7:
+        i10 = i10 + 1;
+
+        goto label5;
+
+     label8:
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: void cachePreferences()>();
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: void shufflePreferences()>();
+
+        return;
+    }
+
+    private int countPreferences() throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer r0;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator r1;
+        org.apache.mahout.cf.taste.model.PreferenceArray r2;
+        org.apache.mahout.cf.taste.model.DataModel $r3, $r4;
+        boolean $z0;
+        long $l0;
+        int $i1, i2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer;
+
+        i2 = 0;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        r1 = interfaceinvoke $r3.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        $l0 = interfaceinvoke r1.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: long nextLong()>();
+
+        r2 = interfaceinvoke $r4.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>($l0);
+
+        $i1 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        i2 = i2 + $i1;
+
+        goto label1;
+
+     label2:
+        return i2;
+    }
+
+    private void cachePreferences() throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer r0;
+        int i0, i3;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator r1;
+        long l1, $l2;
+        org.apache.mahout.cf.taste.model.PreferenceArray r2;
+        java.util.Iterator r3;
+        org.apache.mahout.cf.taste.model.Preference r4;
+        long[] $r5, $r6, $r10, $r11;
+        org.apache.mahout.cf.taste.model.DataModel $r7, $r8;
+        boolean $z0, $z1;
+        java.lang.Object $r9;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer;
+
+        i0 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: int countPreferences()>();
+
+        $r5 = newarray (long)[i0];
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: long[] cachedUserIDs> = $r5;
+
+        $r6 = newarray (long)[i0];
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: long[] cachedItemIDs> = $r6;
+
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        r1 = interfaceinvoke $r7.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs()>();
+
+        i3 = 0;
+
+     label1:
+        $z0 = interfaceinvoke r1.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        l1 = interfaceinvoke r1.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: long nextLong()>();
+
+        $r8 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        r2 = interfaceinvoke $r8.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>(l1);
+
+        r3 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.PreferenceArray: java.util.Iterator iterator()>();
+
+     label2:
+        $z1 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label1;
+
+        $r9 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.cf.taste.model.Preference) $r9;
+
+        $r11 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: long[] cachedUserIDs>;
+
+        $r11[i3] = l1;
+
+        $r10 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: long[] cachedItemIDs>;
+
+        $l2 = interfaceinvoke r4.<org.apache.mahout.cf.taste.model.Preference: long getItemID()>();
+
+        $r10[i3] = $l2;
+
+        i3 = i3 + 1;
+
+        goto label2;
+
+     label3:
+        return;
+    }
+
+    protected void shufflePreferences()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer r0;
+        org.apache.mahout.common.RandomWrapper r1;
+        int i0, $i1, $i2, i3;
+        long[] $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer;
+
+        r1 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: long[] cachedUserIDs>;
+
+        $i1 = lengthof $r2;
+
+        i3 = $i1 - 1;
+
+     label1:
+        if i3 <= 0 goto label2;
+
+        $i2 = i3 + 1;
+
+        i0 = virtualinvoke r1.<org.apache.mahout.common.RandomWrapper: int nextInt(int)>($i2);
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: void swapCachedPreferences(int,int)>(i3, i0);
+
+        i3 = i3 + -1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private void swapCachedPreferences(int, int)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer r0;
+        int i0, i1;
+        long l2, l3, $l4, $l5;
+        long[] $r1, $r2, $r3, $r4, $r5, $r6, $r7, $r8;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: long[] cachedUserIDs>;
+
+        l2 = $r1[i0];
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: long[] cachedItemIDs>;
+
+        l3 = $r2[i0];
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: long[] cachedUserIDs>;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: long[] cachedUserIDs>;
+
+        $l4 = $r3[i1];
+
+        $r4[i0] = $l4;
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: long[] cachedItemIDs>;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: long[] cachedItemIDs>;
+
+        $l5 = $r5[i1];
+
+        $r6[i0] = $l5;
+
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: long[] cachedUserIDs>;
+
+        $r7[i1] = l2;
+
+        $r8 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: long[] cachedItemIDs>;
+
+        $r8[i1] = l3;
+
+        return;
+    }
+
+    public org.apache.mahout.cf.taste.impl.recommender.svd.Factorization factorize() throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer r0;
+        long l0, l1;
+        float f0;
+        int $i2, $i3, i4, i5;
+        double[][] $r1, $r2;
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization $r3;
+        long[] $r4, $r5, $r7;
+        double $d0, d1;
+        org.apache.mahout.cf.taste.model.DataModel $r6;
+        java.lang.Float $r8;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: void prepareTraining()>();
+
+        d1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double learningRate>;
+
+        i4 = 0;
+
+     label1:
+        $i2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: int numIterations>;
+
+        if i4 >= $i2 goto label4;
+
+        i5 = 0;
+
+     label2:
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: long[] cachedUserIDs>;
+
+        $i3 = lengthof $r4;
+
+        if i5 >= $i3 goto label3;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: long[] cachedUserIDs>;
+
+        l0 = $r5[i5];
+
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: long[] cachedItemIDs>;
+
+        l1 = $r7[i5];
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        $r8 = interfaceinvoke $r6.<org.apache.mahout.cf.taste.model.DataModel: java.lang.Float getPreferenceValue(long,long)>(l0, l1);
+
+        f0 = virtualinvoke $r8.<java.lang.Float: float floatValue()>();
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: void updateParameters(long,long,float,double)>(l0, l1, f0, d1);
+
+        i5 = i5 + 1;
+
+        goto label2;
+
+     label3:
+        $d0 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double learningRateDecay>;
+
+        d1 = d1 * $d0;
+
+        i4 = i4 + 1;
+
+        goto label1;
+
+     label4:
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] userVectors>;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] itemVectors>;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization createFactorization(double[][],double[][])>($r2, $r1);
+
+        return $r3;
+    }
+
+    double getAveragePreference() throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer r0;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator r2;
+        java.util.Iterator r3;
+        org.apache.mahout.cf.taste.model.Preference r4;
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage $r5;
+        org.apache.mahout.cf.taste.model.DataModel $r6, $r7;
+        boolean $z0, $z1;
+        double $d0, $d1;
+        long $l0;
+        org.apache.mahout.cf.taste.model.PreferenceArray $r8;
+        float $f0;
+        java.lang.Object $r9;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer;
+
+        $r5 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke $r5.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>()>();
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        r2 = interfaceinvoke $r6.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        $l0 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: long nextLong()>();
+
+        $r8 = interfaceinvoke $r7.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>($l0);
+
+        r3 = interfaceinvoke $r8.<org.apache.mahout.cf.taste.model.PreferenceArray: java.util.Iterator iterator()>();
+
+     label2:
+        $z1 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label1;
+
+        $r9 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.cf.taste.model.Preference) $r9;
+
+        $f0 = interfaceinvoke r4.<org.apache.mahout.cf.taste.model.Preference: float getValue()>();
+
+        $d1 = (double) $f0;
+
+        interfaceinvoke $r5.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void addDatum(double)>($d1);
+
+        goto label2;
+
+     label3:
+        $d0 = interfaceinvoke $r5.<org.apache.mahout.cf.taste.impl.common.RunningAverage: double getAverage()>();
+
+        return $d0;
+    }
+
+    protected void updateParameters(long, long, float, double)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer r0;
+        long l0, l1;
+        float f0;
+        double d0, d1, d2, d3, d4, d5, d6, $d7, $d8, $d9, $d10, $d11, $d12, $d13, $d14, $d15, $d16, $d17, $d18, $d19, $d20, $d21, $d22, $d23, $d24, $d25, $d26, $d27, $d28, $d29, $d30, $d31, $d32, $d33, $d34, $d35, $d36, $d37, $d38, $d39, $d40, $d41;
+        int i2, i3, $i4, i5;
+        double[] r1, r2;
+        java.lang.Integer $r3, $r4;
+        double[][] $r5, $r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        f0 := @parameter2: float;
+
+        d0 := @parameter3: double;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: java.lang.Integer userIndex(long)>(l0);
+
+        i2 = virtualinvoke $r3.<java.lang.Integer: int intValue()>();
+
+        $r4 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: java.lang.Integer itemIndex(long)>(l1);
+
+        i3 = virtualinvoke $r4.<java.lang.Integer: int intValue()>();
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] userVectors>;
+
+        r1 = $r5[i2];
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] itemVectors>;
+
+        r2 = $r6[i3];
+
+        d1 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double predictRating(int,int)>(i2, i3);
+
+        $d9 = (double) f0;
+
+        d2 = $d9 - d1;
+
+        $d15 = r1[1];
+
+        $d10 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double biasLearningRate>;
+
+        $d17 = $d10 * d0;
+
+        $d8 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double biasReg>;
+
+        $d7 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double preventOverfitting>;
+
+        $d14 = $d8 * $d7;
+
+        $d13 = r1[1];
+
+        $d11 = $d14 * $d13;
+
+        $d12 = d2 - $d11;
+
+        $d18 = $d17 * $d12;
+
+        $d16 = $d15 + $d18;
+
+        r1[1] = $d16;
+
+        $d28 = r2[2];
+
+        $d21 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double biasLearningRate>;
+
+        $d23 = $d21 * d0;
+
+        $d19 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double biasReg>;
+
+        $d22 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double preventOverfitting>;
+
+        $d26 = $d19 * $d22;
+
+        $d20 = r2[2];
+
+        $d25 = $d26 * $d20;
+
+        $d24 = d2 - $d25;
+
+        $d29 = $d23 * $d24;
+
+        $d27 = $d28 + $d29;
+
+        r2[2] = $d27;
+
+        i5 = 3;
+
+     label1:
+        $i4 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: int numFeatures>;
+
+        if i5 >= $i4 goto label2;
+
+        d3 = r1[i5];
+
+        d4 = r2[i5];
+
+        $d31 = d2 * d4;
+
+        $d33 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double preventOverfitting>;
+
+        $d32 = $d33 * d3;
+
+        d5 = $d31 - $d32;
+
+        $d37 = r1[i5];
+
+        $d30 = d0 * d5;
+
+        $d36 = $d37 + $d30;
+
+        r1[i5] = $d36;
+
+        $d38 = d2 * d3;
+
+        $d35 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double preventOverfitting>;
+
+        $d34 = $d35 * d4;
+
+        d6 = $d38 - $d34;
+
+        $d40 = r2[i5];
+
+        $d39 = d0 * d6;
+
+        $d41 = $d40 + $d39;
+
+        r2[i5] = $d41;
+
+        i5 = i5 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private double predictRating(int, int)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer r0;
+        int i0, i1, $i2, i3;
+        double[][] $r1, $r3;
+        double[] $r2, $r4;
+        double $d0, $d1, $d2, d3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        d3 = 0.0;
+
+        i3 = 0;
+
+     label1:
+        $i2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: int numFeatures>;
+
+        if i3 >= $i2 goto label2;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] userVectors>;
+
+        $r2 = $r1[i0];
+
+        $d1 = $r2[i3];
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: double[][] itemVectors>;
+
+        $r4 = $r3[i1];
+
+        $d0 = $r4[i3];
+
+        $d2 = $d1 * $d0;
+
+        d3 = d3 + $d2;
+
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label2:
+        return d3;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: int ITEM_BIAS_INDEX> = 2;
+
+        <org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: int USER_BIAS_INDEX> = 1;
+
+        <org.apache.mahout.cf.taste.impl.recommender.svd.RatingSGDFactorizer: int FEATURE_OFFSET> = 3;
+
+        return;
+    }
+}

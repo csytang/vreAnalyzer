@@ -1,0 +1,392 @@
+public final class org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob extends org.apache.mahout.common.AbstractJob
+{
+    public static final java.lang.String ITEM_ID_INDEX_PATH_STR;
+    public static final java.lang.String MAX_SIMILARITIES_PER_ITEM;
+    private static final int DEFAULT_MAX_SIMILAR_ITEMS_PER_ITEM;
+    private static final int DEFAULT_MAX_PREFS;
+    private static final int DEFAULT_MIN_PREFS_PER_USER;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        return;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob $r1;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.util.Tool,java.lang.String[])>($r1, r0);
+
+        return;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob r0;
+        java.lang.String[] r1, $r31, $r53;
+        java.util.Map r2;
+        java.lang.String r3, $r11, $r12, $r14, $r15, $r17, $r18, $r19, $r20, $r21, $r22, $r26, $r29, $r30, $r33, $r37, $r38, $r39, $r40, $r41, $r42, $r43, $r47, $r48, $r49, $r50, $r54, $r56, $r57, $r58, $r59;
+        int i0, i1, i2, i7;
+        boolean z0, z1, $z2, $z3, $z4, $z5, $z6;
+        double d0, $d1;
+        long l3, $l6;
+        org.apache.hadoop.fs.Path r4, r5, $r25, $r27, $r28, $r32, $r46, $r51, $r55;
+        org.apache.hadoop.conf.Configuration r7, $r34, $r35, $r45;
+        java.lang.StringBuilder $r8, $r9, $r10, $r13;
+        java.lang.Boolean $r16, $r23, $r44;
+        java.util.concurrent.atomic.AtomicInteger $r24;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob $r36;
+        org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob $r52;
+        org.apache.hadoop.mapreduce.Job r60;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob;
+
+        r1 := @parameter0: java.lang.String[];
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: void addInputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: void addOutputOption()>();
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Name of distributed similarity measures class to instantiate, alternatively use one of the predefined similarities (");
+
+        $r11 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: java.lang.String list()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        $r13 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(41);
+
+        $r12 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: void addOption(java.lang.String,java.lang.String,java.lang.String)>("similarityClassname", "s", $r12);
+
+        $r14 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(100);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("maxSimilaritiesPerItem", "m", "try to cap the number of similar items per item to this number (default: 100)", $r14);
+
+        $r15 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(500);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("maxPrefs", "mppu", "max number of preferences to consider per user or item, users or items with more preferences will be sampled down (default: 500)", $r15);
+
+        $r17 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(1);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("minPrefsPerUser", "mp", "ignore users with less preferences than this (default: 1)", $r17);
+
+        $r16 = <java.lang.Boolean: java.lang.Boolean FALSE>;
+
+        $r18 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r16);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("booleanData", "b", "Treat input as without pref values", $r18);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("threshold", "tr", "discard item pairs with a similarity value below this", 0);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("randomSeed", null, "use this seed for sampling", 0);
+
+        r2 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: java.util.Map parseArguments(java.lang.String[])>(r1);
+
+        if r2 != null goto label1;
+
+        return -1;
+
+     label1:
+        r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: java.lang.String getOption(java.lang.String)>("similarityClassname");
+
+        $r20 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: java.lang.String getOption(java.lang.String)>("maxSimilaritiesPerItem");
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r20);
+
+        $r19 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: java.lang.String getOption(java.lang.String)>("maxPrefs");
+
+        i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r19);
+
+        $r22 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: java.lang.String getOption(java.lang.String)>("minPrefsPerUser");
+
+        i2 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r22);
+
+        $r21 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: java.lang.String getOption(java.lang.String)>("booleanData");
+
+        $r23 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(java.lang.String)>($r21);
+
+        z0 = virtualinvoke $r23.<java.lang.Boolean: boolean booleanValue()>();
+
+        $z3 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: boolean hasOption(java.lang.String)>("threshold");
+
+        if $z3 == 0 goto label2;
+
+        $r59 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: java.lang.String getOption(java.lang.String)>("threshold");
+
+        $d1 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r59);
+
+        goto label3;
+
+     label2:
+        $d1 = 4.9E-324;
+
+     label3:
+        d0 = $d1;
+
+        $z2 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: boolean hasOption(java.lang.String)>("randomSeed");
+
+        if $z2 == 0 goto label4;
+
+        $r58 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: java.lang.String getOption(java.lang.String)>("randomSeed");
+
+        $l6 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r58);
+
+        goto label5;
+
+     label4:
+        $l6 = -9223372036854775808L;
+
+     label5:
+        l3 = $l6;
+
+        r4 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: org.apache.hadoop.fs.Path getTempPath(java.lang.String)>("similarityMatrix");
+
+        r5 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: org.apache.hadoop.fs.Path getTempPath(java.lang.String)>("prepareRatingMatrix");
+
+        $r24 = new java.util.concurrent.atomic.AtomicInteger;
+
+        specialinvoke $r24.<java.util.concurrent.atomic.AtomicInteger: void <init>()>();
+
+        $z4 = staticinvoke <org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: boolean shouldRunNextPhase(java.util.Map,java.util.concurrent.atomic.AtomicInteger)>(r2, $r24);
+
+        if $z4 == 0 goto label6;
+
+        $r45 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $r52 = new org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob;
+
+        specialinvoke $r52.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: void <init>()>();
+
+        $r53 = newarray (java.lang.String)[10];
+
+        $r53[0] = "--input";
+
+        $r51 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: org.apache.hadoop.fs.Path getInputPath()>();
+
+        $r50 = virtualinvoke $r51.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        $r53[1] = $r50;
+
+        $r53[2] = "--output";
+
+        $r49 = virtualinvoke r5.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        $r53[3] = $r49;
+
+        $r53[4] = "--minPrefsPerUser";
+
+        $r57 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i2);
+
+        $r53[5] = $r57;
+
+        $r53[6] = "--booleanData";
+
+        $r56 = staticinvoke <java.lang.String: java.lang.String valueOf(boolean)>(z0);
+
+        $r53[7] = $r56;
+
+        $r53[8] = "--tempDir";
+
+        $r55 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: org.apache.hadoop.fs.Path getTempPath()>();
+
+        $r54 = virtualinvoke $r55.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        $r53[9] = $r54;
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.util.Tool,java.lang.String[])>($r45, $r52, $r53);
+
+     label6:
+        $z6 = staticinvoke <org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: boolean shouldRunNextPhase(java.util.Map,java.util.concurrent.atomic.AtomicInteger)>(r2, $r24);
+
+        if $z6 == 0 goto label7;
+
+        $r27 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r27.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r5, "numUsers.bin");
+
+        $r34 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        i7 = staticinvoke <org.apache.mahout.common.HadoopUtil: int readInt(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r27, $r34);
+
+        $r35 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $r36 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob;
+
+        specialinvoke $r36.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: void <init>()>();
+
+        $r31 = newarray (java.lang.String)[22];
+
+        $r31[0] = "--input";
+
+        $r32 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r32.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r5, "ratingMatrix");
+
+        $r33 = virtualinvoke $r32.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        $r31[1] = $r33;
+
+        $r31[2] = "--output";
+
+        $r39 = virtualinvoke r4.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        $r31[3] = $r39;
+
+        $r31[4] = "--numberOfColumns";
+
+        $r40 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i7);
+
+        $r31[5] = $r40;
+
+        $r31[6] = "--similarityClassname";
+
+        $r31[7] = r3;
+
+        $r31[8] = "--maxObservationsPerRow";
+
+        $r37 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i1);
+
+        $r31[9] = $r37;
+
+        $r31[10] = "--maxObservationsPerColumn";
+
+        $r38 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i1);
+
+        $r31[11] = $r38;
+
+        $r31[12] = "--maxSimilaritiesPerRow";
+
+        $r43 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i0);
+
+        $r31[13] = $r43;
+
+        $r31[14] = "--excludeSelfSimilarity";
+
+        $r44 = <java.lang.Boolean: java.lang.Boolean TRUE>;
+
+        $r41 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r44);
+
+        $r31[15] = $r41;
+
+        $r31[16] = "--threshold";
+
+        $r42 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(d0);
+
+        $r31[17] = $r42;
+
+        $r31[18] = "--randomSeed";
+
+        $r48 = staticinvoke <java.lang.String: java.lang.String valueOf(long)>(l3);
+
+        $r31[19] = $r48;
+
+        $r31[20] = "--tempDir";
+
+        $r46 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: org.apache.hadoop.fs.Path getTempPath()>();
+
+        $r47 = virtualinvoke $r46.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        $r31[21] = $r47;
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.util.Tool,java.lang.String[])>($r35, $r36, $r31);
+
+     label7:
+        $z5 = staticinvoke <org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: boolean shouldRunNextPhase(java.util.Map,java.util.concurrent.atomic.AtomicInteger)>(r2, $r24);
+
+        if $z5 == 0 goto label8;
+
+        $r25 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        r60 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>(r4, $r25, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", class "org/apache/mahout/cf/taste/hadoop/similarity/item/ItemSimilarityJob$MostSimilarItemPairsMapper", class "org/apache/mahout/cf/taste/hadoop/EntityEntityWritable", class "org/apache/hadoop/io/DoubleWritable", class "org/apache/mahout/cf/taste/hadoop/similarity/item/ItemSimilarityJob$MostSimilarItemPairsReducer", class "org/apache/mahout/cf/taste/hadoop/EntityEntityWritable", class "org/apache/hadoop/io/DoubleWritable", class "org/apache/hadoop/mapreduce/lib/output/TextOutputFormat");
+
+        r7 = virtualinvoke r60.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r29 = <org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: java.lang.String ITEM_ID_INDEX_PATH_STR>;
+
+        $r28 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r28.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r5, "itemIDIndex");
+
+        $r30 = virtualinvoke $r28.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        virtualinvoke r7.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r29, $r30);
+
+        $r26 = <org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: java.lang.String MAX_SIMILARITIES_PER_ITEM>;
+
+        virtualinvoke r7.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>($r26, i0);
+
+        z1 = virtualinvoke r60.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z1 != 0 goto label8;
+
+        return -1;
+
+     label8:
+        return 0;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.StringBuilder $r0, $r3, $r4, $r6, $r9, $r10;
+        java.lang.Class $r1, $r7;
+        java.lang.String $r2, $r5, $r8, $r11;
+
+        <org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: int DEFAULT_MIN_PREFS_PER_USER> = 1;
+
+        <org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: int DEFAULT_MAX_PREFS> = 500;
+
+        <org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: int DEFAULT_MAX_SIMILAR_ITEMS_PER_ITEM> = 100;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = class "org/apache/mahout/cf/taste/hadoop/similarity/item/ItemSimilarityJob";
+
+        $r2 = virtualinvoke $r1.<java.lang.Class: java.lang.String getName()>();
+
+        $r3 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".itemIDIndexPathStr");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: java.lang.String ITEM_ID_INDEX_PATH_STR> = $r5;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = class "org/apache/mahout/cf/taste/hadoop/similarity/item/ItemSimilarityJob";
+
+        $r8 = virtualinvoke $r7.<java.lang.Class: java.lang.String getName()>();
+
+        $r9 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".maxSimilarItemsPerItem");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: java.lang.String MAX_SIMILARITIES_PER_ITEM> = $r11;
+
+        return;
+    }
+}

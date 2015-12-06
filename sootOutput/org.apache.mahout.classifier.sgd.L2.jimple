@@ -1,0 +1,154 @@
+public class org.apache.mahout.classifier.sgd.L2 extends java.lang.Object implements org.apache.mahout.classifier.sgd.PriorFunction
+{
+    private static final double HALF_LOG_2PI;
+    private double s2;
+    private double s;
+
+    public void <init>(double)
+    {
+        org.apache.mahout.classifier.sgd.L2 r0;
+        double d0, $d1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.L2;
+
+        d0 := @parameter0: double;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.L2: double s> = d0;
+
+        $d1 = d0 * d0;
+
+        r0.<org.apache.mahout.classifier.sgd.L2: double s2> = $d1;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.sgd.L2 r0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.L2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.L2: double s> = 1.0;
+
+        r0.<org.apache.mahout.classifier.sgd.L2: double s2> = 1.0;
+
+        return;
+    }
+
+    public double age(double, double, double)
+    {
+        org.apache.mahout.classifier.sgd.L2 r0;
+        double d0, d1, d2, $d3, $d4, $d5, $d6, $d7;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.L2;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        d2 := @parameter2: double;
+
+        $d3 = r0.<org.apache.mahout.classifier.sgd.L2: double s2>;
+
+        $d4 = d2 / $d3;
+
+        $d5 = 1.0 - $d4;
+
+        $d6 = staticinvoke <java.lang.Math: double pow(double,double)>($d5, d1);
+
+        $d7 = d0 * $d6;
+
+        return $d7;
+    }
+
+    public double logP(double)
+    {
+        org.apache.mahout.classifier.sgd.L2 r0;
+        double d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.L2;
+
+        d0 := @parameter0: double;
+
+        $d1 = neg d0;
+
+        $d3 = $d1 * d0;
+
+        $d2 = r0.<org.apache.mahout.classifier.sgd.L2: double s2>;
+
+        $d4 = $d3 / $d2;
+
+        $d6 = $d4 / 2.0;
+
+        $d5 = r0.<org.apache.mahout.classifier.sgd.L2: double s>;
+
+        $d7 = staticinvoke <java.lang.Math: double log(double)>($d5);
+
+        $d9 = $d6 - $d7;
+
+        $d8 = <org.apache.mahout.classifier.sgd.L2: double HALF_LOG_2PI>;
+
+        $d10 = $d9 - $d8;
+
+        return $d10;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.sgd.L2 r0;
+        java.io.DataOutput r1;
+        double $d0, $d1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.L2;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $d0 = r0.<org.apache.mahout.classifier.sgd.L2: double s2>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d0);
+
+        $d1 = r0.<org.apache.mahout.classifier.sgd.L2: double s>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d1);
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.sgd.L2 r0;
+        java.io.DataInput r1;
+        double $d0, $d1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.L2;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $d0 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.classifier.sgd.L2: double s2> = $d0;
+
+        $d1 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.classifier.sgd.L2: double s> = $d1;
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        double $d0, $d1;
+
+        $d0 = staticinvoke <java.lang.Math: double log(double)>(6.283185307179586);
+
+        $d1 = $d0 / 2.0;
+
+        <org.apache.mahout.classifier.sgd.L2: double HALF_LOG_2PI> = $d1;
+
+        return;
+    }
+}

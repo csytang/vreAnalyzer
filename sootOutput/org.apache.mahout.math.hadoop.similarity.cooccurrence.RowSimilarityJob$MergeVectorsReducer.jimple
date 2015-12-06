@@ -1,0 +1,162 @@
+public class org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$MergeVectorsReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+    private org.apache.hadoop.fs.Path normsPath;
+    private org.apache.hadoop.fs.Path numNonZeroEntriesPath;
+    private org.apache.hadoop.fs.Path maxValuesPath;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$MergeVectorsReducer r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$MergeVectorsReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$MergeVectorsReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        org.apache.hadoop.fs.Path $r2, $r6, $r10;
+        org.apache.hadoop.conf.Configuration $r3, $r7, $r11;
+        java.lang.String $r4, $r5, $r8, $r9, $r12, $r13;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$MergeVectorsReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r2 = new org.apache.hadoop.fs.Path;
+
+        $r3 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r4 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String access$600()>();
+
+        $r5 = virtualinvoke $r3.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>($r4);
+
+        specialinvoke $r2.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r5);
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$MergeVectorsReducer: org.apache.hadoop.fs.Path normsPath> = $r2;
+
+        $r6 = new org.apache.hadoop.fs.Path;
+
+        $r7 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r8 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String access$700()>();
+
+        $r9 = virtualinvoke $r7.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>($r8);
+
+        specialinvoke $r6.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r9);
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$MergeVectorsReducer: org.apache.hadoop.fs.Path numNonZeroEntriesPath> = $r6;
+
+        $r10 = new org.apache.hadoop.fs.Path;
+
+        $r11 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r12 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String access$800()>();
+
+        $r13 = virtualinvoke $r11.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>($r12);
+
+        specialinvoke $r10.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r13);
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$MergeVectorsReducer: org.apache.hadoop.fs.Path maxValuesPath> = $r10;
+
+        return;
+    }
+
+    protected void reduce(org.apache.hadoop.io.IntWritable, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$MergeVectorsReducer r0;
+        org.apache.hadoop.io.IntWritable r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.mahout.math.Vector r4;
+        int $i0, $i1, $i2;
+        org.apache.mahout.math.VectorWritable $r5;
+        org.apache.hadoop.fs.Path $r6, $r8, $r10;
+        org.apache.hadoop.conf.Configuration $r7, $r9, $r11;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$MergeVectorsReducer;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        r4 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors: org.apache.mahout.math.Vector merge(java.lang.Iterable)>(r2);
+
+        $i0 = virtualinvoke r1.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        if $i0 != -2147483648 goto label1;
+
+        $r10 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$MergeVectorsReducer: org.apache.hadoop.fs.Path normsPath>;
+
+        $r11 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors: void write(org.apache.mahout.math.Vector,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r4, $r10, $r11);
+
+        goto label4;
+
+     label1:
+        $i1 = virtualinvoke r1.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        if $i1 != -2147483647 goto label2;
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$MergeVectorsReducer: org.apache.hadoop.fs.Path maxValuesPath>;
+
+        $r9 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors: void write(org.apache.mahout.math.Vector,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r4, $r8, $r9);
+
+        goto label4;
+
+     label2:
+        $i2 = virtualinvoke r1.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        if $i2 != -2147483646 goto label3;
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$MergeVectorsReducer: org.apache.hadoop.fs.Path numNonZeroEntriesPath>;
+
+        $r7 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors: void write(org.apache.mahout.math.Vector,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration,boolean)>(r4, $r6, $r7, 1);
+
+        goto label4;
+
+     label3:
+        $r5 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r5.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r4);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r5);
+
+     label4:
+        return;
+    }
+
+    protected volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$MergeVectorsReducer r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.hadoop.io.IntWritable $r4;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$MergeVectorsReducer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.hadoop.io.IntWritable) r1;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$MergeVectorsReducer: void reduce(org.apache.hadoop.io.IntWritable,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+}

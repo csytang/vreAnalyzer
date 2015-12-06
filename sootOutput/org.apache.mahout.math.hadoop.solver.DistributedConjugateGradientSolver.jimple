@@ -1,0 +1,449 @@
+public class org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver extends org.apache.mahout.math.solver.ConjugateGradientSolver implements org.apache.hadoop.util.Tool
+{
+    private org.apache.hadoop.conf.Configuration conf;
+    private java.util.Map parsedArgs;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver;
+
+        specialinvoke r0.<org.apache.mahout.math.solver.ConjugateGradientSolver: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector runJob(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int, int, org.apache.mahout.math.Vector, org.apache.mahout.math.solver.Preconditioner, int, double)
+    {
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver r0;
+        org.apache.hadoop.fs.Path r1, r2;
+        int i0, i1, i2;
+        org.apache.mahout.math.Vector r3, $r8;
+        org.apache.mahout.math.solver.Preconditioner r4;
+        double d0;
+        org.apache.mahout.math.hadoop.DistributedRowMatrix $r6;
+        org.apache.hadoop.conf.Configuration $r7;
+
+        r0 := @this: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter2: int;
+
+        i1 := @parameter3: int;
+
+        r3 := @parameter4: org.apache.mahout.math.Vector;
+
+        r4 := @parameter5: org.apache.mahout.math.solver.Preconditioner;
+
+        i2 := @parameter6: int;
+
+        d0 := @parameter7: double;
+
+        $r6 = new org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        specialinvoke $r6.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int)>(r1, r2, i0, i1);
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: org.apache.hadoop.conf.Configuration conf>;
+
+        virtualinvoke $r6.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void setConf(org.apache.hadoop.conf.Configuration)>($r7);
+
+        $r8 = virtualinvoke r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: org.apache.mahout.math.Vector solve(org.apache.mahout.math.VectorIterable,org.apache.mahout.math.Vector,org.apache.mahout.math.solver.Preconditioner,int,double)>($r6, r3, r4, i2, d0);
+
+        return $r8;
+    }
+
+    public org.apache.hadoop.conf.Configuration getConf()
+    {
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver r0;
+        org.apache.hadoop.conf.Configuration $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: org.apache.hadoop.conf.Configuration conf>;
+
+        return $r1;
+    }
+
+    public void setConf(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver r0;
+        org.apache.hadoop.conf.Configuration r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: org.apache.hadoop.conf.Configuration conf> = r1;
+
+        return;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver r0;
+        java.lang.String[] r1;
+        int i0, i1, i2, $i3;
+        org.apache.mahout.math.Vector r6, r7;
+        org.apache.hadoop.fs.Path $r8, $r12, $r13, $r18;
+        java.util.Map $r9, $r11, $r16, $r17, $r19, $r23, $r24, $r25, $r28, $r31;
+        java.lang.String $r10, $r14, $r15, $r20, $r21, $r22, $r29, $r30;
+        boolean $z0, $z1;
+        org.apache.hadoop.fs.FileSystem $r26;
+        org.apache.hadoop.conf.Configuration $r27;
+        double $d1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver;
+
+        r1 := @parameter0: java.lang.String[];
+
+        $r8 = new org.apache.hadoop.fs.Path;
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: java.util.Map parsedArgs>;
+
+        $r10 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r9, "--input");
+
+        specialinvoke $r8.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r10);
+
+        $r12 = new org.apache.hadoop.fs.Path;
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: java.util.Map parsedArgs>;
+
+        $r14 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r11, "--output");
+
+        specialinvoke $r12.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r14);
+
+        $r13 = new org.apache.hadoop.fs.Path;
+
+        $r16 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: java.util.Map parsedArgs>;
+
+        $r15 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r16, "--tempDir");
+
+        specialinvoke $r13.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r15);
+
+        $r18 = new org.apache.hadoop.fs.Path;
+
+        $r17 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: java.util.Map parsedArgs>;
+
+        $r20 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r17, "--vector");
+
+        specialinvoke $r18.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r20);
+
+        $r19 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: java.util.Map parsedArgs>;
+
+        $r21 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r19, "--numRows");
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r21);
+
+        $r23 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: java.util.Map parsedArgs>;
+
+        $r22 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r23, "--numCols");
+
+        i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r22);
+
+        $r24 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: java.util.Map parsedArgs>;
+
+        $z1 = interfaceinvoke $r24.<java.util.Map: boolean containsKey(java.lang.Object)>("--maxIter");
+
+        if $z1 == 0 goto label1;
+
+        $r31 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: java.util.Map parsedArgs>;
+
+        $r30 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r31, "--maxIter");
+
+        $i3 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r30);
+
+        goto label2;
+
+     label1:
+        $i3 = i1 + 2;
+
+     label2:
+        i2 = $i3;
+
+        $r25 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: java.util.Map parsedArgs>;
+
+        $z0 = interfaceinvoke $r25.<java.util.Map: boolean containsKey(java.lang.Object)>("--maxError");
+
+        if $z0 == 0 goto label3;
+
+        $r28 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: java.util.Map parsedArgs>;
+
+        $r29 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>($r28, "--maxError");
+
+        $d1 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r29);
+
+        goto label4;
+
+     label3:
+        $d1 = 1.0E-9;
+
+     label4:
+        r6 = specialinvoke r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: org.apache.mahout.math.Vector loadInputVector(org.apache.hadoop.fs.Path)>($r18);
+
+        r7 = virtualinvoke r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: org.apache.mahout.math.Vector runJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int,org.apache.mahout.math.Vector,org.apache.mahout.math.solver.Preconditioner,int,double)>($r8, $r13, i0, i1, r6, null, i2, $d1);
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: void saveOutputVector(org.apache.hadoop.fs.Path,org.apache.mahout.math.Vector)>($r12, r7);
+
+        $r27 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: org.apache.hadoop.conf.Configuration conf>;
+
+        $r26 = virtualinvoke $r13.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>($r27);
+
+        virtualinvoke $r26.<org.apache.hadoop.fs.FileSystem: boolean delete(org.apache.hadoop.fs.Path,boolean)>($r13, 1);
+
+        return 0;
+    }
+
+    public org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob job()
+    {
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver r0;
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver;
+
+        $r1 = new org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob;
+
+        specialinvoke $r1.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: void <init>(org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver)>(r0);
+
+        return $r1;
+    }
+
+    private org.apache.mahout.math.Vector loadInputVector(org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver r0;
+        org.apache.hadoop.fs.Path r1;
+        org.apache.hadoop.fs.FileSystem r2;
+        org.apache.mahout.math.Vector r4;
+        org.apache.hadoop.conf.Configuration $r8, $r10;
+        org.apache.hadoop.io.SequenceFile$Reader $r9;
+        org.apache.mahout.math.VectorWritable $r11;
+        org.apache.hadoop.io.IntWritable $r12;
+        boolean $z0;
+        java.io.IOException $r13;
+        java.lang.Throwable $r14, $r15, $r16, r18;
+
+        r0 := @this: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: org.apache.hadoop.conf.Configuration conf>;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>($r8);
+
+        $r9 = new org.apache.hadoop.io.SequenceFile$Reader;
+
+        $r10 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: org.apache.hadoop.conf.Configuration conf>;
+
+        specialinvoke $r9.<org.apache.hadoop.io.SequenceFile$Reader: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r2, r1, $r10);
+
+        r18 = null;
+
+     label01:
+        $r11 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r11.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        $r12 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r12.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+        $z0 = virtualinvoke $r9.<org.apache.hadoop.io.SequenceFile$Reader: boolean next(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r12, $r11);
+
+        if $z0 != 0 goto label02;
+
+        $r13 = new java.io.IOException;
+
+        specialinvoke $r13.<java.io.IOException: void <init>(java.lang.String)>("Input vector file is empty.");
+
+        throw $r13;
+
+     label02:
+        r4 = virtualinvoke $r11.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+     label03:
+        if $r9 == null goto label04;
+
+        virtualinvoke $r9.<org.apache.hadoop.io.SequenceFile$Reader: void close()>();
+
+     label04:
+        return r4;
+
+     label05:
+        $r14 := @caughtexception;
+
+        r18 = $r14;
+
+        throw $r14;
+
+     label06:
+        $r16 := @caughtexception;
+
+     label07:
+        if $r9 == null goto label12;
+
+        if r18 == null goto label11;
+
+     label08:
+        virtualinvoke $r9.<org.apache.hadoop.io.SequenceFile$Reader: void close()>();
+
+     label09:
+        goto label12;
+
+     label10:
+        $r15 := @caughtexception;
+
+        virtualinvoke r18.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r15);
+
+        goto label12;
+
+     label11:
+        virtualinvoke $r9.<org.apache.hadoop.io.SequenceFile$Reader: void close()>();
+
+     label12:
+        throw $r16;
+
+        catch java.lang.Throwable from label01 to label03 with label05;
+        catch java.lang.Throwable from label01 to label03 with label06;
+        catch java.lang.Throwable from label08 to label09 with label10;
+        catch java.lang.Throwable from label05 to label07 with label06;
+    }
+
+    private void saveOutputVector(org.apache.hadoop.fs.Path, org.apache.mahout.math.Vector) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver r0;
+        org.apache.hadoop.fs.Path r1;
+        org.apache.mahout.math.Vector r2;
+        org.apache.hadoop.fs.FileSystem r3;
+        org.apache.hadoop.conf.Configuration $r7, $r9;
+        org.apache.hadoop.io.SequenceFile$Writer $r8;
+        org.apache.hadoop.io.IntWritable $r10;
+        org.apache.mahout.math.VectorWritable $r11;
+        java.lang.Throwable $r12, $r13, $r15, r16;
+
+        r0 := @this: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.mahout.math.Vector;
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: org.apache.hadoop.conf.Configuration conf>;
+
+        r3 = virtualinvoke r1.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>($r7);
+
+        $r8 = new org.apache.hadoop.io.SequenceFile$Writer;
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: org.apache.hadoop.conf.Configuration conf>;
+
+        specialinvoke $r8.<org.apache.hadoop.io.SequenceFile$Writer: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>(r3, $r9, r1, class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable");
+
+        r16 = null;
+
+     label01:
+        $r10 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r10.<org.apache.hadoop.io.IntWritable: void <init>(int)>(0);
+
+        $r11 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r11.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r2);
+
+        virtualinvoke $r8.<org.apache.hadoop.io.SequenceFile$Writer: void append(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r10, $r11);
+
+     label02:
+        if $r8 == null goto label11;
+
+        virtualinvoke $r8.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
+
+        goto label11;
+
+     label03:
+        $r12 := @caughtexception;
+
+        r16 = $r12;
+
+        throw $r12;
+
+     label04:
+        $r13 := @caughtexception;
+
+     label05:
+        if $r8 == null goto label10;
+
+        if r16 == null goto label09;
+
+     label06:
+        virtualinvoke $r8.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
+
+     label07:
+        goto label10;
+
+     label08:
+        $r15 := @caughtexception;
+
+        virtualinvoke r16.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r15);
+
+        goto label10;
+
+     label09:
+        virtualinvoke $r8.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
+
+     label10:
+        throw $r13;
+
+     label11:
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label03;
+        catch java.lang.Throwable from label01 to label02 with label04;
+        catch java.lang.Throwable from label06 to label07 with label08;
+        catch java.lang.Throwable from label03 to label05 with label04;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver $r1;
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob $r2;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver;
+
+        specialinvoke $r1.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob job()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.util.Tool,java.lang.String[])>($r2, r0);
+
+        return;
+    }
+
+    static java.util.Map access$002(org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver, java.util.Map)
+    {
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver r0;
+        java.util.Map r1;
+
+        r0 := @parameter0: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver;
+
+        r1 := @parameter1: java.util.Map;
+
+        r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: java.util.Map parsedArgs> = r1;
+
+        return r1;
+    }
+
+    static java.util.Map access$000(org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver)
+    {
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver r0;
+        java.util.Map $r1;
+
+        r0 := @parameter0: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: java.util.Map parsedArgs>;
+
+        return $r1;
+    }
+}

@@ -1,0 +1,7 @@
+public interface  org.apache.mahout.cf.taste.impl.recommender.svd.PersistenceStrategy extends java.lang.Object
+{
+
+    public abstract org.apache.mahout.cf.taste.impl.recommender.svd.Factorization load() throws java.io.IOException;
+
+    public abstract void maybePersist(org.apache.mahout.cf.taste.impl.recommender.svd.Factorization) throws java.io.IOException;
+}

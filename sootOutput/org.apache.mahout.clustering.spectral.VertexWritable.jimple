@@ -1,0 +1,214 @@
+public class org.apache.mahout.clustering.spectral.VertexWritable extends java.lang.Object implements org.apache.hadoop.io.Writable
+{
+    private int i;
+    private int j;
+    private double value;
+    private java.lang.String type;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.spectral.VertexWritable r0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VertexWritable;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void <init>(int, int, double, java.lang.String)
+    {
+        org.apache.mahout.clustering.spectral.VertexWritable r0;
+        int i0, i1;
+        double d0;
+        java.lang.String r1;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VertexWritable;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        d0 := @parameter2: double;
+
+        r1 := @parameter3: java.lang.String;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.spectral.VertexWritable: int i> = i0;
+
+        r0.<org.apache.mahout.clustering.spectral.VertexWritable: int j> = i1;
+
+        r0.<org.apache.mahout.clustering.spectral.VertexWritable: double value> = d0;
+
+        r0.<org.apache.mahout.clustering.spectral.VertexWritable: java.lang.String type> = r1;
+
+        return;
+    }
+
+    public int getRow()
+    {
+        org.apache.mahout.clustering.spectral.VertexWritable r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VertexWritable;
+
+        $i0 = r0.<org.apache.mahout.clustering.spectral.VertexWritable: int i>;
+
+        return $i0;
+    }
+
+    public void setRow(int)
+    {
+        org.apache.mahout.clustering.spectral.VertexWritable r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VertexWritable;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.clustering.spectral.VertexWritable: int i> = i0;
+
+        return;
+    }
+
+    public int getCol()
+    {
+        org.apache.mahout.clustering.spectral.VertexWritable r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VertexWritable;
+
+        $i0 = r0.<org.apache.mahout.clustering.spectral.VertexWritable: int j>;
+
+        return $i0;
+    }
+
+    public void setCol(int)
+    {
+        org.apache.mahout.clustering.spectral.VertexWritable r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VertexWritable;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.clustering.spectral.VertexWritable: int j> = i0;
+
+        return;
+    }
+
+    public double getValue()
+    {
+        org.apache.mahout.clustering.spectral.VertexWritable r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VertexWritable;
+
+        $d0 = r0.<org.apache.mahout.clustering.spectral.VertexWritable: double value>;
+
+        return $d0;
+    }
+
+    public void setValue(double)
+    {
+        org.apache.mahout.clustering.spectral.VertexWritable r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VertexWritable;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.clustering.spectral.VertexWritable: double value> = d0;
+
+        return;
+    }
+
+    public java.lang.String getType()
+    {
+        org.apache.mahout.clustering.spectral.VertexWritable r0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VertexWritable;
+
+        $r1 = r0.<org.apache.mahout.clustering.spectral.VertexWritable: java.lang.String type>;
+
+        return $r1;
+    }
+
+    public void setType(java.lang.String)
+    {
+        org.apache.mahout.clustering.spectral.VertexWritable r0;
+        java.lang.String r1;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VertexWritable;
+
+        r1 := @parameter0: java.lang.String;
+
+        r0.<org.apache.mahout.clustering.spectral.VertexWritable: java.lang.String type> = r1;
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.spectral.VertexWritable r0;
+        java.io.DataInput r1;
+        int $i0, $i1;
+        double $d0;
+        java.lang.String $r2;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VertexWritable;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $i0 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.clustering.spectral.VertexWritable: int i> = $i0;
+
+        $i1 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.clustering.spectral.VertexWritable: int j> = $i1;
+
+        $d0 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.clustering.spectral.VertexWritable: double value> = $d0;
+
+        $r2 = interfaceinvoke r1.<java.io.DataInput: java.lang.String readUTF()>();
+
+        r0.<org.apache.mahout.clustering.spectral.VertexWritable: java.lang.String type> = $r2;
+
+        return;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.spectral.VertexWritable r0;
+        java.io.DataOutput r1;
+        int $i0, $i1;
+        double $d0;
+        java.lang.String $r2;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VertexWritable;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $i0 = r0.<org.apache.mahout.clustering.spectral.VertexWritable: int i>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i0);
+
+        $i1 = r0.<org.apache.mahout.clustering.spectral.VertexWritable: int j>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i1);
+
+        $d0 = r0.<org.apache.mahout.clustering.spectral.VertexWritable: double value>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d0);
+
+        $r2 = r0.<org.apache.mahout.clustering.spectral.VertexWritable: java.lang.String type>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeUTF(java.lang.String)>($r2);
+
+        return;
+    }
+}

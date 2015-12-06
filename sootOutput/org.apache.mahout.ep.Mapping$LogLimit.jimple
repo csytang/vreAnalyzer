@@ -1,0 +1,115 @@
+public final class org.apache.mahout.ep.Mapping$LogLimit extends org.apache.mahout.ep.Mapping
+{
+    private org.apache.mahout.ep.Mapping wrapped;
+
+    public void <init>()
+    {
+        org.apache.mahout.ep.Mapping$LogLimit r0;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$LogLimit;
+
+        specialinvoke r0.<org.apache.mahout.ep.Mapping: void <init>(org.apache.mahout.ep.Mapping$1)>(null);
+
+        return;
+    }
+
+    private void <init>(double, double)
+    {
+        org.apache.mahout.ep.Mapping$LogLimit r0;
+        double d0, d1, $d2, $d3;
+        org.apache.mahout.ep.Mapping $r1;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$LogLimit;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        specialinvoke r0.<org.apache.mahout.ep.Mapping: void <init>(org.apache.mahout.ep.Mapping$1)>(null);
+
+        $d2 = staticinvoke <java.lang.Math: double log(double)>(d0);
+
+        $d3 = staticinvoke <java.lang.Math: double log(double)>(d1);
+
+        $r1 = staticinvoke <org.apache.mahout.ep.Mapping$LogLimit: org.apache.mahout.ep.Mapping softLimit(double,double)>($d2, $d3);
+
+        r0.<org.apache.mahout.ep.Mapping$LogLimit: org.apache.mahout.ep.Mapping wrapped> = $r1;
+
+        return;
+    }
+
+    public double apply(double)
+    {
+        org.apache.mahout.ep.Mapping$LogLimit r0;
+        double d0, $d1, $d2;
+        org.apache.mahout.ep.Mapping $r1;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$LogLimit;
+
+        d0 := @parameter0: double;
+
+        $r1 = r0.<org.apache.mahout.ep.Mapping$LogLimit: org.apache.mahout.ep.Mapping wrapped>;
+
+        $d1 = virtualinvoke $r1.<org.apache.mahout.ep.Mapping: double apply(double)>(d0);
+
+        $d2 = staticinvoke <java.lang.Math: double exp(double)>($d1);
+
+        return $d2;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.ep.Mapping$LogLimit r0;
+        java.io.DataOutput r1;
+        org.apache.mahout.ep.Mapping $r2;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$LogLimit;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $r2 = r0.<org.apache.mahout.ep.Mapping$LogLimit: org.apache.mahout.ep.Mapping wrapped>;
+
+        staticinvoke <org.apache.mahout.classifier.sgd.PolymorphicWritable: void write(java.io.DataOutput,org.apache.hadoop.io.Writable)>(r1, $r2);
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.ep.Mapping$LogLimit r0;
+        java.io.DataInput r1;
+        org.apache.hadoop.io.Writable $r2;
+        org.apache.mahout.ep.Mapping $r3;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$LogLimit;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $r2 = staticinvoke <org.apache.mahout.classifier.sgd.PolymorphicWritable: org.apache.hadoop.io.Writable read(java.io.DataInput,java.lang.Class)>(r1, class "org/apache/mahout/ep/Mapping");
+
+        $r3 = (org.apache.mahout.ep.Mapping) $r2;
+
+        r0.<org.apache.mahout.ep.Mapping$LogLimit: org.apache.mahout.ep.Mapping wrapped> = $r3;
+
+        return;
+    }
+
+    void <init>(double, double, org.apache.mahout.ep.Mapping$1)
+    {
+        org.apache.mahout.ep.Mapping$LogLimit r0;
+        double d0, d1;
+        org.apache.mahout.ep.Mapping$1 r1;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$LogLimit;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        r1 := @parameter2: org.apache.mahout.ep.Mapping$1;
+
+        specialinvoke r0.<org.apache.mahout.ep.Mapping$LogLimit: void <init>(double,double)>(d0, d1);
+
+        return;
+    }
+}

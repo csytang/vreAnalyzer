@@ -1,0 +1,137 @@
+final class org.apache.mahout.cf.taste.impl.recommender.ByRescoreComparator extends java.lang.Object implements java.util.Comparator, java.io.Serializable
+{
+    private final org.apache.mahout.cf.taste.recommender.IDRescorer rescorer;
+
+    void <init>(org.apache.mahout.cf.taste.recommender.IDRescorer)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ByRescoreComparator r0;
+        org.apache.mahout.cf.taste.recommender.IDRescorer r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ByRescoreComparator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.recommender.IDRescorer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.ByRescoreComparator: org.apache.mahout.cf.taste.recommender.IDRescorer rescorer> = r1;
+
+        return;
+    }
+
+    public int compare(org.apache.mahout.cf.taste.recommender.RecommendedItem, org.apache.mahout.cf.taste.recommender.RecommendedItem)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ByRescoreComparator r0;
+        org.apache.mahout.cf.taste.recommender.RecommendedItem r1, r2;
+        org.apache.mahout.cf.taste.recommender.IDRescorer $r3, $r4, $r5;
+        long $l0, $l1;
+        float $f0, $f1, $f2, $f3;
+        double $d0, $d1, d2, d3;
+        byte $b2, $b3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ByRescoreComparator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.recommender.RecommendedItem;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.recommender.RecommendedItem;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.recommender.ByRescoreComparator: org.apache.mahout.cf.taste.recommender.IDRescorer rescorer>;
+
+        if $r3 != null goto label1;
+
+        $f3 = interfaceinvoke r1.<org.apache.mahout.cf.taste.recommender.RecommendedItem: float getValue()>();
+
+        d2 = (double) $f3;
+
+        $f2 = interfaceinvoke r2.<org.apache.mahout.cf.taste.recommender.RecommendedItem: float getValue()>();
+
+        d3 = (double) $f2;
+
+        goto label2;
+
+     label1:
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.recommender.ByRescoreComparator: org.apache.mahout.cf.taste.recommender.IDRescorer rescorer>;
+
+        $l0 = interfaceinvoke r1.<org.apache.mahout.cf.taste.recommender.RecommendedItem: long getItemID()>();
+
+        $f0 = interfaceinvoke r1.<org.apache.mahout.cf.taste.recommender.RecommendedItem: float getValue()>();
+
+        $d0 = (double) $f0;
+
+        d2 = interfaceinvoke $r4.<org.apache.mahout.cf.taste.recommender.IDRescorer: double rescore(long,double)>($l0, $d0);
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.recommender.ByRescoreComparator: org.apache.mahout.cf.taste.recommender.IDRescorer rescorer>;
+
+        $l1 = interfaceinvoke r2.<org.apache.mahout.cf.taste.recommender.RecommendedItem: long getItemID()>();
+
+        $f1 = interfaceinvoke r2.<org.apache.mahout.cf.taste.recommender.RecommendedItem: float getValue()>();
+
+        $d1 = (double) $f1;
+
+        d3 = interfaceinvoke $r5.<org.apache.mahout.cf.taste.recommender.IDRescorer: double rescore(long,double)>($l1, $d1);
+
+     label2:
+        $b3 = d2 cmpg d3;
+
+        if $b3 >= 0 goto label3;
+
+        return 1;
+
+     label3:
+        $b2 = d2 cmpl d3;
+
+        if $b2 <= 0 goto label4;
+
+        return -1;
+
+     label4:
+        return 0;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ByRescoreComparator r0;
+        java.lang.StringBuilder $r1, $r2, $r4, $r5;
+        org.apache.mahout.cf.taste.recommender.IDRescorer $r3;
+        java.lang.String $r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ByRescoreComparator;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("ByRescoreComparator[rescorer:");
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.recommender.ByRescoreComparator: org.apache.mahout.cf.taste.recommender.IDRescorer rescorer>;
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(93);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r6;
+    }
+
+    public volatile int compare(java.lang.Object, java.lang.Object)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ByRescoreComparator r0;
+        java.lang.Object r1, r2;
+        org.apache.mahout.cf.taste.recommender.RecommendedItem $r3, $r4;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ByRescoreComparator;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        $r4 = (org.apache.mahout.cf.taste.recommender.RecommendedItem) r1;
+
+        $r3 = (org.apache.mahout.cf.taste.recommender.RecommendedItem) r2;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.ByRescoreComparator: int compare(org.apache.mahout.cf.taste.recommender.RecommendedItem,org.apache.mahout.cf.taste.recommender.RecommendedItem)>($r4, $r3);
+
+        return $i0;
+    }
+}

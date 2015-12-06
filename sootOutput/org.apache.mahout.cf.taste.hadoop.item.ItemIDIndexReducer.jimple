@@ -1,0 +1,106 @@
+public final class org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+    private final org.apache.mahout.math.VarLongWritable minimumItemIDWritable;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexReducer r0;
+        org.apache.mahout.math.VarLongWritable $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.VarLongWritable;
+
+        specialinvoke $r1.<org.apache.mahout.math.VarLongWritable: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexReducer: org.apache.mahout.math.VarLongWritable minimumItemIDWritable> = $r1;
+
+        return;
+    }
+
+    protected void reduce(org.apache.mahout.math.VarIntWritable, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexReducer r0;
+        org.apache.mahout.math.VarIntWritable r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        java.util.Iterator r4;
+        org.apache.mahout.math.VarLongWritable r5, $r6, $r7;
+        long l0, l3;
+        boolean $z0;
+        byte $b1, $b2;
+        java.lang.Object $r8;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexReducer;
+
+        r1 := @parameter0: org.apache.mahout.math.VarIntWritable;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        l3 = 9223372036854775807L;
+
+        r4 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r8 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.VarLongWritable) $r8;
+
+        l0 = virtualinvoke r5.<org.apache.mahout.math.VarLongWritable: long get()>();
+
+        $b2 = l0 cmp l3;
+
+        if $b2 >= 0 goto label1;
+
+        l3 = l0;
+
+        goto label1;
+
+     label2:
+        $b1 = l3 cmp 9223372036854775807L;
+
+        if $b1 == 0 goto label3;
+
+        $r6 = r0.<org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexReducer: org.apache.mahout.math.VarLongWritable minimumItemIDWritable>;
+
+        virtualinvoke $r6.<org.apache.mahout.math.VarLongWritable: void set(long)>(l3);
+
+        $r7 = r0.<org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexReducer: org.apache.mahout.math.VarLongWritable minimumItemIDWritable>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r7);
+
+     label3:
+        return;
+    }
+
+    protected volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexReducer r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.mahout.math.VarIntWritable $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexReducer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.mahout.math.VarIntWritable) r1;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.ItemIDIndexReducer: void reduce(org.apache.mahout.math.VarIntWritable,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+}

@@ -1,0 +1,903 @@
+public class org.apache.mahout.math.neighborhood.FastProjectionSearch extends org.apache.mahout.math.neighborhood.UpdatableSearcher
+{
+    private final java.util.List pendingAdditions;
+    private org.apache.mahout.math.Matrix basisMatrix;
+    private java.util.List scalarProjections;
+    private final int numProjections;
+    private final int searchSize;
+    private boolean initialized;
+    private int numPendingRemovals;
+    private static final double ADDITION_THRESHOLD;
+    private static final double REMOVAL_THRESHOLD;
+
+    public void <init>(org.apache.mahout.common.distance.DistanceMeasure, int, int)
+    {
+        org.apache.mahout.math.neighborhood.FastProjectionSearch r0;
+        org.apache.mahout.common.distance.DistanceMeasure r1;
+        int i0, i1, i2;
+        java.util.ArrayList $r2, $r4, $r5;
+        java.util.List $r3;
+        boolean $z1;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.FastProjectionSearch;
+
+        r1 := @parameter0: org.apache.mahout.common.distance.DistanceMeasure;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        specialinvoke r0.<org.apache.mahout.math.neighborhood.UpdatableSearcher: void <init>(org.apache.mahout.common.distance.DistanceMeasure)>(r1);
+
+        $r2 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList()>();
+
+        r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List pendingAdditions> = $r2;
+
+        r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: org.apache.mahout.math.Matrix basisMatrix> = null;
+
+        r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: boolean initialized> = 0;
+
+        r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int numPendingRemovals> = 0;
+
+        if i0 <= 0 goto label1;
+
+        if i0 >= 100 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, "Unreasonable value for number of projections. Must be: 0 < numProjections < 100");
+
+        r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int numProjections> = i0;
+
+        r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int searchSize> = i1;
+
+        $r5 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayListWithCapacity(int)>(i0);
+
+        r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List scalarProjections> = $r5;
+
+        i2 = 0;
+
+     label3:
+        if i2 >= i0 goto label4;
+
+        $r3 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List scalarProjections>;
+
+        $r4 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList()>();
+
+        interfaceinvoke $r3.<java.util.List: boolean add(java.lang.Object)>($r4);
+
+        i2 = i2 + 1;
+
+        goto label3;
+
+     label4:
+        return;
+    }
+
+    private void initialize(int)
+    {
+        org.apache.mahout.math.neighborhood.FastProjectionSearch r0;
+        int i0, $i1;
+        boolean $z0;
+        org.apache.mahout.math.Matrix $r1;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.FastProjectionSearch;
+
+        i0 := @parameter0: int;
+
+        $z0 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: boolean initialized>;
+
+        if $z0 == 0 goto label1;
+
+        return;
+
+     label1:
+        $i1 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int numProjections>;
+
+        $r1 = staticinvoke <org.apache.mahout.math.random.RandomProjector: org.apache.mahout.math.Matrix generateBasisNormal(int,int)>($i1, i0);
+
+        r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: org.apache.mahout.math.Matrix basisMatrix> = $r1;
+
+        r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: boolean initialized> = 1;
+
+        return;
+    }
+
+    public void add(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.neighborhood.FastProjectionSearch r0;
+        org.apache.mahout.math.Vector r1;
+        int $i0;
+        java.util.List $r2;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.FastProjectionSearch;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $i0 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int size()>();
+
+        specialinvoke r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: void initialize(int)>($i0);
+
+        $r2 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List pendingAdditions>;
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>(r1);
+
+        return;
+    }
+
+    public int size()
+    {
+        org.apache.mahout.math.neighborhood.FastProjectionSearch r0;
+        java.util.List $r1, $r2, $r4;
+        int $i0, $i1, $i2, $i3, $i4;
+        java.lang.Object $r3;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.FastProjectionSearch;
+
+        $r1 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List pendingAdditions>;
+
+        $i0 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        $r2 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List scalarProjections>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r4 = (java.util.List) $r3;
+
+        $i1 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        $i3 = $i0 + $i1;
+
+        $i2 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int numPendingRemovals>;
+
+        $i4 = $i3 - $i2;
+
+        return $i4;
+    }
+
+    public java.util.List search(org.apache.mahout.math.Vector, int)
+    {
+        org.apache.mahout.math.neighborhood.FastProjectionSearch r0;
+        org.apache.mahout.math.Vector r1, r3, r25;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, i10, i11, i12, $i13, $i14, $i15, $i16, $i17;
+        java.util.HashSet r2;
+        org.apache.mahout.math.Matrix $r4, $r5;
+        java.util.List $r6, $r7, $r10, $r15, r22;
+        java.lang.Iterable $r8;
+        boolean $z0;
+        java.lang.Object $r9, $r13, $r16, $r17, $r19, $r20;
+        org.apache.mahout.common.distance.DistanceMeasure $r11;
+        org.apache.mahout.math.random.WeightedThing $r12, $r14, $r18, $r21;
+        double $d0, $d1;
+        java.util.ArrayList r23;
+        java.util.Iterator r24;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.FastProjectionSearch;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: void reindex(boolean)>(0);
+
+        r2 = staticinvoke <com.google.common.collect.Sets: java.util.HashSet newHashSet()>();
+
+        $r4 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: org.apache.mahout.math.Matrix basisMatrix>;
+
+        r3 = interfaceinvoke $r4.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Vector times(org.apache.mahout.math.Vector)>(r1);
+
+        i10 = 0;
+
+     label1:
+        $r5 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: org.apache.mahout.math.Matrix basisMatrix>;
+
+        $i1 = interfaceinvoke $r5.<org.apache.mahout.math.Matrix: int numRows()>();
+
+        if i10 >= $i1 goto label7;
+
+        $r15 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List scalarProjections>;
+
+        $r13 = interfaceinvoke $r15.<java.util.List: java.lang.Object get(int)>(i10);
+
+        r22 = (java.util.List) $r13;
+
+        $r14 = new org.apache.mahout.math.random.WeightedThing;
+
+        $d1 = interfaceinvoke r3.<org.apache.mahout.math.Vector: double get(int)>(i10);
+
+        specialinvoke $r14.<org.apache.mahout.math.random.WeightedThing: void <init>(double)>($d1);
+
+        i11 = staticinvoke <java.util.Collections: int binarySearch(java.util.List,java.lang.Object)>(r22, $r14);
+
+        if i11 >= 0 goto label2;
+
+        $i9 = i11 + 1;
+
+        i11 = neg $i9;
+
+     label2:
+        $i7 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int searchSize>;
+
+        $i8 = i11 - $i7;
+
+        i12 = staticinvoke <java.lang.Math: int max(int,int)>(0, $i8);
+
+     label3:
+        $i13 = interfaceinvoke r22.<java.util.List: int size()>();
+
+        $i14 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int searchSize>;
+
+        $i15 = i11 + $i14;
+
+        $i16 = $i15 + 1;
+
+        $i17 = staticinvoke <java.lang.Math: int min(int,int)>($i13, $i16);
+
+        if i12 >= $i17 goto label6;
+
+        $r19 = interfaceinvoke r22.<java.util.List: java.lang.Object get(int)>(i12);
+
+        $r18 = (org.apache.mahout.math.random.WeightedThing) $r19;
+
+        $r17 = virtualinvoke $r18.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        if $r17 != null goto label4;
+
+        goto label5;
+
+     label4:
+        $r16 = interfaceinvoke r22.<java.util.List: java.lang.Object get(int)>(i12);
+
+        $r21 = (org.apache.mahout.math.random.WeightedThing) $r16;
+
+        $r20 = virtualinvoke $r21.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        interfaceinvoke r2.<java.util.Set: boolean add(java.lang.Object)>($r20);
+
+     label5:
+        i12 = i12 + 1;
+
+        goto label3;
+
+     label6:
+        i10 = i10 + 1;
+
+        goto label1;
+
+     label7:
+        $i2 = interfaceinvoke r2.<java.util.Set: int size()>();
+
+        $r6 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List pendingAdditions>;
+
+        $i4 = interfaceinvoke $r6.<java.util.List: int size()>();
+
+        $i3 = $i2 + $i4;
+
+        r23 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayListWithCapacity(int)>($i3);
+
+        $r7 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List pendingAdditions>;
+
+        $r8 = staticinvoke <com.google.common.collect.Iterables: java.lang.Iterable concat(java.lang.Iterable,java.lang.Iterable)>(r2, $r7);
+
+        r24 = interfaceinvoke $r8.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label8:
+        $z0 = interfaceinvoke r24.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label9;
+
+        $r9 = interfaceinvoke r24.<java.util.Iterator: java.lang.Object next()>();
+
+        r25 = (org.apache.mahout.math.Vector) $r9;
+
+        $r12 = new org.apache.mahout.math.random.WeightedThing;
+
+        $r11 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: org.apache.mahout.common.distance.DistanceMeasure distanceMeasure>;
+
+        $d0 = interfaceinvoke $r11.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r25, r1);
+
+        specialinvoke $r12.<org.apache.mahout.math.random.WeightedThing: void <init>(java.lang.Object,double)>(r25, $d0);
+
+        interfaceinvoke r23.<java.util.List: boolean add(java.lang.Object)>($r12);
+
+        goto label8;
+
+     label9:
+        staticinvoke <java.util.Collections: void sort(java.util.List)>(r23);
+
+        $i6 = interfaceinvoke r23.<java.util.List: int size()>();
+
+        $i5 = staticinvoke <java.lang.Math: int min(int,int)>($i6, i0);
+
+        $r10 = interfaceinvoke r23.<java.util.List: java.util.List subList(int,int)>(0, $i5);
+
+        return $r10;
+    }
+
+    public org.apache.mahout.math.random.WeightedThing searchFirst(org.apache.mahout.math.Vector, boolean)
+    {
+        org.apache.mahout.math.neighborhood.FastProjectionSearch r0;
+        org.apache.mahout.math.Vector r1, r2, r3, r20, r23;
+        boolean z0, $z1, $z2, $z3;
+        double d0, $d1, d2, d3;
+        org.apache.mahout.math.Matrix $r4, $r5;
+        int $i0, $i2, $i3, $i5, i6, i7, i8, $i9, $i10, $i11, $i12, $i13;
+        java.util.List $r6, $r11, r21;
+        org.apache.mahout.math.random.WeightedThing $r7, $r12, $r13, $r18;
+        org.apache.mahout.common.distance.DistanceMeasure $r8, $r16;
+        java.lang.Object $r9, $r10, $r14, $r15, $r17, $r19;
+        byte $b1, $b4;
+        java.util.Iterator r22;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.FastProjectionSearch;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        z0 := @parameter1: boolean;
+
+        specialinvoke r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: void reindex(boolean)>(0);
+
+        d2 = #Infinity;
+
+        r20 = null;
+
+        $r4 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: org.apache.mahout.math.Matrix basisMatrix>;
+
+        r2 = interfaceinvoke $r4.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Vector times(org.apache.mahout.math.Vector)>(r1);
+
+        i6 = 0;
+
+     label01:
+        $r5 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: org.apache.mahout.math.Matrix basisMatrix>;
+
+        $i0 = interfaceinvoke $r5.<org.apache.mahout.math.Matrix: int numRows()>();
+
+        if i6 >= $i0 goto label08;
+
+        $r11 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List scalarProjections>;
+
+        $r10 = interfaceinvoke $r11.<java.util.List: java.lang.Object get(int)>(i6);
+
+        r21 = (java.util.List) $r10;
+
+        $r12 = new org.apache.mahout.math.random.WeightedThing;
+
+        $d1 = interfaceinvoke r2.<org.apache.mahout.math.Vector: double get(int)>(i6);
+
+        specialinvoke $r12.<org.apache.mahout.math.random.WeightedThing: void <init>(double)>($d1);
+
+        i7 = staticinvoke <java.util.Collections: int binarySearch(java.util.List,java.lang.Object)>(r21, $r12);
+
+        if i7 >= 0 goto label02;
+
+        $i5 = i7 + 1;
+
+        i7 = neg $i5;
+
+     label02:
+        $i2 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int searchSize>;
+
+        $i3 = i7 - $i2;
+
+        i8 = staticinvoke <java.lang.Math: int max(int,int)>(0, $i3);
+
+     label03:
+        $i9 = interfaceinvoke r21.<java.util.List: int size()>();
+
+        $i10 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int searchSize>;
+
+        $i11 = i7 + $i10;
+
+        $i12 = $i11 + 1;
+
+        $i13 = staticinvoke <java.lang.Math: int min(int,int)>($i9, $i12);
+
+        if i8 >= $i13 goto label07;
+
+        $r15 = interfaceinvoke r21.<java.util.List: java.lang.Object get(int)>(i8);
+
+        $r13 = (org.apache.mahout.math.random.WeightedThing) $r15;
+
+        $r14 = virtualinvoke $r13.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        if $r14 != null goto label04;
+
+        goto label06;
+
+     label04:
+        $r19 = interfaceinvoke r21.<java.util.List: java.lang.Object get(int)>(i8);
+
+        $r18 = (org.apache.mahout.math.random.WeightedThing) $r19;
+
+        $r17 = virtualinvoke $r18.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        r3 = (org.apache.mahout.math.Vector) $r17;
+
+        $r16 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: org.apache.mahout.common.distance.DistanceMeasure distanceMeasure>;
+
+        d0 = interfaceinvoke $r16.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r3, r1);
+
+        $b4 = d0 cmpg d2;
+
+        if $b4 >= 0 goto label06;
+
+        if z0 == 0 goto label05;
+
+        $z3 = virtualinvoke r3.<java.lang.Object: boolean equals(java.lang.Object)>(r1);
+
+        if $z3 != 0 goto label06;
+
+     label05:
+        d2 = d0;
+
+        r20 = r3;
+
+     label06:
+        i8 = i8 + 1;
+
+        goto label03;
+
+     label07:
+        i6 = i6 + 1;
+
+        goto label01;
+
+     label08:
+        $r6 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List pendingAdditions>;
+
+        r22 = interfaceinvoke $r6.<java.util.List: java.util.Iterator iterator()>();
+
+     label09:
+        $z1 = interfaceinvoke r22.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label11;
+
+        $r9 = interfaceinvoke r22.<java.util.Iterator: java.lang.Object next()>();
+
+        r23 = (org.apache.mahout.math.Vector) $r9;
+
+        $r8 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: org.apache.mahout.common.distance.DistanceMeasure distanceMeasure>;
+
+        d3 = interfaceinvoke $r8.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r23, r1);
+
+        $b1 = d3 cmpg d2;
+
+        if $b1 >= 0 goto label09;
+
+        if z0 == 0 goto label10;
+
+        $z2 = virtualinvoke r23.<java.lang.Object: boolean equals(java.lang.Object)>(r1);
+
+        if $z2 != 0 goto label09;
+
+     label10:
+        d2 = d3;
+
+        r20 = r23;
+
+        goto label09;
+
+     label11:
+        $r7 = new org.apache.mahout.math.random.WeightedThing;
+
+        specialinvoke $r7.<org.apache.mahout.math.random.WeightedThing: void <init>(java.lang.Object,double)>(r20, d2);
+
+        return $r7;
+    }
+
+    public boolean remove(org.apache.mahout.math.Vector, double)
+    {
+        org.apache.mahout.math.neighborhood.FastProjectionSearch r0;
+        org.apache.mahout.math.Vector r1, r3, $r8, $r13;
+        double d0, $d1, $d2;
+        org.apache.mahout.math.random.WeightedThing r2, $r20;
+        java.util.List r4, $r11, $r12, $r15, $r17, $r19, $r23;
+        int i0, $i2, $i3, $i4, $i5, i6, i7;
+        org.apache.mahout.common.distance.DistanceMeasure $r6;
+        java.lang.Object $r7, $r14, $r18, $r22;
+        org.apache.mahout.math.Matrix $r9, $r10;
+        byte $b1;
+        boolean $z0, z1;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.FastProjectionSearch;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        d0 := @parameter1: double;
+
+        r2 = virtualinvoke r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: org.apache.mahout.math.random.WeightedThing searchFirst(org.apache.mahout.math.Vector,boolean)>(r1, 0);
+
+        $r6 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: org.apache.mahout.common.distance.DistanceMeasure distanceMeasure>;
+
+        $r7 = virtualinvoke r2.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        $r8 = (org.apache.mahout.math.Vector) $r7;
+
+        $d1 = interfaceinvoke $r6.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>($r8, r1);
+
+        $b1 = $d1 cmpl d0;
+
+        if $b1 <= 0 goto label1;
+
+        return 0;
+
+     label1:
+        z1 = 1;
+
+        $r9 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: org.apache.mahout.math.Matrix basisMatrix>;
+
+        r3 = interfaceinvoke $r9.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Vector times(org.apache.mahout.math.Vector)>(r1);
+
+        i6 = 0;
+
+     label2:
+        $r10 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: org.apache.mahout.math.Matrix basisMatrix>;
+
+        $i2 = interfaceinvoke $r10.<org.apache.mahout.math.Matrix: int numRows()>();
+
+        if i6 >= $i2 goto label4;
+
+        $r17 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List scalarProjections>;
+
+        $r18 = interfaceinvoke $r17.<java.util.List: java.lang.Object get(int)>(i6);
+
+        r4 = (java.util.List) $r18;
+
+        $r20 = new org.apache.mahout.math.random.WeightedThing;
+
+        $d2 = interfaceinvoke r3.<org.apache.mahout.math.Vector: double get(int)>(i6);
+
+        specialinvoke $r20.<org.apache.mahout.math.random.WeightedThing: void <init>(double)>($d2);
+
+        i0 = staticinvoke <java.util.Collections: int binarySearch(java.util.List,java.lang.Object)>(r4, $r20);
+
+        if i0 >= 0 goto label3;
+
+        z1 = 0;
+
+        goto label4;
+
+     label3:
+        $r19 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List scalarProjections>;
+
+        $r22 = interfaceinvoke $r19.<java.util.List: java.lang.Object get(int)>(i6);
+
+        $r23 = (java.util.List) $r22;
+
+        interfaceinvoke $r23.<java.util.List: java.lang.Object set(int,java.lang.Object)>(i0, $r20);
+
+        i6 = i6 + 1;
+
+        goto label2;
+
+     label4:
+        if z1 == 0 goto label5;
+
+        $i4 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int numPendingRemovals>;
+
+        $i5 = $i4 + 1;
+
+        r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int numPendingRemovals> = $i5;
+
+        return 1;
+
+     label5:
+        i7 = 0;
+
+     label6:
+        $r11 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List pendingAdditions>;
+
+        $i3 = interfaceinvoke $r11.<java.util.List: int size()>();
+
+        if i7 >= $i3 goto label8;
+
+        $r12 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List pendingAdditions>;
+
+        $r14 = interfaceinvoke $r12.<java.util.List: java.lang.Object get(int)>(i7);
+
+        $r13 = (org.apache.mahout.math.Vector) $r14;
+
+        $z0 = virtualinvoke $r13.<java.lang.Object: boolean equals(java.lang.Object)>(r1);
+
+        if $z0 == 0 goto label7;
+
+        $r15 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List pendingAdditions>;
+
+        interfaceinvoke $r15.<java.util.List: java.lang.Object remove(int)>(i7);
+
+        goto label8;
+
+     label7:
+        i7 = i7 + 1;
+
+        goto label6;
+
+     label8:
+        return 1;
+    }
+
+    private void reindex(boolean)
+    {
+        org.apache.mahout.math.neighborhood.FastProjectionSearch r0;
+        boolean z0, $z1, $z2;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i9, $i10, i11, $i12, i13, i14, i15;
+        java.util.ArrayList r1, $r19;
+        java.util.List $r2, $r4, $r5, $r6, $r15, $r16, $r18, $r22, r26;
+        java.lang.Object $r3, $r7, $r9, $r10, $r12, $r13, $r17, $r21;
+        org.apache.mahout.math.Matrix $r11;
+        double $d0, $d1, $d2, $d3, $d4, $d5, $d6;
+        org.apache.mahout.math.random.WeightedThing $r14, r28;
+        java.lang.Iterable $r20;
+        byte $b7, $b8;
+        java.util.Iterator r23, r27;
+        org.apache.mahout.math.Vector r24, r25;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.FastProjectionSearch;
+
+        z0 := @parameter0: boolean;
+
+        $r2 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List scalarProjections>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r4 = (java.util.List) $r3;
+
+        i0 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        if z0 != 0 goto label01;
+
+        $r22 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List pendingAdditions>;
+
+        $i6 = interfaceinvoke $r22.<java.util.List: int size()>();
+
+        $d3 = (double) $i6;
+
+        $d2 = (double) i0;
+
+        $d1 = 0.05 * $d2;
+
+        $b7 = $d3 cmpl $d1;
+
+        if $b7 > 0 goto label01;
+
+        $i9 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int numPendingRemovals>;
+
+        $d6 = (double) $i9;
+
+        $d4 = (double) i0;
+
+        $d5 = 0.02 * $d4;
+
+        $b8 = $d6 cmpl $d5;
+
+        if $b8 <= 0 goto label15;
+
+     label01:
+        $i10 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int numProjections>;
+
+        r1 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayListWithCapacity(int)>($i10);
+
+        i11 = 0;
+
+     label02:
+        $i12 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int numProjections>;
+
+        if i11 >= $i12 goto label05;
+
+        if i11 != 0 goto label03;
+
+        $r18 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List scalarProjections>;
+
+        $r21 = interfaceinvoke $r18.<java.util.List: java.lang.Object get(int)>(i11);
+
+        $r20 = (java.lang.Iterable) $r21;
+
+        $r19 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList(java.lang.Iterable)>($r20);
+
+        interfaceinvoke r1.<java.util.List: boolean add(java.lang.Object)>($r19);
+
+        goto label04;
+
+     label03:
+        $r16 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List scalarProjections>;
+
+        $r17 = interfaceinvoke $r16.<java.util.List: java.lang.Object get(int)>(i11);
+
+        interfaceinvoke r1.<java.util.List: boolean add(java.lang.Object)>($r17);
+
+     label04:
+        i11 = i11 + 1;
+
+        goto label02;
+
+     label05:
+        $r5 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List pendingAdditions>;
+
+        r23 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label06:
+        $z1 = interfaceinvoke r23.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label08;
+
+        $r10 = interfaceinvoke r23.<java.util.Iterator: java.lang.Object next()>();
+
+        r24 = (org.apache.mahout.math.Vector) $r10;
+
+        $r11 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: org.apache.mahout.math.Matrix basisMatrix>;
+
+        r25 = interfaceinvoke $r11.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Vector times(org.apache.mahout.math.Vector)>(r24);
+
+        i13 = 0;
+
+     label07:
+        $i5 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int numProjections>;
+
+        if i13 >= $i5 goto label06;
+
+        $r13 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i13);
+
+        $r15 = (java.util.List) $r13;
+
+        $r14 = new org.apache.mahout.math.random.WeightedThing;
+
+        $d0 = interfaceinvoke r25.<org.apache.mahout.math.Vector: double get(int)>(i13);
+
+        specialinvoke $r14.<org.apache.mahout.math.random.WeightedThing: void <init>(java.lang.Object,double)>(r24, $d0);
+
+        interfaceinvoke $r15.<java.util.List: boolean add(java.lang.Object)>($r14);
+
+        i13 = i13 + 1;
+
+        goto label07;
+
+     label08:
+        $r6 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List pendingAdditions>;
+
+        interfaceinvoke $r6.<java.util.List: void clear()>();
+
+        i14 = 0;
+
+     label09:
+        $i1 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int numProjections>;
+
+        if i14 >= $i1 goto label14;
+
+        $r7 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i14);
+
+        r26 = (java.util.List) $r7;
+
+        r27 = interfaceinvoke r26.<java.util.List: java.util.Iterator iterator()>();
+
+     label10:
+        $z2 = interfaceinvoke r27.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label11;
+
+        $r9 = interfaceinvoke r27.<java.util.Iterator: java.lang.Object next()>();
+
+        r28 = (org.apache.mahout.math.random.WeightedThing) $r9;
+
+        $r12 = virtualinvoke r28.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        if $r12 != null goto label10;
+
+        virtualinvoke r28.<org.apache.mahout.math.random.WeightedThing: void setWeight(double)>(#Infinity);
+
+        goto label10;
+
+     label11:
+        staticinvoke <java.util.Collections: void sort(java.util.List)>(r26);
+
+        i15 = 0;
+
+     label12:
+        $i2 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int numPendingRemovals>;
+
+        if i15 >= $i2 goto label13;
+
+        $i4 = interfaceinvoke r26.<java.util.List: int size()>();
+
+        $i3 = $i4 - 1;
+
+        interfaceinvoke r26.<java.util.List: java.lang.Object remove(int)>($i3);
+
+        i15 = i15 + 1;
+
+        goto label12;
+
+     label13:
+        i14 = i14 + 1;
+
+        goto label09;
+
+     label14:
+        r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int numPendingRemovals> = 0;
+
+        r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List scalarProjections> = r1;
+
+     label15:
+        return;
+    }
+
+    public void clear()
+    {
+        org.apache.mahout.math.neighborhood.FastProjectionSearch r0;
+        java.util.List $r1, $r2, $r4;
+        int $i0, i1;
+        java.lang.Object $r3;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.FastProjectionSearch;
+
+        $r1 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List pendingAdditions>;
+
+        interfaceinvoke $r1.<java.util.List: void clear()>();
+
+        i1 = 0;
+
+     label1:
+        $i0 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int numProjections>;
+
+        if i1 >= $i0 goto label2;
+
+        $r2 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List scalarProjections>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>(i1);
+
+        $r4 = (java.util.List) $r3;
+
+        interfaceinvoke $r4.<java.util.List: void clear()>();
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: int numPendingRemovals> = 0;
+
+        return;
+    }
+
+    public java.util.Iterator iterator()
+    {
+        org.apache.mahout.math.neighborhood.FastProjectionSearch r0;
+        org.apache.mahout.math.neighborhood.FastProjectionSearch$1 $r1;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.FastProjectionSearch;
+
+        specialinvoke r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: void reindex(boolean)>(1);
+
+        $r1 = new org.apache.mahout.math.neighborhood.FastProjectionSearch$1;
+
+        specialinvoke $r1.<org.apache.mahout.math.neighborhood.FastProjectionSearch$1: void <init>(org.apache.mahout.math.neighborhood.FastProjectionSearch)>(r0);
+
+        return $r1;
+    }
+
+    static java.util.List access$000(org.apache.mahout.math.neighborhood.FastProjectionSearch)
+    {
+        org.apache.mahout.math.neighborhood.FastProjectionSearch r0;
+        java.util.List $r1;
+
+        r0 := @parameter0: org.apache.mahout.math.neighborhood.FastProjectionSearch;
+
+        $r1 = r0.<org.apache.mahout.math.neighborhood.FastProjectionSearch: java.util.List scalarProjections>;
+
+        return $r1;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.math.neighborhood.FastProjectionSearch: double REMOVAL_THRESHOLD> = 0.02;
+
+        <org.apache.mahout.math.neighborhood.FastProjectionSearch: double ADDITION_THRESHOLD> = 0.05;
+
+        return;
+    }
+}

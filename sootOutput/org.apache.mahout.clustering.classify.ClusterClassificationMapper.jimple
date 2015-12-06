@@ -1,0 +1,489 @@
+public class org.apache.mahout.clustering.classify.ClusterClassificationMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private double threshold;
+    private java.util.List clusterModels;
+    private org.apache.mahout.clustering.classify.ClusterClassifier clusterClassifier;
+    private org.apache.hadoop.io.IntWritable clusterId;
+    private boolean emitMostLikely;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.classify.ClusterClassificationMapper r0;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassificationMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.classify.ClusterClassificationMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        java.lang.String r3;
+        org.apache.mahout.clustering.iterator.ClusteringPolicy r5;
+        float $f0;
+        double $d0;
+        boolean $z0, $z1;
+        java.util.ArrayList $r6;
+        org.apache.hadoop.fs.Path $r7, $r8;
+        java.util.List $r9, $r11;
+        org.apache.mahout.clustering.classify.ClusterClassifier $r10;
+        org.apache.hadoop.io.IntWritable $r12;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassificationMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void setup(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        r3 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("clusters_in");
+
+        $f0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: float getFloat(java.lang.String,float)>("pdf_threshold", 0.0F);
+
+        $d0 = (double) $f0;
+
+        r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: double threshold> = $d0;
+
+        $z0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("emit_most_likely", 0);
+
+        r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: boolean emitMostLikely> = $z0;
+
+        $r6 = new java.util.ArrayList;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: java.util.List clusterModels> = $r6;
+
+        if r3 == null goto label1;
+
+        $z1 = virtualinvoke r3.<java.lang.String: boolean isEmpty()>();
+
+        if $z1 != 0 goto label1;
+
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r7.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r3);
+
+        $r9 = staticinvoke <org.apache.mahout.clustering.classify.ClusterClassificationMapper: java.util.List populateClusterModels(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r7, r2);
+
+        r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: java.util.List clusterModels> = $r9;
+
+        $r8 = staticinvoke <org.apache.mahout.clustering.classify.ClusterClassificationMapper: org.apache.hadoop.fs.Path finalClustersPath(org.apache.hadoop.fs.Path)>($r7);
+
+        r5 = staticinvoke <org.apache.mahout.clustering.classify.ClusterClassifier: org.apache.mahout.clustering.iterator.ClusteringPolicy readPolicy(org.apache.hadoop.fs.Path)>($r8);
+
+        $r10 = new org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        $r11 = r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: java.util.List clusterModels>;
+
+        specialinvoke $r10.<org.apache.mahout.clustering.classify.ClusterClassifier: void <init>(java.util.List,org.apache.mahout.clustering.iterator.ClusteringPolicy)>($r11, r5);
+
+        r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: org.apache.mahout.clustering.classify.ClusterClassifier clusterClassifier> = $r10;
+
+     label1:
+        $r12 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r12.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: org.apache.hadoop.io.IntWritable clusterId> = $r12;
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.WritableComparable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.classify.ClusterClassificationMapper r0;
+        org.apache.hadoop.io.WritableComparable r1;
+        org.apache.mahout.math.VectorWritable r2, $r8, $r10;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        java.lang.Class r4, $r9, $r11;
+        org.apache.mahout.math.Vector r5, $r7, r17;
+        int i0, $i1;
+        java.util.List $r6;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5;
+        org.apache.mahout.math.NamedVector $r12, $r16;
+        org.apache.hadoop.io.IntWritable $r13;
+        java.lang.String $r14, $r15;
+        org.apache.mahout.clustering.classify.ClusterClassifier $r18;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassificationMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.WritableComparable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r6 = r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: java.util.List clusterModels>;
+
+        $z0 = interfaceinvoke $r6.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label4;
+
+        $r7 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        r4 = virtualinvoke $r7.<java.lang.Object: java.lang.Class getClass()>();
+
+        r17 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $z1 = virtualinvoke r4.<java.lang.Object: boolean equals(java.lang.Object)>(class "org/apache/mahout/math/NamedVector");
+
+        if $z1 != 0 goto label2;
+
+        $r9 = virtualinvoke r1.<java.lang.Object: java.lang.Class getClass()>();
+
+        $z3 = virtualinvoke $r9.<java.lang.Object: boolean equals(java.lang.Object)>(class "org/apache/hadoop/io/Text");
+
+        if $z3 == 0 goto label1;
+
+        $r16 = new org.apache.mahout.math.NamedVector;
+
+        $r14 = virtualinvoke r1.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r16.<org.apache.mahout.math.NamedVector: void <init>(org.apache.mahout.math.Vector,java.lang.String)>(r17, $r14);
+
+        r17 = $r16;
+
+        goto label2;
+
+     label1:
+        $r11 = virtualinvoke r1.<java.lang.Object: java.lang.Class getClass()>();
+
+        $z4 = virtualinvoke $r11.<java.lang.Object: boolean equals(java.lang.Object)>(class "org/apache/hadoop/io/IntWritable");
+
+        if $z4 == 0 goto label2;
+
+        $r12 = new org.apache.mahout.math.NamedVector;
+
+        $r13 = (org.apache.hadoop.io.IntWritable) r1;
+
+        $i1 = virtualinvoke $r13.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $r15 = staticinvoke <java.lang.Integer: java.lang.String toString(int)>($i1);
+
+        specialinvoke $r12.<org.apache.mahout.math.NamedVector: void <init>(org.apache.mahout.math.Vector,java.lang.String)>(r17, $r15);
+
+        r17 = $r12;
+
+     label2:
+        $r18 = r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: org.apache.mahout.clustering.classify.ClusterClassifier clusterClassifier>;
+
+        r5 = virtualinvoke $r18.<org.apache.mahout.clustering.classify.ClusterClassifier: org.apache.mahout.math.Vector classify(org.apache.mahout.math.Vector)>(r17);
+
+        $z5 = specialinvoke r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: boolean shouldClassify(org.apache.mahout.math.Vector)>(r5);
+
+        if $z5 == 0 goto label4;
+
+        $z2 = r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: boolean emitMostLikely>;
+
+        if $z2 == 0 goto label3;
+
+        i0 = interfaceinvoke r5.<org.apache.mahout.math.Vector: int maxValueIndex()>();
+
+        $r10 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r10.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r17);
+
+        specialinvoke r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: void write(org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context,int,double)>($r10, r3, i0, 1.0);
+
+        goto label4;
+
+     label3:
+        $r8 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r8.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r17);
+
+        specialinvoke r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: void writeAllAboveThreshold(org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context,org.apache.mahout.math.Vector)>($r8, r3, r5);
+
+     label4:
+        return;
+    }
+
+    private void writeAllAboveThreshold(org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context, org.apache.mahout.math.Vector) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.classify.ClusterClassificationMapper r0;
+        org.apache.mahout.math.VectorWritable r1;
+        org.apache.hadoop.mapreduce.Mapper$Context r2;
+        org.apache.mahout.math.Vector r3;
+        java.util.Iterator r4;
+        org.apache.mahout.math.Vector$Element r5;
+        int i0;
+        java.lang.Iterable $r6;
+        boolean $z0;
+        java.lang.Object $r7;
+        double $d0, $d1, $d2;
+        byte $b1;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassificationMapper;
+
+        r1 := @parameter0: org.apache.mahout.math.VectorWritable;
+
+        r2 := @parameter1: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        r3 := @parameter2: org.apache.mahout.math.Vector;
+
+        $r6 = interfaceinvoke r3.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r4 = interfaceinvoke $r6.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r7 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.Vector$Element) $r7;
+
+        $d0 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        $d1 = r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: double threshold>;
+
+        $b1 = $d0 cmpl $d1;
+
+        if $b1 < 0 goto label1;
+
+        i0 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $d2 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        specialinvoke r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: void write(org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context,int,double)>(r1, r2, i0, $d2);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private void write(org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context, int, double) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.classify.ClusterClassificationMapper r0;
+        org.apache.mahout.math.VectorWritable r1;
+        org.apache.hadoop.mapreduce.Mapper$Context r2;
+        int i0, $i1;
+        double d0, d1;
+        org.apache.mahout.clustering.Cluster r3;
+        org.apache.mahout.clustering.iterator.DistanceMeasureCluster r4;
+        org.apache.mahout.common.distance.DistanceMeasure r5;
+        java.util.List $r7;
+        java.lang.Object $r8;
+        org.apache.hadoop.io.IntWritable $r9, $r19;
+        org.apache.mahout.math.Vector $r10, $r11, $r18;
+        org.apache.hadoop.io.Text $r12, $r15;
+        java.util.HashMap $r13;
+        java.lang.String $r14;
+        org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable $r16;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassificationMapper;
+
+        r1 := @parameter0: org.apache.mahout.math.VectorWritable;
+
+        r2 := @parameter1: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        i0 := @parameter2: int;
+
+        d0 := @parameter3: double;
+
+        $r7 = r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: java.util.List clusterModels>;
+
+        $r8 = interfaceinvoke $r7.<java.util.List: java.lang.Object get(int)>(i0);
+
+        r3 = (org.apache.mahout.clustering.Cluster) $r8;
+
+        $r9 = r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: org.apache.hadoop.io.IntWritable clusterId>;
+
+        $i1 = interfaceinvoke r3.<org.apache.mahout.clustering.Cluster: int getId()>();
+
+        virtualinvoke $r9.<org.apache.hadoop.io.IntWritable: void set(int)>($i1);
+
+        r4 = (org.apache.mahout.clustering.iterator.DistanceMeasureCluster) r3;
+
+        r5 = virtualinvoke r4.<org.apache.mahout.clustering.iterator.DistanceMeasureCluster: org.apache.mahout.common.distance.DistanceMeasure getMeasure()>();
+
+        $r10 = interfaceinvoke r3.<org.apache.mahout.clustering.Cluster: org.apache.mahout.math.Vector getCenter()>();
+
+        $r11 = virtualinvoke r1.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        d1 = interfaceinvoke r5.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>($r10, $r11);
+
+        $r13 = new java.util.HashMap;
+
+        specialinvoke $r13.<java.util.HashMap: void <init>()>();
+
+        $r12 = new org.apache.hadoop.io.Text;
+
+        specialinvoke $r12.<org.apache.hadoop.io.Text: void <init>(java.lang.String)>("distance");
+
+        $r15 = new org.apache.hadoop.io.Text;
+
+        $r14 = staticinvoke <java.lang.Double: java.lang.String toString(double)>(d1);
+
+        specialinvoke $r15.<org.apache.hadoop.io.Text: void <init>(java.lang.String)>($r14);
+
+        interfaceinvoke $r13.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r12, $r15);
+
+        $r19 = r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: org.apache.hadoop.io.IntWritable clusterId>;
+
+        $r16 = new org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable;
+
+        $r18 = virtualinvoke r1.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        specialinvoke $r16.<org.apache.mahout.clustering.classify.WeightedPropertyVectorWritable: void <init>(double,org.apache.mahout.math.Vector,java.util.Map)>(d0, $r18, $r13);
+
+        virtualinvoke r2.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r19, $r16);
+
+        return;
+    }
+
+    public static java.util.List populateClusterModels(org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration) throws java.io.IOException
+    {
+        org.apache.hadoop.fs.Path r0, $r12;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.hadoop.fs.FileSystem r3;
+        org.apache.hadoop.fs.FileStatus[] r4;
+        org.apache.mahout.clustering.iterator.ClusterWritable r6;
+        org.apache.mahout.clustering.Cluster r7;
+        java.util.ArrayList $r8;
+        org.apache.hadoop.fs.PathFilter $r9, $r14;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator $r10;
+        org.apache.hadoop.fs.FileStatus $r11;
+        org.apache.mahout.common.iterator.sequencefile.PathType $r13;
+        boolean $z0;
+        java.lang.Object $r15;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        $r8 = new java.util.ArrayList;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+        r3 = virtualinvoke r0.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r1);
+
+        $r9 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter finalPartFilter()>();
+
+        r4 = virtualinvoke r3.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus[] listStatus(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.PathFilter)>(r0, $r9);
+
+        $r10 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator;
+
+        $r11 = r4[0];
+
+        $r12 = virtualinvoke $r11.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        $r13 = <org.apache.mahout.common.iterator.sequencefile.PathType: org.apache.mahout.common.iterator.sequencefile.PathType LIST>;
+
+        $r14 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter partFilter()>();
+
+        specialinvoke $r10.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator: void <init>(org.apache.hadoop.fs.Path,org.apache.mahout.common.iterator.sequencefile.PathType,org.apache.hadoop.fs.PathFilter,java.util.Comparator,boolean,org.apache.hadoop.conf.Configuration)>($r12, $r13, $r14, null, 0, r1);
+
+     label1:
+        $z0 = interfaceinvoke $r10.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r15 = interfaceinvoke $r10.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.clustering.iterator.ClusterWritable) $r15;
+
+        r7 = virtualinvoke r6.<org.apache.mahout.clustering.iterator.ClusterWritable: org.apache.mahout.clustering.Cluster getValue()>();
+
+        interfaceinvoke r7.<org.apache.mahout.clustering.Cluster: void configure(org.apache.hadoop.conf.Configuration)>(r1);
+
+        interfaceinvoke $r8.<java.util.List: boolean add(java.lang.Object)>(r7);
+
+        goto label1;
+
+     label2:
+        return $r8;
+    }
+
+    private boolean shouldClassify(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.classify.ClusterClassificationMapper r0;
+        org.apache.mahout.math.Vector r1;
+        double $d0, $d1;
+        byte $b0;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassificationMapper;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $d0 = interfaceinvoke r1.<org.apache.mahout.math.Vector: double maxValue()>();
+
+        $d1 = r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: double threshold>;
+
+        $b0 = $d0 cmpl $d1;
+
+        if $b0 < 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    private static org.apache.hadoop.fs.Path finalClustersPath(org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.hadoop.fs.Path r0, $r6;
+        org.apache.hadoop.fs.FileSystem r1;
+        org.apache.hadoop.fs.FileStatus[] r2;
+        org.apache.hadoop.conf.Configuration $r3;
+        org.apache.hadoop.fs.PathFilter $r4;
+        org.apache.hadoop.fs.FileStatus $r5;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        $r3 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r3.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        r1 = virtualinvoke r0.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>($r3);
+
+        $r4 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter finalPartFilter()>();
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus[] listStatus(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.PathFilter)>(r0, $r4);
+
+        $r5 = r2[0];
+
+        $r6 = virtualinvoke $r5.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        return $r6;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.classify.ClusterClassificationMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.WritableComparable $r5;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassificationMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.WritableComparable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.classify.ClusterClassificationMapper: void map(org.apache.hadoop.io.WritableComparable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

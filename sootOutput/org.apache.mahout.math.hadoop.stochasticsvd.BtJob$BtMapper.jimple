@@ -1,0 +1,570 @@
+public class org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep qr;
+    private final java.util.Deque closeables;
+    private int blockNum;
+    private org.apache.hadoop.mapred.lib.MultipleOutputs outputs;
+    private final org.apache.mahout.math.VectorWritable qRowValue;
+    private org.apache.mahout.math.Vector btRow;
+    private org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator btCollector;
+    private org.apache.hadoop.mapreduce.Mapper$Context mapContext;
+    private boolean nv;
+    private org.apache.mahout.math.Vector sqAccum;
+    private boolean computeSq;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper r0;
+        java.util.ArrayDeque $r1;
+        org.apache.mahout.math.VectorWritable $r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        $r1 = new java.util.ArrayDeque;
+
+        specialinvoke $r1.<java.util.ArrayDeque: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: java.util.Deque closeables> = $r1;
+
+        $r2 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r2.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.VectorWritable qRowValue> = $r2;
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.Writable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper r0;
+        org.apache.hadoop.io.Writable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.Vector r4, r5, $r9, $r10, $r14, $r16, $r18, $r22, $r23;
+        int i0, $i2, i4, i5, i6, i7;
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep $r6;
+        boolean $z0, $z1, $z2;
+        long $l1, $l3;
+        java.lang.Long $r7, $r15;
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator $r8, $r13;
+        double $d0, $d1, $d2, $d3, d4, d5;
+        java.lang.Object $r11;
+        java.lang.Iterable $r12;
+        org.apache.mahout.math.function.DoubleDoubleFunction $r17;
+        org.apache.mahout.math.DenseVector $r19, $r20;
+        java.util.Iterator r24;
+        org.apache.mahout.math.Vector$Element r25;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.Writable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.hadoop.mapreduce.Mapper$Context mapContext> = r3;
+
+        r4 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep qr>;
+
+        r5 = virtualinvoke $r6.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: org.apache.mahout.math.Vector next()>();
+
+        i0 = interfaceinvoke r5.<org.apache.mahout.math.Vector: int size()>();
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: void outputQRow(org.apache.hadoop.io.Writable,org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r1, r5, r4);
+
+        $z0 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: boolean computeSq>;
+
+        if $z0 == 0 goto label02;
+
+        $r18 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.Vector sqAccum>;
+
+        if $r18 != null goto label01;
+
+        $r20 = new org.apache.mahout.math.DenseVector;
+
+        specialinvoke $r20.<org.apache.mahout.math.DenseVector: void <init>(int)>(i0);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.Vector sqAccum> = $r20;
+
+     label01:
+        $r22 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.Vector sqAccum>;
+
+        $r17 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction PLUS>;
+
+        interfaceinvoke $r22.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>(r5, $r17);
+
+     label02:
+        $r23 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.Vector btRow>;
+
+        if $r23 != null goto label03;
+
+        $r19 = new org.apache.mahout.math.DenseVector;
+
+        specialinvoke $r19.<org.apache.mahout.math.DenseVector: void <init>(int)>(i0);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.Vector btRow> = $r19;
+
+     label03:
+        $z1 = interfaceinvoke r4.<org.apache.mahout.math.Vector: boolean isDense()>();
+
+        if $z1 != 0 goto label07;
+
+        $r12 = interfaceinvoke r4.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r24 = interfaceinvoke $r12.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label04:
+        $z2 = interfaceinvoke r24.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label11;
+
+        $r11 = interfaceinvoke r24.<java.util.Iterator: java.lang.Object next()>();
+
+        r25 = (org.apache.mahout.math.Vector$Element) $r11;
+
+        d4 = interfaceinvoke r25.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        i4 = 0;
+
+     label05:
+        if i4 >= i0 goto label06;
+
+        $r14 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.Vector btRow>;
+
+        $d2 = interfaceinvoke r5.<org.apache.mahout.math.Vector: double getQuick(int)>(i4);
+
+        $d3 = d4 * $d2;
+
+        interfaceinvoke $r14.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i4, $d3);
+
+        i4 = i4 + 1;
+
+        goto label05;
+
+     label06:
+        $r13 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator btCollector>;
+
+        $i2 = interfaceinvoke r25.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $l3 = (long) $i2;
+
+        $r15 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l3);
+
+        $r16 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.Vector btRow>;
+
+        virtualinvoke $r13.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: void collect(java.lang.Long,org.apache.mahout.math.Vector)>($r15, $r16);
+
+        goto label04;
+
+     label07:
+        i5 = interfaceinvoke r4.<org.apache.mahout.math.Vector: int size()>();
+
+        i6 = 0;
+
+     label08:
+        if i6 >= i5 goto label11;
+
+        d5 = interfaceinvoke r4.<org.apache.mahout.math.Vector: double getQuick(int)>(i6);
+
+        i7 = 0;
+
+     label09:
+        if i7 >= i0 goto label10;
+
+        $r10 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.Vector btRow>;
+
+        $d1 = interfaceinvoke r5.<org.apache.mahout.math.Vector: double getQuick(int)>(i7);
+
+        $d0 = d5 * $d1;
+
+        interfaceinvoke $r10.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i7, $d0);
+
+        i7 = i7 + 1;
+
+        goto label09;
+
+     label10:
+        $r8 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator btCollector>;
+
+        $l1 = (long) i6;
+
+        $r7 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l1);
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.Vector btRow>;
+
+        virtualinvoke $r8.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: void collect(java.lang.Long,org.apache.mahout.math.Vector)>($r7, $r9);
+
+        i6 = i6 + 1;
+
+        goto label08;
+
+     label11:
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2, $r40;
+        org.apache.hadoop.fs.Path $r7, $r9, $r15;
+        java.lang.String $r8, $r10, $r16, $r33;
+        org.apache.hadoop.mapreduce.TaskAttemptID $r11;
+        int $i0, $i1, $i2;
+        org.apache.hadoop.mapreduce.TaskID $r12;
+        java.util.Deque $r13, $r20, $r27, $r31, $r32, $r36;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator $r14;
+        java.util.Comparator $r17, $r37;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator $r18, $r41, r43;
+        boolean $z1, $z2, $z3, $z5, $z6;
+        org.apache.mahout.common.iterator.sequencefile.PathType $r19;
+        java.lang.Object[] $r21, $r38;
+        org.apache.hadoop.mapred.JobConf $r22;
+        org.apache.hadoop.mapred.lib.MultipleOutputs $r23, $r24;
+        org.apache.mahout.common.IOUtils$MultipleOutputsCloseableAdapter $r25;
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep $r26, $r28;
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper$1 $r29;
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator $r30, $r34;
+        org.apache.hadoop.fs.Path[] r42;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void setup(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        $r8 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvd.QJob.path");
+
+        specialinvoke $r7.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r8);
+
+        $r9 = new org.apache.hadoop.fs.Path;
+
+        $r10 = staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: java.lang.String getUniqueFile(org.apache.hadoop.mapreduce.TaskAttemptContext,java.lang.String,java.lang.String)>(r1, "QHat", "");
+
+        specialinvoke $r9.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r7, $r10);
+
+        $r11 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.mapreduce.TaskAttemptID getTaskAttemptID()>();
+
+        $r12 = virtualinvoke $r11.<org.apache.hadoop.mapreduce.TaskAttemptID: org.apache.hadoop.mapreduce.TaskID getTaskID()>();
+
+        $i0 = virtualinvoke $r12.<org.apache.hadoop.mapreduce.TaskID: int getId()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: int blockNum> = $i0;
+
+        $r14 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator;
+
+        specialinvoke $r14.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: void <init>(org.apache.hadoop.fs.Path,boolean,org.apache.hadoop.conf.Configuration)>($r9, 1, r2);
+
+        $r13 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: java.util.Deque closeables>;
+
+        interfaceinvoke $r13.<java.util.Deque: void addFirst(java.lang.Object)>($r14);
+
+        $r16 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvd.rhat.broadcast");
+
+        if $r16 == null goto label1;
+
+        $z5 = 1;
+
+        goto label2;
+
+     label1:
+        $z5 = 0;
+
+     label2:
+        if $z5 == 0 goto label3;
+
+        r42 = staticinvoke <org.apache.mahout.common.HadoopUtil: org.apache.hadoop.fs.Path[] getCachedFiles(org.apache.hadoop.conf.Configuration)>(r2);
+
+        $r38 = newarray (java.lang.Object)[0];
+
+        staticinvoke <org.apache.commons.lang3.Validate: java.lang.Object notNull(java.lang.Object,java.lang.String,java.lang.Object[])>(r42, "no RHat files in distributed cache job definition", $r38);
+
+        $r40 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r40.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        virtualinvoke $r40.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("fs.default.name", "file:///");
+
+        $r41 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator;
+
+        $r37 = <org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper: java.util.Comparator PARTITION_COMPARATOR>;
+
+        specialinvoke $r41.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator: void <init>(org.apache.hadoop.fs.Path[],java.util.Comparator,boolean,org.apache.hadoop.conf.Configuration)>(r42, $r37, 1, $r40);
+
+        r43 = $r41;
+
+        goto label4;
+
+     label3:
+        $r15 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r15.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r7, "R-*");
+
+        $r18 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator;
+
+        $r19 = <org.apache.mahout.common.iterator.sequencefile.PathType: org.apache.mahout.common.iterator.sequencefile.PathType GLOB>;
+
+        $r17 = <org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper: java.util.Comparator PARTITION_COMPARATOR>;
+
+        specialinvoke $r18.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator: void <init>(org.apache.hadoop.fs.Path,org.apache.mahout.common.iterator.sequencefile.PathType,org.apache.hadoop.fs.PathFilter,java.util.Comparator,boolean,org.apache.hadoop.conf.Configuration)>($r15, $r19, null, $r17, 1, r2);
+
+        r43 = $r18;
+
+     label4:
+        $z1 = virtualinvoke r43.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator: boolean hasNext()>();
+
+        $r21 = newarray (java.lang.Object)[0];
+
+        staticinvoke <org.apache.commons.lang3.Validate: void isTrue(boolean,java.lang.String,java.lang.Object[])>($z1, "Empty R-hat input!", $r21);
+
+        $r20 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: java.util.Deque closeables>;
+
+        interfaceinvoke $r20.<java.util.Deque: void addFirst(java.lang.Object)>(r43);
+
+        $r23 = new org.apache.hadoop.mapred.lib.MultipleOutputs;
+
+        $r22 = new org.apache.hadoop.mapred.JobConf;
+
+        specialinvoke $r22.<org.apache.hadoop.mapred.JobConf: void <init>(org.apache.hadoop.conf.Configuration)>(r2);
+
+        specialinvoke $r23.<org.apache.hadoop.mapred.lib.MultipleOutputs: void <init>(org.apache.hadoop.mapred.JobConf)>($r22);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.hadoop.mapred.lib.MultipleOutputs outputs> = $r23;
+
+        $r27 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: java.util.Deque closeables>;
+
+        $r25 = new org.apache.mahout.common.IOUtils$MultipleOutputsCloseableAdapter;
+
+        $r24 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.hadoop.mapred.lib.MultipleOutputs outputs>;
+
+        specialinvoke $r25.<org.apache.mahout.common.IOUtils$MultipleOutputsCloseableAdapter: void <init>(org.apache.hadoop.mapred.lib.MultipleOutputs)>($r24);
+
+        interfaceinvoke $r27.<java.util.Deque: void addFirst(java.lang.Object)>($r25);
+
+        $r28 = new org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep;
+
+        $i1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: int blockNum>;
+
+        specialinvoke $r28.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: void <init>(java.util.Iterator,java.util.Iterator,int)>($r14, r43, $i1);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep qr> = $r28;
+
+        $r31 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: java.util.Deque closeables>;
+
+        $r26 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep qr>;
+
+        interfaceinvoke $r31.<java.util.Deque: void addFirst(java.lang.Object)>($r26);
+
+        $z2 = virtualinvoke r43.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator: boolean hasNext()>();
+
+        if $z2 != 0 goto label5;
+
+        $r36 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: java.util.Deque closeables>;
+
+        interfaceinvoke $r36.<java.util.Deque: boolean remove(java.lang.Object)>(r43);
+
+        virtualinvoke r43.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator: void close()>();
+
+     label5:
+        $r29 = new org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper$1;
+
+        specialinvoke $r29.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper$1: void <init>(org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper)>(r0);
+
+        $r30 = new org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator;
+
+        $i2 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("ssvd.outerProdBlockHeight", -1);
+
+        specialinvoke $r30.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: void <init>(int,org.apache.hadoop.mapred.OutputCollector)>($i2, $r29);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator btCollector> = $r30;
+
+        $r32 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: java.util.Deque closeables>;
+
+        $r34 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator btCollector>;
+
+        interfaceinvoke $r32.<java.util.Deque: void addFirst(java.lang.Object)>($r34);
+
+        $r33 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvdpca.xi.path");
+
+        if $r33 == null goto label6;
+
+        $z6 = 1;
+
+        goto label7;
+
+     label6:
+        $z6 = 0;
+
+     label7:
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: boolean computeSq> = $z6;
+
+        $z3 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("ssvd.nv", 0);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: boolean nv> = $z3;
+
+        return;
+    }
+
+    protected void cleanup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.mahout.math.Vector $r5, $r8;
+        java.util.Deque $r6, $r11;
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable $r7;
+        org.apache.hadoop.io.LongWritable $r9;
+        java.lang.Throwable $r10;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+     label1:
+        $r5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.Vector sqAccum>;
+
+        if $r5 == null goto label2;
+
+        $r7 = new org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+        specialinvoke $r7.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: void <init>(int)>(1);
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.Vector sqAccum>;
+
+        virtualinvoke $r7.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: void plusRow(int,org.apache.mahout.math.Vector)>(0, $r8);
+
+        $r9 = new org.apache.hadoop.io.LongWritable;
+
+        specialinvoke $r9.<org.apache.hadoop.io.LongWritable: void <init>(long)>(-1L);
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r9, $r7);
+
+     label2:
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: java.util.Deque closeables>;
+
+        staticinvoke <org.apache.mahout.common.IOUtils: void close(java.util.Collection)>($r6);
+
+        goto label5;
+
+     label3:
+        $r10 := @caughtexception;
+
+     label4:
+        $r11 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: java.util.Deque closeables>;
+
+        staticinvoke <org.apache.mahout.common.IOUtils: void close(java.util.Collection)>($r11);
+
+        throw $r10;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    private void outputQRow(org.apache.hadoop.io.Writable, org.apache.mahout.math.Vector, org.apache.mahout.math.Vector) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper r0;
+        org.apache.hadoop.io.Writable r1;
+        org.apache.mahout.math.Vector r2, r3;
+        boolean $z0, $z1;
+        org.apache.mahout.math.VectorWritable $r4, $r6, $r11;
+        org.apache.mahout.math.NamedVector $r5, $r7;
+        java.lang.String $r8;
+        org.apache.hadoop.mapred.lib.MultipleOutputs $r9;
+        org.apache.hadoop.mapred.OutputCollector $r10;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.Writable;
+
+        r2 := @parameter1: org.apache.mahout.math.Vector;
+
+        r3 := @parameter2: org.apache.mahout.math.Vector;
+
+        $z0 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: boolean nv>;
+
+        if $z0 == 0 goto label1;
+
+        $z1 = r3 instanceof org.apache.mahout.math.NamedVector;
+
+        if $z1 == 0 goto label1;
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.VectorWritable qRowValue>;
+
+        $r5 = new org.apache.mahout.math.NamedVector;
+
+        $r7 = (org.apache.mahout.math.NamedVector) r3;
+
+        $r8 = virtualinvoke $r7.<org.apache.mahout.math.NamedVector: java.lang.String getName()>();
+
+        specialinvoke $r5.<org.apache.mahout.math.NamedVector: void <init>(org.apache.mahout.math.Vector,java.lang.String)>(r2, $r8);
+
+        virtualinvoke $r6.<org.apache.mahout.math.VectorWritable: void set(org.apache.mahout.math.Vector)>($r5);
+
+        goto label2;
+
+     label1:
+        $r4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.VectorWritable qRowValue>;
+
+        virtualinvoke $r4.<org.apache.mahout.math.VectorWritable: void set(org.apache.mahout.math.Vector)>(r2);
+
+     label2:
+        $r9 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.hadoop.mapred.lib.MultipleOutputs outputs>;
+
+        $r10 = virtualinvoke $r9.<org.apache.hadoop.mapred.lib.MultipleOutputs: org.apache.hadoop.mapred.OutputCollector getCollector(java.lang.String,org.apache.hadoop.mapred.Reporter)>("Q", null);
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.mahout.math.VectorWritable qRowValue>;
+
+        interfaceinvoke $r10.<org.apache.hadoop.mapred.OutputCollector: void collect(java.lang.Object,java.lang.Object)>(r1, $r11);
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.Writable $r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.Writable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: void map(org.apache.hadoop.io.Writable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+
+    static org.apache.hadoop.mapreduce.Mapper$Context access$000(org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context $r1;
+
+        r0 := @parameter0: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.hadoop.mapreduce.Mapper$Context mapContext>;
+
+        return $r1;
+    }
+}

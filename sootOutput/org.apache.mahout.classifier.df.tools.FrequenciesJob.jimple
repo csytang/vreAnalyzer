@@ -1,0 +1,278 @@
+public class org.apache.mahout.classifier.df.tools.FrequenciesJob extends java.lang.Object
+{
+    private static final org.slf4j.Logger log;
+    private final org.apache.hadoop.fs.Path outputPath;
+    private final org.apache.hadoop.fs.Path datasetPath;
+    private final org.apache.hadoop.fs.Path dataPath;
+
+    public void <init>(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path)
+    {
+        org.apache.mahout.classifier.df.tools.FrequenciesJob r0;
+        org.apache.hadoop.fs.Path r1, r2, r3, $r4;
+
+        r0 := @this: org.apache.mahout.classifier.df.tools.FrequenciesJob;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: org.apache.hadoop.fs.Path;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r4 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r4.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r1, "frequencies.output");
+
+        r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob: org.apache.hadoop.fs.Path outputPath> = $r4;
+
+        r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob: org.apache.hadoop.fs.Path dataPath> = r2;
+
+        r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob: org.apache.hadoop.fs.Path datasetPath> = r3;
+
+        return;
+    }
+
+    public int[][] run(org.apache.hadoop.conf.Configuration) throws java.io.IOException, java.lang.ClassNotFoundException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.tools.FrequenciesJob r0;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.hadoop.fs.FileSystem r2;
+        boolean z0, $z1;
+        int[][] r5;
+        org.apache.hadoop.fs.Path $r6, $r7, $r9, $r12, $r14, $r17, $r20;
+        java.net.URI[] $r8;
+        java.net.URI $r10;
+        org.apache.hadoop.mapreduce.Job $r11;
+        org.apache.hadoop.fs.Path[] $r13, $r15;
+        java.lang.IllegalStateException $r16;
+        java.lang.StringBuilder $r18, $r21, $r23;
+        java.io.IOException $r19;
+        java.lang.String $r22;
+
+        r0 := @this: org.apache.mahout.classifier.df.tools.FrequenciesJob;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        $r6 = r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob: org.apache.hadoop.fs.Path outputPath>;
+
+        r2 = virtualinvoke $r6.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r1);
+
+        $r7 = r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob: org.apache.hadoop.fs.Path outputPath>;
+
+        $z1 = virtualinvoke r2.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>($r7);
+
+        if $z1 == 0 goto label1;
+
+        $r19 = new java.io.IOException;
+
+        $r18 = new java.lang.StringBuilder;
+
+        specialinvoke $r18.<java.lang.StringBuilder: void <init>()>();
+
+        $r21 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Output path already exists : ");
+
+        $r20 = r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob: org.apache.hadoop.fs.Path outputPath>;
+
+        $r23 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r20);
+
+        $r22 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r19.<java.io.IOException: void <init>(java.lang.String)>($r22);
+
+        throw $r19;
+
+     label1:
+        $r8 = newarray (java.net.URI)[1];
+
+        $r9 = r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob: org.apache.hadoop.fs.Path datasetPath>;
+
+        $r10 = virtualinvoke $r9.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        $r8[0] = $r10;
+
+        staticinvoke <org.apache.hadoop.filecache.DistributedCache: void setCacheFiles(java.net.URI[],org.apache.hadoop.conf.Configuration)>($r8, r1);
+
+        $r11 = new org.apache.hadoop.mapreduce.Job;
+
+        specialinvoke $r11.<org.apache.hadoop.mapreduce.Job: void <init>(org.apache.hadoop.conf.Configuration)>(r1);
+
+        virtualinvoke $r11.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(class "org/apache/mahout/classifier/df/tools/FrequenciesJob");
+
+        $r13 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r12 = r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob: org.apache.hadoop.fs.Path dataPath>;
+
+        $r13[0] = $r12;
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void setInputPaths(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path[])>($r11, $r13);
+
+        $r14 = r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob: org.apache.hadoop.fs.Path outputPath>;
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r11, $r14);
+
+        virtualinvoke $r11.<org.apache.hadoop.mapreduce.Job: void setMapOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/LongWritable");
+
+        virtualinvoke $r11.<org.apache.hadoop.mapreduce.Job: void setMapOutputValueClass(java.lang.Class)>(class "org/apache/hadoop/io/IntWritable");
+
+        virtualinvoke $r11.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/LongWritable");
+
+        virtualinvoke $r11.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(class "org/apache/mahout/classifier/df/tools/FrequenciesJob$Frequencies");
+
+        virtualinvoke $r11.<org.apache.hadoop.mapreduce.Job: void setMapperClass(java.lang.Class)>(class "org/apache/mahout/classifier/df/tools/FrequenciesJob$FrequenciesMapper");
+
+        virtualinvoke $r11.<org.apache.hadoop.mapreduce.Job: void setReducerClass(java.lang.Class)>(class "org/apache/mahout/classifier/df/tools/FrequenciesJob$FrequenciesReducer");
+
+        virtualinvoke $r11.<org.apache.hadoop.mapreduce.Job: void setInputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/input/TextInputFormat");
+
+        virtualinvoke $r11.<org.apache.hadoop.mapreduce.Job: void setOutputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        z0 = virtualinvoke $r11.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z0 != 0 goto label2;
+
+        $r16 = new java.lang.IllegalStateException;
+
+        specialinvoke $r16.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Job failed!");
+
+        throw $r16;
+
+     label2:
+        r5 = virtualinvoke r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob: int[][] parseOutput(org.apache.hadoop.mapreduce.JobContext)>($r11);
+
+        $r15 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r17 = r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob: org.apache.hadoop.fs.Path outputPath>;
+
+        $r15[0] = $r17;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>(r1, $r15);
+
+        return r5;
+    }
+
+    int[][] parseOutput(org.apache.hadoop.mapreduce.JobContext) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.df.tools.FrequenciesJob r0;
+        org.apache.hadoop.mapreduce.JobContext r1;
+        org.apache.hadoop.conf.Configuration r2;
+        int i0, i1, $i2, i3, i4;
+        org.apache.hadoop.fs.FileSystem r3;
+        org.apache.hadoop.fs.Path[] r4;
+        org.apache.mahout.classifier.df.tools.FrequenciesJob$Frequencies[] r5;
+        org.apache.hadoop.fs.Path r7, $r11, $r13;
+        java.util.Iterator r8;
+        org.apache.mahout.classifier.df.tools.FrequenciesJob$Frequencies r9;
+        org.slf4j.Logger $r10;
+        java.lang.Integer $r12;
+        int[][] $r14;
+        java.lang.StringBuilder $r15, $r17, $r18, $r20;
+        java.lang.IllegalStateException $r16;
+        java.lang.String $r19;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterable $r21;
+        java.lang.Object $r22;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.classifier.df.tools.FrequenciesJob;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.JobContext;
+
+        r2 = interfaceinvoke r1.<org.apache.hadoop.mapreduce.JobContext: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        i0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("mapred.map.tasks", -1);
+
+        $r10 = <org.apache.mahout.classifier.df.tools.FrequenciesJob: org.slf4j.Logger log>;
+
+        $r12 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r10.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("mapred.map.tasks = {}", $r12);
+
+        $r11 = r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob: org.apache.hadoop.fs.Path outputPath>;
+
+        r3 = virtualinvoke $r11.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r2);
+
+        $r13 = r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob: org.apache.hadoop.fs.Path outputPath>;
+
+        r4 = staticinvoke <org.apache.mahout.classifier.df.DFUtils: org.apache.hadoop.fs.Path[] listOutputFiles(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path)>(r3, $r13);
+
+        r5 = newarray (org.apache.mahout.classifier.df.tools.FrequenciesJob$Frequencies)[i0];
+
+        i3 = 0;
+
+        i1 = lengthof r4;
+
+        i4 = 0;
+
+     label1:
+        if i4 >= i1 goto label4;
+
+        r7 = r4[i4];
+
+        $r21 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterable;
+
+        specialinvoke $r21.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterable: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r7, r2);
+
+        r8 = virtualinvoke $r21.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterable: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r8.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r22 = interfaceinvoke r8.<java.util.Iterator: java.lang.Object next()>();
+
+        r9 = (org.apache.mahout.classifier.df.tools.FrequenciesJob$Frequencies) $r22;
+
+        $i2 = i3;
+
+        i3 = i3 + 1;
+
+        r5[$i2] = r9;
+
+        goto label2;
+
+     label3:
+        i4 = i4 + 1;
+
+        goto label1;
+
+     label4:
+        if i3 >= i0 goto label5;
+
+        $r16 = new java.lang.IllegalStateException;
+
+        $r15 = new java.lang.StringBuilder;
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+        $r18 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("number of output Frequencies (");
+
+        $r17 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i3);
+
+        $r20 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(") is lesser than the number of mappers!");
+
+        $r19 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r16.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r19);
+
+        throw $r16;
+
+     label5:
+        staticinvoke <java.util.Arrays: void sort(java.lang.Object[])>(r5);
+
+        $r14 = staticinvoke <org.apache.mahout.classifier.df.tools.FrequenciesJob$Frequencies: int[][] extractCounts(org.apache.mahout.classifier.df.tools.FrequenciesJob$Frequencies[])>(r5);
+
+        return $r14;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/classifier/df/tools/FrequenciesJob");
+
+        <org.apache.mahout.classifier.df.tools.FrequenciesJob: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

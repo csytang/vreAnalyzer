@@ -1,0 +1,9 @@
+public interface  org.apache.mahout.cf.taste.similarity.ItemSimilarity extends java.lang.Object implements org.apache.mahout.cf.taste.common.Refreshable
+{
+
+    public abstract double itemSimilarity(long, long) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract double[] itemSimilarities(long, long[]) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract long[] allSimilarItemIDs(long) throws org.apache.mahout.cf.taste.common.TasteException;
+}

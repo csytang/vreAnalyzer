@@ -1,0 +1,320 @@
+public class org.apache.mahout.vectorizer.collocations.llr.CollocMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private static final byte[] EMPTY;
+    public static final java.lang.String MAX_SHINGLE_SIZE;
+    private static final int DEFAULT_MAX_SHINGLE_SIZE;
+    private static final org.slf4j.Logger log;
+    private int maxShingleSize;
+    private boolean emitUnigrams;
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.collocations.llr.CollocMapper r0;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.CollocMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.Text, org.apache.mahout.common.StringTuple, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.collocations.llr.CollocMapper r0;
+        org.apache.hadoop.io.Text r1;
+        org.apache.mahout.common.StringTuple r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        java.lang.String r7, $r22, r33;
+        org.apache.lucene.analysis.shingle.ShingleFilter $r10;
+        org.apache.mahout.common.lucene.IteratorTokenStream $r11;
+        java.util.List $r12, $r14, $r16;
+        int $i0, $i1, $i2, $i3, $i4, $i5, i9;
+        java.util.Iterator $r13;
+        org.apache.mahout.math.map.OpenObjectIntHashMap $r15, $r17;
+        org.apache.lucene.util.Attribute $r18, $r21;
+        org.apache.lucene.analysis.tokenattributes.CharTermAttribute $r19;
+        org.apache.lucene.analysis.tokenattributes.TypeAttribute $r20;
+        boolean $z0, $z1, $z4, $z5;
+        org.apache.mahout.vectorizer.collocations.llr.GramKey $r23;
+        org.apache.mahout.vectorizer.collocations.llr.CollocMapper$1 $r24;
+        org.apache.mahout.vectorizer.collocations.llr.CollocMapper$Count $r25;
+        org.apache.mahout.vectorizer.collocations.llr.CollocMapper$2 $r26;
+        long $l6;
+        org.apache.hadoop.mapreduce.Counter $r27;
+        java.lang.Throwable $r28, $r29, $r30, r32;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.CollocMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.Text;
+
+        r2 := @parameter1: org.apache.mahout.common.StringTuple;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r10 = new org.apache.lucene.analysis.shingle.ShingleFilter;
+
+        $r11 = new org.apache.mahout.common.lucene.IteratorTokenStream;
+
+        $r12 = virtualinvoke r2.<org.apache.mahout.common.StringTuple: java.util.List getEntries()>();
+
+        $r13 = interfaceinvoke $r12.<java.util.List: java.util.Iterator iterator()>();
+
+        specialinvoke $r11.<org.apache.mahout.common.lucene.IteratorTokenStream: void <init>(java.util.Iterator)>($r13);
+
+        $i0 = r0.<org.apache.mahout.vectorizer.collocations.llr.CollocMapper: int maxShingleSize>;
+
+        specialinvoke $r10.<org.apache.lucene.analysis.shingle.ShingleFilter: void <init>(org.apache.lucene.analysis.TokenStream,int)>($r11, $i0);
+
+        r32 = null;
+
+     label01:
+        virtualinvoke $r10.<org.apache.lucene.analysis.shingle.ShingleFilter: void reset()>();
+
+        i9 = 0;
+
+        $r15 = new org.apache.mahout.math.map.OpenObjectIntHashMap;
+
+        $r14 = virtualinvoke r2.<org.apache.mahout.common.StringTuple: java.util.List getEntries()>();
+
+        $i2 = interfaceinvoke $r14.<java.util.List: int size()>();
+
+        $i1 = r0.<org.apache.mahout.vectorizer.collocations.llr.CollocMapper: int maxShingleSize>;
+
+        $i4 = $i1 - 1;
+
+        $i3 = $i2 * $i4;
+
+        specialinvoke $r15.<org.apache.mahout.math.map.OpenObjectIntHashMap: void <init>(int)>($i3);
+
+        $r17 = new org.apache.mahout.math.map.OpenObjectIntHashMap;
+
+        $r16 = virtualinvoke r2.<org.apache.mahout.common.StringTuple: java.util.List getEntries()>();
+
+        $i5 = interfaceinvoke $r16.<java.util.List: int size()>();
+
+        specialinvoke $r17.<org.apache.mahout.math.map.OpenObjectIntHashMap: void <init>(int)>($i5);
+
+     label02:
+        $r18 = virtualinvoke $r10.<org.apache.lucene.analysis.shingle.ShingleFilter: org.apache.lucene.util.Attribute getAttribute(java.lang.Class)>(class "org/apache/lucene/analysis/tokenattributes/CharTermAttribute");
+
+        $r19 = (org.apache.lucene.analysis.tokenattributes.CharTermAttribute) $r18;
+
+        r33 = virtualinvoke $r19.<java.lang.Object: java.lang.String toString()>();
+
+        $r21 = virtualinvoke $r10.<org.apache.lucene.analysis.shingle.ShingleFilter: org.apache.lucene.util.Attribute getAttribute(java.lang.Class)>(class "org/apache/lucene/analysis/tokenattributes/TypeAttribute");
+
+        $r20 = (org.apache.lucene.analysis.tokenattributes.TypeAttribute) $r21;
+
+        r7 = interfaceinvoke $r20.<org.apache.lucene.analysis.tokenattributes.TypeAttribute: java.lang.String type()>();
+
+        $r22 = "shingle";
+
+        $z0 = virtualinvoke $r22.<java.lang.String: boolean equals(java.lang.Object)>(r7);
+
+        if $z0 == 0 goto label03;
+
+        i9 = i9 + 1;
+
+        virtualinvoke $r15.<org.apache.mahout.math.map.OpenObjectIntHashMap: int adjustOrPutValue(java.lang.Object,int,int)>(r33, 1, 1);
+
+        goto label04;
+
+     label03:
+        $z1 = r0.<org.apache.mahout.vectorizer.collocations.llr.CollocMapper: boolean emitUnigrams>;
+
+        if $z1 == 0 goto label04;
+
+        $z4 = virtualinvoke r33.<java.lang.String: boolean isEmpty()>();
+
+        if $z4 != 0 goto label04;
+
+        virtualinvoke $r17.<org.apache.mahout.math.map.OpenObjectIntHashMap: int adjustOrPutValue(java.lang.Object,int,int)>(r33, 1, 1);
+
+     label04:
+        $z5 = virtualinvoke $r10.<org.apache.lucene.analysis.shingle.ShingleFilter: boolean incrementToken()>();
+
+        if $z5 != 0 goto label02;
+
+        $r23 = new org.apache.mahout.vectorizer.collocations.llr.GramKey;
+
+        specialinvoke $r23.<org.apache.mahout.vectorizer.collocations.llr.GramKey: void <init>()>();
+
+        $r24 = new org.apache.mahout.vectorizer.collocations.llr.CollocMapper$1;
+
+        specialinvoke $r24.<org.apache.mahout.vectorizer.collocations.llr.CollocMapper$1: void <init>(org.apache.mahout.vectorizer.collocations.llr.CollocMapper,org.apache.mahout.vectorizer.collocations.llr.GramKey,org.apache.hadoop.mapreduce.Mapper$Context)>(r0, $r23, r3);
+
+        virtualinvoke $r15.<org.apache.mahout.math.map.OpenObjectIntHashMap: boolean forEachPair(org.apache.mahout.math.function.ObjectIntProcedure)>($r24);
+
+        $r26 = new org.apache.mahout.vectorizer.collocations.llr.CollocMapper$2;
+
+        specialinvoke $r26.<org.apache.mahout.vectorizer.collocations.llr.CollocMapper$2: void <init>(org.apache.mahout.vectorizer.collocations.llr.CollocMapper,org.apache.mahout.vectorizer.collocations.llr.GramKey,org.apache.hadoop.mapreduce.Mapper$Context)>(r0, $r23, r3);
+
+        virtualinvoke $r17.<org.apache.mahout.math.map.OpenObjectIntHashMap: boolean forEachPair(org.apache.mahout.math.function.ObjectIntProcedure)>($r26);
+
+        $r25 = <org.apache.mahout.vectorizer.collocations.llr.CollocMapper$Count: org.apache.mahout.vectorizer.collocations.llr.CollocMapper$Count NGRAM_TOTAL>;
+
+        $r27 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.mapreduce.Counter getCounter(java.lang.Enum)>($r25);
+
+        $l6 = (long) i9;
+
+        interfaceinvoke $r27.<org.apache.hadoop.mapreduce.Counter: void increment(long)>($l6);
+
+        virtualinvoke $r10.<org.apache.lucene.analysis.shingle.ShingleFilter: void end()>();
+
+     label05:
+        if $r10 == null goto label14;
+
+        virtualinvoke $r10.<org.apache.lucene.analysis.shingle.ShingleFilter: void close()>();
+
+        goto label14;
+
+     label06:
+        $r29 := @caughtexception;
+
+        r32 = $r29;
+
+        throw $r29;
+
+     label07:
+        $r30 := @caughtexception;
+
+     label08:
+        if $r10 == null goto label13;
+
+        if r32 == null goto label12;
+
+     label09:
+        virtualinvoke $r10.<org.apache.lucene.analysis.shingle.ShingleFilter: void close()>();
+
+     label10:
+        goto label13;
+
+     label11:
+        $r28 := @caughtexception;
+
+        virtualinvoke r32.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r28);
+
+        goto label13;
+
+     label12:
+        virtualinvoke $r10.<org.apache.lucene.analysis.shingle.ShingleFilter: void close()>();
+
+     label13:
+        throw $r30;
+
+     label14:
+        return;
+
+        catch java.lang.Throwable from label01 to label05 with label06;
+        catch java.lang.Throwable from label01 to label05 with label07;
+        catch java.lang.Throwable from label09 to label10 with label11;
+        catch java.lang.Throwable from label06 to label08 with label07;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.collocations.llr.CollocMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        int $i0, $i1;
+        boolean $z0, $z1, $z2;
+        org.slf4j.Logger $r3, $r4, $r6;
+        java.lang.Integer $r5;
+        java.lang.Boolean $r7;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.CollocMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void setup(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $i0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("maxShingleSize", 2);
+
+        r0.<org.apache.mahout.vectorizer.collocations.llr.CollocMapper: int maxShingleSize> = $i0;
+
+        $z0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("emit-unigrams", 0);
+
+        r0.<org.apache.mahout.vectorizer.collocations.llr.CollocMapper: boolean emitUnigrams> = $z0;
+
+        $r3 = <org.apache.mahout.vectorizer.collocations.llr.CollocMapper: org.slf4j.Logger log>;
+
+        $z1 = interfaceinvoke $r3.<org.slf4j.Logger: boolean isInfoEnabled()>();
+
+        if $z1 == 0 goto label1;
+
+        $r4 = <org.apache.mahout.vectorizer.collocations.llr.CollocMapper: org.slf4j.Logger log>;
+
+        $i1 = r0.<org.apache.mahout.vectorizer.collocations.llr.CollocMapper: int maxShingleSize>;
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        interfaceinvoke $r4.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Max Ngram size is {}", $r5);
+
+        $r6 = <org.apache.mahout.vectorizer.collocations.llr.CollocMapper: org.slf4j.Logger log>;
+
+        $z2 = r0.<org.apache.mahout.vectorizer.collocations.llr.CollocMapper: boolean emitUnigrams>;
+
+        $r7 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>($z2);
+
+        interfaceinvoke $r6.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Emit Unitgrams is {}", $r7);
+
+     label1:
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.collocations.llr.CollocMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.common.StringTuple $r4;
+        org.apache.hadoop.io.Text $r5;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.CollocMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.Text) r1;
+
+        $r4 = (org.apache.mahout.common.StringTuple) r2;
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.collocations.llr.CollocMapper: void map(org.apache.hadoop.io.Text,org.apache.mahout.common.StringTuple,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+
+    static byte[] access$000()
+    {
+        byte[] $r0;
+
+        $r0 = <org.apache.mahout.vectorizer.collocations.llr.CollocMapper: byte[] EMPTY>;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        byte[] $r0;
+        org.slf4j.Logger $r1;
+
+        <org.apache.mahout.vectorizer.collocations.llr.CollocMapper: int DEFAULT_MAX_SHINGLE_SIZE> = 2;
+
+        <org.apache.mahout.vectorizer.collocations.llr.CollocMapper: java.lang.String MAX_SHINGLE_SIZE> = "maxShingleSize";
+
+        $r0 = newarray (byte)[0];
+
+        <org.apache.mahout.vectorizer.collocations.llr.CollocMapper: byte[] EMPTY> = $r0;
+
+        $r1 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/vectorizer/collocations/llr/CollocMapper");
+
+        <org.apache.mahout.vectorizer.collocations.llr.CollocMapper: org.slf4j.Logger log> = $r1;
+
+        return;
+    }
+}

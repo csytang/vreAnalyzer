@@ -30,7 +30,6 @@ public class VariantHTMLFiles {
         varianthtmllist = new DefaultMutableTreeNode("variantanno_list");
         while(!sourcefiles.isEmpty()){
             File subfile = sourcefiles.pop();
-
             if(subfile.isDirectory()){
                 File[]childdir = subfile.listFiles();
                 for(File child:childdir){
@@ -48,12 +47,11 @@ public class VariantHTMLFiles {
                         htmlfileName += splitsNames[i];
                         htmlfileName += "/";
                     }
-
                     String replaceName = "variant_"+straightName;
                     htmlfileName += replaceName;
                     htmlfileName+=".html";
                     File htmlfile = new File(htmlfileName);
-                    Text2HTML t2html = new Text2HTML(subfile, htmlfile);
+                    new Text2HTML(subfile, htmlfile);
                     DefaultMutableTreeNode htmlNode = new DefaultMutableTreeNode(htmlfile);
                     varianthtmllist.add(htmlNode);
                 }

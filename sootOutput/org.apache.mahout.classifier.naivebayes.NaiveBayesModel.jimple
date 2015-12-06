@@ -1,0 +1,664 @@
+public class org.apache.mahout.classifier.naivebayes.NaiveBayesModel extends java.lang.Object
+{
+    private final org.apache.mahout.math.Vector weightsPerLabel;
+    private final org.apache.mahout.math.Vector perlabelThetaNormalizer;
+    private final org.apache.mahout.math.Vector weightsPerFeature;
+    private final org.apache.mahout.math.Matrix weightsPerLabelAndFeature;
+    private final float alphaI;
+    private final double numFeatures;
+    private final double totalWeightSum;
+    private final boolean isComplementary;
+    public static final java.lang.String COMPLEMENTARY_MODEL;
+
+    public void <init>(org.apache.mahout.math.Matrix, org.apache.mahout.math.Vector, org.apache.mahout.math.Vector, org.apache.mahout.math.Vector, float, boolean)
+    {
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel r0;
+        org.apache.mahout.math.Matrix r1;
+        org.apache.mahout.math.Vector r2, r3, r4;
+        float f0;
+        boolean z0;
+        int $i0;
+        double $d0, $d1;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.NaiveBayesModel;
+
+        r1 := @parameter0: org.apache.mahout.math.Matrix;
+
+        r2 := @parameter1: org.apache.mahout.math.Vector;
+
+        r3 := @parameter2: org.apache.mahout.math.Vector;
+
+        r4 := @parameter3: org.apache.mahout.math.Vector;
+
+        f0 := @parameter4: float;
+
+        z0 := @parameter5: boolean;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Matrix weightsPerLabelAndFeature> = r1;
+
+        r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector weightsPerFeature> = r2;
+
+        r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector weightsPerLabel> = r3;
+
+        r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector perlabelThetaNormalizer> = r4;
+
+        $i0 = interfaceinvoke r2.<org.apache.mahout.math.Vector: int getNumNondefaultElements()>();
+
+        $d0 = (double) $i0;
+
+        r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: double numFeatures> = $d0;
+
+        $d1 = interfaceinvoke r3.<org.apache.mahout.math.Vector: double zSum()>();
+
+        r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: double totalWeightSum> = $d1;
+
+        r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: float alphaI> = f0;
+
+        r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: boolean isComplementary> = z0;
+
+        return;
+    }
+
+    public double labelWeight(int)
+    {
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel r0;
+        int i0;
+        org.apache.mahout.math.Vector $r1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.NaiveBayesModel;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector weightsPerLabel>;
+
+        $d0 = interfaceinvoke $r1.<org.apache.mahout.math.Vector: double getQuick(int)>(i0);
+
+        return $d0;
+    }
+
+    public double thetaNormalizer(int)
+    {
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel r0;
+        int i0;
+        org.apache.mahout.math.Vector $r1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.NaiveBayesModel;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector perlabelThetaNormalizer>;
+
+        $d0 = interfaceinvoke $r1.<org.apache.mahout.math.Vector: double get(int)>(i0);
+
+        return $d0;
+    }
+
+    public double featureWeight(int)
+    {
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel r0;
+        int i0;
+        org.apache.mahout.math.Vector $r1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.NaiveBayesModel;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector weightsPerFeature>;
+
+        $d0 = interfaceinvoke $r1.<org.apache.mahout.math.Vector: double getQuick(int)>(i0);
+
+        return $d0;
+    }
+
+    public double weight(int, int)
+    {
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel r0;
+        int i0, i1;
+        org.apache.mahout.math.Matrix $r1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.NaiveBayesModel;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $r1 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Matrix weightsPerLabelAndFeature>;
+
+        $d0 = interfaceinvoke $r1.<org.apache.mahout.math.Matrix: double getQuick(int,int)>(i0, i1);
+
+        return $d0;
+    }
+
+    public float alphaI()
+    {
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel r0;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.NaiveBayesModel;
+
+        $f0 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: float alphaI>;
+
+        return $f0;
+    }
+
+    public double numFeatures()
+    {
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.NaiveBayesModel;
+
+        $d0 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: double numFeatures>;
+
+        return $d0;
+    }
+
+    public double totalWeightSum()
+    {
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.NaiveBayesModel;
+
+        $d0 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: double totalWeightSum>;
+
+        return $d0;
+    }
+
+    public int numLabels()
+    {
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel r0;
+        org.apache.mahout.math.Vector $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.NaiveBayesModel;
+
+        $r1 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector weightsPerLabel>;
+
+        $i0 = interfaceinvoke $r1.<org.apache.mahout.math.Vector: int size()>();
+
+        return $i0;
+    }
+
+    public org.apache.mahout.math.Vector createScoringVector()
+    {
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel r0;
+        org.apache.mahout.math.Vector $r1, $r2;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.NaiveBayesModel;
+
+        $r1 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector weightsPerLabel>;
+
+        $r2 = interfaceinvoke $r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector like()>();
+
+        return $r2;
+    }
+
+    public boolean isComplemtary()
+    {
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel r0;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.NaiveBayesModel;
+
+        $z0 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: boolean isComplementary>;
+
+        return $z0;
+    }
+
+    public static org.apache.mahout.classifier.naivebayes.NaiveBayesModel materialize(org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration) throws java.io.IOException
+    {
+        org.apache.hadoop.fs.Path r0, $r8;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.hadoop.fs.FileSystem r2;
+        org.apache.mahout.math.Vector r4, $r9, $r12, $r15;
+        float f0;
+        boolean z0;
+        org.apache.mahout.math.DenseVector $r10, $r13, r20;
+        int $i0, $i1, i2, $i3;
+        org.apache.mahout.math.SparseRowMatrix $r11;
+        java.lang.Throwable $r16, $r17, $r18, r22;
+        org.apache.hadoop.fs.FSDataInputStream r21;
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel $r25;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        r2 = virtualinvoke r0.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r1);
+
+        r20 = null;
+
+        $r8 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r8.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r0, "naiveBayesModel.bin");
+
+        r21 = virtualinvoke r2.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataInputStream open(org.apache.hadoop.fs.Path)>($r8);
+
+        r22 = null;
+
+     label01:
+        f0 = virtualinvoke r21.<org.apache.hadoop.fs.FSDataInputStream: float readFloat()>();
+
+        z0 = virtualinvoke r21.<org.apache.hadoop.fs.FSDataInputStream: boolean readBoolean()>();
+
+        r4 = staticinvoke <org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector readVector(java.io.DataInput)>(r21);
+
+        $r10 = new org.apache.mahout.math.DenseVector;
+
+        $r9 = staticinvoke <org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector readVector(java.io.DataInput)>(r21);
+
+        specialinvoke $r10.<org.apache.mahout.math.DenseVector: void <init>(org.apache.mahout.math.Vector)>($r9);
+
+        if z0 == 0 goto label02;
+
+        $r13 = new org.apache.mahout.math.DenseVector;
+
+        $r15 = staticinvoke <org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector readVector(java.io.DataInput)>(r21);
+
+        specialinvoke $r13.<org.apache.mahout.math.DenseVector: void <init>(org.apache.mahout.math.Vector)>($r15);
+
+        r20 = $r13;
+
+     label02:
+        $r11 = new org.apache.mahout.math.SparseRowMatrix;
+
+        $i0 = interfaceinvoke $r10.<org.apache.mahout.math.Vector: int size()>();
+
+        $i1 = interfaceinvoke r4.<org.apache.mahout.math.Vector: int size()>();
+
+        specialinvoke $r11.<org.apache.mahout.math.SparseRowMatrix: void <init>(int,int)>($i0, $i1);
+
+        i2 = 0;
+
+     label03:
+        $i3 = interfaceinvoke $r11.<org.apache.mahout.math.Matrix: int numRows()>();
+
+        if i2 >= $i3 goto label04;
+
+        $r12 = staticinvoke <org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector readVector(java.io.DataInput)>(r21);
+
+        interfaceinvoke $r11.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Matrix assignRow(int,org.apache.mahout.math.Vector)>(i2, $r12);
+
+        i2 = i2 + 1;
+
+        goto label03;
+
+     label04:
+        if r21 == null goto label13;
+
+        virtualinvoke r21.<org.apache.hadoop.fs.FSDataInputStream: void close()>();
+
+        goto label13;
+
+     label05:
+        $r18 := @caughtexception;
+
+        r22 = $r18;
+
+        throw $r18;
+
+     label06:
+        $r17 := @caughtexception;
+
+     label07:
+        if r21 == null goto label12;
+
+        if r22 == null goto label11;
+
+     label08:
+        virtualinvoke r21.<org.apache.hadoop.fs.FSDataInputStream: void close()>();
+
+     label09:
+        goto label12;
+
+     label10:
+        $r16 := @caughtexception;
+
+        virtualinvoke r22.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r16);
+
+        goto label12;
+
+     label11:
+        virtualinvoke r21.<org.apache.hadoop.fs.FSDataInputStream: void close()>();
+
+     label12:
+        throw $r17;
+
+     label13:
+        $r25 = new org.apache.mahout.classifier.naivebayes.NaiveBayesModel;
+
+        specialinvoke $r25.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: void <init>(org.apache.mahout.math.Matrix,org.apache.mahout.math.Vector,org.apache.mahout.math.Vector,org.apache.mahout.math.Vector,float,boolean)>($r11, r4, $r10, r20, f0, z0);
+
+        virtualinvoke $r25.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: void validate()>();
+
+        return $r25;
+
+        catch java.lang.Throwable from label01 to label04 with label05;
+        catch java.lang.Throwable from label01 to label04 with label06;
+        catch java.lang.Throwable from label08 to label09 with label10;
+        catch java.lang.Throwable from label05 to label07 with label06;
+    }
+
+    public void serialize(org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel r0;
+        org.apache.hadoop.fs.Path r1, $r7;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.hadoop.fs.FileSystem r3;
+        org.apache.hadoop.fs.FSDataOutputStream r4;
+        float $f0;
+        boolean $z0, $z1;
+        org.apache.mahout.math.Vector $r8, $r9, $r11, $r12;
+        org.apache.mahout.math.Matrix $r10, $r18;
+        java.lang.Throwable $r14, $r15, $r16, r17;
+        int i0, $i1;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.NaiveBayesModel;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        r3 = virtualinvoke r1.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r2);
+
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r7.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r1, "naiveBayesModel.bin");
+
+        r4 = virtualinvoke r3.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataOutputStream create(org.apache.hadoop.fs.Path)>($r7);
+
+        r17 = null;
+
+     label01:
+        $f0 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: float alphaI>;
+
+        virtualinvoke r4.<org.apache.hadoop.fs.FSDataOutputStream: void writeFloat(float)>($f0);
+
+        $z0 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: boolean isComplementary>;
+
+        virtualinvoke r4.<org.apache.hadoop.fs.FSDataOutputStream: void writeBoolean(boolean)>($z0);
+
+        $r8 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector weightsPerFeature>;
+
+        staticinvoke <org.apache.mahout.math.VectorWritable: void writeVector(java.io.DataOutput,org.apache.mahout.math.Vector)>(r4, $r8);
+
+        $r9 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector weightsPerLabel>;
+
+        staticinvoke <org.apache.mahout.math.VectorWritable: void writeVector(java.io.DataOutput,org.apache.mahout.math.Vector)>(r4, $r9);
+
+        $z1 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: boolean isComplementary>;
+
+        if $z1 == 0 goto label02;
+
+        $r12 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector perlabelThetaNormalizer>;
+
+        staticinvoke <org.apache.mahout.math.VectorWritable: void writeVector(java.io.DataOutput,org.apache.mahout.math.Vector)>(r4, $r12);
+
+     label02:
+        i0 = 0;
+
+     label03:
+        $r18 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Matrix weightsPerLabelAndFeature>;
+
+        $i1 = interfaceinvoke $r18.<org.apache.mahout.math.Matrix: int numRows()>();
+
+        if i0 >= $i1 goto label04;
+
+        $r10 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Matrix weightsPerLabelAndFeature>;
+
+        $r11 = interfaceinvoke $r10.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Vector viewRow(int)>(i0);
+
+        staticinvoke <org.apache.mahout.math.VectorWritable: void writeVector(java.io.DataOutput,org.apache.mahout.math.Vector)>(r4, $r11);
+
+        i0 = i0 + 1;
+
+        goto label03;
+
+     label04:
+        if r4 == null goto label13;
+
+        virtualinvoke r4.<org.apache.hadoop.fs.FSDataOutputStream: void close()>();
+
+        goto label13;
+
+     label05:
+        $r15 := @caughtexception;
+
+        r17 = $r15;
+
+        throw $r15;
+
+     label06:
+        $r14 := @caughtexception;
+
+     label07:
+        if r4 == null goto label12;
+
+        if r17 == null goto label11;
+
+     label08:
+        virtualinvoke r4.<org.apache.hadoop.fs.FSDataOutputStream: void close()>();
+
+     label09:
+        goto label12;
+
+     label10:
+        $r16 := @caughtexception;
+
+        virtualinvoke r17.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r16);
+
+        goto label12;
+
+     label11:
+        virtualinvoke r4.<org.apache.hadoop.fs.FSDataOutputStream: void close()>();
+
+     label12:
+        throw $r14;
+
+     label13:
+        return;
+
+        catch java.lang.Throwable from label01 to label04 with label05;
+        catch java.lang.Throwable from label01 to label04 with label06;
+        catch java.lang.Throwable from label08 to label09 with label10;
+        catch java.lang.Throwable from label05 to label07 with label06;
+    }
+
+    public void validate()
+    {
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel r0;
+        float $f0;
+        byte $b0, $b1, $b2, $b6;
+        double $d0, $d1, $d2, $d3, $d4, $d5;
+        org.apache.mahout.math.Vector $r1, $r3, $r4, $r6, $r7, $r8, $r9, $r10, $r11, $r12;
+        int $i3, $i4, $i5, $i7, $i8;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z9;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.NaiveBayesModel;
+
+        $f0 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: float alphaI>;
+
+        $b0 = $f0 cmpl 0.0F;
+
+        if $b0 <= 0 goto label01;
+
+        $z1 = 1;
+
+        goto label02;
+
+     label01:
+        $z1 = 0;
+
+     label02:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z1, "alphaI has to be greater than 0!");
+
+        $d0 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: double numFeatures>;
+
+        $b1 = $d0 cmpl 0.0;
+
+        if $b1 <= 0 goto label03;
+
+        $z2 = 1;
+
+        goto label04;
+
+     label03:
+        $z2 = 0;
+
+     label04:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z2, "the vocab count has to be greater than 0!");
+
+        $d1 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: double totalWeightSum>;
+
+        $b2 = $d1 cmpl 0.0;
+
+        if $b2 <= 0 goto label05;
+
+        $z3 = 1;
+
+        goto label06;
+
+     label05:
+        $z3 = 0;
+
+     label06:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z3, "the totalWeightSum has to be greater than 0!");
+
+        $r1 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector weightsPerLabel>;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r1, "the number of labels has to be defined!");
+
+        $r3 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector weightsPerLabel>;
+
+        $i3 = interfaceinvoke $r3.<org.apache.mahout.math.Vector: int getNumNondefaultElements()>();
+
+        if $i3 <= 0 goto label07;
+
+        $z4 = 1;
+
+        goto label08;
+
+     label07:
+        $z4 = 0;
+
+     label08:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z4, "the number of labels has to be greater than 0!");
+
+        $r4 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector weightsPerFeature>;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>($r4, "the feature sums have to be defined");
+
+        $r6 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector weightsPerFeature>;
+
+        $i4 = interfaceinvoke $r6.<org.apache.mahout.math.Vector: int getNumNondefaultElements()>();
+
+        if $i4 <= 0 goto label09;
+
+        $z5 = 1;
+
+        goto label10;
+
+     label09:
+        $z5 = 0;
+
+     label10:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z5, "the feature sums have to be greater than 0!");
+
+        $z0 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: boolean isComplementary>;
+
+        if $z0 == 0 goto label19;
+
+        $r8 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector perlabelThetaNormalizer>;
+
+        if $r8 == null goto label11;
+
+        $z6 = 1;
+
+        goto label12;
+
+     label11:
+        $z6 = 0;
+
+     label12:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z6, "the theta normalizers have to be defined");
+
+        $r7 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector perlabelThetaNormalizer>;
+
+        $i5 = interfaceinvoke $r7.<org.apache.mahout.math.Vector: int getNumNondefaultElements()>();
+
+        if $i5 <= 0 goto label13;
+
+        $z7 = 1;
+
+        goto label14;
+
+     label13:
+        $z7 = 0;
+
+     label14:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z7, "the number of theta normalizers has to be greater than 0!");
+
+        $r9 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector perlabelThetaNormalizer>;
+
+        $d3 = interfaceinvoke $r9.<org.apache.mahout.math.Vector: double minValue()>();
+
+        $d2 = staticinvoke <java.lang.Math: double signum(double)>($d3);
+
+        $r10 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector perlabelThetaNormalizer>;
+
+        $d4 = interfaceinvoke $r10.<org.apache.mahout.math.Vector: double maxValue()>();
+
+        $d5 = staticinvoke <java.lang.Math: double signum(double)>($d4);
+
+        $b6 = $d2 cmpl $d5;
+
+        if $b6 != 0 goto label15;
+
+        $z8 = 1;
+
+        goto label16;
+
+     label15:
+        $z8 = 0;
+
+     label16:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z8, "Theta normalizers do not all have the same sign");
+
+        $r11 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector perlabelThetaNormalizer>;
+
+        $i7 = interfaceinvoke $r11.<org.apache.mahout.math.Vector: int getNumNonZeroElements()>();
+
+        $r12 = r0.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.math.Vector perlabelThetaNormalizer>;
+
+        $i8 = interfaceinvoke $r12.<org.apache.mahout.math.Vector: int size()>();
+
+        if $i7 != $i8 goto label17;
+
+        $z9 = 1;
+
+        goto label18;
+
+     label17:
+        $z9 = 0;
+
+     label18:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z9, "Theta normalizers can not have zero value.");
+
+     label19:
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.classifier.naivebayes.NaiveBayesModel: java.lang.String COMPLEMENTARY_MODEL> = "COMPLEMENTARY_MODEL";
+
+        return;
+    }
+}

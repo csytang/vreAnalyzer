@@ -1,0 +1,148 @@
+public class org.apache.mahout.classifier.sgd.MixedGradient extends java.lang.Object implements org.apache.mahout.classifier.sgd.Gradient
+{
+    private final double alpha;
+    private final org.apache.mahout.classifier.sgd.RankingGradient rank;
+    private final org.apache.mahout.classifier.sgd.Gradient basic;
+    private final java.util.Random random;
+    private boolean hasZero;
+    private boolean hasOne;
+
+    public void <init>(double, int)
+    {
+        org.apache.mahout.classifier.sgd.MixedGradient r0;
+        double d0;
+        int i0;
+        org.apache.mahout.common.RandomWrapper $r1;
+        org.apache.mahout.classifier.sgd.RankingGradient $r2, $r3;
+        org.apache.mahout.classifier.sgd.Gradient $r4;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.MixedGradient;
+
+        d0 := @parameter0: double;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        r0.<org.apache.mahout.classifier.sgd.MixedGradient: java.util.Random random> = $r1;
+
+        r0.<org.apache.mahout.classifier.sgd.MixedGradient: double alpha> = d0;
+
+        $r2 = new org.apache.mahout.classifier.sgd.RankingGradient;
+
+        specialinvoke $r2.<org.apache.mahout.classifier.sgd.RankingGradient: void <init>(int)>(i0);
+
+        r0.<org.apache.mahout.classifier.sgd.MixedGradient: org.apache.mahout.classifier.sgd.RankingGradient rank> = $r2;
+
+        $r3 = r0.<org.apache.mahout.classifier.sgd.MixedGradient: org.apache.mahout.classifier.sgd.RankingGradient rank>;
+
+        $r4 = virtualinvoke $r3.<org.apache.mahout.classifier.sgd.RankingGradient: org.apache.mahout.classifier.sgd.Gradient getBaseGradient()>();
+
+        r0.<org.apache.mahout.classifier.sgd.MixedGradient: org.apache.mahout.classifier.sgd.Gradient basic> = $r4;
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector apply(java.lang.String, int, org.apache.mahout.math.Vector, org.apache.mahout.classifier.AbstractVectorClassifier)
+    {
+        org.apache.mahout.classifier.sgd.MixedGradient r0;
+        java.lang.String r1;
+        int i0;
+        org.apache.mahout.math.Vector r2, $r7, $r11;
+        org.apache.mahout.classifier.AbstractVectorClassifier r3;
+        java.util.Random $r4;
+        double $d0, $d1;
+        byte $b1;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7;
+        org.apache.mahout.classifier.sgd.RankingGradient $r5, $r12;
+        org.apache.mahout.classifier.sgd.Gradient $r6;
+        java.lang.IllegalStateException $r10;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.MixedGradient;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: org.apache.mahout.math.Vector;
+
+        r3 := @parameter3: org.apache.mahout.classifier.AbstractVectorClassifier;
+
+        $r4 = r0.<org.apache.mahout.classifier.sgd.MixedGradient: java.util.Random random>;
+
+        $d0 = virtualinvoke $r4.<java.util.Random: double nextDouble()>();
+
+        $d1 = r0.<org.apache.mahout.classifier.sgd.MixedGradient: double alpha>;
+
+        $b1 = $d0 cmpg $d1;
+
+        if $b1 >= 0 goto label3;
+
+        $z4 = r0.<org.apache.mahout.classifier.sgd.MixedGradient: boolean hasZero>;
+
+        if $z4 == 0 goto label1;
+
+        $z5 = r0.<org.apache.mahout.classifier.sgd.MixedGradient: boolean hasOne>;
+
+        if $z5 != 0 goto label2;
+
+     label1:
+        $r10 = new java.lang.IllegalStateException;
+
+        specialinvoke $r10.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r10;
+
+     label2:
+        $r12 = r0.<org.apache.mahout.classifier.sgd.MixedGradient: org.apache.mahout.classifier.sgd.RankingGradient rank>;
+
+        $r11 = virtualinvoke $r12.<org.apache.mahout.classifier.sgd.RankingGradient: org.apache.mahout.math.Vector apply(java.lang.String,int,org.apache.mahout.math.Vector,org.apache.mahout.classifier.AbstractVectorClassifier)>(r1, i0, r2, r3);
+
+        return $r11;
+
+     label3:
+        $z0 = r0.<org.apache.mahout.classifier.sgd.MixedGradient: boolean hasZero>;
+
+        if i0 != 0 goto label4;
+
+        $z6 = 1;
+
+        goto label5;
+
+     label4:
+        $z6 = 0;
+
+     label5:
+        $z1 = $z0 | $z6;
+
+        r0.<org.apache.mahout.classifier.sgd.MixedGradient: boolean hasZero> = $z1;
+
+        $z2 = r0.<org.apache.mahout.classifier.sgd.MixedGradient: boolean hasOne>;
+
+        if i0 != 1 goto label6;
+
+        $z7 = 1;
+
+        goto label7;
+
+     label6:
+        $z7 = 0;
+
+     label7:
+        $z3 = $z2 | $z7;
+
+        r0.<org.apache.mahout.classifier.sgd.MixedGradient: boolean hasOne> = $z3;
+
+        $r5 = r0.<org.apache.mahout.classifier.sgd.MixedGradient: org.apache.mahout.classifier.sgd.RankingGradient rank>;
+
+        virtualinvoke $r5.<org.apache.mahout.classifier.sgd.RankingGradient: void addToHistory(int,org.apache.mahout.math.Vector)>(i0, r2);
+
+        $r6 = r0.<org.apache.mahout.classifier.sgd.MixedGradient: org.apache.mahout.classifier.sgd.Gradient basic>;
+
+        $r7 = interfaceinvoke $r6.<org.apache.mahout.classifier.sgd.Gradient: org.apache.mahout.math.Vector apply(java.lang.String,int,org.apache.mahout.math.Vector,org.apache.mahout.classifier.AbstractVectorClassifier)>(r1, i0, r2, r3);
+
+        return $r7;
+    }
+}

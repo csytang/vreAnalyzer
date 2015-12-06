@@ -1,0 +1,68 @@
+class org.apache.mahout.classifier.df.split.RegressionSplit$InstanceComparator extends java.lang.Object implements java.util.Comparator, java.io.Serializable
+{
+    private final int attr;
+
+    void <init>(int)
+    {
+        org.apache.mahout.classifier.df.split.RegressionSplit$InstanceComparator r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.classifier.df.split.RegressionSplit$InstanceComparator;
+
+        i0 := @parameter0: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.df.split.RegressionSplit$InstanceComparator: int attr> = i0;
+
+        return;
+    }
+
+    public int compare(org.apache.mahout.classifier.df.data.Instance, org.apache.mahout.classifier.df.data.Instance)
+    {
+        org.apache.mahout.classifier.df.split.RegressionSplit$InstanceComparator r0;
+        org.apache.mahout.classifier.df.data.Instance r1, r2;
+        int $i0, $i1, $i2;
+        double $d0, $d1;
+
+        r0 := @this: org.apache.mahout.classifier.df.split.RegressionSplit$InstanceComparator;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.data.Instance;
+
+        r2 := @parameter1: org.apache.mahout.classifier.df.data.Instance;
+
+        $i0 = r0.<org.apache.mahout.classifier.df.split.RegressionSplit$InstanceComparator: int attr>;
+
+        $d0 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Instance: double get(int)>($i0);
+
+        $i1 = r0.<org.apache.mahout.classifier.df.split.RegressionSplit$InstanceComparator: int attr>;
+
+        $d1 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Instance: double get(int)>($i1);
+
+        $i2 = staticinvoke <java.lang.Double: int compare(double,double)>($d0, $d1);
+
+        return $i2;
+    }
+
+    public volatile int compare(java.lang.Object, java.lang.Object)
+    {
+        org.apache.mahout.classifier.df.split.RegressionSplit$InstanceComparator r0;
+        java.lang.Object r1, r2;
+        org.apache.mahout.classifier.df.data.Instance $r3, $r4;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.df.split.RegressionSplit$InstanceComparator;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        $r4 = (org.apache.mahout.classifier.df.data.Instance) r1;
+
+        $r3 = (org.apache.mahout.classifier.df.data.Instance) r2;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.classifier.df.split.RegressionSplit$InstanceComparator: int compare(org.apache.mahout.classifier.df.data.Instance,org.apache.mahout.classifier.df.data.Instance)>($r4, $r3);
+
+        return $i0;
+    }
+}

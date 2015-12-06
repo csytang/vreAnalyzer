@@ -1,0 +1,697 @@
+public class org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob extends org.apache.mahout.common.AbstractJob
+{
+    public static final double NO_THRESHOLD;
+    public static final long NO_FIXED_RANDOM_SEED;
+    private static final java.lang.String SIMILARITY_CLASSNAME;
+    private static final java.lang.String NUMBER_OF_COLUMNS;
+    private static final java.lang.String MAX_SIMILARITIES_PER_ROW;
+    private static final java.lang.String EXCLUDE_SELF_SIMILARITY;
+    private static final java.lang.String THRESHOLD;
+    private static final java.lang.String NORMS_PATH;
+    private static final java.lang.String MAXVALUES_PATH;
+    private static final java.lang.String NUM_NON_ZERO_ENTRIES_PATH;
+    private static final int DEFAULT_MAX_SIMILARITIES_PER_ROW;
+    private static final java.lang.String OBSERVATIONS_PER_COLUMN_PATH;
+    private static final java.lang.String MAX_OBSERVATIONS_PER_ROW;
+    private static final java.lang.String MAX_OBSERVATIONS_PER_COLUMN;
+    private static final java.lang.String RANDOM_SEED;
+    private static final int DEFAULT_MAX_OBSERVATIONS_PER_ROW;
+    private static final int DEFAULT_MAX_OBSERVATIONS_PER_COLUMN;
+    private static final int NORM_VECTOR_MARKER;
+    private static final int MAXVALUE_VECTOR_MARKER;
+    private static final int NUM_NON_ZERO_ENTRIES_VECTOR_MARKER;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        return;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob $r1;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob;
+
+        specialinvoke $r1.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.util.Tool,java.lang.String[])>($r1, r0);
+
+        return;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob r0;
+        java.lang.String[] r1;
+        java.util.Map r2;
+        java.lang.String r3, $r13, $r17, $r18, $r19, $r20, $r24, $r27, $r28, $r29, $r30, $r35, $r37, $r38, $r40, $r41, $r42, $r43, $r44, $r45, $r46, $r47, $r48, $r50, $r51, $r52, $r53, $r54, $r55, $r56, $r57, $r58, $r59, $r60, $r61, $r62, $r63, $r64, $r65, $r66, $r67, $r68, $r69, $r70, $r73, r79;
+        boolean z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, z9, z10, z11;
+        double d0, $d1;
+        int i1, i2, i3, i4;
+        org.apache.hadoop.fs.Path r4, r5, r6, r7, r8, r9, $r25, $r32, $r33, $r34, $r49, $r76, $r77;
+        org.apache.hadoop.mapreduce.Job r10, r81, r83, r85;
+        java.lang.StringBuilder $r12, $r14, $r15, $r16;
+        org.apache.commons.cli2.option.DefaultOption $r22;
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r23;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures $r26;
+        java.util.concurrent.atomic.AtomicInteger $r31;
+        org.apache.hadoop.conf.Configuration $r36, $r39, $r72, $r74, r82, r84;
+        org.apache.hadoop.fs.Path[] $r71, $r75;
+        java.lang.IllegalArgumentException $r78;
+        long $l5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob;
+
+        r1 := @parameter0: java.lang.String[];
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: void addInputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: void addOutputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("numberOfColumns", "r", "Number of columns in the input matrix", 0);
+
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Name of distributed similarity class to instantiate, alternatively use one of the predefined similarities (");
+
+        $r13 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: java.lang.String list()>();
+
+        $r16 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r13);
+
+        $r15 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(41);
+
+        $r17 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: void addOption(java.lang.String,java.lang.String,java.lang.String)>("similarityClassname", "s", $r17);
+
+        $r18 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(100);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("maxSimilaritiesPerRow", "m", "Number of maximum similarities per row (default: 100)", $r18);
+
+        $r19 = staticinvoke <java.lang.String: java.lang.String valueOf(boolean)>(0);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("excludeSelfSimilarity", "ess", "compute similarity of rows to themselves?", $r19);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("threshold", "tr", "discard row pairs with a similarity value below this", 0);
+
+        $r20 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(500);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("maxObservationsPerRow", null, "sample rows down to this number of entries", $r20);
+
+        $r24 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(500);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("maxObservationsPerColumn", null, "sample columns down to this number of entries", $r24);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("randomSeed", null, "use this seed for sampling", 0);
+
+        $r23 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder overwriteOption()>();
+
+        $r22 = virtualinvoke $r23.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r22);
+
+        r2 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.util.Map parseArguments(java.lang.String[])>(r1);
+
+        if r2 != null goto label01;
+
+        return -1;
+
+     label01:
+        $z1 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: boolean hasOption(java.lang.String)>("numberOfColumns");
+
+        if $z1 == 0 goto label02;
+
+        $r73 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String getOption(java.lang.String)>("numberOfColumns");
+
+        i3 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r73);
+
+        goto label03;
+
+     label02:
+        $r25 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.fs.Path getInputPath()>();
+
+        i3 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: int getDimensions(org.apache.hadoop.fs.Path)>($r25);
+
+     label03:
+        r3 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String getOption(java.lang.String)>("similarityClassname");
+
+     label04:
+        $r26 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures valueOf(java.lang.String)>(r3);
+
+        r79 = virtualinvoke $r26.<org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: java.lang.String getClassname()>();
+
+     label05:
+        goto label07;
+
+     label06:
+        $r78 := @caughtexception;
+
+        r79 = r3;
+
+     label07:
+        $z2 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: boolean hasOption(java.lang.String)>("overwrite");
+
+        if $z2 == 0 goto label08;
+
+        $r72 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $r71 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r76 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.fs.Path getTempPath()>();
+
+        $r71[0] = $r76;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r72, $r71);
+
+        $r74 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $r75 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r77 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        $r75[0] = $r77;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r74, $r75);
+
+     label08:
+        $r28 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String getOption(java.lang.String)>("maxSimilaritiesPerRow");
+
+        i4 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r28);
+
+        $r27 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String getOption(java.lang.String)>("excludeSelfSimilarity");
+
+        z0 = staticinvoke <java.lang.Boolean: boolean parseBoolean(java.lang.String)>($r27);
+
+        $z3 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: boolean hasOption(java.lang.String)>("threshold");
+
+        if $z3 == 0 goto label09;
+
+        $r70 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String getOption(java.lang.String)>("threshold");
+
+        $d1 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r70);
+
+        goto label10;
+
+     label09:
+        $d1 = 4.9E-324;
+
+     label10:
+        d0 = $d1;
+
+        $z4 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: boolean hasOption(java.lang.String)>("randomSeed");
+
+        if $z4 == 0 goto label11;
+
+        $r69 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String getOption(java.lang.String)>("randomSeed");
+
+        $l5 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r69);
+
+        goto label12;
+
+     label11:
+        $l5 = -9223372036854775808L;
+
+     label12:
+        $r30 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String getOption(java.lang.String)>("maxObservationsPerRow");
+
+        i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r30);
+
+        $r29 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String getOption(java.lang.String)>("maxObservationsPerColumn");
+
+        i2 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r29);
+
+        r4 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.fs.Path getTempPath(java.lang.String)>("weights");
+
+        r5 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.fs.Path getTempPath(java.lang.String)>("norms.bin");
+
+        r7 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.fs.Path getTempPath(java.lang.String)>("numNonZeroEntries.bin");
+
+        r6 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.fs.Path getTempPath(java.lang.String)>("maxValues.bin");
+
+        r9 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.fs.Path getTempPath(java.lang.String)>("pairwiseSimilarity");
+
+        r8 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.fs.Path getTempPath(java.lang.String)>("observationsPerColumn.bin");
+
+        $r31 = new java.util.concurrent.atomic.AtomicInteger;
+
+        specialinvoke $r31.<java.util.concurrent.atomic.AtomicInteger: void <init>()>();
+
+        $r32 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.fs.Path getInputPath()>();
+
+        $r33 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.fs.Path getTempPath(java.lang.String)>("notUsed");
+
+        r10 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>($r32, $r33, class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob$CountObservationsMapper", class "org/apache/hadoop/io/NullWritable", class "org/apache/mahout/math/VectorWritable", class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob$SumObservationsReducer", class "org/apache/hadoop/io/NullWritable", class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke r10.<org.apache.hadoop.mapreduce.Job: void setCombinerClass(java.lang.Class)>(class "org/apache/mahout/common/mapreduce/VectorSumCombiner");
+
+        $r36 = virtualinvoke r10.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r35 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String OBSERVATIONS_PER_COLUMN_PATH>;
+
+        $r37 = virtualinvoke r8.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        virtualinvoke $r36.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r35, $r37);
+
+        virtualinvoke r10.<org.apache.hadoop.mapreduce.Job: void setNumReduceTasks(int)>(1);
+
+        virtualinvoke r10.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        $z6 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: boolean shouldRunNextPhase(java.util.Map,java.util.concurrent.atomic.AtomicInteger)>(r2, $r31);
+
+        if $z6 == 0 goto label13;
+
+        $r49 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.fs.Path getInputPath()>();
+
+        r81 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>($r49, r4, class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob$VectorNormMapper", class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable", class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob$MergeVectorsReducer", class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke r81.<org.apache.hadoop.mapreduce.Job: void setCombinerClass(java.lang.Class)>(class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob$MergeVectorsCombiner");
+
+        r82 = virtualinvoke r81.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r59 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String THRESHOLD>;
+
+        $r58 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(d0);
+
+        virtualinvoke r82.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r59, $r58);
+
+        $r57 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String NORMS_PATH>;
+
+        $r56 = virtualinvoke r5.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        virtualinvoke r82.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r57, $r56);
+
+        $r55 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String NUM_NON_ZERO_ENTRIES_PATH>;
+
+        $r54 = virtualinvoke r7.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        virtualinvoke r82.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r55, $r54);
+
+        $r53 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String MAXVALUES_PATH>;
+
+        $r52 = virtualinvoke r6.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        virtualinvoke r82.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r53, $r52);
+
+        $r67 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String SIMILARITY_CLASSNAME>;
+
+        virtualinvoke r82.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r67, r79);
+
+        $r66 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String OBSERVATIONS_PER_COLUMN_PATH>;
+
+        $r65 = virtualinvoke r8.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        virtualinvoke r82.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r66, $r65);
+
+        $r64 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String MAX_OBSERVATIONS_PER_ROW>;
+
+        $r63 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i1);
+
+        virtualinvoke r82.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r64, $r63);
+
+        $r62 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String MAX_OBSERVATIONS_PER_COLUMN>;
+
+        $r61 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i2);
+
+        virtualinvoke r82.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r62, $r61);
+
+        $r60 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String RANDOM_SEED>;
+
+        $r68 = staticinvoke <java.lang.String: java.lang.String valueOf(long)>($l5);
+
+        virtualinvoke r82.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r60, $r68);
+
+        z9 = virtualinvoke r81.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z9 != 0 goto label13;
+
+        return -1;
+
+     label13:
+        $z5 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: boolean shouldRunNextPhase(java.util.Map,java.util.concurrent.atomic.AtomicInteger)>(r2, $r31);
+
+        if $z5 == 0 goto label14;
+
+        r83 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>(r4, r9, class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob$CooccurrencesMapper", class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable", class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob$SimilarityReducer", class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke r83.<org.apache.hadoop.mapreduce.Job: void setCombinerClass(java.lang.Class)>(class "org/apache/mahout/common/mapreduce/VectorSumReducer");
+
+        r84 = virtualinvoke r83.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r38 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String THRESHOLD>;
+
+        $r47 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(d0);
+
+        virtualinvoke r84.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r38, $r47);
+
+        $r48 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String NORMS_PATH>;
+
+        $r45 = virtualinvoke r5.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        virtualinvoke r84.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r48, $r45);
+
+        $r46 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String NUM_NON_ZERO_ENTRIES_PATH>;
+
+        $r43 = virtualinvoke r7.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        virtualinvoke r84.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r46, $r43);
+
+        $r44 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String MAXVALUES_PATH>;
+
+        $r41 = virtualinvoke r6.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        virtualinvoke r84.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r44, $r41);
+
+        $r42 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String SIMILARITY_CLASSNAME>;
+
+        virtualinvoke r84.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r42, r79);
+
+        $r50 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String NUMBER_OF_COLUMNS>;
+
+        virtualinvoke r84.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>($r50, i3);
+
+        $r51 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String EXCLUDE_SELF_SIMILARITY>;
+
+        virtualinvoke r84.<org.apache.hadoop.conf.Configuration: void setBoolean(java.lang.String,boolean)>($r51, z0);
+
+        z10 = virtualinvoke r83.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z10 != 0 goto label14;
+
+        return -1;
+
+     label14:
+        $z7 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: boolean shouldRunNextPhase(java.util.Map,java.util.concurrent.atomic.AtomicInteger)>(r2, $r31);
+
+        if $z7 == 0 goto label15;
+
+        $r34 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        r85 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>(r9, $r34, class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob$UnsymmetrifyMapper", class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable", class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob$MergeToTopKSimilaritiesReducer", class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke r85.<org.apache.hadoop.mapreduce.Job: void setCombinerClass(java.lang.Class)>(class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob$MergeToTopKSimilaritiesReducer");
+
+        $r39 = virtualinvoke r85.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r40 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String MAX_SIMILARITIES_PER_ROW>;
+
+        virtualinvoke $r39.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>($r40, i4);
+
+        z11 = virtualinvoke r85.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z11 != 0 goto label15;
+
+        return -1;
+
+     label15:
+        return 0;
+
+        catch java.lang.IllegalArgumentException from label04 to label05 with label06;
+    }
+
+    static java.lang.String access$000()
+    {
+        java.lang.String $r0;
+
+        $r0 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String OBSERVATIONS_PER_COLUMN_PATH>;
+
+        return $r0;
+    }
+
+    static java.lang.String access$100()
+    {
+        java.lang.String $r0;
+
+        $r0 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String SIMILARITY_CLASSNAME>;
+
+        return $r0;
+    }
+
+    static java.lang.String access$200()
+    {
+        java.lang.String $r0;
+
+        $r0 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String THRESHOLD>;
+
+        return $r0;
+    }
+
+    static java.lang.String access$300()
+    {
+        java.lang.String $r0;
+
+        $r0 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String MAX_OBSERVATIONS_PER_ROW>;
+
+        return $r0;
+    }
+
+    static java.lang.String access$400()
+    {
+        java.lang.String $r0;
+
+        $r0 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String MAX_OBSERVATIONS_PER_COLUMN>;
+
+        return $r0;
+    }
+
+    static java.lang.String access$500()
+    {
+        java.lang.String $r0;
+
+        $r0 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String RANDOM_SEED>;
+
+        return $r0;
+    }
+
+    static java.lang.String access$600()
+    {
+        java.lang.String $r0;
+
+        $r0 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String NORMS_PATH>;
+
+        return $r0;
+    }
+
+    static java.lang.String access$700()
+    {
+        java.lang.String $r0;
+
+        $r0 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String NUM_NON_ZERO_ENTRIES_PATH>;
+
+        return $r0;
+    }
+
+    static java.lang.String access$800()
+    {
+        java.lang.String $r0;
+
+        $r0 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String MAXVALUES_PATH>;
+
+        return $r0;
+    }
+
+    static java.lang.String access$900()
+    {
+        java.lang.String $r0;
+
+        $r0 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String NUMBER_OF_COLUMNS>;
+
+        return $r0;
+    }
+
+    static java.lang.String access$1000()
+    {
+        java.lang.String $r0;
+
+        $r0 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String EXCLUDE_SELF_SIMILARITY>;
+
+        return $r0;
+    }
+
+    static java.lang.String access$1100()
+    {
+        java.lang.String $r0;
+
+        $r0 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String MAX_SIMILARITIES_PER_ROW>;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.StringBuilder $r0, $r1, $r2, $r4, $r5, $r6, $r8, $r9, $r10, $r12, $r13, $r14, $r16, $r17, $r19, $r20, $r21, $r23, $r24, $r25, $r27, $r28, $r29, $r31, $r32, $r34, $r35, $r36, $r38, $r39, $r40, $r42, $r43, $r44, $r46, $r47;
+        java.lang.String $r3, $r7, $r11, $r15, $r18, $r22, $r26, $r30, $r33, $r37, $r41, $r45;
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: int NUM_NON_ZERO_ENTRIES_VECTOR_MARKER> = -2147483646;
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: int MAXVALUE_VECTOR_MARKER> = -2147483647;
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: int NORM_VECTOR_MARKER> = -2147483648;
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: int DEFAULT_MAX_OBSERVATIONS_PER_COLUMN> = 500;
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: int DEFAULT_MAX_OBSERVATIONS_PER_ROW> = 500;
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: int DEFAULT_MAX_SIMILARITIES_PER_ROW> = 100;
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: long NO_FIXED_RANDOM_SEED> = -9223372036854775808L;
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: double NO_THRESHOLD> = 4.9E-324;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob");
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".distributedSimilarityClassname");
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String SIMILARITY_CLASSNAME> = $r3;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".numberOfColumns");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String NUMBER_OF_COLUMNS> = $r7;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob");
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".maxSimilaritiesPerRow");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String MAX_SIMILARITIES_PER_ROW> = $r11;
+
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>()>();
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob");
+
+        $r14 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".excludeSelfSimilarity");
+
+        $r15 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String EXCLUDE_SELF_SIMILARITY> = $r15;
+
+        $r17 = new java.lang.StringBuilder;
+
+        specialinvoke $r17.<java.lang.StringBuilder: void <init>()>();
+
+        $r16 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob");
+
+        $r19 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".threshold");
+
+        $r18 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String THRESHOLD> = $r18;
+
+        $r21 = new java.lang.StringBuilder;
+
+        specialinvoke $r21.<java.lang.StringBuilder: void <init>()>();
+
+        $r20 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob");
+
+        $r23 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".normsPath");
+
+        $r22 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String NORMS_PATH> = $r22;
+
+        $r25 = new java.lang.StringBuilder;
+
+        specialinvoke $r25.<java.lang.StringBuilder: void <init>()>();
+
+        $r24 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob");
+
+        $r27 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".maxWeightsPath");
+
+        $r26 = virtualinvoke $r27.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String MAXVALUES_PATH> = $r26;
+
+        $r29 = new java.lang.StringBuilder;
+
+        specialinvoke $r29.<java.lang.StringBuilder: void <init>()>();
+
+        $r28 = virtualinvoke $r29.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob");
+
+        $r31 = virtualinvoke $r28.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".nonZeroEntriesPath");
+
+        $r30 = virtualinvoke $r31.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String NUM_NON_ZERO_ENTRIES_PATH> = $r30;
+
+        $r34 = new java.lang.StringBuilder;
+
+        specialinvoke $r34.<java.lang.StringBuilder: void <init>()>();
+
+        $r35 = virtualinvoke $r34.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob");
+
+        $r32 = virtualinvoke $r35.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".observationsPerColumnPath");
+
+        $r33 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String OBSERVATIONS_PER_COLUMN_PATH> = $r33;
+
+        $r38 = new java.lang.StringBuilder;
+
+        specialinvoke $r38.<java.lang.StringBuilder: void <init>()>();
+
+        $r39 = virtualinvoke $r38.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob");
+
+        $r36 = virtualinvoke $r39.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".maxObservationsPerRow");
+
+        $r37 = virtualinvoke $r36.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String MAX_OBSERVATIONS_PER_ROW> = $r37;
+
+        $r42 = new java.lang.StringBuilder;
+
+        specialinvoke $r42.<java.lang.StringBuilder: void <init>()>();
+
+        $r43 = virtualinvoke $r42.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob");
+
+        $r40 = virtualinvoke $r43.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".maxObservationsPerColumn");
+
+        $r41 = virtualinvoke $r40.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String MAX_OBSERVATIONS_PER_COLUMN> = $r41;
+
+        $r46 = new java.lang.StringBuilder;
+
+        specialinvoke $r46.<java.lang.StringBuilder: void <init>()>();
+
+        $r47 = virtualinvoke $r46.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob");
+
+        $r44 = virtualinvoke $r47.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".randomSeed");
+
+        $r45 = virtualinvoke $r44.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String RANDOM_SEED> = $r45;
+
+        return;
+    }
+}

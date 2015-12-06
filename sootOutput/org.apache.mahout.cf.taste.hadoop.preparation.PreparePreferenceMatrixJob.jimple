@@ -1,0 +1,200 @@
+public class org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob extends org.apache.mahout.common.AbstractJob
+{
+    public static final java.lang.String NUM_USERS;
+    public static final java.lang.String ITEMID_INDEX;
+    public static final java.lang.String USER_VECTORS;
+    public static final java.lang.String RATING_MATRIX;
+    private static final int DEFAULT_MIN_PREFS_PER_USER;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        return;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob $r1;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.util.Tool,java.lang.String[])>($r1, r0);
+
+        return;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob r0;
+        java.lang.String[] r1;
+        java.util.Map r2;
+        int i0, i1;
+        boolean z0, z1, z2, z3;
+        float f0;
+        org.apache.hadoop.mapreduce.Job r3, r4, r5;
+        java.lang.String $r6, $r8, $r9, $r10, $r12, $r19, $r21, $r24;
+        java.lang.Boolean $r7, $r11;
+        org.apache.hadoop.fs.Path $r13, $r14, $r16, $r17, $r25, $r28, $r29;
+        org.apache.hadoop.conf.Configuration $r15, $r18, $r20, $r26;
+        org.apache.hadoop.mapreduce.Counters $r22;
+        org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer$Counters $r23;
+        org.apache.hadoop.mapreduce.Counter $r27;
+        long $l2;
+        java.lang.Class $r34;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob;
+
+        r1 := @parameter0: java.lang.String[];
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: void addInputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: void addOutputOption()>();
+
+        $r6 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(1);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("minPrefsPerUser", "mp", "ignore users with less preferences than this (default: 1)", $r6);
+
+        $r7 = <java.lang.Boolean: java.lang.Boolean FALSE>;
+
+        $r8 = virtualinvoke $r7.<java.lang.Boolean: java.lang.String toString()>();
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("booleanData", "b", "Treat input as without pref values", $r8);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("ratingShift", "rs", "shift ratings by this value", "0.0");
+
+        r2 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: java.util.Map parseArguments(java.lang.String[])>(r1);
+
+        if r2 != null goto label1;
+
+        return -1;
+
+     label1:
+        $r9 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: java.lang.String getOption(java.lang.String)>("minPrefsPerUser");
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r9);
+
+        $r10 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: java.lang.String getOption(java.lang.String)>("booleanData");
+
+        $r11 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(java.lang.String)>($r10);
+
+        z0 = virtualinvoke $r11.<java.lang.Boolean: boolean booleanValue()>();
+
+        $r12 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: java.lang.String getOption(java.lang.String)>("ratingShift");
+
+        f0 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>($r12);
+
+        $r14 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: org.apache.hadoop.fs.Path getInputPath()>();
+
+        $r13 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: org.apache.hadoop.fs.Path getOutputPath(java.lang.String)>("itemIDIndex");
+
+        r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>($r14, $r13, class "org/apache/hadoop/mapreduce/lib/input/TextInputFormat", class "org/apache/mahout/cf/taste/hadoop/item/ItemIDIndexMapper", class "org/apache/mahout/math/VarIntWritable", class "org/apache/mahout/math/VarLongWritable", class "org/apache/mahout/cf/taste/hadoop/item/ItemIDIndexReducer", class "org/apache/mahout/math/VarIntWritable", class "org/apache/mahout/math/VarLongWritable", class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: void setCombinerClass(java.lang.Class)>(class "org/apache/mahout/cf/taste/hadoop/item/ItemIDIndexReducer");
+
+        z1 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z1 != 0 goto label2;
+
+        return -1;
+
+     label2:
+        $r16 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: org.apache.hadoop.fs.Path getInputPath()>();
+
+        $r17 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: org.apache.hadoop.fs.Path getOutputPath(java.lang.String)>("userVectors");
+
+        if z0 == 0 goto label3;
+
+        $r34 = class "org/apache/mahout/math/VarLongWritable";
+
+        goto label4;
+
+     label3:
+        $r34 = class "org/apache/mahout/cf/taste/hadoop/EntityPrefWritable";
+
+     label4:
+        r4 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>($r16, $r17, class "org/apache/hadoop/mapreduce/lib/input/TextInputFormat", class "org/apache/mahout/cf/taste/hadoop/ToItemPrefsMapper", class "org/apache/mahout/math/VarLongWritable", $r34, class "org/apache/mahout/cf/taste/hadoop/item/ToUserVectorsReducer", class "org/apache/mahout/math/VarLongWritable", class "org/apache/mahout/math/VectorWritable", class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        $r15 = virtualinvoke r4.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        virtualinvoke $r15.<org.apache.hadoop.conf.Configuration: void setBoolean(java.lang.String,boolean)>("booleanData", z0);
+
+        $r20 = virtualinvoke r4.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r21 = <org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer: java.lang.String MIN_PREFERENCES_PER_USER>;
+
+        virtualinvoke $r20.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>($r21, i0);
+
+        $r18 = virtualinvoke r4.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r19 = <org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: java.lang.String RATING_SHIFT>;
+
+        $r24 = staticinvoke <java.lang.String: java.lang.String valueOf(float)>(f0);
+
+        virtualinvoke $r18.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r19, $r24);
+
+        z2 = virtualinvoke r4.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z2 != 0 goto label5;
+
+        return -1;
+
+     label5:
+        $r22 = virtualinvoke r4.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.mapreduce.Counters getCounters()>();
+
+        $r23 = <org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer$Counters: org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer$Counters USERS>;
+
+        $r27 = virtualinvoke $r22.<org.apache.hadoop.mapreduce.Counters: org.apache.hadoop.mapreduce.Counter findCounter(java.lang.Enum)>($r23);
+
+        $l2 = interfaceinvoke $r27.<org.apache.hadoop.mapreduce.Counter: long getValue()>();
+
+        i1 = (int) $l2;
+
+        $r25 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: org.apache.hadoop.fs.Path getOutputPath(java.lang.String)>("numUsers.bin");
+
+        $r26 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void writeInt(int,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(i1, $r25, $r26);
+
+        $r29 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: org.apache.hadoop.fs.Path getOutputPath(java.lang.String)>("userVectors");
+
+        $r28 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: org.apache.hadoop.fs.Path getOutputPath(java.lang.String)>("ratingMatrix");
+
+        r5 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>($r29, $r28, class "org/apache/mahout/cf/taste/hadoop/preparation/ToItemVectorsMapper", class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable", class "org/apache/mahout/cf/taste/hadoop/preparation/ToItemVectorsReducer", class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke r5.<org.apache.hadoop.mapreduce.Job: void setCombinerClass(java.lang.Class)>(class "org/apache/mahout/cf/taste/hadoop/preparation/ToItemVectorsReducer");
+
+        z3 = virtualinvoke r5.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z3 != 0 goto label6;
+
+        return -1;
+
+     label6:
+        return 0;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: int DEFAULT_MIN_PREFS_PER_USER> = 1;
+
+        <org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: java.lang.String RATING_MATRIX> = "ratingMatrix";
+
+        <org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: java.lang.String USER_VECTORS> = "userVectors";
+
+        <org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: java.lang.String ITEMID_INDEX> = "itemIDIndex";
+
+        <org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: java.lang.String NUM_USERS> = "numUsers.bin";
+
+        return;
+    }
+}

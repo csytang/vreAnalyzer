@@ -1,0 +1,137 @@
+public class org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder extends org.apache.mahout.vectorizer.encoders.WordValueEncoder
+{
+    private final com.google.common.collect.Multiset dictionary;
+
+    public void <init>(java.lang.String)
+    {
+        org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder r0;
+        java.lang.String r1;
+        com.google.common.collect.HashMultiset $r2;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder;
+
+        r1 := @parameter0: java.lang.String;
+
+        specialinvoke r0.<org.apache.mahout.vectorizer.encoders.WordValueEncoder: void <init>(java.lang.String)>(r1);
+
+        $r2 = staticinvoke <com.google.common.collect.HashMultiset: com.google.common.collect.HashMultiset create()>();
+
+        r0.<org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder: com.google.common.collect.Multiset dictionary> = $r2;
+
+        return;
+    }
+
+    public void addToVector(java.lang.String, double, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder r0;
+        java.lang.String r1;
+        double d0;
+        org.apache.mahout.math.Vector r2;
+        com.google.common.collect.Multiset $r3;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder;
+
+        r1 := @parameter0: java.lang.String;
+
+        d0 := @parameter1: double;
+
+        r2 := @parameter2: org.apache.mahout.math.Vector;
+
+        $r3 = r0.<org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder: com.google.common.collect.Multiset dictionary>;
+
+        interfaceinvoke $r3.<com.google.common.collect.Multiset: boolean add(java.lang.Object)>(r1);
+
+        specialinvoke r0.<org.apache.mahout.vectorizer.encoders.WordValueEncoder: void addToVector(java.lang.String,double,org.apache.mahout.math.Vector)>(r1, d0, r2);
+
+        return;
+    }
+
+    protected double getWeight(byte[], double)
+    {
+        org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder r0;
+        byte[] r1;
+        double d0, $d1, $d2;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder;
+
+        r1 := @parameter0: byte[];
+
+        d0 := @parameter1: double;
+
+        $d1 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder: double weight(byte[])>(r1);
+
+        $d2 = d0 * $d1;
+
+        return $d2;
+    }
+
+    protected double weight(byte[])
+    {
+        org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder r0;
+        byte[] r1;
+        double d0, d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9;
+        java.lang.String $r2;
+        java.nio.charset.Charset $r3;
+        com.google.common.collect.Multiset $r4, $r5, $r6;
+        int $i0, $i1, $i2;
+        java.util.Set $r7;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder;
+
+        r1 := @parameter0: byte[];
+
+        $r4 = r0.<org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder: com.google.common.collect.Multiset dictionary>;
+
+        $r2 = new java.lang.String;
+
+        $r3 = <com.google.common.base.Charsets: java.nio.charset.Charset UTF_8>;
+
+        specialinvoke $r2.<java.lang.String: void <init>(byte[],java.nio.charset.Charset)>(r1, $r3);
+
+        $i0 = interfaceinvoke $r4.<com.google.common.collect.Multiset: int count(java.lang.Object)>($r2);
+
+        $d2 = (double) $i0;
+
+        d0 = $d2 + 0.5;
+
+        $r5 = r0.<org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder: com.google.common.collect.Multiset dictionary>;
+
+        $i1 = interfaceinvoke $r5.<com.google.common.collect.Multiset: int size()>();
+
+        $d3 = (double) $i1;
+
+        $r6 = r0.<org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder: com.google.common.collect.Multiset dictionary>;
+
+        $r7 = interfaceinvoke $r6.<com.google.common.collect.Multiset: java.util.Set elementSet()>();
+
+        $i2 = interfaceinvoke $r7.<java.util.Set: int size()>();
+
+        $d4 = (double) $i2;
+
+        $d6 = $d4 * 0.5;
+
+        $d5 = $d3 + $d6;
+
+        d1 = $d5 + 0.5;
+
+        $d8 = d0 / d1;
+
+        $d7 = staticinvoke <java.lang.Math: double log(double)>($d8);
+
+        $d9 = neg $d7;
+
+        return $d9;
+    }
+
+    public com.google.common.collect.Multiset getDictionary()
+    {
+        org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder r0;
+        com.google.common.collect.Multiset $r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder;
+
+        $r1 = r0.<org.apache.mahout.vectorizer.encoders.AdaptiveWordValueEncoder: com.google.common.collect.Multiset dictionary>;
+
+        return $r1;
+    }
+}

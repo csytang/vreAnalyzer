@@ -1,0 +1,17 @@
+public interface  org.apache.mahout.cf.taste.recommender.ItemBasedRecommender extends java.lang.Object implements org.apache.mahout.cf.taste.recommender.Recommender
+{
+
+    public abstract java.util.List mostSimilarItems(long, int) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract java.util.List mostSimilarItems(long, int, org.apache.mahout.cf.taste.recommender.Rescorer) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract java.util.List mostSimilarItems(long[], int) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract java.util.List mostSimilarItems(long[], int, org.apache.mahout.cf.taste.recommender.Rescorer) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract java.util.List mostSimilarItems(long[], int, boolean) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract java.util.List mostSimilarItems(long[], int, org.apache.mahout.cf.taste.recommender.Rescorer, boolean) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract java.util.List recommendedBecause(long, long, int) throws org.apache.mahout.cf.taste.common.TasteException;
+}

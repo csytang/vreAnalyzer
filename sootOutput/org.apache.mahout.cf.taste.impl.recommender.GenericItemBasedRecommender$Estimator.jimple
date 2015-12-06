@@ -1,0 +1,102 @@
+final class org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator extends java.lang.Object implements org.apache.mahout.cf.taste.impl.recommender.TopItems$Estimator
+{
+    private final long userID;
+    private final org.apache.mahout.cf.taste.model.PreferenceArray preferencesFromUser;
+    final org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender this$0;
+
+    private void <init>(org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender, long, org.apache.mahout.cf.taste.model.PreferenceArray)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator r0;
+        org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender r1;
+        long l0;
+        org.apache.mahout.cf.taste.model.PreferenceArray r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender;
+
+        l0 := @parameter1: long;
+
+        r2 := @parameter2: org.apache.mahout.cf.taste.model.PreferenceArray;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator: org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator: long userID> = l0;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator: org.apache.mahout.cf.taste.model.PreferenceArray preferencesFromUser> = r2;
+
+        return;
+    }
+
+    public double estimate(java.lang.Long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator r0;
+        java.lang.Long r1;
+        org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender $r2;
+        long $l0, $l1;
+        org.apache.mahout.cf.taste.model.PreferenceArray $r3;
+        float $f0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator;
+
+        r1 := @parameter0: java.lang.Long;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator: org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender this$0>;
+
+        $l0 = r0.<org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator: long userID>;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator: org.apache.mahout.cf.taste.model.PreferenceArray preferencesFromUser>;
+
+        $l1 = virtualinvoke r1.<java.lang.Long: long longValue()>();
+
+        $f0 = virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender: float doEstimatePreference(long,org.apache.mahout.cf.taste.model.PreferenceArray,long)>($l0, $r3, $l1);
+
+        $d0 = (double) $f0;
+
+        return $d0;
+    }
+
+    public volatile double estimate(java.lang.Object) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator r0;
+        java.lang.Object r1;
+        java.lang.Long $r2;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.lang.Long) r1;
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator: double estimate(java.lang.Long)>($r2);
+
+        return $d0;
+    }
+
+    void <init>(org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender, long, org.apache.mahout.cf.taste.model.PreferenceArray, org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$1)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator r0;
+        org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender r1;
+        long l0;
+        org.apache.mahout.cf.taste.model.PreferenceArray r2;
+        org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$1 r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender;
+
+        l0 := @parameter1: long;
+
+        r2 := @parameter2: org.apache.mahout.cf.taste.model.PreferenceArray;
+
+        r3 := @parameter3: org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$1;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender$Estimator: void <init>(org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender,long,org.apache.mahout.cf.taste.model.PreferenceArray)>(r1, l0, r2);
+
+        return;
+    }
+}

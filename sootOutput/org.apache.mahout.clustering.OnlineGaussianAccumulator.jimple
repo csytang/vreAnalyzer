@@ -1,0 +1,203 @@
+public class org.apache.mahout.clustering.OnlineGaussianAccumulator extends java.lang.Object implements org.apache.mahout.clustering.GaussianAccumulator
+{
+    private double sumWeight;
+    private org.apache.mahout.math.Vector mean;
+    private org.apache.mahout.math.Vector s;
+    private org.apache.mahout.math.Vector variance;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.OnlineGaussianAccumulator r0;
+
+        r0 := @this: org.apache.mahout.clustering.OnlineGaussianAccumulator;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public double getN()
+    {
+        org.apache.mahout.clustering.OnlineGaussianAccumulator r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.clustering.OnlineGaussianAccumulator;
+
+        $d0 = r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: double sumWeight>;
+
+        return $d0;
+    }
+
+    public org.apache.mahout.math.Vector getMean()
+    {
+        org.apache.mahout.clustering.OnlineGaussianAccumulator r0;
+        org.apache.mahout.math.Vector $r1;
+
+        r0 := @this: org.apache.mahout.clustering.OnlineGaussianAccumulator;
+
+        $r1 = r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: org.apache.mahout.math.Vector mean>;
+
+        return $r1;
+    }
+
+    public org.apache.mahout.math.Vector getStd()
+    {
+        org.apache.mahout.clustering.OnlineGaussianAccumulator r0;
+        org.apache.mahout.math.Vector $r1, $r2, $r4;
+        org.apache.mahout.math.function.SquareRootFunction $r3;
+
+        r0 := @this: org.apache.mahout.clustering.OnlineGaussianAccumulator;
+
+        $r1 = r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: org.apache.mahout.math.Vector variance>;
+
+        $r2 = interfaceinvoke $r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        $r3 = new org.apache.mahout.math.function.SquareRootFunction;
+
+        specialinvoke $r3.<org.apache.mahout.math.function.SquareRootFunction: void <init>()>();
+
+        $r4 = interfaceinvoke $r2.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.function.DoubleFunction)>($r3);
+
+        return $r4;
+    }
+
+    public void observe(org.apache.mahout.math.Vector, double)
+    {
+        org.apache.mahout.clustering.OnlineGaussianAccumulator r0;
+        org.apache.mahout.math.Vector r1, r2, $r3, $r4, $r5, $r6, $r7, $r8, $r9, $r10, $r11, $r12, $r13, $r14, $r15, $r16, $r17, r18;
+        double d0, d1, $d2, $d3, $d4, $d5, $d6;
+
+        r0 := @this: org.apache.mahout.clustering.OnlineGaussianAccumulator;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        d0 := @parameter1: double;
+
+        $d2 = r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: double sumWeight>;
+
+        d1 = d0 + $d2;
+
+        $r3 = r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: org.apache.mahout.math.Vector mean>;
+
+        if $r3 != null goto label1;
+
+        $r17 = interfaceinvoke r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector like()>();
+
+        r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: org.apache.mahout.math.Vector mean> = $r17;
+
+        r18 = interfaceinvoke r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        goto label2;
+
+     label1:
+        $r4 = r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: org.apache.mahout.math.Vector mean>;
+
+        r18 = interfaceinvoke r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector minus(org.apache.mahout.math.Vector)>($r4);
+
+     label2:
+        $r5 = interfaceinvoke r18.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector times(double)>(d0);
+
+        r2 = interfaceinvoke $r5.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector divide(double)>(d1);
+
+        $r6 = r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: org.apache.mahout.math.Vector s>;
+
+        if $r6 != null goto label3;
+
+        $d6 = r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: double sumWeight>;
+
+        $r15 = interfaceinvoke r18.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector times(double)>($d6);
+
+        $r16 = interfaceinvoke $r15.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector times(org.apache.mahout.math.Vector)>(r2);
+
+        r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: org.apache.mahout.math.Vector s> = $r16;
+
+        goto label4;
+
+     label3:
+        $r8 = r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: org.apache.mahout.math.Vector s>;
+
+        $d3 = r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: double sumWeight>;
+
+        $r7 = interfaceinvoke r18.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector times(double)>($d3);
+
+        $r10 = interfaceinvoke $r7.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector times(org.apache.mahout.math.Vector)>(r2);
+
+        $r9 = interfaceinvoke $r8.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector plus(org.apache.mahout.math.Vector)>($r10);
+
+        r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: org.apache.mahout.math.Vector s> = $r9;
+
+     label4:
+        $r12 = r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: org.apache.mahout.math.Vector mean>;
+
+        $r11 = interfaceinvoke $r12.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector plus(org.apache.mahout.math.Vector)>(r2);
+
+        r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: org.apache.mahout.math.Vector mean> = $r11;
+
+        r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: double sumWeight> = d1;
+
+        $r14 = r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: org.apache.mahout.math.Vector s>;
+
+        $d5 = r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: double sumWeight>;
+
+        $d4 = $d5 - 1.0;
+
+        $r13 = interfaceinvoke $r14.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector divide(double)>($d4);
+
+        r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: org.apache.mahout.math.Vector variance> = $r13;
+
+        return;
+    }
+
+    public void compute()
+    {
+        org.apache.mahout.clustering.OnlineGaussianAccumulator r0;
+
+        r0 := @this: org.apache.mahout.clustering.OnlineGaussianAccumulator;
+
+        return;
+    }
+
+    public double getAverageStd()
+    {
+        org.apache.mahout.clustering.OnlineGaussianAccumulator r0;
+        org.apache.mahout.math.Vector r1;
+        double $d0, $d1, $d2, $d3;
+        byte $b0;
+        int $i1;
+
+        r0 := @this: org.apache.mahout.clustering.OnlineGaussianAccumulator;
+
+        $d0 = r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: double sumWeight>;
+
+        $b0 = $d0 cmpl 0.0;
+
+        if $b0 != 0 goto label1;
+
+        return 0.0;
+
+     label1:
+        r1 = virtualinvoke r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: org.apache.mahout.math.Vector getStd()>();
+
+        $d1 = interfaceinvoke r1.<org.apache.mahout.math.Vector: double zSum()>();
+
+        $i1 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int size()>();
+
+        $d2 = (double) $i1;
+
+        $d3 = $d1 / $d2;
+
+        return $d3;
+    }
+
+    public org.apache.mahout.math.Vector getVariance()
+    {
+        org.apache.mahout.clustering.OnlineGaussianAccumulator r0;
+        org.apache.mahout.math.Vector $r1;
+
+        r0 := @this: org.apache.mahout.clustering.OnlineGaussianAccumulator;
+
+        $r1 = r0.<org.apache.mahout.clustering.OnlineGaussianAccumulator: org.apache.mahout.math.Vector variance>;
+
+        return $r1;
+    }
+}

@@ -1,0 +1,91 @@
+public final class org.apache.mahout.cf.taste.impl.common.FixedRunningAverageAndStdDev extends org.apache.mahout.cf.taste.impl.common.FixedRunningAverage implements org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev
+{
+    private final double stdDev;
+
+    public void <init>(double, double, int)
+    {
+        org.apache.mahout.cf.taste.impl.common.FixedRunningAverageAndStdDev r0;
+        double d0, d1;
+        int i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FixedRunningAverageAndStdDev;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        i0 := @parameter2: int;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.common.FixedRunningAverage: void <init>(double,int)>(d0, i0);
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FixedRunningAverageAndStdDev: double stdDev> = d1;
+
+        return;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev inverse()
+    {
+        org.apache.mahout.cf.taste.impl.common.FixedRunningAverageAndStdDev r0;
+        org.apache.mahout.cf.taste.impl.common.InvertedRunningAverageAndStdDev $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FixedRunningAverageAndStdDev;
+
+        $r1 = new org.apache.mahout.cf.taste.impl.common.InvertedRunningAverageAndStdDev;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.impl.common.InvertedRunningAverageAndStdDev: void <init>(org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev)>(r0);
+
+        return $r1;
+    }
+
+    public synchronized java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.common.FixedRunningAverageAndStdDev r0;
+        java.lang.StringBuilder $r1, $r3, $r4, $r5;
+        java.lang.String $r2, $r6;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FixedRunningAverageAndStdDev;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.common.FixedRunningAverage: java.lang.String toString()>();
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(44);
+
+        $d0 = r0.<org.apache.mahout.cf.taste.impl.common.FixedRunningAverageAndStdDev: double stdDev>;
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(double)>($d0);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r6;
+    }
+
+    public double getStandardDeviation()
+    {
+        org.apache.mahout.cf.taste.impl.common.FixedRunningAverageAndStdDev r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FixedRunningAverageAndStdDev;
+
+        $d0 = r0.<org.apache.mahout.cf.taste.impl.common.FixedRunningAverageAndStdDev: double stdDev>;
+
+        return $d0;
+    }
+
+    public volatile org.apache.mahout.cf.taste.impl.common.RunningAverage inverse()
+    {
+        org.apache.mahout.cf.taste.impl.common.FixedRunningAverageAndStdDev r0;
+        org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FixedRunningAverageAndStdDev;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.common.FixedRunningAverageAndStdDev: org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev inverse()>();
+
+        return $r1;
+    }
+}

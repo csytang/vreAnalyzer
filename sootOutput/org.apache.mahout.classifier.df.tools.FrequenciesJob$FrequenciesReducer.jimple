@@ -1,0 +1,135 @@
+class org.apache.mahout.classifier.df.tools.FrequenciesJob$FrequenciesReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+    private int nblabels;
+
+    private void <init>()
+    {
+        org.apache.mahout.classifier.df.tools.FrequenciesJob$FrequenciesReducer r0;
+
+        r0 := @this: org.apache.mahout.classifier.df.tools.FrequenciesJob$FrequenciesReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.tools.FrequenciesJob$FrequenciesReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.mahout.classifier.df.data.Dataset r3;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.df.tools.FrequenciesJob$FrequenciesReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        r3 = staticinvoke <org.apache.mahout.classifier.df.mapreduce.Builder: org.apache.mahout.classifier.df.data.Dataset loadDataset(org.apache.hadoop.conf.Configuration)>(r2);
+
+        $i0 = virtualinvoke r3.<org.apache.mahout.classifier.df.data.Dataset: int nblabels()>();
+
+        virtualinvoke r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob$FrequenciesReducer: void setup(int)>($i0);
+
+        return;
+    }
+
+    void setup(int)
+    {
+        org.apache.mahout.classifier.df.tools.FrequenciesJob$FrequenciesReducer r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.classifier.df.tools.FrequenciesJob$FrequenciesReducer;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob$FrequenciesReducer: int nblabels> = i0;
+
+        return;
+    }
+
+    protected void reduce(org.apache.hadoop.io.LongWritable, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.tools.FrequenciesJob$FrequenciesReducer r0;
+        org.apache.hadoop.io.LongWritable r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        int[] r4;
+        java.util.Iterator r5;
+        org.apache.hadoop.io.IntWritable r6;
+        int $i0, $i2, $i3, $i4;
+        boolean $z0;
+        org.apache.mahout.classifier.df.tools.FrequenciesJob$Frequencies $r7;
+        long $l1;
+        java.lang.Object $r8;
+
+        r0 := @this: org.apache.mahout.classifier.df.tools.FrequenciesJob$FrequenciesReducer;
+
+        r1 := @parameter0: org.apache.hadoop.io.LongWritable;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $i0 = r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob$FrequenciesReducer: int nblabels>;
+
+        r4 = newarray (int)[$i0];
+
+        r5 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r8 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.hadoop.io.IntWritable) $r8;
+
+        $i2 = virtualinvoke r6.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $i3 = r4[$i2];
+
+        $i4 = $i3 + 1;
+
+        r4[$i2] = $i4;
+
+        goto label1;
+
+     label2:
+        $r7 = new org.apache.mahout.classifier.df.tools.FrequenciesJob$Frequencies;
+
+        $l1 = virtualinvoke r1.<org.apache.hadoop.io.LongWritable: long get()>();
+
+        specialinvoke $r7.<org.apache.mahout.classifier.df.tools.FrequenciesJob$Frequencies: void <init>(long,int[])>($l1, r4);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r7);
+
+        return;
+    }
+
+    protected volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.tools.FrequenciesJob$FrequenciesReducer r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.hadoop.io.LongWritable $r4;
+
+        r0 := @this: org.apache.mahout.classifier.df.tools.FrequenciesJob$FrequenciesReducer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.hadoop.io.LongWritable) r1;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.df.tools.FrequenciesJob$FrequenciesReducer: void reduce(org.apache.hadoop.io.LongWritable,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+}

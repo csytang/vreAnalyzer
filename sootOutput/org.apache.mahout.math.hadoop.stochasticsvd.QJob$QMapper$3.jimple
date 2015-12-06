@@ -1,0 +1,79 @@
+class org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$3 extends java.lang.Object implements org.apache.hadoop.mapred.OutputCollector
+{
+    final org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper this$0;
+
+    void <init>(org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$3 r0;
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$3;
+
+        r1 := @parameter0: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$3: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void collect(org.apache.hadoop.io.Writable, org.apache.mahout.math.VectorWritable) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$3 r0;
+        org.apache.hadoop.io.Writable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper $r3, $r6, $r8;
+        org.apache.hadoop.mapred.lib.MultipleOutputs $r4;
+        org.apache.hadoop.mapred.OutputCollector $r5;
+        org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable $r7, $r9;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$3;
+
+        r1 := @parameter0: org.apache.hadoop.io.Writable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$3: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper this$0>;
+
+        $r4 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.hadoop.mapred.lib.MultipleOutputs access$000(org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper)>($r3);
+
+        $r5 = virtualinvoke $r4.<org.apache.hadoop.mapred.lib.MultipleOutputs: org.apache.hadoop.mapred.OutputCollector getCollector(java.lang.String,org.apache.hadoop.mapred.Reporter)>("R", null);
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$3: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper this$0>;
+
+        $r7 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable access$200(org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper)>($r6);
+
+        interfaceinvoke $r5.<org.apache.hadoop.mapred.OutputCollector: void collect(java.lang.Object,java.lang.Object)>($r7, r2);
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$3: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper this$0>;
+
+        $r9 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable access$200(org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper)>($r8);
+
+        virtualinvoke $r9.<org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable: void incrementItemOrdinal()>();
+
+        return;
+    }
+
+    public volatile void collect(java.lang.Object, java.lang.Object) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$3 r0;
+        java.lang.Object r1, r2;
+        org.apache.mahout.math.VectorWritable $r3;
+        org.apache.hadoop.io.Writable $r4;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$3;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        $r4 = (org.apache.hadoop.io.Writable) r1;
+
+        $r3 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$3: void collect(org.apache.hadoop.io.Writable,org.apache.mahout.math.VectorWritable)>($r4, $r3);
+
+        return;
+    }
+}

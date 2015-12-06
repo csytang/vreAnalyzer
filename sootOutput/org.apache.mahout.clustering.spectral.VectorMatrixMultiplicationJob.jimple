@@ -1,0 +1,125 @@
+public final class org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob r0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.mahout.math.hadoop.DistributedRowMatrix runJob(org.apache.hadoop.fs.Path, org.apache.mahout.math.Vector, org.apache.hadoop.fs.Path) throws java.io.IOException, java.lang.ClassNotFoundException, java.lang.InterruptedException
+    {
+        org.apache.hadoop.fs.Path r0, r2, $r3;
+        org.apache.mahout.math.Vector r1;
+        org.apache.mahout.math.hadoop.DistributedRowMatrix $r4;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        $r3 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r3.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r2, "tmp");
+
+        $r4 = staticinvoke <org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob: org.apache.mahout.math.hadoop.DistributedRowMatrix runJob(org.apache.hadoop.fs.Path,org.apache.mahout.math.Vector,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>(r0, r1, r2, $r3);
+
+        return $r4;
+    }
+
+    public static org.apache.mahout.math.hadoop.DistributedRowMatrix runJob(org.apache.hadoop.fs.Path, org.apache.mahout.math.Vector, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path) throws java.io.IOException, java.lang.ClassNotFoundException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.Vector r0;
+        org.apache.hadoop.fs.Path r1, $r8, $r9, r14, r15, r16, r17;
+        org.apache.hadoop.fs.FileSystem r3;
+        boolean z0;
+        org.apache.hadoop.conf.Configuration $r6;
+        java.net.URI $r7;
+        org.apache.hadoop.mapreduce.Job $r10;
+        org.apache.hadoop.io.IntWritable $r11;
+        org.apache.mahout.math.hadoop.DistributedRowMatrix $r12;
+        int $i0, $i1;
+        java.lang.IllegalStateException $r13;
+
+        r14 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r0 := @parameter1: org.apache.mahout.math.Vector;
+
+        r15 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter3: org.apache.hadoop.fs.Path;
+
+        $r6 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r6.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r7 = virtualinvoke r14.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r3 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r7, $r6);
+
+        r16 = virtualinvoke r3.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.Path makeQualified(org.apache.hadoop.fs.Path)>(r14);
+
+        r17 = virtualinvoke r3.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.Path makeQualified(org.apache.hadoop.fs.Path)>(r15);
+
+        $r8 = new org.apache.hadoop.fs.Path;
+
+        $r9 = virtualinvoke r17.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.Path getParent()>();
+
+        specialinvoke $r8.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r9, "vector");
+
+        $r11 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r11.<org.apache.hadoop.io.IntWritable: void <init>(int)>(1);
+
+        staticinvoke <org.apache.mahout.clustering.spectral.VectorCache: void save(org.apache.hadoop.io.Writable,org.apache.mahout.math.Vector,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r11, r0, $r8, $r6);
+
+        $r10 = new org.apache.hadoop.mapreduce.Job;
+
+        specialinvoke $r10.<org.apache.hadoop.mapreduce.Job: void <init>(org.apache.hadoop.conf.Configuration,java.lang.String)>($r6, "VectorMatrixMultiplication");
+
+        virtualinvoke $r10.<org.apache.hadoop.mapreduce.Job: void setInputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat");
+
+        virtualinvoke $r10.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/IntWritable");
+
+        virtualinvoke $r10.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke $r10.<org.apache.hadoop.mapreduce.Job: void setOutputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        virtualinvoke $r10.<org.apache.hadoop.mapreduce.Job: void setMapperClass(java.lang.Class)>(class "org/apache/mahout/clustering/spectral/VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper");
+
+        virtualinvoke $r10.<org.apache.hadoop.mapreduce.Job: void setNumReduceTasks(int)>(0);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void addInputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r10, r16);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r10, r17);
+
+        virtualinvoke $r10.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(class "org/apache/mahout/clustering/spectral/VectorMatrixMultiplicationJob");
+
+        z0 = virtualinvoke $r10.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z0 != 0 goto label1;
+
+        $r13 = new java.lang.IllegalStateException;
+
+        specialinvoke $r13.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Job failed!");
+
+        throw $r13;
+
+     label1:
+        $r12 = new org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $i1 = interfaceinvoke r0.<org.apache.mahout.math.Vector: int size()>();
+
+        $i0 = interfaceinvoke r0.<org.apache.mahout.math.Vector: int size()>();
+
+        specialinvoke $r12.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int)>(r17, r1, $i1, $i0);
+
+        return $r12;
+    }
+}

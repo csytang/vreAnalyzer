@@ -1,0 +1,150 @@
+public class org.apache.mahout.cf.taste.impl.model.GenericPreference extends java.lang.Object implements org.apache.mahout.cf.taste.model.Preference, java.io.Serializable
+{
+    private final long userID;
+    private final long itemID;
+    private float value;
+
+    public void <init>(long, long, float)
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericPreference r0;
+        long l0, l1;
+        float f0;
+        boolean $z0, $z1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericPreference;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        f0 := @parameter2: float;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $z0 = staticinvoke <java.lang.Float: boolean isNaN(float)>(f0);
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, "NaN value");
+
+        r0.<org.apache.mahout.cf.taste.impl.model.GenericPreference: long userID> = l0;
+
+        r0.<org.apache.mahout.cf.taste.impl.model.GenericPreference: long itemID> = l1;
+
+        r0.<org.apache.mahout.cf.taste.impl.model.GenericPreference: float value> = f0;
+
+        return;
+    }
+
+    public long getUserID()
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericPreference r0;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericPreference;
+
+        $l0 = r0.<org.apache.mahout.cf.taste.impl.model.GenericPreference: long userID>;
+
+        return $l0;
+    }
+
+    public long getItemID()
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericPreference r0;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericPreference;
+
+        $l0 = r0.<org.apache.mahout.cf.taste.impl.model.GenericPreference: long itemID>;
+
+        return $l0;
+    }
+
+    public float getValue()
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericPreference r0;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericPreference;
+
+        $f0 = r0.<org.apache.mahout.cf.taste.impl.model.GenericPreference: float value>;
+
+        return $f0;
+    }
+
+    public void setValue(float)
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericPreference r0;
+        float f0;
+        boolean $z0, $z1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericPreference;
+
+        f0 := @parameter0: float;
+
+        $z0 = staticinvoke <java.lang.Float: boolean isNaN(float)>(f0);
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, "NaN value");
+
+        r0.<org.apache.mahout.cf.taste.impl.model.GenericPreference: float value> = f0;
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericPreference r0;
+        java.lang.StringBuilder $r1, $r2, $r3, $r4, $r5, $r6, $r7, $r8;
+        long $l0, $l1;
+        float $f0;
+        java.lang.String $r9;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericPreference;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("GenericPreference[userID: ");
+
+        $l0 = r0.<org.apache.mahout.cf.taste.impl.model.GenericPreference: long userID>;
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", itemID:");
+
+        $l1 = r0.<org.apache.mahout.cf.taste.impl.model.GenericPreference: long itemID>;
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", value:");
+
+        $f0 = r0.<org.apache.mahout.cf.taste.impl.model.GenericPreference: float value>;
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(float)>($f0);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(93);
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r9;
+    }
+}

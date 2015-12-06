@@ -1,0 +1,7 @@
+public interface  org.apache.mahout.cf.taste.model.IDMigrator extends java.lang.Object implements org.apache.mahout.cf.taste.common.Refreshable
+{
+
+    public abstract long toLongID(java.lang.String);
+
+    public abstract java.lang.String toStringID(long) throws org.apache.mahout.cf.taste.common.TasteException;
+}

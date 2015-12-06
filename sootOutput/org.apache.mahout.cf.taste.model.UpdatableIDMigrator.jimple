@@ -1,0 +1,7 @@
+public interface  org.apache.mahout.cf.taste.model.UpdatableIDMigrator extends java.lang.Object implements org.apache.mahout.cf.taste.model.IDMigrator
+{
+
+    public abstract void storeMapping(long, java.lang.String) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract void initialize(java.lang.Iterable) throws org.apache.mahout.cf.taste.common.TasteException;
+}

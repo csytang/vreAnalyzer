@@ -1,0 +1,141 @@
+class org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output extends java.lang.Object implements java.lang.Runnable
+{
+    private final java.util.concurrent.BlockingQueue results;
+    private final org.apache.mahout.cf.taste.similarity.precompute.SimilarItemsWriter writer;
+    private final java.util.concurrent.atomic.AtomicInteger numActiveWorkers;
+    private int numSimilaritiesProcessed;
+
+    void <init>(java.util.concurrent.BlockingQueue, org.apache.mahout.cf.taste.similarity.precompute.SimilarItemsWriter, java.util.concurrent.atomic.AtomicInteger)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output r0;
+        java.util.concurrent.BlockingQueue r1;
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItemsWriter r2;
+        java.util.concurrent.atomic.AtomicInteger r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output;
+
+        r1 := @parameter0: java.util.concurrent.BlockingQueue;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.similarity.precompute.SimilarItemsWriter;
+
+        r3 := @parameter2: java.util.concurrent.atomic.AtomicInteger;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output: int numSimilaritiesProcessed> = 0;
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output: java.util.concurrent.BlockingQueue results> = r1;
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output: org.apache.mahout.cf.taste.similarity.precompute.SimilarItemsWriter writer> = r2;
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output: java.util.concurrent.atomic.AtomicInteger numActiveWorkers> = r3;
+
+        return;
+    }
+
+    private int getNumSimilaritiesProcessed()
+    {
+        org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output;
+
+        $i0 = r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output: int numSimilaritiesProcessed>;
+
+        return $i0;
+    }
+
+    public void run()
+    {
+        org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output r0;
+        java.util.Iterator r1;
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItems r2;
+        java.util.concurrent.atomic.AtomicInteger $r3;
+        int $i0, $i1, $i2, $i3;
+        java.util.concurrent.TimeUnit $r4;
+        java.util.concurrent.BlockingQueue $r5, $r9;
+        java.lang.Object $r6, $r7;
+        boolean $z0, $z1;
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItemsWriter $r8;
+        java.lang.RuntimeException $r10;
+        java.lang.Exception $r11;
+        java.util.List r12;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output: java.util.concurrent.atomic.AtomicInteger numActiveWorkers>;
+
+        $i0 = virtualinvoke $r3.<java.util.concurrent.atomic.AtomicInteger: int get()>();
+
+        if $i0 != 0 goto label2;
+
+        $r9 = r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output: java.util.concurrent.BlockingQueue results>;
+
+        $z1 = interfaceinvoke $r9.<java.util.concurrent.BlockingQueue: boolean isEmpty()>();
+
+        if $z1 != 0 goto label5;
+
+     label2:
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output: java.util.concurrent.BlockingQueue results>;
+
+        $r4 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        $r6 = interfaceinvoke $r5.<java.util.concurrent.BlockingQueue: java.lang.Object poll(long,java.util.concurrent.TimeUnit)>(10L, $r4);
+
+        r12 = (java.util.List) $r6;
+
+        if r12 == null goto label1;
+
+        r1 = interfaceinvoke r12.<java.util.List: java.util.Iterator iterator()>();
+
+     label3:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label1;
+
+        $r7 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (org.apache.mahout.cf.taste.similarity.precompute.SimilarItems) $r7;
+
+        $r8 = r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output: org.apache.mahout.cf.taste.similarity.precompute.SimilarItemsWriter writer>;
+
+        interfaceinvoke $r8.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItemsWriter: void add(org.apache.mahout.cf.taste.similarity.precompute.SimilarItems)>(r2);
+
+        $i1 = r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output: int numSimilaritiesProcessed>;
+
+        $i2 = virtualinvoke r2.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItems: int numSimilarItems()>();
+
+        $i3 = $i1 + $i2;
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output: int numSimilaritiesProcessed> = $i3;
+
+        goto label3;
+
+     label4:
+        $r11 := @caughtexception;
+
+        $r10 = new java.lang.RuntimeException;
+
+        specialinvoke $r10.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r11);
+
+        throw $r10;
+
+     label5:
+        return;
+
+        catch java.lang.Exception from label2 to label4 with label4;
+    }
+
+    static int access$000(org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output r0;
+        int $i0;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output;
+
+        $i0 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output: int getNumSimilaritiesProcessed()>();
+
+        return $i0;
+    }
+}

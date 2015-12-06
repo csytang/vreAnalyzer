@@ -1,0 +1,199 @@
+final class org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator extends com.google.common.collect.AbstractIterator implements java.io.Closeable
+{
+    private static final org.slf4j.Logger log;
+    private final java.sql.Connection connection;
+    private final java.sql.PreparedStatement statement;
+    private final java.sql.ResultSet resultSet;
+
+    void <init>(javax.sql.DataSource, java.lang.String) throws java.sql.SQLException
+    {
+        org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator r0;
+        javax.sql.DataSource r1;
+        java.lang.String r2;
+        java.sql.Connection $r4, $r5;
+        java.sql.PreparedStatement $r6, $r7, $r9;
+        org.slf4j.Logger $r8;
+        java.sql.ResultSet $r10;
+        java.sql.SQLException $r11;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator;
+
+        r1 := @parameter0: javax.sql.DataSource;
+
+        r2 := @parameter1: java.lang.String;
+
+        specialinvoke r0.<com.google.common.collect.AbstractIterator: void <init>()>();
+
+     label1:
+        $r4 = interfaceinvoke r1.<javax.sql.DataSource: java.sql.Connection getConnection()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: java.sql.Connection connection> = $r4;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: java.sql.Connection connection>;
+
+        $r6 = interfaceinvoke $r5.<java.sql.Connection: java.sql.PreparedStatement prepareStatement(java.lang.String,int,int)>(r2, 1003, 1007);
+
+        r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: java.sql.PreparedStatement statement> = $r6;
+
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: java.sql.PreparedStatement statement>;
+
+        interfaceinvoke $r7.<java.sql.PreparedStatement: void setFetchDirection(int)>(1000);
+
+        $r8 = <org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: org.slf4j.Logger log>;
+
+        interfaceinvoke $r8.<org.slf4j.Logger: void debug(java.lang.String,java.lang.Object)>("Executing SQL query: {}", r2);
+
+        $r9 = r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: java.sql.PreparedStatement statement>;
+
+        $r10 = interfaceinvoke $r9.<java.sql.PreparedStatement: java.sql.ResultSet executeQuery()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: java.sql.ResultSet resultSet> = $r10;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r11 := @caughtexception;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: void close()>();
+
+        throw $r11;
+
+     label4:
+        return;
+
+        catch java.sql.SQLException from label1 to label2 with label3;
+    }
+
+    protected java.sql.ResultSet computeNext()
+    {
+        org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator r0;
+        java.sql.ResultSet $r2, $r3;
+        boolean $z0;
+        java.sql.SQLException $r4;
+        java.lang.IllegalStateException $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator;
+
+     label1:
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: java.sql.ResultSet resultSet>;
+
+        $z0 = interfaceinvoke $r2.<java.sql.ResultSet: boolean next()>();
+
+        if $z0 == 0 goto label3;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: java.sql.ResultSet resultSet>;
+
+     label2:
+        return $r3;
+
+     label3:
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: void close()>();
+
+     label4:
+        return null;
+
+     label5:
+        $r4 := @caughtexception;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: void close()>();
+
+        $r5 = new java.lang.IllegalStateException;
+
+        specialinvoke $r5.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r4);
+
+        throw $r5;
+
+        catch java.sql.SQLException from label1 to label2 with label5;
+        catch java.sql.SQLException from label3 to label4 with label5;
+    }
+
+    public void skip(int) throws java.sql.SQLException
+    {
+        org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator r0;
+        int i0, i1;
+        java.sql.ResultSet $r2, $r4;
+        java.sql.SQLException $r3;
+        boolean $z1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator;
+
+        i0 := @parameter0: int;
+
+     label1:
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: java.sql.ResultSet resultSet>;
+
+        interfaceinvoke $r2.<java.sql.ResultSet: boolean relative(int)>(i0);
+
+     label2:
+        goto label5;
+
+     label3:
+        $r3 := @caughtexception;
+
+        i1 = 0;
+
+     label4:
+        if i1 >= i0 goto label5;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: java.sql.ResultSet resultSet>;
+
+        $z1 = interfaceinvoke $r4.<java.sql.ResultSet: boolean next()>();
+
+        if $z1 == 0 goto label5;
+
+        i1 = i1 + 1;
+
+        goto label4;
+
+     label5:
+        return;
+
+        catch java.sql.SQLException from label1 to label2 with label3;
+    }
+
+    public void close()
+    {
+        org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator r0;
+        java.sql.Connection $r1;
+        java.sql.PreparedStatement $r2;
+        java.sql.ResultSet $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: java.sql.ResultSet resultSet>;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: java.sql.PreparedStatement statement>;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: java.sql.Connection connection>;
+
+        staticinvoke <org.apache.mahout.common.IOUtils: void quietClose(java.sql.ResultSet,java.sql.Statement,java.sql.Connection)>($r3, $r2, $r1);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: java.lang.Object endOfData()>();
+
+        return;
+    }
+
+    protected volatile java.lang.Object computeNext()
+    {
+        org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator r0;
+        java.sql.ResultSet $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: java.sql.ResultSet computeNext()>();
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/cf/taste/impl/common/jdbc/EachRowIterator");
+
+        <org.apache.mahout.cf.taste.impl.common.jdbc.EachRowIterator: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

@@ -1,0 +1,7 @@
+public interface  org.apache.mahout.cf.taste.similarity.UserSimilarity extends java.lang.Object implements org.apache.mahout.cf.taste.common.Refreshable
+{
+
+    public abstract double userSimilarity(long, long) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract void setPreferenceInferrer(org.apache.mahout.cf.taste.similarity.PreferenceInferrer);
+}

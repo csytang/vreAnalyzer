@@ -1,0 +1,276 @@
+public final class org.apache.mahout.math.random.RandomProjector extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.math.random.RandomProjector r0;
+
+        r0 := @this: org.apache.mahout.math.random.RandomProjector;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.mahout.math.Matrix generateBasisNormal(int, int)
+    {
+        int i0, i1;
+        java.util.Iterator r1;
+        org.apache.mahout.math.MatrixSlice r2;
+        org.apache.mahout.math.DenseMatrix $r3;
+        org.apache.mahout.math.random.Normal $r4;
+        boolean $z0;
+        java.lang.Object $r6;
+        org.apache.mahout.math.Vector $r7, $r8;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $r3 = new org.apache.mahout.math.DenseMatrix;
+
+        specialinvoke $r3.<org.apache.mahout.math.DenseMatrix: void <init>(int,int)>(i0, i1);
+
+        $r4 = new org.apache.mahout.math.random.Normal;
+
+        specialinvoke $r4.<org.apache.mahout.math.random.Normal: void <init>()>();
+
+        interfaceinvoke $r3.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Matrix assign(org.apache.mahout.math.function.DoubleFunction)>($r4);
+
+        r1 = interfaceinvoke $r3.<org.apache.mahout.math.Matrix: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (org.apache.mahout.math.MatrixSlice) $r6;
+
+        $r7 = virtualinvoke r2.<org.apache.mahout.math.MatrixSlice: org.apache.mahout.math.Vector vector()>();
+
+        $r8 = virtualinvoke r2.<org.apache.mahout.math.MatrixSlice: org.apache.mahout.math.Vector normalize()>();
+
+        interfaceinvoke $r7.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector)>($r8);
+
+        goto label1;
+
+     label2:
+        return $r3;
+    }
+
+    public static org.apache.mahout.math.Matrix generateBasisPlusMinusOne(int, int)
+    {
+        int i0, i1, $i2, $i3, $i4, i5, i6;
+        org.apache.mahout.math.DenseMatrix $r1;
+        boolean $z0;
+        java.lang.Object $r2;
+        org.apache.mahout.math.Vector $r3, $r4;
+        double $d0;
+        java.util.Iterator r7;
+        org.apache.mahout.math.MatrixSlice r8;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $r1 = new org.apache.mahout.math.DenseMatrix;
+
+        specialinvoke $r1.<org.apache.mahout.math.DenseMatrix: void <init>(int,int)>(i0, i1);
+
+        i5 = 0;
+
+     label1:
+        if i5 >= i0 goto label6;
+
+        i6 = 0;
+
+     label2:
+        if i6 >= i1 goto label5;
+
+        $i4 = i5;
+
+        $i3 = i6;
+
+        $i2 = staticinvoke <org.apache.commons.lang.math.RandomUtils: int nextInt(int)>(2);
+
+        if $i2 != 0 goto label3;
+
+        $d0 = 1.0;
+
+        goto label4;
+
+     label3:
+        $d0 = -1.0;
+
+     label4:
+        interfaceinvoke $r1.<org.apache.mahout.math.Matrix: void set(int,int,double)>($i4, $i3, $d0);
+
+        i6 = i6 + 1;
+
+        goto label2;
+
+     label5:
+        i5 = i5 + 1;
+
+        goto label1;
+
+     label6:
+        r7 = interfaceinvoke $r1.<org.apache.mahout.math.Matrix: java.util.Iterator iterator()>();
+
+     label7:
+        $z0 = interfaceinvoke r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label8;
+
+        $r2 = interfaceinvoke r7.<java.util.Iterator: java.lang.Object next()>();
+
+        r8 = (org.apache.mahout.math.MatrixSlice) $r2;
+
+        $r3 = virtualinvoke r8.<org.apache.mahout.math.MatrixSlice: org.apache.mahout.math.Vector vector()>();
+
+        $r4 = virtualinvoke r8.<org.apache.mahout.math.MatrixSlice: org.apache.mahout.math.Vector normalize()>();
+
+        interfaceinvoke $r3.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector)>($r4);
+
+        goto label7;
+
+     label8:
+        return $r1;
+    }
+
+    public static org.apache.mahout.math.Matrix generateBasisZeroPlusMinusOne(int, int)
+    {
+        int i0, i1, i2, i3;
+        org.apache.mahout.math.DenseMatrix $r2;
+        org.apache.mahout.math.random.Multinomial $r3;
+        java.lang.Double $r4, $r5, $r6, $r12;
+        double $d0, $d1, $d2, $d3;
+        boolean $z0;
+        org.apache.mahout.math.Vector $r7, $r10;
+        java.lang.Object $r8, $r11;
+        java.util.Iterator r13;
+        org.apache.mahout.math.MatrixSlice r14;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $r2 = new org.apache.mahout.math.DenseMatrix;
+
+        specialinvoke $r2.<org.apache.mahout.math.DenseMatrix: void <init>(int,int)>(i0, i1);
+
+        $r3 = new org.apache.mahout.math.random.Multinomial;
+
+        specialinvoke $r3.<org.apache.mahout.math.random.Multinomial: void <init>()>();
+
+        $r4 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(0.0);
+
+        virtualinvoke $r3.<org.apache.mahout.math.random.Multinomial: void add(java.lang.Object,double)>($r4, 0.6666666666666666);
+
+        $d0 = staticinvoke <java.lang.Math: double sqrt(double)>(3.0);
+
+        $r5 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d0);
+
+        virtualinvoke $r3.<org.apache.mahout.math.random.Multinomial: void add(java.lang.Object,double)>($r5, 0.16666666666666666);
+
+        $d1 = staticinvoke <java.lang.Math: double sqrt(double)>(3.0);
+
+        $d2 = neg $d1;
+
+        $r6 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d2);
+
+        virtualinvoke $r3.<org.apache.mahout.math.random.Multinomial: void add(java.lang.Object,double)>($r6, 0.16666666666666666);
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label4;
+
+        i3 = 0;
+
+     label2:
+        if i3 >= i1 goto label3;
+
+        $r11 = virtualinvoke $r3.<org.apache.mahout.math.random.Multinomial: java.lang.Object sample()>();
+
+        $r12 = (java.lang.Double) $r11;
+
+        $d3 = virtualinvoke $r12.<java.lang.Double: double doubleValue()>();
+
+        interfaceinvoke $r2.<org.apache.mahout.math.Matrix: void set(int,int,double)>(i2, i3, $d3);
+
+        i3 = i3 + 1;
+
+        goto label2;
+
+     label3:
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label4:
+        r13 = interfaceinvoke $r2.<org.apache.mahout.math.Matrix: java.util.Iterator iterator()>();
+
+     label5:
+        $z0 = interfaceinvoke r13.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label6;
+
+        $r8 = interfaceinvoke r13.<java.util.Iterator: java.lang.Object next()>();
+
+        r14 = (org.apache.mahout.math.MatrixSlice) $r8;
+
+        $r7 = virtualinvoke r14.<org.apache.mahout.math.MatrixSlice: org.apache.mahout.math.Vector vector()>();
+
+        $r10 = virtualinvoke r14.<org.apache.mahout.math.MatrixSlice: org.apache.mahout.math.Vector normalize()>();
+
+        interfaceinvoke $r7.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector)>($r10);
+
+        goto label5;
+
+     label6:
+        return $r2;
+    }
+
+    public static java.util.List generateVectorBasis(int, int)
+    {
+        int i0, i1, i2;
+        java.util.ArrayList r1;
+        org.apache.mahout.math.random.Normal $r3;
+        org.apache.mahout.math.DenseVector $r4;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $r3 = new org.apache.mahout.math.random.Normal;
+
+        specialinvoke $r3.<org.apache.mahout.math.random.Normal: void <init>()>();
+
+        r1 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList()>();
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label2;
+
+        $r4 = new org.apache.mahout.math.DenseVector;
+
+        specialinvoke $r4.<org.apache.mahout.math.DenseVector: void <init>(int)>(i1);
+
+        interfaceinvoke $r4.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.function.DoubleFunction)>($r3);
+
+        interfaceinvoke $r4.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector normalize()>();
+
+        interfaceinvoke r1.<java.util.List: boolean add(java.lang.Object)>($r4);
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        return r1;
+    }
+}

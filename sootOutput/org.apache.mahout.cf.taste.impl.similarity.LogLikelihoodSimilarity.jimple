@@ -1,0 +1,292 @@
+public final class org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity extends org.apache.mahout.cf.taste.impl.similarity.AbstractItemSimilarity implements org.apache.mahout.cf.taste.similarity.UserSimilarity
+{
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.AbstractItemSimilarity: void <init>(org.apache.mahout.cf.taste.model.DataModel)>(r1);
+
+        return;
+    }
+
+    public void setPreferenceInferrer(org.apache.mahout.cf.taste.similarity.PreferenceInferrer)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity r0;
+        org.apache.mahout.cf.taste.similarity.PreferenceInferrer r1;
+        java.lang.UnsupportedOperationException $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.PreferenceInferrer;
+
+        $r2 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r2.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r2;
+    }
+
+    public double userSimilarity(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity r0;
+        long l0, l1, l2, l3, l5, $l11, $l13, $l14, $l15, $l16, $l18;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet r2, r3;
+        double d0, $d1, $d2, $d3;
+        int $i6, $i8, $i10, $i12, $i17;
+        byte $b7, $b9;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        r2 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.FastIDSet getItemIDsFromUser(long)>(l0);
+
+        r3 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.FastIDSet getItemIDsFromUser(long)>(l1);
+
+        $i6 = virtualinvoke r2.<org.apache.mahout.cf.taste.impl.common.FastIDSet: int size()>();
+
+        l2 = (long) $i6;
+
+        $i8 = virtualinvoke r3.<org.apache.mahout.cf.taste.impl.common.FastIDSet: int size()>();
+
+        l3 = (long) $i8;
+
+        $b7 = l2 cmp l3;
+
+        if $b7 >= 0 goto label1;
+
+        $i17 = virtualinvoke r3.<org.apache.mahout.cf.taste.impl.common.FastIDSet: int intersectionSize(org.apache.mahout.cf.taste.impl.common.FastIDSet)>(r2);
+
+        $l18 = (long) $i17;
+
+        goto label2;
+
+     label1:
+        $i10 = virtualinvoke r2.<org.apache.mahout.cf.taste.impl.common.FastIDSet: int intersectionSize(org.apache.mahout.cf.taste.impl.common.FastIDSet)>(r3);
+
+        $l18 = (long) $i10;
+
+     label2:
+        $b9 = $l18 cmp 0L;
+
+        if $b9 != 0 goto label3;
+
+        return #NaN;
+
+     label3:
+        $i12 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: int getNumItems()>();
+
+        l5 = (long) $i12;
+
+        $l15 = l3 - $l18;
+
+        $l16 = l2 - $l18;
+
+        $l11 = l5 - l2;
+
+        $l14 = $l11 - l3;
+
+        $l13 = $l14 + $l18;
+
+        d0 = staticinvoke <org.apache.mahout.math.stats.LogLikelihood: double logLikelihoodRatio(long,long,long,long)>($l18, $l15, $l16, $l13);
+
+        $d3 = 1.0 + d0;
+
+        $d1 = 1.0 / $d3;
+
+        $d2 = 1.0 - $d1;
+
+        return $d2;
+    }
+
+    public double itemSimilarity(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity r0;
+        long l0, l1, l2, l3;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        int $i4, $i5;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        $i4 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long)>(l0);
+
+        l2 = (long) $i4;
+
+        $i5 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsers()>();
+
+        l3 = (long) $i5;
+
+        $d0 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity: double doItemSimilarity(long,long,long,long)>(l0, l1, l2, l3);
+
+        return $d0;
+    }
+
+    public double[] itemSimilarities(long, long[]) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity r0;
+        long l0, l1, l2, $l6;
+        long[] r1;
+        org.apache.mahout.cf.taste.model.DataModel r2;
+        int i3, $i4, $i5, i7;
+        double[] r3;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: long[];
+
+        r2 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        $i4 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long)>(l0);
+
+        l1 = (long) $i4;
+
+        $i5 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsers()>();
+
+        l2 = (long) $i5;
+
+        i3 = lengthof r1;
+
+        r3 = newarray (double)[i3];
+
+        i7 = 0;
+
+     label1:
+        if i7 >= i3 goto label2;
+
+        $l6 = r1[i7];
+
+        $d0 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity: double doItemSimilarity(long,long,long,long)>(l0, $l6, l1, l2);
+
+        r3[i7] = $d0;
+
+        i7 = i7 + 1;
+
+        goto label1;
+
+     label2:
+        return r3;
+    }
+
+    private double doItemSimilarity(long, long, long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity r0;
+        long l0, l1, l2, l3, l4, l5, $l9, $l10, $l11, $l12, $l13;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        double d0, $d1, $d2, $d3;
+        int $i6, $i7;
+        byte $b8;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        l2 := @parameter2: long;
+
+        l3 := @parameter3: long;
+
+        r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        $i6 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long,long)>(l0, l1);
+
+        l4 = (long) $i6;
+
+        $b8 = l4 cmp 0L;
+
+        if $b8 != 0 goto label1;
+
+        return #NaN;
+
+     label1:
+        $i7 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long)>(l1);
+
+        l5 = (long) $i7;
+
+        $l13 = l5 - l4;
+
+        $l11 = l2 - l4;
+
+        $l10 = l3 - l2;
+
+        $l9 = $l10 - l5;
+
+        $l12 = $l9 + l4;
+
+        d0 = staticinvoke <org.apache.mahout.math.stats.LogLikelihood: double logLikelihoodRatio(long,long,long,long)>(l4, $l13, $l11, $l12);
+
+        $d2 = 1.0 + d0;
+
+        $d1 = 1.0 / $d2;
+
+        $d3 = 1.0 - $d1;
+
+        return $d3;
+    }
+
+    public void refresh(java.util.Collection)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity r0;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+        java.util.Collection r2, r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity;
+
+        r2 := @parameter0: java.util.Collection;
+
+        r3 = staticinvoke <org.apache.mahout.cf.taste.impl.common.RefreshHelper: java.util.Collection buildRefreshed(java.util.Collection)>(r2);
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        staticinvoke <org.apache.mahout.cf.taste.impl.common.RefreshHelper: void maybeRefresh(java.util.Collection,org.apache.mahout.cf.taste.common.Refreshable)>(r3, $r1);
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity r0;
+        java.lang.StringBuilder $r1, $r2, $r4, $r5;
+        org.apache.mahout.cf.taste.model.DataModel $r3;
+        java.lang.String $r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("LogLikelihoodSimilarity[dataModel:");
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.LogLikelihoodSimilarity: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(93);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r6;
+    }
+}

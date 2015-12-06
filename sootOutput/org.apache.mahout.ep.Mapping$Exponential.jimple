@@ -1,0 +1,100 @@
+public final class org.apache.mahout.ep.Mapping$Exponential extends org.apache.mahout.ep.Mapping
+{
+    private double scale;
+
+    public void <init>()
+    {
+        org.apache.mahout.ep.Mapping$Exponential r0;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$Exponential;
+
+        specialinvoke r0.<org.apache.mahout.ep.Mapping: void <init>(org.apache.mahout.ep.Mapping$1)>(null);
+
+        return;
+    }
+
+    private void <init>(double)
+    {
+        org.apache.mahout.ep.Mapping$Exponential r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$Exponential;
+
+        d0 := @parameter0: double;
+
+        specialinvoke r0.<org.apache.mahout.ep.Mapping: void <init>(org.apache.mahout.ep.Mapping$1)>(null);
+
+        r0.<org.apache.mahout.ep.Mapping$Exponential: double scale> = d0;
+
+        return;
+    }
+
+    public double apply(double)
+    {
+        org.apache.mahout.ep.Mapping$Exponential r0;
+        double d0, $d1, $d2, $d3;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$Exponential;
+
+        d0 := @parameter0: double;
+
+        $d1 = r0.<org.apache.mahout.ep.Mapping$Exponential: double scale>;
+
+        $d2 = d0 * $d1;
+
+        $d3 = staticinvoke <java.lang.Math: double exp(double)>($d2);
+
+        return $d3;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.ep.Mapping$Exponential r0;
+        java.io.DataOutput r1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$Exponential;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $d0 = r0.<org.apache.mahout.ep.Mapping$Exponential: double scale>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d0);
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.ep.Mapping$Exponential r0;
+        java.io.DataInput r1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$Exponential;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $d0 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.ep.Mapping$Exponential: double scale> = $d0;
+
+        return;
+    }
+
+    void <init>(double, org.apache.mahout.ep.Mapping$1)
+    {
+        org.apache.mahout.ep.Mapping$Exponential r0;
+        double d0;
+        org.apache.mahout.ep.Mapping$1 r1;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$Exponential;
+
+        d0 := @parameter0: double;
+
+        r1 := @parameter1: org.apache.mahout.ep.Mapping$1;
+
+        specialinvoke r0.<org.apache.mahout.ep.Mapping$Exponential: void <init>(double)>(d0);
+
+        return;
+    }
+}

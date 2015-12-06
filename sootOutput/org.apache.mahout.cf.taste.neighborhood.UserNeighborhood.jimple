@@ -1,0 +1,5 @@
+public interface  org.apache.mahout.cf.taste.neighborhood.UserNeighborhood extends java.lang.Object implements org.apache.mahout.cf.taste.common.Refreshable
+{
+
+    public abstract long[] getUserNeighborhood(long) throws org.apache.mahout.cf.taste.common.TasteException;
+}

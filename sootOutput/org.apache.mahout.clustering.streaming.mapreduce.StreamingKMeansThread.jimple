@@ -1,0 +1,195 @@
+public class org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread extends java.lang.Object implements java.util.concurrent.Callable
+{
+    private static final org.slf4j.Logger log;
+    private static final int NUM_ESTIMATE_POINTS;
+    private final org.apache.hadoop.conf.Configuration conf;
+    private final java.lang.Iterable dataPoints;
+
+    public void <init>(org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread r0;
+        org.apache.hadoop.fs.Path r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterable $r3;
+        java.lang.Iterable $r4;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        $r3 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterable;
+
+        specialinvoke $r3.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterable: void <init>(org.apache.hadoop.fs.Path,boolean,org.apache.hadoop.conf.Configuration)>(r1, 0, r2);
+
+        $r4 = staticinvoke <org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR: java.lang.Iterable getCentroidsFromVectorWritable(java.lang.Iterable)>($r3);
+
+        specialinvoke r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread: void <init>(java.lang.Iterable,org.apache.hadoop.conf.Configuration)>($r4, r2);
+
+        return;
+    }
+
+    public void <init>(java.lang.Iterable, org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread r0;
+        java.lang.Iterable r1;
+        org.apache.hadoop.conf.Configuration r2;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread;
+
+        r1 := @parameter0: java.lang.Iterable;
+
+        r2 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread: java.lang.Iterable dataPoints> = r1;
+
+        r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread: org.apache.hadoop.conf.Configuration conf> = r2;
+
+        return;
+    }
+
+    public java.lang.Iterable call()
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread r0;
+        org.apache.mahout.math.neighborhood.UpdatableSearcher r1;
+        int i0, $i2, $i3;
+        org.apache.mahout.math.Centroid r2, $r7;
+        org.apache.hadoop.conf.Configuration $r3, $r4, $r5;
+        float $f0;
+        java.lang.Iterable $r6, $r10;
+        byte $b1;
+        java.lang.Object $r8, $r16;
+        boolean $z0, $z1, $z3, $z4;
+        java.util.ArrayList $r11;
+        org.slf4j.Logger $r12, $r15;
+        org.apache.mahout.common.distance.DistanceMeasure $r13;
+        java.lang.Integer $r14;
+        double d0;
+        java.util.Iterator r17;
+        org.apache.mahout.clustering.streaming.cluster.StreamingKMeans $r19;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread;
+
+        $r3 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread: org.apache.hadoop.conf.Configuration conf>;
+
+        r1 = staticinvoke <org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR: org.apache.mahout.math.neighborhood.UpdatableSearcher searcherFromConfiguration(org.apache.hadoop.conf.Configuration)>($r3);
+
+        $r4 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread: org.apache.hadoop.conf.Configuration conf>;
+
+        i0 = virtualinvoke $r4.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("estimatedNumMapClusters", 1);
+
+        $r5 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread: org.apache.hadoop.conf.Configuration conf>;
+
+        $f0 = virtualinvoke $r5.<org.apache.hadoop.conf.Configuration: float getFloat(java.lang.String,float)>("estimatedDistanceCutoff", -1.0F);
+
+        d0 = (double) $f0;
+
+        $r6 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread: java.lang.Iterable dataPoints>;
+
+        r17 = interfaceinvoke $r6.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        $b1 = d0 cmpl -1.0;
+
+        if $b1 != 0 goto label4;
+
+        $r11 = new java.util.ArrayList;
+
+        specialinvoke $r11.<java.util.ArrayList: void <init>(int)>(1000);
+
+     label1:
+        $z0 = interfaceinvoke r17.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $i3 = interfaceinvoke $r11.<java.util.List: int size()>();
+
+        if $i3 >= 1000 goto label2;
+
+        $r16 = interfaceinvoke r17.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (org.apache.mahout.math.Centroid) $r16;
+
+        interfaceinvoke $r11.<java.util.List: boolean add(java.lang.Object)>(r2);
+
+        goto label1;
+
+     label2:
+        $r12 = <org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread: org.slf4j.Logger log>;
+
+        $z1 = interfaceinvoke $r12.<org.slf4j.Logger: boolean isInfoEnabled()>();
+
+        if $z1 == 0 goto label3;
+
+        $r15 = <org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread: org.slf4j.Logger log>;
+
+        $i2 = interfaceinvoke $r11.<java.util.List: int size()>();
+
+        $r14 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        interfaceinvoke $r15.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Estimated Points: {}", $r14);
+
+     label3:
+        $r13 = virtualinvoke r1.<org.apache.mahout.math.neighborhood.UpdatableSearcher: org.apache.mahout.common.distance.DistanceMeasure getDistanceMeasure()>();
+
+        d0 = staticinvoke <org.apache.mahout.clustering.ClusteringUtils: double estimateDistanceCutoff(java.util.List,org.apache.mahout.common.distance.DistanceMeasure)>($r11, $r13);
+
+     label4:
+        $r19 = new org.apache.mahout.clustering.streaming.cluster.StreamingKMeans;
+
+        specialinvoke $r19.<org.apache.mahout.clustering.streaming.cluster.StreamingKMeans: void <init>(org.apache.mahout.math.neighborhood.UpdatableSearcher,int,double)>(r1, i0, d0);
+
+        $z3 = interfaceinvoke r17.<java.util.Iterator: boolean hasNext()>();
+
+        if $z3 != 0 goto label5;
+
+        $r10 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread: java.lang.Iterable dataPoints>;
+
+        r17 = interfaceinvoke $r10.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label5:
+        $z4 = interfaceinvoke r17.<java.util.Iterator: boolean hasNext()>();
+
+        if $z4 == 0 goto label6;
+
+        $r8 = interfaceinvoke r17.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (org.apache.mahout.math.Centroid) $r8;
+
+        virtualinvoke $r19.<org.apache.mahout.clustering.streaming.cluster.StreamingKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher cluster(org.apache.mahout.math.Centroid)>($r7);
+
+        goto label5;
+
+     label6:
+        virtualinvoke $r19.<org.apache.mahout.clustering.streaming.cluster.StreamingKMeans: void reindexCentroids()>();
+
+        return $r19;
+    }
+
+    public volatile java.lang.Object call() throws java.lang.Exception
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread r0;
+        java.lang.Iterable $r1;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread: java.lang.Iterable call()>();
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread: int NUM_ESTIMATE_POINTS> = 1000;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/clustering/streaming/mapreduce/StreamingKMeansThread");
+
+        <org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansThread: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

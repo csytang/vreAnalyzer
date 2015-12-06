@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import soot.SootMethod;
 import soot.Value;
 import vreAnalyzer.Elements.CFGNode;
@@ -21,7 +22,7 @@ public class ConditionCheck {
 	private boolean isCaller = false;
 	
 	public ConditionCheck(SootMethod smethod,CallSite scallsite){
-		this.method = smethod;
+		method = smethod;
 		if(scallsite==null){
 			isCaller = true;
 		}else{
@@ -113,6 +114,19 @@ public class ConditionCheck {
 
 	public Map<CallSite, CFGNode> getcalleeinitCFGNodes() {
 		return calleeinitConditionalCFGNode;
+	}
+
+	public String getCallerConditionalValueString() {
+		String callerConditionalValueString = "[";
+		for(Value value:callerinitConditionalValues){
+			callerConditionalValueString += value.toString();
+			callerConditionalValueString += ",";
+		}
+		if(callerinitConditionalValues.size()>=1){
+			callerConditionalValueString = callerConditionalValueString.substring(0,callerConditionalValueString.length()-1);
+		}
+		
+		return callerConditionalValueString;
 	}
 	
 }

@@ -1,0 +1,78 @@
+final class org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator extends com.google.common.collect.ForwardingIterator
+{
+    private static final java.util.regex.Pattern SEPARATOR;
+    private final java.util.Iterator delegate;
+
+    void <init>(java.io.File) throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator r0;
+        java.io.File r1;
+        org.apache.mahout.common.iterator.FileLineIterator $r2;
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator$1 $r3;
+        java.util.Iterator $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator;
+
+        r1 := @parameter0: java.io.File;
+
+        specialinvoke r0.<com.google.common.collect.ForwardingIterator: void <init>()>();
+
+        $r2 = new org.apache.mahout.common.iterator.FileLineIterator;
+
+        specialinvoke $r2.<org.apache.mahout.common.iterator.FileLineIterator: void <init>(java.io.File)>(r1);
+
+        $r3 = new org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator$1;
+
+        specialinvoke $r3.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator$1: void <init>(org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator)>(r0);
+
+        $r4 = staticinvoke <com.google.common.collect.Iterators: java.util.Iterator transform(java.util.Iterator,com.google.common.base.Function)>($r2, $r3);
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator: java.util.Iterator delegate> = $r4;
+
+        return;
+    }
+
+    protected java.util.Iterator delegate()
+    {
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator r0;
+        java.util.Iterator $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator: java.util.Iterator delegate>;
+
+        return $r1;
+    }
+
+    protected volatile java.lang.Object delegate()
+    {
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator r0;
+        java.util.Iterator $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator: java.util.Iterator delegate()>();
+
+        return $r1;
+    }
+
+    static java.util.regex.Pattern access$000()
+    {
+        java.util.regex.Pattern $r0;
+
+        $r0 = <org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator: java.util.regex.Pattern SEPARATOR>;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        java.util.regex.Pattern $r0;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("[,\t]");
+
+        <org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator: java.util.regex.Pattern SEPARATOR> = $r0;
+
+        return;
+    }
+}

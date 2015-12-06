@@ -1,0 +1,76 @@
+public abstract class org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CountbasedMeasure extends java.lang.Object implements org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasure
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CountbasedMeasure r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CountbasedMeasure;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector normalize(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CountbasedMeasure r0;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CountbasedMeasure;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        return r1;
+    }
+
+    public double norm(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CountbasedMeasure r0;
+        org.apache.mahout.math.Vector r1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CountbasedMeasure;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $d0 = interfaceinvoke r1.<org.apache.mahout.math.Vector: double norm(double)>(0.0);
+
+        return $d0;
+    }
+
+    public double aggregate(double, double)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CountbasedMeasure r0;
+        double d0, d1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CountbasedMeasure;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        return 1.0;
+    }
+
+    public boolean consider(int, int, double, double, double)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CountbasedMeasure r0;
+        int i0, i1;
+        double d0, d1, d2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CountbasedMeasure;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        d0 := @parameter2: double;
+
+        d1 := @parameter3: double;
+
+        d2 := @parameter4: double;
+
+        return 1;
+    }
+}

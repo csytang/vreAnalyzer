@@ -1,0 +1,356 @@
+public final class org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver extends org.apache.mahout.common.AbstractJob
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver r0;
+
+        r0 := @this: org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        return;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver r0;
+        java.lang.String[] r1;
+        org.apache.hadoop.fs.Path r2, r3;
+        boolean z0, $z1;
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r4, $r7;
+        org.apache.commons.cli2.option.DefaultOption $r5, $r8;
+        java.util.Map $r10;
+        java.lang.String $r11;
+        org.apache.hadoop.conf.Configuration $r12;
+        org.apache.hadoop.fs.Path[] $r13;
+
+        r0 := @this: org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver;
+
+        r1 := @parameter0: java.lang.String[];
+
+        virtualinvoke r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver: void addInputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver: void addOutputOption()>();
+
+        $r4 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder methodOption()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r5);
+
+        $r7 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder overwriteOption()>();
+
+        $r8 = virtualinvoke $r7.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r8);
+
+        $r10 = virtualinvoke r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver: java.util.Map parseArguments(java.lang.String[])>(r1);
+
+        if $r10 != null goto label1;
+
+        return -1;
+
+     label1:
+        r2 = virtualinvoke r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver: org.apache.hadoop.fs.Path getInputPath()>();
+
+        r3 = virtualinvoke r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        $z1 = virtualinvoke r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver: boolean hasOption(java.lang.String)>("overwrite");
+
+        if $z1 == 0 goto label2;
+
+        $r12 = virtualinvoke r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $r13 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r13[0] = r3;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r12, $r13);
+
+     label2:
+        $r11 = virtualinvoke r0.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver: java.lang.String getOption(java.lang.String)>("method");
+
+        z0 = virtualinvoke $r11.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>("sequential");
+
+        staticinvoke <org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver: void run(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,boolean)>(r2, r3, z0);
+
+        return 0;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.hadoop.conf.Configuration $r1;
+        org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver $r2;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r1.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r2 = new org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver;
+
+        specialinvoke $r2.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.util.Tool,java.lang.String[])>($r1, $r2, r0);
+
+        return;
+    }
+
+    public static void run(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, boolean) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.fs.Path r0, r1;
+        boolean z0;
+        org.apache.hadoop.conf.Configuration $r3;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        z0 := @parameter2: boolean;
+
+        if z0 == 0 goto label1;
+
+        staticinvoke <org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver: void postProcessSeq(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>(r0, r1);
+
+        goto label2;
+
+     label1:
+        $r3 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r3.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        staticinvoke <org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver: void postProcessMR(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r3, r0, r1);
+
+        staticinvoke <org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver: void movePartFilesToRespectiveDirectories(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path)>($r3, r1);
+
+     label2:
+        return;
+    }
+
+    private static void postProcessSeq(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.hadoop.fs.Path r0, r1;
+        org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor $r3;
+        org.apache.hadoop.conf.Configuration $r4;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        $r3 = new org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor;
+
+        $r4 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r4.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        specialinvoke $r3.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r0, r1, $r4);
+
+        virtualinvoke $r3.<org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessor: void process()>();
+
+        return;
+    }
+
+    private static void postProcessMR(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r2, $r11, $r12;
+        int i0;
+        java.io.PrintStream $r4;
+        java.lang.String $r5, $r10, $r16;
+        org.apache.hadoop.mapreduce.Job $r6;
+        java.lang.StringBuilder $r7, $r8, $r9, $r14, $r15, $r17;
+        java.lang.InterruptedException $r13;
+        boolean $z0;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        $r4 = <java.lang.System: java.io.PrintStream out>;
+
+        virtualinvoke $r4.<java.io.PrintStream: void println(java.lang.String)>("WARNING: If you are running in Hadoop local mode, please use the --sequential option, as the MapReduce option will not work properly");
+
+        i0 = staticinvoke <org.apache.mahout.clustering.topdown.postprocessor.ClusterCountReader: int getNumberOfClusters(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r1, r0);
+
+        $r5 = virtualinvoke r1.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        virtualinvoke r0.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("clusterOutputPath", $r5);
+
+        $r6 = new org.apache.hadoop.mapreduce.Job;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("ClusterOutputPostProcessor Driver running over input: ");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r6.<org.apache.hadoop.mapreduce.Job: void <init>(org.apache.hadoop.conf.Configuration,java.lang.String)>(r0, $r10);
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setInputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat");
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setOutputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setMapperClass(java.lang.Class)>(class "org/apache/mahout/clustering/topdown/postprocessor/ClusterOutputPostProcessorMapper");
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setMapOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/IntWritable");
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setMapOutputValueClass(java.lang.Class)>(class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setReducerClass(java.lang.Class)>(class "org/apache/mahout/clustering/topdown/postprocessor/ClusterOutputPostProcessorReducer");
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/IntWritable");
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setNumReduceTasks(int)>(i0);
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(class "org/apache/mahout/clustering/topdown/postprocessor/ClusterOutputPostProcessorDriver");
+
+        $r11 = new org.apache.hadoop.fs.Path;
+
+        $r12 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r12.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>("clusteredPoints");
+
+        specialinvoke $r11.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>(r1, $r12);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void addInputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r6, $r11);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r6, r2);
+
+        $z0 = virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if $z0 != 0 goto label1;
+
+        $r13 = new java.lang.InterruptedException;
+
+        $r15 = new java.lang.StringBuilder;
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("ClusterOutputPostProcessor Job failed processing ");
+
+        $r17 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r16 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r13.<java.lang.InterruptedException: void <init>(java.lang.String)>($r16);
+
+        throw $r13;
+
+     label1:
+        return;
+    }
+
+    private static void movePartFilesToRespectiveDirectories(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, $r8;
+        org.apache.hadoop.fs.FileSystem r2;
+        org.apache.hadoop.fs.FileStatus[] r3;
+        int i0, i1;
+        org.apache.hadoop.fs.FileStatus r4;
+        org.apache.hadoop.fs.PathFilter $r6;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileIterator $r7;
+        boolean $z0;
+        org.apache.mahout.common.Pair $r9;
+        java.lang.Object $r10, $r12;
+        org.apache.hadoop.io.Writable $r11;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r0);
+
+        $r6 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter partFilter()>();
+
+        r3 = virtualinvoke r2.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus[] listStatus(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.PathFilter)>(r1, $r6);
+
+        i0 = lengthof r3;
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label3;
+
+        r4 = r3[i1];
+
+        $r7 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileIterator;
+
+        $r8 = virtualinvoke r4.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        specialinvoke $r7.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterator: void <init>(org.apache.hadoop.fs.Path,boolean,org.apache.hadoop.conf.Configuration)>($r8, 1, r0);
+
+        $z0 = virtualinvoke $r7.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r10 = virtualinvoke $r7.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterator: java.lang.Object next()>();
+
+        $r9 = (org.apache.mahout.common.Pair) $r10;
+
+        $r12 = virtualinvoke $r9.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r11 = (org.apache.hadoop.io.Writable) $r12;
+
+        staticinvoke <org.apache.mahout.clustering.topdown.postprocessor.ClusterOutputPostProcessorDriver: void renameFile(org.apache.hadoop.io.Writable,org.apache.hadoop.fs.FileStatus,org.apache.hadoop.conf.Configuration)>($r11, r4, r0);
+
+     label2:
+        virtualinvoke $r7.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterator: void close()>();
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    private static void renameFile(org.apache.hadoop.io.Writable, org.apache.hadoop.fs.FileStatus, org.apache.hadoop.conf.Configuration) throws java.io.IOException
+    {
+        org.apache.hadoop.io.Writable r0;
+        org.apache.hadoop.fs.FileStatus r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.hadoop.fs.Path r3, $r7, $r9, $r10;
+        org.apache.hadoop.fs.FileSystem r4;
+        java.lang.String $r8;
+
+        r0 := @parameter0: org.apache.hadoop.io.Writable;
+
+        r1 := @parameter1: org.apache.hadoop.fs.FileStatus;
+
+        r2 := @parameter2: org.apache.hadoop.conf.Configuration;
+
+        r3 = virtualinvoke r1.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        r4 = virtualinvoke r3.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r2);
+
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        $r8 = virtualinvoke r0.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r7.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r8);
+
+        $r9 = new org.apache.hadoop.fs.Path;
+
+        $r10 = virtualinvoke r3.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.Path getParent()>();
+
+        specialinvoke $r9.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r10, $r7);
+
+        virtualinvoke r4.<org.apache.hadoop.fs.FileSystem: boolean mkdirs(org.apache.hadoop.fs.Path)>($r9);
+
+        virtualinvoke r4.<org.apache.hadoop.fs.FileSystem: boolean rename(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>(r3, $r9);
+
+        return;
+    }
+}

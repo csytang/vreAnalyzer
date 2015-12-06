@@ -1,0 +1,386 @@
+public class org.apache.mahout.classifier.df.node.CategoricalNode extends org.apache.mahout.classifier.df.node.Node
+{
+    private int attr;
+    private double[] values;
+    private org.apache.mahout.classifier.df.node.Node[] childs;
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.df.node.CategoricalNode r0;
+
+        r0 := @this: org.apache.mahout.classifier.df.node.CategoricalNode;
+
+        specialinvoke r0.<org.apache.mahout.classifier.df.node.Node: void <init>()>();
+
+        return;
+    }
+
+    public void <init>(int, double[], org.apache.mahout.classifier.df.node.Node[])
+    {
+        org.apache.mahout.classifier.df.node.CategoricalNode r0;
+        int i0;
+        double[] r1;
+        org.apache.mahout.classifier.df.node.Node[] r2;
+
+        r0 := @this: org.apache.mahout.classifier.df.node.CategoricalNode;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: double[];
+
+        r2 := @parameter2: org.apache.mahout.classifier.df.node.Node[];
+
+        specialinvoke r0.<org.apache.mahout.classifier.df.node.Node: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.df.node.CategoricalNode: int attr> = i0;
+
+        r0.<org.apache.mahout.classifier.df.node.CategoricalNode: double[] values> = r1;
+
+        r0.<org.apache.mahout.classifier.df.node.CategoricalNode: org.apache.mahout.classifier.df.node.Node[] childs> = r2;
+
+        return;
+    }
+
+    public double classify(org.apache.mahout.classifier.df.data.Instance)
+    {
+        org.apache.mahout.classifier.df.node.CategoricalNode r0;
+        org.apache.mahout.classifier.df.data.Instance r1;
+        int i0, $i1;
+        double[] $r2;
+        double $d0, $d1;
+        org.apache.mahout.classifier.df.node.Node[] $r3;
+        org.apache.mahout.classifier.df.node.Node $r4;
+
+        r0 := @this: org.apache.mahout.classifier.df.node.CategoricalNode;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.data.Instance;
+
+        $r2 = r0.<org.apache.mahout.classifier.df.node.CategoricalNode: double[] values>;
+
+        $i1 = r0.<org.apache.mahout.classifier.df.node.CategoricalNode: int attr>;
+
+        $d0 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Instance: double get(int)>($i1);
+
+        i0 = staticinvoke <org.apache.commons.lang3.ArrayUtils: int indexOf(double[],double)>($r2, $d0);
+
+        if i0 != -1 goto label1;
+
+        return #NaN;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.classifier.df.node.CategoricalNode: org.apache.mahout.classifier.df.node.Node[] childs>;
+
+        $r4 = $r3[i0];
+
+        $d1 = virtualinvoke $r4.<org.apache.mahout.classifier.df.node.Node: double classify(org.apache.mahout.classifier.df.data.Instance)>(r1);
+
+        return $d1;
+    }
+
+    public long maxDepth()
+    {
+        org.apache.mahout.classifier.df.node.CategoricalNode r0;
+        org.apache.mahout.classifier.df.node.Node[] r1;
+        int i0, i5;
+        org.apache.mahout.classifier.df.node.Node r2;
+        long l1, $l2, l4;
+        byte $b3;
+
+        r0 := @this: org.apache.mahout.classifier.df.node.CategoricalNode;
+
+        l4 = 0L;
+
+        r1 = r0.<org.apache.mahout.classifier.df.node.CategoricalNode: org.apache.mahout.classifier.df.node.Node[] childs>;
+
+        i0 = lengthof r1;
+
+        i5 = 0;
+
+     label1:
+        if i5 >= i0 goto label3;
+
+        r2 = r1[i5];
+
+        l1 = virtualinvoke r2.<org.apache.mahout.classifier.df.node.Node: long maxDepth()>();
+
+        $b3 = l1 cmp l4;
+
+        if $b3 <= 0 goto label2;
+
+        l4 = l1;
+
+     label2:
+        i5 = i5 + 1;
+
+        goto label1;
+
+     label3:
+        $l2 = 1L + l4;
+
+        return $l2;
+    }
+
+    public long nbNodes()
+    {
+        org.apache.mahout.classifier.df.node.CategoricalNode r0;
+        org.apache.mahout.classifier.df.node.Node[] r1;
+        int i0, i3;
+        org.apache.mahout.classifier.df.node.Node r2;
+        long $l1, l2;
+
+        r0 := @this: org.apache.mahout.classifier.df.node.CategoricalNode;
+
+        l2 = 1L;
+
+        r1 = r0.<org.apache.mahout.classifier.df.node.CategoricalNode: org.apache.mahout.classifier.df.node.Node[] childs>;
+
+        i0 = lengthof r1;
+
+        i3 = 0;
+
+     label1:
+        if i3 >= i0 goto label2;
+
+        r2 = r1[i3];
+
+        $l1 = virtualinvoke r2.<org.apache.mahout.classifier.df.node.Node: long nbNodes()>();
+
+        l2 = l2 + $l1;
+
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label2:
+        return l2;
+    }
+
+    protected org.apache.mahout.classifier.df.node.Node$Type getType()
+    {
+        org.apache.mahout.classifier.df.node.CategoricalNode r0;
+        org.apache.mahout.classifier.df.node.Node$Type $r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.node.CategoricalNode;
+
+        $r1 = <org.apache.mahout.classifier.df.node.Node$Type: org.apache.mahout.classifier.df.node.Node$Type CATEGORICAL>;
+
+        return $r1;
+    }
+
+    public boolean equals(java.lang.Object)
+    {
+        org.apache.mahout.classifier.df.node.CategoricalNode r0, r2;
+        java.lang.Object r1;
+        boolean $z0, $z1, $z2, $z3;
+        int $i0, $i1;
+        double[] $r3, $r4;
+        org.apache.mahout.classifier.df.node.Node[] $r5, $r6;
+
+        r0 := @this: org.apache.mahout.classifier.df.node.CategoricalNode;
+
+        r1 := @parameter0: java.lang.Object;
+
+        if r0 != r1 goto label1;
+
+        return 1;
+
+     label1:
+        $z0 = r1 instanceof org.apache.mahout.classifier.df.node.CategoricalNode;
+
+        if $z0 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        r2 = (org.apache.mahout.classifier.df.node.CategoricalNode) r1;
+
+        $i1 = r0.<org.apache.mahout.classifier.df.node.CategoricalNode: int attr>;
+
+        $i0 = r2.<org.apache.mahout.classifier.df.node.CategoricalNode: int attr>;
+
+        if $i1 != $i0 goto label3;
+
+        $r4 = r0.<org.apache.mahout.classifier.df.node.CategoricalNode: double[] values>;
+
+        $r3 = r2.<org.apache.mahout.classifier.df.node.CategoricalNode: double[] values>;
+
+        $z1 = staticinvoke <java.util.Arrays: boolean equals(double[],double[])>($r4, $r3);
+
+        if $z1 == 0 goto label3;
+
+        $r6 = r0.<org.apache.mahout.classifier.df.node.CategoricalNode: org.apache.mahout.classifier.df.node.Node[] childs>;
+
+        $r5 = r2.<org.apache.mahout.classifier.df.node.CategoricalNode: org.apache.mahout.classifier.df.node.Node[] childs>;
+
+        $z2 = staticinvoke <java.util.Arrays: boolean equals(java.lang.Object[],java.lang.Object[])>($r6, $r5);
+
+        if $z2 == 0 goto label3;
+
+        $z3 = 1;
+
+        goto label4;
+
+     label3:
+        $z3 = 0;
+
+     label4:
+        return $z3;
+    }
+
+    public int hashCode()
+    {
+        org.apache.mahout.classifier.df.node.CategoricalNode r0;
+        int $i0, $i1, $i2, $i4, i5, i6, i7, i8, i9;
+        long $l3;
+        double[] r1;
+        double d0;
+        org.apache.mahout.classifier.df.node.Node[] r2;
+        org.apache.mahout.classifier.df.node.Node r3;
+
+        r0 := @this: org.apache.mahout.classifier.df.node.CategoricalNode;
+
+        i5 = r0.<org.apache.mahout.classifier.df.node.CategoricalNode: int attr>;
+
+        r1 = r0.<org.apache.mahout.classifier.df.node.CategoricalNode: double[] values>;
+
+        i6 = lengthof r1;
+
+        i7 = 0;
+
+     label1:
+        if i7 >= i6 goto label2;
+
+        d0 = r1[i7];
+
+        $i2 = 31 * i5;
+
+        $l3 = staticinvoke <java.lang.Double: long doubleToLongBits(double)>(d0);
+
+        $i4 = (int) $l3;
+
+        i5 = $i2 + $i4;
+
+        i7 = i7 + 1;
+
+        goto label1;
+
+     label2:
+        r2 = r0.<org.apache.mahout.classifier.df.node.CategoricalNode: org.apache.mahout.classifier.df.node.Node[] childs>;
+
+        i8 = lengthof r2;
+
+        i9 = 0;
+
+     label3:
+        if i9 >= i8 goto label4;
+
+        r3 = r2[i9];
+
+        $i0 = 31 * i5;
+
+        $i1 = virtualinvoke r3.<java.lang.Object: int hashCode()>();
+
+        i5 = $i0 + $i1;
+
+        i9 = i9 + 1;
+
+        goto label3;
+
+     label4:
+        return i5;
+    }
+
+    protected java.lang.String getString()
+    {
+        org.apache.mahout.classifier.df.node.CategoricalNode r0;
+        org.apache.mahout.classifier.df.node.Node[] r2;
+        int i0, i1;
+        org.apache.mahout.classifier.df.node.Node r3;
+        java.lang.StringBuilder $r4, $r6;
+        java.lang.String $r5;
+
+        r0 := @this: org.apache.mahout.classifier.df.node.CategoricalNode;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        r2 = r0.<org.apache.mahout.classifier.df.node.CategoricalNode: org.apache.mahout.classifier.df.node.Node[] childs>;
+
+        i0 = lengthof r2;
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label2;
+
+        r3 = r2[i1];
+
+        $r6 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r3);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(44);
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r5;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.df.node.CategoricalNode r0;
+        java.io.DataInput r1;
+        int $i0;
+        double[] $r2;
+        org.apache.mahout.classifier.df.node.Node[] $r3;
+
+        r0 := @this: org.apache.mahout.classifier.df.node.CategoricalNode;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $i0 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.classifier.df.node.CategoricalNode: int attr> = $i0;
+
+        $r2 = staticinvoke <org.apache.mahout.classifier.df.DFUtils: double[] readDoubleArray(java.io.DataInput)>(r1);
+
+        r0.<org.apache.mahout.classifier.df.node.CategoricalNode: double[] values> = $r2;
+
+        $r3 = staticinvoke <org.apache.mahout.classifier.df.DFUtils: org.apache.mahout.classifier.df.node.Node[] readNodeArray(java.io.DataInput)>(r1);
+
+        r0.<org.apache.mahout.classifier.df.node.CategoricalNode: org.apache.mahout.classifier.df.node.Node[] childs> = $r3;
+
+        return;
+    }
+
+    protected void writeNode(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.df.node.CategoricalNode r0;
+        java.io.DataOutput r1;
+        int $i0;
+        double[] $r2;
+        org.apache.mahout.classifier.df.node.Node[] $r3;
+
+        r0 := @this: org.apache.mahout.classifier.df.node.CategoricalNode;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $i0 = r0.<org.apache.mahout.classifier.df.node.CategoricalNode: int attr>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i0);
+
+        $r2 = r0.<org.apache.mahout.classifier.df.node.CategoricalNode: double[] values>;
+
+        staticinvoke <org.apache.mahout.classifier.df.DFUtils: void writeArray(java.io.DataOutput,double[])>(r1, $r2);
+
+        $r3 = r0.<org.apache.mahout.classifier.df.node.CategoricalNode: org.apache.mahout.classifier.df.node.Node[] childs>;
+
+        staticinvoke <org.apache.mahout.classifier.df.DFUtils: void writeArray(java.io.DataOutput,org.apache.mahout.classifier.df.node.Node[])>(r1, $r3);
+
+        return;
+    }
+}

@@ -1,0 +1,119 @@
+public final class org.apache.mahout.cf.taste.impl.recommender.GenericBooleanPrefItemBasedRecommender extends org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender
+{
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel, org.apache.mahout.cf.taste.similarity.ItemSimilarity)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.GenericBooleanPrefItemBasedRecommender r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        org.apache.mahout.cf.taste.similarity.ItemSimilarity r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.GenericBooleanPrefItemBasedRecommender;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.similarity.ItemSimilarity;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender: void <init>(org.apache.mahout.cf.taste.model.DataModel,org.apache.mahout.cf.taste.similarity.ItemSimilarity)>(r1, r2);
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel, org.apache.mahout.cf.taste.similarity.ItemSimilarity, org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy, org.apache.mahout.cf.taste.recommender.MostSimilarItemsCandidateItemsStrategy)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.GenericBooleanPrefItemBasedRecommender r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        org.apache.mahout.cf.taste.similarity.ItemSimilarity r2;
+        org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy r3;
+        org.apache.mahout.cf.taste.recommender.MostSimilarItemsCandidateItemsStrategy r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.GenericBooleanPrefItemBasedRecommender;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.similarity.ItemSimilarity;
+
+        r3 := @parameter2: org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy;
+
+        r4 := @parameter3: org.apache.mahout.cf.taste.recommender.MostSimilarItemsCandidateItemsStrategy;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.GenericItemBasedRecommender: void <init>(org.apache.mahout.cf.taste.model.DataModel,org.apache.mahout.cf.taste.similarity.ItemSimilarity,org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy,org.apache.mahout.cf.taste.recommender.MostSimilarItemsCandidateItemsStrategy)>(r1, r2, r3, r4);
+
+        return;
+    }
+
+    protected float doEstimatePreference(long, org.apache.mahout.cf.taste.model.PreferenceArray, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.GenericBooleanPrefItemBasedRecommender r0;
+        long l0, l1;
+        org.apache.mahout.cf.taste.model.PreferenceArray r1;
+        double[] r2;
+        int i2, i3;
+        double d0, d1;
+        org.apache.mahout.cf.taste.similarity.ItemSimilarity $r4;
+        long[] $r5;
+        boolean $z0, z1;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.GenericBooleanPrefItemBasedRecommender;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: org.apache.mahout.cf.taste.model.PreferenceArray;
+
+        l1 := @parameter2: long;
+
+        $r4 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.GenericBooleanPrefItemBasedRecommender: org.apache.mahout.cf.taste.similarity.ItemSimilarity getSimilarity()>();
+
+        $r5 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.PreferenceArray: long[] getIDs()>();
+
+        r2 = interfaceinvoke $r4.<org.apache.mahout.cf.taste.similarity.ItemSimilarity: double[] itemSimilarities(long,long[])>(l1, $r5);
+
+        z1 = 0;
+
+        d1 = 0.0;
+
+        i2 = lengthof r2;
+
+        i3 = 0;
+
+     label1:
+        if i3 >= i2 goto label3;
+
+        d0 = r2[i3];
+
+        $z0 = staticinvoke <java.lang.Double: boolean isNaN(double)>(d0);
+
+        if $z0 != 0 goto label2;
+
+        z1 = 1;
+
+        d1 = d1 + d0;
+
+     label2:
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label3:
+        if z1 == 0 goto label4;
+
+        $f0 = (float) d1;
+
+        goto label5;
+
+     label4:
+        $f0 = #NaNF;
+
+     label5:
+        return $f0;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.GenericBooleanPrefItemBasedRecommender r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.GenericBooleanPrefItemBasedRecommender;
+
+        return "GenericBooleanPrefItemBasedRecommender";
+    }
+}

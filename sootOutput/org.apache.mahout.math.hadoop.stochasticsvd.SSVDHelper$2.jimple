@@ -1,0 +1,58 @@
+final class org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper$2 extends java.lang.Object implements com.google.common.base.Function
+{
+
+    void <init>()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper$2 r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper$2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.mahout.common.Pair apply(org.apache.mahout.common.Pair)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper$2 r0;
+        org.apache.mahout.common.Pair r1, $r2;
+        java.lang.Object $r3, $r4;
+        org.apache.mahout.math.VectorWritable $r5;
+        org.apache.mahout.math.Vector $r6;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper$2;
+
+        r1 := @parameter0: org.apache.mahout.common.Pair;
+
+        $r2 = new org.apache.mahout.common.Pair;
+
+        $r3 = virtualinvoke r1.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r4 = virtualinvoke r1.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r5 = (org.apache.mahout.math.VectorWritable) $r4;
+
+        $r6 = virtualinvoke $r5.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        specialinvoke $r2.<org.apache.mahout.common.Pair: void <init>(java.lang.Object,java.lang.Object)>($r3, $r6);
+
+        return $r2;
+    }
+
+    public volatile java.lang.Object apply(java.lang.Object)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper$2 r0;
+        java.lang.Object r1;
+        org.apache.mahout.common.Pair $r2, $r3;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper$2;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (org.apache.mahout.common.Pair) r1;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper$2: org.apache.mahout.common.Pair apply(org.apache.mahout.common.Pair)>($r2);
+
+        return $r3;
+    }
+}

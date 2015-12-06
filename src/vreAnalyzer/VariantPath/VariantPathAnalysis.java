@@ -258,6 +258,8 @@ public class VariantPathAnalysis {
 				for(SootMethod callee:callees){
 					// 1. 获得callee的cfg 
 					CFG cfg = ProgramFlowBuilder.inst().getCFG(callee);
+					if(cfg==null)
+						continue;
 					List<CFGNode> cfgNodes = cfg.getNodes();
 					isFirstVariant = true;
 					// 清空
@@ -392,8 +394,10 @@ public class VariantPathAnalysis {
 			}
 		}else{
 			for(Variant variant:variantlist){
-				if(variant.getBindingStmts(callsite).contains(cfgNode.getStmt())){
-					bindingVariants.add(variant);
+				if(variant.getBindingStmts(callsite)!=null){
+					if(variant.getBindingStmts(callsite).contains(cfgNode.getStmt())){
+						bindingVariants.add(variant);
+					}
 				}
 			}
 		}

@@ -1,0 +1,311 @@
+final class org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator extends org.apache.mahout.cf.taste.impl.common.AbstractLongPrimitiveIterator
+{
+    private int position;
+    private int lastNext;
+    final org.apache.mahout.cf.taste.impl.common.FastIDSet this$0;
+
+    private void <init>(org.apache.mahout.cf.taste.impl.common.FastIDSet)
+    {
+        org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator r0;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.common.FastIDSet;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: org.apache.mahout.cf.taste.impl.common.FastIDSet this$0> = r1;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.common.AbstractLongPrimitiveIterator: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int lastNext> = -1;
+
+        return;
+    }
+
+    public boolean hasNext()
+    {
+        org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator r0;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r1;
+        int $i0, $i1;
+        long[] $r2;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: void goToNext()>();
+
+        $i0 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int position>;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: org.apache.mahout.cf.taste.impl.common.FastIDSet this$0>;
+
+        $r2 = staticinvoke <org.apache.mahout.cf.taste.impl.common.FastIDSet: long[] access$100(org.apache.mahout.cf.taste.impl.common.FastIDSet)>($r1);
+
+        $i1 = lengthof $r2;
+
+        if $i0 >= $i1 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    public long nextLong()
+    {
+        org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator r0;
+        int $i0, $i1, $i2, $i3, $i4;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r1, $r3;
+        long[] $r2, $r4;
+        long $l5;
+        java.util.NoSuchElementException $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: void goToNext()>();
+
+        $i0 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int position>;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int lastNext> = $i0;
+
+        $i1 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int position>;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: org.apache.mahout.cf.taste.impl.common.FastIDSet this$0>;
+
+        $r2 = staticinvoke <org.apache.mahout.cf.taste.impl.common.FastIDSet: long[] access$100(org.apache.mahout.cf.taste.impl.common.FastIDSet)>($r1);
+
+        $i2 = lengthof $r2;
+
+        if $i1 < $i2 goto label1;
+
+        $r5 = new java.util.NoSuchElementException;
+
+        specialinvoke $r5.<java.util.NoSuchElementException: void <init>()>();
+
+        throw $r5;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: org.apache.mahout.cf.taste.impl.common.FastIDSet this$0>;
+
+        $r4 = staticinvoke <org.apache.mahout.cf.taste.impl.common.FastIDSet: long[] access$100(org.apache.mahout.cf.taste.impl.common.FastIDSet)>($r3);
+
+        $i3 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int position>;
+
+        $i4 = $i3 + 1;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int position> = $i4;
+
+        $l5 = $r4[$i3];
+
+        return $l5;
+    }
+
+    public long peek()
+    {
+        org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator r0;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r1, $r3;
+        int $i0, $i1, $i2;
+        long[] $r2, $r4;
+        long $l3;
+        java.util.NoSuchElementException $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: void goToNext()>();
+
+        $i0 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int position>;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: org.apache.mahout.cf.taste.impl.common.FastIDSet this$0>;
+
+        $r2 = staticinvoke <org.apache.mahout.cf.taste.impl.common.FastIDSet: long[] access$100(org.apache.mahout.cf.taste.impl.common.FastIDSet)>($r1);
+
+        $i1 = lengthof $r2;
+
+        if $i0 < $i1 goto label1;
+
+        $r5 = new java.util.NoSuchElementException;
+
+        specialinvoke $r5.<java.util.NoSuchElementException: void <init>()>();
+
+        throw $r5;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: org.apache.mahout.cf.taste.impl.common.FastIDSet this$0>;
+
+        $r4 = staticinvoke <org.apache.mahout.cf.taste.impl.common.FastIDSet: long[] access$100(org.apache.mahout.cf.taste.impl.common.FastIDSet)>($r3);
+
+        $i2 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int position>;
+
+        $l3 = $r4[$i2];
+
+        return $l3;
+    }
+
+    private void goToNext()
+    {
+        org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator r0;
+        int i0, $i1, $i2, $i5, $i6, $i8;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r1, $r3, $r5;
+        long[] $r2, $r4, $r6;
+        long $l3, $l7;
+        byte $b4, $b9;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: org.apache.mahout.cf.taste.impl.common.FastIDSet this$0>;
+
+        $r2 = staticinvoke <org.apache.mahout.cf.taste.impl.common.FastIDSet: long[] access$100(org.apache.mahout.cf.taste.impl.common.FastIDSet)>($r1);
+
+        i0 = lengthof $r2;
+
+     label1:
+        $i1 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int position>;
+
+        if $i1 >= i0 goto label3;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: org.apache.mahout.cf.taste.impl.common.FastIDSet this$0>;
+
+        $r4 = staticinvoke <org.apache.mahout.cf.taste.impl.common.FastIDSet: long[] access$100(org.apache.mahout.cf.taste.impl.common.FastIDSet)>($r3);
+
+        $i2 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int position>;
+
+        $l3 = $r4[$i2];
+
+        $b4 = $l3 cmp -9223372036854775808L;
+
+        if $b4 == 0 goto label2;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: org.apache.mahout.cf.taste.impl.common.FastIDSet this$0>;
+
+        $r6 = staticinvoke <org.apache.mahout.cf.taste.impl.common.FastIDSet: long[] access$100(org.apache.mahout.cf.taste.impl.common.FastIDSet)>($r5);
+
+        $i8 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int position>;
+
+        $l7 = $r6[$i8];
+
+        $b9 = $l7 cmp 9223372036854775807L;
+
+        if $b9 != 0 goto label3;
+
+     label2:
+        $i5 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int position>;
+
+        $i6 = $i5 + 1;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int position> = $i6;
+
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    public void remove()
+    {
+        org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator r0;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r1, $r3, $r5;
+        int $i0, $i1, $i2, $i3;
+        long[] $r2, $r4;
+        java.lang.IllegalStateException $r6;
+        java.util.NoSuchElementException $r7;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator;
+
+        $i0 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int lastNext>;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: org.apache.mahout.cf.taste.impl.common.FastIDSet this$0>;
+
+        $r2 = staticinvoke <org.apache.mahout.cf.taste.impl.common.FastIDSet: long[] access$100(org.apache.mahout.cf.taste.impl.common.FastIDSet)>($r1);
+
+        $i1 = lengthof $r2;
+
+        if $i0 < $i1 goto label1;
+
+        $r7 = new java.util.NoSuchElementException;
+
+        specialinvoke $r7.<java.util.NoSuchElementException: void <init>()>();
+
+        throw $r7;
+
+     label1:
+        $i2 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int lastNext>;
+
+        if $i2 >= 0 goto label2;
+
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r6;
+
+     label2:
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: org.apache.mahout.cf.taste.impl.common.FastIDSet this$0>;
+
+        $r4 = staticinvoke <org.apache.mahout.cf.taste.impl.common.FastIDSet: long[] access$100(org.apache.mahout.cf.taste.impl.common.FastIDSet)>($r3);
+
+        $i3 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int lastNext>;
+
+        $r4[$i3] = 9223372036854775807L;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: org.apache.mahout.cf.taste.impl.common.FastIDSet this$0>;
+
+        staticinvoke <org.apache.mahout.cf.taste.impl.common.FastIDSet: int access$210(org.apache.mahout.cf.taste.impl.common.FastIDSet)>($r5);
+
+        return;
+    }
+
+    public java.util.Iterator iterator()
+    {
+        org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator r0, $r1;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator;
+
+        $r1 = new org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: org.apache.mahout.cf.taste.impl.common.FastIDSet this$0>;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: void <init>(org.apache.mahout.cf.taste.impl.common.FastIDSet)>($r2);
+
+        return $r1;
+    }
+
+    public void skip(int)
+    {
+        org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator r0;
+        int i0, $i1, $i2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator;
+
+        i0 := @parameter0: int;
+
+        $i1 = r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int position>;
+
+        $i2 = $i1 + i0;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: int position> = $i2;
+
+        return;
+    }
+
+    void <init>(org.apache.mahout.cf.taste.impl.common.FastIDSet, org.apache.mahout.cf.taste.impl.common.FastIDSet$1)
+    {
+        org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator r0;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet r1;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet$1 r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.common.FastIDSet;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.impl.common.FastIDSet$1;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.common.FastIDSet$KeyIterator: void <init>(org.apache.mahout.cf.taste.impl.common.FastIDSet)>(r1);
+
+        return;
+    }
+}

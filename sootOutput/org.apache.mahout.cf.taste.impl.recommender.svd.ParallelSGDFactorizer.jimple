@@ -1,0 +1,906 @@
+public class org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer extends org.apache.mahout.cf.taste.impl.recommender.svd.AbstractFactorizer
+{
+    private final org.apache.mahout.cf.taste.model.DataModel dataModel;
+    private final double lambda;
+    private final int rank;
+    private final int numEpochs;
+    private int numThreads;
+    private double mu0;
+    private double decayFactor;
+    private int stepOffset;
+    private double forgettingExponent;
+    private double biasMuRatio;
+    private double biasLambdaRatio;
+    protected volatile double[][] userVectors;
+    protected volatile double[][] itemVectors;
+    private final org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler shuffler;
+    private int epoch;
+    private static final int USER_BIAS_INDEX;
+    private static final int ITEM_BIAS_INDEX;
+    private static final int FEATURE_OFFSET;
+    private static final double NOISE;
+    private static final org.slf4j.Logger logger;
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel, int, double, int) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        int i0, i1, $i2, $i3, $i4, $i5, $i6;
+        double d0, $d1, $d2;
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler $r2, $r4;
+        java.lang.Runtime $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        i0 := @parameter1: int;
+
+        d0 := @parameter2: double;
+
+        i1 := @parameter3: int;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.AbstractFactorizer: void <init>(org.apache.mahout.cf.taste.model.DataModel)>(r1);
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double mu0> = 0.01;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double decayFactor> = 1.0;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int stepOffset> = 0;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double forgettingExponent> = 0.0;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double biasMuRatio> = 0.5;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double biasLambdaRatio> = 0.1;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int epoch> = 1;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.apache.mahout.cf.taste.model.DataModel dataModel> = r1;
+
+        $i2 = i0 + 3;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int rank> = $i2;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double lambda> = d0;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int numEpochs> = i1;
+
+        $r2 = new org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler;
+
+        specialinvoke $r2.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: void <init>(org.apache.mahout.cf.taste.model.DataModel)>(r1);
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler shuffler> = $r2;
+
+        $r3 = staticinvoke <java.lang.Runtime: java.lang.Runtime getRuntime()>();
+
+        $i3 = virtualinvoke $r3.<java.lang.Runtime: int availableProcessors()>();
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler shuffler>;
+
+        $i4 = virtualinvoke $r4.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: int size()>();
+
+        $d1 = (double) $i4;
+
+        $d2 = staticinvoke <java.lang.Math: double pow(double,double)>($d1, 0.25);
+
+        $i5 = (int) $d2;
+
+        $i6 = staticinvoke <java.lang.Math: int min(int,int)>($i3, $i5);
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int numThreads> = $i6;
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel, int, double, int, double, double, int, double) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        int i0, i1, i2;
+        double d0, d1, d2, d3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        i0 := @parameter1: int;
+
+        d0 := @parameter2: double;
+
+        i1 := @parameter3: int;
+
+        d1 := @parameter4: double;
+
+        d2 := @parameter5: double;
+
+        i2 := @parameter6: int;
+
+        d3 := @parameter7: double;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: void <init>(org.apache.mahout.cf.taste.model.DataModel,int,double,int)>(r1, i0, d0, i1);
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double mu0> = d1;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double decayFactor> = d2;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int stepOffset> = i2;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double forgettingExponent> = d3;
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel, int, double, int, double, double, int, double, int) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        int i0, i1, i2, i3;
+        double d0, d1, d2, d3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        i0 := @parameter1: int;
+
+        d0 := @parameter2: double;
+
+        i1 := @parameter3: int;
+
+        d1 := @parameter4: double;
+
+        d2 := @parameter5: double;
+
+        i2 := @parameter6: int;
+
+        d3 := @parameter7: double;
+
+        i3 := @parameter8: int;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: void <init>(org.apache.mahout.cf.taste.model.DataModel,int,double,int,double,double,int,double)>(r1, i0, d0, i1, d1, d2, i2, d3);
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int numThreads> = i3;
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel, int, double, int, double, double, int, double, double, double) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        int i0, i1, i2;
+        double d0, d1, d2, d3, d4, d5;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        i0 := @parameter1: int;
+
+        d0 := @parameter2: double;
+
+        i1 := @parameter3: int;
+
+        d1 := @parameter4: double;
+
+        d2 := @parameter5: double;
+
+        i2 := @parameter6: int;
+
+        d3 := @parameter7: double;
+
+        d4 := @parameter8: double;
+
+        d5 := @parameter9: double;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: void <init>(org.apache.mahout.cf.taste.model.DataModel,int,double,int,double,double,int,double)>(r1, i0, d0, i1, d1, d2, i2, d3);
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double biasMuRatio> = d4;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double biasLambdaRatio> = d5;
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel, int, double, int, double, double, int, double, double, double, int) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        int i0, i1, i2, i3;
+        double d0, d1, d2, d3, d4, d5;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        i0 := @parameter1: int;
+
+        d0 := @parameter2: double;
+
+        i1 := @parameter3: int;
+
+        d1 := @parameter4: double;
+
+        d2 := @parameter5: double;
+
+        i2 := @parameter6: int;
+
+        d3 := @parameter7: double;
+
+        d4 := @parameter8: double;
+
+        d5 := @parameter9: double;
+
+        i3 := @parameter10: int;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: void <init>(org.apache.mahout.cf.taste.model.DataModel,int,double,int,double,double,int,double,double,double)>(r1, i0, d0, i1, d1, d2, i2, d3, d4, d5);
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int numThreads> = i3;
+
+        return;
+    }
+
+    protected void initialize() throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer r0;
+        org.apache.mahout.common.RandomWrapper r1;
+        double d0, $d1, $d2, $d3, $d4;
+        org.apache.mahout.cf.taste.model.DataModel $r2, $r4;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, i8, i9, i10, i11;
+        double[][] $r3, $r5, $r6, $r7, $r9, $r11, $r13, $r14, $r16, $r18, $r20, $r22;
+        double[] $r8, $r10, $r12, $r15, $r17, $r19, $r21, $r23;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer;
+
+        r1 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        $i0 = interfaceinvoke $r2.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsers()>();
+
+        $i1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int rank>;
+
+        $r3 = newmultiarray (double)[$i0][$i1];
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double[][] userVectors> = $r3;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        $i2 = interfaceinvoke $r4.<org.apache.mahout.cf.taste.model.DataModel: int getNumItems()>();
+
+        $i3 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int rank>;
+
+        $r5 = newmultiarray (double)[$i2][$i3];
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double[][] itemVectors> = $r5;
+
+        d0 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double getAveragePreference()>();
+
+        i8 = 0;
+
+     label1:
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double[][] userVectors>;
+
+        $i4 = lengthof $r6;
+
+        if i8 >= $i4 goto label4;
+
+        $r16 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double[][] userVectors>;
+
+        $r19 = $r16[i8];
+
+        $r19[0] = d0;
+
+        $r20 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double[][] userVectors>;
+
+        $r17 = $r20[i8];
+
+        $r17[1] = 0.0;
+
+        $r18 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double[][] userVectors>;
+
+        $r21 = $r18[i8];
+
+        $r21[2] = 1.0;
+
+        i9 = 3;
+
+     label2:
+        $i7 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int rank>;
+
+        if i9 >= $i7 goto label3;
+
+        $r22 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double[][] userVectors>;
+
+        $r23 = $r22[i8];
+
+        $d3 = virtualinvoke r1.<org.apache.mahout.common.RandomWrapper: double nextGaussian()>();
+
+        $d4 = $d3 * 0.02;
+
+        $r23[i9] = $d4;
+
+        i9 = i9 + 1;
+
+        goto label2;
+
+     label3:
+        i8 = i8 + 1;
+
+        goto label1;
+
+     label4:
+        i10 = 0;
+
+     label5:
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double[][] itemVectors>;
+
+        $i5 = lengthof $r7;
+
+        if i10 >= $i5 goto label8;
+
+        $r9 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double[][] itemVectors>;
+
+        $r8 = $r9[i10];
+
+        $r8[0] = 1.0;
+
+        $r11 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double[][] itemVectors>;
+
+        $r10 = $r11[i10];
+
+        $r10[1] = 1.0;
+
+        $r13 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double[][] itemVectors>;
+
+        $r12 = $r13[i10];
+
+        $r12[2] = 0.0;
+
+        i11 = 3;
+
+     label6:
+        $i6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int rank>;
+
+        if i11 >= $i6 goto label7;
+
+        $r14 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double[][] itemVectors>;
+
+        $r15 = $r14[i10];
+
+        $d1 = virtualinvoke r1.<org.apache.mahout.common.RandomWrapper: double nextGaussian()>();
+
+        $d2 = $d1 * 0.02;
+
+        $r15[i11] = $d2;
+
+        i11 = i11 + 1;
+
+        goto label6;
+
+     label7:
+        i10 = i10 + 1;
+
+        goto label5;
+
+     label8:
+        return;
+    }
+
+    private double getMu(int)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer r0;
+        int i0, $i1, $i2, $i3;
+        double $d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer;
+
+        i0 := @parameter0: int;
+
+        $d2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double mu0>;
+
+        $d1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double decayFactor>;
+
+        $i1 = i0 - 1;
+
+        $d0 = (double) $i1;
+
+        $d3 = staticinvoke <java.lang.Math: double pow(double,double)>($d1, $d0);
+
+        $d6 = $d2 * $d3;
+
+        $i2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int stepOffset>;
+
+        $i3 = i0 + $i2;
+
+        $d5 = (double) $i3;
+
+        $d4 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double forgettingExponent>;
+
+        $d7 = staticinvoke <java.lang.Math: double pow(double,double)>($d5, $d4);
+
+        $d8 = $d6 * $d7;
+
+        return $d8;
+    }
+
+    public org.apache.mahout.cf.taste.impl.recommender.svd.Factorization factorize() throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer r0;
+        double d0;
+        int i0, i1, i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i14, $i15, $i16, $i17, $i18, $i19, $i21, $i22, $i23, i24;
+        java.util.concurrent.ExecutorService r1;
+        org.slf4j.Logger $r3, $r12, $r16, $r23;
+        boolean $z0, z1, z2;
+        double[][] $r4, $r5;
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler $r6, $r8, $r9, $r10, $r13, $r17, $r18;
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization $r7;
+        java.util.concurrent.TimeUnit $r11, $r19;
+        long $l13, $l20;
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$1 $r14;
+        java.lang.Throwable $r15;
+        java.lang.InterruptedException $r20, $r22;
+        org.apache.mahout.cf.taste.common.TasteException $r21, $r24;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: void initialize()>();
+
+        $r3 = <org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.slf4j.Logger logger>;
+
+        $z0 = interfaceinvoke $r3.<org.slf4j.Logger: boolean isInfoEnabled()>();
+
+        if $z0 == 0 goto label01;
+
+        $r16 = <org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.slf4j.Logger logger>;
+
+        interfaceinvoke $r16.<org.slf4j.Logger: void info(java.lang.String)>("starting to compute the factorization...");
+
+     label01:
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int epoch> = 1;
+
+     label02:
+        $i22 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int epoch>;
+
+        $i23 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int numEpochs>;
+
+        if $i22 > $i23 goto label16;
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler shuffler>;
+
+        virtualinvoke $r6.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: void stage()>();
+
+        $i3 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int epoch>;
+
+        d0 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double getMu(int)>($i3);
+
+        $r8 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler shuffler>;
+
+        $i4 = virtualinvoke $r8.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: int size()>();
+
+        $i6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int numThreads>;
+
+        $i5 = $i4 / $i6;
+
+        i0 = $i5 + 1;
+
+        $i7 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int numThreads>;
+
+        r1 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ExecutorService newFixedThreadPool(int)>($i7);
+
+     label03:
+        i24 = 0;
+
+     label04:
+        $i8 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int numThreads>;
+
+        if i24 >= $i8 goto label05;
+
+        i1 = i24 * i0;
+
+        $i17 = i24 + 1;
+
+        $i15 = $i17 * i0;
+
+        $r13 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler shuffler>;
+
+        $i16 = virtualinvoke $r13.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: int size()>();
+
+        i2 = staticinvoke <java.lang.Math: int min(int,int)>($i15, $i16);
+
+        $r14 = new org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$1;
+
+        specialinvoke $r14.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$1: void <init>(org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer,int,int,double)>(r0, i1, i2, d0);
+
+        interfaceinvoke r1.<java.util.concurrent.ExecutorService: void execute(java.lang.Runnable)>($r14);
+
+        i24 = i24 + 1;
+
+        goto label04;
+
+     label05:
+        interfaceinvoke r1.<java.util.concurrent.ExecutorService: void shutdown()>();
+
+        $r9 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler shuffler>;
+
+        virtualinvoke $r9.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: void shuffle()>();
+
+     label06:
+        $i9 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int numEpochs>;
+
+        $r10 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler shuffler>;
+
+        $i11 = virtualinvoke $r10.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: int size()>();
+
+        $i10 = $i9 * $i11;
+
+        $l13 = (long) $i10;
+
+        $r11 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MICROSECONDS>;
+
+        z1 = interfaceinvoke r1.<java.util.concurrent.ExecutorService: boolean awaitTermination(long,java.util.concurrent.TimeUnit)>($l13, $r11);
+
+        if z1 != 0 goto label15;
+
+        $r12 = <org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.slf4j.Logger logger>;
+
+        interfaceinvoke $r12.<org.slf4j.Logger: void error(java.lang.String)>("subtasks takes forever, return anyway");
+
+     label07:
+        goto label15;
+
+     label08:
+        $r22 := @caughtexception;
+
+        $r21 = new org.apache.mahout.cf.taste.common.TasteException;
+
+        specialinvoke $r21.<org.apache.mahout.cf.taste.common.TasteException: void <init>(java.lang.String,java.lang.Throwable)>("waiting fof termination interrupted", $r22);
+
+        throw $r21;
+
+     label09:
+        $r15 := @caughtexception;
+
+     label10:
+        interfaceinvoke r1.<java.util.concurrent.ExecutorService: void shutdown()>();
+
+        $r18 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler shuffler>;
+
+        virtualinvoke $r18.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: void shuffle()>();
+
+     label11:
+        $i19 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int numEpochs>;
+
+        $r17 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler shuffler>;
+
+        $i18 = virtualinvoke $r17.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: int size()>();
+
+        $i21 = $i19 * $i18;
+
+        $l20 = (long) $i21;
+
+        $r19 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MICROSECONDS>;
+
+        z2 = interfaceinvoke r1.<java.util.concurrent.ExecutorService: boolean awaitTermination(long,java.util.concurrent.TimeUnit)>($l20, $r19);
+
+        if z2 != 0 goto label14;
+
+        $r23 = <org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.slf4j.Logger logger>;
+
+        interfaceinvoke $r23.<org.slf4j.Logger: void error(java.lang.String)>("subtasks takes forever, return anyway");
+
+     label12:
+        goto label14;
+
+     label13:
+        $r20 := @caughtexception;
+
+        $r24 = new org.apache.mahout.cf.taste.common.TasteException;
+
+        specialinvoke $r24.<org.apache.mahout.cf.taste.common.TasteException: void <init>(java.lang.String,java.lang.Throwable)>("waiting fof termination interrupted", $r20);
+
+        throw $r24;
+
+     label14:
+        throw $r15;
+
+     label15:
+        $i12 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int epoch>;
+
+        $i14 = $i12 + 1;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int epoch> = $i14;
+
+        goto label02;
+
+     label16:
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double[][] userVectors>;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double[][] itemVectors>;
+
+        $r7 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization createFactorization(double[][],double[][])>($r5, $r4);
+
+        return $r7;
+
+        catch java.lang.InterruptedException from label06 to label07 with label08;
+        catch java.lang.Throwable from label03 to label05 with label09;
+        catch java.lang.InterruptedException from label11 to label12 with label13;
+        catch java.lang.Throwable from label09 to label10 with label09;
+    }
+
+    double getAveragePreference() throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer r0;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator r2;
+        java.util.Iterator r3;
+        org.apache.mahout.cf.taste.model.Preference r4;
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage $r5;
+        org.apache.mahout.cf.taste.model.DataModel $r6, $r7;
+        boolean $z0, $z1;
+        double $d0, $d1;
+        long $l0;
+        org.apache.mahout.cf.taste.model.PreferenceArray $r8;
+        float $f0;
+        java.lang.Object $r9;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer;
+
+        $r5 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke $r5.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>()>();
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        r2 = interfaceinvoke $r6.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        $l0 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: long nextLong()>();
+
+        $r8 = interfaceinvoke $r7.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>($l0);
+
+        r3 = interfaceinvoke $r8.<org.apache.mahout.cf.taste.model.PreferenceArray: java.util.Iterator iterator()>();
+
+     label2:
+        $z1 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label1;
+
+        $r9 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.cf.taste.model.Preference) $r9;
+
+        $f0 = interfaceinvoke r4.<org.apache.mahout.cf.taste.model.Preference: float getValue()>();
+
+        $d1 = (double) $f0;
+
+        interfaceinvoke $r5.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void addDatum(double)>($d1);
+
+        goto label2;
+
+     label3:
+        $d0 = interfaceinvoke $r5.<org.apache.mahout.cf.taste.impl.common.RunningAverage: double getAverage()>();
+
+        return $d0;
+    }
+
+    protected void update(org.apache.mahout.cf.taste.model.Preference, double)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer r0;
+        org.apache.mahout.cf.taste.model.Preference r1;
+        double d0, d1, d2, d3, d4, $d5, $d6, $d7, $d8, $d9, $d10, $d11, $d12, $d13, $d14, $d15, $d16, $d17, $d18, $d19, $d20, $d21, $d22, $d23, $d24, $d25, $d26, $d27, $d28, $d29, $d30, $d31, $d32, $d33, $d34, $d35, $d36, $d37, $d38, $d39, $d40, $d41;
+        int i0, i1, $i4, i5;
+        double[] r2, r3;
+        long $l2, $l3;
+        java.lang.Integer $r4, $r5;
+        double[][] $r6, $r7;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.Preference;
+
+        d0 := @parameter1: double;
+
+        $l2 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.Preference: long getUserID()>();
+
+        $r4 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: java.lang.Integer userIndex(long)>($l2);
+
+        i0 = virtualinvoke $r4.<java.lang.Integer: int intValue()>();
+
+        $l3 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.Preference: long getItemID()>();
+
+        $r5 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: java.lang.Integer itemIndex(long)>($l3);
+
+        i1 = virtualinvoke $r5.<java.lang.Integer: int intValue()>();
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double[][] userVectors>;
+
+        r2 = $r6[i0];
+
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double[][] itemVectors>;
+
+        r3 = $r7[i1];
+
+        d1 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double dot(double[],double[])>(r2, r3);
+
+        $f0 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.Preference: float getValue()>();
+
+        $d5 = (double) $f0;
+
+        d2 = $d5 - d1;
+
+        i5 = 3;
+
+     label1:
+        $i4 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int rank>;
+
+        if i5 >= $i4 goto label2;
+
+        d3 = r2[i5];
+
+        d4 = r3[i5];
+
+        $d36 = r2[i5];
+
+        $d31 = d2 * d4;
+
+        $d25 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double lambda>;
+
+        $d32 = $d25 * d3;
+
+        $d30 = $d31 - $d32;
+
+        $d29 = d0 * $d30;
+
+        $d35 = $d36 + $d29;
+
+        r2[i5] = $d35;
+
+        $d37 = r3[i5];
+
+        $d40 = d2 * d3;
+
+        $d34 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double lambda>;
+
+        $d33 = $d34 * d4;
+
+        $d39 = $d40 - $d33;
+
+        $d38 = d0 * $d39;
+
+        $d41 = $d37 + $d38;
+
+        r3[i5] = $d41;
+
+        i5 = i5 + 1;
+
+        goto label1;
+
+     label2:
+        $d13 = r2[1];
+
+        $d6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double biasMuRatio>;
+
+        $d15 = $d6 * d0;
+
+        $d7 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double biasLambdaRatio>;
+
+        $d8 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double lambda>;
+
+        $d12 = $d7 * $d8;
+
+        $d11 = r2[1];
+
+        $d9 = $d12 * $d11;
+
+        $d10 = d2 - $d9;
+
+        $d16 = $d15 * $d10;
+
+        $d14 = $d13 + $d16;
+
+        r2[1] = $d14;
+
+        $d27 = r3[2];
+
+        $d19 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double biasMuRatio>;
+
+        $d22 = $d19 * d0;
+
+        $d17 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double biasLambdaRatio>;
+
+        $d20 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double lambda>;
+
+        $d23 = $d17 * $d20;
+
+        $d18 = r3[2];
+
+        $d24 = $d23 * $d18;
+
+        $d21 = d2 - $d24;
+
+        $d28 = $d22 * $d21;
+
+        $d26 = $d27 + $d28;
+
+        r3[2] = $d26;
+
+        return;
+    }
+
+    private double dot(double[], double[])
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer r0;
+        double[] r1, r2;
+        int $i0, i1;
+        double $d0, $d1, $d2, d3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer;
+
+        r1 := @parameter0: double[];
+
+        r2 := @parameter1: double[];
+
+        d3 = 0.0;
+
+        i1 = 0;
+
+     label1:
+        $i0 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int rank>;
+
+        if i1 >= $i0 goto label2;
+
+        $d1 = r1[i1];
+
+        $d0 = r2[i1];
+
+        $d2 = $d1 * $d0;
+
+        d3 = d3 + $d2;
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        return d3;
+    }
+
+    static org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler access$000(org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer r0;
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler $r1;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler shuffler>;
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: double NOISE> = 0.02;
+
+        <org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int FEATURE_OFFSET> = 3;
+
+        <org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int ITEM_BIAS_INDEX> = 2;
+
+        <org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: int USER_BIAS_INDEX> = 1;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/cf/taste/impl/recommender/svd/ParallelSGDFactorizer");
+
+        <org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer: org.slf4j.Logger logger> = $r0;
+
+        return;
+    }
+}

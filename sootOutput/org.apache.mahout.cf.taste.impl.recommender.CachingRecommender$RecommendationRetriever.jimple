@@ -1,0 +1,127 @@
+final class org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever extends java.lang.Object implements org.apache.mahout.cf.taste.impl.common.Retriever
+{
+    final org.apache.mahout.cf.taste.impl.recommender.CachingRecommender this$0;
+
+    private void <init>(org.apache.mahout.cf.taste.impl.recommender.CachingRecommender)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever r0;
+        org.apache.mahout.cf.taste.impl.recommender.CachingRecommender r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.recommender.CachingRecommender;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever: org.apache.mahout.cf.taste.impl.recommender.CachingRecommender this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$Recommendations get(java.lang.Long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever r0;
+        java.lang.Long r1;
+        int i0;
+        org.apache.mahout.cf.taste.recommender.IDRescorer r2;
+        org.slf4j.Logger $r4;
+        org.apache.mahout.cf.taste.impl.recommender.CachingRecommender $r5, $r7, $r8, $r10, $r14, $r15;
+        int[] $r6;
+        org.apache.mahout.cf.taste.recommender.Recommender $r9, $r13;
+        long $l1, $l2;
+        boolean $z0, $z1;
+        java.util.List $r11, $r16;
+        org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$Recommendations $r12;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever;
+
+        r1 := @parameter0: java.lang.Long;
+
+        $r4 = staticinvoke <org.apache.mahout.cf.taste.impl.recommender.CachingRecommender: org.slf4j.Logger access$200()>();
+
+        interfaceinvoke $r4.<org.slf4j.Logger: void debug(java.lang.String,java.lang.Object)>("Retrieving new recommendations for user ID \'{}\'", r1);
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever: org.apache.mahout.cf.taste.impl.recommender.CachingRecommender this$0>;
+
+        $r6 = staticinvoke <org.apache.mahout.cf.taste.impl.recommender.CachingRecommender: int[] access$300(org.apache.mahout.cf.taste.impl.recommender.CachingRecommender)>($r5);
+
+        i0 = $r6[0];
+
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever: org.apache.mahout.cf.taste.impl.recommender.CachingRecommender this$0>;
+
+        r2 = staticinvoke <org.apache.mahout.cf.taste.impl.recommender.CachingRecommender: org.apache.mahout.cf.taste.recommender.IDRescorer access$400(org.apache.mahout.cf.taste.impl.recommender.CachingRecommender)>($r7);
+
+        if r2 != null goto label1;
+
+        $r14 = r0.<org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever: org.apache.mahout.cf.taste.impl.recommender.CachingRecommender this$0>;
+
+        $r13 = staticinvoke <org.apache.mahout.cf.taste.impl.recommender.CachingRecommender: org.apache.mahout.cf.taste.recommender.Recommender access$600(org.apache.mahout.cf.taste.impl.recommender.CachingRecommender)>($r14);
+
+        $l2 = virtualinvoke r1.<java.lang.Long: long longValue()>();
+
+        $r15 = r0.<org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever: org.apache.mahout.cf.taste.impl.recommender.CachingRecommender this$0>;
+
+        $z1 = staticinvoke <org.apache.mahout.cf.taste.impl.recommender.CachingRecommender: boolean access$500(org.apache.mahout.cf.taste.impl.recommender.CachingRecommender)>($r15);
+
+        $r16 = interfaceinvoke $r13.<org.apache.mahout.cf.taste.recommender.Recommender: java.util.List recommend(long,int,org.apache.mahout.cf.taste.recommender.IDRescorer,boolean)>($l2, i0, null, $z1);
+
+        goto label2;
+
+     label1:
+        $r8 = r0.<org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever: org.apache.mahout.cf.taste.impl.recommender.CachingRecommender this$0>;
+
+        $r9 = staticinvoke <org.apache.mahout.cf.taste.impl.recommender.CachingRecommender: org.apache.mahout.cf.taste.recommender.Recommender access$600(org.apache.mahout.cf.taste.impl.recommender.CachingRecommender)>($r8);
+
+        $l1 = virtualinvoke r1.<java.lang.Long: long longValue()>();
+
+        $r10 = r0.<org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever: org.apache.mahout.cf.taste.impl.recommender.CachingRecommender this$0>;
+
+        $z0 = staticinvoke <org.apache.mahout.cf.taste.impl.recommender.CachingRecommender: boolean access$500(org.apache.mahout.cf.taste.impl.recommender.CachingRecommender)>($r10);
+
+        $r16 = interfaceinvoke $r9.<org.apache.mahout.cf.taste.recommender.Recommender: java.util.List recommend(long,int,org.apache.mahout.cf.taste.recommender.IDRescorer,boolean)>($l1, i0, r2, $z0);
+
+     label2:
+        $r12 = new org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$Recommendations;
+
+        $r11 = staticinvoke <java.util.Collections: java.util.List unmodifiableList(java.util.List)>($r16);
+
+        specialinvoke $r12.<org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$Recommendations: void <init>(java.util.List,org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$1)>($r11, null);
+
+        return $r12;
+    }
+
+    public volatile java.lang.Object get(java.lang.Object) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever r0;
+        java.lang.Object r1;
+        java.lang.Long $r2;
+        org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$Recommendations $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.lang.Long) r1;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever: org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$Recommendations get(java.lang.Long)>($r2);
+
+        return $r3;
+    }
+
+    void <init>(org.apache.mahout.cf.taste.impl.recommender.CachingRecommender, org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$1)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever r0;
+        org.apache.mahout.cf.taste.impl.recommender.CachingRecommender r1;
+        org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$1 r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.recommender.CachingRecommender;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$1;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.CachingRecommender$RecommendationRetriever: void <init>(org.apache.mahout.cf.taste.impl.recommender.CachingRecommender)>(r1);
+
+        return;
+    }
+}

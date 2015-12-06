@@ -1,0 +1,305 @@
+class org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features extends java.lang.Object
+{
+    private final org.apache.mahout.cf.taste.model.DataModel dataModel;
+    private final int numFeatures;
+    private final double[][] M;
+    private final double[][] U;
+
+    void <init>(org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features r0;
+        org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer r1;
+        org.apache.mahout.common.RandomWrapper r2;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator r3;
+        long l0;
+        int i1, $i2, $i3, $i4, $i5, $i6, $i7, i8;
+        org.apache.mahout.cf.taste.model.DataModel $r4, $r5, $r7, $r8;
+        double[][] $r6, $r9, $r11, $r13;
+        boolean $z0;
+        java.lang.Integer $r10;
+        double[] $r12, $r14;
+        double $d0, $d1, $d2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r4 = staticinvoke <org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer: org.apache.mahout.cf.taste.model.DataModel access$000(org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer)>(r1);
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: org.apache.mahout.cf.taste.model.DataModel dataModel> = $r4;
+
+        $i2 = staticinvoke <org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer: int access$100(org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer)>(r1);
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: int numFeatures> = $i2;
+
+        r2 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        $i3 = interfaceinvoke $r5.<org.apache.mahout.cf.taste.model.DataModel: int getNumItems()>();
+
+        $i4 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: int numFeatures>;
+
+        $r6 = newmultiarray (double)[$i3][$i4];
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: double[][] M> = $r6;
+
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        r3 = interfaceinvoke $r7.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getItemIDs()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        l0 = interfaceinvoke r3.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: long nextLong()>();
+
+        $r10 = virtualinvoke r1.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer: java.lang.Integer itemIndex(long)>(l0);
+
+        i1 = virtualinvoke $r10.<java.lang.Integer: int intValue()>();
+
+        $r11 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: double[][] M>;
+
+        $r12 = $r11[i1];
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: double averateRating(long)>(l0);
+
+        $r12[0] = $d0;
+
+        i8 = 1;
+
+     label2:
+        $i7 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: int numFeatures>;
+
+        if i8 >= $i7 goto label1;
+
+        $r13 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: double[][] M>;
+
+        $r14 = $r13[i1];
+
+        $d2 = virtualinvoke r2.<java.util.Random: double nextDouble()>();
+
+        $d1 = $d2 * 0.1;
+
+        $r14[i8] = $d1;
+
+        i8 = i8 + 1;
+
+        goto label2;
+
+     label3:
+        $r8 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        $i5 = interfaceinvoke $r8.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsers()>();
+
+        $i6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: int numFeatures>;
+
+        $r9 = newmultiarray (double)[$i5][$i6];
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: double[][] U> = $r9;
+
+        return;
+    }
+
+    double[][] getM()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features r0;
+        double[][] $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: double[][] M>;
+
+        return $r1;
+    }
+
+    double[][] getU()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features r0;
+        double[][] $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: double[][] U>;
+
+        return $r1;
+    }
+
+    org.apache.mahout.math.Vector getUserFeatureColumn(int)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features r0;
+        int i0;
+        org.apache.mahout.math.DenseVector $r1;
+        double[][] $r2;
+        double[] $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features;
+
+        i0 := @parameter0: int;
+
+        $r1 = new org.apache.mahout.math.DenseVector;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: double[][] U>;
+
+        $r3 = $r2[i0];
+
+        specialinvoke $r1.<org.apache.mahout.math.DenseVector: void <init>(double[])>($r3);
+
+        return $r1;
+    }
+
+    org.apache.mahout.math.Vector getItemFeatureColumn(int)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features r0;
+        int i0;
+        org.apache.mahout.math.DenseVector $r1;
+        double[][] $r2;
+        double[] $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features;
+
+        i0 := @parameter0: int;
+
+        $r1 = new org.apache.mahout.math.DenseVector;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: double[][] M>;
+
+        $r3 = $r2[i0];
+
+        specialinvoke $r1.<org.apache.mahout.math.DenseVector: void <init>(double[])>($r3);
+
+        return $r1;
+    }
+
+    void setFeatureColumnInU(int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features r0;
+        int i0;
+        org.apache.mahout.math.Vector r1;
+        double[][] $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: double[][] U>;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: void setFeatureColumn(double[][],int,org.apache.mahout.math.Vector)>($r2, i0, r1);
+
+        return;
+    }
+
+    void setFeatureColumnInM(int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features r0;
+        int i0;
+        org.apache.mahout.math.Vector r1;
+        double[][] $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: double[][] M>;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: void setFeatureColumn(double[][],int,org.apache.mahout.math.Vector)>($r2, i0, r1);
+
+        return;
+    }
+
+    protected void setFeatureColumn(double[][], int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features r0;
+        double[][] r1;
+        int i0, $i1, i2;
+        org.apache.mahout.math.Vector r2;
+        double[] $r3;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features;
+
+        r1 := @parameter0: double[][];
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: org.apache.mahout.math.Vector;
+
+        i2 = 0;
+
+     label1:
+        $i1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: int numFeatures>;
+
+        if i2 >= $i1 goto label2;
+
+        $r3 = r1[i0];
+
+        $d0 = interfaceinvoke r2.<org.apache.mahout.math.Vector: double get(int)>(i2);
+
+        $r3[i2] = $d0;
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    protected double averateRating(long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features r0;
+        long l0;
+        org.apache.mahout.cf.taste.model.PreferenceArray r1;
+        java.util.Iterator r3;
+        org.apache.mahout.cf.taste.model.Preference r4;
+        org.apache.mahout.cf.taste.model.DataModel $r5;
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage $r6;
+        boolean $z0;
+        double $d0, $d1;
+        java.lang.Object $r7;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features;
+
+        l0 := @parameter0: long;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        r1 = interfaceinvoke $r5.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesForItem(long)>(l0);
+
+        $r6 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke $r6.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>()>();
+
+        r3 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.PreferenceArray: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r7 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.cf.taste.model.Preference) $r7;
+
+        $f0 = interfaceinvoke r4.<org.apache.mahout.cf.taste.model.Preference: float getValue()>();
+
+        $d1 = (double) $f0;
+
+        interfaceinvoke $r6.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void addDatum(double)>($d1);
+
+        goto label1;
+
+     label2:
+        $d0 = interfaceinvoke $r6.<org.apache.mahout.cf.taste.impl.common.RunningAverage: double getAverage()>();
+
+        return $d0;
+    }
+}

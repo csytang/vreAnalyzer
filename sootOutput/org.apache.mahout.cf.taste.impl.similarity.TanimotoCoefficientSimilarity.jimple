@@ -1,0 +1,253 @@
+public final class org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity extends org.apache.mahout.cf.taste.impl.similarity.AbstractItemSimilarity implements org.apache.mahout.cf.taste.similarity.UserSimilarity
+{
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.AbstractItemSimilarity: void <init>(org.apache.mahout.cf.taste.model.DataModel)>(r1);
+
+        return;
+    }
+
+    public void setPreferenceInferrer(org.apache.mahout.cf.taste.similarity.PreferenceInferrer)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity r0;
+        org.apache.mahout.cf.taste.similarity.PreferenceInferrer r1;
+        java.lang.UnsupportedOperationException $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.PreferenceInferrer;
+
+        $r2 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r2.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r2;
+    }
+
+    public double userSimilarity(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity r0;
+        long l0, l1;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet r2, r3;
+        int i2, i3, i5, $i6, $i7;
+        double $d0, $d1, $d2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        r2 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.FastIDSet getItemIDsFromUser(long)>(l0);
+
+        r3 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.FastIDSet getItemIDsFromUser(long)>(l1);
+
+        i2 = virtualinvoke r2.<org.apache.mahout.cf.taste.impl.common.FastIDSet: int size()>();
+
+        i3 = virtualinvoke r3.<org.apache.mahout.cf.taste.impl.common.FastIDSet: int size()>();
+
+        if i2 != 0 goto label1;
+
+        if i3 != 0 goto label1;
+
+        return #NaN;
+
+     label1:
+        if i2 == 0 goto label2;
+
+        if i3 != 0 goto label3;
+
+     label2:
+        return 0.0;
+
+     label3:
+        if i2 >= i3 goto label4;
+
+        $i7 = virtualinvoke r3.<org.apache.mahout.cf.taste.impl.common.FastIDSet: int intersectionSize(org.apache.mahout.cf.taste.impl.common.FastIDSet)>(r2);
+
+        goto label5;
+
+     label4:
+        $i7 = virtualinvoke r2.<org.apache.mahout.cf.taste.impl.common.FastIDSet: int intersectionSize(org.apache.mahout.cf.taste.impl.common.FastIDSet)>(r3);
+
+     label5:
+        if $i7 != 0 goto label6;
+
+        return #NaN;
+
+     label6:
+        $i6 = i2 + i3;
+
+        i5 = $i6 - $i7;
+
+        $d2 = (double) $i7;
+
+        $d0 = (double) i5;
+
+        $d1 = $d2 / $d0;
+
+        return $d1;
+    }
+
+    public double itemSimilarity(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity r0;
+        long l0, l1;
+        int i2;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        i2 = interfaceinvoke $r1.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long)>(l0);
+
+        $d0 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity: double doItemSimilarity(long,long,int)>(l0, l1, i2);
+
+        return $d0;
+    }
+
+    public double[] itemSimilarities(long, long[]) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity r0;
+        long l0, $l3;
+        long[] r1;
+        int i1, i2, i4;
+        double[] r2;
+        org.apache.mahout.cf.taste.model.DataModel $r3;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: long[];
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        i1 = interfaceinvoke $r3.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long)>(l0);
+
+        i2 = lengthof r1;
+
+        r2 = newarray (double)[i2];
+
+        i4 = 0;
+
+     label1:
+        if i4 >= i2 goto label2;
+
+        $l3 = r1[i4];
+
+        $d0 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity: double doItemSimilarity(long,long,int)>(l0, $l3, i1);
+
+        r2[i4] = $d0;
+
+        i4 = i4 + 1;
+
+        goto label1;
+
+     label2:
+        return r2;
+    }
+
+    private double doItemSimilarity(long, long, int) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity r0;
+        long l0, l1;
+        int i2, i3, i4, $i5, $i6;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        double $d0, $d1, $d2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        i2 := @parameter2: int;
+
+        r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        i3 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long,long)>(l0, l1);
+
+        if i3 != 0 goto label1;
+
+        return #NaN;
+
+     label1:
+        i4 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long)>(l1);
+
+        $d1 = (double) i3;
+
+        $i5 = i2 + i4;
+
+        $i6 = $i5 - i3;
+
+        $d0 = (double) $i6;
+
+        $d2 = $d1 / $d0;
+
+        return $d2;
+    }
+
+    public void refresh(java.util.Collection)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity r0;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+        java.util.Collection r2, r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity;
+
+        r2 := @parameter0: java.util.Collection;
+
+        r3 = staticinvoke <org.apache.mahout.cf.taste.impl.common.RefreshHelper: java.util.Collection buildRefreshed(java.util.Collection)>(r2);
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        staticinvoke <org.apache.mahout.cf.taste.impl.common.RefreshHelper: void maybeRefresh(java.util.Collection,org.apache.mahout.cf.taste.common.Refreshable)>(r3, $r1);
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity r0;
+        java.lang.StringBuilder $r1, $r2, $r4, $r5;
+        org.apache.mahout.cf.taste.model.DataModel $r3;
+        java.lang.String $r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("TanimotoCoefficientSimilarity[dataModel:");
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.TanimotoCoefficientSimilarity: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(93);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r6;
+    }
+}

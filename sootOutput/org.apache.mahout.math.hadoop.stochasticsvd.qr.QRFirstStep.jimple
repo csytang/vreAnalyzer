@@ -1,0 +1,902 @@
+public class org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep extends java.lang.Object implements java.io.Closeable, org.apache.hadoop.mapred.OutputCollector
+{
+    public static final java.lang.String PROP_K;
+    public static final java.lang.String PROP_P;
+    public static final java.lang.String PROP_AROWBLOCK_SIZE;
+    private int kp;
+    private java.util.List yLookahead;
+    private org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver;
+    private int blockCnt;
+    private final org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable value;
+    private final org.apache.hadoop.io.Writable tempKey;
+    private org.apache.hadoop.mapred.lib.MultipleOutputs outputs;
+    private final java.util.Deque closeables;
+    private org.apache.hadoop.io.SequenceFile$Writer tempQw;
+    private org.apache.hadoop.fs.Path tempQPath;
+    private final java.util.List rSubseq;
+    private final org.apache.hadoop.conf.Configuration jobConf;
+    private final org.apache.hadoop.mapred.OutputCollector qtHatOut;
+    private final org.apache.hadoop.mapred.OutputCollector rHatOut;
+    static final boolean $assertionsDisabled;
+
+    public void <init>(org.apache.hadoop.conf.Configuration, org.apache.hadoop.mapred.OutputCollector, org.apache.hadoop.mapred.OutputCollector)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep r0;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.hadoop.mapred.OutputCollector r2, r3;
+        org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable $r4;
+        org.apache.hadoop.io.IntWritable $r5;
+        java.util.LinkedList $r6;
+        java.util.ArrayList $r7;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r2 := @parameter1: org.apache.hadoop.mapred.OutputCollector;
+
+        r3 := @parameter2: org.apache.hadoop.mapred.OutputCollector;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r4 = new org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable;
+
+        specialinvoke $r4.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable value> = $r4;
+
+        $r5 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r5.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.io.Writable tempKey> = $r5;
+
+        $r6 = staticinvoke <com.google.common.collect.Lists: java.util.LinkedList newLinkedList()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.Deque closeables> = $r6;
+
+        $r7 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.List rSubseq> = $r7;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.conf.Configuration jobConf> = r1;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.mapred.OutputCollector qtHatOut> = r2;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.mapred.OutputCollector rHatOut> = r3;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: void setup()>();
+
+        return;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: void cleanup()>();
+
+        return;
+    }
+
+    public int getKP()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: int kp>;
+
+        return $i0;
+    }
+
+    private void flushSolver() throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep r0;
+        org.apache.mahout.math.UpperTriangular r1;
+        double[][] r2, $r10;
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver $r3, $r4, $r12;
+        java.util.List $r5;
+        org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable $r6, $r8, $r11;
+        org.apache.hadoop.io.SequenceFile$Writer $r7;
+        org.apache.hadoop.io.Writable $r9;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver>;
+
+        r1 = virtualinvoke $r3.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: org.apache.mahout.math.UpperTriangular getRTilde()>();
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver>;
+
+        r2 = virtualinvoke $r4.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: double[][] getThinQtTilde()>();
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.List rSubseq>;
+
+        interfaceinvoke $r5.<java.util.List: boolean add(java.lang.Object)>(r1);
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable value>;
+
+        virtualinvoke $r6.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: void setBlock(double[][])>(r2);
+
+        $r7 = specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.io.SequenceFile$Writer getTempQw()>();
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.io.Writable tempKey>;
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable value>;
+
+        virtualinvoke $r7.<org.apache.hadoop.io.SequenceFile$Writer: void append(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r9, $r8);
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable value>;
+
+        $r10 = (double[][]) null;
+
+        virtualinvoke $r11.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: void setBlock(double[][])>($r10);
+
+        $r12 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver>;
+
+        virtualinvoke $r12.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: void reset()>();
+
+        return;
+    }
+
+    private void flushQBlocks() throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep r0;
+        int $i0;
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver $r1, $r7;
+        org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable $r2, $r4;
+        double[][] $r3;
+        org.apache.mahout.math.VectorWritable $r5;
+        org.apache.mahout.math.DenseVector $r6;
+        org.apache.mahout.math.UpperTriangular $r8;
+        double[] $r9;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: int blockCnt>;
+
+        if $i0 != 1 goto label1;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable value>;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver>;
+
+        $r3 = virtualinvoke $r1.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: double[][] getThinQtTilde()>();
+
+        virtualinvoke $r2.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: void setBlock(double[][])>($r3);
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable value>;
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: void outputQHat(org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable)>($r4);
+
+        $r5 = new org.apache.mahout.math.VectorWritable;
+
+        $r6 = new org.apache.mahout.math.DenseVector;
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver>;
+
+        $r8 = virtualinvoke $r7.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: org.apache.mahout.math.UpperTriangular getRTilde()>();
+
+        $r9 = virtualinvoke $r8.<org.apache.mahout.math.UpperTriangular: double[] getData()>();
+
+        specialinvoke $r6.<org.apache.mahout.math.DenseVector: void <init>(double[],boolean)>($r9, 1);
+
+        specialinvoke $r5.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r6);
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: void outputR(org.apache.mahout.math.VectorWritable)>($r5);
+
+        goto label2;
+
+     label1:
+        specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: void secondPass()>();
+
+     label2:
+        return;
+    }
+
+    private void outputQHat(org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep r0;
+        org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable r1;
+        org.apache.hadoop.mapred.OutputCollector $r2;
+        org.apache.hadoop.io.NullWritable $r3;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+        r1 := @parameter0: org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.mapred.OutputCollector qtHatOut>;
+
+        $r3 = staticinvoke <org.apache.hadoop.io.NullWritable: org.apache.hadoop.io.NullWritable get()>();
+
+        interfaceinvoke $r2.<org.apache.hadoop.mapred.OutputCollector: void collect(java.lang.Object,java.lang.Object)>($r3, r1);
+
+        return;
+    }
+
+    private void outputR(org.apache.mahout.math.VectorWritable) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep r0;
+        org.apache.mahout.math.VectorWritable r1;
+        org.apache.hadoop.mapred.OutputCollector $r2;
+        org.apache.hadoop.io.NullWritable $r3;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+        r1 := @parameter0: org.apache.mahout.math.VectorWritable;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.mapred.OutputCollector rHatOut>;
+
+        $r3 = staticinvoke <org.apache.hadoop.io.NullWritable: org.apache.hadoop.io.NullWritable get()>();
+
+        interfaceinvoke $r2.<org.apache.hadoop.mapred.OutputCollector: void collect(java.lang.Object,java.lang.Object)>($r3, r1);
+
+        return;
+    }
+
+    private void secondPass() throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep r0;
+        org.apache.hadoop.fs.LocalFileSystem r1;
+        org.apache.hadoop.conf.Configuration $r3, $r5;
+        org.apache.hadoop.io.SequenceFile$Reader $r4;
+        org.apache.hadoop.fs.Path $r6;
+        java.util.Deque $r7;
+        org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable $r8, $r17, $r20, $r23;
+        org.apache.hadoop.io.Writable $r9;
+        boolean $z0, $z1;
+        org.apache.mahout.math.VectorWritable $r10;
+        org.apache.mahout.math.DenseVector $r11;
+        java.lang.Object $r12, $r27, $r28;
+        java.util.List $r13, $r16, $r21, $r26, $r30;
+        double[] $r14;
+        org.apache.mahout.math.UpperTriangular $r15, $r29, $r31;
+        int $i0, i1;
+        java.lang.AssertionError $r18;
+        double[][] $r19, $r25;
+        org.apache.mahout.common.iterator.CopyConstructorIterator $r22;
+        java.util.Iterator $r24;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver> = null;
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.conf.Configuration jobConf>;
+
+        r1 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.LocalFileSystem getLocal(org.apache.hadoop.conf.Configuration)>($r3);
+
+        $r4 = new org.apache.hadoop.io.SequenceFile$Reader;
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.fs.Path tempQPath>;
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.conf.Configuration jobConf>;
+
+        specialinvoke $r4.<org.apache.hadoop.io.SequenceFile$Reader: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r1, $r6, $r5);
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.Deque closeables>;
+
+        interfaceinvoke $r7.<java.util.Deque: void addFirst(java.lang.Object)>($r4);
+
+        i1 = 0;
+
+     label1:
+        $r9 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.io.Writable tempKey>;
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable value>;
+
+        $z0 = virtualinvoke $r4.<org.apache.hadoop.io.SequenceFile$Reader: boolean next(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r9, $r8);
+
+        if $z0 == 0 goto label4;
+
+        $r20 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable value>;
+
+        $r17 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable value>;
+
+        $r19 = virtualinvoke $r17.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] getBlock()>();
+
+        $r22 = new org.apache.mahout.common.iterator.CopyConstructorIterator;
+
+        $r21 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.List rSubseq>;
+
+        $r24 = interfaceinvoke $r21.<java.util.List: java.util.Iterator iterator()>();
+
+        specialinvoke $r22.<org.apache.mahout.common.iterator.CopyConstructorIterator: void <init>(java.util.Iterator)>($r24);
+
+        $r25 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: double[][] computeQtHat(double[][],int,java.util.Iterator)>($r19, i1, $r22);
+
+        virtualinvoke $r20.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: void setBlock(double[][])>($r25);
+
+        if i1 != 1 goto label2;
+
+        $r26 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.List rSubseq>;
+
+        $r27 = interfaceinvoke $r26.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r31 = (org.apache.mahout.math.UpperTriangular) $r27;
+
+        $r30 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.List rSubseq>;
+
+        $r28 = interfaceinvoke $r30.<java.util.List: java.lang.Object remove(int)>(1);
+
+        $r29 = (org.apache.mahout.math.UpperTriangular) $r28;
+
+        staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: void mergeR(org.apache.mahout.math.UpperTriangular,org.apache.mahout.math.UpperTriangular)>($r31, $r29);
+
+        goto label3;
+
+     label2:
+        i1 = i1 + 1;
+
+     label3:
+        $r23 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable value>;
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: void outputQHat(org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable)>($r23);
+
+        goto label1;
+
+     label4:
+        $z1 = <org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: boolean $assertionsDisabled>;
+
+        if $z1 != 0 goto label5;
+
+        $r16 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.List rSubseq>;
+
+        $i0 = interfaceinvoke $r16.<java.util.List: int size()>();
+
+        if $i0 == 1 goto label5;
+
+        $r18 = new java.lang.AssertionError;
+
+        specialinvoke $r18.<java.lang.AssertionError: void <init>()>();
+
+        throw $r18;
+
+     label5:
+        $r10 = new org.apache.mahout.math.VectorWritable;
+
+        $r11 = new org.apache.mahout.math.DenseVector;
+
+        $r13 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.List rSubseq>;
+
+        $r12 = interfaceinvoke $r13.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r15 = (org.apache.mahout.math.UpperTriangular) $r12;
+
+        $r14 = virtualinvoke $r15.<org.apache.mahout.math.UpperTriangular: double[] getData()>();
+
+        specialinvoke $r11.<org.apache.mahout.math.DenseVector: void <init>(double[],boolean)>($r14, 1);
+
+        specialinvoke $r10.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r11);
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: void outputR(org.apache.mahout.math.VectorWritable)>($r10);
+
+        return;
+    }
+
+    protected void map(org.apache.mahout.math.Vector) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep r0;
+        org.apache.mahout.math.Vector r1;
+        org.apache.mahout.math.Vector$Element r2;
+        java.util.List $r3, $r5, $r8;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, i7;
+        boolean $z0, $z1, $z3;
+        java.lang.Iterable $r4;
+        java.lang.Object $r6, $r10;
+        double $d0, $d1;
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver $r7, $r9;
+        double[] r11;
+        java.util.Iterator r12;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.List yLookahead>;
+
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        $i1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: int kp>;
+
+        if $i0 != $i1 goto label2;
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver>;
+
+        $z3 = virtualinvoke $r7.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: boolean isFull()>();
+
+        if $z3 == 0 goto label1;
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: void flushSolver()>();
+
+        $i5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: int blockCnt>;
+
+        $i6 = $i5 + 1;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: int blockCnt> = $i6;
+
+     label1:
+        $r8 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.List yLookahead>;
+
+        $r10 = interfaceinvoke $r8.<java.util.List: java.lang.Object remove(int)>(0);
+
+        r11 = (double[]) $r10;
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver>;
+
+        virtualinvoke $r9.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: void appendRow(double[])>(r11);
+
+        goto label3;
+
+     label2:
+        $i2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: int kp>;
+
+        r11 = newarray (double)[$i2];
+
+     label3:
+        $z0 = interfaceinvoke r1.<org.apache.mahout.math.Vector: boolean isDense()>();
+
+        if $z0 == 0 goto label5;
+
+        i7 = 0;
+
+     label4:
+        $i4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: int kp>;
+
+        if i7 >= $i4 goto label7;
+
+        $d1 = interfaceinvoke r1.<org.apache.mahout.math.Vector: double get(int)>(i7);
+
+        r11[i7] = $d1;
+
+        i7 = i7 + 1;
+
+        goto label4;
+
+     label5:
+        staticinvoke <java.util.Arrays: void fill(double[],double)>(r11, 0.0);
+
+        $r4 = interfaceinvoke r1.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r12 = interfaceinvoke $r4.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label6:
+        $z1 = interfaceinvoke r12.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label7;
+
+        $r6 = interfaceinvoke r12.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (org.apache.mahout.math.Vector$Element) $r6;
+
+        $i3 = interfaceinvoke r2.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $d0 = interfaceinvoke r2.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        r11[$i3] = $d0;
+
+        goto label6;
+
+     label7:
+        $r5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.List yLookahead>;
+
+        interfaceinvoke $r5.<java.util.List: boolean add(java.lang.Object)>(r11);
+
+        return;
+    }
+
+    protected void setup()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep r0;
+        int i0, i1, i2, $i3, $i4, $i5;
+        org.apache.hadoop.conf.Configuration $r1, $r3, $r5, $r12;
+        java.lang.String $r2, $r4, $r6;
+        java.util.ArrayList $r7;
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver $r8;
+        org.apache.hadoop.mapred.JobConf $r9;
+        org.apache.hadoop.mapred.lib.MultipleOutputs $r10;
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep$1 $r11;
+        java.util.Deque $r13;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.conf.Configuration jobConf>;
+
+        $r2 = virtualinvoke $r1.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvd.arowblock.size");
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r2);
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.conf.Configuration jobConf>;
+
+        $r4 = virtualinvoke $r3.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvd.k");
+
+        i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r4);
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.conf.Configuration jobConf>;
+
+        $r6 = virtualinvoke $r5.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvd.p");
+
+        i2 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r6);
+
+        $i3 = i1 + i2;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: int kp> = $i3;
+
+        $i4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: int kp>;
+
+        $r7 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayListWithCapacity(int)>($i4);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.List yLookahead> = $r7;
+
+        $r8 = new org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver;
+
+        $i5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: int kp>;
+
+        specialinvoke $r8.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: void <init>(int,int)>(i0, $i5);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver> = $r8;
+
+        $r10 = new org.apache.hadoop.mapred.lib.MultipleOutputs;
+
+        $r9 = new org.apache.hadoop.mapred.JobConf;
+
+        $r12 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.conf.Configuration jobConf>;
+
+        specialinvoke $r9.<org.apache.hadoop.mapred.JobConf: void <init>(org.apache.hadoop.conf.Configuration)>($r12);
+
+        specialinvoke $r10.<org.apache.hadoop.mapred.lib.MultipleOutputs: void <init>(org.apache.hadoop.mapred.JobConf)>($r9);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.mapred.lib.MultipleOutputs outputs> = $r10;
+
+        $r13 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.Deque closeables>;
+
+        $r11 = new org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep$1;
+
+        specialinvoke $r11.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep$1: void <init>(org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep)>(r0);
+
+        interfaceinvoke $r13.<java.util.Deque: void addFirst(java.lang.Object)>($r11);
+
+        return;
+    }
+
+    protected void cleanup() throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep r0;
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver $r2, $r3, $r4, $r5, $r11, $r17, $r19;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6;
+        java.util.List $r6, $r15, $r20, $r21, $r25;
+        boolean $z0, $z1, $z3, $z4, $z5;
+        org.apache.hadoop.io.SequenceFile$Writer $r7, $r9, $r10;
+        java.util.Deque $r8, $r23, $r24, $r26;
+        java.lang.AssertionError $r12, $r14;
+        double[] $r16;
+        java.lang.Object $r18;
+        java.lang.Throwable $r22;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+     label01:
+        $r2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver>;
+
+        if $r2 != null goto label03;
+
+        $r21 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.List yLookahead>;
+
+        $z4 = interfaceinvoke $r21.<java.util.List: boolean isEmpty()>();
+
+        if $z4 == 0 goto label03;
+
+     label02:
+        $r23 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.Deque closeables>;
+
+        staticinvoke <org.apache.mahout.common.IOUtils: void close(java.util.Collection)>($r23);
+
+        return;
+
+     label03:
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver>;
+
+        if $r3 != null goto label04;
+
+        $r19 = new org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver;
+
+        $r20 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.List yLookahead>;
+
+        $i5 = interfaceinvoke $r20.<java.util.List: int size()>();
+
+        $i6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: int kp>;
+
+        specialinvoke $r19.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: void <init>(int,int)>($i5, $i6);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver> = $r19;
+
+     label04:
+        $r5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver>;
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver>;
+
+        $i0 = virtualinvoke $r4.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: int getCnt()>();
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.List yLookahead>;
+
+        $i1 = interfaceinvoke $r6.<java.util.List: int size()>();
+
+        $i2 = $i0 + $i1;
+
+        virtualinvoke $r5.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: void adjust(int)>($i2);
+
+     label05:
+        $r25 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.List yLookahead>;
+
+        $z5 = interfaceinvoke $r25.<java.util.List: boolean isEmpty()>();
+
+        if $z5 != 0 goto label06;
+
+        $r17 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver>;
+
+        $r15 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.List yLookahead>;
+
+        $r18 = interfaceinvoke $r15.<java.util.List: java.lang.Object remove(int)>(0);
+
+        $r16 = (double[]) $r18;
+
+        virtualinvoke $r17.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: void appendRow(double[])>($r16);
+
+        goto label05;
+
+     label06:
+        $z0 = <org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: boolean $assertionsDisabled>;
+
+        if $z0 != 0 goto label07;
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver qSolver>;
+
+        $z3 = virtualinvoke $r11.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: boolean isFull()>();
+
+        if $z3 != 0 goto label07;
+
+        $r14 = new java.lang.AssertionError;
+
+        specialinvoke $r14.<java.lang.AssertionError: void <init>()>();
+
+        throw $r14;
+
+     label07:
+        $i3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: int blockCnt>;
+
+        $i4 = $i3 + 1;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: int blockCnt> = $i4;
+
+        if $i4 <= 1 goto label09;
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: void flushSolver()>();
+
+        $z1 = <org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: boolean $assertionsDisabled>;
+
+        if $z1 != 0 goto label08;
+
+        $r10 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.io.SequenceFile$Writer tempQw>;
+
+        if $r10 != null goto label08;
+
+        $r12 = new java.lang.AssertionError;
+
+        specialinvoke $r12.<java.lang.AssertionError: void <init>()>();
+
+        throw $r12;
+
+     label08:
+        $r8 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.Deque closeables>;
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.io.SequenceFile$Writer tempQw>;
+
+        interfaceinvoke $r8.<java.util.Deque: boolean remove(java.lang.Object)>($r7);
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.io.SequenceFile$Writer tempQw>;
+
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r9, 0);
+
+     label09:
+        specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: void flushQBlocks()>();
+
+     label10:
+        $r26 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.Deque closeables>;
+
+        staticinvoke <org.apache.mahout.common.IOUtils: void close(java.util.Collection)>($r26);
+
+        goto label13;
+
+     label11:
+        $r22 := @caughtexception;
+
+     label12:
+        $r24 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.Deque closeables>;
+
+        staticinvoke <org.apache.mahout.common.IOUtils: void close(java.util.Collection)>($r24);
+
+        throw $r22;
+
+     label13:
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label11;
+        catch java.lang.Throwable from label03 to label10 with label11;
+        catch java.lang.Throwable from label11 to label12 with label11;
+    }
+
+    private org.apache.hadoop.io.SequenceFile$Writer getTempQw() throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep r0;
+        java.lang.String r1, $r14, $r25;
+        org.apache.hadoop.fs.LocalFileSystem r2;
+        org.apache.hadoop.io.SequenceFile$Writer $r5, $r6, $r17, $r20;
+        org.apache.hadoop.conf.Configuration $r7, $r18;
+        org.apache.hadoop.fs.Path $r8, $r9, $r13, $r15, $r24;
+        java.lang.StringBuilder $r10, $r11, $r12;
+        long $l0;
+        org.apache.hadoop.io.SequenceFile$CompressionType $r16;
+        java.util.Deque $r19, $r23;
+        java.io.File $r21;
+        org.apache.mahout.common.IOUtils$DeleteFileOnClose $r22;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.io.SequenceFile$Writer tempQw>;
+
+        if $r5 != null goto label1;
+
+        r1 = staticinvoke <java.lang.System: java.lang.String getProperty(java.lang.String)>("java.io.tmpdir");
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.conf.Configuration jobConf>;
+
+        r2 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.LocalFileSystem getLocal(org.apache.hadoop.conf.Configuration)>($r7);
+
+        $r8 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r8.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r1);
+
+        $r9 = new org.apache.hadoop.fs.Path;
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("qw_");
+
+        $l0 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r14 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r9.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r8, $r14);
+
+        $r13 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r13.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r9, "q-temp.seq");
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.fs.Path tempQPath> = $r13;
+
+        $r18 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.conf.Configuration jobConf>;
+
+        $r15 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.fs.Path tempQPath>;
+
+        $r16 = <org.apache.hadoop.io.SequenceFile$CompressionType: org.apache.hadoop.io.SequenceFile$CompressionType BLOCK>;
+
+        $r17 = staticinvoke <org.apache.hadoop.io.SequenceFile: org.apache.hadoop.io.SequenceFile$Writer createWriter(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,org.apache.hadoop.io.SequenceFile$CompressionType)>(r2, $r18, $r15, class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/hadoop/stochasticsvd/DenseBlockWritable", $r16);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.io.SequenceFile$Writer tempQw> = $r17;
+
+        $r19 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.Deque closeables>;
+
+        $r20 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.io.SequenceFile$Writer tempQw>;
+
+        interfaceinvoke $r19.<java.util.Deque: void addFirst(java.lang.Object)>($r20);
+
+        $r23 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.util.Deque closeables>;
+
+        $r22 = new org.apache.mahout.common.IOUtils$DeleteFileOnClose;
+
+        $r21 = new java.io.File;
+
+        $r24 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.fs.Path tempQPath>;
+
+        $r25 = virtualinvoke $r24.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        specialinvoke $r21.<java.io.File: void <init>(java.lang.String)>($r25);
+
+        specialinvoke $r22.<org.apache.mahout.common.IOUtils$DeleteFileOnClose: void <init>(java.io.File)>($r21);
+
+        interfaceinvoke $r23.<java.util.Deque: void addFirst(java.lang.Object)>($r22);
+
+     label1:
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.io.SequenceFile$Writer tempQw>;
+
+        return $r6;
+    }
+
+    public void collect(org.apache.hadoop.io.Writable, org.apache.mahout.math.Vector) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep r0;
+        org.apache.hadoop.io.Writable r1;
+        org.apache.mahout.math.Vector r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+        r1 := @parameter0: org.apache.hadoop.io.Writable;
+
+        r2 := @parameter1: org.apache.mahout.math.Vector;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: void map(org.apache.mahout.math.Vector)>(r2);
+
+        return;
+    }
+
+    public volatile void collect(java.lang.Object, java.lang.Object) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep r0;
+        java.lang.Object r1, r2;
+        org.apache.mahout.math.Vector $r3;
+        org.apache.hadoop.io.Writable $r4;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        $r4 = (org.apache.hadoop.io.Writable) r1;
+
+        $r3 = (org.apache.mahout.math.Vector) r2;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: void collect(org.apache.hadoop.io.Writable,org.apache.mahout.math.Vector)>($r4, $r3);
+
+        return;
+    }
+
+    static org.apache.hadoop.mapred.lib.MultipleOutputs access$000(org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep r0;
+        org.apache.hadoop.mapred.lib.MultipleOutputs $r1;
+
+        r0 := @parameter0: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: org.apache.hadoop.mapred.lib.MultipleOutputs outputs>;
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.Class $r0;
+        boolean $z0, $z1;
+
+        <org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.lang.String PROP_AROWBLOCK_SIZE> = "ssvd.arowblock.size";
+
+        <org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.lang.String PROP_P> = "ssvd.p";
+
+        <org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: java.lang.String PROP_K> = "ssvd.k";
+
+        $r0 = class "org/apache/mahout/math/hadoop/stochasticsvd/qr/QRFirstStep";
+
+        $z0 = virtualinvoke $r0.<java.lang.Class: boolean desiredAssertionStatus()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        <org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: boolean $assertionsDisabled> = $z1;
+
+        return;
+    }
+}

@@ -90,6 +90,7 @@ public class StmtTag implements Tag{
 	public CallSite initCallSite() throws Throwable  {
 		// TODO Auto-generated method stub
 		Stmt sThis = loc.getStmt();
+		
 		if (sThis.containsInvokeExpr()) {
 			// Invoke expression
 			InvokeExpr invokeExpr = sThis.getInvokeExpr();

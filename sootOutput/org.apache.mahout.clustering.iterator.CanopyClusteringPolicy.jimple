@@ -1,0 +1,82 @@
+public class org.apache.mahout.clustering.iterator.CanopyClusteringPolicy extends org.apache.mahout.clustering.iterator.AbstractClusteringPolicy
+{
+    private double t1;
+    private double t2;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.iterator.CanopyClusteringPolicy r0;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.CanopyClusteringPolicy;
+
+        specialinvoke r0.<org.apache.mahout.clustering.iterator.AbstractClusteringPolicy: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector select(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.iterator.CanopyClusteringPolicy r0;
+        org.apache.mahout.math.Vector r1;
+        int i0, $i1;
+        org.apache.mahout.math.SequentialAccessSparseVector $r3;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.CanopyClusteringPolicy;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        i0 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int maxValueIndex()>();
+
+        $r3 = new org.apache.mahout.math.SequentialAccessSparseVector;
+
+        $i1 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int size()>();
+
+        specialinvoke $r3.<org.apache.mahout.math.SequentialAccessSparseVector: void <init>(int)>($i1);
+
+        interfaceinvoke $r3.<org.apache.mahout.math.Vector: void set(int,double)>(i0, 1.0);
+
+        return $r3;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.iterator.CanopyClusteringPolicy r0;
+        java.io.DataOutput r1;
+        double $d0, $d1;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.CanopyClusteringPolicy;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $d0 = r0.<org.apache.mahout.clustering.iterator.CanopyClusteringPolicy: double t1>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d0);
+
+        $d1 = r0.<org.apache.mahout.clustering.iterator.CanopyClusteringPolicy: double t2>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d1);
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.iterator.CanopyClusteringPolicy r0;
+        java.io.DataInput r1;
+        double $d0, $d1;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.CanopyClusteringPolicy;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $d0 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.clustering.iterator.CanopyClusteringPolicy: double t1> = $d0;
+
+        $d1 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.clustering.iterator.CanopyClusteringPolicy: double t2> = $d1;
+
+        return;
+    }
+}

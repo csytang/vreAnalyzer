@@ -1,0 +1,788 @@
+public class org.apache.mahout.clustering.classify.ClusterClassifier extends org.apache.mahout.classifier.AbstractVectorClassifier implements org.apache.mahout.classifier.OnlineLearner, org.apache.hadoop.io.Writable
+{
+    private static final java.lang.String POLICY_FILE_NAME;
+    private java.util.List models;
+    private java.lang.String modelClass;
+    private org.apache.mahout.clustering.iterator.ClusteringPolicy policy;
+
+    public void <init>(java.util.List, org.apache.mahout.clustering.iterator.ClusteringPolicy)
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+        java.util.List r1;
+        org.apache.mahout.clustering.iterator.ClusteringPolicy r2;
+        java.lang.Object $r3;
+        org.apache.mahout.clustering.Cluster $r4;
+        java.lang.Class $r5;
+        java.lang.String $r6;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        r1 := @parameter0: java.util.List;
+
+        r2 := @parameter1: org.apache.mahout.clustering.iterator.ClusteringPolicy;
+
+        specialinvoke r0.<org.apache.mahout.classifier.AbstractVectorClassifier: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models> = r1;
+
+        $r3 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r4 = (org.apache.mahout.clustering.Cluster) $r3;
+
+        $r5 = virtualinvoke $r4.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.Class: java.lang.String getName()>();
+
+        r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.lang.String modelClass> = $r6;
+
+        r0.<org.apache.mahout.clustering.classify.ClusterClassifier: org.apache.mahout.clustering.iterator.ClusteringPolicy policy> = r2;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        specialinvoke r0.<org.apache.mahout.classifier.AbstractVectorClassifier: void <init>()>();
+
+        return;
+    }
+
+    protected void <init>(org.apache.mahout.clustering.iterator.ClusteringPolicy)
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+        org.apache.mahout.clustering.iterator.ClusteringPolicy r1;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        r1 := @parameter0: org.apache.mahout.clustering.iterator.ClusteringPolicy;
+
+        specialinvoke r0.<org.apache.mahout.classifier.AbstractVectorClassifier: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.classify.ClusterClassifier: org.apache.mahout.clustering.iterator.ClusteringPolicy policy> = r1;
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector classify(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+        org.apache.mahout.math.Vector r1, $r3;
+        org.apache.mahout.clustering.iterator.ClusteringPolicy $r2;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $r2 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: org.apache.mahout.clustering.iterator.ClusteringPolicy policy>;
+
+        $r3 = interfaceinvoke $r2.<org.apache.mahout.clustering.iterator.ClusteringPolicy: org.apache.mahout.math.Vector classify(org.apache.mahout.math.Vector,org.apache.mahout.clustering.classify.ClusterClassifier)>(r1, r0);
+
+        return $r3;
+    }
+
+    public double classifyScalar(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+        org.apache.mahout.math.Vector r1;
+        double d0, d1, $d2, $d3;
+        java.util.List $r2, $r4, $r8;
+        int $i0;
+        java.lang.IllegalStateException $r3;
+        java.lang.Object $r5, $r9;
+        org.apache.mahout.math.VectorWritable $r6, $r11;
+        org.apache.mahout.clustering.Cluster $r7, $r10;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $r2 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models>;
+
+        $i0 = interfaceinvoke $r2.<java.util.List: int size()>();
+
+        if $i0 != 2 goto label1;
+
+        $r4 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models>;
+
+        $r5 = interfaceinvoke $r4.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r7 = (org.apache.mahout.clustering.Cluster) $r5;
+
+        $r6 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r6.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r1);
+
+        d0 = interfaceinvoke $r7.<org.apache.mahout.clustering.Cluster: double pdf(java.lang.Object)>($r6);
+
+        $r8 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models>;
+
+        $r9 = interfaceinvoke $r8.<java.util.List: java.lang.Object get(int)>(1);
+
+        $r10 = (org.apache.mahout.clustering.Cluster) $r9;
+
+        $r11 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r11.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r1);
+
+        d1 = interfaceinvoke $r10.<org.apache.mahout.clustering.Cluster: double pdf(java.lang.Object)>($r11);
+
+        $d2 = d0 + d1;
+
+        $d3 = d0 / $d2;
+
+        return $d3;
+
+     label1:
+        $r3 = new java.lang.IllegalStateException;
+
+        specialinvoke $r3.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r3;
+    }
+
+    public int numCategories()
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+        java.util.List $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        $r1 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models>;
+
+        $i0 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        return $i0;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+        java.io.DataOutput r1;
+        java.util.Iterator r2;
+        org.apache.mahout.clustering.Cluster r3;
+        java.util.List $r4, $r8;
+        int $i0;
+        java.lang.String $r5;
+        org.apache.mahout.clustering.iterator.ClusteringPolicyWritable $r6;
+        org.apache.mahout.clustering.iterator.ClusteringPolicy $r7;
+        boolean $z0;
+        java.lang.Object $r9;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $r4 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models>;
+
+        $i0 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i0);
+
+        $r5 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.lang.String modelClass>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeUTF(java.lang.String)>($r5);
+
+        $r6 = new org.apache.mahout.clustering.iterator.ClusteringPolicyWritable;
+
+        $r7 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: org.apache.mahout.clustering.iterator.ClusteringPolicy policy>;
+
+        specialinvoke $r6.<org.apache.mahout.clustering.iterator.ClusteringPolicyWritable: void <init>(org.apache.mahout.clustering.iterator.ClusteringPolicy)>($r7);
+
+        virtualinvoke $r6.<org.apache.mahout.clustering.iterator.ClusteringPolicyWritable: void write(java.io.DataOutput)>(r1);
+
+        $r8 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models>;
+
+        r2 = interfaceinvoke $r8.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r9 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.clustering.Cluster) $r9;
+
+        interfaceinvoke r3.<org.apache.mahout.clustering.Cluster: void write(java.io.DataOutput)>(r1);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+        java.io.DataInput r1;
+        int i0, i1;
+        org.apache.mahout.clustering.Cluster r3;
+        java.lang.String $r4, $r8;
+        java.util.ArrayList $r5;
+        org.apache.mahout.clustering.iterator.ClusteringPolicyWritable $r6;
+        org.apache.mahout.clustering.iterator.ClusteringPolicy $r7;
+        java.lang.Object $r9;
+        java.util.List $r10;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        i0 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        $r4 = interfaceinvoke r1.<java.io.DataInput: java.lang.String readUTF()>();
+
+        r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.lang.String modelClass> = $r4;
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models> = $r5;
+
+        $r6 = new org.apache.mahout.clustering.iterator.ClusteringPolicyWritable;
+
+        specialinvoke $r6.<org.apache.mahout.clustering.iterator.ClusteringPolicyWritable: void <init>()>();
+
+        virtualinvoke $r6.<org.apache.mahout.clustering.iterator.ClusteringPolicyWritable: void readFields(java.io.DataInput)>(r1);
+
+        $r7 = virtualinvoke $r6.<org.apache.mahout.clustering.iterator.ClusteringPolicyWritable: org.apache.mahout.clustering.iterator.ClusteringPolicy getValue()>();
+
+        r0.<org.apache.mahout.clustering.classify.ClusterClassifier: org.apache.mahout.clustering.iterator.ClusteringPolicy policy> = $r7;
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label2;
+
+        $r8 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.lang.String modelClass>;
+
+        $r9 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.String,java.lang.Class)>($r8, class "org/apache/mahout/clustering/Cluster");
+
+        r3 = (org.apache.mahout.clustering.Cluster) $r9;
+
+        interfaceinvoke r3.<org.apache.mahout.clustering.Cluster: void readFields(java.io.DataInput)>(r1);
+
+        $r10 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models>;
+
+        interfaceinvoke $r10.<java.util.List: boolean add(java.lang.Object)>(r3);
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void train(int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+        int i0;
+        org.apache.mahout.math.Vector r1;
+        java.util.List $r2;
+        java.lang.Object $r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.mahout.clustering.Cluster $r5;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        $r2 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>(i0);
+
+        $r5 = (org.apache.mahout.clustering.Cluster) $r3;
+
+        $r4 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r4.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r1);
+
+        interfaceinvoke $r5.<org.apache.mahout.clustering.Cluster: void observe(java.lang.Object)>($r4);
+
+        return;
+    }
+
+    public void train(int, org.apache.mahout.math.Vector, double)
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+        int i0;
+        org.apache.mahout.math.Vector r1;
+        double d0;
+        java.util.List $r2;
+        java.lang.Object $r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.mahout.clustering.Cluster $r5;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        d0 := @parameter2: double;
+
+        $r2 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>(i0);
+
+        $r5 = (org.apache.mahout.clustering.Cluster) $r3;
+
+        $r4 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r4.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r1);
+
+        interfaceinvoke $r5.<org.apache.mahout.clustering.Cluster: void observe(java.lang.Object,double)>($r4, d0);
+
+        return;
+    }
+
+    public void train(long, java.lang.String, int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+        long l0;
+        java.lang.String r1;
+        int i1;
+        org.apache.mahout.math.Vector r2;
+        java.util.List $r3;
+        java.lang.Object $r4;
+        org.apache.mahout.math.VectorWritable $r5;
+        org.apache.mahout.clustering.Cluster $r6;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: java.lang.String;
+
+        i1 := @parameter2: int;
+
+        r2 := @parameter3: org.apache.mahout.math.Vector;
+
+        $r3 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models>;
+
+        $r4 = interfaceinvoke $r3.<java.util.List: java.lang.Object get(int)>(i1);
+
+        $r6 = (org.apache.mahout.clustering.Cluster) $r4;
+
+        $r5 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r5.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r2);
+
+        interfaceinvoke $r6.<org.apache.mahout.clustering.Cluster: void observe(java.lang.Object)>($r5);
+
+        return;
+    }
+
+    public void train(long, int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+        long l0;
+        int i1;
+        org.apache.mahout.math.Vector r1;
+        java.util.List $r2;
+        java.lang.Object $r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.mahout.clustering.Cluster $r5;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        r1 := @parameter2: org.apache.mahout.math.Vector;
+
+        $r2 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models>;
+
+        $r3 = interfaceinvoke $r2.<java.util.List: java.lang.Object get(int)>(i1);
+
+        $r5 = (org.apache.mahout.clustering.Cluster) $r3;
+
+        $r4 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r4.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r1);
+
+        interfaceinvoke $r5.<org.apache.mahout.clustering.Cluster: void observe(java.lang.Object)>($r4);
+
+        return;
+    }
+
+    public void close()
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+        org.apache.mahout.clustering.iterator.ClusteringPolicy $r1;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        $r1 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: org.apache.mahout.clustering.iterator.ClusteringPolicy policy>;
+
+        interfaceinvoke $r1.<org.apache.mahout.clustering.iterator.ClusteringPolicy: void close(org.apache.mahout.clustering.classify.ClusterClassifier)>(r0);
+
+        return;
+    }
+
+    public java.util.List getModels()
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+        java.util.List $r1;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        $r1 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models>;
+
+        return $r1;
+    }
+
+    public org.apache.mahout.clustering.iterator.ClusteringPolicy getPolicy()
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+        org.apache.mahout.clustering.iterator.ClusteringPolicy $r1;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        $r1 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: org.apache.mahout.clustering.iterator.ClusteringPolicy policy>;
+
+        return $r1;
+    }
+
+    public void writeToSeqFiles(org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+        org.apache.hadoop.fs.Path r1, $r16;
+        org.apache.hadoop.fs.FileSystem r3;
+        org.apache.mahout.clustering.iterator.ClusteringPolicy $r9;
+        org.apache.hadoop.conf.Configuration $r10;
+        java.net.URI $r11;
+        java.util.List $r12, $r23;
+        org.apache.mahout.clustering.iterator.ClusterWritable $r13;
+        org.apache.hadoop.io.SequenceFile$Writer $r14;
+        int $i0, i1;
+        java.lang.StringBuilder $r15, $r18, $r21;
+        java.lang.Object[] $r17;
+        java.util.Locale $r19;
+        java.lang.Integer $r20;
+        java.lang.String $r22, $r24;
+        java.lang.Object $r25;
+        org.apache.hadoop.io.IntWritable $r26;
+        java.lang.Throwable $r27, $r29, $r30, r31;
+        org.apache.mahout.clustering.Cluster r32;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        $r9 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: org.apache.mahout.clustering.iterator.ClusteringPolicy policy>;
+
+        staticinvoke <org.apache.mahout.clustering.classify.ClusterClassifier: void writePolicy(org.apache.mahout.clustering.iterator.ClusteringPolicy,org.apache.hadoop.fs.Path)>($r9, r1);
+
+        $r10 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r10.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r11 = virtualinvoke r1.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r3 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r11, $r10);
+
+        $r13 = new org.apache.mahout.clustering.iterator.ClusterWritable;
+
+        specialinvoke $r13.<org.apache.mahout.clustering.iterator.ClusterWritable: void <init>()>();
+
+        i1 = 0;
+
+     label01:
+        $r12 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models>;
+
+        $i0 = interfaceinvoke $r12.<java.util.List: int size()>();
+
+        if i1 >= $i0 goto label13;
+
+        $r14 = new org.apache.hadoop.io.SequenceFile$Writer;
+
+        $r16 = new org.apache.hadoop.fs.Path;
+
+        $r15 = new java.lang.StringBuilder;
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+        $r18 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("part-");
+
+        $r19 = <java.util.Locale: java.util.Locale ENGLISH>;
+
+        $r17 = newarray (java.lang.Object)[1];
+
+        $r20 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        $r17[0] = $r20;
+
+        $r22 = staticinvoke <java.lang.String: java.lang.String format(java.util.Locale,java.lang.String,java.lang.Object[])>($r19, "%05d", $r17);
+
+        $r21 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r22);
+
+        $r24 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r16.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r1, $r24);
+
+        specialinvoke $r14.<org.apache.hadoop.io.SequenceFile$Writer: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>(r3, $r10, $r16, class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/clustering/iterator/ClusterWritable");
+
+        r31 = null;
+
+     label02:
+        $r23 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models>;
+
+        $r25 = interfaceinvoke $r23.<java.util.List: java.lang.Object get(int)>(i1);
+
+        r32 = (org.apache.mahout.clustering.Cluster) $r25;
+
+        virtualinvoke $r13.<org.apache.mahout.clustering.iterator.ClusterWritable: void setValue(org.apache.mahout.clustering.Cluster)>(r32);
+
+        $r26 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r26.<org.apache.hadoop.io.IntWritable: void <init>(int)>(i1);
+
+        virtualinvoke $r14.<org.apache.hadoop.io.SequenceFile$Writer: void append(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r26, $r13);
+
+     label03:
+        if $r14 == null goto label12;
+
+        virtualinvoke $r14.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
+
+        goto label12;
+
+     label04:
+        $r29 := @caughtexception;
+
+        r31 = $r29;
+
+        throw $r29;
+
+     label05:
+        $r27 := @caughtexception;
+
+     label06:
+        if $r14 == null goto label11;
+
+        if r31 == null goto label10;
+
+     label07:
+        virtualinvoke $r14.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
+
+     label08:
+        goto label11;
+
+     label09:
+        $r30 := @caughtexception;
+
+        virtualinvoke r31.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r30);
+
+        goto label11;
+
+     label10:
+        virtualinvoke $r14.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
+
+     label11:
+        throw $r27;
+
+     label12:
+        i1 = i1 + 1;
+
+        goto label01;
+
+     label13:
+        return;
+
+        catch java.lang.Throwable from label02 to label03 with label04;
+        catch java.lang.Throwable from label02 to label03 with label05;
+        catch java.lang.Throwable from label07 to label08 with label09;
+        catch java.lang.Throwable from label04 to label06 with label05;
+    }
+
+    public void readFromSeqFiles(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.classify.ClusterClassifier r0;
+        org.apache.hadoop.conf.Configuration r1, $r8;
+        org.apache.hadoop.fs.Path r2;
+        java.util.Iterator r5;
+        org.apache.mahout.clustering.iterator.ClusterWritable r6;
+        org.apache.mahout.clustering.Cluster r7, $r14;
+        java.util.ArrayList $r9;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterable $r10;
+        org.apache.mahout.common.iterator.sequencefile.PathType $r11;
+        org.apache.hadoop.fs.PathFilter $r12;
+        boolean $z0;
+        java.util.List $r13;
+        java.lang.Object $r15, $r18;
+        java.lang.String $r16;
+        java.lang.Class $r17;
+        org.apache.mahout.clustering.iterator.ClusteringPolicy $r19;
+
+        r0 := @this: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        $r8 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r8.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r9 = new java.util.ArrayList;
+
+        specialinvoke $r9.<java.util.ArrayList: void <init>()>();
+
+        $r10 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterable;
+
+        $r11 = <org.apache.mahout.common.iterator.sequencefile.PathType: org.apache.mahout.common.iterator.sequencefile.PathType LIST>;
+
+        $r12 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter logsCRCFilter()>();
+
+        specialinvoke $r10.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterable: void <init>(org.apache.hadoop.fs.Path,org.apache.mahout.common.iterator.sequencefile.PathType,org.apache.hadoop.fs.PathFilter,org.apache.hadoop.conf.Configuration)>(r2, $r11, $r12, $r8);
+
+        r5 = virtualinvoke $r10.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r18 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.clustering.iterator.ClusterWritable) $r18;
+
+        r7 = virtualinvoke r6.<org.apache.mahout.clustering.iterator.ClusterWritable: org.apache.mahout.clustering.Cluster getValue()>();
+
+        interfaceinvoke r7.<org.apache.mahout.clustering.Cluster: void configure(org.apache.hadoop.conf.Configuration)>(r1);
+
+        interfaceinvoke $r9.<java.util.List: boolean add(java.lang.Object)>(r7);
+
+        goto label1;
+
+     label2:
+        r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models> = $r9;
+
+        $r13 = r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List models>;
+
+        $r15 = interfaceinvoke $r13.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r14 = (org.apache.mahout.clustering.Cluster) $r15;
+
+        $r17 = virtualinvoke $r14.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r16 = virtualinvoke $r17.<java.lang.Class: java.lang.String getName()>();
+
+        r0.<org.apache.mahout.clustering.classify.ClusterClassifier: java.lang.String modelClass> = $r16;
+
+        $r19 = staticinvoke <org.apache.mahout.clustering.classify.ClusterClassifier: org.apache.mahout.clustering.iterator.ClusteringPolicy readPolicy(org.apache.hadoop.fs.Path)>(r2);
+
+        r0.<org.apache.mahout.clustering.classify.ClusterClassifier: org.apache.mahout.clustering.iterator.ClusteringPolicy policy> = $r19;
+
+        return;
+    }
+
+    public static org.apache.mahout.clustering.iterator.ClusteringPolicy readPolicy(org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.hadoop.fs.Path r0, $r7;
+        org.apache.hadoop.fs.FileSystem r3;
+        org.apache.hadoop.conf.Configuration $r8;
+        java.net.URI $r9;
+        org.apache.hadoop.io.SequenceFile$Reader $r10;
+        org.apache.hadoop.io.Text $r11;
+        org.apache.mahout.clustering.iterator.ClusteringPolicyWritable $r12;
+        org.apache.mahout.clustering.iterator.ClusteringPolicy $r13;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r7.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r0, "_policy");
+
+        $r8 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r8.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r9 = virtualinvoke $r7.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r3 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r9, $r8);
+
+        $r10 = new org.apache.hadoop.io.SequenceFile$Reader;
+
+        specialinvoke $r10.<org.apache.hadoop.io.SequenceFile$Reader: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r3, $r7, $r8);
+
+        $r11 = new org.apache.hadoop.io.Text;
+
+        specialinvoke $r11.<org.apache.hadoop.io.Text: void <init>()>();
+
+        $r12 = new org.apache.mahout.clustering.iterator.ClusteringPolicyWritable;
+
+        specialinvoke $r12.<org.apache.mahout.clustering.iterator.ClusteringPolicyWritable: void <init>()>();
+
+        virtualinvoke $r10.<org.apache.hadoop.io.SequenceFile$Reader: boolean next(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r11, $r12);
+
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r10, 1);
+
+        $r13 = virtualinvoke $r12.<org.apache.mahout.clustering.iterator.ClusteringPolicyWritable: org.apache.mahout.clustering.iterator.ClusteringPolicy getValue()>();
+
+        return $r13;
+    }
+
+    public static void writePolicy(org.apache.mahout.clustering.iterator.ClusteringPolicy, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.iterator.ClusteringPolicy r0;
+        org.apache.hadoop.fs.Path r1, $r6;
+        org.apache.hadoop.fs.FileSystem r4;
+        org.apache.hadoop.conf.Configuration $r7;
+        java.net.URI $r8;
+        org.apache.hadoop.io.SequenceFile$Writer $r9;
+        org.apache.hadoop.io.Text $r10;
+        org.apache.mahout.clustering.iterator.ClusteringPolicyWritable $r11;
+
+        r0 := @parameter0: org.apache.mahout.clustering.iterator.ClusteringPolicy;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        $r6 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r6.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r1, "_policy");
+
+        $r7 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r7.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r8 = virtualinvoke $r6.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r4 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r8, $r7);
+
+        $r9 = new org.apache.hadoop.io.SequenceFile$Writer;
+
+        specialinvoke $r9.<org.apache.hadoop.io.SequenceFile$Writer: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>(r4, $r7, $r6, class "org/apache/hadoop/io/Text", class "org/apache/mahout/clustering/iterator/ClusteringPolicyWritable");
+
+        $r10 = new org.apache.hadoop.io.Text;
+
+        specialinvoke $r10.<org.apache.hadoop.io.Text: void <init>()>();
+
+        $r11 = new org.apache.mahout.clustering.iterator.ClusteringPolicyWritable;
+
+        specialinvoke $r11.<org.apache.mahout.clustering.iterator.ClusteringPolicyWritable: void <init>(org.apache.mahout.clustering.iterator.ClusteringPolicy)>(r0);
+
+        virtualinvoke $r9.<org.apache.hadoop.io.SequenceFile$Writer: void append(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r10, $r11);
+
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r9, 0);
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.clustering.classify.ClusterClassifier: java.lang.String POLICY_FILE_NAME> = "_policy";
+
+        return;
+    }
+}

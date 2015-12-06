@@ -1,0 +1,21 @@
+public interface  org.apache.mahout.common.parameters.Parameter extends java.lang.Object implements org.apache.mahout.common.parameters.Parametered
+{
+
+    public abstract java.lang.String prefix();
+
+    public abstract java.lang.String name();
+
+    public abstract java.lang.String description();
+
+    public abstract java.lang.Class type();
+
+    public abstract void setStringValue(java.lang.String);
+
+    public abstract java.lang.String getStringValue();
+
+    public abstract void set(java.lang.Object);
+
+    public abstract java.lang.Object get();
+
+    public abstract java.lang.String defaultValue();
+}

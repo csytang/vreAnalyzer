@@ -1,0 +1,209 @@
+final class org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator extends java.lang.Object implements java.util.Iterator
+{
+    private int position;
+    private int lastNext;
+    final org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet this$1;
+
+    private void <init>(org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet)
+    {
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet this$1> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: int lastNext> = -1;
+
+        return;
+    }
+
+    public boolean hasNext()
+    {
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet $r1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r2;
+        int $i0, $i1;
+        long[] $r3;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: void goToNext()>();
+
+        $i0 = r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: int position>;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet this$1>;
+
+        $r2 = $r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet: org.apache.mahout.cf.taste.impl.common.FastByIDMap this$0>;
+
+        $r3 = staticinvoke <org.apache.mahout.cf.taste.impl.common.FastByIDMap: long[] access$300(org.apache.mahout.cf.taste.impl.common.FastByIDMap)>($r2);
+
+        $i1 = lengthof $r3;
+
+        if $i0 >= $i1 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    public java.util.Map$Entry next()
+    {
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator r0;
+        int $i0, $i1, $i2, $i3, $i4;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet $r1, $r5;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r2;
+        long[] $r3;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$MapEntry $r4;
+        java.util.NoSuchElementException $r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: void goToNext()>();
+
+        $i0 = r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: int position>;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: int lastNext> = $i0;
+
+        $i1 = r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: int position>;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet this$1>;
+
+        $r2 = $r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet: org.apache.mahout.cf.taste.impl.common.FastByIDMap this$0>;
+
+        $r3 = staticinvoke <org.apache.mahout.cf.taste.impl.common.FastByIDMap: long[] access$300(org.apache.mahout.cf.taste.impl.common.FastByIDMap)>($r2);
+
+        $i2 = lengthof $r3;
+
+        if $i1 < $i2 goto label1;
+
+        $r6 = new java.util.NoSuchElementException;
+
+        specialinvoke $r6.<java.util.NoSuchElementException: void <init>()>();
+
+        throw $r6;
+
+     label1:
+        $r4 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$MapEntry;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet this$1>;
+
+        $i3 = r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: int position>;
+
+        $i4 = $i3 + 1;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: int position> = $i4;
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$MapEntry: void <init>(org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet,int,org.apache.mahout.cf.taste.impl.common.FastByIDMap$1)>($r5, $i3, null);
+
+        return $r4;
+    }
+
+    private void goToNext()
+    {
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator r0;
+        int i0, $i1, $i2, $i3, $i4;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet $r1, $r4;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r2, $r5;
+        java.lang.Object[] $r3, $r6;
+        java.lang.Object $r7;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet this$1>;
+
+        $r2 = $r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet: org.apache.mahout.cf.taste.impl.common.FastByIDMap this$0>;
+
+        $r3 = staticinvoke <org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object[] access$400(org.apache.mahout.cf.taste.impl.common.FastByIDMap)>($r2);
+
+        i0 = lengthof $r3;
+
+     label1:
+        $i1 = r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: int position>;
+
+        if $i1 >= i0 goto label2;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet this$1>;
+
+        $r5 = $r4.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet: org.apache.mahout.cf.taste.impl.common.FastByIDMap this$0>;
+
+        $r6 = staticinvoke <org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object[] access$400(org.apache.mahout.cf.taste.impl.common.FastByIDMap)>($r5);
+
+        $i2 = r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: int position>;
+
+        $r7 = $r6[$i2];
+
+        if $r7 != null goto label2;
+
+        $i3 = r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: int position>;
+
+        $i4 = $i3 + 1;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: int position> = $i4;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void remove()
+    {
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet $r1;
+        int $i0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet this$1>;
+
+        $r2 = $r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet: org.apache.mahout.cf.taste.impl.common.FastByIDMap this$0>;
+
+        $i0 = r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: int lastNext>;
+
+        virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void iteratorRemove(int)>($i0);
+
+        return;
+    }
+
+    public volatile java.lang.Object next()
+    {
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator r0;
+        java.util.Map$Entry $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: java.util.Map$Entry next()>();
+
+        return $r1;
+    }
+
+    void <init>(org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet, org.apache.mahout.cf.taste.impl.common.FastByIDMap$1)
+    {
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet r1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap$1 r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.impl.common.FastByIDMap$1;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet$EntryIterator: void <init>(org.apache.mahout.cf.taste.impl.common.FastByIDMap$EntrySet)>(r1);
+
+        return;
+    }
+}

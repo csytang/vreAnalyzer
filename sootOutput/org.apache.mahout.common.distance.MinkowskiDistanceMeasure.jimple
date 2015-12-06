@@ -1,0 +1,183 @@
+public class org.apache.mahout.common.distance.MinkowskiDistanceMeasure extends java.lang.Object implements org.apache.mahout.common.distance.DistanceMeasure
+{
+    private static final double EXPONENT;
+    private java.util.List parameters;
+    private double exponent;
+
+    public void <init>()
+    {
+        org.apache.mahout.common.distance.MinkowskiDistanceMeasure r0;
+
+        r0 := @this: org.apache.mahout.common.distance.MinkowskiDistanceMeasure;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.common.distance.MinkowskiDistanceMeasure: double exponent> = 3.0;
+
+        return;
+    }
+
+    public void <init>(double)
+    {
+        org.apache.mahout.common.distance.MinkowskiDistanceMeasure r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.common.distance.MinkowskiDistanceMeasure;
+
+        d0 := @parameter0: double;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.common.distance.MinkowskiDistanceMeasure: double exponent> = 3.0;
+
+        r0.<org.apache.mahout.common.distance.MinkowskiDistanceMeasure: double exponent> = d0;
+
+        return;
+    }
+
+    public void createParameters(java.lang.String, org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.common.distance.MinkowskiDistanceMeasure r0;
+        java.lang.String r1;
+        org.apache.hadoop.conf.Configuration r2;
+        java.util.ArrayList $r4;
+        org.apache.mahout.common.parameters.DoubleParameter $r5;
+        java.util.List $r6;
+
+        r0 := @this: org.apache.mahout.common.distance.MinkowskiDistanceMeasure;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        $r4 = new java.util.ArrayList;
+
+        specialinvoke $r4.<java.util.ArrayList: void <init>()>();
+
+        r0.<org.apache.mahout.common.distance.MinkowskiDistanceMeasure: java.util.List parameters> = $r4;
+
+        $r5 = new org.apache.mahout.common.parameters.DoubleParameter;
+
+        specialinvoke $r5.<org.apache.mahout.common.parameters.DoubleParameter: void <init>(java.lang.String,java.lang.String,org.apache.hadoop.conf.Configuration,double,java.lang.String)>(r1, "exponent", r2, 3.0, "Exponent for Fractional Lagrange distance");
+
+        $r6 = r0.<org.apache.mahout.common.distance.MinkowskiDistanceMeasure: java.util.List parameters>;
+
+        interfaceinvoke $r6.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        return;
+    }
+
+    public java.util.Collection getParameters()
+    {
+        org.apache.mahout.common.distance.MinkowskiDistanceMeasure r0;
+        java.util.List $r1;
+
+        r0 := @this: org.apache.mahout.common.distance.MinkowskiDistanceMeasure;
+
+        $r1 = r0.<org.apache.mahout.common.distance.MinkowskiDistanceMeasure: java.util.List parameters>;
+
+        return $r1;
+    }
+
+    public void configure(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.common.distance.MinkowskiDistanceMeasure r0;
+        org.apache.hadoop.conf.Configuration r1;
+        java.util.List $r2;
+
+        r0 := @this: org.apache.mahout.common.distance.MinkowskiDistanceMeasure;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        $r2 = r0.<org.apache.mahout.common.distance.MinkowskiDistanceMeasure: java.util.List parameters>;
+
+        if $r2 != null goto label1;
+
+        staticinvoke <org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations: void configureParameters(org.apache.mahout.common.parameters.Parametered,org.apache.hadoop.conf.Configuration)>(r0, r1);
+
+     label1:
+        return;
+    }
+
+    public double getExponent()
+    {
+        org.apache.mahout.common.distance.MinkowskiDistanceMeasure r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.common.distance.MinkowskiDistanceMeasure;
+
+        $d0 = r0.<org.apache.mahout.common.distance.MinkowskiDistanceMeasure: double exponent>;
+
+        return $d0;
+    }
+
+    public void setExponent(double)
+    {
+        org.apache.mahout.common.distance.MinkowskiDistanceMeasure r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.common.distance.MinkowskiDistanceMeasure;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.common.distance.MinkowskiDistanceMeasure: double exponent> = d0;
+
+        return;
+    }
+
+    public double distance(org.apache.mahout.math.Vector, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.common.distance.MinkowskiDistanceMeasure r0;
+        org.apache.mahout.math.Vector r1, r2;
+        double $d0, $d1, $d2, $d3, $d4;
+        org.apache.mahout.math.function.DoubleDoubleFunction $r3, $r4;
+
+        r0 := @this: org.apache.mahout.common.distance.MinkowskiDistanceMeasure;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 := @parameter1: org.apache.mahout.math.Vector;
+
+        $r3 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction PLUS>;
+
+        $d0 = r0.<org.apache.mahout.common.distance.MinkowskiDistanceMeasure: double exponent>;
+
+        $r4 = staticinvoke <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction minusAbsPow(double)>($d0);
+
+        $d1 = interfaceinvoke r1.<org.apache.mahout.math.Vector: double aggregate(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction,org.apache.mahout.math.function.DoubleDoubleFunction)>(r2, $r3, $r4);
+
+        $d2 = r0.<org.apache.mahout.common.distance.MinkowskiDistanceMeasure: double exponent>;
+
+        $d3 = 1.0 / $d2;
+
+        $d4 = staticinvoke <java.lang.Math: double pow(double,double)>($d1, $d3);
+
+        return $d4;
+    }
+
+    public double distance(double, org.apache.mahout.math.Vector, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.common.distance.MinkowskiDistanceMeasure r0;
+        double d0, $d1;
+        org.apache.mahout.math.Vector r1, r2;
+
+        r0 := @this: org.apache.mahout.common.distance.MinkowskiDistanceMeasure;
+
+        d0 := @parameter0: double;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        r2 := @parameter2: org.apache.mahout.math.Vector;
+
+        $d1 = virtualinvoke r0.<org.apache.mahout.common.distance.MinkowskiDistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r1, r2);
+
+        return $d1;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.common.distance.MinkowskiDistanceMeasure: double EXPONENT> = 3.0;
+
+        return;
+    }
+}

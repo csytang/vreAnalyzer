@@ -1,0 +1,86 @@
+public class org.apache.mahout.classifier.df.Bagging extends java.lang.Object
+{
+    private static final org.slf4j.Logger log;
+    private final org.apache.mahout.classifier.df.builder.TreeBuilder treeBuilder;
+    private final org.apache.mahout.classifier.df.data.Data data;
+    private final boolean[] sampled;
+
+    public void <init>(org.apache.mahout.classifier.df.builder.TreeBuilder, org.apache.mahout.classifier.df.data.Data)
+    {
+        org.apache.mahout.classifier.df.Bagging r0;
+        org.apache.mahout.classifier.df.builder.TreeBuilder r1;
+        org.apache.mahout.classifier.df.data.Data r2;
+        int $i0;
+        boolean[] $r3;
+
+        r0 := @this: org.apache.mahout.classifier.df.Bagging;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.builder.TreeBuilder;
+
+        r2 := @parameter1: org.apache.mahout.classifier.df.data.Data;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.df.Bagging: org.apache.mahout.classifier.df.builder.TreeBuilder treeBuilder> = r1;
+
+        r0.<org.apache.mahout.classifier.df.Bagging: org.apache.mahout.classifier.df.data.Data data> = r2;
+
+        $i0 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        $r3 = newarray (boolean)[$i0];
+
+        r0.<org.apache.mahout.classifier.df.Bagging: boolean[] sampled> = $r3;
+
+        return;
+    }
+
+    public org.apache.mahout.classifier.df.node.Node build(java.util.Random)
+    {
+        org.apache.mahout.classifier.df.Bagging r0;
+        java.util.Random r1;
+        org.apache.mahout.classifier.df.data.Data r2, $r6;
+        org.slf4j.Logger $r3, $r7;
+        boolean[] $r4, $r5;
+        org.apache.mahout.classifier.df.builder.TreeBuilder $r8;
+        org.apache.mahout.classifier.df.node.Node $r9;
+
+        r0 := @this: org.apache.mahout.classifier.df.Bagging;
+
+        r1 := @parameter0: java.util.Random;
+
+        $r3 = <org.apache.mahout.classifier.df.Bagging: org.slf4j.Logger log>;
+
+        interfaceinvoke $r3.<org.slf4j.Logger: void debug(java.lang.String)>("Bagging...");
+
+        $r4 = r0.<org.apache.mahout.classifier.df.Bagging: boolean[] sampled>;
+
+        staticinvoke <java.util.Arrays: void fill(boolean[],boolean)>($r4, 0);
+
+        $r6 = r0.<org.apache.mahout.classifier.df.Bagging: org.apache.mahout.classifier.df.data.Data data>;
+
+        $r5 = r0.<org.apache.mahout.classifier.df.Bagging: boolean[] sampled>;
+
+        r2 = virtualinvoke $r6.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Data bagging(java.util.Random,boolean[])>(r1, $r5);
+
+        $r7 = <org.apache.mahout.classifier.df.Bagging: org.slf4j.Logger log>;
+
+        interfaceinvoke $r7.<org.slf4j.Logger: void debug(java.lang.String)>("Building...");
+
+        $r8 = r0.<org.apache.mahout.classifier.df.Bagging: org.apache.mahout.classifier.df.builder.TreeBuilder treeBuilder>;
+
+        $r9 = interfaceinvoke $r8.<org.apache.mahout.classifier.df.builder.TreeBuilder: org.apache.mahout.classifier.df.node.Node build(java.util.Random,org.apache.mahout.classifier.df.data.Data)>(r1, r2);
+
+        return $r9;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/classifier/df/Bagging");
+
+        <org.apache.mahout.classifier.df.Bagging: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

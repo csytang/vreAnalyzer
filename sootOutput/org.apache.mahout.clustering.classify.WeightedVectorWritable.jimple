@@ -1,0 +1,183 @@
+public class org.apache.mahout.clustering.classify.WeightedVectorWritable extends java.lang.Object implements org.apache.hadoop.io.Writable
+{
+    private final org.apache.mahout.math.VectorWritable vectorWritable;
+    private double weight;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.classify.WeightedVectorWritable r0;
+        org.apache.mahout.math.VectorWritable $r1;
+
+        r0 := @this: org.apache.mahout.clustering.classify.WeightedVectorWritable;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r1.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: org.apache.mahout.math.VectorWritable vectorWritable> = $r1;
+
+        return;
+    }
+
+    public void <init>(double, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.classify.WeightedVectorWritable r0;
+        double d0;
+        org.apache.mahout.math.Vector r1;
+        org.apache.mahout.math.VectorWritable $r2, $r3;
+
+        r0 := @this: org.apache.mahout.clustering.classify.WeightedVectorWritable;
+
+        d0 := @parameter0: double;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r2.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: org.apache.mahout.math.VectorWritable vectorWritable> = $r2;
+
+        $r3 = r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: org.apache.mahout.math.VectorWritable vectorWritable>;
+
+        virtualinvoke $r3.<org.apache.mahout.math.VectorWritable: void set(org.apache.mahout.math.Vector)>(r1);
+
+        r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: double weight> = d0;
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector getVector()
+    {
+        org.apache.mahout.clustering.classify.WeightedVectorWritable r0;
+        org.apache.mahout.math.VectorWritable $r1;
+        org.apache.mahout.math.Vector $r2;
+
+        r0 := @this: org.apache.mahout.clustering.classify.WeightedVectorWritable;
+
+        $r1 = r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: org.apache.mahout.math.VectorWritable vectorWritable>;
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        return $r2;
+    }
+
+    public void setVector(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.classify.WeightedVectorWritable r0;
+        org.apache.mahout.math.Vector r1;
+        org.apache.mahout.math.VectorWritable $r2;
+
+        r0 := @this: org.apache.mahout.clustering.classify.WeightedVectorWritable;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $r2 = r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: org.apache.mahout.math.VectorWritable vectorWritable>;
+
+        virtualinvoke $r2.<org.apache.mahout.math.VectorWritable: void set(org.apache.mahout.math.Vector)>(r1);
+
+        return;
+    }
+
+    public double getWeight()
+    {
+        org.apache.mahout.clustering.classify.WeightedVectorWritable r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.clustering.classify.WeightedVectorWritable;
+
+        $d0 = r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: double weight>;
+
+        return $d0;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.classify.WeightedVectorWritable r0;
+        java.io.DataInput r1;
+        org.apache.mahout.math.VectorWritable $r2;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.clustering.classify.WeightedVectorWritable;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $r2 = r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: org.apache.mahout.math.VectorWritable vectorWritable>;
+
+        virtualinvoke $r2.<org.apache.mahout.math.VectorWritable: void readFields(java.io.DataInput)>(r1);
+
+        $d0 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: double weight> = $d0;
+
+        return;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.classify.WeightedVectorWritable r0;
+        java.io.DataOutput r1;
+        org.apache.mahout.math.VectorWritable $r2;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.clustering.classify.WeightedVectorWritable;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $r2 = r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: org.apache.mahout.math.VectorWritable vectorWritable>;
+
+        virtualinvoke $r2.<org.apache.mahout.math.VectorWritable: void write(java.io.DataOutput)>(r1);
+
+        $d0 = r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: double weight>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d0);
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.clustering.classify.WeightedVectorWritable r0;
+        org.apache.mahout.math.Vector r1;
+        org.apache.mahout.math.VectorWritable $r2;
+        java.lang.StringBuilder $r3, $r4, $r5, $r6;
+        double $d0;
+        java.lang.String $r7, $r8;
+
+        r0 := @this: org.apache.mahout.clustering.classify.WeightedVectorWritable;
+
+        $r2 = r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: org.apache.mahout.math.VectorWritable vectorWritable>;
+
+        r1 = virtualinvoke $r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $d0 = r0.<org.apache.mahout.clustering.classify.WeightedVectorWritable: double weight>;
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(double)>($d0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(": ");
+
+        if r1 != null goto label1;
+
+        $r8 = "null";
+
+        goto label2;
+
+     label1:
+        $r8 = staticinvoke <org.apache.mahout.clustering.AbstractCluster: java.lang.String formatVector(org.apache.mahout.math.Vector,java.lang.String[])>(r1, null);
+
+     label2:
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r7;
+    }
+}

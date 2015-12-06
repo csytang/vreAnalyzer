@@ -1,0 +1,123 @@
+public abstract class org.apache.mahout.vectorizer.encoders.CachingValueEncoder extends org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder
+{
+    private int[] cachedProbes;
+
+    protected void <init>(java.lang.String, int)
+    {
+        org.apache.mahout.vectorizer.encoders.CachingValueEncoder r0;
+        java.lang.String r1;
+        int i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.CachingValueEncoder;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder: void <init>(java.lang.String)>(r1);
+
+        specialinvoke r0.<org.apache.mahout.vectorizer.encoders.CachingValueEncoder: void cacheProbeLocations(int)>(i0);
+
+        return;
+    }
+
+    public void setProbes(int)
+    {
+        org.apache.mahout.vectorizer.encoders.CachingValueEncoder r0;
+        int i0, $i1;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.CachingValueEncoder;
+
+        i0 := @parameter0: int;
+
+        specialinvoke r0.<org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder: void setProbes(int)>(i0);
+
+        $i1 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.CachingValueEncoder: int getSeed()>();
+
+        specialinvoke r0.<org.apache.mahout.vectorizer.encoders.CachingValueEncoder: void cacheProbeLocations(int)>($i1);
+
+        return;
+    }
+
+    protected abstract int getSeed();
+
+    private void cacheProbeLocations(int)
+    {
+        org.apache.mahout.vectorizer.encoders.CachingValueEncoder r0;
+        int i0, $i1, $i2, $i3, $i5, i6;
+        int[] $r1, $r2;
+        java.lang.String $r3;
+        byte[] $r4;
+        long $l4;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.CachingValueEncoder;
+
+        i0 := @parameter0: int;
+
+        $i1 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.CachingValueEncoder: int getProbes()>();
+
+        $r1 = newarray (int)[$i1];
+
+        r0.<org.apache.mahout.vectorizer.encoders.CachingValueEncoder: int[] cachedProbes> = $r1;
+
+        i6 = 0;
+
+     label1:
+        $i2 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.CachingValueEncoder: int getProbes()>();
+
+        if i6 >= $i2 goto label2;
+
+        $r2 = r0.<org.apache.mahout.vectorizer.encoders.CachingValueEncoder: int[] cachedProbes>;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.CachingValueEncoder: java.lang.String getName()>();
+
+        $r4 = staticinvoke <org.apache.mahout.vectorizer.encoders.CachingValueEncoder: byte[] bytesForString(java.lang.String)>($r3);
+
+        $i3 = i0 + i6;
+
+        $l4 = staticinvoke <org.apache.mahout.math.MurmurHash: long hash64A(byte[],int)>($r4, $i3);
+
+        $i5 = (int) $l4;
+
+        $r2[i6] = $i5;
+
+        i6 = i6 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    protected int hashForProbe(byte[], int, java.lang.String, int)
+    {
+        org.apache.mahout.vectorizer.encoders.CachingValueEncoder r0;
+        byte[] r1;
+        int i0, i1, $i2, i3;
+        java.lang.String r2;
+        int[] $r3;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.CachingValueEncoder;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: java.lang.String;
+
+        i1 := @parameter3: int;
+
+        $r3 = r0.<org.apache.mahout.vectorizer.encoders.CachingValueEncoder: int[] cachedProbes>;
+
+        $i2 = $r3[i1];
+
+        i3 = $i2 % i0;
+
+        if i3 >= 0 goto label1;
+
+        i3 = i3 + i0;
+
+     label1:
+        return i3;
+    }
+}

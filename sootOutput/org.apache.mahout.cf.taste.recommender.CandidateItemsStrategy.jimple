@@ -1,0 +1,5 @@
+public interface  org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy extends java.lang.Object implements org.apache.mahout.cf.taste.common.Refreshable
+{
+
+    public abstract org.apache.mahout.cf.taste.impl.common.FastIDSet getCandidateItems(long, org.apache.mahout.cf.taste.model.PreferenceArray, org.apache.mahout.cf.taste.model.DataModel, boolean) throws org.apache.mahout.cf.taste.common.TasteException;
+}

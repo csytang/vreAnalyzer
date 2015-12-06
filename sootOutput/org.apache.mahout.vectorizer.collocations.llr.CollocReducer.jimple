@@ -1,0 +1,340 @@
+public class org.apache.mahout.vectorizer.collocations.llr.CollocReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+    private static final org.slf4j.Logger log;
+    public static final java.lang.String MIN_SUPPORT;
+    public static final int DEFAULT_MIN_SUPPORT;
+    private int minSupport;
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.collocations.llr.CollocReducer r0;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.CollocReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        return;
+    }
+
+    protected void reduce(org.apache.mahout.vectorizer.collocations.llr.GramKey, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.collocations.llr.CollocReducer r0;
+        org.apache.mahout.vectorizer.collocations.llr.GramKey r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.mahout.vectorizer.collocations.llr.Gram$Type r4, $r5, $r6, $r8;
+        java.util.Iterator $r7, $r11;
+        org.apache.mahout.vectorizer.collocations.llr.CollocReducer$Skipped $r9;
+        org.apache.hadoop.mapreduce.Counter $r10;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.CollocReducer;
+
+        r1 := @parameter0: org.apache.mahout.vectorizer.collocations.llr.GramKey;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        r4 = virtualinvoke r1.<org.apache.mahout.vectorizer.collocations.llr.GramKey: org.apache.mahout.vectorizer.collocations.llr.Gram$Type getType()>();
+
+        $r5 = <org.apache.mahout.vectorizer.collocations.llr.Gram$Type: org.apache.mahout.vectorizer.collocations.llr.Gram$Type UNIGRAM>;
+
+        if r4 != $r5 goto label1;
+
+        $r11 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.collocations.llr.CollocReducer: void processUnigram(java.util.Iterator,org.apache.hadoop.mapreduce.Reducer$Context)>($r11, r3);
+
+        goto label4;
+
+     label1:
+        $r6 = <org.apache.mahout.vectorizer.collocations.llr.Gram$Type: org.apache.mahout.vectorizer.collocations.llr.Gram$Type HEAD>;
+
+        if r4 == $r6 goto label2;
+
+        $r8 = <org.apache.mahout.vectorizer.collocations.llr.Gram$Type: org.apache.mahout.vectorizer.collocations.llr.Gram$Type TAIL>;
+
+        if r4 != $r8 goto label3;
+
+     label2:
+        $r7 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.collocations.llr.CollocReducer: void processSubgram(java.util.Iterator,org.apache.hadoop.mapreduce.Reducer$Context)>($r7, r3);
+
+        goto label4;
+
+     label3:
+        $r9 = <org.apache.mahout.vectorizer.collocations.llr.CollocReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.CollocReducer$Skipped MALFORMED_TYPES>;
+
+        $r10 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.mapreduce.Counter getCounter(java.lang.Enum)>($r9);
+
+        interfaceinvoke $r10.<org.apache.hadoop.mapreduce.Counter: void increment(long)>(1L);
+
+     label4:
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.collocations.llr.CollocReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        boolean z0;
+        int $i0, $i1;
+        org.slf4j.Logger $r3, $r5;
+        java.lang.Integer $r4;
+        java.lang.Boolean $r6;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.CollocReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void setup(org.apache.hadoop.mapreduce.Reducer$Context)>(r1);
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $i0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("minSupport", 2);
+
+        r0.<org.apache.mahout.vectorizer.collocations.llr.CollocReducer: int minSupport> = $i0;
+
+        z0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("emit-unigrams", 0);
+
+        $r3 = <org.apache.mahout.vectorizer.collocations.llr.CollocReducer: org.slf4j.Logger log>;
+
+        $i1 = r0.<org.apache.mahout.vectorizer.collocations.llr.CollocReducer: int minSupport>;
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        interfaceinvoke $r3.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Min support is {}", $r4);
+
+        $r5 = <org.apache.mahout.vectorizer.collocations.llr.CollocReducer: org.slf4j.Logger log>;
+
+        $r6 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(z0);
+
+        interfaceinvoke $r5.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Emit Unitgrams is {}", $r6);
+
+        return;
+    }
+
+    protected void processUnigram(java.util.Iterator, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.collocations.llr.CollocReducer r0;
+        java.util.Iterator r1;
+        org.apache.hadoop.mapreduce.Reducer$Context r2;
+        boolean $z0;
+        int $i0, $i1, i2;
+        org.apache.mahout.vectorizer.collocations.llr.CollocReducer$Skipped $r3;
+        org.apache.hadoop.mapreduce.Counter $r4;
+        java.lang.Object $r5;
+        org.apache.mahout.vectorizer.collocations.llr.Gram r6;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.CollocReducer;
+
+        r1 := @parameter0: java.util.Iterator;
+
+        r2 := @parameter1: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        i2 = 0;
+
+        r6 = null;
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.vectorizer.collocations.llr.Gram) $r5;
+
+        $i1 = virtualinvoke r6.<org.apache.mahout.vectorizer.collocations.llr.Gram: int getFrequency()>();
+
+        i2 = i2 + $i1;
+
+        goto label1;
+
+     label2:
+        $i0 = r0.<org.apache.mahout.vectorizer.collocations.llr.CollocReducer: int minSupport>;
+
+        if i2 >= $i0 goto label3;
+
+        $r3 = <org.apache.mahout.vectorizer.collocations.llr.CollocReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.CollocReducer$Skipped LESS_THAN_MIN_SUPPORT>;
+
+        $r4 = virtualinvoke r2.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.mapreduce.Counter getCounter(java.lang.Enum)>($r3);
+
+        interfaceinvoke $r4.<org.apache.hadoop.mapreduce.Counter: void increment(long)>(1L);
+
+        return;
+
+     label3:
+        virtualinvoke r6.<org.apache.mahout.vectorizer.collocations.llr.Gram: void setFrequency(int)>(i2);
+
+        virtualinvoke r2.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>(r6, r6);
+
+        return;
+    }
+
+    protected void processSubgram(java.util.Iterator, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.collocations.llr.CollocReducer r0;
+        java.util.Iterator r1;
+        org.apache.hadoop.mapreduce.Reducer$Context r2;
+        org.apache.mahout.vectorizer.collocations.llr.Gram r3, $r10, r14, r15, $r16;
+        boolean $z0, $z1;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+        org.apache.mahout.vectorizer.collocations.llr.CollocReducer$Skipped $r4, $r12;
+        org.apache.hadoop.mapreduce.Counter $r5, $r13;
+        java.lang.Object $r6;
+        org.apache.mahout.vectorizer.collocations.llr.Gram$Type $r7, $r8, $r9, $r11;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.CollocReducer;
+
+        r1 := @parameter0: java.util.Iterator;
+
+        r2 := @parameter1: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        r14 = null;
+
+        r15 = null;
+
+     label01:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label08;
+
+        $r6 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.vectorizer.collocations.llr.Gram) $r6;
+
+        $r7 = virtualinvoke r3.<org.apache.mahout.vectorizer.collocations.llr.Gram: org.apache.mahout.vectorizer.collocations.llr.Gram$Type getType()>();
+
+        $r8 = <org.apache.mahout.vectorizer.collocations.llr.Gram$Type: org.apache.mahout.vectorizer.collocations.llr.Gram$Type HEAD>;
+
+        if $r7 == $r8 goto label02;
+
+        $r9 = virtualinvoke r3.<org.apache.mahout.vectorizer.collocations.llr.Gram: org.apache.mahout.vectorizer.collocations.llr.Gram$Type getType()>();
+
+        $r11 = <org.apache.mahout.vectorizer.collocations.llr.Gram$Type: org.apache.mahout.vectorizer.collocations.llr.Gram$Type TAIL>;
+
+        if $r9 != $r11 goto label04;
+
+     label02:
+        if r14 != null goto label03;
+
+        $r10 = new org.apache.mahout.vectorizer.collocations.llr.Gram;
+
+        specialinvoke $r10.<org.apache.mahout.vectorizer.collocations.llr.Gram: void <init>(org.apache.mahout.vectorizer.collocations.llr.Gram)>(r3);
+
+        r14 = $r10;
+
+        goto label01;
+
+     label03:
+        $i2 = virtualinvoke r3.<org.apache.mahout.vectorizer.collocations.llr.Gram: int getFrequency()>();
+
+        virtualinvoke r14.<org.apache.mahout.vectorizer.collocations.llr.Gram: void incrementFrequency(int)>($i2);
+
+        goto label01;
+
+     label04:
+        $z1 = virtualinvoke r3.<org.apache.mahout.vectorizer.collocations.llr.Gram: boolean equals(java.lang.Object)>(r15);
+
+        if $z1 != 0 goto label07;
+
+        if r15 == null goto label06;
+
+        $i5 = virtualinvoke r15.<org.apache.mahout.vectorizer.collocations.llr.Gram: int getFrequency()>();
+
+        $i4 = r0.<org.apache.mahout.vectorizer.collocations.llr.CollocReducer: int minSupport>;
+
+        if $i5 >= $i4 goto label05;
+
+        $r12 = <org.apache.mahout.vectorizer.collocations.llr.CollocReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.CollocReducer$Skipped LESS_THAN_MIN_SUPPORT>;
+
+        $r13 = virtualinvoke r2.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.mapreduce.Counter getCounter(java.lang.Enum)>($r12);
+
+        interfaceinvoke $r13.<org.apache.hadoop.mapreduce.Counter: void increment(long)>(1L);
+
+        goto label06;
+
+     label05:
+        virtualinvoke r2.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>(r15, r14);
+
+     label06:
+        $r16 = new org.apache.mahout.vectorizer.collocations.llr.Gram;
+
+        specialinvoke $r16.<org.apache.mahout.vectorizer.collocations.llr.Gram: void <init>(org.apache.mahout.vectorizer.collocations.llr.Gram)>(r3);
+
+        r15 = $r16;
+
+        goto label01;
+
+     label07:
+        $i3 = virtualinvoke r3.<org.apache.mahout.vectorizer.collocations.llr.Gram: int getFrequency()>();
+
+        virtualinvoke r15.<org.apache.mahout.vectorizer.collocations.llr.Gram: void incrementFrequency(int)>($i3);
+
+        goto label01;
+
+     label08:
+        if r15 == null goto label10;
+
+        $i0 = virtualinvoke r15.<org.apache.mahout.vectorizer.collocations.llr.Gram: int getFrequency()>();
+
+        $i1 = r0.<org.apache.mahout.vectorizer.collocations.llr.CollocReducer: int minSupport>;
+
+        if $i0 >= $i1 goto label09;
+
+        $r4 = <org.apache.mahout.vectorizer.collocations.llr.CollocReducer$Skipped: org.apache.mahout.vectorizer.collocations.llr.CollocReducer$Skipped LESS_THAN_MIN_SUPPORT>;
+
+        $r5 = virtualinvoke r2.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.mapreduce.Counter getCounter(java.lang.Enum)>($r4);
+
+        interfaceinvoke $r5.<org.apache.hadoop.mapreduce.Counter: void increment(long)>(1L);
+
+        return;
+
+     label09:
+        virtualinvoke r2.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>(r15, r14);
+
+     label10:
+        return;
+    }
+
+    protected volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.collocations.llr.CollocReducer r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.mahout.vectorizer.collocations.llr.GramKey $r4;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.CollocReducer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.mahout.vectorizer.collocations.llr.GramKey) r1;
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.collocations.llr.CollocReducer: void reduce(org.apache.mahout.vectorizer.collocations.llr.GramKey,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.vectorizer.collocations.llr.CollocReducer: int DEFAULT_MIN_SUPPORT> = 2;
+
+        <org.apache.mahout.vectorizer.collocations.llr.CollocReducer: java.lang.String MIN_SUPPORT> = "minSupport";
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/vectorizer/collocations/llr/CollocReducer");
+
+        <org.apache.mahout.vectorizer.collocations.llr.CollocReducer: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

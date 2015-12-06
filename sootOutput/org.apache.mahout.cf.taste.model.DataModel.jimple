@@ -1,0 +1,35 @@
+public interface  org.apache.mahout.cf.taste.model.DataModel extends java.lang.Object implements org.apache.mahout.cf.taste.common.Refreshable, java.io.Serializable
+{
+
+    public abstract org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs() throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract org.apache.mahout.cf.taste.impl.common.FastIDSet getItemIDsFromUser(long) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getItemIDs() throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesForItem(long) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract java.lang.Float getPreferenceValue(long, long) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract java.lang.Long getPreferenceTime(long, long) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract int getNumItems() throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract int getNumUsers() throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract int getNumUsersWithPreferenceFor(long) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract int getNumUsersWithPreferenceFor(long, long) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract void setPreference(long, long, float) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract void removePreference(long, long) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract boolean hasPreferenceValues();
+
+    public abstract float getMaxPreference();
+
+    public abstract float getMinPreference();
+}

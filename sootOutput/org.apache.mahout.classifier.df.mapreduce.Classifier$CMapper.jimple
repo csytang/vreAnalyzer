@@ -1,0 +1,239 @@
+public class org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private org.apache.mahout.classifier.df.data.DataConverter converter;
+    private org.apache.mahout.classifier.df.DecisionForest forest;
+    private final java.util.Random rng;
+    private boolean first;
+    private final org.apache.hadoop.io.Text lvalue;
+    private org.apache.mahout.classifier.df.data.Dataset dataset;
+    private final org.apache.hadoop.io.DoubleWritable lkey;
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper r0;
+        org.apache.mahout.common.RandomWrapper $r1;
+        org.apache.hadoop.io.Text $r2;
+        org.apache.hadoop.io.DoubleWritable $r3;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        $r1 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: java.util.Random rng> = $r1;
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: boolean first> = 1;
+
+        $r2 = new org.apache.hadoop.io.Text;
+
+        specialinvoke $r2.<org.apache.hadoop.io.Text: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.hadoop.io.Text lvalue> = $r2;
+
+        $r3 = new org.apache.hadoop.io.DoubleWritable;
+
+        specialinvoke $r3.<org.apache.hadoop.io.DoubleWritable: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.hadoop.io.DoubleWritable lkey> = $r3;
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.hadoop.fs.Path[] r3;
+        int $i0;
+        org.apache.hadoop.fs.Path $r4, $r8;
+        org.apache.mahout.classifier.df.data.Dataset $r5, $r7;
+        org.apache.mahout.classifier.df.data.DataConverter $r6;
+        org.apache.mahout.classifier.df.DecisionForest $r9, $r10;
+        java.lang.InterruptedException $r11;
+        java.io.IOException $r12;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void setup(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        r3 = staticinvoke <org.apache.mahout.common.HadoopUtil: org.apache.hadoop.fs.Path[] getCachedFiles(org.apache.hadoop.conf.Configuration)>(r2);
+
+        $i0 = lengthof r3;
+
+        if $i0 >= 2 goto label1;
+
+        $r12 = new java.io.IOException;
+
+        specialinvoke $r12.<java.io.IOException: void <init>(java.lang.String)>("not enough paths in the DistributedCache");
+
+        throw $r12;
+
+     label1:
+        $r4 = r3[0];
+
+        $r5 = staticinvoke <org.apache.mahout.classifier.df.data.Dataset: org.apache.mahout.classifier.df.data.Dataset load(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path)>(r2, $r4);
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.mahout.classifier.df.data.Dataset dataset> = $r5;
+
+        $r6 = new org.apache.mahout.classifier.df.data.DataConverter;
+
+        $r7 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.mahout.classifier.df.data.Dataset dataset>;
+
+        specialinvoke $r6.<org.apache.mahout.classifier.df.data.DataConverter: void <init>(org.apache.mahout.classifier.df.data.Dataset)>($r7);
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.mahout.classifier.df.data.DataConverter converter> = $r6;
+
+        $r8 = r3[1];
+
+        $r9 = staticinvoke <org.apache.mahout.classifier.df.DecisionForest: org.apache.mahout.classifier.df.DecisionForest load(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path)>(r2, $r8);
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.mahout.classifier.df.DecisionForest forest> = $r9;
+
+        $r10 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.mahout.classifier.df.DecisionForest forest>;
+
+        if $r10 != null goto label2;
+
+        $r11 = new java.lang.InterruptedException;
+
+        specialinvoke $r11.<java.lang.InterruptedException: void <init>(java.lang.String)>("DecisionForest not found!");
+
+        throw $r11;
+
+     label2:
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.LongWritable, org.apache.hadoop.io.Text, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper r0;
+        org.apache.hadoop.io.LongWritable r1;
+        org.apache.hadoop.io.Text r2, $r11, $r13, $r16, $r18;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        double d0, $d1, $d2;
+        boolean $z0, $z1;
+        org.apache.mahout.classifier.df.data.DataConverter $r4;
+        java.util.Random $r5;
+        org.apache.mahout.classifier.df.data.Dataset $r6, $r8;
+        org.apache.mahout.classifier.df.DecisionForest $r7;
+        org.apache.hadoop.io.DoubleWritable $r9, $r12, $r17, $r19;
+        java.lang.String $r10, $r15, r22;
+        org.apache.hadoop.mapreduce.InputSplit $r14;
+        long $l0;
+        org.apache.hadoop.mapreduce.lib.input.FileSplit r20;
+        org.apache.hadoop.fs.Path r21;
+        org.apache.mahout.classifier.df.data.Instance r23;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.LongWritable;
+
+        r2 := @parameter1: org.apache.hadoop.io.Text;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $z0 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: boolean first>;
+
+        if $z0 == 0 goto label1;
+
+        $r14 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.mapreduce.InputSplit getInputSplit()>();
+
+        r20 = (org.apache.hadoop.mapreduce.lib.input.FileSplit) $r14;
+
+        r21 = virtualinvoke r20.<org.apache.hadoop.mapreduce.lib.input.FileSplit: org.apache.hadoop.fs.Path getPath()>();
+
+        $r16 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.hadoop.io.Text lvalue>;
+
+        $r15 = virtualinvoke r21.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        virtualinvoke $r16.<org.apache.hadoop.io.Text: void set(java.lang.String)>($r15);
+
+        $r17 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.hadoop.io.DoubleWritable lkey>;
+
+        $l0 = virtualinvoke r1.<org.apache.hadoop.io.LongWritable: long get()>();
+
+        $d2 = (double) $l0;
+
+        virtualinvoke $r17.<org.apache.hadoop.io.DoubleWritable: void set(double)>($d2);
+
+        $r19 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.hadoop.io.DoubleWritable lkey>;
+
+        $r18 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.hadoop.io.Text lvalue>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r19, $r18);
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: boolean first> = 0;
+
+     label1:
+        r22 = virtualinvoke r2.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        $z1 = virtualinvoke r22.<java.lang.String: boolean isEmpty()>();
+
+        if $z1 != 0 goto label2;
+
+        $r4 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.mahout.classifier.df.data.DataConverter converter>;
+
+        r23 = virtualinvoke $r4.<org.apache.mahout.classifier.df.data.DataConverter: org.apache.mahout.classifier.df.data.Instance convert(java.lang.CharSequence)>(r22);
+
+        $r7 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.mahout.classifier.df.DecisionForest forest>;
+
+        $r6 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.mahout.classifier.df.data.Dataset dataset>;
+
+        $r5 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: java.util.Random rng>;
+
+        d0 = virtualinvoke $r7.<org.apache.mahout.classifier.df.DecisionForest: double classify(org.apache.mahout.classifier.df.data.Dataset,java.util.Random,org.apache.mahout.classifier.df.data.Instance)>($r6, $r5, r23);
+
+        $r9 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.hadoop.io.DoubleWritable lkey>;
+
+        $r8 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.mahout.classifier.df.data.Dataset dataset>;
+
+        $d1 = virtualinvoke $r8.<org.apache.mahout.classifier.df.data.Dataset: double getLabel(org.apache.mahout.classifier.df.data.Instance)>(r23);
+
+        virtualinvoke $r9.<org.apache.hadoop.io.DoubleWritable: void set(double)>($d1);
+
+        $r11 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.hadoop.io.Text lvalue>;
+
+        $r10 = staticinvoke <java.lang.Double: java.lang.String toString(double)>(d0);
+
+        virtualinvoke $r11.<org.apache.hadoop.io.Text: void set(java.lang.String)>($r10);
+
+        $r12 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.hadoop.io.DoubleWritable lkey>;
+
+        $r13 = r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: org.apache.hadoop.io.Text lvalue>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r12, $r13);
+
+     label2:
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.hadoop.io.Text $r4;
+        org.apache.hadoop.io.LongWritable $r5;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.LongWritable) r1;
+
+        $r4 = (org.apache.hadoop.io.Text) r2;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.df.mapreduce.Classifier$CMapper: void map(org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

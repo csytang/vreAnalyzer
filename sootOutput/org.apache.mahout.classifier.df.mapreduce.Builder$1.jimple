@@ -1,0 +1,99 @@
+final class org.apache.mahout.classifier.df.mapreduce.Builder$1 extends java.lang.Object implements java.util.Comparator
+{
+
+    void <init>()
+    {
+        org.apache.mahout.classifier.df.mapreduce.Builder$1 r0;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.Builder$1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public int compare(org.apache.hadoop.mapreduce.InputSplit, org.apache.hadoop.mapreduce.InputSplit)
+    {
+        org.apache.mahout.classifier.df.mapreduce.Builder$1 r0;
+        org.apache.hadoop.mapreduce.InputSplit r1, r2;
+        long l0, l3;
+        byte $b1, $b2;
+        java.lang.InterruptedException $r3;
+        java.lang.IllegalStateException $r4, $r6;
+        java.io.IOException $r5;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.Builder$1;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.InputSplit;
+
+        r2 := @parameter1: org.apache.hadoop.mapreduce.InputSplit;
+
+     label1:
+        l3 = virtualinvoke r1.<org.apache.hadoop.mapreduce.InputSplit: long getLength()>();
+
+        l0 = virtualinvoke r2.<org.apache.hadoop.mapreduce.InputSplit: long getLength()>();
+
+        $b1 = l3 cmp l0;
+
+        if $b1 != 0 goto label3;
+
+     label2:
+        return 0;
+
+     label3:
+        $b2 = l3 cmp l0;
+
+        if $b2 >= 0 goto label5;
+
+     label4:
+        return 1;
+
+     label5:
+        return -1;
+
+     label6:
+        $r5 := @caughtexception;
+
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("Problem getting input split size", $r5);
+
+        throw $r6;
+
+     label7:
+        $r3 := @caughtexception;
+
+        $r4 = new java.lang.IllegalStateException;
+
+        specialinvoke $r4.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("Problem getting input split size", $r3);
+
+        throw $r4;
+
+        catch java.io.IOException from label1 to label2 with label6;
+        catch java.io.IOException from label3 to label4 with label6;
+        catch java.lang.InterruptedException from label1 to label2 with label7;
+        catch java.lang.InterruptedException from label3 to label4 with label7;
+    }
+
+    public volatile int compare(java.lang.Object, java.lang.Object)
+    {
+        org.apache.mahout.classifier.df.mapreduce.Builder$1 r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.InputSplit $r3, $r4;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.Builder$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        $r4 = (org.apache.hadoop.mapreduce.InputSplit) r1;
+
+        $r3 = (org.apache.hadoop.mapreduce.InputSplit) r2;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.classifier.df.mapreduce.Builder$1: int compare(org.apache.hadoop.mapreduce.InputSplit,org.apache.hadoop.mapreduce.InputSplit)>($r4, $r3);
+
+        return $i0;
+    }
+}

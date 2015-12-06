@@ -1,0 +1,142 @@
+class org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private final org.apache.hadoop.io.IntWritable firstIndex;
+    private final org.apache.mahout.math.Vector featureVector;
+    private final org.apache.mahout.math.VectorWritable featureVectorWritable;
+
+    void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper r0;
+        org.apache.hadoop.io.IntWritable $r1;
+        org.apache.mahout.math.RandomAccessSparseVector $r2;
+        org.apache.mahout.math.VectorWritable $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        $r1 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r1.<org.apache.hadoop.io.IntWritable: void <init>(int)>(0);
+
+        r0.<org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper: org.apache.hadoop.io.IntWritable firstIndex> = $r1;
+
+        $r2 = new org.apache.mahout.math.RandomAccessSparseVector;
+
+        specialinvoke $r2.<org.apache.mahout.math.RandomAccessSparseVector: void <init>(int,int)>(2147483647, 1);
+
+        r0.<org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper: org.apache.mahout.math.Vector featureVector> = $r2;
+
+        $r3 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r3.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper: org.apache.mahout.math.VectorWritable featureVectorWritable> = $r3;
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.IntWritable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper r0;
+        org.apache.hadoop.io.IntWritable r1, $r15;
+        org.apache.mahout.math.VectorWritable r2, $r12, $r13;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        java.util.Iterator r5;
+        org.apache.mahout.math.Vector$Element r6;
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage $r7;
+        org.apache.mahout.math.Vector $r8, $r10, $r11, $r14;
+        java.lang.Iterable $r9;
+        boolean $z0;
+        int $i0, $i1;
+        double $d0, $d1;
+        java.lang.Object $r16;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r7 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke $r7.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>()>();
+
+        $r8 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r9 = interfaceinvoke $r8.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r5 = interfaceinvoke $r9.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r16 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.math.Vector$Element) $r16;
+
+        $d1 = interfaceinvoke r6.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        interfaceinvoke $r7.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void addDatum(double)>($d1);
+
+        goto label1;
+
+     label2:
+        $r10 = r0.<org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper: org.apache.mahout.math.Vector featureVector>;
+
+        $i0 = virtualinvoke r1.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $d0 = interfaceinvoke $r7.<org.apache.mahout.cf.taste.impl.common.RunningAverage: double getAverage()>();
+
+        interfaceinvoke $r10.<org.apache.mahout.math.Vector: void setQuick(int,double)>($i0, $d0);
+
+        $r13 = r0.<org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper: org.apache.mahout.math.VectorWritable featureVectorWritable>;
+
+        $r11 = r0.<org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper: org.apache.mahout.math.Vector featureVector>;
+
+        virtualinvoke $r13.<org.apache.mahout.math.VectorWritable: void set(org.apache.mahout.math.Vector)>($r11);
+
+        $r15 = r0.<org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper: org.apache.hadoop.io.IntWritable firstIndex>;
+
+        $r12 = r0.<org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper: org.apache.mahout.math.VectorWritable featureVectorWritable>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r15, $r12);
+
+        $r14 = r0.<org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper: org.apache.mahout.math.Vector featureVector>;
+
+        $i1 = virtualinvoke r1.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        interfaceinvoke $r14.<org.apache.mahout.math.Vector: void setQuick(int,double)>($i1, 0.0);
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.IntWritable $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.IntWritable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$AverageRatingMapper: void map(org.apache.hadoop.io.IntWritable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

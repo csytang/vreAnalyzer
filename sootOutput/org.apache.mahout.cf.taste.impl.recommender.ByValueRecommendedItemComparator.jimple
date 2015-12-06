@@ -1,0 +1,100 @@
+public final class org.apache.mahout.cf.taste.impl.recommender.ByValueRecommendedItemComparator extends java.lang.Object implements java.util.Comparator, java.io.Serializable
+{
+    private static final java.util.Comparator INSTANCE;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ByValueRecommendedItemComparator r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ByValueRecommendedItemComparator;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.util.Comparator getInstance()
+    {
+        java.util.Comparator $r0;
+
+        $r0 = <org.apache.mahout.cf.taste.impl.recommender.ByValueRecommendedItemComparator: java.util.Comparator INSTANCE>;
+
+        return $r0;
+    }
+
+    public int compare(org.apache.mahout.cf.taste.recommender.RecommendedItem, org.apache.mahout.cf.taste.recommender.RecommendedItem)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ByValueRecommendedItemComparator r0;
+        org.apache.mahout.cf.taste.recommender.RecommendedItem r1, r2;
+        float f0, f1;
+        byte $b0, $b1, $b2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ByValueRecommendedItemComparator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.recommender.RecommendedItem;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.recommender.RecommendedItem;
+
+        f0 = interfaceinvoke r1.<org.apache.mahout.cf.taste.recommender.RecommendedItem: float getValue()>();
+
+        f1 = interfaceinvoke r2.<org.apache.mahout.cf.taste.recommender.RecommendedItem: float getValue()>();
+
+        $b0 = f0 cmpl f1;
+
+        if $b0 <= 0 goto label1;
+
+        $b2 = -1;
+
+        goto label3;
+
+     label1:
+        $b1 = f0 cmpg f1;
+
+        if $b1 >= 0 goto label2;
+
+        $b2 = 1;
+
+        goto label3;
+
+     label2:
+        $b2 = 0;
+
+     label3:
+        return $b2;
+    }
+
+    public volatile int compare(java.lang.Object, java.lang.Object)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ByValueRecommendedItemComparator r0;
+        java.lang.Object r1, r2;
+        org.apache.mahout.cf.taste.recommender.RecommendedItem $r3, $r4;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.ByValueRecommendedItemComparator;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        $r4 = (org.apache.mahout.cf.taste.recommender.RecommendedItem) r1;
+
+        $r3 = (org.apache.mahout.cf.taste.recommender.RecommendedItem) r2;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.ByValueRecommendedItemComparator: int compare(org.apache.mahout.cf.taste.recommender.RecommendedItem,org.apache.mahout.cf.taste.recommender.RecommendedItem)>($r4, $r3);
+
+        return $i0;
+    }
+
+    static void <clinit>()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.ByValueRecommendedItemComparator $r0;
+
+        $r0 = new org.apache.mahout.cf.taste.impl.recommender.ByValueRecommendedItemComparator;
+
+        specialinvoke $r0.<org.apache.mahout.cf.taste.impl.recommender.ByValueRecommendedItemComparator: void <init>()>();
+
+        <org.apache.mahout.cf.taste.impl.recommender.ByValueRecommendedItemComparator: java.util.Comparator INSTANCE> = $r0;
+
+        return;
+    }
+}

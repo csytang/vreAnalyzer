@@ -1,0 +1,140 @@
+public abstract class org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator extends java.lang.Object implements org.apache.mahout.cf.taste.model.IDMigrator
+{
+    private final java.security.MessageDigest md5Digest;
+
+    protected void <init>()
+    {
+        org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator r0;
+        java.security.MessageDigest $r2;
+        java.security.NoSuchAlgorithmException $r3;
+        java.lang.IllegalStateException $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+     label1:
+        $r2 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("MD5");
+
+        r0.<org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator: java.security.MessageDigest md5Digest> = $r2;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r3 := @caughtexception;
+
+        $r4 = new java.lang.IllegalStateException;
+
+        specialinvoke $r4.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r3);
+
+        throw $r4;
+
+     label4:
+        return;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label2 with label3;
+    }
+
+    protected final long hash(java.lang.String)
+    {
+        org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator r0;
+        java.lang.String r1;
+        byte[] r2, $r7;
+        java.security.MessageDigest $r4, $r6, $r8;
+        java.nio.charset.Charset $r5;
+        byte $b0;
+        long $l1, $l2, $l3, l4;
+        java.lang.Throwable $r9;
+        int i5;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator: java.security.MessageDigest md5Digest>;
+
+        entermonitor $r4;
+
+     label1:
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator: java.security.MessageDigest md5Digest>;
+
+        $r5 = <org.apache.commons.io.Charsets: java.nio.charset.Charset UTF_8>;
+
+        $r7 = virtualinvoke r1.<java.lang.String: byte[] getBytes(java.nio.charset.Charset)>($r5);
+
+        r2 = virtualinvoke $r6.<java.security.MessageDigest: byte[] digest(byte[])>($r7);
+
+        $r8 = r0.<org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator: java.security.MessageDigest md5Digest>;
+
+        virtualinvoke $r8.<java.security.MessageDigest: void reset()>();
+
+        exitmonitor $r4;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r9 := @caughtexception;
+
+        exitmonitor $r4;
+
+     label4:
+        throw $r9;
+
+     label5:
+        l4 = 0L;
+
+        i5 = 0;
+
+     label6:
+        if i5 >= 8 goto label7;
+
+        $l3 = l4 << 8;
+
+        $b0 = r2[i5];
+
+        $l1 = (long) $b0;
+
+        $l2 = $l1 & 255L;
+
+        l4 = $l3 | $l2;
+
+        i5 = i5 + 1;
+
+        goto label6;
+
+     label7:
+        return l4;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public long toLongID(java.lang.String)
+    {
+        org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator r0;
+        java.lang.String r1;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator;
+
+        r1 := @parameter0: java.lang.String;
+
+        $l0 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator: long hash(java.lang.String)>(r1);
+
+        return $l0;
+    }
+
+    public void refresh(java.util.Collection)
+    {
+        org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator r0;
+        java.util.Collection r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator;
+
+        r1 := @parameter0: java.util.Collection;
+
+        return;
+    }
+}

@@ -1,0 +1,269 @@
+public class org.apache.mahout.common.Parameters extends java.lang.Object
+{
+    private static final org.slf4j.Logger log;
+    private java.util.Map params;
+
+    public void <init>()
+    {
+        org.apache.mahout.common.Parameters r0;
+        java.util.HashMap $r1;
+
+        r0 := @this: org.apache.mahout.common.Parameters;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = staticinvoke <com.google.common.collect.Maps: java.util.HashMap newHashMap()>();
+
+        r0.<org.apache.mahout.common.Parameters: java.util.Map params> = $r1;
+
+        return;
+    }
+
+    public void <init>(java.lang.String) throws java.io.IOException
+    {
+        org.apache.mahout.common.Parameters r0;
+        java.lang.String r1;
+        java.util.Map $r2;
+
+        r0 := @this: org.apache.mahout.common.Parameters;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = staticinvoke <org.apache.mahout.common.Parameters: java.util.Map parseParams(java.lang.String)>(r1);
+
+        specialinvoke r0.<org.apache.mahout.common.Parameters: void <init>(java.util.Map)>($r2);
+
+        return;
+    }
+
+    protected void <init>(java.util.Map)
+    {
+        org.apache.mahout.common.Parameters r0;
+        java.util.Map r1;
+        java.util.HashMap $r2;
+
+        r0 := @this: org.apache.mahout.common.Parameters;
+
+        r1 := @parameter0: java.util.Map;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = staticinvoke <com.google.common.collect.Maps: java.util.HashMap newHashMap()>();
+
+        r0.<org.apache.mahout.common.Parameters: java.util.Map params> = $r2;
+
+        r0.<org.apache.mahout.common.Parameters: java.util.Map params> = r1;
+
+        return;
+    }
+
+    public java.lang.String get(java.lang.String)
+    {
+        org.apache.mahout.common.Parameters r0;
+        java.lang.String r1, $r4;
+        java.util.Map $r2;
+        java.lang.Object $r3;
+
+        r0 := @this: org.apache.mahout.common.Parameters;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = r0.<org.apache.mahout.common.Parameters: java.util.Map params>;
+
+        $r3 = interfaceinvoke $r2.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        $r4 = (java.lang.String) $r3;
+
+        return $r4;
+    }
+
+    public java.lang.String get(java.lang.String, java.lang.String)
+    {
+        org.apache.mahout.common.Parameters r0;
+        java.lang.String r1, r2, r3, $r6;
+        java.util.Map $r4;
+        java.lang.Object $r5;
+
+        r0 := @this: org.apache.mahout.common.Parameters;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.lang.String;
+
+        $r4 = r0.<org.apache.mahout.common.Parameters: java.util.Map params>;
+
+        $r5 = interfaceinvoke $r4.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        r3 = (java.lang.String) $r5;
+
+        if r3 != null goto label1;
+
+        $r6 = r2;
+
+        goto label2;
+
+     label1:
+        $r6 = r3;
+
+     label2:
+        return $r6;
+    }
+
+    public void set(java.lang.String, java.lang.String)
+    {
+        org.apache.mahout.common.Parameters r0;
+        java.lang.String r1, r2;
+        java.util.Map $r3;
+
+        r0 := @this: org.apache.mahout.common.Parameters;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.lang.String;
+
+        $r3 = r0.<org.apache.mahout.common.Parameters: java.util.Map params>;
+
+        interfaceinvoke $r3.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, r2);
+
+        return;
+    }
+
+    public int getInt(java.lang.String, int)
+    {
+        org.apache.mahout.common.Parameters r0;
+        java.lang.String r1, r2;
+        int i0, $i1;
+        java.util.Map $r3;
+        java.lang.Object $r4;
+
+        r0 := @this: org.apache.mahout.common.Parameters;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        $r3 = r0.<org.apache.mahout.common.Parameters: java.util.Map params>;
+
+        $r4 = interfaceinvoke $r3.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        r2 = (java.lang.String) $r4;
+
+        if r2 != null goto label1;
+
+        $i1 = i0;
+
+        goto label2;
+
+     label1:
+        $i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>(r2);
+
+     label2:
+        return $i1;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.common.Parameters r0;
+        org.apache.hadoop.conf.Configuration $r4;
+        org.apache.hadoop.io.DefaultStringifier $r5;
+        java.util.Map $r6, $r8;
+        java.lang.Class $r7;
+        java.lang.String $r9;
+        java.io.IOException $r10;
+        org.slf4j.Logger $r11;
+
+        r0 := @this: org.apache.mahout.common.Parameters;
+
+        $r4 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r4.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        virtualinvoke $r4.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("io.serializations", "org.apache.hadoop.io.serializer.JavaSerialization,org.apache.hadoop.io.serializer.WritableSerialization");
+
+        $r5 = new org.apache.hadoop.io.DefaultStringifier;
+
+        $r6 = r0.<org.apache.mahout.common.Parameters: java.util.Map params>;
+
+        $r7 = staticinvoke <org.apache.hadoop.util.GenericsUtil: java.lang.Class getClass(java.lang.Object)>($r6);
+
+        specialinvoke $r5.<org.apache.hadoop.io.DefaultStringifier: void <init>(org.apache.hadoop.conf.Configuration,java.lang.Class)>($r4, $r7);
+
+     label1:
+        $r8 = r0.<org.apache.mahout.common.Parameters: java.util.Map params>;
+
+        $r9 = virtualinvoke $r5.<org.apache.hadoop.io.DefaultStringifier: java.lang.String toString(java.lang.Object)>($r8);
+
+     label2:
+        return $r9;
+
+     label3:
+        $r10 := @caughtexception;
+
+        $r11 = <org.apache.mahout.common.Parameters: org.slf4j.Logger log>;
+
+        interfaceinvoke $r11.<org.slf4j.Logger: void info(java.lang.String,java.lang.Throwable)>("Encountered IOException while deserializing returning empty string", $r10);
+
+        return "";
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public java.lang.String print()
+    {
+        org.apache.mahout.common.Parameters r0;
+        java.util.Map $r1;
+        java.lang.String $r2;
+
+        r0 := @this: org.apache.mahout.common.Parameters;
+
+        $r1 = r0.<org.apache.mahout.common.Parameters: java.util.Map params>;
+
+        $r2 = virtualinvoke $r1.<java.lang.Object: java.lang.String toString()>();
+
+        return $r2;
+    }
+
+    public static java.util.Map parseParams(java.lang.String) throws java.io.IOException
+    {
+        java.lang.String r0;
+        java.util.HashMap r2;
+        org.apache.hadoop.conf.Configuration $r4;
+        org.apache.hadoop.io.DefaultStringifier $r5;
+        java.lang.Class $r6;
+        java.lang.Object $r7;
+        java.util.Map $r8;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r4 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r4.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        virtualinvoke $r4.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("io.serializations", "org.apache.hadoop.io.serializer.JavaSerialization,org.apache.hadoop.io.serializer.WritableSerialization");
+
+        r2 = staticinvoke <com.google.common.collect.Maps: java.util.HashMap newHashMap()>();
+
+        $r5 = new org.apache.hadoop.io.DefaultStringifier;
+
+        $r6 = staticinvoke <org.apache.hadoop.util.GenericsUtil: java.lang.Class getClass(java.lang.Object)>(r2);
+
+        specialinvoke $r5.<org.apache.hadoop.io.DefaultStringifier: void <init>(org.apache.hadoop.conf.Configuration,java.lang.Class)>($r4, $r6);
+
+        $r7 = virtualinvoke $r5.<org.apache.hadoop.io.DefaultStringifier: java.lang.Object fromString(java.lang.String)>(r0);
+
+        $r8 = (java.util.Map) $r7;
+
+        return $r8;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/common/Parameters");
+
+        <org.apache.mahout.common.Parameters: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

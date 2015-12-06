@@ -1,0 +1,153 @@
+public class org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    public static final org.apache.hadoop.io.IntWritable SUM_OF_SQUARES;
+    public static final org.apache.hadoop.io.IntWritable SUM;
+    public static final org.apache.hadoop.io.IntWritable TOTAL_COUNT;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.IntWritable, org.apache.hadoop.io.Writable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper r0;
+        org.apache.hadoop.io.IntWritable r1, $r5, $r7, $r10;
+        org.apache.hadoop.io.Writable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        int $i0;
+        boolean $z0, $z1, $z2;
+        org.apache.hadoop.io.DoubleWritable $r4, $r6, $r8, $r9;
+        double $d0, d1;
+        long $l1;
+        org.apache.hadoop.io.LongWritable $r11;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: org.apache.hadoop.io.Writable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $i0 = virtualinvoke r1.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        if $i0 != -1 goto label1;
+
+        return;
+
+     label1:
+        d1 = #NaN;
+
+        $z0 = r2 instanceof org.apache.hadoop.io.LongWritable;
+
+        if $z0 == 0 goto label2;
+
+        $r11 = (org.apache.hadoop.io.LongWritable) r2;
+
+        $l1 = virtualinvoke $r11.<org.apache.hadoop.io.LongWritable: long get()>();
+
+        d1 = (double) $l1;
+
+        goto label3;
+
+     label2:
+        $z1 = r2 instanceof org.apache.hadoop.io.DoubleWritable;
+
+        if $z1 == 0 goto label3;
+
+        $r9 = (org.apache.hadoop.io.DoubleWritable) r2;
+
+        d1 = virtualinvoke $r9.<org.apache.hadoop.io.DoubleWritable: double get()>();
+
+     label3:
+        $z2 = staticinvoke <java.lang.Double: boolean isNaN(double)>(d1);
+
+        if $z2 != 0 goto label4;
+
+        $r5 = <org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper: org.apache.hadoop.io.IntWritable SUM_OF_SQUARES>;
+
+        $r4 = new org.apache.hadoop.io.DoubleWritable;
+
+        $d0 = d1 * d1;
+
+        specialinvoke $r4.<org.apache.hadoop.io.DoubleWritable: void <init>(double)>($d0);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r5, $r4);
+
+        $r7 = <org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper: org.apache.hadoop.io.IntWritable SUM>;
+
+        $r6 = new org.apache.hadoop.io.DoubleWritable;
+
+        specialinvoke $r6.<org.apache.hadoop.io.DoubleWritable: void <init>(double)>(d1);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r7, $r6);
+
+        $r10 = <org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper: org.apache.hadoop.io.IntWritable TOTAL_COUNT>;
+
+        $r8 = new org.apache.hadoop.io.DoubleWritable;
+
+        specialinvoke $r8.<org.apache.hadoop.io.DoubleWritable: void <init>(double)>(1.0);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r10, $r8);
+
+     label4:
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.hadoop.io.Writable $r4;
+        org.apache.hadoop.io.IntWritable $r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.IntWritable) r1;
+
+        $r4 = (org.apache.hadoop.io.Writable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper: void map(org.apache.hadoop.io.IntWritable,org.apache.hadoop.io.Writable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.apache.hadoop.io.IntWritable $r0, $r1, $r2;
+
+        $r0 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r0.<org.apache.hadoop.io.IntWritable: void <init>(int)>(1);
+
+        <org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper: org.apache.hadoop.io.IntWritable SUM_OF_SQUARES> = $r0;
+
+        $r1 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r1.<org.apache.hadoop.io.IntWritable: void <init>(int)>(2);
+
+        <org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper: org.apache.hadoop.io.IntWritable SUM> = $r1;
+
+        $r2 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r2.<org.apache.hadoop.io.IntWritable: void <init>(int)>(-1);
+
+        <org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper: org.apache.hadoop.io.IntWritable TOTAL_COUNT> = $r2;
+
+        return;
+    }
+}

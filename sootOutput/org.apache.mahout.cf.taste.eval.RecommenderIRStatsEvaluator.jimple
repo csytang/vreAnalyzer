@@ -1,0 +1,5 @@
+public interface  org.apache.mahout.cf.taste.eval.RecommenderIRStatsEvaluator extends java.lang.Object
+{
+
+    public abstract org.apache.mahout.cf.taste.eval.IRStatistics evaluate(org.apache.mahout.cf.taste.eval.RecommenderBuilder, org.apache.mahout.cf.taste.eval.DataModelBuilder, org.apache.mahout.cf.taste.model.DataModel, org.apache.mahout.cf.taste.recommender.IDRescorer, int, double, double) throws org.apache.mahout.cf.taste.common.TasteException;
+}

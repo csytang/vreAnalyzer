@@ -1,0 +1,241 @@
+public class org.apache.mahout.vectorizer.pruner.WordsPrunerReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+    private final org.apache.mahout.math.map.OpenIntLongHashMap dictionary;
+    private long maxDf;
+    private long minDf;
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.pruner.WordsPrunerReducer r0;
+        org.apache.mahout.math.map.OpenIntLongHashMap $r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.pruner.WordsPrunerReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.map.OpenIntLongHashMap;
+
+        specialinvoke $r1.<org.apache.mahout.math.map.OpenIntLongHashMap: void <init>()>();
+
+        r0.<org.apache.mahout.vectorizer.pruner.WordsPrunerReducer: org.apache.mahout.math.map.OpenIntLongHashMap dictionary> = $r1;
+
+        r0.<org.apache.mahout.vectorizer.pruner.WordsPrunerReducer: long maxDf> = 9223372036854775807L;
+
+        r0.<org.apache.mahout.vectorizer.pruner.WordsPrunerReducer: long minDf> = -1L;
+
+        return;
+    }
+
+    protected void reduce(org.apache.hadoop.io.WritableComparable, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.pruner.WordsPrunerReducer r0;
+        org.apache.hadoop.io.WritableComparable r1;
+        java.lang.Iterable r2, $r10;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        java.util.Iterator r4, r15;
+        org.apache.mahout.math.Vector r5, r6;
+        org.apache.mahout.math.Vector$Element r7;
+        long l0, $l1, $l6, $l7, $l11;
+        boolean $z0, $z1, $z2;
+        java.lang.Object $r8, $r11;
+        org.apache.mahout.math.VectorWritable $r9, $r12;
+        byte $b2, $b5, $b8, $b12;
+        int $i3, $i4, $i9, $i10;
+        org.apache.mahout.math.map.OpenIntLongHashMap $r13, $r14;
+
+        r0 := @this: org.apache.mahout.vectorizer.pruner.WordsPrunerReducer;
+
+        r1 := @parameter0: org.apache.hadoop.io.WritableComparable;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        r4 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r8 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r9 = (org.apache.mahout.math.VectorWritable) $r8;
+
+        r5 = virtualinvoke $r9.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        r6 = interfaceinvoke r5.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        $l1 = r0.<org.apache.mahout.vectorizer.pruner.WordsPrunerReducer: long maxDf>;
+
+        $b2 = $l1 cmp 9223372036854775807L;
+
+        if $b2 != 0 goto label2;
+
+        $l11 = r0.<org.apache.mahout.vectorizer.pruner.WordsPrunerReducer: long minDf>;
+
+        $b12 = $l11 cmp -1L;
+
+        if $b12 <= 0 goto label6;
+
+     label2:
+        $r10 = interfaceinvoke r5.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r15 = interfaceinvoke $r10.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label3:
+        $z2 = interfaceinvoke r15.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label6;
+
+        $r11 = interfaceinvoke r15.<java.util.Iterator: java.lang.Object next()>();
+
+        r7 = (org.apache.mahout.math.Vector$Element) $r11;
+
+        $r13 = r0.<org.apache.mahout.vectorizer.pruner.WordsPrunerReducer: org.apache.mahout.math.map.OpenIntLongHashMap dictionary>;
+
+        $i3 = interfaceinvoke r7.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $z1 = virtualinvoke $r13.<org.apache.mahout.math.map.OpenIntLongHashMap: boolean containsKey(int)>($i3);
+
+        if $z1 != 0 goto label4;
+
+        $i10 = interfaceinvoke r7.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        interfaceinvoke r6.<org.apache.mahout.math.Vector: void setQuick(int,double)>($i10, 0.0);
+
+        goto label3;
+
+     label4:
+        $r14 = r0.<org.apache.mahout.vectorizer.pruner.WordsPrunerReducer: org.apache.mahout.math.map.OpenIntLongHashMap dictionary>;
+
+        $i4 = interfaceinvoke r7.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        l0 = virtualinvoke $r14.<org.apache.mahout.math.map.OpenIntLongHashMap: long get(int)>($i4);
+
+        $l6 = r0.<org.apache.mahout.vectorizer.pruner.WordsPrunerReducer: long maxDf>;
+
+        $b5 = l0 cmp $l6;
+
+        if $b5 > 0 goto label5;
+
+        $l7 = r0.<org.apache.mahout.vectorizer.pruner.WordsPrunerReducer: long minDf>;
+
+        $b8 = l0 cmp $l7;
+
+        if $b8 >= 0 goto label3;
+
+     label5:
+        $i9 = interfaceinvoke r7.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        interfaceinvoke r6.<org.apache.mahout.math.Vector: void setQuick(int,double)>($i9, 0.0);
+
+        goto label3;
+
+     label6:
+        $r12 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r12.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r6);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r12);
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.pruner.WordsPrunerReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.hadoop.fs.Path r3;
+        java.util.Iterator r4;
+        org.apache.mahout.common.Pair r5;
+        long $l0, $l1, $l3;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable $r6;
+        boolean $z0;
+        java.lang.Object $r7, $r9, $r12;
+        org.apache.mahout.math.map.OpenIntLongHashMap $r8;
+        int $i2;
+        org.apache.hadoop.io.IntWritable $r10;
+        org.apache.hadoop.io.LongWritable $r11;
+
+        r0 := @this: org.apache.mahout.vectorizer.pruner.WordsPrunerReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void setup(org.apache.hadoop.mapreduce.Reducer$Context)>(r1);
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $l0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: long getLong(java.lang.String,long)>("max.df", 9223372036854775807L);
+
+        r0.<org.apache.mahout.vectorizer.pruner.WordsPrunerReducer: long maxDf> = $l0;
+
+        $l1 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: long getLong(java.lang.String,long)>("min.df", -1L);
+
+        r0.<org.apache.mahout.vectorizer.pruner.WordsPrunerReducer: long minDf> = $l1;
+
+        r3 = staticinvoke <org.apache.mahout.common.HadoopUtil: org.apache.hadoop.fs.Path getSingleCachedFile(org.apache.hadoop.conf.Configuration)>(r2);
+
+        $r6 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable;
+
+        specialinvoke $r6.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable: void <init>(org.apache.hadoop.fs.Path,boolean,org.apache.hadoop.conf.Configuration)>(r3, 1, r2);
+
+        r4 = virtualinvoke $r6.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r7 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.common.Pair) $r7;
+
+        $r8 = r0.<org.apache.mahout.vectorizer.pruner.WordsPrunerReducer: org.apache.mahout.math.map.OpenIntLongHashMap dictionary>;
+
+        $r9 = virtualinvoke r5.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r10 = (org.apache.hadoop.io.IntWritable) $r9;
+
+        $i2 = virtualinvoke $r10.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $r12 = virtualinvoke r5.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r11 = (org.apache.hadoop.io.LongWritable) $r12;
+
+        $l3 = virtualinvoke $r11.<org.apache.hadoop.io.LongWritable: long get()>();
+
+        virtualinvoke $r8.<org.apache.mahout.math.map.OpenIntLongHashMap: boolean put(int,long)>($i2, $l3);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    protected volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.pruner.WordsPrunerReducer r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.hadoop.io.WritableComparable $r4;
+
+        r0 := @this: org.apache.mahout.vectorizer.pruner.WordsPrunerReducer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.hadoop.io.WritableComparable) r1;
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.pruner.WordsPrunerReducer: void reduce(org.apache.hadoop.io.WritableComparable,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+}

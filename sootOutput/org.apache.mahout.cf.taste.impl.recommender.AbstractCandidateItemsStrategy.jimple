@@ -1,0 +1,91 @@
+public abstract class org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy extends java.lang.Object implements org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy, org.apache.mahout.cf.taste.recommender.MostSimilarItemsCandidateItemsStrategy
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    protected org.apache.mahout.cf.taste.impl.common.FastIDSet doGetCandidateItems(long[], org.apache.mahout.cf.taste.model.DataModel) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy r0;
+        long[] r1;
+        org.apache.mahout.cf.taste.model.DataModel r2;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy;
+
+        r1 := @parameter0: long[];
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.model.DataModel;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy: org.apache.mahout.cf.taste.impl.common.FastIDSet doGetCandidateItems(long[],org.apache.mahout.cf.taste.model.DataModel,boolean)>(r1, r2, 0);
+
+        return $r3;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.FastIDSet getCandidateItems(long, org.apache.mahout.cf.taste.model.PreferenceArray, org.apache.mahout.cf.taste.model.DataModel, boolean) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy r0;
+        long l0;
+        org.apache.mahout.cf.taste.model.PreferenceArray r1;
+        org.apache.mahout.cf.taste.model.DataModel r2;
+        boolean z0;
+        long[] $r3;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: org.apache.mahout.cf.taste.model.PreferenceArray;
+
+        r2 := @parameter2: org.apache.mahout.cf.taste.model.DataModel;
+
+        z0 := @parameter3: boolean;
+
+        $r3 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.PreferenceArray: long[] getIDs()>();
+
+        $r4 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy: org.apache.mahout.cf.taste.impl.common.FastIDSet doGetCandidateItems(long[],org.apache.mahout.cf.taste.model.DataModel,boolean)>($r3, r2, z0);
+
+        return $r4;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.FastIDSet getCandidateItems(long[], org.apache.mahout.cf.taste.model.DataModel) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy r0;
+        long[] r1;
+        org.apache.mahout.cf.taste.model.DataModel r2;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy;
+
+        r1 := @parameter0: long[];
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.model.DataModel;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy: org.apache.mahout.cf.taste.impl.common.FastIDSet doGetCandidateItems(long[],org.apache.mahout.cf.taste.model.DataModel,boolean)>(r1, r2, 0);
+
+        return $r3;
+    }
+
+    protected abstract org.apache.mahout.cf.taste.impl.common.FastIDSet doGetCandidateItems(long[], org.apache.mahout.cf.taste.model.DataModel, boolean) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public void refresh(java.util.Collection)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy r0;
+        java.util.Collection r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy;
+
+        r1 := @parameter0: java.util.Collection;
+
+        return;
+    }
+}

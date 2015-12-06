@@ -1,0 +1,147 @@
+public final class org.apache.mahout.common.CommandLineUtil extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.common.CommandLineUtil r0;
+
+        r0 := @this: org.apache.mahout.common.CommandLineUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void printHelp(org.apache.commons.cli2.Group)
+    {
+        org.apache.commons.cli2.Group r0;
+        org.apache.commons.cli2.util.HelpFormatter $r2;
+
+        r0 := @parameter0: org.apache.commons.cli2.Group;
+
+        $r2 = new org.apache.commons.cli2.util.HelpFormatter;
+
+        specialinvoke $r2.<org.apache.commons.cli2.util.HelpFormatter: void <init>()>();
+
+        virtualinvoke $r2.<org.apache.commons.cli2.util.HelpFormatter: void setGroup(org.apache.commons.cli2.Group)>(r0);
+
+        virtualinvoke $r2.<org.apache.commons.cli2.util.HelpFormatter: void print()>();
+
+        return;
+    }
+
+    public static void printHelpWithGenericOptions(org.apache.commons.cli2.Group) throws java.io.IOException
+    {
+        org.apache.commons.cli2.Group r0;
+        org.apache.hadoop.util.GenericOptionsParser $r3;
+        org.apache.hadoop.conf.Configuration $r4;
+        org.apache.commons.cli.Options $r5;
+        java.lang.String[] $r6;
+        java.io.PrintWriter $r7;
+        java.io.OutputStreamWriter $r8;
+        java.nio.charset.Charset $r9;
+        java.io.PrintStream $r10;
+        org.apache.commons.cli2.util.HelpFormatter $r11;
+
+        r0 := @parameter0: org.apache.commons.cli2.Group;
+
+        $r3 = new org.apache.hadoop.util.GenericOptionsParser;
+
+        $r4 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r4.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r5 = new org.apache.commons.cli.Options;
+
+        specialinvoke $r5.<org.apache.commons.cli.Options: void <init>()>();
+
+        $r6 = newarray (java.lang.String)[0];
+
+        specialinvoke $r3.<org.apache.hadoop.util.GenericOptionsParser: void <init>(org.apache.hadoop.conf.Configuration,org.apache.commons.cli.Options,java.lang.String[])>($r4, $r5, $r6);
+
+        $r7 = new java.io.PrintWriter;
+
+        $r8 = new java.io.OutputStreamWriter;
+
+        $r10 = <java.lang.System: java.io.PrintStream out>;
+
+        $r9 = <org.apache.commons.io.Charsets: java.nio.charset.Charset UTF_8>;
+
+        specialinvoke $r8.<java.io.OutputStreamWriter: void <init>(java.io.OutputStream,java.nio.charset.Charset)>($r10, $r9);
+
+        specialinvoke $r7.<java.io.PrintWriter: void <init>(java.io.Writer,boolean)>($r8, 1);
+
+        $r11 = new org.apache.commons.cli2.util.HelpFormatter;
+
+        specialinvoke $r11.<org.apache.commons.cli2.util.HelpFormatter: void <init>()>();
+
+        virtualinvoke $r11.<org.apache.commons.cli2.util.HelpFormatter: void setGroup(org.apache.commons.cli2.Group)>(r0);
+
+        virtualinvoke $r11.<org.apache.commons.cli2.util.HelpFormatter: void setPrintWriter(java.io.PrintWriter)>($r7);
+
+        virtualinvoke $r11.<org.apache.commons.cli2.util.HelpFormatter: void setFooter(java.lang.String)>("Specify HDFS directories while running on hadoop; else specify local file system directories");
+
+        virtualinvoke $r11.<org.apache.commons.cli2.util.HelpFormatter: void print()>();
+
+        return;
+    }
+
+    public static void printHelpWithGenericOptions(org.apache.commons.cli2.Group, org.apache.commons.cli2.OptionException) throws java.io.IOException
+    {
+        org.apache.commons.cli2.Group r0;
+        org.apache.commons.cli2.OptionException r1;
+        org.apache.hadoop.util.GenericOptionsParser $r4;
+        org.apache.hadoop.conf.Configuration $r5;
+        org.apache.commons.cli.Options $r6;
+        java.lang.String[] $r7;
+        java.io.PrintWriter $r8;
+        java.io.OutputStreamWriter $r9;
+        java.nio.charset.Charset $r10;
+        java.io.PrintStream $r11;
+        org.apache.commons.cli2.util.HelpFormatter $r12;
+
+        r0 := @parameter0: org.apache.commons.cli2.Group;
+
+        r1 := @parameter1: org.apache.commons.cli2.OptionException;
+
+        $r4 = new org.apache.hadoop.util.GenericOptionsParser;
+
+        $r5 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r5.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r6 = new org.apache.commons.cli.Options;
+
+        specialinvoke $r6.<org.apache.commons.cli.Options: void <init>()>();
+
+        $r7 = newarray (java.lang.String)[0];
+
+        specialinvoke $r4.<org.apache.hadoop.util.GenericOptionsParser: void <init>(org.apache.hadoop.conf.Configuration,org.apache.commons.cli.Options,java.lang.String[])>($r5, $r6, $r7);
+
+        $r8 = new java.io.PrintWriter;
+
+        $r9 = new java.io.OutputStreamWriter;
+
+        $r11 = <java.lang.System: java.io.PrintStream out>;
+
+        $r10 = <org.apache.commons.io.Charsets: java.nio.charset.Charset UTF_8>;
+
+        specialinvoke $r9.<java.io.OutputStreamWriter: void <init>(java.io.OutputStream,java.nio.charset.Charset)>($r11, $r10);
+
+        specialinvoke $r8.<java.io.PrintWriter: void <init>(java.io.Writer,boolean)>($r9, 1);
+
+        $r12 = new org.apache.commons.cli2.util.HelpFormatter;
+
+        specialinvoke $r12.<org.apache.commons.cli2.util.HelpFormatter: void <init>()>();
+
+        virtualinvoke $r12.<org.apache.commons.cli2.util.HelpFormatter: void setGroup(org.apache.commons.cli2.Group)>(r0);
+
+        virtualinvoke $r12.<org.apache.commons.cli2.util.HelpFormatter: void setPrintWriter(java.io.PrintWriter)>($r8);
+
+        virtualinvoke $r12.<org.apache.commons.cli2.util.HelpFormatter: void setException(org.apache.commons.cli2.OptionException)>(r1);
+
+        virtualinvoke $r12.<org.apache.commons.cli2.util.HelpFormatter: void print()>();
+
+        return;
+    }
+}

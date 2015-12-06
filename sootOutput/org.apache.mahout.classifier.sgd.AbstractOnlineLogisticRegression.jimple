@@ -1,0 +1,792 @@
+public abstract class org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression extends org.apache.mahout.classifier.AbstractVectorClassifier implements org.apache.mahout.classifier.OnlineLearner
+{
+    protected org.apache.mahout.math.Matrix beta;
+    protected int numCategories;
+    protected int step;
+    protected org.apache.mahout.math.Vector updateSteps;
+    protected org.apache.mahout.math.Vector updateCounts;
+    private double lambda;
+    protected org.apache.mahout.classifier.sgd.PriorFunction prior;
+    private boolean sealed;
+    private org.apache.mahout.classifier.sgd.Gradient gradient;
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        org.apache.mahout.classifier.sgd.DefaultGradient $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        specialinvoke r0.<org.apache.mahout.classifier.AbstractVectorClassifier: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: double lambda> = 1.0E-5;
+
+        $r1 = new org.apache.mahout.classifier.sgd.DefaultGradient;
+
+        specialinvoke $r1.<org.apache.mahout.classifier.sgd.DefaultGradient: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.classifier.sgd.Gradient gradient> = $r1;
+
+        return;
+    }
+
+    public org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression lambda(double)
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: double lambda> = d0;
+
+        return r0;
+    }
+
+    public static org.apache.mahout.math.Vector link(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.Vector r0, $r3, $r5, $r8;
+        double d0, $d1, $d2, $d3;
+        byte $b0;
+        org.apache.mahout.math.function.DoubleFunction $r1, $r4, $r6;
+
+        r0 := @parameter0: org.apache.mahout.math.Vector;
+
+        d0 = interfaceinvoke r0.<org.apache.mahout.math.Vector: double maxValue()>();
+
+        $b0 = d0 cmpl 40.0;
+
+        if $b0 < 0 goto label1;
+
+        $r4 = staticinvoke <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleFunction minus(double)>(d0);
+
+        $r5 = interfaceinvoke r0.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.function.DoubleFunction)>($r4);
+
+        $r6 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleFunction EXP>;
+
+        interfaceinvoke $r5.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.function.DoubleFunction)>($r6);
+
+        $d3 = interfaceinvoke r0.<org.apache.mahout.math.Vector: double norm(double)>(1.0);
+
+        $r8 = interfaceinvoke r0.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector divide(double)>($d3);
+
+        return $r8;
+
+     label1:
+        $r1 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleFunction EXP>;
+
+        interfaceinvoke r0.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.function.DoubleFunction)>($r1);
+
+        $d1 = interfaceinvoke r0.<org.apache.mahout.math.Vector: double norm(double)>(1.0);
+
+        $d2 = 1.0 + $d1;
+
+        $r3 = interfaceinvoke r0.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector divide(double)>($d2);
+
+        return $r3;
+    }
+
+    public static double link(double)
+    {
+        double d0, $d1, $d2, $d3, $d4, $d5, d6, d7;
+        byte $b0;
+
+        d0 := @parameter0: double;
+
+        $b0 = d0 cmpg 0.0;
+
+        if $b0 >= 0 goto label1;
+
+        d6 = staticinvoke <java.lang.Math: double exp(double)>(d0);
+
+        $d4 = 1.0 + d6;
+
+        $d5 = d6 / $d4;
+
+        return $d5;
+
+     label1:
+        $d1 = neg d0;
+
+        d7 = staticinvoke <java.lang.Math: double exp(double)>($d1);
+
+        $d2 = 1.0 + d7;
+
+        $d3 = 1.0 / $d2;
+
+        return $d3;
+    }
+
+    public org.apache.mahout.math.Vector classifyNoLink(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        org.apache.mahout.math.Vector r1, $r3;
+        org.apache.mahout.math.Matrix $r2;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: void regularize(org.apache.mahout.math.Vector)>(r1);
+
+        $r2 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Matrix beta>;
+
+        $r3 = interfaceinvoke $r2.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Vector times(org.apache.mahout.math.Vector)>(r1);
+
+        return $r3;
+    }
+
+    public double classifyScalarNoLink(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        org.apache.mahout.math.Vector r1, $r3;
+        org.apache.mahout.math.Matrix $r2;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $r2 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Matrix beta>;
+
+        $r3 = interfaceinvoke $r2.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Vector viewRow(int)>(0);
+
+        $d0 = interfaceinvoke $r3.<org.apache.mahout.math.Vector: double dot(org.apache.mahout.math.Vector)>(r1);
+
+        return $d0;
+    }
+
+    public org.apache.mahout.math.Vector classify(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        org.apache.mahout.math.Vector r1, $r2, $r3;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $r2 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Vector classifyNoLink(org.apache.mahout.math.Vector)>(r1);
+
+        $r3 = staticinvoke <org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Vector link(org.apache.mahout.math.Vector)>($r2);
+
+        return $r3;
+    }
+
+    public double classifyScalar(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        org.apache.mahout.math.Vector r1;
+        int $i0;
+        double $d0, $d1;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: int numCategories()>();
+
+        if $i0 != 2 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "Can only call classifyScalar with two categories");
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: void regularize(org.apache.mahout.math.Vector)>(r1);
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: double classifyScalarNoLink(org.apache.mahout.math.Vector)>(r1);
+
+        $d1 = staticinvoke <org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: double link(double)>($d0);
+
+        return $d1;
+    }
+
+    public void train(long, java.lang.String, int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        long l0;
+        java.lang.String r1;
+        int i1, i2, i3, $i4, $i5, $i6, i7;
+        org.apache.mahout.math.Vector r2, r3, $r9, $r10;
+        double d0, d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, d9;
+        java.util.Iterator r4, r15;
+        org.apache.mahout.math.Vector$Element r5, r16;
+        org.apache.mahout.classifier.sgd.Gradient $r6;
+        java.lang.Iterable $r7, $r11;
+        java.lang.Object $r8, $r12;
+        boolean $z0, $z1;
+        org.apache.mahout.math.Matrix $r13, $r14;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: java.lang.String;
+
+        i1 := @parameter2: int;
+
+        r2 := @parameter3: org.apache.mahout.math.Vector;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: void unseal()>();
+
+        d0 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: double currentLearningRate()>();
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: void regularize(org.apache.mahout.math.Vector)>(r2);
+
+        $r6 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.classifier.sgd.Gradient gradient>;
+
+        r3 = interfaceinvoke $r6.<org.apache.mahout.classifier.sgd.Gradient: org.apache.mahout.math.Vector apply(java.lang.String,int,org.apache.mahout.math.Vector,org.apache.mahout.classifier.AbstractVectorClassifier)>(r1, i1, r2, r0);
+
+        i7 = 0;
+
+     label1:
+        $i5 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: int numCategories>;
+
+        $i4 = $i5 - 1;
+
+        if i7 >= $i4 goto label4;
+
+        d9 = interfaceinvoke r3.<org.apache.mahout.math.Vector: double get(int)>(i7);
+
+        $r11 = interfaceinvoke r2.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r4 = interfaceinvoke $r11.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label2:
+        $z1 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label3;
+
+        $r12 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.Vector$Element) $r12;
+
+        i3 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $r13 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Matrix beta>;
+
+        $d3 = interfaceinvoke $r13.<org.apache.mahout.math.Matrix: double getQuick(int,int)>(i7, i3);
+
+        $d4 = d9 * d0;
+
+        $d7 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: double perTermLearningRate(int)>(i3);
+
+        $d8 = $d4 * $d7;
+
+        $d5 = interfaceinvoke r2.<org.apache.mahout.math.Vector: double get(int)>(i3);
+
+        $d6 = $d8 * $d5;
+
+        d1 = $d3 + $d6;
+
+        $r14 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Matrix beta>;
+
+        interfaceinvoke $r14.<org.apache.mahout.math.Matrix: void setQuick(int,int,double)>(i7, i3, d1);
+
+        goto label2;
+
+     label3:
+        i7 = i7 + 1;
+
+        goto label1;
+
+     label4:
+        $r7 = interfaceinvoke r2.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r15 = interfaceinvoke $r7.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label5:
+        $z0 = interfaceinvoke r15.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label6;
+
+        $r8 = interfaceinvoke r15.<java.util.Iterator: java.lang.Object next()>();
+
+        r16 = (org.apache.mahout.math.Vector$Element) $r8;
+
+        i2 = interfaceinvoke r16.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $r9 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Vector updateSteps>;
+
+        $i6 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: int getStep()>();
+
+        $d2 = (double) $i6;
+
+        interfaceinvoke $r9.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i2, $d2);
+
+        $r10 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Vector updateCounts>;
+
+        interfaceinvoke $r10.<org.apache.mahout.math.Vector: void incrementQuick(int,double)>(i2, 1.0);
+
+        goto label5;
+
+     label6:
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: void nextStep()>();
+
+        return;
+    }
+
+    public void train(long, int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        long l0;
+        int i1;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        r1 := @parameter2: org.apache.mahout.math.Vector;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: void train(long,java.lang.String,int,org.apache.mahout.math.Vector)>(l0, null, i1, r1);
+
+        return;
+    }
+
+    public void train(int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        int i0;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: void train(long,java.lang.String,int,org.apache.mahout.math.Vector)>(0L, null, i0, r1);
+
+        return;
+    }
+
+    public void regularize(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        org.apache.mahout.math.Vector r1, $r4, $r7, $r11;
+        double d0, d1, d2, d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10;
+        java.util.Iterator r2;
+        org.apache.mahout.math.Vector$Element r3;
+        int i0, $i1, $i2, $i3, $i5, i6;
+        boolean $z0, $z1;
+        java.lang.Iterable $r5;
+        java.lang.Object $r6;
+        byte $b4;
+        org.apache.mahout.math.Matrix $r8, $r10;
+        org.apache.mahout.classifier.sgd.PriorFunction $r9;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $r4 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Vector updateSteps>;
+
+        if $r4 == null goto label1;
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: boolean isSealed()>();
+
+        if $z0 == 0 goto label2;
+
+     label1:
+        return;
+
+     label2:
+        d0 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: double currentLearningRate()>();
+
+        i6 = 0;
+
+     label3:
+        $i1 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: int numCategories>;
+
+        $i2 = $i1 - 1;
+
+        if i6 >= $i2 goto label6;
+
+        $r5 = interfaceinvoke r1.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r2 = interfaceinvoke $r5.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label4:
+        $z1 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label5;
+
+        $r6 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.math.Vector$Element) $r6;
+
+        i0 = interfaceinvoke r3.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $i3 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: int getStep()>();
+
+        $d4 = (double) $i3;
+
+        $r7 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Vector updateSteps>;
+
+        $d5 = interfaceinvoke $r7.<org.apache.mahout.math.Vector: double get(int)>(i0);
+
+        d1 = $d4 - $d5;
+
+        $b4 = d1 cmpl 0.0;
+
+        if $b4 <= 0 goto label4;
+
+        $d8 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: double getLambda()>();
+
+        $d6 = $d8 * d0;
+
+        $d7 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: double perTermLearningRate(int)>(i0);
+
+        d2 = $d6 * $d7;
+
+        $r9 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.classifier.sgd.PriorFunction prior>;
+
+        $r8 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Matrix beta>;
+
+        $d9 = interfaceinvoke $r8.<org.apache.mahout.math.Matrix: double get(int,int)>(i6, i0);
+
+        d3 = interfaceinvoke $r9.<org.apache.mahout.classifier.sgd.PriorFunction: double age(double,double,double)>($d9, d1, d2);
+
+        $r10 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Matrix beta>;
+
+        interfaceinvoke $r10.<org.apache.mahout.math.Matrix: void set(int,int,double)>(i6, i0, d3);
+
+        $r11 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Vector updateSteps>;
+
+        $i5 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: int getStep()>();
+
+        $d10 = (double) $i5;
+
+        interfaceinvoke $r11.<org.apache.mahout.math.Vector: void set(int,double)>(i0, $d10);
+
+        goto label4;
+
+     label5:
+        i6 = i6 + 1;
+
+        goto label3;
+
+     label6:
+        return;
+    }
+
+    public abstract double perTermLearningRate(int);
+
+    public abstract double currentLearningRate();
+
+    public void setPrior(org.apache.mahout.classifier.sgd.PriorFunction)
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        org.apache.mahout.classifier.sgd.PriorFunction r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        r1 := @parameter0: org.apache.mahout.classifier.sgd.PriorFunction;
+
+        r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.classifier.sgd.PriorFunction prior> = r1;
+
+        return;
+    }
+
+    public void setGradient(org.apache.mahout.classifier.sgd.Gradient)
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        org.apache.mahout.classifier.sgd.Gradient r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        r1 := @parameter0: org.apache.mahout.classifier.sgd.Gradient;
+
+        r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.classifier.sgd.Gradient gradient> = r1;
+
+        return;
+    }
+
+    public org.apache.mahout.classifier.sgd.PriorFunction getPrior()
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        org.apache.mahout.classifier.sgd.PriorFunction $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.classifier.sgd.PriorFunction prior>;
+
+        return $r1;
+    }
+
+    public org.apache.mahout.math.Matrix getBeta()
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        org.apache.mahout.math.Matrix $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: void close()>();
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Matrix beta>;
+
+        return $r1;
+    }
+
+    public void setBeta(int, int, double)
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        int i0, i1;
+        double d0;
+        org.apache.mahout.math.Matrix $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        d0 := @parameter2: double;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Matrix beta>;
+
+        interfaceinvoke $r1.<org.apache.mahout.math.Matrix: void set(int,int,double)>(i0, i1, d0);
+
+        return;
+    }
+
+    public int numCategories()
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: int numCategories>;
+
+        return $i0;
+    }
+
+    public int numFeatures()
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        org.apache.mahout.math.Matrix $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Matrix beta>;
+
+        $i0 = interfaceinvoke $r1.<org.apache.mahout.math.Matrix: int numCols()>();
+
+        return $i0;
+    }
+
+    public double getLambda()
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        $d0 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: double lambda>;
+
+        return $d0;
+    }
+
+    public int getStep()
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: int step>;
+
+        return $i0;
+    }
+
+    protected void nextStep()
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        int $i0, $i1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: int step>;
+
+        $i1 = $i0 + 1;
+
+        r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: int step> = $i1;
+
+        return;
+    }
+
+    public boolean isSealed()
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        $z0 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: boolean sealed>;
+
+        return $z0;
+    }
+
+    protected void unseal()
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: boolean sealed> = 0;
+
+        return;
+    }
+
+    private void regularizeAll()
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        org.apache.mahout.math.DenseVector $r2;
+        org.apache.mahout.math.Matrix $r3;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        $r2 = new org.apache.mahout.math.DenseVector;
+
+        $r3 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Matrix beta>;
+
+        $i0 = interfaceinvoke $r3.<org.apache.mahout.math.Matrix: int numCols()>();
+
+        specialinvoke $r2.<org.apache.mahout.math.DenseVector: void <init>(int)>($i0);
+
+        interfaceinvoke $r2.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(double)>(1.0);
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: void regularize(org.apache.mahout.math.Vector)>($r2);
+
+        return;
+    }
+
+    public void close()
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        boolean $z0;
+        int $i0, $i1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        $z0 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: boolean sealed>;
+
+        if $z0 != 0 goto label1;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: int step>;
+
+        $i1 = $i0 + 1;
+
+        r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: int step> = $i1;
+
+        specialinvoke r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: void regularizeAll()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: boolean sealed> = 1;
+
+     label1:
+        return;
+    }
+
+    public void copyFrom(org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression)
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0, r1;
+        int $i0, $i1, $i2;
+        org.apache.mahout.math.Matrix $r2, $r3;
+        org.apache.mahout.math.Vector $r5, $r6, $r8, $r9;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        r1 := @parameter0: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        $i1 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: int numCategories>;
+
+        $i0 = r1.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: int numCategories>;
+
+        if $i1 != $i0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "Can\'t copy unless number of target categories is the same");
+
+        $r3 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Matrix beta>;
+
+        $r2 = r1.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Matrix beta>;
+
+        interfaceinvoke $r3.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Matrix assign(org.apache.mahout.math.Matrix)>($r2);
+
+        $i2 = r1.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: int step>;
+
+        r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: int step> = $i2;
+
+        $r6 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Vector updateSteps>;
+
+        $r5 = r1.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Vector updateSteps>;
+
+        interfaceinvoke $r6.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector)>($r5);
+
+        $r9 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Vector updateCounts>;
+
+        $r8 = r1.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Vector updateCounts>;
+
+        interfaceinvoke $r9.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector)>($r8);
+
+        return;
+    }
+
+    public boolean validModel()
+    {
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression r0;
+        double d0;
+        org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression$1 $r1;
+        org.apache.mahout.math.Matrix $r2;
+        org.apache.mahout.math.function.DoubleDoubleFunction $r3;
+        byte $b0;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression;
+
+        $r2 = r0.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression: org.apache.mahout.math.Matrix beta>;
+
+        $r3 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction PLUS>;
+
+        $r1 = new org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression$1;
+
+        specialinvoke $r1.<org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression$1: void <init>(org.apache.mahout.classifier.sgd.AbstractOnlineLogisticRegression)>(r0);
+
+        d0 = interfaceinvoke $r2.<org.apache.mahout.math.Matrix: double aggregate(org.apache.mahout.math.function.DoubleDoubleFunction,org.apache.mahout.math.function.DoubleFunction)>($r3, $r1);
+
+        $b0 = d0 cmpg 1.0;
+
+        if $b0 >= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+}

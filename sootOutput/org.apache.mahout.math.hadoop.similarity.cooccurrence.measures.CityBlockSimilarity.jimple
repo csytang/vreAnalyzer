@@ -1,0 +1,43 @@
+public class org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CityBlockSimilarity extends org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CountbasedMeasure
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CityBlockSimilarity r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CityBlockSimilarity;
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CountbasedMeasure: void <init>()>();
+
+        return;
+    }
+
+    public double similarity(double, double, double, int)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CityBlockSimilarity r0;
+        double d0, d1, d2, $d3, $d4, $d5, $d6, $d7;
+        int i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CityBlockSimilarity;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        d2 := @parameter2: double;
+
+        i0 := @parameter3: int;
+
+        $d3 = 1.0 + d1;
+
+        $d5 = $d3 + d2;
+
+        $d4 = 2.0 * d0;
+
+        $d6 = $d5 - $d4;
+
+        $d7 = 1.0 / $d6;
+
+        return $d7;
+    }
+}

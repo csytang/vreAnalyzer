@@ -1,0 +1,357 @@
+public class org.apache.mahout.vectorizer.term.TFPartialVectorReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+    private final org.apache.mahout.math.map.OpenObjectIntHashMap dictionary;
+    private int dimension;
+    private boolean sequentialAccess;
+    private boolean namedVector;
+    private int maxNGramSize;
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.term.TFPartialVectorReducer r0;
+        org.apache.mahout.math.map.OpenObjectIntHashMap $r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.term.TFPartialVectorReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.map.OpenObjectIntHashMap;
+
+        specialinvoke $r1.<org.apache.mahout.math.map.OpenObjectIntHashMap: void <init>()>();
+
+        r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: org.apache.mahout.math.map.OpenObjectIntHashMap dictionary> = $r1;
+
+        r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: int maxNGramSize> = 1;
+
+        return;
+    }
+
+    protected void reduce(org.apache.hadoop.io.Text, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.term.TFPartialVectorReducer r0;
+        org.apache.hadoop.io.Text r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        java.util.Iterator r4, $r16, r30;
+        java.util.ArrayList r5;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z10;
+        org.apache.mahout.math.RandomAccessSparseVector $r7;
+        int $i0, $i1, $i2, $i3, $i4, i5, i6;
+        org.apache.mahout.math.VectorWritable $r8;
+        org.apache.hadoop.mapreduce.Counter $r9;
+        java.lang.String $r10, r29, r31;
+        org.apache.mahout.math.NamedVector $r11;
+        org.apache.mahout.math.SequentialAccessSparseVector $r12;
+        java.lang.Object $r13, $r25;
+        org.apache.mahout.math.map.OpenObjectIntHashMap $r14, $r15, $r21, $r22;
+        double $d0, $d1, $d2, $d3;
+        org.apache.lucene.analysis.shingle.ShingleFilter $r17;
+        org.apache.mahout.common.lucene.IteratorTokenStream $r18;
+        org.apache.lucene.util.Attribute $r19;
+        org.apache.lucene.analysis.tokenattributes.CharTermAttribute $r20;
+        java.util.List $r23;
+        org.apache.mahout.common.StringTuple $r24;
+        java.lang.Throwable $r26;
+        org.apache.mahout.math.Vector r27;
+
+        r0 := @this: org.apache.mahout.vectorizer.term.TFPartialVectorReducer;
+
+        r1 := @parameter0: org.apache.hadoop.io.Text;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        r4 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 != 0 goto label01;
+
+        return;
+
+     label01:
+        r5 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList()>();
+
+     label02:
+        $z1 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label03;
+
+        $r25 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        $r24 = (org.apache.mahout.common.StringTuple) $r25;
+
+        $r23 = virtualinvoke $r24.<org.apache.mahout.common.StringTuple: java.util.List getEntries()>();
+
+        interfaceinvoke r5.<java.util.List: boolean addAll(java.util.Collection)>($r23);
+
+        goto label02;
+
+     label03:
+        $r7 = new org.apache.mahout.math.RandomAccessSparseVector;
+
+        $i1 = r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: int dimension>;
+
+        $i0 = interfaceinvoke r5.<java.util.List: int size()>();
+
+        specialinvoke $r7.<org.apache.mahout.math.RandomAccessSparseVector: void <init>(int,int)>($i1, $i0);
+
+        r27 = $r7;
+
+        $i2 = r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: int maxNGramSize>;
+
+        if $i2 < 2 goto label09;
+
+        $r17 = new org.apache.lucene.analysis.shingle.ShingleFilter;
+
+        $r18 = new org.apache.mahout.common.lucene.IteratorTokenStream;
+
+        $r16 = interfaceinvoke r5.<java.util.List: java.util.Iterator iterator()>();
+
+        specialinvoke $r18.<org.apache.mahout.common.lucene.IteratorTokenStream: void <init>(java.util.Iterator)>($r16);
+
+        $i4 = r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: int maxNGramSize>;
+
+        specialinvoke $r17.<org.apache.lucene.analysis.shingle.ShingleFilter: void <init>(org.apache.lucene.analysis.TokenStream,int)>($r18, $i4);
+
+        virtualinvoke $r17.<org.apache.lucene.analysis.shingle.ShingleFilter: void reset()>();
+
+     label04:
+        $r19 = virtualinvoke $r17.<org.apache.lucene.analysis.shingle.ShingleFilter: org.apache.lucene.util.Attribute getAttribute(java.lang.Class)>(class "org/apache/lucene/analysis/tokenattributes/CharTermAttribute");
+
+        $r20 = (org.apache.lucene.analysis.tokenattributes.CharTermAttribute) $r19;
+
+        r29 = virtualinvoke $r20.<java.lang.Object: java.lang.String toString()>();
+
+        $z7 = virtualinvoke r29.<java.lang.String: boolean isEmpty()>();
+
+        if $z7 != 0 goto label05;
+
+        $r21 = r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: org.apache.mahout.math.map.OpenObjectIntHashMap dictionary>;
+
+        $z8 = virtualinvoke $r21.<org.apache.mahout.math.map.OpenObjectIntHashMap: boolean containsKey(java.lang.Object)>(r29);
+
+        if $z8 == 0 goto label05;
+
+        $r22 = r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: org.apache.mahout.math.map.OpenObjectIntHashMap dictionary>;
+
+        i5 = virtualinvoke $r22.<org.apache.mahout.math.map.OpenObjectIntHashMap: int get(java.lang.Object)>(r29);
+
+        $d3 = interfaceinvoke $r7.<org.apache.mahout.math.Vector: double getQuick(int)>(i5);
+
+        $d2 = $d3 + 1.0;
+
+        interfaceinvoke $r7.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i5, $d2);
+
+     label05:
+        $z10 = virtualinvoke $r17.<org.apache.lucene.analysis.shingle.ShingleFilter: boolean incrementToken()>();
+
+        if $z10 != 0 goto label04;
+
+        virtualinvoke $r17.<org.apache.lucene.analysis.shingle.ShingleFilter: void end()>();
+
+     label06:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r17, 1);
+
+        goto label11;
+
+     label07:
+        $r26 := @caughtexception;
+
+     label08:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r17, 1);
+
+        throw $r26;
+
+     label09:
+        r30 = interfaceinvoke r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label10:
+        $z3 = interfaceinvoke r30.<java.util.Iterator: boolean hasNext()>();
+
+        if $z3 == 0 goto label11;
+
+        $r13 = interfaceinvoke r30.<java.util.Iterator: java.lang.Object next()>();
+
+        r31 = (java.lang.String) $r13;
+
+        $z6 = virtualinvoke r31.<java.lang.String: boolean isEmpty()>();
+
+        if $z6 != 0 goto label10;
+
+        $r14 = r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: org.apache.mahout.math.map.OpenObjectIntHashMap dictionary>;
+
+        $z5 = virtualinvoke $r14.<org.apache.mahout.math.map.OpenObjectIntHashMap: boolean containsKey(java.lang.Object)>(r31);
+
+        if $z5 == 0 goto label10;
+
+        $r15 = r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: org.apache.mahout.math.map.OpenObjectIntHashMap dictionary>;
+
+        i6 = virtualinvoke $r15.<org.apache.mahout.math.map.OpenObjectIntHashMap: int get(java.lang.Object)>(r31);
+
+        $d0 = interfaceinvoke $r7.<org.apache.mahout.math.Vector: double getQuick(int)>(i6);
+
+        $d1 = $d0 + 1.0;
+
+        interfaceinvoke $r7.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i6, $d1);
+
+        goto label10;
+
+     label11:
+        $z2 = r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: boolean sequentialAccess>;
+
+        if $z2 == 0 goto label12;
+
+        $r12 = new org.apache.mahout.math.SequentialAccessSparseVector;
+
+        specialinvoke $r12.<org.apache.mahout.math.SequentialAccessSparseVector: void <init>(org.apache.mahout.math.Vector)>($r7);
+
+        r27 = $r12;
+
+     label12:
+        $z4 = r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: boolean namedVector>;
+
+        if $z4 == 0 goto label13;
+
+        $r11 = new org.apache.mahout.math.NamedVector;
+
+        $r10 = virtualinvoke r1.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        specialinvoke $r11.<org.apache.mahout.math.NamedVector: void <init>(org.apache.mahout.math.Vector,java.lang.String)>(r27, $r10);
+
+        r27 = $r11;
+
+     label13:
+        $i3 = interfaceinvoke r27.<org.apache.mahout.math.Vector: int getNumNondefaultElements()>();
+
+        if $i3 <= 0 goto label14;
+
+        $r8 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r8.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r27);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r8);
+
+        goto label15;
+
+     label14:
+        $r9 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.mapreduce.Counter getCounter(java.lang.String,java.lang.String)>("TFPartialVectorReducer", "emptyVectorCount");
+
+        interfaceinvoke $r9.<org.apache.hadoop.mapreduce.Counter: void increment(long)>(1L);
+
+     label15:
+        return;
+
+        catch java.lang.Throwable from label04 to label06 with label07;
+        catch java.lang.Throwable from label07 to label08 with label07;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.term.TFPartialVectorReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        java.net.URI[] r3;
+        org.apache.hadoop.fs.Path r4;
+        java.util.Iterator r5;
+        org.apache.mahout.common.Pair r6;
+        int $i0, $i1, $i2, $i3;
+        boolean $z0, $z1, $z2;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable $r7;
+        org.apache.mahout.math.map.OpenObjectIntHashMap $r8;
+        java.lang.Object $r9, $r11, $r12;
+        org.apache.hadoop.io.Writable $r10;
+        java.lang.String $r13;
+        org.apache.hadoop.io.IntWritable $r14;
+
+        r0 := @this: org.apache.mahout.vectorizer.term.TFPartialVectorReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void setup(org.apache.hadoop.mapreduce.Reducer$Context)>(r1);
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $i0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("vector.dimension", 2147483647);
+
+        r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: int dimension> = $i0;
+
+        $z0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("vector.sequentialAccess", 0);
+
+        r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: boolean sequentialAccess> = $z0;
+
+        $z1 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("vector.named", 0);
+
+        r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: boolean namedVector> = $z1;
+
+        $i1 = r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: int maxNGramSize>;
+
+        $i2 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("max.ngrams", $i1);
+
+        r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: int maxNGramSize> = $i2;
+
+        r3 = staticinvoke <org.apache.hadoop.filecache.DistributedCache: java.net.URI[] getCacheFiles(org.apache.hadoop.conf.Configuration)>(r2);
+
+        r4 = staticinvoke <org.apache.mahout.common.HadoopUtil: org.apache.hadoop.fs.Path findInCacheByPartOfFilename(java.lang.String,java.net.URI[])>("dictionary.file-", r3);
+
+        $r7 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable;
+
+        specialinvoke $r7.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable: void <init>(org.apache.hadoop.fs.Path,boolean,org.apache.hadoop.conf.Configuration)>(r4, 1, r2);
+
+        r5 = virtualinvoke $r7.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z2 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label2;
+
+        $r9 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.common.Pair) $r9;
+
+        $r8 = r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: org.apache.mahout.math.map.OpenObjectIntHashMap dictionary>;
+
+        $r11 = virtualinvoke r6.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r10 = (org.apache.hadoop.io.Writable) $r11;
+
+        $r13 = virtualinvoke $r10.<java.lang.Object: java.lang.String toString()>();
+
+        $r12 = virtualinvoke r6.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r14 = (org.apache.hadoop.io.IntWritable) $r12;
+
+        $i3 = virtualinvoke $r14.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        virtualinvoke $r8.<org.apache.mahout.math.map.OpenObjectIntHashMap: boolean put(java.lang.Object,int)>($r13, $i3);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    protected volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.term.TFPartialVectorReducer r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.hadoop.io.Text $r4;
+
+        r0 := @this: org.apache.mahout.vectorizer.term.TFPartialVectorReducer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.hadoop.io.Text) r1;
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.term.TFPartialVectorReducer: void reduce(org.apache.hadoop.io.Text,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+}

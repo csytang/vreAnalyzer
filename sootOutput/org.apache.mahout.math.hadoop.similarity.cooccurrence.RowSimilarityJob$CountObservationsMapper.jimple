@@ -1,0 +1,130 @@
+public class org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CountObservationsMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private org.apache.mahout.math.Vector columnCounts;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CountObservationsMapper r0;
+        org.apache.mahout.math.RandomAccessSparseVector $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CountObservationsMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.RandomAccessSparseVector;
+
+        specialinvoke $r1.<org.apache.mahout.math.RandomAccessSparseVector: void <init>(int)>(2147483647);
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CountObservationsMapper: org.apache.mahout.math.Vector columnCounts> = $r1;
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.IntWritable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CountObservationsMapper r0;
+        org.apache.hadoop.io.IntWritable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.Vector r4, $r9, $r10;
+        java.util.Iterator r5;
+        org.apache.mahout.math.Vector$Element r6;
+        java.lang.Iterable $r7;
+        boolean $z0;
+        java.lang.Object $r8;
+        int $i0, $i1;
+        double $d0, $d1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CountObservationsMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        r4 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r7 = interfaceinvoke r4.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r5 = interfaceinvoke $r7.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r8 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.math.Vector$Element) $r8;
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CountObservationsMapper: org.apache.mahout.math.Vector columnCounts>;
+
+        $i0 = interfaceinvoke r6.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $r10 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CountObservationsMapper: org.apache.mahout.math.Vector columnCounts>;
+
+        $i1 = interfaceinvoke r6.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $d1 = interfaceinvoke $r10.<org.apache.mahout.math.Vector: double getQuick(int)>($i1);
+
+        $d0 = $d1 + 1.0;
+
+        interfaceinvoke $r9.<org.apache.mahout.math.Vector: void setQuick(int,double)>($i0, $d0);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    protected void cleanup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CountObservationsMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.io.NullWritable $r2;
+        org.apache.mahout.math.VectorWritable $r3;
+        org.apache.mahout.math.Vector $r4;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CountObservationsMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r2 = staticinvoke <org.apache.hadoop.io.NullWritable: org.apache.hadoop.io.NullWritable get()>();
+
+        $r3 = new org.apache.mahout.math.VectorWritable;
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CountObservationsMapper: org.apache.mahout.math.Vector columnCounts>;
+
+        specialinvoke $r3.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r4);
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r2, $r3);
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CountObservationsMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.IntWritable $r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CountObservationsMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.IntWritable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CountObservationsMapper: void map(org.apache.hadoop.io.IntWritable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

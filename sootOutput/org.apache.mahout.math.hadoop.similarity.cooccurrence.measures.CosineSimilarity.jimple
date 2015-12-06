@@ -1,0 +1,122 @@
+public class org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CosineSimilarity extends java.lang.Object implements org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasure
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CosineSimilarity r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CosineSimilarity;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector normalize(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CosineSimilarity r0;
+        org.apache.mahout.math.Vector r1, $r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CosineSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $r2 = interfaceinvoke r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector normalize()>();
+
+        return $r2;
+    }
+
+    public double norm(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CosineSimilarity r0;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CosineSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        return 0.0;
+    }
+
+    public double aggregate(double, double)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CosineSimilarity r0;
+        double d0, d1, $d2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CosineSimilarity;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        $d2 = d0 * d1;
+
+        return $d2;
+    }
+
+    public double similarity(double, double, double, int)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CosineSimilarity r0;
+        double d0, d1, d2;
+        int i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CosineSimilarity;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        d2 := @parameter2: double;
+
+        i0 := @parameter3: int;
+
+        return d0;
+    }
+
+    public boolean consider(int, int, double, double, double)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CosineSimilarity r0;
+        int i0, i1;
+        double d0, d1, d2, $d3, $d4, $d5, $d6;
+        byte $b2, $b3;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CosineSimilarity;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        d0 := @parameter2: double;
+
+        d1 := @parameter3: double;
+
+        d2 := @parameter4: double;
+
+        $d4 = (double) i1;
+
+        $d3 = d2 / d0;
+
+        $b2 = $d4 cmpl $d3;
+
+        if $b2 < 0 goto label1;
+
+        $d6 = (double) i0;
+
+        $d5 = d2 / d1;
+
+        $b3 = $d6 cmpl $d5;
+
+        if $b3 < 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+}

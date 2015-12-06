@@ -1,0 +1,322 @@
+final class org.apache.mahout.cf.taste.hadoop.als.ALS extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.als.ALS r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.ALS;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static org.apache.mahout.math.Vector readFirstRow(org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration) throws java.io.IOException
+    {
+        org.apache.hadoop.fs.Path r0;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator $r3;
+        org.apache.mahout.common.iterator.sequencefile.PathType $r4;
+        org.apache.hadoop.fs.PathFilter $r5;
+        boolean $z0;
+        java.lang.Object $r6;
+        org.apache.mahout.math.VectorWritable $r7;
+        org.apache.mahout.math.Vector $r8;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        $r3 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator;
+
+        $r4 = <org.apache.mahout.common.iterator.sequencefile.PathType: org.apache.mahout.common.iterator.sequencefile.PathType LIST>;
+
+        $r5 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter partFilter()>();
+
+        specialinvoke $r3.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator: void <init>(org.apache.hadoop.fs.Path,org.apache.mahout.common.iterator.sequencefile.PathType,org.apache.hadoop.fs.PathFilter,java.util.Comparator,boolean,org.apache.hadoop.conf.Configuration)>(r0, $r4, $r5, null, 1, r1);
+
+        $z0 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label1;
+
+        $r6 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $r7 = (org.apache.mahout.math.VectorWritable) $r6;
+
+        $r8 = virtualinvoke $r7.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        goto label2;
+
+     label1:
+        $r8 = null;
+
+     label2:
+        return $r8;
+    }
+
+    public static org.apache.mahout.math.map.OpenIntObjectHashMap readMatrixByRowsFromDistributedCache(int, org.apache.hadoop.conf.Configuration) throws java.io.IOException
+    {
+        int i0, i1, $i2, i3;
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.mahout.math.map.OpenIntObjectHashMap r3, $r19;
+        org.apache.hadoop.fs.Path[] r4;
+        org.apache.hadoop.fs.LocalFileSystem r5;
+        org.apache.hadoop.fs.Path r7;
+        org.apache.mahout.math.VectorWritable $r11;
+        org.apache.hadoop.io.IntWritable $r12;
+        boolean $z0, $z1, $z3;
+        org.apache.hadoop.io.SequenceFile$Reader $r13;
+        org.apache.mahout.math.Vector $r14;
+        java.lang.Throwable $r15, $r17, $r18, r20;
+
+        i0 := @parameter0: int;
+
+        r0 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        $r12 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r12.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+        $r11 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r11.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        if i0 <= 0 goto label01;
+
+        $r19 = new org.apache.mahout.math.map.OpenIntObjectHashMap;
+
+        specialinvoke $r19.<org.apache.mahout.math.map.OpenIntObjectHashMap: void <init>(int)>(i0);
+
+        goto label02;
+
+     label01:
+        $r19 = new org.apache.mahout.math.map.OpenIntObjectHashMap;
+
+        specialinvoke $r19.<org.apache.mahout.math.map.OpenIntObjectHashMap: void <init>()>();
+
+     label02:
+        r3 = $r19;
+
+        r4 = staticinvoke <org.apache.mahout.common.HadoopUtil: org.apache.hadoop.fs.Path[] getCachedFiles(org.apache.hadoop.conf.Configuration)>(r0);
+
+        r5 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.LocalFileSystem getLocal(org.apache.hadoop.conf.Configuration)>(r0);
+
+        i1 = lengthof r4;
+
+        i3 = 0;
+
+     label03:
+        if i3 >= i1 goto label15;
+
+        r7 = r4[i3];
+
+        $r13 = new org.apache.hadoop.io.SequenceFile$Reader;
+
+        specialinvoke $r13.<org.apache.hadoop.io.SequenceFile$Reader: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r5, r7, r0);
+
+        r20 = null;
+
+     label04:
+        $z1 = virtualinvoke $r13.<org.apache.hadoop.io.SequenceFile$Reader: boolean next(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r12, $r11);
+
+        if $z1 == 0 goto label05;
+
+        $i2 = virtualinvoke $r12.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $r14 = virtualinvoke $r11.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        virtualinvoke r3.<org.apache.mahout.math.map.OpenIntObjectHashMap: boolean put(int,java.lang.Object)>($i2, $r14);
+
+        goto label04;
+
+     label05:
+        if $r13 == null goto label14;
+
+        virtualinvoke $r13.<org.apache.hadoop.io.SequenceFile$Reader: void close()>();
+
+        goto label14;
+
+     label06:
+        $r18 := @caughtexception;
+
+        r20 = $r18;
+
+        throw $r18;
+
+     label07:
+        $r15 := @caughtexception;
+
+     label08:
+        if $r13 == null goto label13;
+
+        if r20 == null goto label12;
+
+     label09:
+        virtualinvoke $r13.<org.apache.hadoop.io.SequenceFile$Reader: void close()>();
+
+     label10:
+        goto label13;
+
+     label11:
+        $r17 := @caughtexception;
+
+        virtualinvoke r20.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r17);
+
+        goto label13;
+
+     label12:
+        virtualinvoke $r13.<org.apache.hadoop.io.SequenceFile$Reader: void close()>();
+
+     label13:
+        throw $r15;
+
+     label14:
+        i3 = i3 + 1;
+
+        goto label03;
+
+     label15:
+        $z0 = virtualinvoke r3.<org.apache.mahout.math.map.OpenIntObjectHashMap: boolean isEmpty()>();
+
+        if $z0 != 0 goto label16;
+
+        $z3 = 1;
+
+        goto label17;
+
+     label16:
+        $z3 = 0;
+
+     label17:
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>($z3, "Feature matrix is empty");
+
+        return r3;
+
+        catch java.lang.Throwable from label04 to label05 with label06;
+        catch java.lang.Throwable from label04 to label05 with label07;
+        catch java.lang.Throwable from label09 to label10 with label11;
+        catch java.lang.Throwable from label06 to label08 with label07;
+    }
+
+    public static org.apache.mahout.math.map.OpenIntObjectHashMap readMatrixByRows(org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.hadoop.fs.Path r0;
+        org.apache.hadoop.conf.Configuration r1;
+        java.util.Iterator r3;
+        org.apache.mahout.common.Pair r4;
+        int i0;
+        org.apache.mahout.math.Vector r5;
+        org.apache.mahout.math.map.OpenIntObjectHashMap $r6;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable $r7;
+        org.apache.mahout.common.iterator.sequencefile.PathType $r8;
+        org.apache.hadoop.fs.PathFilter $r9;
+        boolean $z0;
+        java.lang.Object $r10, $r11, $r13;
+        org.apache.hadoop.io.IntWritable $r12;
+        org.apache.mahout.math.VectorWritable $r14;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        $r6 = new org.apache.mahout.math.map.OpenIntObjectHashMap;
+
+        specialinvoke $r6.<org.apache.mahout.math.map.OpenIntObjectHashMap: void <init>()>();
+
+        $r7 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable;
+
+        $r8 = <org.apache.mahout.common.iterator.sequencefile.PathType: org.apache.mahout.common.iterator.sequencefile.PathType LIST>;
+
+        $r9 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter partFilter()>();
+
+        specialinvoke $r7.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable: void <init>(org.apache.hadoop.fs.Path,org.apache.mahout.common.iterator.sequencefile.PathType,org.apache.hadoop.fs.PathFilter,org.apache.hadoop.conf.Configuration)>(r0, $r8, $r9, r1);
+
+        r3 = virtualinvoke $r7.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r10 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.common.Pair) $r10;
+
+        $r11 = virtualinvoke r4.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r12 = (org.apache.hadoop.io.IntWritable) $r11;
+
+        i0 = virtualinvoke $r12.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $r13 = virtualinvoke r4.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r14 = (org.apache.mahout.math.VectorWritable) $r13;
+
+        r5 = virtualinvoke $r14.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        virtualinvoke $r6.<org.apache.mahout.math.map.OpenIntObjectHashMap: boolean put(int,java.lang.Object)>(i0, r5);
+
+        goto label1;
+
+     label2:
+        return $r6;
+    }
+
+    public static org.apache.mahout.math.Vector solveExplicit(org.apache.mahout.math.VectorWritable, org.apache.mahout.math.map.OpenIntObjectHashMap, double, int)
+    {
+        org.apache.mahout.math.VectorWritable r0;
+        org.apache.mahout.math.map.OpenIntObjectHashMap r1;
+        double d0;
+        int i0, i1, $i2;
+        org.apache.mahout.math.Vector r2, $r9;
+        java.util.Iterator r4;
+        org.apache.mahout.math.Vector$Element r5;
+        java.util.ArrayList $r6;
+        java.lang.Iterable $r7;
+        boolean $z0;
+        java.lang.Object $r8, $r10;
+
+        r0 := @parameter0: org.apache.mahout.math.VectorWritable;
+
+        r1 := @parameter1: org.apache.mahout.math.map.OpenIntObjectHashMap;
+
+        d0 := @parameter2: double;
+
+        i0 := @parameter3: int;
+
+        r2 = virtualinvoke r0.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r6 = new java.util.ArrayList;
+
+        $i2 = interfaceinvoke r2.<org.apache.mahout.math.Vector: int getNumNondefaultElements()>();
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>(int)>($i2);
+
+        $r7 = interfaceinvoke r2.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r4 = interfaceinvoke $r7.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r8 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.Vector$Element) $r8;
+
+        i1 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $r10 = virtualinvoke r1.<org.apache.mahout.math.map.OpenIntObjectHashMap: java.lang.Object get(int)>(i1);
+
+        interfaceinvoke $r6.<java.util.List: boolean add(java.lang.Object)>($r10);
+
+        goto label1;
+
+     label2:
+        $r9 = staticinvoke <org.apache.mahout.math.als.AlternatingLeastSquaresSolver: org.apache.mahout.math.Vector solve(java.lang.Iterable,org.apache.mahout.math.Vector,double,int)>($r6, r2, d0, i0);
+
+        return $r9;
+    }
+}

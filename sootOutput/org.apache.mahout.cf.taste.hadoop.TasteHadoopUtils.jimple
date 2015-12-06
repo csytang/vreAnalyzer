@@ -1,0 +1,158 @@
+public final class org.apache.mahout.cf.taste.hadoop.TasteHadoopUtils extends java.lang.Object
+{
+    public static final int USER_ID_POS;
+    public static final int ITEM_ID_POS;
+    private static final java.util.regex.Pattern PREFERENCE_TOKEN_DELIMITER;
+
+    private void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.TasteHadoopUtils r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.TasteHadoopUtils;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.String[] splitPrefTokens(java.lang.CharSequence)
+    {
+        java.lang.CharSequence r0;
+        java.util.regex.Pattern $r1;
+        java.lang.String[] $r2;
+
+        r0 := @parameter0: java.lang.CharSequence;
+
+        $r1 = <org.apache.mahout.cf.taste.hadoop.TasteHadoopUtils: java.util.regex.Pattern PREFERENCE_TOKEN_DELIMITER>;
+
+        $r2 = virtualinvoke $r1.<java.util.regex.Pattern: java.lang.String[] split(java.lang.CharSequence)>(r0);
+
+        return $r2;
+    }
+
+    public static int idToIndex(long)
+    {
+        long l0;
+        int $i1, $i2, $i3;
+
+        l0 := @parameter0: long;
+
+        $i1 = staticinvoke <com.google.common.primitives.Longs: int hashCode(long)>(l0);
+
+        $i2 = $i1 % 2147483646;
+
+        $i3 = 2147483647 & $i2;
+
+        return $i3;
+    }
+
+    public static int readID(java.lang.String, boolean)
+    {
+        java.lang.String r0;
+        boolean z0;
+        long $l0;
+        int $i1;
+
+        r0 := @parameter0: java.lang.String;
+
+        z0 := @parameter1: boolean;
+
+        if z0 == 0 goto label1;
+
+        $l0 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>(r0);
+
+        $i1 = staticinvoke <org.apache.mahout.cf.taste.hadoop.TasteHadoopUtils: int idToIndex(long)>($l0);
+
+        goto label2;
+
+     label1:
+        $i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>(r0);
+
+     label2:
+        return $i1;
+    }
+
+    public static org.apache.mahout.math.map.OpenIntLongHashMap readIDIndexMap(java.lang.String, org.apache.hadoop.conf.Configuration)
+    {
+        java.lang.String r0;
+        org.apache.hadoop.conf.Configuration r1;
+        java.util.Iterator r4;
+        org.apache.mahout.common.Pair r5;
+        org.apache.mahout.math.map.OpenIntLongHashMap $r6;
+        org.apache.hadoop.fs.Path $r7;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable $r8;
+        org.apache.mahout.common.iterator.sequencefile.PathType $r9;
+        org.apache.hadoop.fs.PathFilter $r10;
+        boolean $z0;
+        java.lang.Object $r11, $r12, $r14;
+        org.apache.mahout.math.VarIntWritable $r13;
+        int $i0;
+        long $l1;
+        org.apache.mahout.math.VarLongWritable $r15;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        $r6 = new org.apache.mahout.math.map.OpenIntLongHashMap;
+
+        specialinvoke $r6.<org.apache.mahout.math.map.OpenIntLongHashMap: void <init>()>();
+
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r7.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r0);
+
+        $r8 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable;
+
+        $r9 = <org.apache.mahout.common.iterator.sequencefile.PathType: org.apache.mahout.common.iterator.sequencefile.PathType LIST>;
+
+        $r10 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter partFilter()>();
+
+        specialinvoke $r8.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable: void <init>(org.apache.hadoop.fs.Path,org.apache.mahout.common.iterator.sequencefile.PathType,org.apache.hadoop.fs.PathFilter,java.util.Comparator,boolean,org.apache.hadoop.conf.Configuration)>($r7, $r9, $r10, null, 1, r1);
+
+        r4 = virtualinvoke $r8.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r11 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.common.Pair) $r11;
+
+        $r12 = virtualinvoke r5.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r13 = (org.apache.mahout.math.VarIntWritable) $r12;
+
+        $i0 = virtualinvoke $r13.<org.apache.mahout.math.VarIntWritable: int get()>();
+
+        $r14 = virtualinvoke r5.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r15 = (org.apache.mahout.math.VarLongWritable) $r14;
+
+        $l1 = virtualinvoke $r15.<org.apache.mahout.math.VarLongWritable: long get()>();
+
+        virtualinvoke $r6.<org.apache.mahout.math.map.OpenIntLongHashMap: boolean put(int,long)>($i0, $l1);
+
+        goto label1;
+
+     label2:
+        return $r6;
+    }
+
+    static void <clinit>()
+    {
+        java.util.regex.Pattern $r0;
+
+        <org.apache.mahout.cf.taste.hadoop.TasteHadoopUtils: int ITEM_ID_POS> = 1;
+
+        <org.apache.mahout.cf.taste.hadoop.TasteHadoopUtils: int USER_ID_POS> = 0;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("[\t,]");
+
+        <org.apache.mahout.cf.taste.hadoop.TasteHadoopUtils: java.util.regex.Pattern PREFERENCE_TOKEN_DELIMITER> = $r0;
+
+        return;
+    }
+}

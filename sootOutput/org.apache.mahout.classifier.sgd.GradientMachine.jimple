@@ -1,0 +1,1256 @@
+public class org.apache.mahout.classifier.sgd.GradientMachine extends org.apache.mahout.classifier.AbstractVectorClassifier implements org.apache.mahout.classifier.OnlineLearner, org.apache.hadoop.io.Writable
+{
+    public static final int WRITABLE_VERSION;
+    private double learningRate;
+    private double regularization;
+    private double sparsity;
+    private double sparsityLearningRate;
+    private int numFeatures;
+    private int numHidden;
+    private int numOutput;
+    private org.apache.mahout.math.Vector[] hiddenWeights;
+    private org.apache.mahout.math.Vector[] outputWeights;
+    private org.apache.mahout.math.Vector hiddenBias;
+    private org.apache.mahout.math.Vector outputBias;
+    private final java.util.Random rnd;
+
+    public void <init>(int, int, int)
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        int i0, i1, i2, i3, i4;
+        org.apache.mahout.math.DenseVector[] $r1, $r5;
+        org.apache.mahout.math.DenseVector $r2, $r6, $r10, $r15;
+        org.apache.mahout.math.Vector $r3, $r7, $r12, $r19;
+        org.apache.mahout.common.RandomWrapper $r9;
+        org.apache.mahout.math.Vector[] $r11, $r13, $r16, $r17;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 := @parameter2: int;
+
+        specialinvoke r0.<org.apache.mahout.classifier.AbstractVectorClassifier: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: double learningRate> = 0.1;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: double regularization> = 0.1;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: double sparsity> = 0.1;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: double sparsityLearningRate> = 0.1;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numFeatures> = 10;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden> = 100;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput> = 2;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numFeatures> = i0;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden> = i1;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput> = i2;
+
+        $r1 = newarray (org.apache.mahout.math.DenseVector)[i1];
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] hiddenWeights> = $r1;
+
+        i3 = 0;
+
+     label1:
+        if i3 >= i1 goto label2;
+
+        $r17 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] hiddenWeights>;
+
+        $r15 = new org.apache.mahout.math.DenseVector;
+
+        specialinvoke $r15.<org.apache.mahout.math.DenseVector: void <init>(int)>(i0);
+
+        $r17[i3] = $r15;
+
+        $r16 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] hiddenWeights>;
+
+        $r19 = $r16[i3];
+
+        interfaceinvoke $r19.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(double)>(0.0);
+
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label2:
+        $r2 = new org.apache.mahout.math.DenseVector;
+
+        specialinvoke $r2.<org.apache.mahout.math.DenseVector: void <init>(int)>(i1);
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector hiddenBias> = $r2;
+
+        $r3 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector hiddenBias>;
+
+        interfaceinvoke $r3.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(double)>(0.0);
+
+        $r5 = newarray (org.apache.mahout.math.DenseVector)[i2];
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights> = $r5;
+
+        i4 = 0;
+
+     label3:
+        if i4 >= i2 goto label4;
+
+        $r11 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights>;
+
+        $r10 = new org.apache.mahout.math.DenseVector;
+
+        specialinvoke $r10.<org.apache.mahout.math.DenseVector: void <init>(int)>(i1);
+
+        $r11[i4] = $r10;
+
+        $r13 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights>;
+
+        $r12 = $r13[i4];
+
+        interfaceinvoke $r12.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(double)>(0.0);
+
+        i4 = i4 + 1;
+
+        goto label3;
+
+     label4:
+        $r6 = new org.apache.mahout.math.DenseVector;
+
+        specialinvoke $r6.<org.apache.mahout.math.DenseVector: void <init>(int)>(i2);
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector outputBias> = $r6;
+
+        $r7 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector outputBias>;
+
+        interfaceinvoke $r7.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(double)>(0.0);
+
+        $r9 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: java.util.Random rnd> = $r9;
+
+        return;
+    }
+
+    public void initWeights(java.util.Random)
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        java.util.Random r1;
+        double d0, d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10, $d11, d12, d13;
+        int $i0, $i1, $i2, $i3, $i4, $i5, i6, i7, i8, i9;
+        org.apache.mahout.math.Vector[] $r2, $r4;
+        org.apache.mahout.math.Vector $r3, $r5;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        r1 := @parameter0: java.util.Random;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numFeatures>;
+
+        $d2 = (double) $i0;
+
+        $d3 = staticinvoke <java.lang.Math: double sqrt(double)>($d2);
+
+        d0 = 1.0 / $d3;
+
+        i6 = 0;
+
+     label1:
+        $i1 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden>;
+
+        if i6 >= $i1 goto label4;
+
+        i7 = 0;
+
+     label2:
+        $i5 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numFeatures>;
+
+        if i7 >= $i5 goto label3;
+
+        $d9 = virtualinvoke r1.<java.util.Random: double nextDouble()>();
+
+        $d10 = 2.0 * $d9;
+
+        $d11 = $d10 - 1.0;
+
+        d12 = $d11 * d0;
+
+        $r4 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] hiddenWeights>;
+
+        $r5 = $r4[i6];
+
+        interfaceinvoke $r5.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i7, d12);
+
+        i7 = i7 + 1;
+
+        goto label2;
+
+     label3:
+        i6 = i6 + 1;
+
+        goto label1;
+
+     label4:
+        $i2 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden>;
+
+        $d4 = (double) $i2;
+
+        $d5 = staticinvoke <java.lang.Math: double sqrt(double)>($d4);
+
+        d13 = 1.0 / $d5;
+
+        i8 = 0;
+
+     label5:
+        $i3 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput>;
+
+        if i8 >= $i3 goto label8;
+
+        i9 = 0;
+
+     label6:
+        $i4 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden>;
+
+        if i9 >= $i4 goto label7;
+
+        $d7 = virtualinvoke r1.<java.util.Random: double nextDouble()>();
+
+        $d6 = 2.0 * $d7;
+
+        $d8 = $d6 - 1.0;
+
+        d1 = $d8 * d13;
+
+        $r2 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights>;
+
+        $r3 = $r2[i8];
+
+        interfaceinvoke $r3.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i9, d1);
+
+        i9 = i9 + 1;
+
+        goto label6;
+
+     label7:
+        i8 = i8 + 1;
+
+        goto label5;
+
+     label8:
+        return;
+    }
+
+    public org.apache.mahout.classifier.sgd.GradientMachine learningRate(double)
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: double learningRate> = d0;
+
+        return r0;
+    }
+
+    public org.apache.mahout.classifier.sgd.GradientMachine regularization(double)
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: double regularization> = d0;
+
+        return r0;
+    }
+
+    public org.apache.mahout.classifier.sgd.GradientMachine sparsity(double)
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: double sparsity> = d0;
+
+        return r0;
+    }
+
+    public org.apache.mahout.classifier.sgd.GradientMachine sparsityLearningRate(double)
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: double sparsityLearningRate> = d0;
+
+        return r0;
+    }
+
+    public void copyFrom(org.apache.mahout.classifier.sgd.GradientMachine)
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0, r1;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, i7, i8;
+        double $d0, $d1, $d2, $d3;
+        org.apache.mahout.math.DenseVector[] $r2, $r5;
+        org.apache.mahout.math.Vector $r3, $r4, $r6, $r7, $r8, $r10, $r12, $r14;
+        org.apache.mahout.math.Vector[] $r9, $r11, $r13, $r15;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        r1 := @parameter0: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        $i0 = r1.<org.apache.mahout.classifier.sgd.GradientMachine: int numFeatures>;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numFeatures> = $i0;
+
+        $i1 = r1.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden>;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden> = $i1;
+
+        $i2 = r1.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput>;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput> = $i2;
+
+        $d0 = r1.<org.apache.mahout.classifier.sgd.GradientMachine: double learningRate>;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: double learningRate> = $d0;
+
+        $d1 = r1.<org.apache.mahout.classifier.sgd.GradientMachine: double regularization>;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: double regularization> = $d1;
+
+        $d2 = r1.<org.apache.mahout.classifier.sgd.GradientMachine: double sparsity>;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: double sparsity> = $d2;
+
+        $d3 = r1.<org.apache.mahout.classifier.sgd.GradientMachine: double sparsityLearningRate>;
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: double sparsityLearningRate> = $d3;
+
+        $i3 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden>;
+
+        $r2 = newarray (org.apache.mahout.math.DenseVector)[$i3];
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] hiddenWeights> = $r2;
+
+        i7 = 0;
+
+     label1:
+        $i4 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden>;
+
+        if i7 >= $i4 goto label2;
+
+        $r15 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] hiddenWeights>;
+
+        $r13 = r1.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] hiddenWeights>;
+
+        $r12 = $r13[i7];
+
+        $r14 = interfaceinvoke $r12.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        $r15[i7] = $r14;
+
+        i7 = i7 + 1;
+
+        goto label1;
+
+     label2:
+        $r3 = r1.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector hiddenBias>;
+
+        $r4 = interfaceinvoke $r3.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector hiddenBias> = $r4;
+
+        $i5 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput>;
+
+        $r5 = newarray (org.apache.mahout.math.DenseVector)[$i5];
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights> = $r5;
+
+        i8 = 0;
+
+     label3:
+        $i6 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput>;
+
+        if i8 >= $i6 goto label4;
+
+        $r11 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights>;
+
+        $r9 = r1.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights>;
+
+        $r8 = $r9[i8];
+
+        $r10 = interfaceinvoke $r8.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        $r11[i8] = $r10;
+
+        i8 = i8 + 1;
+
+        goto label3;
+
+     label4:
+        $r7 = r1.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector outputBias>;
+
+        $r6 = interfaceinvoke $r7.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector outputBias> = $r6;
+
+        return;
+    }
+
+    public int numCategories()
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput>;
+
+        return $i0;
+    }
+
+    public int numFeatures()
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numFeatures>;
+
+        return $i0;
+    }
+
+    public int numHidden()
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden>;
+
+        return $i0;
+    }
+
+    public org.apache.mahout.math.DenseVector inputToHidden(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        org.apache.mahout.math.Vector r1, $r5, $r8, $r13;
+        org.apache.mahout.math.DenseVector $r3;
+        int $i0, $i1, i2;
+        org.apache.mahout.math.function.DoubleDoubleFunction $r4;
+        org.apache.mahout.math.function.DoubleFunction $r7, $r9, $r11;
+        org.apache.mahout.math.Vector[] $r14;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $r3 = new org.apache.mahout.math.DenseVector;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden>;
+
+        specialinvoke $r3.<org.apache.mahout.math.DenseVector: void <init>(int)>($i0);
+
+        i2 = 0;
+
+     label1:
+        $i1 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden>;
+
+        if i2 >= $i1 goto label2;
+
+        $r14 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] hiddenWeights>;
+
+        $r13 = $r14[i2];
+
+        $d0 = interfaceinvoke $r13.<org.apache.mahout.math.Vector: double dot(org.apache.mahout.math.Vector)>(r1);
+
+        virtualinvoke $r3.<org.apache.mahout.math.DenseVector: void setQuick(int,double)>(i2, $d0);
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        $r5 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector hiddenBias>;
+
+        $r4 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction PLUS>;
+
+        virtualinvoke $r3.<org.apache.mahout.math.DenseVector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>($r5, $r4);
+
+        $r7 = staticinvoke <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleFunction min(double)>(40.0);
+
+        $r8 = virtualinvoke $r3.<org.apache.mahout.math.DenseVector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.function.DoubleFunction)>($r7);
+
+        $r9 = staticinvoke <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleFunction max(double)>(-40.0);
+
+        interfaceinvoke $r8.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.function.DoubleFunction)>($r9);
+
+        $r11 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleFunction SIGMOID>;
+
+        virtualinvoke $r3.<org.apache.mahout.math.DenseVector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.function.DoubleFunction)>($r11);
+
+        return $r3;
+    }
+
+    public org.apache.mahout.math.DenseVector hiddenToOutput(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        org.apache.mahout.math.Vector r1, $r5, $r8;
+        org.apache.mahout.math.DenseVector $r3;
+        int $i0, $i1, i2;
+        org.apache.mahout.math.function.DoubleDoubleFunction $r4;
+        org.apache.mahout.math.Vector[] $r7;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $r3 = new org.apache.mahout.math.DenseVector;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput>;
+
+        specialinvoke $r3.<org.apache.mahout.math.DenseVector: void <init>(int)>($i0);
+
+        i2 = 0;
+
+     label1:
+        $i1 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput>;
+
+        if i2 >= $i1 goto label2;
+
+        $r7 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights>;
+
+        $r8 = $r7[i2];
+
+        $d0 = interfaceinvoke $r8.<org.apache.mahout.math.Vector: double dot(org.apache.mahout.math.Vector)>(r1);
+
+        virtualinvoke $r3.<org.apache.mahout.math.DenseVector: void setQuick(int,double)>(i2, $d0);
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        $r5 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector outputBias>;
+
+        $r4 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction PLUS>;
+
+        virtualinvoke $r3.<org.apache.mahout.math.DenseVector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>($r5, $r4);
+
+        return $r3;
+    }
+
+    public void updateRanking(org.apache.mahout.math.Vector, java.util.Collection, int, java.util.Random)
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        org.apache.mahout.math.Vector r1, r6, r7, r8, r9, $r12, $r16, $r17, $r26, $r29, $r30, $r34, $r35, $r36, $r39, $r41, $r44;
+        java.util.Collection r2;
+        int i0, $i1, $i2, $i3, $i4, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, i15, i16, i17, i19, i20, i21;
+        java.util.Random r3;
+        java.util.Iterator r4;
+        java.lang.Integer r5, $r43;
+        double d0, d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10, $d11, $d12, $d13, $d14, $d15, $d16, $d17, $d18, $d19, $d20, $d21, $d22, $d23, $d24, $d25, $d26, $d27, d28, d29, d30, d31;
+        java.lang.Object $r10;
+        org.apache.mahout.math.Vector[] $r11, $r13, $r18, $r23, $r32, $r40, $r42, $r45;
+        byte $b5, $b14;
+        org.apache.mahout.math.function.DoubleFunction $r14, $r21, $r27, $r38;
+        org.apache.mahout.math.function.DoubleDoubleFunction $r19, $r22, $r33;
+        boolean $z0, $z1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 := @parameter1: java.util.Collection;
+
+        i0 := @parameter2: int;
+
+        r3 := @parameter3: java.util.Random;
+
+        $i1 = interfaceinvoke r2.<java.util.Collection: int size()>();
+
+        $i2 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput>;
+
+        if $i1 < $i2 goto label01;
+
+        return;
+
+     label01:
+        r4 = interfaceinvoke r2.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label02:
+        $z1 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label14;
+
+        $r10 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (java.lang.Integer) $r10;
+
+        $r11 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights>;
+
+        $i3 = virtualinvoke r5.<java.lang.Integer: int intValue()>();
+
+        $r12 = $r11[$i3];
+
+        d0 = interfaceinvoke $r12.<org.apache.mahout.math.Vector: double dot(org.apache.mahout.math.Vector)>(r1);
+
+        i15 = -1;
+
+        d28 = #-Infinity;
+
+        i16 = 0;
+
+     label03:
+        if i16 >= i0 goto label07;
+
+        $i12 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput>;
+
+        i17 = virtualinvoke r3.<java.util.Random: int nextInt(int)>($i12);
+
+     label04:
+        $r43 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i17);
+
+        $z0 = interfaceinvoke r2.<java.util.Collection: boolean contains(java.lang.Object)>($r43);
+
+        if $z0 == 0 goto label05;
+
+        $i13 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput>;
+
+        i17 = virtualinvoke r3.<java.util.Random: int nextInt(int)>($i13);
+
+        goto label04;
+
+     label05:
+        $r45 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights>;
+
+        $r44 = $r45[i17];
+
+        d1 = interfaceinvoke $r44.<org.apache.mahout.math.Vector: double dot(org.apache.mahout.math.Vector)>(r1);
+
+        $b14 = d1 cmpl d28;
+
+        if $b14 <= 0 goto label06;
+
+        d28 = d1;
+
+        i15 = i17;
+
+     label06:
+        i16 = i16 + 1;
+
+        goto label03;
+
+     label07:
+        $d2 = 1.0 - d0;
+
+        d29 = $d2 + d28;
+
+        $b5 = d29 cmpg 0.0;
+
+        if $b5 >= 0 goto label08;
+
+        goto label02;
+
+     label08:
+        $r13 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights>;
+
+        $i4 = virtualinvoke r5.<java.lang.Integer: int intValue()>();
+
+        $r16 = $r13[$i4];
+
+        r6 = interfaceinvoke $r16.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        $r14 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleFunction NEGATE>;
+
+        interfaceinvoke r6.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.function.DoubleFunction)>($r14);
+
+        r8 = interfaceinvoke r6.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        $r18 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights>;
+
+        $r17 = $r18[i15];
+
+        r7 = interfaceinvoke $r17.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        $r19 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction PLUS>;
+
+        interfaceinvoke r8.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>(r7, $r19);
+
+        $d3 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: double learningRate>;
+
+        $d6 = neg $d3;
+
+        $d4 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: double regularization>;
+
+        $d7 = 1.0 - $d4;
+
+        $d5 = $d6 * $d7;
+
+        $r21 = staticinvoke <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleFunction mult(double)>($d5);
+
+        interfaceinvoke r6.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.function.DoubleFunction)>($r21);
+
+        $r23 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights>;
+
+        $i6 = virtualinvoke r5.<java.lang.Integer: int intValue()>();
+
+        $r26 = $r23[$i6];
+
+        $r22 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction PLUS>;
+
+        interfaceinvoke $r26.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>(r6, $r22);
+
+        $d9 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: double learningRate>;
+
+        $d11 = neg $d9;
+
+        $d8 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: double regularization>;
+
+        $d12 = 1.0 + $d8;
+
+        $d10 = $d11 * $d12;
+
+        $r27 = staticinvoke <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleFunction mult(double)>($d10);
+
+        interfaceinvoke r7.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.function.DoubleFunction)>($r27);
+
+        $r32 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights>;
+
+        $r34 = $r32[i15];
+
+        $r33 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction PLUS>;
+
+        interfaceinvoke $r34.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>(r7, $r33);
+
+        $r29 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector outputBias>;
+
+        $i7 = virtualinvoke r5.<java.lang.Integer: int intValue()>();
+
+        $r30 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector outputBias>;
+
+        $i8 = virtualinvoke r5.<java.lang.Integer: int intValue()>();
+
+        $d15 = interfaceinvoke $r30.<org.apache.mahout.math.Vector: double get(int)>($i8);
+
+        $d16 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: double learningRate>;
+
+        $d17 = $d15 + $d16;
+
+        interfaceinvoke $r29.<org.apache.mahout.math.Vector: void setQuick(int,double)>($i7, $d17);
+
+        $r36 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector outputBias>;
+
+        $r35 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector outputBias>;
+
+        $d13 = interfaceinvoke $r35.<org.apache.mahout.math.Vector: double get(int)>(i15);
+
+        $d14 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: double learningRate>;
+
+        $d18 = $d13 - $d14;
+
+        interfaceinvoke $r36.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i15, $d18);
+
+        r9 = interfaceinvoke r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        $r38 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleFunction SIGMOIDGRADIENT>;
+
+        interfaceinvoke r9.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.function.DoubleFunction)>($r38);
+
+        i19 = 0;
+
+     label09:
+        $i10 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden>;
+
+        if i19 >= $i10 goto label10;
+
+        $d22 = interfaceinvoke r9.<org.apache.mahout.math.Vector: double get(int)>(i19);
+
+        $d26 = interfaceinvoke r8.<org.apache.mahout.math.Vector: double get(int)>(i19);
+
+        $d27 = $d22 * $d26;
+
+        interfaceinvoke r9.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i19, $d27);
+
+        i19 = i19 + 1;
+
+        goto label09;
+
+     label10:
+        i20 = 0;
+
+     label11:
+        $i9 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden>;
+
+        if i20 >= $i9 goto label02;
+
+        i21 = 0;
+
+     label12:
+        $i11 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numFeatures>;
+
+        if i21 >= $i11 goto label13;
+
+        $r40 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] hiddenWeights>;
+
+        $r39 = $r40[i20];
+
+        d30 = interfaceinvoke $r39.<org.apache.mahout.math.Vector: double get(int)>(i21);
+
+        $d19 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: double learningRate>;
+
+        $d21 = interfaceinvoke r9.<org.apache.mahout.math.Vector: double get(int)>(i20);
+
+        $d20 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: double regularization>;
+
+        $d24 = $d20 * d30;
+
+        $d25 = $d21 + $d24;
+
+        $d23 = $d19 * $d25;
+
+        d31 = d30 - $d23;
+
+        $r42 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] hiddenWeights>;
+
+        $r41 = $r42[i20];
+
+        interfaceinvoke $r41.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i21, d31);
+
+        i21 = i21 + 1;
+
+        goto label12;
+
+     label13:
+        i20 = i20 + 1;
+
+        goto label11;
+
+     label14:
+        return;
+    }
+
+    public org.apache.mahout.math.Vector classify(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        org.apache.mahout.math.Vector r1, r2, $r4;
+        int i0, $i1, $i2;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector classifyNoLink(org.apache.mahout.math.Vector)>(r1);
+
+        i0 = interfaceinvoke r2.<org.apache.mahout.math.Vector: int maxValueIndex()>();
+
+        interfaceinvoke r2.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(double)>(0.0);
+
+        interfaceinvoke r2.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i0, 1.0);
+
+        $i1 = interfaceinvoke r2.<org.apache.mahout.math.Vector: int size()>();
+
+        $i2 = $i1 - 1;
+
+        $r4 = interfaceinvoke r2.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector viewPart(int,int)>(1, $i2);
+
+        return $r4;
+    }
+
+    public org.apache.mahout.math.Vector classifyNoLink(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        org.apache.mahout.math.Vector r1;
+        org.apache.mahout.math.DenseVector r2, $r3;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.DenseVector inputToHidden(org.apache.mahout.math.Vector)>(r1);
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.DenseVector hiddenToOutput(org.apache.mahout.math.Vector)>(r2);
+
+        return $r3;
+    }
+
+    public double classifyScalar(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        org.apache.mahout.math.Vector r1, r2;
+        double $d0, $d1;
+        byte $b0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector classifyNoLink(org.apache.mahout.math.Vector)>(r1);
+
+        $d0 = interfaceinvoke r2.<org.apache.mahout.math.Vector: double get(int)>(0);
+
+        $d1 = interfaceinvoke r2.<org.apache.mahout.math.Vector: double get(int)>(1);
+
+        $b0 = $d0 cmpl $d1;
+
+        if $b0 <= 0 goto label1;
+
+        return 0.0;
+
+     label1:
+        return 1.0;
+    }
+
+    public org.apache.mahout.classifier.sgd.GradientMachine copy()
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0, $r2;
+        int $i0, $i1, $i2;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.GradientMachine: void close()>();
+
+        $r2 = new org.apache.mahout.classifier.sgd.GradientMachine;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numFeatures()>();
+
+        $i1 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden()>();
+
+        $i2 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numCategories()>();
+
+        specialinvoke $r2.<org.apache.mahout.classifier.sgd.GradientMachine: void <init>(int,int,int)>($i0, $i1, $i2);
+
+        virtualinvoke $r2.<org.apache.mahout.classifier.sgd.GradientMachine: void copyFrom(org.apache.mahout.classifier.sgd.GradientMachine)>(r0);
+
+        return $r2;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        java.io.DataOutput r1;
+        double $d0, $d1, $d2, $d3;
+        int $i0, $i1, $i2, $i3, $i4, i5, i6;
+        org.apache.mahout.math.Vector $r2, $r3, $r5, $r6;
+        org.apache.mahout.math.Vector[] $r4, $r7;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>(1);
+
+        $d0 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: double learningRate>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d0);
+
+        $d1 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: double regularization>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d1);
+
+        $d2 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: double sparsity>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d2);
+
+        $d3 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: double sparsityLearningRate>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d3);
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numFeatures>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i0);
+
+        $i1 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i1);
+
+        $i2 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i2);
+
+        $r2 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector hiddenBias>;
+
+        staticinvoke <org.apache.mahout.math.VectorWritable: void writeVector(java.io.DataOutput,org.apache.mahout.math.Vector)>(r1, $r2);
+
+        i5 = 0;
+
+     label1:
+        $i3 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden>;
+
+        if i5 >= $i3 goto label2;
+
+        $r7 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] hiddenWeights>;
+
+        $r6 = $r7[i5];
+
+        staticinvoke <org.apache.mahout.math.VectorWritable: void writeVector(java.io.DataOutput,org.apache.mahout.math.Vector)>(r1, $r6);
+
+        i5 = i5 + 1;
+
+        goto label1;
+
+     label2:
+        $r3 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector outputBias>;
+
+        staticinvoke <org.apache.mahout.math.VectorWritable: void writeVector(java.io.DataOutput,org.apache.mahout.math.Vector)>(r1, $r3);
+
+        i6 = 0;
+
+     label3:
+        $i4 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput>;
+
+        if i6 >= $i4 goto label4;
+
+        $r4 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights>;
+
+        $r5 = $r4[i6];
+
+        staticinvoke <org.apache.mahout.math.VectorWritable: void writeVector(java.io.DataOutput,org.apache.mahout.math.Vector)>(r1, $r5);
+
+        i6 = i6 + 1;
+
+        goto label3;
+
+     label4:
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        java.io.DataInput r1;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, i8, i9;
+        java.io.IOException $r2;
+        java.lang.StringBuilder $r3, $r4, $r5;
+        java.lang.String $r6;
+        double $d0, $d1, $d2, $d3;
+        org.apache.mahout.math.Vector $r7, $r9, $r12, $r14;
+        org.apache.mahout.math.DenseVector[] $r8, $r10;
+        org.apache.mahout.math.Vector[] $r11, $r13;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        i0 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        if i0 != 1 goto label4;
+
+        $d0 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: double learningRate> = $d0;
+
+        $d1 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: double regularization> = $d1;
+
+        $d2 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: double sparsity> = $d2;
+
+        $d3 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: double sparsityLearningRate> = $d3;
+
+        $i1 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numFeatures> = $i1;
+
+        $i2 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden> = $i2;
+
+        $i4 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput> = $i4;
+
+        $i3 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden>;
+
+        $r8 = newarray (org.apache.mahout.math.DenseVector)[$i3];
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] hiddenWeights> = $r8;
+
+        $r7 = staticinvoke <org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector readVector(java.io.DataInput)>(r1);
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector hiddenBias> = $r7;
+
+        i8 = 0;
+
+     label1:
+        $i6 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numHidden>;
+
+        if i8 >= $i6 goto label2;
+
+        $r13 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] hiddenWeights>;
+
+        $r14 = staticinvoke <org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector readVector(java.io.DataInput)>(r1);
+
+        $r13[i8] = $r14;
+
+        i8 = i8 + 1;
+
+        goto label1;
+
+     label2:
+        $i5 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput>;
+
+        $r10 = newarray (org.apache.mahout.math.DenseVector)[$i5];
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights> = $r10;
+
+        $r9 = staticinvoke <org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector readVector(java.io.DataInput)>(r1);
+
+        r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector outputBias> = $r9;
+
+        i9 = 0;
+
+     label3:
+        $i7 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: int numOutput>;
+
+        if i9 >= $i7 goto label5;
+
+        $r11 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.Vector[] outputWeights>;
+
+        $r12 = staticinvoke <org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector readVector(java.io.DataInput)>(r1);
+
+        $r11[i9] = $r12;
+
+        i9 = i9 + 1;
+
+        goto label3;
+
+     label4:
+        $r2 = new java.io.IOException;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Incorrect object version, wanted 1 got ");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<java.io.IOException: void <init>(java.lang.String)>($r6);
+
+        throw $r2;
+
+     label5:
+        return;
+    }
+
+    public void close()
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        return;
+    }
+
+    public void train(long, java.lang.String, int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        long l0;
+        java.lang.String r1;
+        int i1;
+        org.apache.mahout.math.Vector r2;
+        org.apache.mahout.math.DenseVector r3;
+        java.util.HashSet $r6;
+        java.lang.Integer $r7;
+        java.util.Random $r8;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: java.lang.String;
+
+        i1 := @parameter2: int;
+
+        r2 := @parameter3: org.apache.mahout.math.Vector;
+
+        r3 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.DenseVector inputToHidden(org.apache.mahout.math.Vector)>(r2);
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.GradientMachine: org.apache.mahout.math.DenseVector hiddenToOutput(org.apache.mahout.math.Vector)>(r3);
+
+        $r6 = new java.util.HashSet;
+
+        specialinvoke $r6.<java.util.HashSet: void <init>()>();
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        interfaceinvoke $r6.<java.util.Collection: boolean add(java.lang.Object)>($r7);
+
+        $r8 = r0.<org.apache.mahout.classifier.sgd.GradientMachine: java.util.Random rnd>;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.GradientMachine: void updateRanking(org.apache.mahout.math.Vector,java.util.Collection,int,java.util.Random)>(r3, $r6, 2, $r8);
+
+        return;
+    }
+
+    public void train(long, int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        long l0;
+        int i1;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        r1 := @parameter2: org.apache.mahout.math.Vector;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.GradientMachine: void train(long,java.lang.String,int,org.apache.mahout.math.Vector)>(l0, null, i1, r1);
+
+        return;
+    }
+
+    public void train(int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.GradientMachine r0;
+        int i0;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.GradientMachine;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.GradientMachine: void train(long,java.lang.String,int,org.apache.mahout.math.Vector)>(0L, null, i0, r1);
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.classifier.sgd.GradientMachine: int WRITABLE_VERSION> = 1;
+
+        return;
+    }
+}

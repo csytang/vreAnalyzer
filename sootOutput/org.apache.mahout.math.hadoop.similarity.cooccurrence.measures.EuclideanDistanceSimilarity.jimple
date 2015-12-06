@@ -1,0 +1,138 @@
+public class org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.EuclideanDistanceSimilarity extends java.lang.Object implements org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasure
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.EuclideanDistanceSimilarity r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.EuclideanDistanceSimilarity;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector normalize(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.EuclideanDistanceSimilarity r0;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.EuclideanDistanceSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        return r1;
+    }
+
+    public double norm(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.EuclideanDistanceSimilarity r0;
+        org.apache.mahout.math.Vector r1;
+        java.util.Iterator r2;
+        org.apache.mahout.math.Vector$Element r3;
+        double d0, $d1, d2;
+        java.lang.Iterable $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.EuclideanDistanceSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        d2 = 0.0;
+
+        $r4 = interfaceinvoke r1.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r2 = interfaceinvoke $r4.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.math.Vector$Element) $r5;
+
+        d0 = interfaceinvoke r3.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        $d1 = d0 * d0;
+
+        d2 = d2 + $d1;
+
+        goto label1;
+
+     label2:
+        return d2;
+    }
+
+    public double aggregate(double, double)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.EuclideanDistanceSimilarity r0;
+        double d0, d1, $d2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.EuclideanDistanceSimilarity;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        $d2 = d0 * d1;
+
+        return $d2;
+    }
+
+    public double similarity(double, double, double, int)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.EuclideanDistanceSimilarity r0;
+        double $d0, d1, d2, d3, d4, $d5, $d6, $d7, $d8, $d9;
+        int i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.EuclideanDistanceSimilarity;
+
+        d1 := @parameter0: double;
+
+        d2 := @parameter1: double;
+
+        d3 := @parameter2: double;
+
+        i0 := @parameter3: int;
+
+        $d5 = 2.0 * d1;
+
+        $d6 = d2 - $d5;
+
+        $d7 = $d6 + d3;
+
+        $d8 = staticinvoke <java.lang.Math: double max(double,double)>(0.0, $d7);
+
+        d4 = staticinvoke <java.lang.Math: double sqrt(double)>($d8);
+
+        $d9 = 1.0 + d4;
+
+        $d0 = 1.0 / $d9;
+
+        return $d0;
+    }
+
+    public boolean consider(int, int, double, double, double)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.EuclideanDistanceSimilarity r0;
+        int i0, i1;
+        double d0, d1, d2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.EuclideanDistanceSimilarity;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        d0 := @parameter2: double;
+
+        d1 := @parameter3: double;
+
+        d2 := @parameter4: double;
+
+        return 1;
+    }
+}

@@ -1,0 +1,196 @@
+public class org.apache.mahout.classifier.sgd.ModelDissector extends java.lang.Object
+{
+    private final java.util.Map weightMap;
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.sgd.ModelDissector r0;
+        java.util.HashMap $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.ModelDissector;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.util.HashMap;
+
+        specialinvoke $r1.<java.util.HashMap: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.ModelDissector: java.util.Map weightMap> = $r1;
+
+        return;
+    }
+
+    public void update(org.apache.mahout.math.Vector, java.util.Map, org.apache.mahout.classifier.AbstractVectorClassifier)
+    {
+        org.apache.mahout.classifier.sgd.ModelDissector r0;
+        org.apache.mahout.math.Vector r1, r21;
+        java.util.Map r2, $r14, $r16;
+        org.apache.mahout.classifier.AbstractVectorClassifier r3;
+        java.util.Iterator r4, r19, r22;
+        java.util.Map$Entry r5;
+        java.lang.String r6;
+        java.util.Set r7, $r10;
+        java.lang.Integer r8, r20;
+        boolean $z0, $z1, $z2, $z3;
+        java.lang.Object $r11, $r12, $r13, $r17, $r18;
+        int $i0, $i1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.ModelDissector;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 := @parameter1: java.util.Map;
+
+        r3 := @parameter2: org.apache.mahout.classifier.AbstractVectorClassifier;
+
+        interfaceinvoke r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(double)>(0.0);
+
+        $r10 = interfaceinvoke r2.<java.util.Map: java.util.Set entrySet()>();
+
+        r4 = interfaceinvoke $r10.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r11 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (java.util.Map$Entry) $r11;
+
+        $r13 = interfaceinvoke r5.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        r6 = (java.lang.String) $r13;
+
+        $r12 = interfaceinvoke r5.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        r7 = (java.util.Set) $r12;
+
+        $r14 = r0.<org.apache.mahout.classifier.sgd.ModelDissector: java.util.Map weightMap>;
+
+        $z1 = interfaceinvoke $r14.<java.util.Map: boolean containsKey(java.lang.Object)>(r6);
+
+        if $z1 != 0 goto label1;
+
+        r19 = interfaceinvoke r7.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z2 = interfaceinvoke r19.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label3;
+
+        $r18 = interfaceinvoke r19.<java.util.Iterator: java.lang.Object next()>();
+
+        r20 = (java.lang.Integer) $r18;
+
+        $i1 = virtualinvoke r20.<java.lang.Integer: int intValue()>();
+
+        interfaceinvoke r1.<org.apache.mahout.math.Vector: void set(int,double)>($i1, 1.0);
+
+        goto label2;
+
+     label3:
+        r21 = virtualinvoke r3.<org.apache.mahout.classifier.AbstractVectorClassifier: org.apache.mahout.math.Vector classifyNoLink(org.apache.mahout.math.Vector)>(r1);
+
+        $r16 = r0.<org.apache.mahout.classifier.sgd.ModelDissector: java.util.Map weightMap>;
+
+        interfaceinvoke $r16.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r6, r21);
+
+        r22 = interfaceinvoke r7.<java.util.Set: java.util.Iterator iterator()>();
+
+     label4:
+        $z3 = interfaceinvoke r22.<java.util.Iterator: boolean hasNext()>();
+
+        if $z3 == 0 goto label1;
+
+        $r17 = interfaceinvoke r22.<java.util.Iterator: java.lang.Object next()>();
+
+        r8 = (java.lang.Integer) $r17;
+
+        $i0 = virtualinvoke r8.<java.lang.Integer: int intValue()>();
+
+        interfaceinvoke r1.<org.apache.mahout.math.Vector: void set(int,double)>($i0, 0.0);
+
+        goto label4;
+
+     label5:
+        return;
+    }
+
+    public java.util.List summary(int)
+    {
+        org.apache.mahout.classifier.sgd.ModelDissector r0;
+        int i0, $i1;
+        java.util.Map$Entry r2;
+        java.util.PriorityQueue $r3;
+        java.util.Map $r4;
+        java.util.Set $r5;
+        boolean $z0;
+        java.util.ArrayList $r6;
+        com.google.common.collect.Ordering $r7, $r8;
+        java.lang.Object $r9, $r11, $r12;
+        org.apache.mahout.classifier.sgd.ModelDissector$Weight $r10;
+        java.lang.String $r13;
+        org.apache.mahout.math.Vector $r14;
+        java.util.Iterator r16;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.ModelDissector;
+
+        i0 := @parameter0: int;
+
+        $r3 = new java.util.PriorityQueue;
+
+        specialinvoke $r3.<java.util.PriorityQueue: void <init>()>();
+
+        $r4 = r0.<org.apache.mahout.classifier.sgd.ModelDissector: java.util.Map weightMap>;
+
+        $r5 = interfaceinvoke $r4.<java.util.Map: java.util.Set entrySet()>();
+
+        r16 = interfaceinvoke $r5.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r16.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r9 = interfaceinvoke r16.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (java.util.Map$Entry) $r9;
+
+        $r10 = new org.apache.mahout.classifier.sgd.ModelDissector$Weight;
+
+        $r11 = interfaceinvoke r2.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r13 = (java.lang.String) $r11;
+
+        $r12 = interfaceinvoke r2.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r14 = (org.apache.mahout.math.Vector) $r12;
+
+        specialinvoke $r10.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: void <init>(java.lang.String,org.apache.mahout.math.Vector)>($r13, $r14);
+
+        interfaceinvoke $r3.<java.util.Queue: boolean add(java.lang.Object)>($r10);
+
+     label2:
+        $i1 = interfaceinvoke $r3.<java.util.Queue: int size()>();
+
+        if $i1 <= i0 goto label1;
+
+        interfaceinvoke $r3.<java.util.Queue: java.lang.Object poll()>();
+
+        goto label2;
+
+     label3:
+        $r6 = new java.util.ArrayList;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>(java.util.Collection)>($r3);
+
+        $r7 = staticinvoke <com.google.common.collect.Ordering: com.google.common.collect.Ordering natural()>();
+
+        $r8 = virtualinvoke $r7.<com.google.common.collect.Ordering: com.google.common.collect.Ordering reverse()>();
+
+        staticinvoke <java.util.Collections: void sort(java.util.List,java.util.Comparator)>($r6, $r8);
+
+        return $r6;
+    }
+}

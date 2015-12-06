@@ -1,0 +1,173 @@
+public final class org.apache.mahout.math.hadoop.stats.VarianceTotals extends java.lang.Object
+{
+    private double sumOfSquares;
+    private double sum;
+    private double totalCount;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.stats.VarianceTotals r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stats.VarianceTotals;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public double getSumOfSquares()
+    {
+        org.apache.mahout.math.hadoop.stats.VarianceTotals r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stats.VarianceTotals;
+
+        $d0 = r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double sumOfSquares>;
+
+        return $d0;
+    }
+
+    public void setSumOfSquares(double)
+    {
+        org.apache.mahout.math.hadoop.stats.VarianceTotals r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stats.VarianceTotals;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double sumOfSquares> = d0;
+
+        return;
+    }
+
+    public double getSum()
+    {
+        org.apache.mahout.math.hadoop.stats.VarianceTotals r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stats.VarianceTotals;
+
+        $d0 = r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double sum>;
+
+        return $d0;
+    }
+
+    public void setSum(double)
+    {
+        org.apache.mahout.math.hadoop.stats.VarianceTotals r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stats.VarianceTotals;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double sum> = d0;
+
+        return;
+    }
+
+    public double getTotalCount()
+    {
+        org.apache.mahout.math.hadoop.stats.VarianceTotals r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stats.VarianceTotals;
+
+        $d0 = r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double totalCount>;
+
+        return $d0;
+    }
+
+    public void setTotalCount(double)
+    {
+        org.apache.mahout.math.hadoop.stats.VarianceTotals r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stats.VarianceTotals;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double totalCount> = d0;
+
+        return;
+    }
+
+    public double computeMean()
+    {
+        org.apache.mahout.math.hadoop.stats.VarianceTotals r0;
+        double $d0, $d1, $d2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stats.VarianceTotals;
+
+        $d1 = r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double sum>;
+
+        $d0 = r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double totalCount>;
+
+        $d2 = $d1 / $d0;
+
+        return $d2;
+    }
+
+    public double computeVariance()
+    {
+        org.apache.mahout.math.hadoop.stats.VarianceTotals r0;
+        double $d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10, $d11;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stats.VarianceTotals;
+
+        $d1 = r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double totalCount>;
+
+        $d0 = r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double sumOfSquares>;
+
+        $d5 = $d1 * $d0;
+
+        $d3 = r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double sum>;
+
+        $d2 = r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double sum>;
+
+        $d4 = $d3 * $d2;
+
+        $d10 = $d5 - $d4;
+
+        $d8 = r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double totalCount>;
+
+        $d6 = r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double totalCount>;
+
+        $d7 = $d6 - 1.0;
+
+        $d9 = $d8 * $d7;
+
+        $d11 = $d10 / $d9;
+
+        return $d11;
+    }
+
+    public double computeVarianceForGivenMean(double)
+    {
+        org.apache.mahout.math.hadoop.stats.VarianceTotals r0;
+        double d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stats.VarianceTotals;
+
+        d0 := @parameter0: double;
+
+        $d4 = r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double sumOfSquares>;
+
+        $d1 = r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double totalCount>;
+
+        $d2 = $d1 * d0;
+
+        $d3 = $d2 * d0;
+
+        $d7 = $d4 - $d3;
+
+        $d5 = r0.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double totalCount>;
+
+        $d6 = $d5 - 1.0;
+
+        $d8 = $d7 / $d6;
+
+        return $d8;
+    }
+}

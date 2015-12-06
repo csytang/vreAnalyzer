@@ -1,0 +1,275 @@
+public final class org.apache.mahout.classifier.sgd.ModelSerializer extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.classifier.sgd.ModelSerializer r0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.ModelSerializer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void writeBinary(java.lang.String, org.apache.mahout.classifier.sgd.CrossFoldLearner) throws java.io.IOException
+    {
+        java.lang.String r0;
+        org.apache.mahout.classifier.sgd.CrossFoldLearner r1;
+        java.io.DataOutputStream $r5;
+        java.io.FileOutputStream $r6;
+        java.lang.Throwable $r8, $r9, $r10, r11;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: org.apache.mahout.classifier.sgd.CrossFoldLearner;
+
+        $r5 = new java.io.DataOutputStream;
+
+        $r6 = new java.io.FileOutputStream;
+
+        specialinvoke $r6.<java.io.FileOutputStream: void <init>(java.lang.String)>(r0);
+
+        specialinvoke $r5.<java.io.DataOutputStream: void <init>(java.io.OutputStream)>($r6);
+
+        r11 = null;
+
+     label01:
+        staticinvoke <org.apache.mahout.classifier.sgd.PolymorphicWritable: void write(java.io.DataOutput,org.apache.hadoop.io.Writable)>($r5, r1);
+
+     label02:
+        if $r5 == null goto label11;
+
+        virtualinvoke $r5.<java.io.DataOutputStream: void close()>();
+
+        goto label11;
+
+     label03:
+        $r9 := @caughtexception;
+
+        r11 = $r9;
+
+        throw $r9;
+
+     label04:
+        $r8 := @caughtexception;
+
+     label05:
+        if $r5 == null goto label10;
+
+        if r11 == null goto label09;
+
+     label06:
+        virtualinvoke $r5.<java.io.DataOutputStream: void close()>();
+
+     label07:
+        goto label10;
+
+     label08:
+        $r10 := @caughtexception;
+
+        virtualinvoke r11.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r10);
+
+        goto label10;
+
+     label09:
+        virtualinvoke $r5.<java.io.DataOutputStream: void close()>();
+
+     label10:
+        throw $r8;
+
+     label11:
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label03;
+        catch java.lang.Throwable from label01 to label02 with label04;
+        catch java.lang.Throwable from label06 to label07 with label08;
+        catch java.lang.Throwable from label03 to label05 with label04;
+    }
+
+    public static void writeBinary(java.lang.String, org.apache.mahout.classifier.sgd.OnlineLogisticRegression) throws java.io.IOException
+    {
+        java.lang.String r0;
+        org.apache.mahout.classifier.sgd.OnlineLogisticRegression r1;
+        java.io.DataOutputStream $r5;
+        java.io.FileOutputStream $r6;
+        java.lang.Throwable $r7, $r9, $r10, r11;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: org.apache.mahout.classifier.sgd.OnlineLogisticRegression;
+
+        $r5 = new java.io.DataOutputStream;
+
+        $r6 = new java.io.FileOutputStream;
+
+        specialinvoke $r6.<java.io.FileOutputStream: void <init>(java.lang.String)>(r0);
+
+        specialinvoke $r5.<java.io.DataOutputStream: void <init>(java.io.OutputStream)>($r6);
+
+        r11 = null;
+
+     label01:
+        staticinvoke <org.apache.mahout.classifier.sgd.PolymorphicWritable: void write(java.io.DataOutput,org.apache.hadoop.io.Writable)>($r5, r1);
+
+     label02:
+        if $r5 == null goto label11;
+
+        virtualinvoke $r5.<java.io.DataOutputStream: void close()>();
+
+        goto label11;
+
+     label03:
+        $r9 := @caughtexception;
+
+        r11 = $r9;
+
+        throw $r9;
+
+     label04:
+        $r7 := @caughtexception;
+
+     label05:
+        if $r5 == null goto label10;
+
+        if r11 == null goto label09;
+
+     label06:
+        virtualinvoke $r5.<java.io.DataOutputStream: void close()>();
+
+     label07:
+        goto label10;
+
+     label08:
+        $r10 := @caughtexception;
+
+        virtualinvoke r11.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r10);
+
+        goto label10;
+
+     label09:
+        virtualinvoke $r5.<java.io.DataOutputStream: void close()>();
+
+     label10:
+        throw $r7;
+
+     label11:
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label03;
+        catch java.lang.Throwable from label01 to label02 with label04;
+        catch java.lang.Throwable from label06 to label07 with label08;
+        catch java.lang.Throwable from label03 to label05 with label04;
+    }
+
+    public static void writeBinary(java.lang.String, org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression) throws java.io.IOException
+    {
+        java.lang.String r0;
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r1;
+        java.io.DataOutputStream $r5;
+        java.io.FileOutputStream $r6;
+        java.lang.Throwable $r7, $r8, $r10, r11;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        $r5 = new java.io.DataOutputStream;
+
+        $r6 = new java.io.FileOutputStream;
+
+        specialinvoke $r6.<java.io.FileOutputStream: void <init>(java.lang.String)>(r0);
+
+        specialinvoke $r5.<java.io.DataOutputStream: void <init>(java.io.OutputStream)>($r6);
+
+        r11 = null;
+
+     label01:
+        staticinvoke <org.apache.mahout.classifier.sgd.PolymorphicWritable: void write(java.io.DataOutput,org.apache.hadoop.io.Writable)>($r5, r1);
+
+     label02:
+        if $r5 == null goto label11;
+
+        virtualinvoke $r5.<java.io.DataOutputStream: void close()>();
+
+        goto label11;
+
+     label03:
+        $r8 := @caughtexception;
+
+        r11 = $r8;
+
+        throw $r8;
+
+     label04:
+        $r10 := @caughtexception;
+
+     label05:
+        if $r5 == null goto label10;
+
+        if r11 == null goto label09;
+
+     label06:
+        virtualinvoke $r5.<java.io.DataOutputStream: void close()>();
+
+     label07:
+        goto label10;
+
+     label08:
+        $r7 := @caughtexception;
+
+        virtualinvoke r11.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r7);
+
+        goto label10;
+
+     label09:
+        virtualinvoke $r5.<java.io.DataOutputStream: void close()>();
+
+     label10:
+        throw $r10;
+
+     label11:
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label03;
+        catch java.lang.Throwable from label01 to label02 with label04;
+        catch java.lang.Throwable from label06 to label07 with label08;
+        catch java.lang.Throwable from label03 to label05 with label04;
+    }
+
+    public static org.apache.hadoop.io.Writable readBinary(java.io.InputStream, java.lang.Class) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        java.lang.Class r1;
+        org.apache.hadoop.io.Writable r3;
+        java.io.DataInputStream $r5;
+        java.lang.Throwable $r6;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        r1 := @parameter1: java.lang.Class;
+
+        $r5 = new java.io.DataInputStream;
+
+        specialinvoke $r5.<java.io.DataInputStream: void <init>(java.io.InputStream)>(r0);
+
+     label1:
+        r3 = staticinvoke <org.apache.mahout.classifier.sgd.PolymorphicWritable: org.apache.hadoop.io.Writable read(java.io.DataInput,java.lang.Class)>($r5, r1);
+
+     label2:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>(r0, 0);
+
+        return r3;
+
+     label3:
+        $r6 := @caughtexception;
+
+     label4:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>(r0, 0);
+
+        throw $r6;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+}

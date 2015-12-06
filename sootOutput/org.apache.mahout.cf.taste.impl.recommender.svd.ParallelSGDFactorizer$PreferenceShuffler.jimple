@@ -1,0 +1,252 @@
+public class org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler extends java.lang.Object
+{
+    private org.apache.mahout.cf.taste.model.Preference[] preferences;
+    private org.apache.mahout.cf.taste.model.Preference[] unstagedPreferences;
+    protected final org.apache.mahout.common.RandomWrapper random;
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        org.apache.mahout.common.RandomWrapper $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: org.apache.mahout.common.RandomWrapper random> = $r2;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: void cachePreferences(org.apache.mahout.cf.taste.model.DataModel)>(r1);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: void shuffle()>();
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: void stage()>();
+
+        return;
+    }
+
+    private int countPreferences(org.apache.mahout.cf.taste.model.DataModel) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator r2;
+        org.apache.mahout.cf.taste.model.PreferenceArray r3;
+        boolean $z0;
+        long $l0;
+        int $i1, i2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        i2 = 0;
+
+        r2 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $l0 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: long nextLong()>();
+
+        r3 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>($l0);
+
+        $i1 = interfaceinvoke r3.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        i2 = i2 + $i1;
+
+        goto label1;
+
+     label2:
+        return i2;
+    }
+
+    private void cachePreferences(org.apache.mahout.cf.taste.model.DataModel) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        int i0, $i2, i3;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator r2;
+        long l1;
+        org.apache.mahout.cf.taste.model.PreferenceArray r3;
+        java.util.Iterator r4;
+        org.apache.mahout.cf.taste.model.Preference r5;
+        org.apache.mahout.cf.taste.model.Preference[] $r6, $r8;
+        boolean $z0, $z1;
+        java.lang.Object $r7;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        i0 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: int countPreferences(org.apache.mahout.cf.taste.model.DataModel)>(r1);
+
+        $r6 = newarray (org.apache.mahout.cf.taste.model.Preference)[i0];
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: org.apache.mahout.cf.taste.model.Preference[] preferences> = $r6;
+
+        r2 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs()>();
+
+        i3 = 0;
+
+     label1:
+        $z0 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        l1 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: long nextLong()>();
+
+        r3 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>(l1);
+
+        r4 = interfaceinvoke r3.<org.apache.mahout.cf.taste.model.PreferenceArray: java.util.Iterator iterator()>();
+
+     label2:
+        $z1 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label1;
+
+        $r7 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.cf.taste.model.Preference) $r7;
+
+        $r8 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: org.apache.mahout.cf.taste.model.Preference[] preferences>;
+
+        $i2 = i3;
+
+        i3 = i3 + 1;
+
+        $r8[$i2] = r5;
+
+        goto label2;
+
+     label3:
+        return;
+    }
+
+    public final void shuffle()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler r0;
+        int i0, $i1, $i2, i3;
+        org.apache.mahout.cf.taste.model.Preference[] $r1, $r3, $r4;
+        java.lang.Object $r2;
+        org.apache.mahout.common.RandomWrapper $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: org.apache.mahout.cf.taste.model.Preference[] preferences>;
+
+        $r2 = virtualinvoke $r1.<java.lang.Object: java.lang.Object clone()>();
+
+        $r3 = (org.apache.mahout.cf.taste.model.Preference[]) $r2;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: org.apache.mahout.cf.taste.model.Preference[] unstagedPreferences> = $r3;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: org.apache.mahout.cf.taste.model.Preference[] unstagedPreferences>;
+
+        $i1 = lengthof $r4;
+
+        i3 = $i1 - 1;
+
+     label1:
+        if i3 <= 0 goto label2;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: org.apache.mahout.common.RandomWrapper random>;
+
+        $i2 = i3 + 1;
+
+        i0 = virtualinvoke $r5.<org.apache.mahout.common.RandomWrapper: int nextInt(int)>($i2);
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: void swapCachedPreferences(int,int)>(i3, i0);
+
+        i3 = i3 + -1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private void swapCachedPreferences(int, int)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler r0;
+        int i0, i1;
+        org.apache.mahout.cf.taste.model.Preference r1, $r4;
+        org.apache.mahout.cf.taste.model.Preference[] $r2, $r3, $r5, $r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: org.apache.mahout.cf.taste.model.Preference[] unstagedPreferences>;
+
+        r1 = $r2[i0];
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: org.apache.mahout.cf.taste.model.Preference[] unstagedPreferences>;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: org.apache.mahout.cf.taste.model.Preference[] unstagedPreferences>;
+
+        $r4 = $r3[i1];
+
+        $r5[i0] = $r4;
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: org.apache.mahout.cf.taste.model.Preference[] unstagedPreferences>;
+
+        $r6[i1] = r1;
+
+        return;
+    }
+
+    public final void stage()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler r0;
+        org.apache.mahout.cf.taste.model.Preference[] $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: org.apache.mahout.cf.taste.model.Preference[] unstagedPreferences>;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: org.apache.mahout.cf.taste.model.Preference[] preferences> = $r1;
+
+        return;
+    }
+
+    public org.apache.mahout.cf.taste.model.Preference get(int)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler r0;
+        int i0;
+        org.apache.mahout.cf.taste.model.Preference[] $r1;
+        org.apache.mahout.cf.taste.model.Preference $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: org.apache.mahout.cf.taste.model.Preference[] preferences>;
+
+        $r2 = $r1[i0];
+
+        return $r2;
+    }
+
+    public int size()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler r0;
+        org.apache.mahout.cf.taste.model.Preference[] $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.ParallelSGDFactorizer$PreferenceShuffler: org.apache.mahout.cf.taste.model.Preference[] preferences>;
+
+        $i0 = lengthof $r1;
+
+        return $i0;
+    }
+}

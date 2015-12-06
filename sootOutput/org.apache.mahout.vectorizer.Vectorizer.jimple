@@ -1,0 +1,5 @@
+public interface  org.apache.mahout.vectorizer.Vectorizer extends java.lang.Object
+{
+
+    public abstract void createVectors(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.mahout.vectorizer.VectorizerConfig) throws java.io.IOException, java.lang.ClassNotFoundException, java.lang.InterruptedException;
+}

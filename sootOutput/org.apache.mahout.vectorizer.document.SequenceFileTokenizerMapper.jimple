@@ -1,0 +1,175 @@
+public class org.apache.mahout.vectorizer.document.SequenceFileTokenizerMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private org.apache.lucene.analysis.Analyzer analyzer;
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.document.SequenceFileTokenizerMapper r0;
+
+        r0 := @this: org.apache.mahout.vectorizer.document.SequenceFileTokenizerMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.Text, org.apache.hadoop.io.Text, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.document.SequenceFileTokenizerMapper r0;
+        org.apache.hadoop.io.Text r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.lucene.analysis.TokenStream r4;
+        org.apache.lucene.analysis.tokenattributes.CharTermAttribute r5;
+        org.apache.lucene.analysis.Analyzer $r7;
+        java.lang.String $r8, $r10, $r13;
+        java.io.StringReader $r9;
+        org.apache.lucene.util.Attribute $r11;
+        org.apache.mahout.common.StringTuple $r12;
+        int $i0, $i1;
+        char[] $r14;
+        boolean $z1;
+
+        r0 := @this: org.apache.mahout.vectorizer.document.SequenceFileTokenizerMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.Text;
+
+        r2 := @parameter1: org.apache.hadoop.io.Text;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r7 = r0.<org.apache.mahout.vectorizer.document.SequenceFileTokenizerMapper: org.apache.lucene.analysis.Analyzer analyzer>;
+
+        $r8 = virtualinvoke r1.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        $r9 = new java.io.StringReader;
+
+        $r10 = virtualinvoke r2.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        specialinvoke $r9.<java.io.StringReader: void <init>(java.lang.String)>($r10);
+
+        r4 = virtualinvoke $r7.<org.apache.lucene.analysis.Analyzer: org.apache.lucene.analysis.TokenStream tokenStream(java.lang.String,java.io.Reader)>($r8, $r9);
+
+        $r11 = virtualinvoke r4.<org.apache.lucene.analysis.TokenStream: org.apache.lucene.util.Attribute addAttribute(java.lang.Class)>(class "org/apache/lucene/analysis/tokenattributes/CharTermAttribute");
+
+        r5 = (org.apache.lucene.analysis.tokenattributes.CharTermAttribute) $r11;
+
+        virtualinvoke r4.<org.apache.lucene.analysis.TokenStream: void reset()>();
+
+        $r12 = new org.apache.mahout.common.StringTuple;
+
+        specialinvoke $r12.<org.apache.mahout.common.StringTuple: void <init>()>();
+
+     label1:
+        $z1 = virtualinvoke r4.<org.apache.lucene.analysis.TokenStream: boolean incrementToken()>();
+
+        if $z1 == 0 goto label2;
+
+        $i0 = interfaceinvoke r5.<org.apache.lucene.analysis.tokenattributes.CharTermAttribute: int length()>();
+
+        if $i0 <= 0 goto label1;
+
+        $r13 = new java.lang.String;
+
+        $r14 = interfaceinvoke r5.<org.apache.lucene.analysis.tokenattributes.CharTermAttribute: char[] buffer()>();
+
+        $i1 = interfaceinvoke r5.<org.apache.lucene.analysis.tokenattributes.CharTermAttribute: int length()>();
+
+        specialinvoke $r13.<java.lang.String: void <init>(char[],int,int)>($r14, 0, $i1);
+
+        virtualinvoke $r12.<org.apache.mahout.common.StringTuple: boolean add(java.lang.String)>($r13);
+
+        goto label1;
+
+     label2:
+        virtualinvoke r4.<org.apache.lucene.analysis.TokenStream: void end()>();
+
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>(r4, 1);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r12);
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.document.SequenceFileTokenizerMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        java.lang.String r2, $r6, $r13;
+        org.apache.hadoop.conf.Configuration $r4;
+        java.lang.Class $r5;
+        org.apache.lucene.analysis.Analyzer $r7;
+        java.lang.ClassNotFoundException $r8;
+        java.io.IOException $r9;
+        java.lang.StringBuilder $r10, $r11, $r12;
+
+        r0 := @this: org.apache.mahout.vectorizer.document.SequenceFileTokenizerMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void setup(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        $r4 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r5 = class "org/apache/lucene/analysis/standard/StandardAnalyzer";
+
+        $r6 = virtualinvoke $r5.<java.lang.Class: java.lang.String getName()>();
+
+        r2 = virtualinvoke $r4.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String,java.lang.String)>("analyzer.class", $r6);
+
+     label1:
+        $r7 = staticinvoke <org.apache.mahout.common.lucene.AnalyzerUtils: org.apache.lucene.analysis.Analyzer createAnalyzer(java.lang.String)>(r2);
+
+        r0.<org.apache.mahout.vectorizer.document.SequenceFileTokenizerMapper: org.apache.lucene.analysis.Analyzer analyzer> = $r7;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r8 := @caughtexception;
+
+        $r9 = new java.io.IOException;
+
+        $r10 = new java.lang.StringBuilder;
+
+        specialinvoke $r10.<java.lang.StringBuilder: void <init>()>();
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to create analyzer: ");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r2);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r9.<java.io.IOException: void <init>(java.lang.String,java.lang.Throwable)>($r13, $r8);
+
+        throw $r9;
+
+     label4:
+        return;
+
+        catch java.lang.ClassNotFoundException from label1 to label2 with label3;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.document.SequenceFileTokenizerMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.hadoop.io.Text $r4, $r5;
+
+        r0 := @this: org.apache.mahout.vectorizer.document.SequenceFileTokenizerMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.Text) r1;
+
+        $r4 = (org.apache.hadoop.io.Text) r2;
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.document.SequenceFileTokenizerMapper: void map(org.apache.hadoop.io.Text,org.apache.hadoop.io.Text,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

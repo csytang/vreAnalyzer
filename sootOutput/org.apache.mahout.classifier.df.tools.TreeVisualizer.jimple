@@ -1,0 +1,903 @@
+public final class org.apache.mahout.classifier.df.tools.TreeVisualizer extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.classifier.df.tools.TreeVisualizer r0;
+
+        r0 := @this: org.apache.mahout.classifier.df.tools.TreeVisualizer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    private static java.lang.String doubleToString(double)
+    {
+        double d0;
+        java.text.DecimalFormat $r1;
+        java.lang.String $r2;
+
+        d0 := @parameter0: double;
+
+        $r1 = new java.text.DecimalFormat;
+
+        specialinvoke $r1.<java.text.DecimalFormat: void <init>(java.lang.String)>("0.##");
+
+        $r2 = virtualinvoke $r1.<java.text.DecimalFormat: java.lang.String format(double)>(d0);
+
+        return $r2;
+    }
+
+    private static java.lang.String toStringNode(org.apache.mahout.classifier.df.node.Node, org.apache.mahout.classifier.df.data.Dataset, java.lang.String[], java.util.Map, int)
+    {
+        org.apache.mahout.classifier.df.node.Node r0, $r69, r85, r86;
+        org.apache.mahout.classifier.df.data.Dataset r1;
+        java.lang.String[] r2, $r65, $r72;
+        java.util.Map r3;
+        int i0, $i1, $i2, $i3, $i4, $i5, i6, i7, i8, i9, i10, i11, i12;
+        org.apache.mahout.classifier.df.node.Node[] r5, $r59;
+        java.lang.StringBuilder $r6, $r13, $r14, $r32, $r33, $r38, $r43, $r73, $r74;
+        boolean $z0, $z1, $z2, $z3;
+        java.lang.Object $r7, $r9, $r18, $r20, $r23, $r24, $r25, $r29, $r30, $r31, $r50, $r54, $r55, $r56, $r58, $r60, $r62, $r67;
+        java.lang.String $r8, $r12, $r17, $r35, $r37, $r42, $r44, $r68, $r71;
+        java.lang.reflect.Field $r10, $r21, $r22, $r26, $r28, $r51, $r53, $r57, $r61;
+        java.lang.Double $r11, $r27;
+        java.lang.Integer $r19, $r52;
+        double[] $r63, r81;
+        double $d0, d1, d2;
+        java.lang.String[][] $r66, r82;
+        java.lang.IllegalAccessException $r78;
+        java.lang.IllegalStateException $r79;
+        org.apache.mahout.classifier.df.node.CategoricalNode r80;
+        java.io.Serializable $r83, $r87, $r88;
+        org.apache.mahout.classifier.df.node.NumericalNode r84;
+        org.apache.mahout.classifier.df.node.Leaf r89;
+
+        r0 := @parameter0: org.apache.mahout.classifier.df.node.Node;
+
+        r1 := @parameter1: org.apache.mahout.classifier.df.data.Dataset;
+
+        r2 := @parameter2: java.lang.String[];
+
+        r3 := @parameter3: java.util.Map;
+
+        i0 := @parameter4: int;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+     label01:
+        $z0 = r0 instanceof org.apache.mahout.classifier.df.node.CategoricalNode;
+
+        if $z0 == 0 goto label09;
+
+        r80 = (org.apache.mahout.classifier.df.node.CategoricalNode) r0;
+
+        $r55 = interfaceinvoke r3.<java.util.Map: java.lang.Object get(java.lang.Object)>("CategoricalNode.attr");
+
+        $r53 = (java.lang.reflect.Field) $r55;
+
+        $r54 = virtualinvoke $r53.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r80);
+
+        $r52 = (java.lang.Integer) $r54;
+
+        i6 = virtualinvoke $r52.<java.lang.Integer: int intValue()>();
+
+        $r50 = interfaceinvoke r3.<java.util.Map: java.lang.Object get(java.lang.Object)>("CategoricalNode.values");
+
+        $r51 = (java.lang.reflect.Field) $r50;
+
+        $r62 = virtualinvoke $r51.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r80);
+
+        $r63 = (double[]) $r62;
+
+        r81 = (double[]) $r63;
+
+        $r60 = interfaceinvoke r3.<java.util.Map: java.lang.Object get(java.lang.Object)>("CategoricalNode.childs");
+
+        $r61 = (java.lang.reflect.Field) $r60;
+
+        $r58 = virtualinvoke $r61.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r80);
+
+        $r59 = (org.apache.mahout.classifier.df.node.Node[]) $r58;
+
+        r5 = (org.apache.mahout.classifier.df.node.Node[]) $r59;
+
+        $r56 = interfaceinvoke r3.<java.util.Map: java.lang.Object get(java.lang.Object)>("Dataset.values");
+
+        $r57 = (java.lang.reflect.Field) $r56;
+
+        $r67 = virtualinvoke $r57.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r1);
+
+        $r66 = (java.lang.String[][]) $r67;
+
+        r82 = (java.lang.String[][]) $r66;
+
+        i7 = 0;
+
+     label02:
+        $r65 = r82[i6];
+
+        $i4 = lengthof $r65;
+
+        if i7 >= $i4 goto label22;
+
+        $d0 = (double) i7;
+
+        i8 = staticinvoke <org.apache.commons.lang3.ArrayUtils: int indexOf(double[],double)>(r81, $d0);
+
+        if i8 >= 0 goto label03;
+
+        goto label08;
+
+     label03:
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(10);
+
+        i9 = 0;
+
+     label04:
+        if i9 >= i0 goto label05;
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("|   ");
+
+        i9 = i9 + 1;
+
+        goto label04;
+
+     label05:
+        if r2 != null goto label06;
+
+        $r83 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i6);
+
+        goto label07;
+
+     label06:
+        $r83 = r2[i6];
+
+     label07:
+        $r74 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r83);
+
+        $r73 = virtualinvoke $r74.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" = ");
+
+        $r72 = r82[i6];
+
+        $r71 = $r72[i7];
+
+        virtualinvoke $r73.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r71);
+
+        $r69 = r5[i8];
+
+        $i5 = i0 + 1;
+
+        $r68 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String toStringNode(org.apache.mahout.classifier.df.node.Node,org.apache.mahout.classifier.df.data.Dataset,java.lang.String[],java.util.Map,int)>($r69, r1, r2, r3, $i5);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r68);
+
+     label08:
+        i7 = i7 + 1;
+
+        goto label02;
+
+     label09:
+        $z2 = r0 instanceof org.apache.mahout.classifier.df.node.NumericalNode;
+
+        if $z2 == 0 goto label18;
+
+        r84 = (org.apache.mahout.classifier.df.node.NumericalNode) r0;
+
+        $r20 = interfaceinvoke r3.<java.util.Map: java.lang.Object get(java.lang.Object)>("NumericalNode.attr");
+
+        $r21 = (java.lang.reflect.Field) $r20;
+
+        $r18 = virtualinvoke $r21.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r84);
+
+        $r19 = (java.lang.Integer) $r18;
+
+        i10 = virtualinvoke $r19.<java.lang.Integer: int intValue()>();
+
+        $r24 = interfaceinvoke r3.<java.util.Map: java.lang.Object get(java.lang.Object)>("NumericalNode.split");
+
+        $r22 = (java.lang.reflect.Field) $r24;
+
+        $r23 = virtualinvoke $r22.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r84);
+
+        $r27 = (java.lang.Double) $r23;
+
+        d1 = virtualinvoke $r27.<java.lang.Double: double doubleValue()>();
+
+        $r25 = interfaceinvoke r3.<java.util.Map: java.lang.Object get(java.lang.Object)>("NumericalNode.loChild");
+
+        $r26 = (java.lang.reflect.Field) $r25;
+
+        $r30 = virtualinvoke $r26.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r84);
+
+        r85 = (org.apache.mahout.classifier.df.node.Node) $r30;
+
+        $r31 = interfaceinvoke r3.<java.util.Map: java.lang.Object get(java.lang.Object)>("NumericalNode.hiChild");
+
+        $r28 = (java.lang.reflect.Field) $r31;
+
+        $r29 = virtualinvoke $r28.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r84);
+
+        r86 = (org.apache.mahout.classifier.df.node.Node) $r29;
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(10);
+
+        i11 = 0;
+
+     label10:
+        if i11 >= i0 goto label11;
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("|   ");
+
+        i11 = i11 + 1;
+
+        goto label10;
+
+     label11:
+        if r2 != null goto label12;
+
+        $r87 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i10);
+
+        goto label13;
+
+     label12:
+        $r87 = r2[i10];
+
+     label13:
+        $r33 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r87);
+
+        $r32 = virtualinvoke $r33.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" < ");
+
+        $r37 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String doubleToString(double)>(d1);
+
+        virtualinvoke $r32.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r37);
+
+        $i2 = i0 + 1;
+
+        $r35 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String toStringNode(org.apache.mahout.classifier.df.node.Node,org.apache.mahout.classifier.df.data.Dataset,java.lang.String[],java.util.Map,int)>(r85, r1, r2, r3, $i2);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r35);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(10);
+
+        i12 = 0;
+
+     label14:
+        if i12 >= i0 goto label15;
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("|   ");
+
+        i12 = i12 + 1;
+
+        goto label14;
+
+     label15:
+        if r2 != null goto label16;
+
+        $r88 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i10);
+
+        goto label17;
+
+     label16:
+        $r88 = r2[i10];
+
+     label17:
+        $r38 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r88);
+
+        $r43 = virtualinvoke $r38.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" >= ");
+
+        $r42 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String doubleToString(double)>(d1);
+
+        virtualinvoke $r43.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r42);
+
+        $i3 = i0 + 1;
+
+        $r44 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String toStringNode(org.apache.mahout.classifier.df.node.Node,org.apache.mahout.classifier.df.data.Dataset,java.lang.String[],java.util.Map,int)>(r86, r1, r2, r3, $i3);
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r44);
+
+        goto label22;
+
+     label18:
+        $z1 = r0 instanceof org.apache.mahout.classifier.df.node.Leaf;
+
+        if $z1 == 0 goto label22;
+
+        r89 = (org.apache.mahout.classifier.df.node.Leaf) r0;
+
+        $r7 = interfaceinvoke r3.<java.util.Map: java.lang.Object get(java.lang.Object)>("Leaf.label");
+
+        $r10 = (java.lang.reflect.Field) $r7;
+
+        $r9 = virtualinvoke $r10.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r89);
+
+        $r11 = (java.lang.Double) $r9;
+
+        d2 = virtualinvoke $r11.<java.lang.Double: double doubleValue()>();
+
+        $i1 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Dataset: int getLabelId()>();
+
+        $z3 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Dataset: boolean isNumerical(int)>($i1);
+
+        if $z3 == 0 goto label19;
+
+        $r14 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" : ");
+
+        $r17 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String doubleToString(double)>(d2);
+
+        virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r17);
+
+        goto label22;
+
+     label19:
+        $r13 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" : ");
+
+        $r12 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String getLabelString(double)>(d2);
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r12);
+
+     label20:
+        goto label22;
+
+     label21:
+        $r78 := @caughtexception;
+
+        $r79 = new java.lang.IllegalStateException;
+
+        specialinvoke $r79.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r78);
+
+        throw $r79;
+
+     label22:
+        $r8 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r8;
+
+        catch java.lang.IllegalAccessException from label01 to label20 with label21;
+    }
+
+    private static java.util.Map getReflectMap()
+    {
+        java.util.HashMap $r1;
+        java.lang.Class $r2, $r4, $r6, $r8, $r10, $r12, $r13, $r16, $r17;
+        java.lang.IllegalStateException $r20;
+        java.lang.NoSuchFieldException $r21;
+        java.lang.reflect.Field r22, r23, r24, r25, r26, r27, r28, r29, r30;
+
+        $r1 = new java.util.HashMap;
+
+        specialinvoke $r1.<java.util.HashMap: void <init>()>();
+
+     label1:
+        $r2 = class "org/apache/mahout/classifier/df/node/CategoricalNode";
+
+        r22 = virtualinvoke $r2.<java.lang.Class: java.lang.reflect.Field getDeclaredField(java.lang.String)>("attr");
+
+        virtualinvoke r22.<java.lang.reflect.Field: void setAccessible(boolean)>(1);
+
+        interfaceinvoke $r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("CategoricalNode.attr", r22);
+
+        $r4 = class "org/apache/mahout/classifier/df/node/CategoricalNode";
+
+        r23 = virtualinvoke $r4.<java.lang.Class: java.lang.reflect.Field getDeclaredField(java.lang.String)>("values");
+
+        virtualinvoke r23.<java.lang.reflect.Field: void setAccessible(boolean)>(1);
+
+        interfaceinvoke $r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("CategoricalNode.values", r23);
+
+        $r6 = class "org/apache/mahout/classifier/df/node/CategoricalNode";
+
+        r24 = virtualinvoke $r6.<java.lang.Class: java.lang.reflect.Field getDeclaredField(java.lang.String)>("childs");
+
+        virtualinvoke r24.<java.lang.reflect.Field: void setAccessible(boolean)>(1);
+
+        interfaceinvoke $r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("CategoricalNode.childs", r24);
+
+        $r8 = class "org/apache/mahout/classifier/df/node/NumericalNode";
+
+        r25 = virtualinvoke $r8.<java.lang.Class: java.lang.reflect.Field getDeclaredField(java.lang.String)>("attr");
+
+        virtualinvoke r25.<java.lang.reflect.Field: void setAccessible(boolean)>(1);
+
+        interfaceinvoke $r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("NumericalNode.attr", r25);
+
+        $r10 = class "org/apache/mahout/classifier/df/node/NumericalNode";
+
+        r26 = virtualinvoke $r10.<java.lang.Class: java.lang.reflect.Field getDeclaredField(java.lang.String)>("split");
+
+        virtualinvoke r26.<java.lang.reflect.Field: void setAccessible(boolean)>(1);
+
+        interfaceinvoke $r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("NumericalNode.split", r26);
+
+        $r12 = class "org/apache/mahout/classifier/df/node/NumericalNode";
+
+        r27 = virtualinvoke $r12.<java.lang.Class: java.lang.reflect.Field getDeclaredField(java.lang.String)>("loChild");
+
+        virtualinvoke r27.<java.lang.reflect.Field: void setAccessible(boolean)>(1);
+
+        interfaceinvoke $r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("NumericalNode.loChild", r27);
+
+        $r13 = class "org/apache/mahout/classifier/df/node/NumericalNode";
+
+        r28 = virtualinvoke $r13.<java.lang.Class: java.lang.reflect.Field getDeclaredField(java.lang.String)>("hiChild");
+
+        virtualinvoke r28.<java.lang.reflect.Field: void setAccessible(boolean)>(1);
+
+        interfaceinvoke $r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("NumericalNode.hiChild", r28);
+
+        $r16 = class "org/apache/mahout/classifier/df/node/Leaf";
+
+        r29 = virtualinvoke $r16.<java.lang.Class: java.lang.reflect.Field getDeclaredField(java.lang.String)>("label");
+
+        virtualinvoke r29.<java.lang.reflect.Field: void setAccessible(boolean)>(1);
+
+        interfaceinvoke $r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("Leaf.label", r29);
+
+        $r17 = class "org/apache/mahout/classifier/df/data/Dataset";
+
+        r30 = virtualinvoke $r17.<java.lang.Class: java.lang.reflect.Field getDeclaredField(java.lang.String)>("values");
+
+        virtualinvoke r30.<java.lang.reflect.Field: void setAccessible(boolean)>(1);
+
+        interfaceinvoke $r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("Dataset.values", r30);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r21 := @caughtexception;
+
+        $r20 = new java.lang.IllegalStateException;
+
+        specialinvoke $r20.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r21);
+
+        throw $r20;
+
+     label4:
+        return $r1;
+
+        catch java.lang.NoSuchFieldException from label1 to label2 with label3;
+    }
+
+    public static java.lang.String toString(org.apache.mahout.classifier.df.node.Node, org.apache.mahout.classifier.df.data.Dataset, java.lang.String[])
+    {
+        org.apache.mahout.classifier.df.node.Node r0;
+        org.apache.mahout.classifier.df.data.Dataset r1;
+        java.lang.String[] r2;
+        java.util.Map $r3;
+        java.lang.String $r4;
+
+        r0 := @parameter0: org.apache.mahout.classifier.df.node.Node;
+
+        r1 := @parameter1: org.apache.mahout.classifier.df.data.Dataset;
+
+        r2 := @parameter2: java.lang.String[];
+
+        $r3 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.util.Map getReflectMap()>();
+
+        $r4 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String toStringNode(org.apache.mahout.classifier.df.node.Node,org.apache.mahout.classifier.df.data.Dataset,java.lang.String[],java.util.Map,int)>(r0, r1, r2, $r3, 0);
+
+        return $r4;
+    }
+
+    public static void print(org.apache.mahout.classifier.df.node.Node, org.apache.mahout.classifier.df.data.Dataset, java.lang.String[])
+    {
+        org.apache.mahout.classifier.df.node.Node r0;
+        org.apache.mahout.classifier.df.data.Dataset r1;
+        java.lang.String[] r2;
+        java.io.PrintStream $r3;
+        java.lang.String $r4;
+
+        r0 := @parameter0: org.apache.mahout.classifier.df.node.Node;
+
+        r1 := @parameter1: org.apache.mahout.classifier.df.data.Dataset;
+
+        r2 := @parameter2: java.lang.String[];
+
+        $r3 = <java.lang.System: java.io.PrintStream out>;
+
+        $r4 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String toString(org.apache.mahout.classifier.df.node.Node,org.apache.mahout.classifier.df.data.Dataset,java.lang.String[])>(r0, r1, r2);
+
+        virtualinvoke $r3.<java.io.PrintStream: void println(java.lang.String)>($r4);
+
+        return;
+    }
+
+    private static java.lang.String toStringPredict(org.apache.mahout.classifier.df.node.Node, org.apache.mahout.classifier.df.data.Instance, org.apache.mahout.classifier.df.data.Dataset, java.lang.String[], java.util.Map)
+    {
+        org.apache.mahout.classifier.df.node.Node r0, $r76, r86, r87;
+        org.apache.mahout.classifier.df.data.Instance r1;
+        org.apache.mahout.classifier.df.data.Dataset r2;
+        java.lang.String[] r3, $r72;
+        java.util.Map r4;
+        org.apache.mahout.classifier.df.node.Node[] r6, $r68;
+        java.lang.StringBuilder $r7, $r31, $r33, $r34, $r37, $r38, $r42, $r44, $r45, $r46, $r50, $r73, $r74;
+        boolean $z0, $z1, $z2, $z3;
+        java.lang.Object $r8, $r10, $r18, $r20, $r22, $r23, $r24, $r28, $r29, $r30, $r53, $r55, $r58, $r60, $r62, $r63, $r65, $r67;
+        java.lang.String $r9, $r14, $r16, $r32, $r36, $r40, $r43, $r48, $r49, $r71, $r75;
+        java.lang.reflect.Field $r11, $r17, $r21, $r25, $r27, $r56, $r57, $r61, $r66;
+        java.lang.Double $r12, $r26;
+        int $i0, $i2, i3, i4, i5;
+        java.lang.Integer $r19, $r54;
+        double $d0, $d1, $d2, $d3, $d4, d5, d6;
+        byte $b1;
+        double[] $r59, r82;
+        java.lang.String[][] $r64, r83;
+        java.lang.IllegalAccessException $r79;
+        java.lang.IllegalStateException $r80;
+        org.apache.mahout.classifier.df.node.CategoricalNode r81;
+        java.io.Serializable $r84, $r88, $r89;
+        org.apache.mahout.classifier.df.node.NumericalNode r85;
+        org.apache.mahout.classifier.df.node.Leaf r90;
+
+        r0 := @parameter0: org.apache.mahout.classifier.df.node.Node;
+
+        r1 := @parameter1: org.apache.mahout.classifier.df.data.Instance;
+
+        r2 := @parameter2: org.apache.mahout.classifier.df.data.Dataset;
+
+        r3 := @parameter3: java.lang.String[];
+
+        r4 := @parameter4: java.util.Map;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+     label01:
+        $z0 = r0 instanceof org.apache.mahout.classifier.df.node.CategoricalNode;
+
+        if $z0 == 0 goto label04;
+
+        r81 = (org.apache.mahout.classifier.df.node.CategoricalNode) r0;
+
+        $r55 = interfaceinvoke r4.<java.util.Map: java.lang.Object get(java.lang.Object)>("CategoricalNode.attr");
+
+        $r56 = (java.lang.reflect.Field) $r55;
+
+        $r53 = virtualinvoke $r56.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r81);
+
+        $r54 = (java.lang.Integer) $r53;
+
+        i3 = virtualinvoke $r54.<java.lang.Integer: int intValue()>();
+
+        $r63 = interfaceinvoke r4.<java.util.Map: java.lang.Object get(java.lang.Object)>("CategoricalNode.values");
+
+        $r61 = (java.lang.reflect.Field) $r63;
+
+        $r62 = virtualinvoke $r61.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r81);
+
+        $r59 = (double[]) $r62;
+
+        r82 = (double[]) $r59;
+
+        $r60 = interfaceinvoke r4.<java.util.Map: java.lang.Object get(java.lang.Object)>("CategoricalNode.childs");
+
+        $r57 = (java.lang.reflect.Field) $r60;
+
+        $r58 = virtualinvoke $r57.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r81);
+
+        $r68 = (org.apache.mahout.classifier.df.node.Node[]) $r58;
+
+        r6 = (org.apache.mahout.classifier.df.node.Node[]) $r68;
+
+        $r67 = interfaceinvoke r4.<java.util.Map: java.lang.Object get(java.lang.Object)>("Dataset.values");
+
+        $r66 = (java.lang.reflect.Field) $r67;
+
+        $r65 = virtualinvoke $r66.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r2);
+
+        $r64 = (java.lang.String[][]) $r65;
+
+        r83 = (java.lang.String[][]) $r64;
+
+        $d3 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Instance: double get(int)>(i3);
+
+        i4 = staticinvoke <org.apache.commons.lang3.ArrayUtils: int indexOf(double[],double)>(r82, $d3);
+
+        if i4 < 0 goto label14;
+
+        if r3 != null goto label02;
+
+        $r84 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i3);
+
+        goto label03;
+
+     label02:
+        $r84 = r3[i3];
+
+     label03:
+        $r74 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r84);
+
+        $r73 = virtualinvoke $r74.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" = ");
+
+        $r72 = r83[i3];
+
+        $d4 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Instance: double get(int)>(i3);
+
+        $i2 = (int) $d4;
+
+        $r71 = $r72[$i2];
+
+        virtualinvoke $r73.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r71);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" -> ");
+
+        $r76 = r6[i4];
+
+        $r75 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String toStringPredict(org.apache.mahout.classifier.df.node.Node,org.apache.mahout.classifier.df.data.Instance,org.apache.mahout.classifier.df.data.Dataset,java.lang.String[],java.util.Map)>($r76, r1, r2, r3, r4);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r75);
+
+        goto label14;
+
+     label04:
+        $z1 = r0 instanceof org.apache.mahout.classifier.df.node.NumericalNode;
+
+        if $z1 == 0 goto label10;
+
+        r85 = (org.apache.mahout.classifier.df.node.NumericalNode) r0;
+
+        $r18 = interfaceinvoke r4.<java.util.Map: java.lang.Object get(java.lang.Object)>("NumericalNode.attr");
+
+        $r17 = (java.lang.reflect.Field) $r18;
+
+        $r20 = virtualinvoke $r17.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r85);
+
+        $r19 = (java.lang.Integer) $r20;
+
+        i5 = virtualinvoke $r19.<java.lang.Integer: int intValue()>();
+
+        $r23 = interfaceinvoke r4.<java.util.Map: java.lang.Object get(java.lang.Object)>("NumericalNode.split");
+
+        $r21 = (java.lang.reflect.Field) $r23;
+
+        $r22 = virtualinvoke $r21.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r85);
+
+        $r26 = (java.lang.Double) $r22;
+
+        d5 = virtualinvoke $r26.<java.lang.Double: double doubleValue()>();
+
+        $r24 = interfaceinvoke r4.<java.util.Map: java.lang.Object get(java.lang.Object)>("NumericalNode.loChild");
+
+        $r25 = (java.lang.reflect.Field) $r24;
+
+        $r29 = virtualinvoke $r25.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r85);
+
+        r86 = (org.apache.mahout.classifier.df.node.Node) $r29;
+
+        $r30 = interfaceinvoke r4.<java.util.Map: java.lang.Object get(java.lang.Object)>("NumericalNode.hiChild");
+
+        $r27 = (java.lang.reflect.Field) $r30;
+
+        $r28 = virtualinvoke $r27.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r85);
+
+        r87 = (org.apache.mahout.classifier.df.node.Node) $r28;
+
+        $d0 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Instance: double get(int)>(i5);
+
+        $b1 = $d0 cmpg d5;
+
+        if $b1 >= 0 goto label07;
+
+        $r45 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(40);
+
+        if r3 != null goto label05;
+
+        $r88 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i5);
+
+        goto label06;
+
+     label05:
+        $r88 = r3[i5];
+
+     label06:
+        $r46 = virtualinvoke $r45.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r88);
+
+        $r42 = virtualinvoke $r46.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" = ");
+
+        $d2 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Instance: double get(int)>(i5);
+
+        $r43 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String doubleToString(double)>($d2);
+
+        $r44 = virtualinvoke $r42.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r43);
+
+        $r50 = virtualinvoke $r44.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(") < ");
+
+        $r49 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String doubleToString(double)>(d5);
+
+        virtualinvoke $r50.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r49);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" -> ");
+
+        $r48 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String toStringPredict(org.apache.mahout.classifier.df.node.Node,org.apache.mahout.classifier.df.data.Instance,org.apache.mahout.classifier.df.data.Dataset,java.lang.String[],java.util.Map)>(r86, r1, r2, r3, r4);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r48);
+
+        goto label14;
+
+     label07:
+        $r31 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(40);
+
+        if r3 != null goto label08;
+
+        $r89 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i5);
+
+        goto label09;
+
+     label08:
+        $r89 = r3[i5];
+
+     label09:
+        $r34 = virtualinvoke $r31.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r89);
+
+        $r33 = virtualinvoke $r34.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" = ");
+
+        $d1 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Instance: double get(int)>(i5);
+
+        $r32 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String doubleToString(double)>($d1);
+
+        $r38 = virtualinvoke $r33.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r32);
+
+        $r37 = virtualinvoke $r38.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(") >= ");
+
+        $r36 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String doubleToString(double)>(d5);
+
+        virtualinvoke $r37.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r36);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" -> ");
+
+        $r40 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String toStringPredict(org.apache.mahout.classifier.df.node.Node,org.apache.mahout.classifier.df.data.Instance,org.apache.mahout.classifier.df.data.Dataset,java.lang.String[],java.util.Map)>(r87, r1, r2, r3, r4);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r40);
+
+        goto label14;
+
+     label10:
+        $z2 = r0 instanceof org.apache.mahout.classifier.df.node.Leaf;
+
+        if $z2 == 0 goto label14;
+
+        r90 = (org.apache.mahout.classifier.df.node.Leaf) r0;
+
+        $r8 = interfaceinvoke r4.<java.util.Map: java.lang.Object get(java.lang.Object)>("Leaf.label");
+
+        $r11 = (java.lang.reflect.Field) $r8;
+
+        $r10 = virtualinvoke $r11.<java.lang.reflect.Field: java.lang.Object get(java.lang.Object)>(r90);
+
+        $r12 = (java.lang.Double) $r10;
+
+        d6 = virtualinvoke $r12.<java.lang.Double: double doubleValue()>();
+
+        $i0 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Dataset: int getLabelId()>();
+
+        $z3 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Dataset: boolean isNumerical(int)>($i0);
+
+        if $z3 == 0 goto label11;
+
+        $r16 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String doubleToString(double)>(d6);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r16);
+
+        goto label14;
+
+     label11:
+        $r14 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String getLabelString(double)>(d6);
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r14);
+
+     label12:
+        goto label14;
+
+     label13:
+        $r79 := @caughtexception;
+
+        $r80 = new java.lang.IllegalStateException;
+
+        specialinvoke $r80.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r79);
+
+        throw $r80;
+
+     label14:
+        $r9 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r9;
+
+        catch java.lang.IllegalAccessException from label01 to label12 with label13;
+    }
+
+    public static java.lang.String[] predictTrace(org.apache.mahout.classifier.df.node.Node, org.apache.mahout.classifier.df.data.Data, java.lang.String[])
+    {
+        org.apache.mahout.classifier.df.node.Node r0;
+        org.apache.mahout.classifier.df.data.Data r1;
+        java.lang.String[] r2, r4;
+        java.util.Map r3;
+        int $i0, $i1, i2;
+        org.apache.mahout.classifier.df.data.Instance $r5;
+        org.apache.mahout.classifier.df.data.Dataset $r6;
+        java.lang.String $r7;
+
+        r0 := @parameter0: org.apache.mahout.classifier.df.node.Node;
+
+        r1 := @parameter1: org.apache.mahout.classifier.df.data.Data;
+
+        r2 := @parameter2: java.lang.String[];
+
+        r3 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.util.Map getReflectMap()>();
+
+        $i0 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        r4 = newarray (java.lang.String)[$i0];
+
+        i2 = 0;
+
+     label1:
+        $i1 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        if i2 >= $i1 goto label2;
+
+        $r5 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Instance get(int)>(i2);
+
+        $r6 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        $r7 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String toStringPredict(org.apache.mahout.classifier.df.node.Node,org.apache.mahout.classifier.df.data.Instance,org.apache.mahout.classifier.df.data.Dataset,java.lang.String[],java.util.Map)>(r0, $r5, $r6, r2, r3);
+
+        r4[i2] = $r7;
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        return r4;
+    }
+
+    public static void predictTracePrint(org.apache.mahout.classifier.df.node.Node, org.apache.mahout.classifier.df.data.Data, java.lang.String[])
+    {
+        org.apache.mahout.classifier.df.node.Node r0;
+        org.apache.mahout.classifier.df.data.Data r1;
+        java.lang.String[] r2;
+        java.util.Map r3;
+        int $i0, i1;
+        java.io.PrintStream $r4;
+        org.apache.mahout.classifier.df.data.Instance $r5;
+        org.apache.mahout.classifier.df.data.Dataset $r6;
+        java.lang.String $r7;
+
+        r0 := @parameter0: org.apache.mahout.classifier.df.node.Node;
+
+        r1 := @parameter1: org.apache.mahout.classifier.df.data.Data;
+
+        r2 := @parameter2: java.lang.String[];
+
+        r3 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.util.Map getReflectMap()>();
+
+        i1 = 0;
+
+     label1:
+        $i0 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        if i1 >= $i0 goto label2;
+
+        $r4 = <java.lang.System: java.io.PrintStream out>;
+
+        $r5 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Instance get(int)>(i1);
+
+        $r6 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        $r7 = staticinvoke <org.apache.mahout.classifier.df.tools.TreeVisualizer: java.lang.String toStringPredict(org.apache.mahout.classifier.df.node.Node,org.apache.mahout.classifier.df.data.Instance,org.apache.mahout.classifier.df.data.Dataset,java.lang.String[],java.util.Map)>(r0, $r5, $r6, r2, r3);
+
+        virtualinvoke $r4.<java.io.PrintStream: void println(java.lang.String)>($r7);
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+}

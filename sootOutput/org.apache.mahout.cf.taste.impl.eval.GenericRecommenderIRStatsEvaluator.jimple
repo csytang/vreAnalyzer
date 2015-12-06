@@ -1,0 +1,571 @@
+public final class org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator extends java.lang.Object implements org.apache.mahout.cf.taste.eval.RecommenderIRStatsEvaluator
+{
+    private static final org.slf4j.Logger log;
+    private static final double LOG2;
+    public static final double CHOOSE_THRESHOLD;
+    private final java.util.Random random;
+    private final org.apache.mahout.cf.taste.eval.RelevantItemsDataSplitter dataSplitter;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator r0;
+        org.apache.mahout.cf.taste.impl.eval.GenericRelevantItemsDataSplitter $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator;
+
+        $r1 = new org.apache.mahout.cf.taste.impl.eval.GenericRelevantItemsDataSplitter;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.impl.eval.GenericRelevantItemsDataSplitter: void <init>()>();
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator: void <init>(org.apache.mahout.cf.taste.eval.RelevantItemsDataSplitter)>($r1);
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.cf.taste.eval.RelevantItemsDataSplitter)
+    {
+        org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator r0;
+        org.apache.mahout.cf.taste.eval.RelevantItemsDataSplitter r1;
+        org.apache.mahout.common.RandomWrapper $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.eval.RelevantItemsDataSplitter;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r3 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator: java.util.Random random> = $r3;
+
+        r0.<org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator: org.apache.mahout.cf.taste.eval.RelevantItemsDataSplitter dataSplitter> = r1;
+
+        return;
+    }
+
+    public org.apache.mahout.cf.taste.eval.IRStatistics evaluate(org.apache.mahout.cf.taste.eval.RecommenderBuilder, org.apache.mahout.cf.taste.eval.DataModelBuilder, org.apache.mahout.cf.taste.model.DataModel, org.apache.mahout.cf.taste.recommender.IDRescorer, int, double, double) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator r0;
+        org.apache.mahout.cf.taste.eval.RecommenderBuilder r1;
+        org.apache.mahout.cf.taste.eval.DataModelBuilder r2;
+        org.apache.mahout.cf.taste.model.DataModel r3, $r47;
+        org.apache.mahout.cf.taste.recommender.IDRescorer r4;
+        int i0, i1, i4, $i7, $i8, $i9, $i13, $i14, i18, i19, i20, i21, i22, i23;
+        double d0, d1, d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10, $d11, $d12, $d13, $d14, $d15, $d16, $d17, $d18, $d19, $d20, $d21, $d22, $d23, $d24, $d25, $d26, $d27, $d28, $d29, $d30, $d31, $d32, d33, d34;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator r9, r14;
+        long l2, l3, $l11, $l12, $l15, $l16, l24;
+        org.apache.mahout.cf.taste.model.PreferenceArray r10;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet r11, $r22;
+        org.apache.mahout.cf.taste.recommender.Recommender r15;
+        java.util.List r16;
+        byte $b5, $b6, $b10, $b17;
+        org.apache.mahout.cf.taste.recommender.RecommendedItem r17, r50;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z9;
+        java.util.Random $r19;
+        org.apache.mahout.cf.taste.eval.RelevantItemsDataSplitter $r20, $r36;
+        org.slf4j.Logger $r24, $r25;
+        java.lang.Long $r26, $r28;
+        java.lang.Object[] $r27;
+        java.lang.Double $r29, $r30, $r31, $r32, $r33;
+        java.lang.Object $r34, $r35;
+        org.apache.mahout.cf.taste.common.NoSuchUserException $r37;
+        java.lang.StringBuilder $r39, $r40, $r41, r51;
+        java.lang.String $r42;
+        java.util.Iterator r49;
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage r52, r53, r54, r55;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap r56;
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r57;
+        org.apache.mahout.cf.taste.impl.eval.IRStatisticsImpl r58;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.eval.RecommenderBuilder;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.eval.DataModelBuilder;
+
+        r3 := @parameter2: org.apache.mahout.cf.taste.model.DataModel;
+
+        r4 := @parameter3: org.apache.mahout.cf.taste.recommender.IDRescorer;
+
+        i0 := @parameter4: int;
+
+        d0 := @parameter5: double;
+
+        d1 := @parameter6: double;
+
+        if r1 == null goto label01;
+
+        $z5 = 1;
+
+        goto label02;
+
+     label01:
+        $z5 = 0;
+
+     label02:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z5, "recommenderBuilder is null");
+
+        if r3 == null goto label03;
+
+        $z6 = 1;
+
+        goto label04;
+
+     label03:
+        $z6 = 0;
+
+     label04:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z6, "dataModel is null");
+
+        if i0 < 1 goto label05;
+
+        $z7 = 1;
+
+        goto label06;
+
+     label05:
+        $z7 = 0;
+
+     label06:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z7, "at must be at least 1");
+
+        $b5 = d1 cmpl 0.0;
+
+        if $b5 <= 0 goto label07;
+
+        $b17 = d1 cmpg 1.0;
+
+        if $b17 > 0 goto label07;
+
+        $z8 = 1;
+
+        goto label08;
+
+     label07:
+        $z8 = 0;
+
+     label08:
+        r51 = new java.lang.StringBuilder;
+
+        specialinvoke r51.<java.lang.StringBuilder: void <init>()>();
+
+        $r39 = virtualinvoke r51.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid evaluationPercentage: ");
+
+        $r40 = virtualinvoke $r39.<java.lang.StringBuilder: java.lang.StringBuilder append(double)>(d1);
+
+        $r41 = virtualinvoke $r40.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(". Must be: 0.0 < evaluationPercentage <= 1.0");
+
+        $r42 = virtualinvoke $r41.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z8, $r42);
+
+        i1 = interfaceinvoke r3.<org.apache.mahout.cf.taste.model.DataModel: int getNumItems()>();
+
+        r52 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke r52.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>()>();
+
+        r53 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke r53.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>()>();
+
+        r54 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke r54.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>()>();
+
+        r55 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke r55.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>()>();
+
+        i18 = 0;
+
+        i19 = 0;
+
+        r9 = interfaceinvoke r3.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs()>();
+
+     label09:
+        $z9 = interfaceinvoke r9.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: boolean hasNext()>();
+
+        if $z9 == 0 goto label32;
+
+        l2 = interfaceinvoke r9.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: long nextLong()>();
+
+        $r19 = r0.<org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator: java.util.Random random>;
+
+        $d11 = virtualinvoke $r19.<java.util.Random: double nextDouble()>();
+
+        $b6 = $d11 cmpl d1;
+
+        if $b6 < 0 goto label10;
+
+        goto label09;
+
+     label10:
+        l3 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        r10 = interfaceinvoke r3.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>(l2);
+
+        $z0 = staticinvoke <java.lang.Double: boolean isNaN(double)>(d0);
+
+        if $z0 == 0 goto label11;
+
+        $d32 = staticinvoke <org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator: double computeThreshold(org.apache.mahout.cf.taste.model.PreferenceArray)>(r10);
+
+        goto label12;
+
+     label11:
+        $d32 = d0;
+
+     label12:
+        $r20 = r0.<org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator: org.apache.mahout.cf.taste.eval.RelevantItemsDataSplitter dataSplitter>;
+
+        r11 = interfaceinvoke $r20.<org.apache.mahout.cf.taste.eval.RelevantItemsDataSplitter: org.apache.mahout.cf.taste.impl.common.FastIDSet getRelevantItemsIDs(long,int,double,org.apache.mahout.cf.taste.model.DataModel)>(l2, i0, $d32, r3);
+
+        i4 = virtualinvoke r11.<org.apache.mahout.cf.taste.impl.common.FastIDSet: int size()>();
+
+        if i4 > 0 goto label13;
+
+        goto label09;
+
+     label13:
+        r56 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        $i7 = interfaceinvoke r3.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsers()>();
+
+        specialinvoke r56.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>(int)>($i7);
+
+        r14 = interfaceinvoke r3.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs()>();
+
+     label14:
+        $z1 = interfaceinvoke r14.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label15;
+
+        $r36 = r0.<org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator: org.apache.mahout.cf.taste.eval.RelevantItemsDataSplitter dataSplitter>;
+
+        $l16 = interfaceinvoke r14.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: long nextLong()>();
+
+        interfaceinvoke $r36.<org.apache.mahout.cf.taste.eval.RelevantItemsDataSplitter: void processOtherUser(long,org.apache.mahout.cf.taste.impl.common.FastIDSet,org.apache.mahout.cf.taste.impl.common.FastByIDMap,long,org.apache.mahout.cf.taste.model.DataModel)>(l2, r11, r56, $l16, r3);
+
+        goto label14;
+
+     label15:
+        if r2 != null goto label16;
+
+        r57 = new org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        $r47 = r57;
+
+        specialinvoke r57.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: void <init>(org.apache.mahout.cf.taste.impl.common.FastByIDMap)>(r56);
+
+        goto label17;
+
+     label16:
+        $r47 = interfaceinvoke r2.<org.apache.mahout.cf.taste.eval.DataModelBuilder: org.apache.mahout.cf.taste.model.DataModel buildDataModel(org.apache.mahout.cf.taste.impl.common.FastByIDMap)>(r56);
+
+     label17:
+        interfaceinvoke $r47.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>(l2);
+
+     label18:
+        goto label20;
+
+     label19:
+        $r37 := @caughtexception;
+
+        goto label09;
+
+     label20:
+        $r22 = interfaceinvoke $r47.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.FastIDSet getItemIDsFromUser(long)>(l2);
+
+        $i9 = virtualinvoke $r22.<org.apache.mahout.cf.taste.impl.common.FastIDSet: int size()>();
+
+        i20 = i4 + $i9;
+
+        $i8 = 2 * i0;
+
+        if i20 >= $i8 goto label21;
+
+        goto label09;
+
+     label21:
+        r15 = interfaceinvoke r1.<org.apache.mahout.cf.taste.eval.RecommenderBuilder: org.apache.mahout.cf.taste.recommender.Recommender buildRecommender(org.apache.mahout.cf.taste.model.DataModel)>($r47);
+
+        i21 = 0;
+
+        r16 = interfaceinvoke r15.<org.apache.mahout.cf.taste.recommender.Recommender: java.util.List recommend(long,int,org.apache.mahout.cf.taste.recommender.IDRescorer)>(l2, i0, r4);
+
+        r49 = interfaceinvoke r16.<java.util.List: java.util.Iterator iterator()>();
+
+     label22:
+        $z2 = interfaceinvoke r49.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label23;
+
+        $r35 = interfaceinvoke r49.<java.util.Iterator: java.lang.Object next()>();
+
+        r50 = (org.apache.mahout.cf.taste.recommender.RecommendedItem) $r35;
+
+        $l15 = interfaceinvoke r50.<org.apache.mahout.cf.taste.recommender.RecommendedItem: long getItemID()>();
+
+        $z4 = virtualinvoke r11.<org.apache.mahout.cf.taste.impl.common.FastIDSet: boolean contains(long)>($l15);
+
+        if $z4 == 0 goto label22;
+
+        i21 = i21 + 1;
+
+        goto label22;
+
+     label23:
+        i22 = interfaceinvoke r16.<java.util.List: int size()>();
+
+        if i22 <= 0 goto label24;
+
+        $d26 = (double) i21;
+
+        $d31 = (double) i22;
+
+        $d27 = $d26 / $d31;
+
+        interfaceinvoke r52.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void addDatum(double)>($d27);
+
+     label24:
+        $d14 = (double) i21;
+
+        $d12 = (double) i4;
+
+        $d13 = $d14 / $d12;
+
+        interfaceinvoke r53.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void addDatum(double)>($d13);
+
+        if i4 >= i20 goto label25;
+
+        $i13 = i22 - i21;
+
+        $d29 = (double) $i13;
+
+        $i14 = i1 - i4;
+
+        $d28 = (double) $i14;
+
+        $d30 = $d29 / $d28;
+
+        interfaceinvoke r54.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void addDatum(double)>($d30);
+
+     label25:
+        d33 = 0.0;
+
+        d34 = 0.0;
+
+        i23 = 0;
+
+     label26:
+        if i23 >= i22 goto label29;
+
+        $r34 = interfaceinvoke r16.<java.util.List: java.lang.Object get(int)>(i23);
+
+        r17 = (org.apache.mahout.cf.taste.recommender.RecommendedItem) $r34;
+
+        $d24 = (double) i23;
+
+        $d25 = $d24 + 2.0;
+
+        $d22 = staticinvoke <org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator: double log2(double)>($d25);
+
+        d3 = 1.0 / $d22;
+
+        $l12 = interfaceinvoke r17.<org.apache.mahout.cf.taste.recommender.RecommendedItem: long getItemID()>();
+
+        $z3 = virtualinvoke r11.<org.apache.mahout.cf.taste.impl.common.FastIDSet: boolean contains(long)>($l12);
+
+        if $z3 == 0 goto label27;
+
+        d33 = d33 + d3;
+
+     label27:
+        if i23 >= i4 goto label28;
+
+        d34 = d34 + d3;
+
+     label28:
+        i23 = i23 + 1;
+
+        goto label26;
+
+     label29:
+        $b10 = d34 cmpl 0.0;
+
+        if $b10 <= 0 goto label30;
+
+        $d23 = d33 / d34;
+
+        interfaceinvoke r55.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void addDatum(double)>($d23);
+
+     label30:
+        i18 = i18 + 1;
+
+        if i22 <= 0 goto label31;
+
+        i19 = i19 + 1;
+
+     label31:
+        l24 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $r24 = <org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator: org.slf4j.Logger log>;
+
+        $r28 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l2);
+
+        $l11 = l24 - l3;
+
+        $r26 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l11);
+
+        interfaceinvoke $r24.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object,java.lang.Object)>("Evaluated with user {} in {}ms", $r28, $r26);
+
+        $r25 = <org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator: org.slf4j.Logger log>;
+
+        $r27 = newarray (java.lang.Object)[5];
+
+        $d15 = interfaceinvoke r52.<org.apache.mahout.cf.taste.impl.common.RunningAverage: double getAverage()>();
+
+        $r31 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d15);
+
+        $r27[0] = $r31;
+
+        $d17 = interfaceinvoke r53.<org.apache.mahout.cf.taste.impl.common.RunningAverage: double getAverage()>();
+
+        $r30 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d17);
+
+        $r27[1] = $r30;
+
+        $d16 = interfaceinvoke r54.<org.apache.mahout.cf.taste.impl.common.RunningAverage: double getAverage()>();
+
+        $r29 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d16);
+
+        $r27[2] = $r29;
+
+        $d21 = interfaceinvoke r55.<org.apache.mahout.cf.taste.impl.common.RunningAverage: double getAverage()>();
+
+        $r33 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d21);
+
+        $r27[3] = $r33;
+
+        $d19 = (double) i19;
+
+        $d20 = (double) i18;
+
+        $d18 = $d19 / $d20;
+
+        $r32 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d18);
+
+        $r27[4] = $r32;
+
+        interfaceinvoke $r25.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object[])>("Precision/recall/fall-out/nDCG/reach: {} / {} / {} / {} / {}", $r27);
+
+        goto label09;
+
+     label32:
+        r58 = new org.apache.mahout.cf.taste.impl.eval.IRStatisticsImpl;
+
+        $d5 = interfaceinvoke r52.<org.apache.mahout.cf.taste.impl.common.RunningAverage: double getAverage()>();
+
+        $d4 = interfaceinvoke r53.<org.apache.mahout.cf.taste.impl.common.RunningAverage: double getAverage()>();
+
+        $d9 = interfaceinvoke r54.<org.apache.mahout.cf.taste.impl.common.RunningAverage: double getAverage()>();
+
+        $d8 = interfaceinvoke r55.<org.apache.mahout.cf.taste.impl.common.RunningAverage: double getAverage()>();
+
+        $d6 = (double) i19;
+
+        $d7 = (double) i18;
+
+        $d10 = $d6 / $d7;
+
+        specialinvoke r58.<org.apache.mahout.cf.taste.impl.eval.IRStatisticsImpl: void <init>(double,double,double,double,double)>($d5, $d4, $d9, $d8, $d10);
+
+        return r58;
+
+        catch org.apache.mahout.cf.taste.common.NoSuchUserException from label17 to label18 with label19;
+    }
+
+    private static double computeThreshold(org.apache.mahout.cf.taste.model.PreferenceArray)
+    {
+        org.apache.mahout.cf.taste.model.PreferenceArray r0;
+        int i0, $i1, i2;
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverageAndStdDev $r2;
+        double $d0, $d1, $d2, $d3;
+        float $f0;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.model.PreferenceArray;
+
+        $i1 = interfaceinvoke r0.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        if $i1 >= 2 goto label1;
+
+        return #-Infinity;
+
+     label1:
+        $r2 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverageAndStdDev;
+
+        specialinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FullRunningAverageAndStdDev: void <init>()>();
+
+        i0 = interfaceinvoke r0.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        i2 = 0;
+
+     label2:
+        if i2 >= i0 goto label3;
+
+        $f0 = interfaceinvoke r0.<org.apache.mahout.cf.taste.model.PreferenceArray: float getValue(int)>(i2);
+
+        $d3 = (double) $f0;
+
+        interfaceinvoke $r2.<org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev: void addDatum(double)>($d3);
+
+        i2 = i2 + 1;
+
+        goto label2;
+
+     label3:
+        $d0 = interfaceinvoke $r2.<org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev: double getAverage()>();
+
+        $d1 = interfaceinvoke $r2.<org.apache.mahout.cf.taste.impl.common.RunningAverageAndStdDev: double getStandardDeviation()>();
+
+        $d2 = $d0 + $d1;
+
+        return $d2;
+    }
+
+    private static double log2(double)
+    {
+        double d0, $d1, $d2, $d3;
+
+        d0 := @parameter0: double;
+
+        $d1 = staticinvoke <java.lang.Math: double log(double)>(d0);
+
+        $d2 = <org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator: double LOG2>;
+
+        $d3 = $d1 / $d2;
+
+        return $d3;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+        double $d0;
+
+        <org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator: double CHOOSE_THRESHOLD> = #NaN;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/cf/taste/impl/eval/GenericRecommenderIRStatsEvaluator");
+
+        <org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator: org.slf4j.Logger log> = $r0;
+
+        $d0 = staticinvoke <java.lang.Math: double log(double)>(2.0);
+
+        <org.apache.mahout.cf.taste.impl.eval.GenericRecommenderIRStatsEvaluator: double LOG2> = $d0;
+
+        return;
+    }
+}

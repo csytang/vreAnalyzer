@@ -1,0 +1,40 @@
+class org.apache.mahout.clustering.streaming.cluster.StreamingKMeans$3 extends java.lang.Object implements java.lang.Iterable
+{
+    final org.apache.mahout.math.Centroid val$datapoint;
+    final org.apache.mahout.clustering.streaming.cluster.StreamingKMeans this$0;
+
+    void <init>(org.apache.mahout.clustering.streaming.cluster.StreamingKMeans, org.apache.mahout.math.Centroid)
+    {
+        org.apache.mahout.clustering.streaming.cluster.StreamingKMeans$3 r0;
+        org.apache.mahout.clustering.streaming.cluster.StreamingKMeans r1;
+        org.apache.mahout.math.Centroid r2;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.cluster.StreamingKMeans$3;
+
+        r1 := @parameter0: org.apache.mahout.clustering.streaming.cluster.StreamingKMeans;
+
+        r2 := @parameter1: org.apache.mahout.math.Centroid;
+
+        r0.<org.apache.mahout.clustering.streaming.cluster.StreamingKMeans$3: org.apache.mahout.clustering.streaming.cluster.StreamingKMeans this$0> = r1;
+
+        r0.<org.apache.mahout.clustering.streaming.cluster.StreamingKMeans$3: org.apache.mahout.math.Centroid val$datapoint> = r2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public java.util.Iterator iterator()
+    {
+        org.apache.mahout.clustering.streaming.cluster.StreamingKMeans$3 r0;
+        org.apache.mahout.clustering.streaming.cluster.StreamingKMeans$3$1 $r1;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.cluster.StreamingKMeans$3;
+
+        $r1 = new org.apache.mahout.clustering.streaming.cluster.StreamingKMeans$3$1;
+
+        specialinvoke $r1.<org.apache.mahout.clustering.streaming.cluster.StreamingKMeans$3$1: void <init>(org.apache.mahout.clustering.streaming.cluster.StreamingKMeans$3)>(r0);
+
+        return $r1;
+    }
+}

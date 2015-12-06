@@ -1,0 +1,146 @@
+public class org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue extends org.apache.lucene.util.PriorityQueue
+{
+    private final int maxSize;
+    private static final int SENTINEL_INDEX;
+
+    public void <init>(int)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue;
+
+        i0 := @parameter0: int;
+
+        specialinvoke r0.<org.apache.lucene.util.PriorityQueue: void <init>(int)>(i0);
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue: int maxSize> = i0;
+
+        return;
+    }
+
+    public java.util.List getTopElements()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue r0;
+        java.util.ArrayList r1;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement r2;
+        int $i0, $i1, $i2;
+        java.lang.Object $r3;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue;
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue: int maxSize>;
+
+        r1 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayListWithCapacity(int)>($i0);
+
+     label1:
+        $i1 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue: int size()>();
+
+        if $i1 <= 0 goto label2;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue: java.lang.Object pop()>();
+
+        r2 = (org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement) $r3;
+
+        $i2 = virtualinvoke r2.<org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement: int index()>();
+
+        if $i2 == -2147483648 goto label1;
+
+        interfaceinvoke r1.<java.util.List: boolean add(java.lang.Object)>(r2);
+
+        goto label1;
+
+     label2:
+        staticinvoke <java.util.Collections: void reverse(java.util.List)>(r1);
+
+        return r1;
+    }
+
+    protected org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement getSentinelObject()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue r0;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue;
+
+        $r1 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement;
+
+        specialinvoke $r1.<org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement: void <init>(int,double)>(-2147483648, 4.9E-324);
+
+        return $r1;
+    }
+
+    protected boolean lessThan(org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement, org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue r0;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement r1, r2;
+        double $d0, $d1;
+        byte $b0;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue;
+
+        r1 := @parameter0: org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement;
+
+        r2 := @parameter1: org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement;
+
+        $d0 = virtualinvoke r1.<org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement: double get()>();
+
+        $d1 = virtualinvoke r2.<org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement: double get()>();
+
+        $b0 = $d0 cmpg $d1;
+
+        if $b0 >= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    protected volatile java.lang.Object getSentinelObject()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue r0;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue: org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement getSentinelObject()>();
+
+        return $r1;
+    }
+
+    protected volatile boolean lessThan(java.lang.Object, java.lang.Object)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue r0;
+        java.lang.Object r1, r2;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement $r3, $r4;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        $r4 = (org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement) r1;
+
+        $r3 = (org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement) r2;
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue: boolean lessThan(org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement,org.apache.mahout.math.hadoop.similarity.cooccurrence.MutableElement)>($r4, $r3);
+
+        return $z0;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.TopElementsQueue: int SENTINEL_INDEX> = -2147483648;
+
+        return;
+    }
+}

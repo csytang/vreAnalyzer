@@ -1,0 +1,192 @@
+public final class org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+    public static final java.lang.String MIN_PREFERENCES_PER_USER;
+    private int minPreferences;
+    private final org.apache.mahout.math.VectorWritable userVectorWritable;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer r0;
+        org.apache.mahout.math.VectorWritable $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r1.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer: org.apache.mahout.math.VectorWritable userVectorWritable> = $r1;
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        org.apache.hadoop.conf.Configuration $r2;
+        java.lang.String $r3;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void setup(org.apache.hadoop.mapreduce.Reducer$Context)>(r1);
+
+        $r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r3 = <org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer: java.lang.String MIN_PREFERENCES_PER_USER>;
+
+        $i0 = virtualinvoke $r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>($r3, 1);
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer: int minPreferences> = $i0;
+
+        return;
+    }
+
+    protected void reduce(org.apache.mahout.math.VarLongWritable, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer r0;
+        org.apache.mahout.math.VarLongWritable r1, r6;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        java.util.Iterator r5;
+        int i0, $i1, $i2;
+        org.apache.mahout.math.RandomAccessSparseVector $r7;
+        boolean $z0, $z1;
+        org.apache.mahout.math.VectorWritable $r8, $r9, $r13;
+        org.apache.hadoop.mapreduce.Counter $r10;
+        org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer$Counters $r11;
+        java.lang.Object $r12;
+        long $l3;
+        double $d0;
+        org.apache.mahout.cf.taste.hadoop.EntityPrefWritable $r14;
+        float $f1;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer;
+
+        r1 := @parameter0: org.apache.mahout.math.VarLongWritable;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r7 = new org.apache.mahout.math.RandomAccessSparseVector;
+
+        specialinvoke $r7.<org.apache.mahout.math.RandomAccessSparseVector: void <init>(int,int)>(2147483647, 100);
+
+        r5 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r12 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.math.VarLongWritable) $r12;
+
+        $l3 = virtualinvoke r6.<org.apache.mahout.math.VarLongWritable: long get()>();
+
+        i0 = staticinvoke <org.apache.mahout.cf.taste.hadoop.TasteHadoopUtils: int idToIndex(long)>($l3);
+
+        $z1 = r6 instanceof org.apache.mahout.cf.taste.hadoop.EntityPrefWritable;
+
+        if $z1 == 0 goto label2;
+
+        $r14 = (org.apache.mahout.cf.taste.hadoop.EntityPrefWritable) r6;
+
+        $f1 = virtualinvoke $r14.<org.apache.mahout.cf.taste.hadoop.EntityPrefWritable: float getPrefValue()>();
+
+        goto label3;
+
+     label2:
+        $f1 = 1.0F;
+
+     label3:
+        $d0 = (double) $f1;
+
+        interfaceinvoke $r7.<org.apache.mahout.math.Vector: void set(int,double)>(i0, $d0);
+
+        goto label1;
+
+     label4:
+        $i1 = interfaceinvoke $r7.<org.apache.mahout.math.Vector: int getNumNondefaultElements()>();
+
+        $i2 = r0.<org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer: int minPreferences>;
+
+        if $i1 < $i2 goto label5;
+
+        $r8 = r0.<org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer: org.apache.mahout.math.VectorWritable userVectorWritable>;
+
+        virtualinvoke $r8.<org.apache.mahout.math.VectorWritable: void set(org.apache.mahout.math.Vector)>($r7);
+
+        $r9 = r0.<org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer: org.apache.mahout.math.VectorWritable userVectorWritable>;
+
+        virtualinvoke $r9.<org.apache.mahout.math.VectorWritable: void setWritesLaxPrecision(boolean)>(1);
+
+        $r11 = <org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer$Counters: org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer$Counters USERS>;
+
+        $r10 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.mapreduce.Counter getCounter(java.lang.Enum)>($r11);
+
+        interfaceinvoke $r10.<org.apache.hadoop.mapreduce.Counter: void increment(long)>(1L);
+
+        $r13 = r0.<org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer: org.apache.mahout.math.VectorWritable userVectorWritable>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r13);
+
+     label5:
+        return;
+    }
+
+    protected volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.mahout.math.VarLongWritable $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.mahout.math.VarLongWritable) r1;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer: void reduce(org.apache.mahout.math.VarLongWritable,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.StringBuilder $r0, $r3, $r4;
+        java.lang.Class $r1;
+        java.lang.String $r2, $r5;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = class "org/apache/mahout/cf/taste/hadoop/item/ToUserVectorsReducer";
+
+        $r2 = virtualinvoke $r1.<java.lang.Class: java.lang.String getName()>();
+
+        $r3 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".minPreferencesPerUser");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.cf.taste.hadoop.item.ToUserVectorsReducer: java.lang.String MIN_PREFERENCES_PER_USER> = $r5;
+
+        return;
+    }
+}

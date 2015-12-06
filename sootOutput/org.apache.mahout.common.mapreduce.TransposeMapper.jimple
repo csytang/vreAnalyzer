@@ -1,0 +1,156 @@
+public class org.apache.mahout.common.mapreduce.TransposeMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    public static final java.lang.String NEW_NUM_COLS_PARAM;
+    private int newNumCols;
+
+    public void <init>()
+    {
+        org.apache.mahout.common.mapreduce.TransposeMapper r0;
+
+        r0 := @this: org.apache.mahout.common.mapreduce.TransposeMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.common.mapreduce.TransposeMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration $r2;
+        java.lang.String $r3;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.common.mapreduce.TransposeMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r3 = <org.apache.mahout.common.mapreduce.TransposeMapper: java.lang.String NEW_NUM_COLS_PARAM>;
+
+        $i0 = virtualinvoke $r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>($r3, 2147483647);
+
+        r0.<org.apache.mahout.common.mapreduce.TransposeMapper: int newNumCols> = $i0;
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.IntWritable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.common.mapreduce.TransposeMapper r0;
+        org.apache.hadoop.io.IntWritable r1;
+        org.apache.mahout.math.VectorWritable r2, $r11;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        int i0, $i1, $i2;
+        java.util.Iterator r4;
+        org.apache.mahout.math.Vector$Element r5;
+        org.apache.mahout.math.Vector $r7;
+        java.lang.Iterable $r8;
+        boolean $z0;
+        java.lang.Object $r9;
+        org.apache.mahout.math.RandomAccessSparseVector $r10;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.common.mapreduce.TransposeMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        i0 = virtualinvoke r1.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $r7 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r8 = interfaceinvoke $r7.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r4 = interfaceinvoke $r8.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r9 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.Vector$Element) $r9;
+
+        $r10 = new org.apache.mahout.math.RandomAccessSparseVector;
+
+        $i1 = r0.<org.apache.mahout.common.mapreduce.TransposeMapper: int newNumCols>;
+
+        specialinvoke $r10.<org.apache.mahout.math.RandomAccessSparseVector: void <init>(int,int)>($i1, 1);
+
+        $d0 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        virtualinvoke $r10.<org.apache.mahout.math.RandomAccessSparseVector: void setQuick(int,double)>(i0, $d0);
+
+        $i2 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        virtualinvoke r1.<org.apache.hadoop.io.IntWritable: void set(int)>($i2);
+
+        $r11 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r11.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r10);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r11);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.common.mapreduce.TransposeMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.IntWritable $r5;
+
+        r0 := @this: org.apache.mahout.common.mapreduce.TransposeMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.IntWritable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.common.mapreduce.TransposeMapper: void map(org.apache.hadoop.io.IntWritable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.StringBuilder $r0, $r3, $r4;
+        java.lang.Class $r1;
+        java.lang.String $r2, $r5;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = class "org/apache/mahout/common/mapreduce/TransposeMapper";
+
+        $r2 = virtualinvoke $r1.<java.lang.Class: java.lang.String getName()>();
+
+        $r3 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".newNumCols");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.common.mapreduce.TransposeMapper: java.lang.String NEW_NUM_COLS_PARAM> = $r5;
+
+        return;
+    }
+}

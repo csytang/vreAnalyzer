@@ -1,0 +1,279 @@
+public final class org.apache.mahout.clustering.UncommonDistributions extends java.lang.Object
+{
+    private static final org.apache.mahout.common.RandomWrapper RANDOM;
+
+    private void <init>()
+    {
+        org.apache.mahout.clustering.UncommonDistributions r0;
+
+        r0 := @this: org.apache.mahout.clustering.UncommonDistributions;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static double rGamma(double, double)
+    {
+        double d0, d1, d2, d3, d4, $d5, $d6, $d7, $d8, $d9, $d10, $d11, $d12, $d13, $d14, $d15, $d16, $d17, $d18, $d19, $d20, $d21, $d22, $d23, $d24, $d25, $d26, $d27, $d28, $d29, $d30, $d31, $d32, d33, d34, d35, d36, d37, d38, d39, d40, d41, d42, d43, d44, d45, d46;
+        byte $b0, $b1, $b2, $b3;
+        org.apache.mahout.common.RandomWrapper $r0, $r1, $r2, $r3;
+        boolean z0;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        z0 = 0;
+
+        $b0 = d0 cmpl 1.0;
+
+        if $b0 < 0 goto label4;
+
+        $d17 = staticinvoke <java.lang.Math: double log(double)>(4.0);
+
+        d33 = d0 - $d17;
+
+        $d16 = 2.0 * d0;
+
+        $d15 = $d16 - 1.0;
+
+        $d14 = staticinvoke <java.lang.Math: double sqrt(double)>($d15);
+
+        d34 = d0 + $d14;
+
+        $d19 = 2.0 * d0;
+
+        $d18 = $d19 - 1.0;
+
+        d35 = staticinvoke <java.lang.Math: double sqrt(double)>($d18);
+
+        $d20 = staticinvoke <java.lang.Math: double log(double)>(4.5);
+
+        d36 = 1.0 + $d20;
+
+     label1:
+        $r3 = <org.apache.mahout.clustering.UncommonDistributions: org.apache.mahout.common.RandomWrapper RANDOM>;
+
+        d37 = virtualinvoke $r3.<org.apache.mahout.common.RandomWrapper: double nextDouble()>();
+
+        $r2 = <org.apache.mahout.clustering.UncommonDistributions: org.apache.mahout.common.RandomWrapper RANDOM>;
+
+        d38 = virtualinvoke $r2.<org.apache.mahout.common.RandomWrapper: double nextDouble()>();
+
+        $d27 = 1.0 / d35;
+
+        $d25 = 1.0 - d38;
+
+        $d26 = d38 / $d25;
+
+        $d21 = staticinvoke <java.lang.Math: double log(double)>($d26);
+
+        d2 = $d27 * $d21;
+
+        $d22 = staticinvoke <java.lang.Math: double exp(double)>(d2);
+
+        d39 = d0 * $d22;
+
+        $d23 = d37 * d38;
+
+        d3 = $d23 * d38;
+
+        $d24 = d34 * d2;
+
+        $d28 = d33 + $d24;
+
+        d4 = $d28 - d39;
+
+        $d29 = 4.5 * d3;
+
+        $d30 = $d29 - d36;
+
+        $b2 = d4 cmpl $d30;
+
+        if $b2 >= 0 goto label2;
+
+        $d32 = staticinvoke <java.lang.Math: double log(double)>(d3);
+
+        $b3 = d4 cmpl $d32;
+
+        if $b3 < 0 goto label3;
+
+     label2:
+        z0 = 1;
+
+     label3:
+        if z0 == 0 goto label1;
+
+        $d31 = d39 / d1;
+
+        return $d31;
+
+     label4:
+        d40 = 1.0 / d0;
+
+        $d8 = 1.0 - d0;
+
+        $d6 = 1.0 - d0;
+
+        $d5 = d0 / $d6;
+
+        $d7 = staticinvoke <java.lang.Math: double pow(double,double)>(d0, $d5);
+
+        d41 = $d8 * $d7;
+
+     label5:
+        $r0 = <org.apache.mahout.clustering.UncommonDistributions: org.apache.mahout.common.RandomWrapper RANDOM>;
+
+        d42 = virtualinvoke $r0.<org.apache.mahout.common.RandomWrapper: double nextDouble()>();
+
+        $r1 = <org.apache.mahout.clustering.UncommonDistributions: org.apache.mahout.common.RandomWrapper RANDOM>;
+
+        d43 = virtualinvoke $r1.<org.apache.mahout.common.RandomWrapper: double nextDouble()>();
+
+        $d9 = staticinvoke <java.lang.Math: double log(double)>(d42);
+
+        d44 = neg $d9;
+
+        $d10 = staticinvoke <java.lang.Math: double log(double)>(d43);
+
+        d45 = neg $d10;
+
+        d46 = staticinvoke <java.lang.Math: double pow(double,double)>(d44, d40);
+
+        $d11 = d44 + d45;
+
+        $d12 = d41 + d46;
+
+        $b1 = $d11 cmpl $d12;
+
+        if $b1 < 0 goto label6;
+
+        z0 = 1;
+
+     label6:
+        if z0 == 0 goto label5;
+
+        $d13 = d46 / d1;
+
+        return $d13;
+    }
+
+    public static double rBeta(double, double)
+    {
+        double d0, d1, d2, d3, $d4, $d5;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        d2 = staticinvoke <org.apache.mahout.clustering.UncommonDistributions: double rGamma(double,double)>(d0, 1.0);
+
+        d3 = staticinvoke <org.apache.mahout.clustering.UncommonDistributions: double rGamma(double,double)>(d1, 1.0);
+
+        $d4 = d2 + d3;
+
+        $d5 = d2 / $d4;
+
+        return $d5;
+    }
+
+    public static double rNorm(double, double)
+    {
+        double d0, d1, $d2;
+        org.apache.commons.math3.distribution.NormalDistribution $r1;
+        org.apache.mahout.common.RandomWrapper $r2;
+        org.apache.commons.math3.random.RandomGenerator $r3;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        $r1 = new org.apache.commons.math3.distribution.NormalDistribution;
+
+        $r2 = <org.apache.mahout.clustering.UncommonDistributions: org.apache.mahout.common.RandomWrapper RANDOM>;
+
+        $r3 = virtualinvoke $r2.<org.apache.mahout.common.RandomWrapper: org.apache.commons.math3.random.RandomGenerator getRandomGenerator()>();
+
+        specialinvoke $r1.<org.apache.commons.math3.distribution.NormalDistribution: void <init>(org.apache.commons.math3.random.RandomGenerator,double,double,double)>($r3, d0, d1, 1.0E-9);
+
+        $d2 = interfaceinvoke $r1.<org.apache.commons.math3.distribution.RealDistribution: double sample()>();
+
+        return $d2;
+    }
+
+    public static int rBinomial(int, double)
+    {
+        int i0, $i3, $i4, i5;
+        double d0, d1, d2, d3, $d4, $d5, $d6, $d7, $d8, d9;
+        byte $b1, $b2;
+        org.apache.mahout.common.RandomWrapper $r0;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        $b1 = d0 cmpl 1.0;
+
+        if $b1 < 0 goto label1;
+
+        return i0;
+
+     label1:
+        $d4 = neg d0;
+
+        $d5 = staticinvoke <java.lang.Math: double log1p(double)>($d4);
+
+        d1 = neg $d5;
+
+        d9 = 0.0;
+
+        i5 = 0;
+
+     label2:
+        $b2 = d9 cmpg d1;
+
+        if $b2 > 0 goto label3;
+
+        $r0 = <org.apache.mahout.clustering.UncommonDistributions: org.apache.mahout.common.RandomWrapper RANDOM>;
+
+        d2 = virtualinvoke $r0.<org.apache.mahout.common.RandomWrapper: double nextDouble()>();
+
+        $d6 = staticinvoke <java.lang.Math: double log(double)>(d2);
+
+        d3 = neg $d6;
+
+        $i4 = i0 - i5;
+
+        $d7 = (double) $i4;
+
+        $d8 = d3 / $d7;
+
+        d9 = d9 + $d8;
+
+        i5 = i5 + 1;
+
+        goto label2;
+
+     label3:
+        if i5 != 0 goto label4;
+
+        return 0;
+
+     label4:
+        $i3 = i5 - 1;
+
+        return $i3;
+    }
+
+    static void <clinit>()
+    {
+        org.apache.mahout.common.RandomWrapper $r0;
+
+        $r0 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        <org.apache.mahout.clustering.UncommonDistributions: org.apache.mahout.common.RandomWrapper RANDOM> = $r0;
+
+        return;
+    }
+}

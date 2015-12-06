@@ -1,0 +1,499 @@
+public class org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy extends java.lang.Object implements org.apache.mahout.cf.taste.impl.recommender.svd.PersistenceStrategy
+{
+    private final java.io.File file;
+    private static final org.slf4j.Logger log;
+
+    public void <init>(java.io.File)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy r0;
+        java.io.File r1, $r3;
+        java.lang.Object $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy;
+
+        r1 := @parameter0: java.io.File;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r3 = (java.io.File) $r2;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy: java.io.File file> = $r3;
+
+        return;
+    }
+
+    public org.apache.mahout.cf.taste.impl.recommender.svd.Factorization load() throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy r0;
+        java.io.File $r5, $r9, $r10, $r13;
+        boolean $z0;
+        java.io.DataInputStream $r6;
+        java.io.BufferedInputStream $r7;
+        java.io.FileInputStream $r8;
+        org.slf4j.Logger $r11, $r14;
+        java.lang.String $r12, $r16;
+        java.lang.Throwable $r17, $r18, $r19, r20;
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r21;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy: java.io.File file>;
+
+        $z0 = virtualinvoke $r5.<java.io.File: boolean exists()>();
+
+        if $z0 != 0 goto label01;
+
+        $r14 = <org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy: org.slf4j.Logger log>;
+
+        $r13 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy: java.io.File file>;
+
+        $r16 = virtualinvoke $r13.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        interfaceinvoke $r14.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("{} does not yet exist, no factorization found", $r16);
+
+        return null;
+
+     label01:
+        $r6 = new java.io.DataInputStream;
+
+        $r7 = new java.io.BufferedInputStream;
+
+        $r8 = new java.io.FileInputStream;
+
+        $r9 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy: java.io.File file>;
+
+        specialinvoke $r8.<java.io.FileInputStream: void <init>(java.io.File)>($r9);
+
+        specialinvoke $r7.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>($r8);
+
+        specialinvoke $r6.<java.io.DataInputStream: void <init>(java.io.InputStream)>($r7);
+
+        r20 = null;
+
+     label02:
+        $r11 = <org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy: org.slf4j.Logger log>;
+
+        $r10 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy: java.io.File file>;
+
+        $r12 = virtualinvoke $r10.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        interfaceinvoke $r11.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Reading factorization from {}...", $r12);
+
+        r21 = staticinvoke <org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization readBinary(java.io.DataInput)>($r6);
+
+     label03:
+        if $r6 == null goto label04;
+
+        virtualinvoke $r6.<java.io.DataInputStream: void close()>();
+
+     label04:
+        return r21;
+
+     label05:
+        $r18 := @caughtexception;
+
+        r20 = $r18;
+
+        throw $r18;
+
+     label06:
+        $r17 := @caughtexception;
+
+     label07:
+        if $r6 == null goto label12;
+
+        if r20 == null goto label11;
+
+     label08:
+        virtualinvoke $r6.<java.io.DataInputStream: void close()>();
+
+     label09:
+        goto label12;
+
+     label10:
+        $r19 := @caughtexception;
+
+        virtualinvoke r20.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r19);
+
+        goto label12;
+
+     label11:
+        virtualinvoke $r6.<java.io.DataInputStream: void close()>();
+
+     label12:
+        throw $r17;
+
+        catch java.lang.Throwable from label02 to label03 with label05;
+        catch java.lang.Throwable from label02 to label03 with label06;
+        catch java.lang.Throwable from label08 to label09 with label10;
+        catch java.lang.Throwable from label05 to label07 with label06;
+    }
+
+    public void maybePersist(org.apache.mahout.cf.taste.impl.recommender.svd.Factorization) throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy r0;
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r1;
+        java.io.DataOutputStream $r5;
+        java.io.BufferedOutputStream $r6;
+        java.io.FileOutputStream $r7;
+        java.io.File $r8, $r9;
+        org.slf4j.Logger $r10;
+        java.lang.String $r11;
+        java.lang.Throwable $r12, $r13, $r14, r16;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        $r5 = new java.io.DataOutputStream;
+
+        $r6 = new java.io.BufferedOutputStream;
+
+        $r7 = new java.io.FileOutputStream;
+
+        $r8 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy: java.io.File file>;
+
+        specialinvoke $r7.<java.io.FileOutputStream: void <init>(java.io.File)>($r8);
+
+        specialinvoke $r6.<java.io.BufferedOutputStream: void <init>(java.io.OutputStream)>($r7);
+
+        specialinvoke $r5.<java.io.DataOutputStream: void <init>(java.io.OutputStream)>($r6);
+
+        r16 = null;
+
+     label01:
+        $r10 = <org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy: org.slf4j.Logger log>;
+
+        $r9 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy: java.io.File file>;
+
+        $r11 = virtualinvoke $r9.<java.io.File: java.lang.String getAbsolutePath()>();
+
+        interfaceinvoke $r10.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Writing factorization to {}...", $r11);
+
+        staticinvoke <org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy: void writeBinary(org.apache.mahout.cf.taste.impl.recommender.svd.Factorization,java.io.DataOutput)>(r1, $r5);
+
+     label02:
+        if $r5 == null goto label11;
+
+        virtualinvoke $r5.<java.io.DataOutputStream: void close()>();
+
+        goto label11;
+
+     label03:
+        $r14 := @caughtexception;
+
+        r16 = $r14;
+
+        throw $r14;
+
+     label04:
+        $r13 := @caughtexception;
+
+     label05:
+        if $r5 == null goto label10;
+
+        if r16 == null goto label09;
+
+     label06:
+        virtualinvoke $r5.<java.io.DataOutputStream: void close()>();
+
+     label07:
+        goto label10;
+
+     label08:
+        $r12 := @caughtexception;
+
+        virtualinvoke r16.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r12);
+
+        goto label10;
+
+     label09:
+        virtualinvoke $r5.<java.io.DataOutputStream: void close()>();
+
+     label10:
+        throw $r13;
+
+     label11:
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label03;
+        catch java.lang.Throwable from label01 to label02 with label04;
+        catch java.lang.Throwable from label06 to label07 with label08;
+        catch java.lang.Throwable from label03 to label05 with label04;
+    }
+
+    protected static void writeBinary(org.apache.mahout.cf.taste.impl.recommender.svd.Factorization, java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0;
+        java.io.DataOutput r1;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, i8, i10;
+        java.lang.Iterable $r2, $r3;
+        boolean $z0, $z1;
+        java.lang.Object $r4, $r6, $r7, $r9, $r10, $r11;
+        java.lang.Long $r5, $r13;
+        java.lang.Integer $r8, $r12;
+        double $d0, $d1;
+        org.apache.mahout.cf.taste.common.NoSuchItemException $r14;
+        java.io.IOException $r15, $r16;
+        org.apache.mahout.cf.taste.common.NoSuchUserException $r17;
+        java.util.Iterator r18, r22;
+        java.util.Map$Entry r19, r23;
+        long l7, l9;
+        double[] r20, r24;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        r1 := @parameter1: java.io.DataOutput;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: int numFeatures()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i0);
+
+        $i1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: int numUsers()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i1);
+
+        $i2 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: int numItems()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i2);
+
+        $r2 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: java.lang.Iterable getUserIDMappings()>();
+
+        r18 = interfaceinvoke $r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label01:
+        $z0 = interfaceinvoke r18.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label05;
+
+        $r10 = interfaceinvoke r18.<java.util.Iterator: java.lang.Object next()>();
+
+        r19 = (java.util.Map$Entry) $r10;
+
+        $r9 = interfaceinvoke r19.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r13 = (java.lang.Long) $r9;
+
+        l7 = virtualinvoke $r13.<java.lang.Long: long longValue()>();
+
+        $r11 = interfaceinvoke r19.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r12 = (java.lang.Integer) $r11;
+
+        $i6 = virtualinvoke $r12.<java.lang.Integer: int intValue()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i6);
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeLong(long)>(l7);
+
+     label02:
+        r20 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: double[] getUserFeatures(long)>(l7);
+
+        i8 = 0;
+
+     label03:
+        $i5 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: int numFeatures()>();
+
+        if i8 >= $i5 goto label01;
+
+        $d1 = r20[i8];
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d1);
+
+        i8 = i8 + 1;
+
+        goto label03;
+
+     label04:
+        $r17 := @caughtexception;
+
+        $r15 = new java.io.IOException;
+
+        specialinvoke $r15.<java.io.IOException: void <init>(java.lang.String,java.lang.Throwable)>("Unable to persist factorization", $r17);
+
+        throw $r15;
+
+     label05:
+        $r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: java.lang.Iterable getItemIDMappings()>();
+
+        r22 = interfaceinvoke $r3.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label06:
+        $z1 = interfaceinvoke r22.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label10;
+
+        $r4 = interfaceinvoke r22.<java.util.Iterator: java.lang.Object next()>();
+
+        r23 = (java.util.Map$Entry) $r4;
+
+        $r6 = interfaceinvoke r23.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r5 = (java.lang.Long) $r6;
+
+        l9 = virtualinvoke $r5.<java.lang.Long: long longValue()>();
+
+        $r7 = interfaceinvoke r23.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r8 = (java.lang.Integer) $r7;
+
+        $i3 = virtualinvoke $r8.<java.lang.Integer: int intValue()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i3);
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeLong(long)>(l9);
+
+     label07:
+        r24 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: double[] getItemFeatures(long)>(l9);
+
+        i10 = 0;
+
+     label08:
+        $i4 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: int numFeatures()>();
+
+        if i10 >= $i4 goto label06;
+
+        $d0 = r24[i10];
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d0);
+
+        i10 = i10 + 1;
+
+        goto label08;
+
+     label09:
+        $r14 := @caughtexception;
+
+        $r16 = new java.io.IOException;
+
+        specialinvoke $r16.<java.io.IOException: void <init>(java.lang.String,java.lang.Throwable)>("Unable to persist factorization", $r14);
+
+        throw $r16;
+
+     label10:
+        return;
+
+        catch org.apache.mahout.cf.taste.common.NoSuchUserException from label02 to label04 with label04;
+        catch org.apache.mahout.cf.taste.common.NoSuchItemException from label07 to label09 with label09;
+    }
+
+    public static org.apache.mahout.cf.taste.impl.recommender.svd.Factorization readBinary(java.io.DataInput) throws java.io.IOException
+    {
+        java.io.DataInput r0;
+        int i0, i1, i2, i3, i4, i5, i7, i8, i10;
+        double[][] r2, r13;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r3, $r4;
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization $r5;
+        java.lang.Integer $r6, $r9;
+        double[] $r8, $r10;
+        double $d0, $d1;
+        long l6, l9;
+
+        r0 := @parameter0: java.io.DataInput;
+
+        i0 = interfaceinvoke r0.<java.io.DataInput: int readInt()>();
+
+        i1 = interfaceinvoke r0.<java.io.DataInput: int readInt()>();
+
+        i2 = interfaceinvoke r0.<java.io.DataInput: int readInt()>();
+
+        $r4 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>(int)>(i1);
+
+        r2 = newmultiarray (double)[i1][i0];
+
+        i4 = 0;
+
+     label1:
+        if i4 >= i1 goto label4;
+
+        i5 = interfaceinvoke r0.<java.io.DataInput: int readInt()>();
+
+        l6 = interfaceinvoke r0.<java.io.DataInput: long readLong()>();
+
+        $r9 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i5);
+
+        virtualinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object put(long,java.lang.Object)>(l6, $r9);
+
+        i7 = 0;
+
+     label2:
+        if i7 >= i0 goto label3;
+
+        $r10 = r2[i5];
+
+        $d1 = interfaceinvoke r0.<java.io.DataInput: double readDouble()>();
+
+        $r10[i7] = $d1;
+
+        i7 = i7 + 1;
+
+        goto label2;
+
+     label3:
+        i4 = i4 + 1;
+
+        goto label1;
+
+     label4:
+        $r3 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke $r3.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>(int)>(i2);
+
+        r13 = newmultiarray (double)[i2][i0];
+
+        i8 = 0;
+
+     label5:
+        if i8 >= i2 goto label8;
+
+        i3 = interfaceinvoke r0.<java.io.DataInput: int readInt()>();
+
+        l9 = interfaceinvoke r0.<java.io.DataInput: long readLong()>();
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i3);
+
+        virtualinvoke $r3.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object put(long,java.lang.Object)>(l9, $r6);
+
+        i10 = 0;
+
+     label6:
+        if i10 >= i0 goto label7;
+
+        $r8 = r13[i3];
+
+        $d0 = interfaceinvoke r0.<java.io.DataInput: double readDouble()>();
+
+        $r8[i10] = $d0;
+
+        i10 = i10 + 1;
+
+        goto label6;
+
+     label7:
+        i8 = i8 + 1;
+
+        goto label5;
+
+     label8:
+        $r5 = new org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        specialinvoke $r5.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: void <init>(org.apache.mahout.cf.taste.impl.common.FastByIDMap,org.apache.mahout.cf.taste.impl.common.FastByIDMap,double[][],double[][])>($r4, $r3, r2, r13);
+
+        return $r5;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/cf/taste/impl/recommender/svd/FilePersistenceStrategy");
+
+        <org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

@@ -1,0 +1,7 @@
+public interface  org.apache.mahout.cf.taste.similarity.precompute.SimilarItemsWriter extends java.lang.Object implements java.io.Closeable
+{
+
+    public abstract void open() throws java.io.IOException;
+
+    public abstract void add(org.apache.mahout.cf.taste.similarity.precompute.SimilarItems) throws java.io.IOException;
+}

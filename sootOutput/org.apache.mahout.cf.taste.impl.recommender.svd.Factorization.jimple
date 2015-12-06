@@ -1,0 +1,441 @@
+public class org.apache.mahout.cf.taste.impl.recommender.svd.Factorization extends java.lang.Object
+{
+    private final org.apache.mahout.cf.taste.impl.common.FastByIDMap userIDMapping;
+    private final org.apache.mahout.cf.taste.impl.common.FastByIDMap itemIDMapping;
+    private final double[][] userFeatures;
+    private final double[][] itemFeatures;
+
+    public void <init>(org.apache.mahout.cf.taste.impl.common.FastByIDMap, org.apache.mahout.cf.taste.impl.common.FastByIDMap, double[][], double[][])
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap r1, r2, $r6, $r8;
+        double[][] r3, r4;
+        java.lang.Object $r5, $r7;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        r3 := @parameter2: double[][];
+
+        r4 := @parameter3: double[][];
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r5 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r6 = (org.apache.mahout.cf.taste.impl.common.FastByIDMap) $r5;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap userIDMapping> = $r6;
+
+        $r7 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r2);
+
+        $r8 = (org.apache.mahout.cf.taste.impl.common.FastByIDMap) $r7;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap itemIDMapping> = $r8;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: double[][] userFeatures> = r3;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: double[][] itemFeatures> = r4;
+
+        return;
+    }
+
+    public double[][] allUserFeatures()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0;
+        double[][] $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: double[][] userFeatures>;
+
+        return $r1;
+    }
+
+    public double[] getUserFeatures(long) throws org.apache.mahout.cf.taste.common.NoSuchUserException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0;
+        long l0;
+        java.lang.Integer r1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r2;
+        java.lang.Object $r3;
+        double[][] $r4;
+        int $i1;
+        double[] $r5;
+        org.apache.mahout.cf.taste.common.NoSuchUserException $r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        l0 := @parameter0: long;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap userIDMapping>;
+
+        $r3 = virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        r1 = (java.lang.Integer) $r3;
+
+        if r1 != null goto label1;
+
+        $r6 = new org.apache.mahout.cf.taste.common.NoSuchUserException;
+
+        specialinvoke $r6.<org.apache.mahout.cf.taste.common.NoSuchUserException: void <init>(long)>(l0);
+
+        throw $r6;
+
+     label1:
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: double[][] userFeatures>;
+
+        $i1 = virtualinvoke r1.<java.lang.Integer: int intValue()>();
+
+        $r5 = $r4[$i1];
+
+        return $r5;
+    }
+
+    public double[][] allItemFeatures()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0;
+        double[][] $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: double[][] itemFeatures>;
+
+        return $r1;
+    }
+
+    public double[] getItemFeatures(long) throws org.apache.mahout.cf.taste.common.NoSuchItemException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0;
+        long l0;
+        java.lang.Integer r1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r2;
+        java.lang.Object $r3;
+        double[][] $r4;
+        int $i1;
+        double[] $r5;
+        org.apache.mahout.cf.taste.common.NoSuchItemException $r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        l0 := @parameter0: long;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap itemIDMapping>;
+
+        $r3 = virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        r1 = (java.lang.Integer) $r3;
+
+        if r1 != null goto label1;
+
+        $r6 = new org.apache.mahout.cf.taste.common.NoSuchItemException;
+
+        specialinvoke $r6.<org.apache.mahout.cf.taste.common.NoSuchItemException: void <init>(long)>(l0);
+
+        throw $r6;
+
+     label1:
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: double[][] itemFeatures>;
+
+        $i1 = virtualinvoke r1.<java.lang.Integer: int intValue()>();
+
+        $r5 = $r4[$i1];
+
+        return $r5;
+    }
+
+    public int userIndex(long) throws org.apache.mahout.cf.taste.common.NoSuchUserException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0;
+        long l0;
+        java.lang.Integer r1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r2;
+        java.lang.Object $r3;
+        int $i1;
+        org.apache.mahout.cf.taste.common.NoSuchUserException $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        l0 := @parameter0: long;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap userIDMapping>;
+
+        $r3 = virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        r1 = (java.lang.Integer) $r3;
+
+        if r1 != null goto label1;
+
+        $r4 = new org.apache.mahout.cf.taste.common.NoSuchUserException;
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.common.NoSuchUserException: void <init>(long)>(l0);
+
+        throw $r4;
+
+     label1:
+        $i1 = virtualinvoke r1.<java.lang.Integer: int intValue()>();
+
+        return $i1;
+    }
+
+    public java.lang.Iterable getUserIDMappings()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r1;
+        java.util.Set $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap userIDMapping>;
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.util.Set entrySet()>();
+
+        return $r2;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDMappingKeys()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r1;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap userIDMapping>;
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator keySetIterator()>();
+
+        return $r2;
+    }
+
+    public int itemIndex(long) throws org.apache.mahout.cf.taste.common.NoSuchItemException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0;
+        long l0;
+        java.lang.Integer r1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r2;
+        java.lang.Object $r3;
+        int $i1;
+        org.apache.mahout.cf.taste.common.NoSuchItemException $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        l0 := @parameter0: long;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap itemIDMapping>;
+
+        $r3 = virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        r1 = (java.lang.Integer) $r3;
+
+        if r1 != null goto label1;
+
+        $r4 = new org.apache.mahout.cf.taste.common.NoSuchItemException;
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.common.NoSuchItemException: void <init>(long)>(l0);
+
+        throw $r4;
+
+     label1:
+        $i1 = virtualinvoke r1.<java.lang.Integer: int intValue()>();
+
+        return $i1;
+    }
+
+    public java.lang.Iterable getItemIDMappings()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r1;
+        java.util.Set $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap itemIDMapping>;
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.util.Set entrySet()>();
+
+        return $r2;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getItemIDMappingKeys()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r1;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap itemIDMapping>;
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator keySetIterator()>();
+
+        return $r2;
+    }
+
+    public int numFeatures()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0;
+        double[][] $r1, $r2;
+        int $i0, $i1;
+        double[] $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: double[][] userFeatures>;
+
+        $i0 = lengthof $r1;
+
+        if $i0 <= 0 goto label1;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: double[][] userFeatures>;
+
+        $r3 = $r2[0];
+
+        $i1 = lengthof $r3;
+
+        goto label2;
+
+     label1:
+        $i1 = 0;
+
+     label2:
+        return $i1;
+    }
+
+    public int numUsers()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap userIDMapping>;
+
+        $i0 = virtualinvoke $r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: int size()>();
+
+        return $i0;
+    }
+
+    public int numItems()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap itemIDMapping>;
+
+        $i0 = virtualinvoke $r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: int size()>();
+
+        return $i0;
+    }
+
+    public boolean equals(java.lang.Object)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0, r2;
+        java.lang.Object r1;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r3, $r4, $r5, $r6;
+        double[][] $r7, $r8, $r9, $r10;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $z0 = r1 instanceof org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        if $z0 == 0 goto label3;
+
+        r2 = (org.apache.mahout.cf.taste.impl.recommender.svd.Factorization) r1;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap userIDMapping>;
+
+        $r3 = r2.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap userIDMapping>;
+
+        $z1 = virtualinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: boolean equals(java.lang.Object)>($r3);
+
+        if $z1 == 0 goto label1;
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap itemIDMapping>;
+
+        $r5 = r2.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap itemIDMapping>;
+
+        $z2 = virtualinvoke $r6.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: boolean equals(java.lang.Object)>($r5);
+
+        if $z2 == 0 goto label1;
+
+        $r8 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: double[][] userFeatures>;
+
+        $r7 = r2.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: double[][] userFeatures>;
+
+        $z3 = staticinvoke <java.util.Arrays: boolean deepEquals(java.lang.Object[],java.lang.Object[])>($r8, $r7);
+
+        if $z3 == 0 goto label1;
+
+        $r10 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: double[][] itemFeatures>;
+
+        $r9 = r2.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: double[][] itemFeatures>;
+
+        $z4 = staticinvoke <java.util.Arrays: boolean deepEquals(java.lang.Object[],java.lang.Object[])>($r10, $r9);
+
+        if $z4 == 0 goto label1;
+
+        $z5 = 1;
+
+        goto label2;
+
+     label1:
+        $z5 = 0;
+
+     label2:
+        return $z5;
+
+     label3:
+        return 0;
+    }
+
+    public int hashCode()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.svd.Factorization r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r1, $r2;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, i7, i8, i9;
+        double[][] $r3, $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.Factorization;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap userIDMapping>;
+
+        $i0 = virtualinvoke $r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: int hashCode()>();
+
+        $i1 = 31 * $i0;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: org.apache.mahout.cf.taste.impl.common.FastByIDMap itemIDMapping>;
+
+        $i2 = virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: int hashCode()>();
+
+        i7 = $i1 + $i2;
+
+        $i3 = 31 * i7;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: double[][] userFeatures>;
+
+        $i4 = staticinvoke <java.util.Arrays: int deepHashCode(java.lang.Object[])>($r3);
+
+        i8 = $i3 + $i4;
+
+        $i5 = 31 * i8;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.recommender.svd.Factorization: double[][] itemFeatures>;
+
+        $i6 = staticinvoke <java.util.Arrays: int deepHashCode(java.lang.Object[])>($r4);
+
+        i9 = $i5 + $i6;
+
+        return i9;
+    }
+}

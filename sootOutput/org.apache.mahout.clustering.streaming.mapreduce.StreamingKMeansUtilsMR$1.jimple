@@ -1,0 +1,69 @@
+final class org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$1 extends java.lang.Object implements com.google.common.base.Function
+{
+    private int numVectors;
+
+    void <init>()
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$1 r0;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$1: int numVectors> = 0;
+
+        return;
+    }
+
+    public org.apache.mahout.math.Centroid apply(org.apache.mahout.math.VectorWritable)
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$1 r0;
+        org.apache.mahout.math.VectorWritable r1;
+        org.apache.mahout.math.Centroid $r3;
+        int $i0, $i1;
+        org.apache.mahout.math.RandomAccessSparseVector $r4;
+        org.apache.mahout.math.Vector $r5;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$1;
+
+        r1 := @parameter0: org.apache.mahout.math.VectorWritable;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r3 = new org.apache.mahout.math.Centroid;
+
+        $i0 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$1: int numVectors>;
+
+        $i1 = $i0 + 1;
+
+        r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$1: int numVectors> = $i1;
+
+        $r4 = new org.apache.mahout.math.RandomAccessSparseVector;
+
+        $r5 = virtualinvoke r1.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        specialinvoke $r4.<org.apache.mahout.math.RandomAccessSparseVector: void <init>(org.apache.mahout.math.Vector)>($r5);
+
+        specialinvoke $r3.<org.apache.mahout.math.Centroid: void <init>(int,org.apache.mahout.math.Vector,double)>($i0, $r4, 1.0);
+
+        return $r3;
+    }
+
+    public volatile java.lang.Object apply(java.lang.Object)
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$1 r0;
+        java.lang.Object r1;
+        org.apache.mahout.math.VectorWritable $r2;
+        org.apache.mahout.math.Centroid $r3;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (org.apache.mahout.math.VectorWritable) r1;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$1: org.apache.mahout.math.Centroid apply(org.apache.mahout.math.VectorWritable)>($r2);
+
+        return $r3;
+    }
+}

@@ -1,0 +1,81 @@
+final class org.apache.mahout.cf.taste.impl.similarity.CachingItemSimilarity$SimilarityRetriever extends java.lang.Object implements org.apache.mahout.cf.taste.impl.common.Retriever
+{
+    private final org.apache.mahout.cf.taste.similarity.ItemSimilarity similarity;
+
+    private void <init>(org.apache.mahout.cf.taste.similarity.ItemSimilarity)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CachingItemSimilarity$SimilarityRetriever r0;
+        org.apache.mahout.cf.taste.similarity.ItemSimilarity r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.CachingItemSimilarity$SimilarityRetriever;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.ItemSimilarity;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.CachingItemSimilarity$SimilarityRetriever: org.apache.mahout.cf.taste.similarity.ItemSimilarity similarity> = r1;
+
+        return;
+    }
+
+    public java.lang.Double get(org.apache.mahout.common.LongPair) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CachingItemSimilarity$SimilarityRetriever r0;
+        org.apache.mahout.common.LongPair r1;
+        org.apache.mahout.cf.taste.similarity.ItemSimilarity $r2;
+        long $l0, $l1;
+        double $d0;
+        java.lang.Double $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.CachingItemSimilarity$SimilarityRetriever;
+
+        r1 := @parameter0: org.apache.mahout.common.LongPair;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.similarity.CachingItemSimilarity$SimilarityRetriever: org.apache.mahout.cf.taste.similarity.ItemSimilarity similarity>;
+
+        $l0 = virtualinvoke r1.<org.apache.mahout.common.LongPair: long getFirst()>();
+
+        $l1 = virtualinvoke r1.<org.apache.mahout.common.LongPair: long getSecond()>();
+
+        $d0 = interfaceinvoke $r2.<org.apache.mahout.cf.taste.similarity.ItemSimilarity: double itemSimilarity(long,long)>($l0, $l1);
+
+        $r3 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d0);
+
+        return $r3;
+    }
+
+    public volatile java.lang.Object get(java.lang.Object) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CachingItemSimilarity$SimilarityRetriever r0;
+        java.lang.Object r1;
+        org.apache.mahout.common.LongPair $r2;
+        java.lang.Double $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.CachingItemSimilarity$SimilarityRetriever;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (org.apache.mahout.common.LongPair) r1;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.CachingItemSimilarity$SimilarityRetriever: java.lang.Double get(org.apache.mahout.common.LongPair)>($r2);
+
+        return $r3;
+    }
+
+    void <init>(org.apache.mahout.cf.taste.similarity.ItemSimilarity, org.apache.mahout.cf.taste.impl.similarity.CachingItemSimilarity$1)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CachingItemSimilarity$SimilarityRetriever r0;
+        org.apache.mahout.cf.taste.similarity.ItemSimilarity r1;
+        org.apache.mahout.cf.taste.impl.similarity.CachingItemSimilarity$1 r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.CachingItemSimilarity$SimilarityRetriever;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.ItemSimilarity;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.impl.similarity.CachingItemSimilarity$1;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.CachingItemSimilarity$SimilarityRetriever: void <init>(org.apache.mahout.cf.taste.similarity.ItemSimilarity)>(r1);
+
+        return;
+    }
+}

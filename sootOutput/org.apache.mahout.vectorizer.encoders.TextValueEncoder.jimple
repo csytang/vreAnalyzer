@@ -1,0 +1,368 @@
+public class org.apache.mahout.vectorizer.encoders.TextValueEncoder extends org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder
+{
+    private static final double LOG_2;
+    private static final com.google.common.base.Splitter ON_NON_WORD;
+    private org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder wordEncoder;
+    private final com.google.common.collect.Multiset counts;
+
+    public void <init>(java.lang.String)
+    {
+        org.apache.mahout.vectorizer.encoders.TextValueEncoder r0;
+        java.lang.String r1;
+        org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder $r2;
+        com.google.common.collect.HashMultiset $r3;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.TextValueEncoder;
+
+        r1 := @parameter0: java.lang.String;
+
+        specialinvoke r0.<org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder: void <init>(java.lang.String,int)>(r1, 2);
+
+        $r2 = new org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder;
+
+        specialinvoke $r2.<org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder: void <init>(java.lang.String)>(r1);
+
+        r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder wordEncoder> = $r2;
+
+        $r3 = staticinvoke <com.google.common.collect.HashMultiset: com.google.common.collect.HashMultiset create()>();
+
+        r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: com.google.common.collect.Multiset counts> = $r3;
+
+        return;
+    }
+
+    public void addToVector(byte[], double, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.vectorizer.encoders.TextValueEncoder r0;
+        byte[] r1;
+        double d0;
+        org.apache.mahout.math.Vector r2;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.TextValueEncoder;
+
+        r1 := @parameter0: byte[];
+
+        d0 := @parameter1: double;
+
+        r2 := @parameter2: org.apache.mahout.math.Vector;
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: void addText(byte[])>(r1);
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: void flush(double,org.apache.mahout.math.Vector)>(d0, r2);
+
+        return;
+    }
+
+    public void addText(byte[])
+    {
+        org.apache.mahout.vectorizer.encoders.TextValueEncoder r0;
+        byte[] r1;
+        java.lang.String $r2;
+        java.nio.charset.Charset $r3;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.TextValueEncoder;
+
+        r1 := @parameter0: byte[];
+
+        $r2 = new java.lang.String;
+
+        $r3 = <com.google.common.base.Charsets: java.nio.charset.Charset UTF_8>;
+
+        specialinvoke $r2.<java.lang.String: void <init>(byte[],java.nio.charset.Charset)>(r1, $r3);
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: void addText(java.lang.CharSequence)>($r2);
+
+        return;
+    }
+
+    public void addText(java.lang.CharSequence)
+    {
+        org.apache.mahout.vectorizer.encoders.TextValueEncoder r0;
+        java.lang.CharSequence r1;
+        java.util.Iterator r2;
+        java.lang.String r3;
+        java.lang.Iterable $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+        com.google.common.collect.Multiset $r6;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.TextValueEncoder;
+
+        r1 := @parameter0: java.lang.CharSequence;
+
+        $r4 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: java.lang.Iterable tokenize(java.lang.CharSequence)>(r1);
+
+        r2 = interfaceinvoke $r4.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.lang.String) $r5;
+
+        $r6 = r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: com.google.common.collect.Multiset counts>;
+
+        interfaceinvoke $r6.<com.google.common.collect.Multiset: boolean add(java.lang.Object)>(r3);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void flush(double, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.vectorizer.encoders.TextValueEncoder r0;
+        double d0, $d1, $d2, $d3, $d4, $d5;
+        org.apache.mahout.math.Vector r1;
+        java.util.Iterator r2;
+        java.lang.String r3;
+        com.google.common.collect.Multiset $r4, $r6, $r8;
+        java.util.Set $r5;
+        boolean $z0;
+        java.lang.Object $r7;
+        org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder $r9;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.TextValueEncoder;
+
+        d0 := @parameter0: double;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        $r4 = r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: com.google.common.collect.Multiset counts>;
+
+        $r5 = interfaceinvoke $r4.<com.google.common.collect.Multiset: java.util.Set elementSet()>();
+
+        r2 = interfaceinvoke $r5.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r7 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.lang.String) $r7;
+
+        $r9 = r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder wordEncoder>;
+
+        $r8 = r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: com.google.common.collect.Multiset counts>;
+
+        $i0 = interfaceinvoke $r8.<com.google.common.collect.Multiset: int count(java.lang.Object)>(r3);
+
+        $d1 = (double) $i0;
+
+        $d3 = staticinvoke <java.lang.Math: double log1p(double)>($d1);
+
+        $d5 = d0 * $d3;
+
+        $d2 = <org.apache.mahout.vectorizer.encoders.TextValueEncoder: double LOG_2>;
+
+        $d4 = $d5 / $d2;
+
+        virtualinvoke $r9.<org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder: void addToVector(java.lang.String,double,org.apache.mahout.math.Vector)>(r3, $d4, r1);
+
+        goto label1;
+
+     label2:
+        $r6 = r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: com.google.common.collect.Multiset counts>;
+
+        interfaceinvoke $r6.<com.google.common.collect.Multiset: void clear()>();
+
+        return;
+    }
+
+    protected int hashForProbe(byte[], int, java.lang.String, int)
+    {
+        org.apache.mahout.vectorizer.encoders.TextValueEncoder r0;
+        byte[] r1;
+        int i0, i1;
+        java.lang.String r2;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.TextValueEncoder;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: java.lang.String;
+
+        i1 := @parameter3: int;
+
+        return 0;
+    }
+
+    protected java.lang.Iterable hashesForProbe(byte[], int, java.lang.String, int)
+    {
+        org.apache.mahout.vectorizer.encoders.TextValueEncoder r0;
+        byte[] r1, $r10;
+        int i0, i1, $i2;
+        java.lang.String r2, r5, $r6;
+        java.util.ArrayList r3;
+        java.util.Iterator r4;
+        java.nio.charset.Charset $r7;
+        java.lang.Iterable $r8;
+        boolean $z0;
+        java.lang.Object $r9;
+        java.lang.Integer $r11;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.TextValueEncoder;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: java.lang.String;
+
+        i1 := @parameter3: int;
+
+        r3 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList()>();
+
+        $r6 = new java.lang.String;
+
+        $r7 = <com.google.common.base.Charsets: java.nio.charset.Charset UTF_8>;
+
+        specialinvoke $r6.<java.lang.String: void <init>(byte[],java.nio.charset.Charset)>(r1, $r7);
+
+        $r8 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: java.lang.Iterable tokenize(java.lang.CharSequence)>($r6);
+
+        r4 = interfaceinvoke $r8.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r9 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (java.lang.String) $r9;
+
+        $r10 = staticinvoke <org.apache.mahout.vectorizer.encoders.TextValueEncoder: byte[] bytesForString(java.lang.String)>(r5);
+
+        $i2 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: int hashForProbe(byte[],int,java.lang.String,int)>($r10, i0, r2, i1);
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        interfaceinvoke r3.<java.util.Collection: boolean add(java.lang.Object)>($r11);
+
+        goto label1;
+
+     label2:
+        return r3;
+    }
+
+    protected java.lang.Iterable tokenize(java.lang.CharSequence)
+    {
+        org.apache.mahout.vectorizer.encoders.TextValueEncoder r0;
+        java.lang.CharSequence r1;
+        com.google.common.base.Splitter $r2;
+        java.lang.Iterable $r3;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.TextValueEncoder;
+
+        r1 := @parameter0: java.lang.CharSequence;
+
+        $r2 = <org.apache.mahout.vectorizer.encoders.TextValueEncoder: com.google.common.base.Splitter ON_NON_WORD>;
+
+        $r3 = virtualinvoke $r2.<com.google.common.base.Splitter: java.lang.Iterable split(java.lang.CharSequence)>(r1);
+
+        return $r3;
+    }
+
+    public java.lang.String asString(java.lang.String)
+    {
+        org.apache.mahout.vectorizer.encoders.TextValueEncoder r0;
+        java.lang.String r1, r4, $r9, $r12;
+        java.util.Iterator r3;
+        java.lang.StringBuilder $r5;
+        java.lang.Iterable $r7;
+        boolean $z0;
+        java.lang.Object $r10;
+        int $i0;
+        org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder $r11;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.TextValueEncoder;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(91);
+
+        $r7 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: java.lang.Iterable tokenize(java.lang.CharSequence)>(r1);
+
+        r3 = interfaceinvoke $r7.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r10 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (java.lang.String) $r10;
+
+        $i0 = virtualinvoke $r5.<java.lang.StringBuilder: int length()>();
+
+        if $i0 <= 1 goto label2;
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+     label2:
+        $r11 = r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder wordEncoder>;
+
+        $r12 = virtualinvoke $r11.<org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder: java.lang.String asString(java.lang.String)>(r4);
+
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r12);
+
+        goto label1;
+
+     label3:
+        virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(93);
+
+        $r9 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r9;
+    }
+
+    public final void setWordEncoder(org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder)
+    {
+        org.apache.mahout.vectorizer.encoders.TextValueEncoder r0;
+        org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.TextValueEncoder;
+
+        r1 := @parameter0: org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder;
+
+        r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: org.apache.mahout.vectorizer.encoders.FeatureVectorEncoder wordEncoder> = r1;
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        double $d0;
+        java.util.regex.Pattern $r0;
+        com.google.common.base.Splitter $r1, $r2;
+
+        $d0 = staticinvoke <java.lang.Math: double log(double)>(2.0);
+
+        <org.apache.mahout.vectorizer.encoders.TextValueEncoder: double LOG_2> = $d0;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("\\W+");
+
+        $r1 = staticinvoke <com.google.common.base.Splitter: com.google.common.base.Splitter on(java.util.regex.Pattern)>($r0);
+
+        $r2 = virtualinvoke $r1.<com.google.common.base.Splitter: com.google.common.base.Splitter omitEmptyStrings()>();
+
+        <org.apache.mahout.vectorizer.encoders.TextValueEncoder: com.google.common.base.Splitter ON_NON_WORD> = $r2;
+
+        return;
+    }
+}

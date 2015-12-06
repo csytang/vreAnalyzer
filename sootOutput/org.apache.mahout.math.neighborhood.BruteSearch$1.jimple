@@ -1,0 +1,70 @@
+class org.apache.mahout.math.neighborhood.BruteSearch$1 extends java.lang.Object implements java.util.concurrent.Callable
+{
+    final java.util.List val$results;
+    final int val$index;
+    final org.apache.mahout.math.Vector val$query;
+    final int val$limit;
+    final org.apache.mahout.math.neighborhood.BruteSearch this$0;
+
+    void <init>(org.apache.mahout.math.neighborhood.BruteSearch, java.util.List, int, org.apache.mahout.math.Vector, int)
+    {
+        org.apache.mahout.math.neighborhood.BruteSearch$1 r0;
+        org.apache.mahout.math.neighborhood.BruteSearch r1;
+        java.util.List r2;
+        int i0, i1;
+        org.apache.mahout.math.Vector r3;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.BruteSearch$1;
+
+        r1 := @parameter0: org.apache.mahout.math.neighborhood.BruteSearch;
+
+        r2 := @parameter1: java.util.List;
+
+        i0 := @parameter2: int;
+
+        r3 := @parameter3: org.apache.mahout.math.Vector;
+
+        i1 := @parameter4: int;
+
+        r0.<org.apache.mahout.math.neighborhood.BruteSearch$1: org.apache.mahout.math.neighborhood.BruteSearch this$0> = r1;
+
+        r0.<org.apache.mahout.math.neighborhood.BruteSearch$1: java.util.List val$results> = r2;
+
+        r0.<org.apache.mahout.math.neighborhood.BruteSearch$1: int val$index> = i0;
+
+        r0.<org.apache.mahout.math.neighborhood.BruteSearch$1: org.apache.mahout.math.Vector val$query> = r3;
+
+        r0.<org.apache.mahout.math.neighborhood.BruteSearch$1: int val$limit> = i1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public java.lang.Object call() throws java.lang.Exception
+    {
+        org.apache.mahout.math.neighborhood.BruteSearch$1 r0;
+        int $i0, $i1;
+        org.apache.mahout.math.Vector $r1;
+        org.apache.mahout.math.neighborhood.BruteSearch $r2;
+        java.util.List $r3, $r4;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.BruteSearch$1;
+
+        $r3 = r0.<org.apache.mahout.math.neighborhood.BruteSearch$1: java.util.List val$results>;
+
+        $i1 = r0.<org.apache.mahout.math.neighborhood.BruteSearch$1: int val$index>;
+
+        $r2 = r0.<org.apache.mahout.math.neighborhood.BruteSearch$1: org.apache.mahout.math.neighborhood.BruteSearch this$0>;
+
+        $r1 = r0.<org.apache.mahout.math.neighborhood.BruteSearch$1: org.apache.mahout.math.Vector val$query>;
+
+        $i0 = r0.<org.apache.mahout.math.neighborhood.BruteSearch$1: int val$limit>;
+
+        $r4 = virtualinvoke $r2.<org.apache.mahout.math.neighborhood.BruteSearch: java.util.List search(org.apache.mahout.math.Vector,int)>($r1, $i0);
+
+        interfaceinvoke $r3.<java.util.List: java.lang.Object set(int,java.lang.Object)>($i1, $r4);
+
+        return null;
+    }
+}

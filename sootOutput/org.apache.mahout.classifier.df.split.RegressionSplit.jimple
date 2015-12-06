@@ -1,0 +1,483 @@
+public class org.apache.mahout.classifier.df.split.RegressionSplit extends org.apache.mahout.classifier.df.split.IgSplit
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.df.split.RegressionSplit r0;
+
+        r0 := @this: org.apache.mahout.classifier.df.split.RegressionSplit;
+
+        specialinvoke r0.<org.apache.mahout.classifier.df.split.IgSplit: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.mahout.classifier.df.split.Split computeSplit(org.apache.mahout.classifier.df.data.Data, int)
+    {
+        org.apache.mahout.classifier.df.split.RegressionSplit r0;
+        org.apache.mahout.classifier.df.data.Data r1;
+        int i0;
+        org.apache.mahout.classifier.df.data.Dataset $r2;
+        boolean $z0;
+        org.apache.mahout.classifier.df.split.Split $r3, $r4;
+
+        r0 := @this: org.apache.mahout.classifier.df.split.RegressionSplit;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.data.Data;
+
+        i0 := @parameter1: int;
+
+        $r2 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        $z0 = virtualinvoke $r2.<org.apache.mahout.classifier.df.data.Dataset: boolean isNumerical(int)>(i0);
+
+        if $z0 == 0 goto label1;
+
+        $r4 = staticinvoke <org.apache.mahout.classifier.df.split.RegressionSplit: org.apache.mahout.classifier.df.split.Split numericalSplit(org.apache.mahout.classifier.df.data.Data,int)>(r1, i0);
+
+        return $r4;
+
+     label1:
+        $r3 = staticinvoke <org.apache.mahout.classifier.df.split.RegressionSplit: org.apache.mahout.classifier.df.split.Split categoricalSplit(org.apache.mahout.classifier.df.data.Data,int)>(r1, i0);
+
+        return $r3;
+    }
+
+    private static org.apache.mahout.classifier.df.split.Split categoricalSplit(org.apache.mahout.classifier.df.data.Data, int)
+    {
+        org.apache.mahout.classifier.df.data.Data r0;
+        int i0, $i1, $i2, $i3, $i4, $i5, i6, i7, i8, i9, i10;
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage[] r1;
+        double[] r2;
+        org.apache.mahout.classifier.df.data.Instance r3;
+        org.apache.mahout.classifier.df.data.Dataset $r4, $r5, $r8;
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage $r6, $r9, $r10, $r11, $r12, $r13, $r14;
+        org.apache.mahout.classifier.df.split.Split $r7;
+        double $d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10, d11, d12, d13, d14, d15, d16;
+
+        r0 := @parameter0: org.apache.mahout.classifier.df.data.Data;
+
+        i0 := @parameter1: int;
+
+        $r4 = virtualinvoke r0.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        $i1 = virtualinvoke $r4.<org.apache.mahout.classifier.df.data.Dataset: int nbValues(int)>(i0);
+
+        r1 = newarray (org.apache.mahout.cf.taste.impl.common.FullRunningAverage)[$i1];
+
+        $r5 = virtualinvoke r0.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        $i2 = virtualinvoke $r5.<org.apache.mahout.classifier.df.data.Dataset: int nbValues(int)>(i0);
+
+        r2 = newarray (double)[$i2];
+
+        i6 = 0;
+
+     label01:
+        $i3 = lengthof r1;
+
+        if i6 >= $i3 goto label02;
+
+        $r14 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke $r14.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>()>();
+
+        r1[i6] = $r14;
+
+        i6 = i6 + 1;
+
+        goto label01;
+
+     label02:
+        $r6 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke $r6.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>()>();
+
+        d11 = 0.0;
+
+        i7 = 0;
+
+     label03:
+        $i4 = virtualinvoke r0.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        if i7 >= $i4 goto label08;
+
+        r3 = virtualinvoke r0.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Instance get(int)>(i7);
+
+        $d0 = virtualinvoke r3.<org.apache.mahout.classifier.df.data.Instance: double get(int)>(i0);
+
+        i8 = (int) $d0;
+
+        $r8 = virtualinvoke r0.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        d12 = virtualinvoke $r8.<org.apache.mahout.classifier.df.data.Dataset: double getLabel(org.apache.mahout.classifier.df.data.Instance)>(r3);
+
+        $r9 = r1[i8];
+
+        $i5 = virtualinvoke $r9.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int getCount()>();
+
+        if $i5 != 0 goto label04;
+
+        $r13 = r1[i8];
+
+        virtualinvoke $r13.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void addDatum(double)>(d12);
+
+        r2[i8] = 0.0;
+
+        goto label05;
+
+     label04:
+        $r10 = r1[i8];
+
+        d13 = virtualinvoke $r10.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double getAverage()>();
+
+        $r11 = r1[i8];
+
+        virtualinvoke $r11.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void addDatum(double)>(d12);
+
+        $d1 = r2[i8];
+
+        $d2 = d12 - d13;
+
+        $r12 = r1[i8];
+
+        $d5 = virtualinvoke $r12.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double getAverage()>();
+
+        $d6 = d12 - $d5;
+
+        $d3 = $d2 * $d6;
+
+        $d4 = $d1 + $d3;
+
+        r2[i8] = $d4;
+
+     label05:
+        if i7 != 0 goto label06;
+
+        virtualinvoke $r6.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void addDatum(double)>(d12);
+
+        d11 = 0.0;
+
+        goto label07;
+
+     label06:
+        d14 = virtualinvoke $r6.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double getAverage()>();
+
+        virtualinvoke $r6.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void addDatum(double)>(d12);
+
+        $d9 = d12 - d14;
+
+        $d7 = virtualinvoke $r6.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double getAverage()>();
+
+        $d8 = d12 - $d7;
+
+        $d10 = $d9 * $d8;
+
+        d11 = d11 + $d10;
+
+     label07:
+        i7 = i7 + 1;
+
+        goto label03;
+
+     label08:
+        d15 = d11;
+
+        i9 = lengthof r2;
+
+        i10 = 0;
+
+     label09:
+        if i10 >= i9 goto label10;
+
+        d16 = r2[i10];
+
+        d15 = d15 - d16;
+
+        i10 = i10 + 1;
+
+        goto label09;
+
+     label10:
+        $r7 = new org.apache.mahout.classifier.df.split.Split;
+
+        specialinvoke $r7.<org.apache.mahout.classifier.df.split.Split: void <init>(int,double)>(i0, d15);
+
+        return $r7;
+    }
+
+    private static org.apache.mahout.classifier.df.split.Split numericalSplit(org.apache.mahout.classifier.df.data.Data, int)
+    {
+        org.apache.mahout.classifier.df.data.Data r0;
+        int i0, i1, i2, $i3, $i4, $i5, $i9, $i10, $i12, i14, i15, i16, i17, $i18;
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage[] r1;
+        org.apache.mahout.classifier.df.data.Instance r2, r3, $r23;
+        double d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10, $d11, $d12, $d13, $d14, $d15, $d16, $d17, $d18, $d19, $d20, $d21, $d22, $d23, $d24, $d25, $d26, $d27, $d28, $d29, d30, d31, d32, d33, d34, d35, d36, d37, d38, d39, d40;
+        org.apache.mahout.classifier.df.split.Split $r4;
+        org.apache.mahout.classifier.df.split.RegressionSplit$InstanceComparator $r5;
+        org.apache.mahout.classifier.df.data.Dataset $r6, $r19;
+        byte $b6, $b11;
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage $r7, $r8, $r9, $r10, $r11, $r12, $r13, $r15, $r16, $r17, $r18, $r20, $r21, $r22, $r24, $r29;
+        org.apache.mahout.classifier.df.data.Instance[] r25;
+        double[] r26;
+
+        r0 := @parameter0: org.apache.mahout.classifier.df.data.Data;
+
+        i0 := @parameter1: int;
+
+        r1 = newarray (org.apache.mahout.cf.taste.impl.common.FullRunningAverage)[2];
+
+        i14 = 0;
+
+     label01:
+        $i3 = lengthof r1;
+
+        if i14 >= $i3 goto label02;
+
+        $r22 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke $r22.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>()>();
+
+        r1[i14] = $r22;
+
+        i14 = i14 + 1;
+
+        goto label01;
+
+     label02:
+        $i5 = virtualinvoke r0.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        r25 = newarray (org.apache.mahout.classifier.df.data.Instance)[$i5];
+
+        i15 = 0;
+
+     label03:
+        $i4 = virtualinvoke r0.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        if i15 >= $i4 goto label04;
+
+        $r23 = virtualinvoke r0.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Instance get(int)>(i15);
+
+        r25[i15] = $r23;
+
+        i15 = i15 + 1;
+
+        goto label03;
+
+     label04:
+        $r5 = new org.apache.mahout.classifier.df.split.RegressionSplit$InstanceComparator;
+
+        specialinvoke $r5.<org.apache.mahout.classifier.df.split.RegressionSplit$InstanceComparator: void <init>(int)>(i0);
+
+        staticinvoke <java.util.Arrays: void sort(java.lang.Object[],java.util.Comparator)>(r25, $r5);
+
+        r26 = newarray (double)[2];
+
+        i1 = lengthof r25;
+
+        i16 = 0;
+
+     label05:
+        if i16 >= i1 goto label08;
+
+        r2 = r25[i16];
+
+        $r19 = virtualinvoke r0.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        d30 = virtualinvoke $r19.<org.apache.mahout.classifier.df.data.Dataset: double getLabel(org.apache.mahout.classifier.df.data.Instance)>(r2);
+
+        $r17 = r1[1];
+
+        $i12 = virtualinvoke $r17.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int getCount()>();
+
+        if $i12 != 0 goto label06;
+
+        $r24 = r1[1];
+
+        virtualinvoke $r24.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void addDatum(double)>(d30);
+
+        r26[1] = 0.0;
+
+        goto label07;
+
+     label06:
+        $r18 = r1[1];
+
+        d31 = virtualinvoke $r18.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double getAverage()>();
+
+        $r20 = r1[1];
+
+        virtualinvoke $r20.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void addDatum(double)>(d30);
+
+        $d28 = r26[1];
+
+        $d26 = d30 - d31;
+
+        $r21 = r1[1];
+
+        $d27 = virtualinvoke $r21.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double getAverage()>();
+
+        $d24 = d30 - $d27;
+
+        $d25 = $d26 * $d24;
+
+        $d29 = $d28 + $d25;
+
+        r26[1] = $d29;
+
+     label07:
+        i16 = i16 + 1;
+
+        goto label05;
+
+     label08:
+        d32 = r26[1];
+
+        d33 = #NaN;
+
+        d34 = #NaN;
+
+        d35 = 1.7976931348623157E308;
+
+        d36 = 0.0;
+
+        i2 = lengthof r25;
+
+        i17 = 0;
+
+     label09:
+        if i17 >= i2 goto label13;
+
+        r3 = r25[i17];
+
+        $r6 = virtualinvoke r0.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        d0 = virtualinvoke $r6.<org.apache.mahout.classifier.df.data.Dataset: double getLabel(org.apache.mahout.classifier.df.data.Instance)>(r3);
+
+        $d1 = virtualinvoke r3.<org.apache.mahout.classifier.df.data.Instance: double get(int)>(i0);
+
+        $b6 = $d1 cmpl d34;
+
+        if $b6 <= 0 goto label10;
+
+        $d17 = r26[0];
+
+        $r16 = r1[0];
+
+        $i9 = virtualinvoke $r16.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int getCount()>();
+
+        $d14 = (double) $i9;
+
+        $d15 = $d17 / $d14;
+
+        $d16 = r26[1];
+
+        $r15 = r1[1];
+
+        $i10 = virtualinvoke $r15.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int getCount()>();
+
+        $d20 = (double) $i10;
+
+        $d21 = $d16 / $d20;
+
+        d37 = $d15 + $d21;
+
+        $b11 = d37 cmpg d35;
+
+        if $b11 >= 0 goto label10;
+
+        d35 = d37;
+
+        $d18 = r26[0];
+
+        $d19 = r26[1];
+
+        d36 = $d18 + $d19;
+
+        $d23 = virtualinvoke r3.<org.apache.mahout.classifier.df.data.Instance: double get(int)>(i0);
+
+        $d22 = $d23 + d34;
+
+        d33 = $d22 / 2.0;
+
+     label10:
+        $r29 = r1[0];
+
+        $i18 = virtualinvoke $r29.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int getCount()>();
+
+        if $i18 != 0 goto label11;
+
+        $r13 = r1[0];
+
+        virtualinvoke $r13.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void addDatum(double)>(d0);
+
+        r26[0] = 0.0;
+
+        goto label12;
+
+     label11:
+        $r7 = r1[0];
+
+        d38 = virtualinvoke $r7.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double getAverage()>();
+
+        $r8 = r1[0];
+
+        virtualinvoke $r8.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void addDatum(double)>(d0);
+
+        $d2 = r26[0];
+
+        $d5 = d0 - d38;
+
+        $r9 = r1[0];
+
+        $d6 = virtualinvoke $r9.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double getAverage()>();
+
+        $d3 = d0 - $d6;
+
+        $d4 = $d5 * $d3;
+
+        $d7 = $d2 + $d4;
+
+        r26[0] = $d7;
+
+     label12:
+        $r11 = r1[1];
+
+        d39 = virtualinvoke $r11.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double getAverage()>();
+
+        $r10 = r1[1];
+
+        virtualinvoke $r10.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void removeDatum(double)>(d0);
+
+        $d9 = r26[1];
+
+        $d8 = d0 - d39;
+
+        $r12 = r1[1];
+
+        $d13 = virtualinvoke $r12.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double getAverage()>();
+
+        $d12 = d0 - $d13;
+
+        $d11 = $d8 * $d12;
+
+        $d10 = $d9 - $d11;
+
+        r26[1] = $d10;
+
+        d34 = virtualinvoke r3.<org.apache.mahout.classifier.df.data.Instance: double get(int)>(i0);
+
+        i17 = i17 + 1;
+
+        goto label09;
+
+     label13:
+        d40 = d32 - d36;
+
+        $r4 = new org.apache.mahout.classifier.df.split.Split;
+
+        specialinvoke $r4.<org.apache.mahout.classifier.df.split.Split: void <init>(int,double,double)>(i0, d40, d33);
+
+        return $r4;
+    }
+}

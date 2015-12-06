@@ -1,0 +1,319 @@
+public class org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private static final org.slf4j.Logger log;
+    private org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer;
+    private org.apache.mahout.clustering.lda.cvb.TopicModel readModel;
+    private int maxIters;
+    private int numTopics;
+    private float testFraction;
+    private java.util.Random random;
+    private org.apache.mahout.math.Vector topicVector;
+    private final org.apache.hadoop.io.DoubleWritable outKey;
+    private final org.apache.hadoop.io.DoubleWritable outValue;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper r0;
+        org.apache.hadoop.io.DoubleWritable $r1, $r2;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        $r1 = new org.apache.hadoop.io.DoubleWritable;
+
+        specialinvoke $r1.<org.apache.hadoop.io.DoubleWritable: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.apache.hadoop.io.DoubleWritable outKey> = $r1;
+
+        $r2 = new org.apache.hadoop.io.DoubleWritable;
+
+        specialinvoke $r2.<org.apache.hadoop.io.DoubleWritable: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.apache.hadoop.io.DoubleWritable outValue> = $r2;
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        float f0, f1, f2, $f3;
+        long l0;
+        int i1, i2, i3, $i4, $i5, $i6, $i7, $i8, $i9;
+        org.apache.hadoop.fs.Path[] r3;
+        org.slf4j.Logger $r4, $r6, $r7, $r11, $r14;
+        java.util.Random $r5, $r9;
+        org.apache.mahout.clustering.lda.cvb.TopicModel $r8, $r10, $r13;
+        double $d0, $d1, $d2, $d3, $d4, $d5;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer $r12;
+        org.apache.mahout.math.DenseVector $r15;
+        double[] $r16;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        staticinvoke <org.apache.mahout.common.MemoryUtil: void startMemoryLogger(long)>(5000L);
+
+        $r4 = <org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r4.<org.slf4j.Logger: void info(java.lang.String)>("Retrieving configuration");
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        f0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: float getFloat(java.lang.String,float)>("term_topic_smoothing", #NaNF);
+
+        f1 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: float getFloat(java.lang.String,float)>("doc_topic_smoothing", #NaNF);
+
+        l0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: long getLong(java.lang.String,long)>("random_seed", 1234L);
+
+        $r5 = staticinvoke <org.apache.mahout.common.RandomUtils: java.util.Random getRandom(long)>(l0);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: java.util.Random random> = $r5;
+
+        $i4 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("num_topics", -1);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: int numTopics> = $i4;
+
+        i1 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("num_terms", -1);
+
+        i2 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("num_update_threads", 1);
+
+        i3 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("num_train_threads", 4);
+
+        $i5 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("max_doc_topic_iters", 10);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: int maxIters> = $i5;
+
+        f2 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: float getFloat(java.lang.String,float)>("prev_iter_mult", 1.0F);
+
+        $f3 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: float getFloat(java.lang.String,float)>("test_set_fraction", 0.1F);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: float testFraction> = $f3;
+
+        $r6 = <org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r6.<org.slf4j.Logger: void info(java.lang.String)>("Initializing read model");
+
+        r3 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.fs.Path[] getModelPaths(org.apache.hadoop.conf.Configuration)>(r2);
+
+        if r3 == null goto label1;
+
+        $i7 = lengthof r3;
+
+        if $i7 <= 0 goto label1;
+
+        $r10 = new org.apache.mahout.clustering.lda.cvb.TopicModel;
+
+        $d5 = (double) f0;
+
+        $d4 = (double) f1;
+
+        $d3 = (double) f2;
+
+        specialinvoke $r10.<org.apache.mahout.clustering.lda.cvb.TopicModel: void <init>(org.apache.hadoop.conf.Configuration,double,double,java.lang.String[],int,double,org.apache.hadoop.fs.Path[])>(r2, $d5, $d4, null, i2, $d3, r3);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.apache.mahout.clustering.lda.cvb.TopicModel readModel> = $r10;
+
+        goto label2;
+
+     label1:
+        $r7 = <org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r7.<org.slf4j.Logger: void info(java.lang.String)>("No model files found");
+
+        $r8 = new org.apache.mahout.clustering.lda.cvb.TopicModel;
+
+        $i6 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: int numTopics>;
+
+        $d1 = (double) f0;
+
+        $d0 = (double) f1;
+
+        $r9 = staticinvoke <org.apache.mahout.common.RandomUtils: java.util.Random getRandom(long)>(l0);
+
+        $d2 = (double) f2;
+
+        specialinvoke $r8.<org.apache.mahout.clustering.lda.cvb.TopicModel: void <init>(int,int,double,double,java.util.Random,java.lang.String[],int,double)>($i6, i1, $d1, $d0, $r9, null, i3, $d2);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.apache.mahout.clustering.lda.cvb.TopicModel readModel> = $r8;
+
+     label2:
+        $r11 = <org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r11.<org.slf4j.Logger: void info(java.lang.String)>("Initializing model trainer");
+
+        $r12 = new org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        $r13 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.apache.mahout.clustering.lda.cvb.TopicModel readModel>;
+
+        $i8 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: int numTopics>;
+
+        specialinvoke $r12.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void <init>(org.apache.mahout.clustering.lda.cvb.TopicModel,org.apache.mahout.clustering.lda.cvb.TopicModel,int,int,int)>($r13, null, i3, $i8, i1);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer> = $r12;
+
+        $r14 = <org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r14.<org.slf4j.Logger: void info(java.lang.String)>("Initializing topic vector");
+
+        $r15 = new org.apache.mahout.math.DenseVector;
+
+        $i9 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: int numTopics>;
+
+        $r16 = newarray (double)[$i9];
+
+        specialinvoke $r15.<org.apache.mahout.math.DenseVector: void <init>(double[])>($r16);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.apache.mahout.math.Vector topicVector> = $r15;
+
+        return;
+    }
+
+    protected void cleanup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.mahout.clustering.lda.cvb.TopicModel $r2;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r2 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.apache.mahout.clustering.lda.cvb.TopicModel readModel>;
+
+        virtualinvoke $r2.<org.apache.mahout.clustering.lda.cvb.TopicModel: void stop()>();
+
+        staticinvoke <org.apache.mahout.common.MemoryUtil: void stopMemoryLogger()>();
+
+        return;
+    }
+
+    public void map(org.apache.hadoop.io.IntWritable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper r0;
+        org.apache.hadoop.io.IntWritable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        float $f0, $f1, $f2;
+        byte $b0, $b3;
+        org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper$Counters $r4;
+        org.apache.hadoop.mapreduce.Counter $r5;
+        org.apache.hadoop.io.DoubleWritable $r6, $r8, $r13, $r15;
+        org.apache.mahout.math.Vector $r7, $r10, $r11, $r12;
+        double $d0, $d1, $d2, $d3;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer $r9;
+        int $i1, $i2;
+        java.util.Random $r14;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $f0 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: float testFraction>;
+
+        $b0 = $f0 cmpg 1.0F;
+
+        if $b0 >= 0 goto label1;
+
+        $r14 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: java.util.Random random>;
+
+        $f2 = virtualinvoke $r14.<java.util.Random: float nextFloat()>();
+
+        $f1 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: float testFraction>;
+
+        $b3 = $f2 cmpl $f1;
+
+        if $b3 < 0 goto label1;
+
+        return;
+
+     label1:
+        $r4 = <org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper$Counters: org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper$Counters SAMPLED_DOCUMENTS>;
+
+        $r5 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.mapreduce.Counter getCounter(java.lang.Enum)>($r4);
+
+        interfaceinvoke $r5.<org.apache.hadoop.mapreduce.Counter: void increment(long)>(1L);
+
+        $r6 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.apache.hadoop.io.DoubleWritable outKey>;
+
+        $r7 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $d0 = interfaceinvoke $r7.<org.apache.mahout.math.Vector: double norm(double)>(1.0);
+
+        virtualinvoke $r6.<org.apache.hadoop.io.DoubleWritable: void set(double)>($d0);
+
+        $r8 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.apache.hadoop.io.DoubleWritable outValue>;
+
+        $r9 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer>;
+
+        $r10 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r11 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.apache.mahout.math.Vector topicVector>;
+
+        $i1 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: int numTopics>;
+
+        $d1 = (double) $i1;
+
+        $d2 = 1.0 / $d1;
+
+        $r12 = interfaceinvoke $r11.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(double)>($d2);
+
+        $i2 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: int maxIters>;
+
+        $d3 = virtualinvoke $r9.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: double calculatePerplexity(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector,int)>($r10, $r12, $i2);
+
+        virtualinvoke $r8.<org.apache.hadoop.io.DoubleWritable: void set(double)>($d3);
+
+        $r15 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.apache.hadoop.io.DoubleWritable outKey>;
+
+        $r13 = r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.apache.hadoop.io.DoubleWritable outValue>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r15, $r13);
+
+        return;
+    }
+
+    public volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.IntWritable $r5;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.IntWritable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: void map(org.apache.hadoop.io.IntWritable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/clustering/lda/cvb/CachingCVB0PerplexityMapper");
+
+        <org.apache.mahout.clustering.lda.cvb.CachingCVB0PerplexityMapper: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

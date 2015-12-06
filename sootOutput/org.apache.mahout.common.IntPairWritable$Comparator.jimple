@@ -1,0 +1,119 @@
+public final class org.apache.mahout.common.IntPairWritable$Comparator extends org.apache.hadoop.io.WritableComparator implements java.io.Serializable
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.common.IntPairWritable$Comparator r0;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable$Comparator;
+
+        specialinvoke r0.<org.apache.hadoop.io.WritableComparator: void <init>(java.lang.Class)>(class "org/apache/mahout/common/IntPairWritable");
+
+        return;
+    }
+
+    public int compare(byte[], int, int, byte[], int, int)
+    {
+        org.apache.mahout.common.IntPairWritable$Comparator r0;
+        byte[] r1, r2;
+        int i0, i1, i2, i3, $i4;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable$Comparator;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        r2 := @parameter3: byte[];
+
+        i2 := @parameter4: int;
+
+        i3 := @parameter5: int;
+
+        $i4 = staticinvoke <org.apache.mahout.common.IntPairWritable$Comparator: int doCompare(byte[],int,byte[],int)>(r1, i0, r2, i2);
+
+        return $i4;
+    }
+
+    static int doCompare(byte[], int, byte[], int)
+    {
+        byte[] r0, r1;
+        int i0, i1, i2, $i3, $i4, $i5;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        r1 := @parameter2: byte[];
+
+        i1 := @parameter3: int;
+
+        i2 = staticinvoke <org.apache.mahout.common.IntPairWritable$Comparator: int compareInts(byte[],int,byte[],int)>(r0, i0, r1, i1);
+
+        if i2 == 0 goto label1;
+
+        return i2;
+
+     label1:
+        $i4 = i0 + 4;
+
+        $i3 = i1 + 4;
+
+        $i5 = staticinvoke <org.apache.mahout.common.IntPairWritable$Comparator: int compareInts(byte[],int,byte[],int)>(r0, $i4, r1, $i3);
+
+        return $i5;
+    }
+
+    private static int compareInts(byte[], int, byte[], int)
+    {
+        byte[] r0, r1;
+        int i0, i1, i2, $i3, i4, i5;
+        short s6, s7;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        r1 := @parameter2: byte[];
+
+        i1 := @parameter3: int;
+
+        i2 = i0 + 4;
+
+        i4 = i0;
+
+        i5 = i1;
+
+     label1:
+        if i4 >= i2 goto label4;
+
+        s6 = r0[i4];
+
+        s7 = r1[i5];
+
+        if i4 <= i0 goto label2;
+
+        s6 = s6 & 255;
+
+        s7 = s7 & 255;
+
+     label2:
+        if s6 == s7 goto label3;
+
+        $i3 = s6 - s7;
+
+        return $i3;
+
+     label3:
+        i4 = i4 + 1;
+
+        i5 = i5 + 1;
+
+        goto label1;
+
+     label4:
+        return 0;
+    }
+}

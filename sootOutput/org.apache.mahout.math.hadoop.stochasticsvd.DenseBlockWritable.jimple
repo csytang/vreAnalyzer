@@ -1,0 +1,212 @@
+public class org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable extends java.lang.Object implements org.apache.hadoop.io.Writable
+{
+    private double[][] block;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void setBlock(double[][])
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable r0;
+        double[][] r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable;
+
+        r1 := @parameter0: double[][];
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] block> = r1;
+
+        return;
+    }
+
+    public double[][] getBlock()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable r0;
+        double[][] $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] block>;
+
+        return $r1;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable r0;
+        java.io.DataInput r1;
+        int i0, i1, $i2, $i3, i4, i5;
+        double[][] $r2, $r3, $r4, $r7, $r8, $r11, $r12, $r13, $r15;
+        double[] $r5, $r6, $r9, $r10;
+        double $d0;
+        java.lang.Object[] $r14;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        i0 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        i1 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] block>;
+
+        if $r2 != null goto label1;
+
+        $r15 = newmultiarray (double)[i0][0];
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] block> = $r15;
+
+        goto label2;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] block>;
+
+        $i2 = lengthof $r3;
+
+        if $i2 == i0 goto label2;
+
+        $r12 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] block>;
+
+        $r14 = staticinvoke <java.util.Arrays: java.lang.Object[] copyOf(java.lang.Object[],int)>($r12, i0);
+
+        $r13 = (double[][]) $r14;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] block> = $r13;
+
+     label2:
+        i4 = 0;
+
+     label3:
+        if i4 >= i0 goto label8;
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] block>;
+
+        $r5 = $r4[i4];
+
+        if $r5 == null goto label4;
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] block>;
+
+        $r10 = $r11[i4];
+
+        $i3 = lengthof $r10;
+
+        if $i3 == i1 goto label5;
+
+     label4:
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] block>;
+
+        $r6 = newarray (double)[i1];
+
+        $r7[i4] = $r6;
+
+     label5:
+        i5 = 0;
+
+     label6:
+        if i5 >= i1 goto label7;
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] block>;
+
+        $r9 = $r8[i4];
+
+        $d0 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        $r9[i5] = $d0;
+
+        i5 = i5 + 1;
+
+        goto label6;
+
+     label7:
+        i4 = i4 + 1;
+
+        goto label3;
+
+     label8:
+        return;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable r0;
+        java.io.DataOutput r1;
+        int i0, i1, i2, $i3, $i4, i5, i6;
+        double[][] r2, $r4, $r5, $r6;
+        double[] r3, $r7;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] block>;
+
+        i0 = lengthof $r4;
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] block>;
+
+        $i3 = lengthof $r5;
+
+        if $i3 != 0 goto label1;
+
+        $i4 = 0;
+
+        goto label2;
+
+     label1:
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] block>;
+
+        $r7 = $r6[0];
+
+        $i4 = lengthof $r7;
+
+     label2:
+        i1 = $i4;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>(i0);
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i4);
+
+        r2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] block>;
+
+        i2 = lengthof r2;
+
+        i5 = 0;
+
+     label3:
+        if i5 >= i2 goto label6;
+
+        r3 = r2[i5];
+
+        i6 = 0;
+
+     label4:
+        if i6 >= i1 goto label5;
+
+        $d0 = r3[i6];
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d0);
+
+        i6 = i6 + 1;
+
+        goto label4;
+
+     label5:
+        i5 = i5 + 1;
+
+        goto label3;
+
+     label6:
+        return;
+    }
+}

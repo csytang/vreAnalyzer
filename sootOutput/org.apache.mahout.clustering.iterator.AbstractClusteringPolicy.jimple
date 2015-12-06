@@ -1,0 +1,160 @@
+public abstract class org.apache.mahout.clustering.iterator.AbstractClusteringPolicy extends java.lang.Object implements org.apache.mahout.clustering.iterator.ClusteringPolicy
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.iterator.AbstractClusteringPolicy r0;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.AbstractClusteringPolicy;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public abstract void write(java.io.DataOutput) throws java.io.IOException;
+
+    public abstract void readFields(java.io.DataInput) throws java.io.IOException;
+
+    public org.apache.mahout.math.Vector select(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.iterator.AbstractClusteringPolicy r0;
+        org.apache.mahout.math.Vector r1;
+        int i0, $i1;
+        org.apache.mahout.math.SequentialAccessSparseVector $r3;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.AbstractClusteringPolicy;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        i0 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int maxValueIndex()>();
+
+        $r3 = new org.apache.mahout.math.SequentialAccessSparseVector;
+
+        $i1 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int size()>();
+
+        specialinvoke $r3.<org.apache.mahout.math.SequentialAccessSparseVector: void <init>(int)>($i1);
+
+        interfaceinvoke $r3.<org.apache.mahout.math.Vector: void set(int,double)>(i0, 1.0);
+
+        return $r3;
+    }
+
+    public void update(org.apache.mahout.clustering.classify.ClusterClassifier)
+    {
+        org.apache.mahout.clustering.iterator.AbstractClusteringPolicy r0;
+        org.apache.mahout.clustering.classify.ClusterClassifier r1;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.AbstractClusteringPolicy;
+
+        r1 := @parameter0: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector classify(org.apache.mahout.math.Vector, org.apache.mahout.clustering.classify.ClusterClassifier)
+    {
+        org.apache.mahout.clustering.iterator.AbstractClusteringPolicy r0;
+        org.apache.mahout.math.Vector r1, $r9;
+        org.apache.mahout.clustering.classify.ClusterClassifier r2;
+        java.util.List r3;
+        java.util.Iterator r5;
+        org.apache.mahout.clustering.Cluster r6;
+        org.apache.mahout.math.DenseVector $r7;
+        int $i0, $i1, i2;
+        boolean $z0;
+        org.apache.mahout.math.function.TimesFunction $r8;
+        double $d0, $d1, $d2;
+        java.lang.Object $r10;
+        org.apache.mahout.math.VectorWritable $r11;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.AbstractClusteringPolicy;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 := @parameter1: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        r3 = virtualinvoke r2.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List getModels()>();
+
+        i2 = 0;
+
+        $r7 = new org.apache.mahout.math.DenseVector;
+
+        $i0 = interfaceinvoke r3.<java.util.List: int size()>();
+
+        specialinvoke $r7.<org.apache.mahout.math.DenseVector: void <init>(int)>($i0);
+
+        r5 = interfaceinvoke r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r10 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.clustering.Cluster) $r10;
+
+        $i1 = i2;
+
+        i2 = i2 + 1;
+
+        $r11 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r11.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r1);
+
+        $d2 = interfaceinvoke r6.<org.apache.mahout.clustering.Cluster: double pdf(java.lang.Object)>($r11);
+
+        interfaceinvoke $r7.<org.apache.mahout.math.Vector: void set(int,double)>($i1, $d2);
+
+        goto label1;
+
+     label2:
+        $r8 = new org.apache.mahout.math.function.TimesFunction;
+
+        specialinvoke $r8.<org.apache.mahout.math.function.TimesFunction: void <init>()>();
+
+        $d0 = interfaceinvoke $r7.<org.apache.mahout.math.Vector: double zSum()>();
+
+        $d1 = 1.0 / $d0;
+
+        $r9 = interfaceinvoke $r7.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.function.DoubleDoubleFunction,double)>($r8, $d1);
+
+        return $r9;
+    }
+
+    public void close(org.apache.mahout.clustering.classify.ClusterClassifier)
+    {
+        org.apache.mahout.clustering.iterator.AbstractClusteringPolicy r0;
+        org.apache.mahout.clustering.classify.ClusterClassifier r1;
+        java.util.Iterator r2;
+        org.apache.mahout.clustering.Cluster r3;
+        java.util.List $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.AbstractClusteringPolicy;
+
+        r1 := @parameter0: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        $r4 = virtualinvoke r1.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List getModels()>();
+
+        r2 = interfaceinvoke $r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.clustering.Cluster) $r5;
+
+        interfaceinvoke r3.<org.apache.mahout.clustering.Cluster: void computeParameters()>();
+
+        goto label1;
+
+     label2:
+        return;
+    }
+}

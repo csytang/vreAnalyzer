@@ -1,0 +1,481 @@
+public final class org.apache.mahout.classifier.df.DFUtils extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.classifier.df.DFUtils r0;
+
+        r0 := @this: org.apache.mahout.classifier.df.DFUtils;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void writeArray(java.io.DataOutput, org.apache.mahout.classifier.df.node.Node[]) throws java.io.IOException
+    {
+        java.io.DataOutput r0;
+        org.apache.mahout.classifier.df.node.Node[] r1;
+        int i0, $i1, i2;
+        org.apache.mahout.classifier.df.node.Node r3;
+
+        r0 := @parameter0: java.io.DataOutput;
+
+        r1 := @parameter1: org.apache.mahout.classifier.df.node.Node[];
+
+        $i1 = lengthof r1;
+
+        interfaceinvoke r0.<java.io.DataOutput: void writeInt(int)>($i1);
+
+        i0 = lengthof r1;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label2;
+
+        r3 = r1[i2];
+
+        virtualinvoke r3.<org.apache.mahout.classifier.df.node.Node: void write(java.io.DataOutput)>(r0);
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public static org.apache.mahout.classifier.df.node.Node[] readNodeArray(java.io.DataInput) throws java.io.IOException
+    {
+        java.io.DataInput r0;
+        int i0, i1;
+        org.apache.mahout.classifier.df.node.Node[] r1;
+        org.apache.mahout.classifier.df.node.Node $r2;
+
+        r0 := @parameter0: java.io.DataInput;
+
+        i0 = interfaceinvoke r0.<java.io.DataInput: int readInt()>();
+
+        r1 = newarray (org.apache.mahout.classifier.df.node.Node)[i0];
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label2;
+
+        $r2 = staticinvoke <org.apache.mahout.classifier.df.node.Node: org.apache.mahout.classifier.df.node.Node read(java.io.DataInput)>(r0);
+
+        r1[i1] = $r2;
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        return r1;
+    }
+
+    public static void writeArray(java.io.DataOutput, double[]) throws java.io.IOException
+    {
+        java.io.DataOutput r0;
+        double[] r1;
+        int i0, $i1, i2;
+        double d0;
+
+        r0 := @parameter0: java.io.DataOutput;
+
+        r1 := @parameter1: double[];
+
+        $i1 = lengthof r1;
+
+        interfaceinvoke r0.<java.io.DataOutput: void writeInt(int)>($i1);
+
+        i0 = lengthof r1;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label2;
+
+        d0 = r1[i2];
+
+        interfaceinvoke r0.<java.io.DataOutput: void writeDouble(double)>(d0);
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public static double[] readDoubleArray(java.io.DataInput) throws java.io.IOException
+    {
+        java.io.DataInput r0;
+        int i0, i1;
+        double[] r1;
+        double $d0;
+
+        r0 := @parameter0: java.io.DataInput;
+
+        i0 = interfaceinvoke r0.<java.io.DataInput: int readInt()>();
+
+        r1 = newarray (double)[i0];
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label2;
+
+        $d0 = interfaceinvoke r0.<java.io.DataInput: double readDouble()>();
+
+        r1[i1] = $d0;
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        return r1;
+    }
+
+    public static void writeArray(java.io.DataOutput, int[]) throws java.io.IOException
+    {
+        java.io.DataOutput r0;
+        int[] r1;
+        int i0, i1, $i2, i3;
+
+        r0 := @parameter0: java.io.DataOutput;
+
+        r1 := @parameter1: int[];
+
+        $i2 = lengthof r1;
+
+        interfaceinvoke r0.<java.io.DataOutput: void writeInt(int)>($i2);
+
+        i0 = lengthof r1;
+
+        i3 = 0;
+
+     label1:
+        if i3 >= i0 goto label2;
+
+        i1 = r1[i3];
+
+        interfaceinvoke r0.<java.io.DataOutput: void writeInt(int)>(i1);
+
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public static int[] readIntArray(java.io.DataInput) throws java.io.IOException
+    {
+        java.io.DataInput r0;
+        int i0, $i1, i2;
+        int[] r1;
+
+        r0 := @parameter0: java.io.DataInput;
+
+        i0 = interfaceinvoke r0.<java.io.DataInput: int readInt()>();
+
+        r1 = newarray (int)[i0];
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label2;
+
+        $i1 = interfaceinvoke r0.<java.io.DataInput: int readInt()>();
+
+        r1[i2] = $i1;
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        return r1;
+    }
+
+    public static org.apache.hadoop.fs.Path[] listOutputFiles(org.apache.hadoop.fs.FileSystem, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.hadoop.fs.FileSystem r0;
+        org.apache.hadoop.fs.Path r1, $r11, $r13;
+        org.apache.hadoop.fs.FileStatus[] r3;
+        int i0, $i1, i2;
+        org.apache.hadoop.fs.FileStatus r4;
+        java.util.ArrayList $r5;
+        org.apache.hadoop.fs.PathFilter $r6;
+        boolean $z0, $z1, $z2;
+        org.apache.hadoop.fs.Path[] $r7, $r9;
+        java.lang.Object[] $r8;
+        java.io.IOException $r10;
+        java.lang.String $r12;
+
+        r0 := @parameter0: org.apache.hadoop.fs.FileSystem;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        $r6 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter logsCRCFilter()>();
+
+        r3 = virtualinvoke r0.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus[] listStatus(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.PathFilter)>(r1, $r6);
+
+        i0 = lengthof r3;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label3;
+
+        r4 = r3[i2];
+
+        $z1 = virtualinvoke r4.<org.apache.hadoop.fs.FileStatus: boolean isDir()>();
+
+        if $z1 != 0 goto label2;
+
+        $r11 = virtualinvoke r4.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        $r12 = virtualinvoke $r11.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        $z2 = virtualinvoke $r12.<java.lang.String: boolean startsWith(java.lang.String)>("_");
+
+        if $z2 != 0 goto label2;
+
+        $r13 = virtualinvoke r4.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        interfaceinvoke $r5.<java.util.List: boolean add(java.lang.Object)>($r13);
+
+     label2:
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label3:
+        $z0 = interfaceinvoke $r5.<java.util.List: boolean isEmpty()>();
+
+        if $z0 == 0 goto label4;
+
+        $r10 = new java.io.IOException;
+
+        specialinvoke $r10.<java.io.IOException: void <init>(java.lang.String)>("No output found !");
+
+        throw $r10;
+
+     label4:
+        $i1 = interfaceinvoke $r5.<java.util.List: int size()>();
+
+        $r7 = newarray (org.apache.hadoop.fs.Path)[$i1];
+
+        $r8 = interfaceinvoke $r5.<java.util.List: java.lang.Object[] toArray(java.lang.Object[])>($r7);
+
+        $r9 = (org.apache.hadoop.fs.Path[]) $r8;
+
+        return $r9;
+    }
+
+    public static java.lang.String elapsedTime(long)
+    {
+        java.lang.String $r0;
+        long l0, l1, l2, l3, l4, l5, l6;
+        java.lang.StringBuilder $r1, $r2, $r3, $r4, $r5, $r6, $r7, $r8;
+
+        l1 := @parameter0: long;
+
+        l2 = l1 / 1000L;
+
+        l3 = l1 % 1000L;
+
+        l4 = l2 / 60L;
+
+        l5 = l2 % 60L;
+
+        l0 = l4 / 60L;
+
+        l6 = l4 % 60L;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l0);
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("h ");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l6);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("m ");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("s ");
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l3);
+
+        $r0 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r0;
+    }
+
+    public static void storeWritable(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.io.Writable) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1;
+        org.apache.hadoop.io.Writable r2;
+        org.apache.hadoop.fs.FileSystem r3;
+        org.apache.hadoop.fs.FSDataOutputStream r4;
+        java.lang.Throwable $r8, $r9, $r10, r11;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.io.Writable;
+
+        r3 = virtualinvoke r1.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r0);
+
+        r4 = virtualinvoke r3.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataOutputStream create(org.apache.hadoop.fs.Path)>(r1);
+
+        r11 = null;
+
+     label01:
+        interfaceinvoke r2.<org.apache.hadoop.io.Writable: void write(java.io.DataOutput)>(r4);
+
+     label02:
+        if r4 == null goto label11;
+
+        virtualinvoke r4.<org.apache.hadoop.fs.FSDataOutputStream: void close()>();
+
+        goto label11;
+
+     label03:
+        $r9 := @caughtexception;
+
+        r11 = $r9;
+
+        throw $r9;
+
+     label04:
+        $r8 := @caughtexception;
+
+     label05:
+        if r4 == null goto label10;
+
+        if r11 == null goto label09;
+
+     label06:
+        virtualinvoke r4.<org.apache.hadoop.fs.FSDataOutputStream: void close()>();
+
+     label07:
+        goto label10;
+
+     label08:
+        $r10 := @caughtexception;
+
+        virtualinvoke r11.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r10);
+
+        goto label10;
+
+     label09:
+        virtualinvoke r4.<org.apache.hadoop.fs.FSDataOutputStream: void close()>();
+
+     label10:
+        throw $r8;
+
+     label11:
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label03;
+        catch java.lang.Throwable from label01 to label02 with label04;
+        catch java.lang.Throwable from label06 to label07 with label08;
+        catch java.lang.Throwable from label03 to label05 with label04;
+    }
+
+    public static void storeString(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, java.lang.String) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1;
+        java.lang.String r2;
+        org.apache.hadoop.fs.FSDataOutputStream r3;
+        org.apache.hadoop.fs.FileSystem $r6;
+        java.nio.charset.Charset $r7;
+        byte[] $r8;
+        java.lang.Throwable $r9, $r10, $r11, r13;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: java.lang.String;
+
+        $r6 = virtualinvoke r1.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r0);
+
+        r3 = virtualinvoke $r6.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataOutputStream create(org.apache.hadoop.fs.Path)>(r1);
+
+        r13 = null;
+
+     label01:
+        $r7 = staticinvoke <java.nio.charset.Charset: java.nio.charset.Charset defaultCharset()>();
+
+        $r8 = virtualinvoke r2.<java.lang.String: byte[] getBytes(java.nio.charset.Charset)>($r7);
+
+        virtualinvoke r3.<java.io.DataOutputStream: void write(byte[])>($r8);
+
+     label02:
+        if r3 == null goto label11;
+
+        virtualinvoke r3.<java.io.DataOutputStream: void close()>();
+
+        goto label11;
+
+     label03:
+        $r9 := @caughtexception;
+
+        r13 = $r9;
+
+        throw $r9;
+
+     label04:
+        $r10 := @caughtexception;
+
+     label05:
+        if r3 == null goto label10;
+
+        if r13 == null goto label09;
+
+     label06:
+        virtualinvoke r3.<java.io.DataOutputStream: void close()>();
+
+     label07:
+        goto label10;
+
+     label08:
+        $r11 := @caughtexception;
+
+        virtualinvoke r13.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r11);
+
+        goto label10;
+
+     label09:
+        virtualinvoke r3.<java.io.DataOutputStream: void close()>();
+
+     label10:
+        throw $r10;
+
+     label11:
+        return;
+
+        catch java.lang.Throwable from label01 to label02 with label03;
+        catch java.lang.Throwable from label01 to label02 with label04;
+        catch java.lang.Throwable from label06 to label07 with label08;
+        catch java.lang.Throwable from label03 to label05 with label04;
+    }
+}

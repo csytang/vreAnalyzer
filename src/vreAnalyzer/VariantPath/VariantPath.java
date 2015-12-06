@@ -45,6 +45,9 @@ public class VariantPath {
 	private Set<File> variantPathFiles = new HashSet<File>();
 	private Set<SootClass> variantPathClass = new HashSet<SootClass>();
 	
+	// 所有的call site
+	private Set<CallSite> callsiteSet = new HashSet<CallSite>();
+	
 	// variant路径
 	public VariantPath(Variant headVariant,SootMethod caller,int id){
 		head = headVariant;
@@ -71,6 +74,8 @@ public class VariantPath {
 		for(Variant variant:headVariants){
 			variantPathClass.addAll(variant.getAllClasses());
 		}
+		
+		
 	}
 	
 	// 在路径上加入下一个节点
@@ -100,6 +105,9 @@ public class VariantPath {
 			}
 			
 		}else{
+			// 加入callsite 集合中
+			callsiteSet.add(site);
+			
 			if(status==VariantStat.single){
 				// 设置前驱节点
 				precursors.clear();
@@ -160,6 +168,9 @@ public class VariantPath {
 				currSet.addAll(variants);
 			}
 		}else{
+			// 加入callsite 集合中
+			callsiteSet.add(site);
+			
 			if(status==VariantStat.single){
 				// 设置前驱节点
 				precursors.clear();
@@ -222,6 +233,9 @@ public class VariantPath {
 				}
 				status = VariantStat.branch;
 		}else{
+			// 加入callsite 集合中
+			callsiteSet.add(site);
+			
 				if(precursors.isEmpty()){
 					Set<Variant>varSucceeds = curr.getSucceedVariants(site);
 					for(Variant varsucc:varSucceeds){
@@ -266,6 +280,8 @@ public class VariantPath {
 				}
 			}
 		}else{
+			// 加入callsite 集合中
+			callsiteSet.add(site);
 			
 			// 1. 对于所有的precursor来讲, 在所有的上加入新的 后继节点
 			for(Variant prevar:precursors){
@@ -309,12 +325,6 @@ public class VariantPath {
 		List<Variant> lastLayer = new LinkedList<Variant>();// 最后一层的内容
 		
 		if(callsite==null){
-			System.out.println("Inside caller method:"+caller.getName());
-		}else{
-			System.out.println("Inside callee method, call site is"+callsite.toString());
-		}
-		
-		if(callsite==null){
 			analyzedPool.clear();
 			lastLayer.clear();
 			// 1. 加入entry节点 单一的 或多个的 
@@ -328,7 +338,7 @@ public class VariantPath {
 			while(!queue.isEmpty()){
 				// 2. 当队列不为空, 
 				queuetemp.clear();
-				System.out.println("\nIn layer:"+layer);
+				System.out.println("\n@VariantPath 345-In layer:"+layer);
 				lastLayer.clear();
 				
 				while(!queue.isEmpty()){
@@ -345,18 +355,18 @@ public class VariantPath {
 						for(Variant var:varNodeSuccs){
 							if(!analyzedPool.contains(var)){
 								queuetemp.add(var);
+								//System.out.println("Link: "+varNode.getVariantId()+"\t to \t"+varsucc.getVariantId());
+								graphvizController.addLine(varNode.getVariantId()+"->"+var.getVariantId()+";");
 							}
 						}
 					}
-					for(Variant varsucc:varNodeSuccs){
-						System.out.println("Link: "+varNode.getVariantId()+"\t to \t"+varsucc.getVariantId());
-						graphvizController.addLine(varNode.getVariantId()+"->"+varsucc.getVariantId()+";");
-					}
+					
 				}
 				
 				if(!queuetemp.isEmpty()){
 					queue.addAll(queuetemp);
 				}
+				
 				layer++;
 			}
 		}else{
@@ -374,7 +384,7 @@ public class VariantPath {
 				queuetemp.clear();
 				lastLayer.clear();
 				
-				System.out.println("\nIn layer:"+layer);
+				System.out.println("\n@387- In layer:"+layer);
 				while(!queue.isEmpty()){
 					Variant varNode = queue.poll();
 					if(layer==1){
@@ -382,20 +392,22 @@ public class VariantPath {
 					}
 					analyzedPool.add(varNode);
 					lastLayer.add(varNode);
-					System.out.println("Variant:"+varNode.getVariantId());
+					//System.out.println("Variant:"+varNode.getVariantId());
 					Set<Variant> varNodeSuccs = varNode.getSucceedVariants(callsite);
-					if(!varNodeSuccs.isEmpty())
-						queuetemp.addAll(varNodeSuccs);
-					for(Variant varsucc:varNodeSuccs){
-						if(!analyzedPool.contains(varsucc)){
-							queuetemp.add(varsucc);
+			
+					if(varNodeSuccs!=null){
+						for(Variant varsucc:varNodeSuccs){
+							if(!analyzedPool.contains(varsucc)){
+								queuetemp.add(varsucc);
+								System.out.println("Link: "+varNode.getVariantId()+"\t to \t"+varsucc.getVariantId());
+								graphvizController.addLine(varNode.getVariantId()+"->"+varsucc.getVariantId()+";");
+							}
 						}
-						System.out.println("Link: "+varNode.getVariantId()+"\t to \t"+varsucc.getVariantId());
-						graphvizController.addLine(varNode.getVariantId()+"->"+varsucc.getVariantId()+";");
 					}
 				}
 				if(!queuetemp.isEmpty())
 					queue.addAll(queuetemp);
+				
 				layer++;
 			}
 		}
@@ -411,7 +423,7 @@ public class VariantPath {
 	
 	public void addToTable(CSVWriter writer){
 		VariantPathToTable vtTable = new VariantPathToTable();
-		vtTable.addARowToTable(pathId, fullVariantSet,getAssociatedFiles(),writer);
+		vtTable.addARowToTable(pathId, this,fullVariantSet,getAssociatedFiles(),writer);
 	}
 	
 	// 本路径涉及到的文件
@@ -455,4 +467,13 @@ public class VariantPath {
 	public File getImageFile(){
 		return imageFile;
 	}
+	
+	/**  
+	 * @return 返回路径的caller函数
+	 */
+	public SootMethod getCallerMethod() {
+		// TODO Auto-generated method stub
+		return callerMethod;
+	}
+	
 }

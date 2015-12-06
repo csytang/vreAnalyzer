@@ -1,0 +1,193 @@
+public class org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample extends java.lang.Object implements org.apache.hadoop.io.Writable
+{
+    private long key;
+    private java.lang.String groupKey;
+    private int actual;
+    private org.apache.mahout.math.Vector instance;
+
+    private void <init>()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample r0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void <init>(long, java.lang.String, int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample r0;
+        long l0;
+        java.lang.String r1;
+        int i1;
+        org.apache.mahout.math.Vector r2;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: java.lang.String;
+
+        i1 := @parameter2: int;
+
+        r2 := @parameter3: org.apache.mahout.math.Vector;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: long key> = l0;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: java.lang.String groupKey> = r1;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: int actual> = i1;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: org.apache.mahout.math.Vector instance> = r2;
+
+        return;
+    }
+
+    public long getKey()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample r0;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample;
+
+        $l0 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: long key>;
+
+        return $l0;
+    }
+
+    public int getActual()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: int actual>;
+
+        return $i0;
+    }
+
+    public org.apache.mahout.math.Vector getInstance()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample r0;
+        org.apache.mahout.math.Vector $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: org.apache.mahout.math.Vector instance>;
+
+        return $r1;
+    }
+
+    public java.lang.String getGroupKey()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample r0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: java.lang.String groupKey>;
+
+        return $r1;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample r0;
+        java.io.DataOutput r1;
+        long $l0;
+        java.lang.String $r2, $r4;
+        int $i1;
+        org.apache.mahout.math.Vector $r3;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $l0 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: long key>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeLong(long)>($l0);
+
+        $r2 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: java.lang.String groupKey>;
+
+        if $r2 == null goto label1;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeBoolean(boolean)>(1);
+
+        $r4 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: java.lang.String groupKey>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeUTF(java.lang.String)>($r4);
+
+        goto label2;
+
+     label1:
+        interfaceinvoke r1.<java.io.DataOutput: void writeBoolean(boolean)>(0);
+
+     label2:
+        $i1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: int actual>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i1);
+
+        $r3 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: org.apache.mahout.math.Vector instance>;
+
+        staticinvoke <org.apache.mahout.math.VectorWritable: void writeVector(java.io.DataOutput,org.apache.mahout.math.Vector,boolean)>(r1, $r3, 1);
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample r0;
+        java.io.DataInput r1;
+        long $l0;
+        boolean $z0;
+        int $i1;
+        org.apache.mahout.math.Vector $r2;
+        java.lang.String $r3;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $l0 = interfaceinvoke r1.<java.io.DataInput: long readLong()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: long key> = $l0;
+
+        $z0 = interfaceinvoke r1.<java.io.DataInput: boolean readBoolean()>();
+
+        if $z0 == 0 goto label1;
+
+        $r3 = interfaceinvoke r1.<java.io.DataInput: java.lang.String readUTF()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: java.lang.String groupKey> = $r3;
+
+     label1:
+        $i1 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: int actual> = $i1;
+
+        $r2 = staticinvoke <org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector readVector(java.io.DataInput)>(r1);
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: org.apache.mahout.math.Vector instance> = $r2;
+
+        return;
+    }
+
+    void <init>(org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$1)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample r0;
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$1 r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample;
+
+        r1 := @parameter0: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$1;
+
+        specialinvoke r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: void <init>()>();
+
+        return;
+    }
+}

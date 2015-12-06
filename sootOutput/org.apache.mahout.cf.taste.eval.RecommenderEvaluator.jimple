@@ -1,0 +1,13 @@
+public interface  org.apache.mahout.cf.taste.eval.RecommenderEvaluator extends java.lang.Object
+{
+
+    public abstract double evaluate(org.apache.mahout.cf.taste.eval.RecommenderBuilder, org.apache.mahout.cf.taste.eval.DataModelBuilder, org.apache.mahout.cf.taste.model.DataModel, double, double) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract float getMaxPreference();
+
+    public abstract void setMaxPreference(float);
+
+    public abstract float getMinPreference();
+
+    public abstract void setMinPreference(float);
+}

@@ -1,0 +1,82 @@
+public final class org.apache.mahout.common.iterator.SamplingIterable extends java.lang.Object implements java.lang.Iterable
+{
+    private final java.lang.Iterable delegate;
+    private final double samplingRate;
+
+    public void <init>(java.lang.Iterable, double)
+    {
+        org.apache.mahout.common.iterator.SamplingIterable r0;
+        java.lang.Iterable r1;
+        double d0;
+
+        r0 := @this: org.apache.mahout.common.iterator.SamplingIterable;
+
+        r1 := @parameter0: java.lang.Iterable;
+
+        d0 := @parameter1: double;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.common.iterator.SamplingIterable: java.lang.Iterable delegate> = r1;
+
+        r0.<org.apache.mahout.common.iterator.SamplingIterable: double samplingRate> = d0;
+
+        return;
+    }
+
+    public java.util.Iterator iterator()
+    {
+        org.apache.mahout.common.iterator.SamplingIterable r0;
+        org.apache.mahout.common.iterator.SamplingIterator $r1;
+        java.lang.Iterable $r2;
+        java.util.Iterator $r3;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.common.iterator.SamplingIterable;
+
+        $r1 = new org.apache.mahout.common.iterator.SamplingIterator;
+
+        $r2 = r0.<org.apache.mahout.common.iterator.SamplingIterable: java.lang.Iterable delegate>;
+
+        $r3 = interfaceinvoke $r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        $d0 = r0.<org.apache.mahout.common.iterator.SamplingIterable: double samplingRate>;
+
+        specialinvoke $r1.<org.apache.mahout.common.iterator.SamplingIterator: void <init>(java.util.Iterator,double)>($r3, $d0);
+
+        return $r1;
+    }
+
+    public static java.lang.Iterable maybeWrapIterable(java.lang.Iterable, double)
+    {
+        java.lang.Iterable r0, r3;
+        double d0;
+        byte $b0;
+        java.lang.Object $r1;
+        org.apache.mahout.common.iterator.SamplingIterable r2;
+
+        r0 := @parameter0: java.lang.Iterable;
+
+        d0 := @parameter1: double;
+
+        $b0 = d0 cmpl 1.0;
+
+        if $b0 < 0 goto label1;
+
+        $r1 = r0;
+
+        goto label2;
+
+     label1:
+        r2 = new org.apache.mahout.common.iterator.SamplingIterable;
+
+        $r1 = r2;
+
+        specialinvoke r2.<org.apache.mahout.common.iterator.SamplingIterable: void <init>(java.lang.Iterable,double)>(r0, d0);
+
+     label2:
+        r3 = (java.lang.Iterable) $r1;
+
+        return r3;
+    }
+}

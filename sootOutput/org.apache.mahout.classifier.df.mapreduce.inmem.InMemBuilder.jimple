@@ -1,0 +1,227 @@
+public class org.apache.mahout.classifier.df.mapreduce.inmem.InMemBuilder extends org.apache.mahout.classifier.df.mapreduce.Builder
+{
+
+    public void <init>(org.apache.mahout.classifier.df.builder.TreeBuilder, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, java.lang.Long, org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemBuilder r0;
+        org.apache.mahout.classifier.df.builder.TreeBuilder r1;
+        org.apache.hadoop.fs.Path r2, r3;
+        java.lang.Long r4;
+        org.apache.hadoop.conf.Configuration r5;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemBuilder;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.builder.TreeBuilder;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r4 := @parameter3: java.lang.Long;
+
+        r5 := @parameter4: org.apache.hadoop.conf.Configuration;
+
+        specialinvoke r0.<org.apache.mahout.classifier.df.mapreduce.Builder: void <init>(org.apache.mahout.classifier.df.builder.TreeBuilder,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Long,org.apache.hadoop.conf.Configuration)>(r1, r2, r3, r4, r5);
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.classifier.df.builder.TreeBuilder, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path)
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemBuilder r0;
+        org.apache.mahout.classifier.df.builder.TreeBuilder r1;
+        org.apache.hadoop.fs.Path r2, r3;
+        org.apache.hadoop.conf.Configuration $r4;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemBuilder;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.builder.TreeBuilder;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: org.apache.hadoop.fs.Path;
+
+        $r4 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r4.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        specialinvoke r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemBuilder: void <init>(org.apache.mahout.classifier.df.builder.TreeBuilder,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Long,org.apache.hadoop.conf.Configuration)>(r1, r2, r3, null, $r4);
+
+        return;
+    }
+
+    protected void configureJob(org.apache.hadoop.mapreduce.Job) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemBuilder r0;
+        org.apache.hadoop.mapreduce.Job r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.hadoop.fs.Path $r3, $r4;
+        java.net.URI $r5;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemBuilder;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Job;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(class "org/apache/mahout/classifier/df/mapreduce/inmem/InMemBuilder");
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemBuilder: org.apache.hadoop.fs.Path getOutputPath(org.apache.hadoop.conf.Configuration)>(r2);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>(r1, $r3);
+
+        $r4 = virtualinvoke r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemBuilder: org.apache.hadoop.fs.Path getDataPath()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        staticinvoke <org.apache.hadoop.filecache.DistributedCache: void addCacheFile(java.net.URI,org.apache.hadoop.conf.Configuration)>($r5, r2);
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/IntWritable");
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(class "org/apache/mahout/classifier/df/mapreduce/MapredOutput");
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Job: void setMapperClass(java.lang.Class)>(class "org/apache/mahout/classifier/df/mapreduce/inmem/InMemMapper");
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Job: void setNumReduceTasks(int)>(0);
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Job: void setInputFormatClass(java.lang.Class)>(class "org/apache/mahout/classifier/df/mapreduce/inmem/InMemInputFormat");
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Job: void setOutputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        return;
+    }
+
+    protected org.apache.mahout.classifier.df.DecisionForest parseOutput(org.apache.hadoop.mapreduce.Job) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemBuilder r0;
+        org.apache.hadoop.mapreduce.Job r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.hadoop.fs.Path r4, r8;
+        org.apache.hadoop.fs.FileSystem r5;
+        org.apache.hadoop.fs.Path[] r6;
+        int i0, $i1, i2;
+        java.util.Iterator r9;
+        org.apache.mahout.common.Pair r10;
+        java.util.HashMap $r11;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable $r12;
+        org.apache.mahout.classifier.df.DecisionForest $r13;
+        boolean $z0;
+        java.lang.Object $r14, $r15, $r17;
+        org.apache.hadoop.io.IntWritable $r16;
+        java.lang.Integer $r18;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemBuilder;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Job;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r11 = new java.util.HashMap;
+
+        specialinvoke $r11.<java.util.HashMap: void <init>()>();
+
+        r4 = virtualinvoke r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemBuilder: org.apache.hadoop.fs.Path getOutputPath(org.apache.hadoop.conf.Configuration)>(r2);
+
+        r5 = virtualinvoke r4.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r2);
+
+        r6 = staticinvoke <org.apache.mahout.classifier.df.DFUtils: org.apache.hadoop.fs.Path[] listOutputFiles(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path)>(r5, r4);
+
+        i0 = lengthof r6;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label4;
+
+        r8 = r6[i2];
+
+        $r12 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable;
+
+        specialinvoke $r12.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r8, r2);
+
+        r9 = virtualinvoke $r12.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r9.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r15 = interfaceinvoke r9.<java.util.Iterator: java.lang.Object next()>();
+
+        r10 = (org.apache.mahout.common.Pair) $r15;
+
+        $r14 = virtualinvoke r10.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r16 = (org.apache.hadoop.io.IntWritable) $r14;
+
+        $i1 = virtualinvoke $r16.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $r18 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        $r17 = virtualinvoke r10.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        interfaceinvoke $r11.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r18, $r17);
+
+        goto label2;
+
+     label3:
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label4:
+        $r13 = staticinvoke <org.apache.mahout.classifier.df.mapreduce.inmem.InMemBuilder: org.apache.mahout.classifier.df.DecisionForest processOutput(java.util.Map)>($r11);
+
+        return $r13;
+    }
+
+    private static org.apache.mahout.classifier.df.DecisionForest processOutput(java.util.Map)
+    {
+        java.util.Map r0;
+        java.util.Iterator r2;
+        java.util.Map$Entry r3;
+        org.apache.mahout.classifier.df.mapreduce.MapredOutput r4;
+        java.util.ArrayList $r5;
+        java.util.Set $r6;
+        boolean $z0;
+        org.apache.mahout.classifier.df.DecisionForest $r7;
+        java.lang.Object $r8, $r9;
+        org.apache.mahout.classifier.df.node.Node $r10;
+
+        r0 := @parameter0: java.util.Map;
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        $r6 = interfaceinvoke r0.<java.util.Map: java.util.Set entrySet()>();
+
+        r2 = interfaceinvoke $r6.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r8 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.util.Map$Entry) $r8;
+
+        $r9 = interfaceinvoke r3.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        r4 = (org.apache.mahout.classifier.df.mapreduce.MapredOutput) $r9;
+
+        $r10 = virtualinvoke r4.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: org.apache.mahout.classifier.df.node.Node getTree()>();
+
+        interfaceinvoke $r5.<java.util.List: boolean add(java.lang.Object)>($r10);
+
+        goto label1;
+
+     label2:
+        $r7 = new org.apache.mahout.classifier.df.DecisionForest;
+
+        specialinvoke $r7.<org.apache.mahout.classifier.df.DecisionForest: void <init>(java.util.List)>($r5);
+
+        return $r7;
+    }
+}

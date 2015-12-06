@@ -1,0 +1,72 @@
+public class org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.PearsonCorrelationSimilarity extends org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CosineSimilarity
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.PearsonCorrelationSimilarity r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.PearsonCorrelationSimilarity;
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CosineSimilarity: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector normalize(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.PearsonCorrelationSimilarity r0;
+        org.apache.mahout.math.Vector r1, $r5;
+        double d0, $d1, $d2, $d3, $d4;
+        java.util.Iterator r2;
+        org.apache.mahout.math.Vector$Element r3;
+        int $i0, $i1;
+        java.lang.Iterable $r4;
+        boolean $z0;
+        java.lang.Object $r6;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.PearsonCorrelationSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $i0 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int getNumNondefaultElements()>();
+
+        if $i0 != 0 goto label1;
+
+        return r1;
+
+     label1:
+        $d1 = interfaceinvoke r1.<org.apache.mahout.math.Vector: double norm(double)>(1.0);
+
+        $i1 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int getNumNonZeroElements()>();
+
+        $d2 = (double) $i1;
+
+        d0 = $d1 / $d2;
+
+        $r4 = interfaceinvoke r1.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r2 = interfaceinvoke $r4.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r6 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.math.Vector$Element) $r6;
+
+        $d3 = interfaceinvoke r3.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        $d4 = $d3 - d0;
+
+        interfaceinvoke r3.<org.apache.mahout.math.Vector$Element: void set(double)>($d4);
+
+        goto label2;
+
+     label3:
+        $r5 = specialinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.CosineSimilarity: org.apache.mahout.math.Vector normalize(org.apache.mahout.math.Vector)>(r1);
+
+        return $r5;
+    }
+}

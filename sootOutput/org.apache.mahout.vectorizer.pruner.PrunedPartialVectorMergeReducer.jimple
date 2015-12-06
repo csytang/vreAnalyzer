@@ -1,0 +1,159 @@
+public class org.apache.mahout.vectorizer.pruner.PrunedPartialVectorMergeReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+    private double normPower;
+    private boolean logNormalize;
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.pruner.PrunedPartialVectorMergeReducer r0;
+
+        r0 := @this: org.apache.mahout.vectorizer.pruner.PrunedPartialVectorMergeReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        return;
+    }
+
+    protected void reduce(org.apache.hadoop.io.WritableComparable, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.pruner.PrunedPartialVectorMergeReducer r0;
+        org.apache.hadoop.io.WritableComparable r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.mahout.math.VectorWritable r4, $r13;
+        double $d0, $d1, $d2;
+        byte $b0;
+        boolean $z0, $z1;
+        java.lang.Object $r5;
+        org.apache.mahout.math.function.DoubleDoubleFunction $r6;
+        org.apache.mahout.math.Vector $r7, $r9, r10, $r12;
+        java.util.Iterator r11;
+
+        r0 := @this: org.apache.mahout.vectorizer.pruner.PrunedPartialVectorMergeReducer;
+
+        r1 := @parameter0: org.apache.hadoop.io.WritableComparable;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        r10 = null;
+
+        r11 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z1 = interfaceinvoke r11.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label3;
+
+        $r5 = interfaceinvoke r11.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.math.VectorWritable) $r5;
+
+        if r10 != null goto label2;
+
+        $r9 = virtualinvoke r4.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        r10 = interfaceinvoke $r9.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        goto label1;
+
+     label2:
+        $r7 = virtualinvoke r4.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r6 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction PLUS>;
+
+        interfaceinvoke r10.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>($r7, $r6);
+
+        goto label1;
+
+     label3:
+        if r10 == null goto label6;
+
+        $d0 = r0.<org.apache.mahout.vectorizer.pruner.PrunedPartialVectorMergeReducer: double normPower>;
+
+        $b0 = $d0 cmpl -1.0;
+
+        if $b0 == 0 goto label6;
+
+        $z0 = r0.<org.apache.mahout.vectorizer.pruner.PrunedPartialVectorMergeReducer: boolean logNormalize>;
+
+        if $z0 == 0 goto label4;
+
+        $d2 = r0.<org.apache.mahout.vectorizer.pruner.PrunedPartialVectorMergeReducer: double normPower>;
+
+        $r12 = interfaceinvoke r10.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector logNormalize(double)>($d2);
+
+        goto label5;
+
+     label4:
+        $d1 = r0.<org.apache.mahout.vectorizer.pruner.PrunedPartialVectorMergeReducer: double normPower>;
+
+        $r12 = interfaceinvoke r10.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector normalize(double)>($d1);
+
+     label5:
+        r10 = $r12;
+
+     label6:
+        $r13 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r13.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r10);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r13);
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.pruner.PrunedPartialVectorMergeReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        float $f0;
+        double $d0;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.vectorizer.pruner.PrunedPartialVectorMergeReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void setup(org.apache.hadoop.mapreduce.Reducer$Context)>(r1);
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $f0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: float getFloat(java.lang.String,float)>("normalization.power", -1.0F);
+
+        $d0 = (double) $f0;
+
+        r0.<org.apache.mahout.vectorizer.pruner.PrunedPartialVectorMergeReducer: double normPower> = $d0;
+
+        $z0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("vector.lognormalize", 0);
+
+        r0.<org.apache.mahout.vectorizer.pruner.PrunedPartialVectorMergeReducer: boolean logNormalize> = $z0;
+
+        return;
+    }
+
+    protected volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.pruner.PrunedPartialVectorMergeReducer r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.hadoop.io.WritableComparable $r4;
+
+        r0 := @this: org.apache.mahout.vectorizer.pruner.PrunedPartialVectorMergeReducer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.hadoop.io.WritableComparable) r1;
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.pruner.PrunedPartialVectorMergeReducer: void reduce(org.apache.hadoop.io.WritableComparable,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+}

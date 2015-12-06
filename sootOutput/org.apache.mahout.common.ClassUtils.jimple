@@ -1,0 +1,174 @@
+public final class org.apache.mahout.common.ClassUtils extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.common.ClassUtils r0;
+
+        r0 := @this: org.apache.mahout.common.ClassUtils;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.lang.Object instantiateAs(java.lang.String, java.lang.Class)
+    {
+        java.lang.String r0;
+        java.lang.Class r1, $r3, $r4;
+        java.lang.Object $r5;
+        java.lang.ClassNotFoundException $r6;
+        java.lang.IllegalStateException $r7;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: java.lang.Class;
+
+     label1:
+        $r3 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>(r0);
+
+        $r4 = virtualinvoke $r3.<java.lang.Class: java.lang.Class asSubclass(java.lang.Class)>(r1);
+
+        $r5 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.Class,java.lang.Class)>($r4, r1);
+
+     label2:
+        return $r5;
+
+     label3:
+        $r6 := @caughtexception;
+
+        $r7 = new java.lang.IllegalStateException;
+
+        specialinvoke $r7.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r6);
+
+        throw $r7;
+
+        catch java.lang.ClassNotFoundException from label1 to label2 with label3;
+    }
+
+    public static java.lang.Object instantiateAs(java.lang.String, java.lang.Class, java.lang.Class[], java.lang.Object[])
+    {
+        java.lang.String r0;
+        java.lang.Class r1, $r5, $r6;
+        java.lang.Class[] r2;
+        java.lang.Object[] r3;
+        java.lang.Object $r7;
+        java.lang.ClassNotFoundException $r8;
+        java.lang.IllegalStateException $r9;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: java.lang.Class;
+
+        r2 := @parameter2: java.lang.Class[];
+
+        r3 := @parameter3: java.lang.Object[];
+
+     label1:
+        $r5 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>(r0);
+
+        $r6 = virtualinvoke $r5.<java.lang.Class: java.lang.Class asSubclass(java.lang.Class)>(r1);
+
+        $r7 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.Class,java.lang.Class,java.lang.Class[],java.lang.Object[])>($r6, r1, r2, r3);
+
+     label2:
+        return $r7;
+
+     label3:
+        $r8 := @caughtexception;
+
+        $r9 = new java.lang.IllegalStateException;
+
+        specialinvoke $r9.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r8);
+
+        throw $r9;
+
+        catch java.lang.ClassNotFoundException from label1 to label2 with label3;
+    }
+
+    public static java.lang.Object instantiateAs(java.lang.Class, java.lang.Class, java.lang.Class[], java.lang.Object[])
+    {
+        java.lang.Class r0, r1, $r5;
+        java.lang.Class[] r2;
+        java.lang.Object[] r3;
+        java.lang.reflect.Constructor $r6;
+        java.lang.Object $r7;
+        java.lang.ReflectiveOperationException $r8;
+        java.lang.IllegalStateException $r9;
+
+        r0 := @parameter0: java.lang.Class;
+
+        r1 := @parameter1: java.lang.Class;
+
+        r2 := @parameter2: java.lang.Class[];
+
+        r3 := @parameter3: java.lang.Object[];
+
+     label1:
+        $r5 = virtualinvoke r0.<java.lang.Class: java.lang.Class asSubclass(java.lang.Class)>(r1);
+
+        $r6 = virtualinvoke $r5.<java.lang.Class: java.lang.reflect.Constructor getConstructor(java.lang.Class[])>(r2);
+
+        $r7 = virtualinvoke $r6.<java.lang.reflect.Constructor: java.lang.Object newInstance(java.lang.Object[])>(r3);
+
+     label2:
+        return $r7;
+
+     label3:
+        $r8 := @caughtexception;
+
+        $r9 = new java.lang.IllegalStateException;
+
+        specialinvoke $r9.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r8);
+
+        throw $r9;
+
+        catch java.lang.InstantiationException from label1 to label2 with label3;
+        catch java.lang.IllegalAccessException from label1 to label2 with label3;
+        catch java.lang.NoSuchMethodException from label1 to label2 with label3;
+        catch java.lang.reflect.InvocationTargetException from label1 to label2 with label3;
+    }
+
+    public static java.lang.Object instantiateAs(java.lang.Class, java.lang.Class)
+    {
+        java.lang.Class r0, r1, $r3;
+        java.lang.Class[] $r4;
+        java.lang.reflect.Constructor $r5;
+        java.lang.Object[] $r6;
+        java.lang.Object $r7;
+        java.lang.ReflectiveOperationException $r8;
+        java.lang.IllegalStateException $r9;
+
+        r0 := @parameter0: java.lang.Class;
+
+        r1 := @parameter1: java.lang.Class;
+
+     label1:
+        $r3 = virtualinvoke r0.<java.lang.Class: java.lang.Class asSubclass(java.lang.Class)>(r1);
+
+        $r4 = newarray (java.lang.Class)[0];
+
+        $r5 = virtualinvoke $r3.<java.lang.Class: java.lang.reflect.Constructor getConstructor(java.lang.Class[])>($r4);
+
+        $r6 = newarray (java.lang.Object)[0];
+
+        $r7 = virtualinvoke $r5.<java.lang.reflect.Constructor: java.lang.Object newInstance(java.lang.Object[])>($r6);
+
+     label2:
+        return $r7;
+
+     label3:
+        $r8 := @caughtexception;
+
+        $r9 = new java.lang.IllegalStateException;
+
+        specialinvoke $r9.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r8);
+
+        throw $r9;
+
+        catch java.lang.InstantiationException from label1 to label2 with label3;
+        catch java.lang.IllegalAccessException from label1 to label2 with label3;
+        catch java.lang.NoSuchMethodException from label1 to label2 with label3;
+        catch java.lang.reflect.InvocationTargetException from label1 to label2 with label3;
+    }
+}

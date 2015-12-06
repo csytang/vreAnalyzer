@@ -1,0 +1,67 @@
+public class org.apache.mahout.cf.taste.hadoop.als.MultithreadedSharingMapper extends org.apache.hadoop.mapreduce.lib.map.MultithreadedMapper
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.als.MultithreadedSharingMapper r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.MultithreadedSharingMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.lib.map.MultithreadedMapper: void <init>()>();
+
+        return;
+    }
+
+    public void run(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.als.MultithreadedSharingMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        java.lang.Class r2, $r8;
+        org.apache.hadoop.conf.Configuration r3;
+        org.apache.hadoop.mapreduce.Mapper r4;
+        java.lang.Object $r6;
+        boolean $z0;
+        java.lang.Object[] $r7;
+        java.lang.String $r9;
+        org.apache.mahout.cf.taste.hadoop.als.SharingMapper r11;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.MultithreadedSharingMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        r2 = staticinvoke <org.apache.mahout.cf.taste.hadoop.als.MultithreadedSharingMapper: java.lang.Class getMapperClass(org.apache.hadoop.mapreduce.JobContext)>(r1);
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.Object)>(r2, "Could not find Multithreaded Mapper class.");
+
+        r3 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r6 = staticinvoke <org.apache.hadoop.util.ReflectionUtils: java.lang.Object newInstance(java.lang.Class,org.apache.hadoop.conf.Configuration)>(r2, r3);
+
+        r4 = (org.apache.hadoop.mapreduce.Mapper) $r6;
+
+        r11 = null;
+
+        $z0 = r4 instanceof org.apache.mahout.cf.taste.hadoop.als.SharingMapper;
+
+        if $z0 == 0 goto label1;
+
+        r11 = (org.apache.mahout.cf.taste.hadoop.als.SharingMapper) r4;
+
+     label1:
+        $r7 = newarray (java.lang.Object)[1];
+
+        $r8 = virtualinvoke r4.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r9 = virtualinvoke $r8.<java.lang.Class: java.lang.String getName()>();
+
+        $r7[0] = $r9;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object,java.lang.String,java.lang.Object[])>(r11, "Could not instantiate SharingMapper. Class was: %s", $r7);
+
+        virtualinvoke r11.<org.apache.mahout.cf.taste.hadoop.als.SharingMapper: void setupSharedInstance(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.lib.map.MultithreadedMapper: void run(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        return;
+    }
+}

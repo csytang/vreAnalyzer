@@ -1,0 +1,86 @@
+class org.apache.mahout.math.neighborhood.ProjectionSearch$1 extends com.google.common.collect.AbstractIterator
+{
+    private final java.util.Iterator projected;
+    final org.apache.mahout.math.neighborhood.ProjectionSearch this$0;
+
+    void <init>(org.apache.mahout.math.neighborhood.ProjectionSearch)
+    {
+        org.apache.mahout.math.neighborhood.ProjectionSearch$1 r0;
+        org.apache.mahout.math.neighborhood.ProjectionSearch r1, $r2;
+        java.util.List $r3;
+        java.lang.Object $r4;
+        com.google.common.collect.TreeMultiset $r5;
+        java.util.Iterator $r6;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.ProjectionSearch$1;
+
+        r1 := @parameter0: org.apache.mahout.math.neighborhood.ProjectionSearch;
+
+        r0.<org.apache.mahout.math.neighborhood.ProjectionSearch$1: org.apache.mahout.math.neighborhood.ProjectionSearch this$0> = r1;
+
+        specialinvoke r0.<com.google.common.collect.AbstractIterator: void <init>()>();
+
+        $r2 = r0.<org.apache.mahout.math.neighborhood.ProjectionSearch$1: org.apache.mahout.math.neighborhood.ProjectionSearch this$0>;
+
+        $r3 = staticinvoke <org.apache.mahout.math.neighborhood.ProjectionSearch: java.util.List access$000(org.apache.mahout.math.neighborhood.ProjectionSearch)>($r2);
+
+        $r4 = interfaceinvoke $r3.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r5 = (com.google.common.collect.TreeMultiset) $r4;
+
+        $r6 = virtualinvoke $r5.<com.google.common.collect.TreeMultiset: java.util.Iterator iterator()>();
+
+        r0.<org.apache.mahout.math.neighborhood.ProjectionSearch$1: java.util.Iterator projected> = $r6;
+
+        return;
+    }
+
+    protected org.apache.mahout.math.Vector computeNext()
+    {
+        org.apache.mahout.math.neighborhood.ProjectionSearch$1 r0;
+        java.util.Iterator $r1, $r2;
+        boolean $z0;
+        java.lang.Object $r3, $r5, $r7;
+        org.apache.mahout.math.random.WeightedThing $r4;
+        org.apache.mahout.math.Vector $r6, $r8;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.ProjectionSearch$1;
+
+        $r1 = r0.<org.apache.mahout.math.neighborhood.ProjectionSearch$1: java.util.Iterator projected>;
+
+        $z0 = interfaceinvoke $r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 != 0 goto label1;
+
+        $r7 = virtualinvoke r0.<org.apache.mahout.math.neighborhood.ProjectionSearch$1: java.lang.Object endOfData()>();
+
+        $r8 = (org.apache.mahout.math.Vector) $r7;
+
+        return $r8;
+
+     label1:
+        $r2 = r0.<org.apache.mahout.math.neighborhood.ProjectionSearch$1: java.util.Iterator projected>;
+
+        $r3 = interfaceinvoke $r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r4 = (org.apache.mahout.math.random.WeightedThing) $r3;
+
+        $r5 = virtualinvoke $r4.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        $r6 = (org.apache.mahout.math.Vector) $r5;
+
+        return $r6;
+    }
+
+    protected volatile java.lang.Object computeNext()
+    {
+        org.apache.mahout.math.neighborhood.ProjectionSearch$1 r0;
+        org.apache.mahout.math.Vector $r1;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.ProjectionSearch$1;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.math.neighborhood.ProjectionSearch$1: org.apache.mahout.math.Vector computeNext()>();
+
+        return $r1;
+    }
+}

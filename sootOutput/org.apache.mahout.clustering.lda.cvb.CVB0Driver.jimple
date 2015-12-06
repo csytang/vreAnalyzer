@@ -1,0 +1,1678 @@
+public class org.apache.mahout.clustering.lda.cvb.CVB0Driver extends org.apache.mahout.common.AbstractJob
+{
+    private static final org.slf4j.Logger log;
+    public static final java.lang.String NUM_TOPICS;
+    public static final java.lang.String NUM_TERMS;
+    public static final java.lang.String DOC_TOPIC_SMOOTHING;
+    public static final java.lang.String TERM_TOPIC_SMOOTHING;
+    public static final java.lang.String DICTIONARY;
+    public static final java.lang.String DOC_TOPIC_OUTPUT;
+    public static final java.lang.String MODEL_TEMP_DIR;
+    public static final java.lang.String ITERATION_BLOCK_SIZE;
+    public static final java.lang.String RANDOM_SEED;
+    public static final java.lang.String TEST_SET_FRACTION;
+    public static final java.lang.String NUM_TRAIN_THREADS;
+    public static final java.lang.String NUM_UPDATE_THREADS;
+    public static final java.lang.String MAX_ITERATIONS_PER_DOC;
+    public static final java.lang.String MODEL_WEIGHT;
+    public static final java.lang.String NUM_REDUCE_TASKS;
+    public static final java.lang.String BACKFILL_PERPLEXITY;
+    private static final java.lang.String MODEL_PATHS;
+    private static final double DEFAULT_CONVERGENCE_DELTA;
+    private static final double DEFAULT_DOC_TOPIC_SMOOTHING;
+    private static final double DEFAULT_TERM_TOPIC_SMOOTHING;
+    private static final int DEFAULT_ITERATION_BLOCK_SIZE;
+    private static final double DEFAULT_TEST_SET_FRACTION;
+    private static final int DEFAULT_NUM_TRAIN_THREADS;
+    private static final int DEFAULT_NUM_UPDATE_THREADS;
+    private static final int DEFAULT_MAX_ITERATIONS_PER_DOC;
+    private static final int DEFAULT_NUM_REDUCE_TASKS;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.lda.cvb.CVB0Driver r0;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CVB0Driver;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        return;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.clustering.lda.cvb.CVB0Driver r0;
+        java.lang.String[] r1;
+        int i0, i1, i2, i3, i4, i5, i6, i8, $i10, $i11;
+        org.apache.hadoop.fs.Path r2, r3, r4, r5, r6, $r43, $r44, $r45;
+        double d0, d1, d2;
+        long l7, $l9, $l12;
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r7, $r12;
+        boolean z0, $z1, $z2, $z3, $z4, $z5, $z6;
+        org.apache.commons.cli2.option.DefaultOption $r9, $r13;
+        java.lang.String $r10, $r14, $r15, $r16, $r17, $r18, $r19, $r20, $r23, $r24, $r26, $r27, $r28, $r29, $r30, $r31, $r32, $r34, $r36, $r37, $r38, $r39, $r40, $r41, $r42;
+        java.util.Map $r22;
+        org.apache.commons.cli2.Option $r25;
+        org.apache.hadoop.conf.Configuration $r33, $r35;
+        float $f1;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CVB0Driver;
+
+        r1 := @parameter0: java.lang.String[];
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addInputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addOutputOption()>();
+
+        $r7 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder maxIterationsOption()>();
+
+        $r9 = virtualinvoke $r7.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r9);
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(0.0);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("convergenceDelta", "cd", "The convergence delta value", $r10);
+
+        $r12 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder overwriteOption()>();
+
+        $r13 = virtualinvoke $r12.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r13);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("num_topics", "k", "Number of topics to learn", 1);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("num_terms", "nt", "Vocabulary size", 0);
+
+        $r14 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(1.0E-4);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("doc_topic_smoothing", "a", "Smoothing for document/topic distribution", $r14);
+
+        $r15 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(1.0E-4);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("term_topic_smoothing", "e", "Smoothing for topic/term distribution", $r15);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("dictionary", "dict", "Path to term-dictionary file(s) (glob expression supported)", 0);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("doc_topic_output", "dt", "Output path for the training doc/topic distribution", 0);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("topic_model_temp_dir", "mt", "Path to intermediate model path (useful for restarting)", 0);
+
+        $r16 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(10);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("iteration_block_size", "block", "Number of iterations per perplexity check", $r16);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("random_seed", "seed", "Random seed", 0);
+
+        $r17 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(0.0);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("test_set_fraction", "tf", "Fraction of data to hold out for testing", $r17);
+
+        $r18 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(4);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("num_train_threads", "ntt", "number of threads per mapper to train with", $r18);
+
+        $r19 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(1);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("num_update_threads", "nut", "number of threads per mapper to update the model with", $r19);
+
+        $r20 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(10);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("max_doc_topic_iters", "mipd", "max number of iterations per doc for p(topic|doc) learning", $r20);
+
+        $r24 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(10);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("num_reduce_tasks", null, "number of reducers to use during model estimation", $r24);
+
+        $r25 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.commons.cli2.Option buildOption(java.lang.String,java.lang.String,java.lang.String,boolean,boolean,java.lang.String)>("backfill_perplexity", null, "enable backfilling of missing perplexity values", 0, 0, null);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r25);
+
+        $r22 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.util.Map parseArguments(java.lang.String[])>(r1);
+
+        if $r22 != null goto label01;
+
+        return -1;
+
+     label01:
+        $r23 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String getOption(java.lang.String)>("num_topics");
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r23);
+
+        r2 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.fs.Path getInputPath()>();
+
+        r3 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        $r28 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String getOption(java.lang.String)>("maxIter");
+
+        i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r28);
+
+        $r26 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String getOption(java.lang.String)>("iteration_block_size");
+
+        i2 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r26);
+
+        $r27 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String getOption(java.lang.String)>("convergenceDelta");
+
+        d0 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r27);
+
+        $r31 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String getOption(java.lang.String)>("doc_topic_smoothing");
+
+        d1 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r31);
+
+        $r32 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String getOption(java.lang.String)>("term_topic_smoothing");
+
+        d2 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r32);
+
+        $r29 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String getOption(java.lang.String)>("num_train_threads");
+
+        i3 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r29);
+
+        $r30 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String getOption(java.lang.String)>("num_update_threads");
+
+        i4 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r30);
+
+        $r34 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String getOption(java.lang.String)>("max_doc_topic_iters");
+
+        i5 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r34);
+
+        $z4 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: boolean hasOption(java.lang.String)>("dictionary");
+
+        if $z4 == 0 goto label02;
+
+        $r43 = new org.apache.hadoop.fs.Path;
+
+        $r42 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String getOption(java.lang.String)>("dictionary");
+
+        specialinvoke $r43.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r42);
+
+        goto label03;
+
+     label02:
+        $r43 = null;
+
+     label03:
+        r4 = $r43;
+
+        $z3 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: boolean hasOption(java.lang.String)>("num_terms");
+
+        if $z3 == 0 goto label04;
+
+        $r41 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String getOption(java.lang.String)>("num_terms");
+
+        $i11 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r41);
+
+        goto label05;
+
+     label04:
+        $r33 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $i11 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: int getNumTerms(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path)>($r33, $r43);
+
+     label05:
+        i6 = $i11;
+
+        $z2 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: boolean hasOption(java.lang.String)>("doc_topic_output");
+
+        if $z2 == 0 goto label06;
+
+        $r44 = new org.apache.hadoop.fs.Path;
+
+        $r39 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String getOption(java.lang.String)>("doc_topic_output");
+
+        specialinvoke $r44.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r39);
+
+        goto label07;
+
+     label06:
+        $r44 = null;
+
+     label07:
+        r6 = $r44;
+
+        $z1 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: boolean hasOption(java.lang.String)>("topic_model_temp_dir");
+
+        if $z1 == 0 goto label08;
+
+        $r45 = new org.apache.hadoop.fs.Path;
+
+        $r38 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String getOption(java.lang.String)>("topic_model_temp_dir");
+
+        specialinvoke $r45.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r38);
+
+        goto label09;
+
+     label08:
+        $r45 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.fs.Path getTempPath(java.lang.String)>("topicModelState");
+
+     label09:
+        r5 = $r45;
+
+        $z6 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: boolean hasOption(java.lang.String)>("random_seed");
+
+        if $z6 == 0 goto label10;
+
+        $r40 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String getOption(java.lang.String)>("random_seed");
+
+        $l12 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r40);
+
+        goto label11;
+
+     label10:
+        $l9 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l12 = $l9 % 10000L;
+
+     label11:
+        l7 = $l12;
+
+        $z5 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: boolean hasOption(java.lang.String)>("test_set_fraction");
+
+        if $z5 == 0 goto label12;
+
+        $r37 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String getOption(java.lang.String)>("test_set_fraction");
+
+        $f1 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>($r37);
+
+        goto label13;
+
+     label12:
+        $f1 = 0.0F;
+
+     label13:
+        $r36 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String getOption(java.lang.String)>("num_reduce_tasks");
+
+        i8 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r36);
+
+        z0 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: boolean hasOption(java.lang.String)>("backfill_perplexity");
+
+        $r35 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $i10 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: int run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int,double,double,int,int,double,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,long,float,int,int,int,int,boolean)>($r35, r2, r3, i0, i6, d1, d2, i1, i2, d0, r4, r6, r5, l7, $f1, i3, i4, i5, i8, z0);
+
+        return $i10;
+    }
+
+    private static int getNumTerms(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, $r10;
+        org.apache.hadoop.fs.FileSystem r2;
+        org.apache.hadoop.fs.FileStatus[] r5;
+        int i0, $i1, $i2, i3, i4;
+        org.apache.hadoop.fs.FileStatus r6;
+        org.apache.hadoop.io.Text $r8;
+        org.apache.hadoop.io.IntWritable $r9;
+        org.apache.hadoop.io.SequenceFile$Reader $r11;
+        boolean $z0;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r0);
+
+        $r8 = new org.apache.hadoop.io.Text;
+
+        specialinvoke $r8.<org.apache.hadoop.io.Text: void <init>()>();
+
+        $r9 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r9.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+        i3 = -1;
+
+        r5 = virtualinvoke r2.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus[] globStatus(org.apache.hadoop.fs.Path)>(r1);
+
+        i0 = lengthof r5;
+
+        i4 = 0;
+
+     label1:
+        if i4 >= i0 goto label4;
+
+        r6 = r5[i4];
+
+        $r11 = new org.apache.hadoop.io.SequenceFile$Reader;
+
+        $r10 = virtualinvoke r6.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        specialinvoke $r11.<org.apache.hadoop.io.SequenceFile$Reader: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r2, $r10, r0);
+
+     label2:
+        $z0 = virtualinvoke $r11.<org.apache.hadoop.io.SequenceFile$Reader: boolean next(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r8, $r9);
+
+        if $z0 == 0 goto label3;
+
+        $i2 = virtualinvoke $r9.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        i3 = staticinvoke <java.lang.Math: int max(int,int)>(i3, $i2);
+
+        goto label2;
+
+     label3:
+        i4 = i4 + 1;
+
+        goto label1;
+
+     label4:
+        $i1 = i3 + 1;
+
+        return $i1;
+    }
+
+    public int run(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int, int, double, double, int, int, double, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, long, float, int, int, int, int, boolean) throws java.lang.ClassNotFoundException, java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CVB0Driver r0;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.hadoop.fs.Path r2, r3, r4, r5, r6, r9, r89, r90, r91;
+        int i0, i1, i2, i3, i5, i6, i7, i8, $i14, $i15, $i17, $i18, $i19, $i21, $i22, $i23, i26, i27;
+        double d0, d1, d2, $d3, $d4, $d5, $d6, $d7, d8, d9;
+        long l4, $l10, $l11, $l12, l28;
+        float f0;
+        boolean z0, $z1, $z2, $z4, $z6, $z7, $z8;
+        org.apache.hadoop.fs.FileSystem r7;
+        byte $b9, $b13, $b16, $b20, $b24, $b25;
+        org.apache.hadoop.mapreduce.Job r10, $r92, r93, $r94;
+        java.lang.Object[] $r11, $r12, $r65, $r70, $r82;
+        org.slf4j.Logger $r13, $r36, $r39, $r49, $r54, $r57, $r58, $r66, $r72, $r76, $r79, $r81;
+        java.lang.Float $r14, $r21, $r83;
+        java.lang.Integer $r15, $r16, $r20, $r37, $r48, $r59, $r60, $r61, $r67, $r71, $r73, $r78, $r80;
+        java.lang.Double $r17, $r18, $r19, $r56, $r62, $r63, $r69, $r74, $r75;
+        java.lang.Long $r22, $r55;
+        java.lang.StringBuilder $r23, $r24, $r25, $r26, $r27, $r29, $r30, $r31, $r32, $r33, $r35;
+        java.lang.String $r28, $r34, $r40, $r41, $r42, $r43, $r44, $r45, $r46, $r47, $r50, $r52, $r77, $r85, $r87, r88;
+        java.net.URI $r38;
+        java.util.ArrayList $r51;
+        com.google.common.base.Joiner $r53;
+        java.lang.Object $r64, $r68;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CVB0Driver;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter3: int;
+
+        i1 := @parameter4: int;
+
+        d0 := @parameter5: double;
+
+        d1 := @parameter6: double;
+
+        i2 := @parameter7: int;
+
+        i3 := @parameter8: int;
+
+        d2 := @parameter9: double;
+
+        r4 := @parameter10: org.apache.hadoop.fs.Path;
+
+        r5 := @parameter11: org.apache.hadoop.fs.Path;
+
+        r6 := @parameter12: org.apache.hadoop.fs.Path;
+
+        l4 := @parameter13: long;
+
+        f0 := @parameter14: float;
+
+        i6 := @parameter15: int;
+
+        i5 := @parameter16: int;
+
+        i8 := @parameter17: int;
+
+        i7 := @parameter18: int;
+
+        z0 := @parameter19: boolean;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void setConf(org.apache.hadoop.conf.Configuration)>(r1);
+
+        $d3 = (double) f0;
+
+        $b9 = $d3 cmpl 0.0;
+
+        if $b9 < 0 goto label01;
+
+        $d7 = (double) f0;
+
+        $b25 = $d7 cmpg 1.0;
+
+        if $b25 > 0 goto label01;
+
+        $z7 = 1;
+
+        goto label02;
+
+     label01:
+        $z7 = 0;
+
+     label02:
+        $r82 = newarray (java.lang.Object)[1];
+
+        $r83 = staticinvoke <java.lang.Float: java.lang.Float valueOf(float)>(f0);
+
+        $r82[0] = $r83;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.String,java.lang.Object[])>($z7, "Expected \'testFraction\' value in range [0, 1] but found value \'%s\'", $r82);
+
+        if z0 == 0 goto label03;
+
+        $d6 = (double) f0;
+
+        $b24 = $d6 cmpl 0.0;
+
+        if $b24 <= 0 goto label04;
+
+     label03:
+        $z8 = 1;
+
+        goto label05;
+
+     label04:
+        $z8 = 0;
+
+     label05:
+        $r11 = newarray (java.lang.Object)[1];
+
+        $r14 = staticinvoke <java.lang.Float: java.lang.Float valueOf(float)>(f0);
+
+        $r11[0] = $r14;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.String,java.lang.Object[])>($z8, "Expected \'testFraction\' value in range (0, 1] but found value \'%s\'", $r11);
+
+        $r13 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        $r12 = newarray (java.lang.Object)[10];
+
+        $r12[0] = r2;
+
+        $r16 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        $r12[1] = $r16;
+
+        $r15 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r12[2] = $r15;
+
+        $r18 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d0);
+
+        $r12[3] = $r18;
+
+        $r17 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d1);
+
+        $r12[4] = $r17;
+
+        $r20 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i2);
+
+        $r12[5] = $r20;
+
+        $r19 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d2);
+
+        $r12[6] = $r19;
+
+        $r12[7] = r3;
+
+        $r22 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l4);
+
+        $r12[8] = $r22;
+
+        $r21 = staticinvoke <java.lang.Float: java.lang.Float valueOf(float)>(f0);
+
+        $r12[9] = $r21;
+
+        interfaceinvoke $r13.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object[])>("Will run Collapsed Variational Bayes (0th-derivative approximation) learning for LDA on {} (numTerms: {}), finding {}-topics, with document/topic prior {}, topic/term prior {}.  Maximum iterations to run will be {}, unless the change in perplexity is less than {}.  Topic model output (p(term|topic) for each topic) will be stored {}.  Random initialization seed is {}, holding out {} of the data for perplexity check\n", $r12);
+
+        if r4 != null goto label06;
+
+        $r85 = "";
+
+        goto label07;
+
+     label06:
+        $r26 = new java.lang.StringBuilder;
+
+        specialinvoke $r26.<java.lang.StringBuilder: void <init>()>();
+
+        $r27 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Dictionary to be used located ");
+
+        $r28 = virtualinvoke r4.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        $r29 = virtualinvoke $r27.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r28);
+
+        $r23 = virtualinvoke $r29.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(10);
+
+        $r85 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label07:
+        $r24 = new java.lang.StringBuilder;
+
+        specialinvoke $r24.<java.lang.StringBuilder: void <init>()>();
+
+        $r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r85);
+
+        if r5 != null goto label08;
+
+        $r87 = "";
+
+        goto label09;
+
+     label08:
+        $r32 = new java.lang.StringBuilder;
+
+        specialinvoke $r32.<java.lang.StringBuilder: void <init>()>();
+
+        $r33 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("p(topic|docId) will be stored ");
+
+        $r34 = virtualinvoke r5.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        $r35 = virtualinvoke $r33.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r34);
+
+        $r30 = virtualinvoke $r35.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(10);
+
+        $r87 = virtualinvoke $r30.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label09:
+        $r31 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r87);
+
+        r88 = virtualinvoke $r31.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r39 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        interfaceinvoke $r39.<org.slf4j.Logger: void info(java.lang.String)>(r88);
+
+        $r38 = virtualinvoke r6.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r7 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r38, r1);
+
+        i26 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: int getCurrentIterationNumber(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,int)>(r1, r6, i2);
+
+        $r36 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        $r37 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i26);
+
+        interfaceinvoke $r36.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Current iteration number: {}", $r37);
+
+        $r42 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i0);
+
+        virtualinvoke r1.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("num_topics", $r42);
+
+        $r43 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i1);
+
+        virtualinvoke r1.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("num_terms", $r43);
+
+        $r40 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(d0);
+
+        virtualinvoke r1.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("doc_topic_smoothing", $r40);
+
+        $r41 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(d1);
+
+        virtualinvoke r1.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("term_topic_smoothing", $r41);
+
+        $r47 = staticinvoke <java.lang.String: java.lang.String valueOf(long)>(l4);
+
+        virtualinvoke r1.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("random_seed", $r47);
+
+        $r46 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i6);
+
+        virtualinvoke r1.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("num_train_threads", $r46);
+
+        $r45 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i5);
+
+        virtualinvoke r1.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("num_update_threads", $r45);
+
+        $r44 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i8);
+
+        virtualinvoke r1.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("max_doc_topic_iters", $r44);
+
+        virtualinvoke r1.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("prev_iter_mult", "1");
+
+        $r50 = staticinvoke <java.lang.String: java.lang.String valueOf(float)>(f0);
+
+        virtualinvoke r1.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("test_set_fraction", $r50);
+
+        $r51 = new java.util.ArrayList;
+
+        specialinvoke $r51.<java.util.ArrayList: void <init>()>();
+
+        i27 = 1;
+
+     label10:
+        if i27 > i26 goto label15;
+
+        r9 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.fs.Path modelPath(org.apache.hadoop.fs.Path,int)>(r6, i27);
+
+        d8 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: double readPerplexity(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,int)>(r1, r6, i27);
+
+        $z4 = staticinvoke <java.lang.Double: boolean isNaN(double)>(d8);
+
+        if $z4 == 0 goto label13;
+
+        if z0 == 0 goto label14;
+
+        $i23 = i27 % i3;
+
+        if $i23 == 0 goto label11;
+
+        goto label14;
+
+     label11:
+        $r81 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        $r80 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i27);
+
+        interfaceinvoke $r81.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Backfilling perplexity at iteration {}", $r80);
+
+        $z6 = virtualinvoke r7.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>(r9);
+
+        if $z6 != 0 goto label12;
+
+        $r79 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        $r77 = virtualinvoke r9.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        $r78 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i27);
+
+        interfaceinvoke $r79.<org.slf4j.Logger: void error(java.lang.String,java.lang.Object,java.lang.Object)>("Model path \'{}\' does not exist; Skipping iteration {} perplexity calculation", $r77, $r78);
+
+        goto label14;
+
+     label12:
+        d8 = specialinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: double calculatePerplexity(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int)>(r1, r2, r9, i27);
+
+     label13:
+        $r75 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d8);
+
+        interfaceinvoke $r51.<java.util.List: boolean add(java.lang.Object)>($r75);
+
+        $r76 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        $r73 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i27);
+
+        $r74 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d8);
+
+        interfaceinvoke $r76.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object,java.lang.Object)>("Perplexity at iteration {} = {}", $r73, $r74);
+
+     label14:
+        i27 = i27 + 1;
+
+        goto label10;
+
+     label15:
+        l28 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+     label16:
+        if i26 >= i2 goto label18;
+
+        $b13 = d2 cmpl 0.0;
+
+        if $b13 <= 0 goto label17;
+
+        d9 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: double rateOfChange(java.util.List)>($r51);
+
+        $b20 = d9 cmpg d2;
+
+        if $b20 >= 0 goto label17;
+
+        $r72 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        $r70 = newarray (java.lang.Object)[3];
+
+        $r71 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i26);
+
+        $r70[0] = $r71;
+
+        $i22 = interfaceinvoke $r51.<java.util.List: int size()>();
+
+        $i21 = $i22 - 1;
+
+        $r68 = interfaceinvoke $r51.<java.util.List: java.lang.Object get(int)>($i21);
+
+        $r70[1] = $r68;
+
+        $r69 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d9);
+
+        $r70[2] = $r69;
+
+        interfaceinvoke $r72.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object[])>("Convergence achieved at iteration {} with perplexity {} and delta {}", $r70);
+
+        goto label18;
+
+     label17:
+        i26 = i26 + 1;
+
+        $r58 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        $r60 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i26);
+
+        $r59 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i2);
+
+        interfaceinvoke $r58.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object,java.lang.Object)>("About to run iteration {} of {}", $r60, $r59);
+
+        $i15 = i26 - 1;
+
+        r89 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.fs.Path modelPath(org.apache.hadoop.fs.Path,int)>(r6, $i15);
+
+        r90 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.fs.Path modelPath(org.apache.hadoop.fs.Path,int)>(r6, i26);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void runIteration(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int,int)>(r1, r2, r89, r90, i26, i2, i7);
+
+        $b16 = f0 cmpl 0.0F;
+
+        if $b16 <= 0 goto label16;
+
+        $i14 = i26 % i3;
+
+        if $i14 != 0 goto label16;
+
+        $d4 = specialinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: double calculatePerplexity(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int)>(r1, r2, r90, i26);
+
+        $r56 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d4);
+
+        interfaceinvoke $r51.<java.util.List: boolean add(java.lang.Object)>($r56);
+
+        $r57 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        $i18 = interfaceinvoke $r51.<java.util.List: int size()>();
+
+        $i19 = $i18 - 1;
+
+        $r64 = interfaceinvoke $r51.<java.util.List: java.lang.Object get(int)>($i19);
+
+        interfaceinvoke $r57.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Current perplexity = {}", $r64);
+
+        $r66 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        $r65 = newarray (java.lang.Object)[4];
+
+        $r67 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i26);
+
+        $r65[0] = $r67;
+
+        $i17 = i26 - i3;
+
+        $r61 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i17);
+
+        $r65[1] = $r61;
+
+        $d5 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: double rateOfChange(java.util.List)>($r51);
+
+        $r62 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d5);
+
+        $r65[2] = $r62;
+
+        $r63 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d2);
+
+        $r65[3] = $r63;
+
+        interfaceinvoke $r66.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object[])>("(p_{} - p_{}) / p_0 = {}; target = {}", $r65);
+
+        goto label16;
+
+     label18:
+        $r49 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        $r48 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i26);
+
+        $l10 = staticinvoke <java.lang.System: long currentTimeMillis()>();
+
+        $l11 = $l10 - l28;
+
+        $l12 = $l11 / 1000L;
+
+        $r55 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l12);
+
+        interfaceinvoke $r49.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object,java.lang.Object)>("Completed {} iterations in {} seconds", $r48, $r55);
+
+        $r54 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        $r53 = staticinvoke <com.google.common.base.Joiner: com.google.common.base.Joiner on(java.lang.String)>(", ");
+
+        $r52 = virtualinvoke $r53.<com.google.common.base.Joiner: java.lang.String join(java.lang.Iterable)>($r51);
+
+        interfaceinvoke $r54.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Perplexities: ({})", $r52);
+
+        r91 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.fs.Path modelPath(org.apache.hadoop.fs.Path,int)>(r6, i26);
+
+        if r3 == null goto label19;
+
+        $r92 = specialinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.mapreduce.Job writeTopicModel(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>(r1, r91, r3);
+
+        goto label20;
+
+     label19:
+        $r92 = null;
+
+     label20:
+        r93 = $r92;
+
+        if r5 == null goto label21;
+
+        $r94 = specialinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.mapreduce.Job writeDocTopicInference(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>(r1, r2, r91, r5);
+
+        goto label22;
+
+     label21:
+        $r94 = null;
+
+     label22:
+        r10 = $r94;
+
+        if r93 == null goto label23;
+
+        $z2 = virtualinvoke r93.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if $z2 != 0 goto label23;
+
+        return -1;
+
+     label23:
+        if r10 == null goto label24;
+
+        $z1 = virtualinvoke r10.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if $z1 != 0 goto label24;
+
+        return -1;
+
+     label24:
+        return 0;
+    }
+
+    private static double rateOfChange(java.util.List)
+    {
+        java.util.List r0;
+        int i0, $i1, $i2;
+        java.lang.Object $r1, $r3, $r5;
+        java.lang.Double $r2, $r4, $r6;
+        double $d0, $d1, $d2, $d3, $d4, $d5;
+
+        r0 := @parameter0: java.util.List;
+
+        i0 = interfaceinvoke r0.<java.util.List: int size()>();
+
+        if i0 >= 2 goto label1;
+
+        return 1.7976931348623157E308;
+
+     label1:
+        $i1 = i0 - 1;
+
+        $r1 = interfaceinvoke r0.<java.util.List: java.lang.Object get(int)>($i1);
+
+        $r2 = (java.lang.Double) $r1;
+
+        $d0 = virtualinvoke $r2.<java.lang.Double: double doubleValue()>();
+
+        $i2 = i0 - 2;
+
+        $r3 = interfaceinvoke r0.<java.util.List: java.lang.Object get(int)>($i2);
+
+        $r4 = (java.lang.Double) $r3;
+
+        $d1 = virtualinvoke $r4.<java.lang.Double: double doubleValue()>();
+
+        $d2 = $d0 - $d1;
+
+        $d3 = staticinvoke <java.lang.Math: double abs(double)>($d2);
+
+        $r5 = interfaceinvoke r0.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r6 = (java.lang.Double) $r5;
+
+        $d4 = virtualinvoke $r6.<java.lang.Double: double doubleValue()>();
+
+        $d5 = $d3 / $d4;
+
+        return $d5;
+    }
+
+    private double calculatePerplexity(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int) throws java.io.IOException, java.lang.ClassNotFoundException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CVB0Driver r0;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.hadoop.fs.Path r2, r3, r5, $r11, $r13;
+        int i0;
+        java.lang.String r4, $r18;
+        org.apache.hadoop.mapreduce.Job r6;
+        java.lang.StringBuilder $r7, $r8, $r9, $r14, $r16, $r17;
+        org.slf4j.Logger $r10;
+        boolean $z0;
+        org.apache.hadoop.fs.Path[] $r12;
+        double $d0;
+        java.lang.InterruptedException $r15;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CVB0Driver;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter3: int;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Calculating perplexity for ");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r3);
+
+        r4 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r10 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        interfaceinvoke $r10.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("About to run: {}", r4);
+
+        $r11 = virtualinvoke r3.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.Path getParent()>();
+
+        r5 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.fs.Path perplexityPath(org.apache.hadoop.fs.Path,int)>($r11, i0);
+
+        r6 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>(r2, r5, class "org/apache/mahout/clustering/lda/cvb/CachingCVB0PerplexityMapper", class "org/apache/hadoop/io/DoubleWritable", class "org/apache/hadoop/io/DoubleWritable", class "org/apache/mahout/clustering/lda/cvb/CVB0Driver$DualDoubleSumReducer", class "org/apache/hadoop/io/DoubleWritable", class "org/apache/hadoop/io/DoubleWritable");
+
+        virtualinvoke r6.<org.apache.hadoop.mapreduce.Job: void setJobName(java.lang.String)>(r4);
+
+        virtualinvoke r6.<org.apache.hadoop.mapreduce.Job: void setCombinerClass(java.lang.Class)>(class "org/apache/mahout/clustering/lda/cvb/CVB0Driver$DualDoubleSumReducer");
+
+        virtualinvoke r6.<org.apache.hadoop.mapreduce.Job: void setNumReduceTasks(int)>(1);
+
+        staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: void setModelPaths(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>(r6, r3);
+
+        $r12 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r12[0] = r5;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>(r1, $r12);
+
+        $z0 = virtualinvoke r6.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if $z0 != 0 goto label1;
+
+        $r15 = new java.lang.InterruptedException;
+
+        $r14 = new java.lang.StringBuilder;
+
+        specialinvoke $r14.<java.lang.StringBuilder: void <init>()>();
+
+        $r17 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to calculate perplexity for: ");
+
+        $r16 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r3);
+
+        $r18 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r15.<java.lang.InterruptedException: void <init>(java.lang.String)>($r18);
+
+        throw $r15;
+
+     label1:
+        $r13 = virtualinvoke r3.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.Path getParent()>();
+
+        $d0 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: double readPerplexity(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,int)>(r1, $r13, i0);
+
+        return $d0;
+    }
+
+    public static double readPerplexity(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, int) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r2;
+        int i0;
+        org.apache.hadoop.fs.FileSystem r3;
+        java.util.Iterator r4;
+        org.apache.mahout.common.Pair r5;
+        java.net.URI $r6;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable $r7;
+        boolean $z0, $z1;
+        org.apache.hadoop.fs.PathFilter $r8;
+        org.apache.mahout.common.iterator.sequencefile.PathType $r9;
+        org.slf4j.Logger $r10, $r20;
+        java.lang.Object[] $r11;
+        java.lang.Long $r12;
+        java.lang.Double $r13, $r14;
+        double $d0, $d1, $d2, d3, d4;
+        org.apache.hadoop.io.DoubleWritable $r15, $r19;
+        java.lang.Object $r16, $r17, $r18;
+        long l1;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter2: int;
+
+        r2 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.fs.Path perplexityPath(org.apache.hadoop.fs.Path,int)>(r1, i0);
+
+        $r6 = virtualinvoke r2.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r3 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r6, r0);
+
+        $z0 = virtualinvoke r3.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>(r2);
+
+        if $z0 != 0 goto label1;
+
+        $r20 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        interfaceinvoke $r20.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Object)>("Perplexity path {} does not exist, returning NaN", r2);
+
+        return #NaN;
+
+     label1:
+        d3 = 0.0;
+
+        d4 = 0.0;
+
+        l1 = 0L;
+
+        $r7 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable;
+
+        $r9 = <org.apache.mahout.common.iterator.sequencefile.PathType: org.apache.mahout.common.iterator.sequencefile.PathType LIST>;
+
+        $r8 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter partFilter()>();
+
+        specialinvoke $r7.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable: void <init>(org.apache.hadoop.fs.Path,org.apache.mahout.common.iterator.sequencefile.PathType,org.apache.hadoop.fs.PathFilter,java.util.Comparator,boolean,org.apache.hadoop.conf.Configuration)>(r2, $r9, $r8, null, 1, r0);
+
+        r4 = virtualinvoke $r7.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable: java.util.Iterator iterator()>();
+
+     label2:
+        $z1 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label3;
+
+        $r16 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.common.Pair) $r16;
+
+        $r17 = virtualinvoke r5.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r15 = (org.apache.hadoop.io.DoubleWritable) $r17;
+
+        $d1 = virtualinvoke $r15.<org.apache.hadoop.io.DoubleWritable: double get()>();
+
+        d4 = d4 + $d1;
+
+        $r18 = virtualinvoke r5.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r19 = (org.apache.hadoop.io.DoubleWritable) $r18;
+
+        $d2 = virtualinvoke $r19.<org.apache.hadoop.io.DoubleWritable: double get()>();
+
+        d3 = d3 + $d2;
+
+        l1 = l1 + 1L;
+
+        goto label2;
+
+     label3:
+        $r10 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        $r11 = newarray (java.lang.Object)[3];
+
+        $r12 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l1);
+
+        $r11[0] = $r12;
+
+        $r13 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d3);
+
+        $r11[1] = $r13;
+
+        $r14 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d4);
+
+        $r11[2] = $r14;
+
+        interfaceinvoke $r10.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object[])>("Read {} entries with total perplexity {} and model weight {}", $r11);
+
+        $d0 = d3 / d4;
+
+        return $d0;
+    }
+
+    private org.apache.hadoop.mapreduce.Job writeTopicModel(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.mahout.clustering.lda.cvb.CVB0Driver r0;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.hadoop.fs.Path r2, r3;
+        java.lang.String r4;
+        org.apache.hadoop.mapreduce.Job r5;
+        java.lang.Object[] $r6;
+        org.slf4j.Logger $r7;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CVB0Driver;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: org.apache.hadoop.fs.Path;
+
+        $r6 = newarray (java.lang.Object)[2];
+
+        $r6[0] = r2;
+
+        $r6[1] = r3;
+
+        r4 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Writing final topic/term distributions from %s to %s", $r6);
+
+        $r7 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        interfaceinvoke $r7.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("About to run: {}", r4);
+
+        r5 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.String)>(r2, r3, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", class "org/apache/mahout/clustering/lda/cvb/CVB0TopicTermVectorNormalizerMapper", class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable", class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat", r4);
+
+        virtualinvoke r5.<org.apache.hadoop.mapreduce.Job: void submit()>();
+
+        return r5;
+    }
+
+    private org.apache.hadoop.mapreduce.Job writeDocTopicInference(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path) throws java.io.IOException, java.lang.ClassNotFoundException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CVB0Driver r0;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.hadoop.fs.Path r2, r3, r4, $r14;
+        java.lang.String r5;
+        org.apache.hadoop.mapreduce.Job r6;
+        org.apache.hadoop.fs.FileSystem r7;
+        org.apache.hadoop.fs.FileStatus[] r8;
+        java.net.URI[] r9;
+        java.lang.Object[] $r10;
+        org.slf4j.Logger $r11;
+        java.net.URI $r12, $r16;
+        boolean $z0;
+        org.apache.hadoop.fs.PathFilter $r13;
+        int $i0, $i1, i2;
+        org.apache.hadoop.fs.FileStatus $r15;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CVB0Driver;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r4 := @parameter3: org.apache.hadoop.fs.Path;
+
+        $r10 = newarray (java.lang.Object)[2];
+
+        $r10[0] = r2;
+
+        $r10[1] = r4;
+
+        r5 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Writing final document/topic inference from %s to %s", $r10);
+
+        $r11 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        interfaceinvoke $r11.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("About to run: {}", r5);
+
+        r6 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.String)>(r2, r4, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", class "org/apache/mahout/clustering/lda/cvb/CVB0DocInferenceMapper", class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable", class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat", r5);
+
+        $r12 = virtualinvoke r2.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r7 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r12, r1);
+
+        if r3 == null goto label3;
+
+        $z0 = virtualinvoke r7.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>(r3);
+
+        if $z0 == 0 goto label3;
+
+        $r13 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter partFilter()>();
+
+        r8 = virtualinvoke r7.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus[] listStatus(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.PathFilter)>(r3, $r13);
+
+        $i1 = lengthof r8;
+
+        r9 = newarray (java.net.URI)[$i1];
+
+        i2 = 0;
+
+     label1:
+        $i0 = lengthof r8;
+
+        if i2 >= $i0 goto label2;
+
+        $r15 = r8[i2];
+
+        $r14 = virtualinvoke $r15.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        $r16 = virtualinvoke $r14.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r9[i2] = $r16;
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        staticinvoke <org.apache.hadoop.filecache.DistributedCache: void setCacheFiles(java.net.URI[],org.apache.hadoop.conf.Configuration)>(r9, r1);
+
+        staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: void setModelPaths(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>(r6, r3);
+
+     label3:
+        virtualinvoke r6.<org.apache.hadoop.mapreduce.Job: void submit()>();
+
+        return r6;
+    }
+
+    public static org.apache.hadoop.fs.Path modelPath(org.apache.hadoop.fs.Path, int)
+    {
+        org.apache.hadoop.fs.Path r0, $r1;
+        int i0;
+        java.lang.StringBuilder $r2, $r3, $r4;
+        java.lang.String $r5;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter1: int;
+
+        $r1 = new org.apache.hadoop.fs.Path;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("model-");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r0, $r5);
+
+        return $r1;
+    }
+
+    public static org.apache.hadoop.fs.Path perplexityPath(org.apache.hadoop.fs.Path, int)
+    {
+        org.apache.hadoop.fs.Path r0, $r1;
+        int i0;
+        java.lang.StringBuilder $r2, $r3, $r4;
+        java.lang.String $r5;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter1: int;
+
+        $r1 = new org.apache.hadoop.fs.Path;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("perplexity-");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r0, $r5);
+
+        return $r1;
+    }
+
+    private static int getCurrentIterationNumber(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, int) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r5;
+        int i0, $i1, i2;
+        org.apache.hadoop.fs.FileSystem r2;
+        java.net.URI $r3;
+        boolean $z0;
+        org.slf4j.Logger $r4;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter2: int;
+
+        $r3 = virtualinvoke r1.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r2 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r3, r0);
+
+        i2 = 1;
+
+        r5 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.fs.Path modelPath(org.apache.hadoop.fs.Path,int)>(r1, 1);
+
+     label1:
+        $z0 = virtualinvoke r2.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>(r5);
+
+        if $z0 == 0 goto label2;
+
+        if i2 > i0 goto label2;
+
+        $r4 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        interfaceinvoke $r4.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Found previous state: {}", r5);
+
+        i2 = i2 + 1;
+
+        r5 = staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.fs.Path modelPath(org.apache.hadoop.fs.Path,int)>(r1, i2);
+
+        goto label1;
+
+     label2:
+        $i1 = i2 - 1;
+
+        return $i1;
+    }
+
+    public void runIteration(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int, int, int) throws java.io.IOException, java.lang.ClassNotFoundException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CVB0Driver r0;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.hadoop.fs.Path r2, r3, r4;
+        int i0, i1, i2;
+        java.lang.String r5, $r15;
+        org.apache.hadoop.mapreduce.Job r6;
+        java.lang.Object[] $r7, $r13;
+        java.lang.Integer $r8, $r9, $r14;
+        org.slf4j.Logger $r10;
+        org.apache.hadoop.fs.Path[] $r11;
+        java.lang.InterruptedException $r12;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CVB0Driver;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r4 := @parameter3: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter4: int;
+
+        i1 := @parameter5: int;
+
+        i2 := @parameter6: int;
+
+        $r7 = newarray (java.lang.Object)[3];
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r7[0] = $r8;
+
+        $r9 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        $r7[1] = $r9;
+
+        $r7[2] = r3;
+
+        r5 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Iteration %d of %d, input path: %s", $r7);
+
+        $r10 = <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log>;
+
+        interfaceinvoke $r10.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("About to run: {}", r5);
+
+        r6 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>(r2, r4, class "org/apache/mahout/clustering/lda/cvb/CachingCVB0Mapper", class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable", class "org/apache/mahout/common/mapreduce/VectorSumReducer", class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke r6.<org.apache.hadoop.mapreduce.Job: void setCombinerClass(java.lang.Class)>(class "org/apache/mahout/common/mapreduce/VectorSumReducer");
+
+        virtualinvoke r6.<org.apache.hadoop.mapreduce.Job: void setNumReduceTasks(int)>(i2);
+
+        virtualinvoke r6.<org.apache.hadoop.mapreduce.Job: void setJobName(java.lang.String)>(r5);
+
+        staticinvoke <org.apache.mahout.clustering.lda.cvb.CVB0Driver: void setModelPaths(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>(r6, r3);
+
+        $r11 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r11[0] = r4;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>(r1, $r11);
+
+        $z0 = virtualinvoke r6.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if $z0 != 0 goto label1;
+
+        $r12 = new java.lang.InterruptedException;
+
+        $r13 = newarray (java.lang.Object)[1];
+
+        $r14 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r13[0] = $r14;
+
+        $r15 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Failed to complete iteration %d stage 1", $r13);
+
+        specialinvoke $r12.<java.lang.InterruptedException: void <init>(java.lang.String)>($r15);
+
+        throw $r12;
+
+     label1:
+        return;
+    }
+
+    private static void setModelPaths(org.apache.hadoop.mapreduce.Job, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.hadoop.mapreduce.Job r0;
+        org.apache.hadoop.fs.Path r1, $r12;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.hadoop.fs.FileStatus[] r3;
+        java.lang.String[] r4;
+        java.net.URI $r5, $r7, $r15;
+        org.apache.hadoop.fs.FileSystem $r6, $r8;
+        boolean $z0, $z1;
+        org.apache.hadoop.fs.PathFilter $r9;
+        int $i0, $i1, i2, $i3;
+        java.lang.Object[] $r10;
+        java.lang.String $r11, $r14;
+        org.apache.hadoop.fs.FileStatus $r13;
+
+        r0 := @parameter0: org.apache.hadoop.mapreduce.Job;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 = virtualinvoke r0.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        if r1 == null goto label1;
+
+        $r5 = virtualinvoke r1.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        $r6 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r5, r2);
+
+        $z0 = virtualinvoke $r6.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>(r1);
+
+        if $z0 != 0 goto label2;
+
+     label1:
+        return;
+
+     label2:
+        $r7 = virtualinvoke r1.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        $r8 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r7, r2);
+
+        $r9 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter partFilter()>();
+
+        r3 = virtualinvoke $r8.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus[] listStatus(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.PathFilter)>(r1, $r9);
+
+        $i0 = lengthof r3;
+
+        if $i0 <= 0 goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        $r10 = newarray (java.lang.Object)[1];
+
+        $r11 = virtualinvoke r1.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        $r10[0] = $r11;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.String,java.lang.Object[])>($z1, "No part files found in model path \'%s\'", $r10);
+
+        $i1 = lengthof r3;
+
+        r4 = newarray (java.lang.String)[$i1];
+
+        i2 = 0;
+
+     label5:
+        $i3 = lengthof r3;
+
+        if i2 >= $i3 goto label6;
+
+        $r13 = r3[i2];
+
+        $r12 = virtualinvoke $r13.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        $r15 = virtualinvoke $r12.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        $r14 = virtualinvoke $r15.<java.net.URI: java.lang.String toString()>();
+
+        r4[i2] = $r14;
+
+        i2 = i2 + 1;
+
+        goto label5;
+
+     label6:
+        virtualinvoke r2.<org.apache.hadoop.conf.Configuration: void setStrings(java.lang.String,java.lang.String[])>("mahout.lda.cvb.modelPath", r4);
+
+        return;
+    }
+
+    public static org.apache.hadoop.fs.Path[] getModelPaths(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        java.lang.String[] r1;
+        org.apache.hadoop.fs.Path[] r2;
+        int $i0, $i1, $i2, i3;
+        org.apache.hadoop.fs.Path $r3;
+        java.lang.String $r4;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 = virtualinvoke r0.<org.apache.hadoop.conf.Configuration: java.lang.String[] getStrings(java.lang.String)>("mahout.lda.cvb.modelPath");
+
+        if r1 == null goto label1;
+
+        $i0 = lengthof r1;
+
+        if $i0 != 0 goto label2;
+
+     label1:
+        return null;
+
+     label2:
+        $i1 = lengthof r1;
+
+        r2 = newarray (org.apache.hadoop.fs.Path)[$i1];
+
+        i3 = 0;
+
+     label3:
+        $i2 = lengthof r1;
+
+        if i3 >= $i2 goto label4;
+
+        $r3 = new org.apache.hadoop.fs.Path;
+
+        $r4 = r1[i3];
+
+        specialinvoke $r3.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r4);
+
+        r2[i3] = $r3;
+
+        i3 = i3 + 1;
+
+        goto label3;
+
+     label4:
+        return r2;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.hadoop.conf.Configuration $r1;
+        org.apache.mahout.clustering.lda.cvb.CVB0Driver $r2;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r1.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r2 = new org.apache.mahout.clustering.lda.cvb.CVB0Driver;
+
+        specialinvoke $r2.<org.apache.mahout.clustering.lda.cvb.CVB0Driver: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.util.Tool,java.lang.String[])>($r1, $r2, r0);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: int DEFAULT_NUM_REDUCE_TASKS> = 10;
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: int DEFAULT_MAX_ITERATIONS_PER_DOC> = 10;
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: int DEFAULT_NUM_UPDATE_THREADS> = 1;
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: int DEFAULT_NUM_TRAIN_THREADS> = 4;
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: double DEFAULT_TEST_SET_FRACTION> = 0.0;
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: int DEFAULT_ITERATION_BLOCK_SIZE> = 10;
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: double DEFAULT_TERM_TOPIC_SMOOTHING> = 1.0E-4;
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: double DEFAULT_DOC_TOPIC_SMOOTHING> = 1.0E-4;
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: double DEFAULT_CONVERGENCE_DELTA> = 0.0;
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String MODEL_PATHS> = "mahout.lda.cvb.modelPath";
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String BACKFILL_PERPLEXITY> = "backfill_perplexity";
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String NUM_REDUCE_TASKS> = "num_reduce_tasks";
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String MODEL_WEIGHT> = "prev_iter_mult";
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String MAX_ITERATIONS_PER_DOC> = "max_doc_topic_iters";
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String NUM_UPDATE_THREADS> = "num_update_threads";
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String NUM_TRAIN_THREADS> = "num_train_threads";
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String TEST_SET_FRACTION> = "test_set_fraction";
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String RANDOM_SEED> = "random_seed";
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String ITERATION_BLOCK_SIZE> = "iteration_block_size";
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String MODEL_TEMP_DIR> = "topic_model_temp_dir";
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String DOC_TOPIC_OUTPUT> = "doc_topic_output";
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String DICTIONARY> = "dictionary";
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String TERM_TOPIC_SMOOTHING> = "term_topic_smoothing";
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String DOC_TOPIC_SMOOTHING> = "doc_topic_smoothing";
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String NUM_TERMS> = "num_terms";
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: java.lang.String NUM_TOPICS> = "num_topics";
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/clustering/lda/cvb/CVB0Driver");
+
+        <org.apache.mahout.clustering.lda.cvb.CVB0Driver: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

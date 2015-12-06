@@ -1,0 +1,89 @@
+public final class org.apache.mahout.clustering.canopy.CanopyConfigKeys extends java.lang.Object
+{
+    public static final java.lang.String T1_KEY;
+    public static final java.lang.String T2_KEY;
+    public static final java.lang.String T3_KEY;
+    public static final java.lang.String T4_KEY;
+    public static final java.lang.String DISTANCE_MEASURE_KEY;
+    public static final java.lang.String CF_KEY;
+
+    private void <init>()
+    {
+        org.apache.mahout.clustering.canopy.CanopyConfigKeys r0;
+
+        r0 := @this: org.apache.mahout.clustering.canopy.CanopyConfigKeys;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.mahout.clustering.canopy.CanopyClusterer configureCanopyClusterer(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        double d0, d1, $d2, $d3;
+        org.apache.mahout.common.distance.DistanceMeasure r1;
+        java.lang.String $r3, $r4, $r5, r8, r9;
+        java.lang.Object $r6;
+        org.apache.mahout.clustering.canopy.CanopyClusterer $r7;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        $r3 = virtualinvoke r0.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("org.apache.mahout.clustering.canopy.t1");
+
+        d0 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r3);
+
+        $r4 = virtualinvoke r0.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("org.apache.mahout.clustering.canopy.t2");
+
+        d1 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r4);
+
+        $r5 = virtualinvoke r0.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("org.apache.mahout.clustering.canopy.measure");
+
+        $r6 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.String,java.lang.Class)>($r5, class "org/apache/mahout/common/distance/DistanceMeasure");
+
+        r1 = (org.apache.mahout.common.distance.DistanceMeasure) $r6;
+
+        interfaceinvoke r1.<org.apache.mahout.common.distance.DistanceMeasure: void configure(org.apache.hadoop.conf.Configuration)>(r0);
+
+        $r7 = new org.apache.mahout.clustering.canopy.CanopyClusterer;
+
+        specialinvoke $r7.<org.apache.mahout.clustering.canopy.CanopyClusterer: void <init>(org.apache.mahout.common.distance.DistanceMeasure,double,double)>(r1, d0, d1);
+
+        r8 = virtualinvoke r0.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("org.apache.mahout.clustering.canopy.t3");
+
+        if r8 == null goto label1;
+
+        $d3 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>(r8);
+
+        virtualinvoke $r7.<org.apache.mahout.clustering.canopy.CanopyClusterer: void setT3(double)>($d3);
+
+     label1:
+        r9 = virtualinvoke r0.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("org.apache.mahout.clustering.canopy.t4");
+
+        if r9 == null goto label2;
+
+        $d2 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>(r9);
+
+        virtualinvoke $r7.<org.apache.mahout.clustering.canopy.CanopyClusterer: void setT4(double)>($d2);
+
+     label2:
+        return $r7;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.clustering.canopy.CanopyConfigKeys: java.lang.String CF_KEY> = "org.apache.mahout.clustering.canopy.canopyFilter";
+
+        <org.apache.mahout.clustering.canopy.CanopyConfigKeys: java.lang.String DISTANCE_MEASURE_KEY> = "org.apache.mahout.clustering.canopy.measure";
+
+        <org.apache.mahout.clustering.canopy.CanopyConfigKeys: java.lang.String T4_KEY> = "org.apache.mahout.clustering.canopy.t4";
+
+        <org.apache.mahout.clustering.canopy.CanopyConfigKeys: java.lang.String T3_KEY> = "org.apache.mahout.clustering.canopy.t3";
+
+        <org.apache.mahout.clustering.canopy.CanopyConfigKeys: java.lang.String T2_KEY> = "org.apache.mahout.clustering.canopy.t2";
+
+        <org.apache.mahout.clustering.canopy.CanopyConfigKeys: java.lang.String T1_KEY> = "org.apache.mahout.clustering.canopy.t1";
+
+        return;
+    }
+}

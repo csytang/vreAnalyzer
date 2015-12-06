@@ -1,0 +1,21 @@
+public interface  org.apache.mahout.common.parameters.Parametered extends java.lang.Object
+{
+    public static final org.slf4j.Logger log;
+
+    public abstract java.util.Collection getParameters();
+
+    public abstract void createParameters(java.lang.String, org.apache.hadoop.conf.Configuration);
+
+    public abstract void configure(org.apache.hadoop.conf.Configuration);
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/common/parameters/Parametered");
+
+        <org.apache.mahout.common.parameters.Parametered: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

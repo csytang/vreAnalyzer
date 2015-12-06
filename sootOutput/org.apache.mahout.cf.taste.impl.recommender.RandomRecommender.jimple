@@ -1,0 +1,221 @@
+public final class org.apache.mahout.cf.taste.impl.recommender.RandomRecommender extends org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender
+{
+    private final java.util.Random random;
+    private final float minPref;
+    private final float maxPref;
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.RandomRecommender r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator r2;
+        long l0;
+        org.apache.mahout.cf.taste.model.PreferenceArray r3;
+        float f0, f1, f2;
+        org.apache.mahout.common.RandomWrapper $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+        java.lang.Long $r6;
+        int $i1, i4;
+        byte $b2, $b3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.RandomRecommender;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: void <init>(org.apache.mahout.cf.taste.model.DataModel)>(r1);
+
+        $r4 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.RandomRecommender: java.util.Random random> = $r4;
+
+        f1 = #-InfinityF;
+
+        f2 = #InfinityF;
+
+        r2 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r5 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: java.lang.Object next()>();
+
+        $r6 = (java.lang.Long) $r5;
+
+        l0 = virtualinvoke $r6.<java.lang.Long: long longValue()>();
+
+        r3 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>(l0);
+
+        i4 = 0;
+
+     label2:
+        $i1 = interfaceinvoke r3.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        if i4 >= $i1 goto label1;
+
+        f0 = interfaceinvoke r3.<org.apache.mahout.cf.taste.model.PreferenceArray: float getValue(int)>(i4);
+
+        $b3 = f0 cmpg f2;
+
+        if $b3 >= 0 goto label3;
+
+        f2 = f0;
+
+     label3:
+        $b2 = f0 cmpl f1;
+
+        if $b2 <= 0 goto label4;
+
+        f1 = f0;
+
+     label4:
+        i4 = i4 + 1;
+
+        goto label2;
+
+     label5:
+        r0.<org.apache.mahout.cf.taste.impl.recommender.RandomRecommender: float minPref> = f2;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.RandomRecommender: float maxPref> = f1;
+
+        return;
+    }
+
+    public java.util.List recommend(long, int, org.apache.mahout.cf.taste.recommender.IDRescorer, boolean) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.RandomRecommender r0;
+        long l0, l3;
+        int i1, i2, $i4, $i5;
+        org.apache.mahout.cf.taste.recommender.IDRescorer r1;
+        boolean z0;
+        org.apache.mahout.cf.taste.model.DataModel r2;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator r4;
+        java.util.ArrayList $r5;
+        java.util.Random $r6;
+        java.lang.Object $r7;
+        java.lang.Long $r8;
+        float $f0;
+        org.apache.mahout.cf.taste.impl.recommender.GenericRecommendedItem $r9;
+        java.lang.Float $r10;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.RandomRecommender;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        r1 := @parameter2: org.apache.mahout.cf.taste.recommender.IDRescorer;
+
+        z0 := @parameter3: boolean;
+
+        r2 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.RandomRecommender: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        i2 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.DataModel: int getNumItems()>();
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>(int)>(i1);
+
+     label1:
+        $i4 = interfaceinvoke $r5.<java.util.List: int size()>();
+
+        if $i4 >= i1 goto label3;
+
+        r4 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getItemIDs()>();
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.recommender.RandomRecommender: java.util.Random random>;
+
+        $i5 = virtualinvoke $r6.<java.util.Random: int nextInt(int)>(i2);
+
+        interfaceinvoke r4.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: void skip(int)>($i5);
+
+        $r7 = interfaceinvoke r4.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: java.lang.Object next()>();
+
+        $r8 = (java.lang.Long) $r7;
+
+        l3 = virtualinvoke $r8.<java.lang.Long: long longValue()>();
+
+        if z0 != 0 goto label2;
+
+        $r10 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.DataModel: java.lang.Float getPreferenceValue(long,long)>(l0, l3);
+
+        if $r10 != null goto label1;
+
+     label2:
+        $r9 = new org.apache.mahout.cf.taste.impl.recommender.GenericRecommendedItem;
+
+        $f0 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.RandomRecommender: float randomPref()>();
+
+        specialinvoke $r9.<org.apache.mahout.cf.taste.impl.recommender.GenericRecommendedItem: void <init>(long,float)>(l3, $f0);
+
+        interfaceinvoke $r5.<java.util.List: boolean add(java.lang.Object)>($r9);
+
+        goto label1;
+
+     label3:
+        return $r5;
+    }
+
+    public float estimatePreference(long, long)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.RandomRecommender r0;
+        long l0, l1;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.RandomRecommender;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $f0 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.RandomRecommender: float randomPref()>();
+
+        return $f0;
+    }
+
+    private float randomPref()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.RandomRecommender r0;
+        java.util.Random $r1;
+        float $f0, $f1, $f2, $f3, $f4, $f5, $f6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.RandomRecommender;
+
+        $f0 = r0.<org.apache.mahout.cf.taste.impl.recommender.RandomRecommender: float minPref>;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.RandomRecommender: java.util.Random random>;
+
+        $f1 = virtualinvoke $r1.<java.util.Random: float nextFloat()>();
+
+        $f3 = r0.<org.apache.mahout.cf.taste.impl.recommender.RandomRecommender: float maxPref>;
+
+        $f2 = r0.<org.apache.mahout.cf.taste.impl.recommender.RandomRecommender: float minPref>;
+
+        $f4 = $f3 - $f2;
+
+        $f5 = $f1 * $f4;
+
+        $f6 = $f0 + $f5;
+
+        return $f6;
+    }
+
+    public void refresh(java.util.Collection)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.RandomRecommender r0;
+        java.util.Collection r1;
+        org.apache.mahout.cf.taste.model.DataModel $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.RandomRecommender;
+
+        r1 := @parameter0: java.util.Collection;
+
+        $r2 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.RandomRecommender: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        interfaceinvoke $r2.<org.apache.mahout.cf.taste.model.DataModel: void refresh(java.util.Collection)>(r1);
+
+        return;
+    }
+}

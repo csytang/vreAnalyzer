@@ -1,0 +1,883 @@
+public final class org.apache.mahout.common.commandline.DefaultOptionCreator extends java.lang.Object
+{
+    public static final java.lang.String CLUSTERING_OPTION;
+    public static final java.lang.String CLUSTERS_IN_OPTION;
+    public static final java.lang.String CONVERGENCE_DELTA_OPTION;
+    public static final java.lang.String DISTANCE_MEASURE_OPTION;
+    public static final java.lang.String EMIT_MOST_LIKELY_OPTION;
+    public static final java.lang.String INPUT_OPTION;
+    public static final java.lang.String MAX_ITERATIONS_OPTION;
+    public static final java.lang.String MAX_REDUCERS_OPTION;
+    public static final java.lang.String METHOD_OPTION;
+    public static final java.lang.String NUM_CLUSTERS_OPTION;
+    public static final java.lang.String OUTPUT_OPTION;
+    public static final java.lang.String OVERWRITE_OPTION;
+    public static final java.lang.String T1_OPTION;
+    public static final java.lang.String T2_OPTION;
+    public static final java.lang.String T3_OPTION;
+    public static final java.lang.String T4_OPTION;
+    public static final java.lang.String OUTLIER_THRESHOLD;
+    public static final java.lang.String CLUSTER_FILTER_OPTION;
+    public static final java.lang.String THRESHOLD_OPTION;
+    public static final java.lang.String SEQUENTIAL_METHOD;
+    public static final java.lang.String MAPREDUCE_METHOD;
+    public static final java.lang.String KERNEL_PROFILE_OPTION;
+    public static final java.lang.String ANALYZER_NAME_OPTION;
+    public static final java.lang.String RANDOM_SEED;
+
+    private void <init>()
+    {
+        org.apache.mahout.common.commandline.DefaultOptionCreator r0;
+
+        r0 := @this: org.apache.mahout.common.commandline.DefaultOptionCreator;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.commons.cli2.Option helpOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r3;
+        org.apache.commons.cli2.option.DefaultOption $r4;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("help");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Print out help");
+
+        $r3 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("h");
+
+        $r4 = virtualinvoke $r3.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        return $r4;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder inputOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r3, $r9, $r10;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r4, $r5, $r6, $r7;
+        org.apache.commons.cli2.Argument $r8;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("input");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("i");
+
+        $r4 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("input");
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r8 = virtualinvoke $r7.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r9 = virtualinvoke $r3.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r8);
+
+        $r10 = virtualinvoke $r9.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Path to job input directory.");
+
+        return $r10;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder clustersInOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r8, $r9, $r10;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r3, $r4, $r5, $r6;
+        org.apache.commons.cli2.Argument $r7;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("clusters");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(1);
+
+        $r3 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r3.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("clusters");
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r8 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r7);
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The path to the initial clusters directory. Must be a SequenceFile of some type of Cluster");
+
+        $r10 = virtualinvoke $r9.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("c");
+
+        return $r10;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder outputOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r3, $r9, $r10;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r4, $r5, $r6, $r7;
+        org.apache.commons.cli2.Argument $r8;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("output");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("o");
+
+        $r4 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("output");
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r8 = virtualinvoke $r7.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r9 = virtualinvoke $r3.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r8);
+
+        $r10 = virtualinvoke $r9.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The directory pathname for output.");
+
+        return $r10;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder overwriteOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r3, $r4;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("overwrite");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("If present, overwrite the output directory before running job");
+
+        $r4 = virtualinvoke $r3.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("ow");
+
+        return $r4;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder distanceMeasureOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r3, $r12, $r13;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r4, $r5, $r8, $r9, $r10;
+        java.lang.Class $r6;
+        java.lang.String $r7;
+        org.apache.commons.cli2.Argument $r11;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("distanceMeasure");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("dm");
+
+        $r4 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("distanceMeasure");
+
+        $r6 = class "org/apache/mahout/common/distance/SquaredEuclideanDistanceMeasure";
+
+        $r7 = virtualinvoke $r6.<java.lang.Class: java.lang.String getName()>();
+
+        $r8 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>($r7);
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r10 = virtualinvoke $r9.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r11 = virtualinvoke $r10.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r12 = virtualinvoke $r3.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r11);
+
+        $r13 = virtualinvoke $r12.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The classname of the DistanceMeasure. Default is SquaredEuclidean");
+
+        return $r13;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder methodOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r3, $r10, $r11;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r4, $r5, $r6, $r7, $r8;
+        org.apache.commons.cli2.Argument $r9;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("method");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("xm");
+
+        $r4 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("method");
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>("mapreduce");
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r8 = virtualinvoke $r7.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r10 = virtualinvoke $r3.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r9);
+
+        $r11 = virtualinvoke $r10.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The execution method to use: sequential or mapreduce. Default is mapreduce");
+
+        return $r11;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder t1Option()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r8, $r9, $r10;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r3, $r4, $r5, $r6;
+        org.apache.commons.cli2.Argument $r7;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("t1");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(1);
+
+        $r3 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r3.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("t1");
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r8 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r7);
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("T1 threshold value");
+
+        $r10 = virtualinvoke $r9.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("t1");
+
+        return $r10;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder t2Option()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r8, $r9, $r10;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r3, $r4, $r5, $r6;
+        org.apache.commons.cli2.Argument $r7;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("t2");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(1);
+
+        $r3 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r3.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("t2");
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r8 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r7);
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("T2 threshold value");
+
+        $r10 = virtualinvoke $r9.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("t2");
+
+        return $r10;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder t3Option()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r8, $r9, $r10;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r3, $r4, $r5, $r6;
+        org.apache.commons.cli2.Argument $r7;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("t3");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r3.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("t3");
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r8 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r7);
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("T3 (Reducer T1) threshold value");
+
+        $r10 = virtualinvoke $r9.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("t3");
+
+        return $r10;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder t4Option()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r8, $r9, $r10;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r3, $r4, $r5, $r6;
+        org.apache.commons.cli2.Argument $r7;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("t4");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r3.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("t4");
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r8 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r7);
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("T4 (Reducer T2) threshold value");
+
+        $r10 = virtualinvoke $r9.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("t4");
+
+        return $r10;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder clusterFilterOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r3, $r9, $r10, $r11;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r4, $r5, $r6, $r7;
+        org.apache.commons.cli2.Argument $r8;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("clusterFilter");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("cf");
+
+        $r3 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r4 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("clusterFilter");
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r8 = virtualinvoke $r7.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r9 = virtualinvoke $r3.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r8);
+
+        $r10 = virtualinvoke $r9.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Cluster filter suppresses small canopies from mapper");
+
+        $r11 = virtualinvoke $r10.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("clusterFilter");
+
+        return $r11;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder maxIterationsOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r3, $r10, $r11;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r4, $r5, $r6, $r7, $r8;
+        org.apache.commons.cli2.Argument $r9;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("maxIter");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(1);
+
+        $r3 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("x");
+
+        $r4 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("maxIter");
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>("-1");
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r8 = virtualinvoke $r7.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r10 = virtualinvoke $r3.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r9);
+
+        $r11 = virtualinvoke $r10.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The maximum number of iterations.");
+
+        return $r11;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder numClustersOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r8, $r9, $r10;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r3, $r4, $r5, $r6;
+        org.apache.commons.cli2.Argument $r7;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("numClusters");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r3.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("k");
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r8 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r7);
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The number of clusters to create");
+
+        $r10 = virtualinvoke $r9.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("k");
+
+        return $r10;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder useSetRandomSeedOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r6, $r7, $r8;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r3, $r4;
+        org.apache.commons.cli2.Argument $r5;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("randomSeed");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r3.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("randomSeed");
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r6 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r5);
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Seed to initaize Random Number Generator with");
+
+        $r8 = virtualinvoke $r7.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("rs");
+
+        return $r8;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder convergenceOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r3, $r10, $r11;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r4, $r5, $r6, $r7, $r8;
+        org.apache.commons.cli2.Argument $r9;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("convergenceDelta");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("cd");
+
+        $r4 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("convergenceDelta");
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>("0.5");
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r8 = virtualinvoke $r7.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r10 = virtualinvoke $r3.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r9);
+
+        $r11 = virtualinvoke $r10.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The convergence delta value. Default is 0.5");
+
+        return $r11;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder numReducersOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r3, $r10, $r11;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r4, $r5, $r6, $r7, $r8;
+        org.apache.commons.cli2.Argument $r9;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("maxRed");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("r");
+
+        $r4 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("maxRed");
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>("2");
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r8 = virtualinvoke $r7.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r10 = virtualinvoke $r3.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r9);
+
+        $r11 = virtualinvoke $r10.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The number of reduce tasks. Defaults to 2");
+
+        return $r11;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder clusteringOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r3, $r4;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("clustering");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("If present, run clustering after the iterations have taken place");
+
+        $r4 = virtualinvoke $r3.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("cl");
+
+        return $r4;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder analyzerOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r3, $r12, $r13;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r4, $r5, $r8, $r9, $r10;
+        java.lang.Class $r6;
+        java.lang.String $r7;
+        org.apache.commons.cli2.Argument $r11;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("analyzerName");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("If present, the name of a Lucene analyzer class to use");
+
+        $r4 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("analyzerName");
+
+        $r6 = class "org/apache/lucene/analysis/standard/StandardAnalyzer";
+
+        $r7 = virtualinvoke $r6.<java.lang.Class: java.lang.String getName()>();
+
+        $r8 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>($r7);
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r10 = virtualinvoke $r9.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r11 = virtualinvoke $r10.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r12 = virtualinvoke $r3.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r11);
+
+        $r13 = virtualinvoke $r12.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("an");
+
+        return $r13;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder emitMostLikelyOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r3, $r10, $r11;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r4, $r5, $r6, $r7, $r8;
+        org.apache.commons.cli2.Argument $r9;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("emitMostLikely");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("e");
+
+        $r4 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("emitMostLikely");
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>("true");
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r8 = virtualinvoke $r7.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r10 = virtualinvoke $r3.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r9);
+
+        $r11 = virtualinvoke $r10.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("True if clustering should emit the most likely point only, false for threshold clustering. Default is true");
+
+        return $r11;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder thresholdOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r3, $r10, $r11;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r4, $r5, $r6, $r7, $r8;
+        org.apache.commons.cli2.Argument $r9;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("threshold");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("t");
+
+        $r4 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("threshold");
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>("0");
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r8 = virtualinvoke $r7.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r10 = virtualinvoke $r3.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r9);
+
+        $r11 = virtualinvoke $r10.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The pdf threshold used for cluster determination. Default is 0");
+
+        return $r11;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder kernelProfileOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r3, $r12, $r13;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r4, $r5, $r8, $r9, $r10;
+        java.lang.Class $r6;
+        java.lang.String $r7;
+        org.apache.commons.cli2.Argument $r11;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("kernelProfile");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("kp");
+
+        $r4 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("kernelProfile");
+
+        $r6 = class "org/apache/mahout/clustering/kernel/TriangularKernelProfile";
+
+        $r7 = virtualinvoke $r6.<java.lang.Class: java.lang.String getName()>();
+
+        $r8 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>($r7);
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r10 = virtualinvoke $r9.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r11 = virtualinvoke $r10.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r12 = virtualinvoke $r3.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r11);
+
+        $r13 = virtualinvoke $r12.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The classname of the IKernelProfile. Default is TriangularKernelProfile");
+
+        return $r13;
+    }
+
+    public static org.apache.commons.cli2.builder.DefaultOptionBuilder outlierThresholdOption()
+    {
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r0, $r1, $r2, $r8, $r9, $r10;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r3, $r4, $r5, $r6;
+        org.apache.commons.cli2.Argument $r7;
+
+        $r0 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("outlierThreshold");
+
+        $r2 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r3 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r3.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("outlierThreshold");
+
+        $r5 = virtualinvoke $r4.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r8 = virtualinvoke $r2.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r7);
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Outlier threshold value");
+
+        $r10 = virtualinvoke $r9.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("outlierThreshold");
+
+        return $r10;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String RANDOM_SEED> = "randomSeed";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String ANALYZER_NAME_OPTION> = "analyzerName";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String KERNEL_PROFILE_OPTION> = "kernelProfile";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String MAPREDUCE_METHOD> = "mapreduce";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String SEQUENTIAL_METHOD> = "sequential";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String THRESHOLD_OPTION> = "threshold";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String CLUSTER_FILTER_OPTION> = "clusterFilter";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String OUTLIER_THRESHOLD> = "outlierThreshold";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String T4_OPTION> = "t4";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String T3_OPTION> = "t3";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String T2_OPTION> = "t2";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String T1_OPTION> = "t1";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String OVERWRITE_OPTION> = "overwrite";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String OUTPUT_OPTION> = "output";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String NUM_CLUSTERS_OPTION> = "numClusters";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String METHOD_OPTION> = "method";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String MAX_REDUCERS_OPTION> = "maxRed";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String MAX_ITERATIONS_OPTION> = "maxIter";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String INPUT_OPTION> = "input";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String EMIT_MOST_LIKELY_OPTION> = "emitMostLikely";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String DISTANCE_MEASURE_OPTION> = "distanceMeasure";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String CONVERGENCE_DELTA_OPTION> = "convergenceDelta";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String CLUSTERS_IN_OPTION> = "clusters";
+
+        <org.apache.mahout.common.commandline.DefaultOptionCreator: java.lang.String CLUSTERING_OPTION> = "clustering";
+
+        return;
+    }
+}

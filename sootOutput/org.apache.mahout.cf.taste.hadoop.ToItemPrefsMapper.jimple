@@ -1,0 +1,14 @@
+public final class org.apache.mahout.cf.taste.hadoop.ToItemPrefsMapper extends org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.ToItemPrefsMapper r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.ToItemPrefsMapper;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: void <init>(boolean)>(0);
+
+        return;
+    }
+}

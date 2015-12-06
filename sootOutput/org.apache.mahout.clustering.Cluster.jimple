@@ -1,0 +1,29 @@
+public interface  org.apache.mahout.clustering.Cluster extends java.lang.Object implements org.apache.mahout.clustering.Model, org.apache.mahout.common.parameters.Parametered
+{
+    public static final java.lang.String INITIAL_CLUSTERS_DIR;
+    public static final java.lang.String CLUSTERS_DIR;
+    public static final java.lang.String FINAL_ITERATION_SUFFIX;
+
+    public abstract int getId();
+
+    public abstract org.apache.mahout.math.Vector getCenter();
+
+    public abstract org.apache.mahout.math.Vector getRadius();
+
+    public abstract java.lang.String asFormatString(java.lang.String[]);
+
+    public abstract java.util.Map asJson(java.lang.String[]);
+
+    public abstract boolean isConverged();
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.clustering.Cluster: java.lang.String FINAL_ITERATION_SUFFIX> = "-final";
+
+        <org.apache.mahout.clustering.Cluster: java.lang.String CLUSTERS_DIR> = "clusters-";
+
+        <org.apache.mahout.clustering.Cluster: java.lang.String INITIAL_CLUSTERS_DIR> = "clusters-0";
+
+        return;
+    }
+}

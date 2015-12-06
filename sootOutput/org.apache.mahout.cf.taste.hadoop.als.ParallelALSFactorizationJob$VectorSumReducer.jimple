@@ -1,0 +1,83 @@
+class org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$VectorSumReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+    private final org.apache.mahout.math.VectorWritable result;
+
+    void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$VectorSumReducer r0;
+        org.apache.mahout.math.VectorWritable $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$VectorSumReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r1.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$VectorSumReducer: org.apache.mahout.math.VectorWritable result> = $r1;
+
+        return;
+    }
+
+    protected void reduce(org.apache.hadoop.io.WritableComparable, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$VectorSumReducer r0;
+        org.apache.hadoop.io.WritableComparable r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.mahout.math.Vector r4;
+        java.util.Iterator $r5;
+        org.apache.mahout.math.SequentialAccessSparseVector $r6;
+        org.apache.mahout.math.VectorWritable $r7, $r8;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$VectorSumReducer;
+
+        r1 := @parameter0: org.apache.hadoop.io.WritableComparable;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r5 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        r4 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors: org.apache.mahout.math.Vector sum(java.util.Iterator)>($r5);
+
+        $r7 = r0.<org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$VectorSumReducer: org.apache.mahout.math.VectorWritable result>;
+
+        $r6 = new org.apache.mahout.math.SequentialAccessSparseVector;
+
+        specialinvoke $r6.<org.apache.mahout.math.SequentialAccessSparseVector: void <init>(org.apache.mahout.math.Vector)>(r4);
+
+        virtualinvoke $r7.<org.apache.mahout.math.VectorWritable: void set(org.apache.mahout.math.Vector)>($r6);
+
+        $r8 = r0.<org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$VectorSumReducer: org.apache.mahout.math.VectorWritable result>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r8);
+
+        return;
+    }
+
+    protected volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$VectorSumReducer r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.hadoop.io.WritableComparable $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$VectorSumReducer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.hadoop.io.WritableComparable) r1;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob$VectorSumReducer: void reduce(org.apache.hadoop.io.WritableComparable,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+}

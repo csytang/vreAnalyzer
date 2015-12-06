@@ -1,0 +1,203 @@
+public final class org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity extends java.lang.Object implements org.apache.mahout.cf.taste.similarity.UserSimilarity
+{
+    private final org.apache.mahout.cf.taste.similarity.UserSimilarity similarity;
+    private final org.apache.mahout.cf.taste.impl.common.Cache similarityCache;
+    private final org.apache.mahout.cf.taste.impl.common.RefreshHelper refreshHelper;
+
+    public void <init>(org.apache.mahout.cf.taste.similarity.UserSimilarity, org.apache.mahout.cf.taste.model.DataModel) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity r0;
+        org.apache.mahout.cf.taste.similarity.UserSimilarity r1;
+        org.apache.mahout.cf.taste.model.DataModel r2;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.UserSimilarity;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.model.DataModel;
+
+        $i0 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsers()>();
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity: void <init>(org.apache.mahout.cf.taste.similarity.UserSimilarity,int)>(r1, $i0);
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.cf.taste.similarity.UserSimilarity, int)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity r0;
+        org.apache.mahout.cf.taste.similarity.UserSimilarity r1;
+        int i0;
+        org.apache.mahout.cf.taste.impl.common.Cache $r2;
+        org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity$SimilarityRetriever $r3;
+        org.apache.mahout.cf.taste.impl.common.RefreshHelper $r4, $r6;
+        org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity$1 $r5;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.UserSimilarity;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        if r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "similarity is null");
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity: org.apache.mahout.cf.taste.similarity.UserSimilarity similarity> = r1;
+
+        $r2 = new org.apache.mahout.cf.taste.impl.common.Cache;
+
+        $r3 = new org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity$SimilarityRetriever;
+
+        specialinvoke $r3.<org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity$SimilarityRetriever: void <init>(org.apache.mahout.cf.taste.similarity.UserSimilarity,org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity$1)>(r1, null);
+
+        specialinvoke $r2.<org.apache.mahout.cf.taste.impl.common.Cache: void <init>(org.apache.mahout.cf.taste.impl.common.Retriever,int)>($r3, i0);
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity: org.apache.mahout.cf.taste.impl.common.Cache similarityCache> = $r2;
+
+        $r4 = new org.apache.mahout.cf.taste.impl.common.RefreshHelper;
+
+        $r5 = new org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity$1;
+
+        specialinvoke $r5.<org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity$1: void <init>(org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity)>(r0);
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: void <init>(java.util.concurrent.Callable)>($r5);
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity: org.apache.mahout.cf.taste.impl.common.RefreshHelper refreshHelper> = $r4;
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity: org.apache.mahout.cf.taste.impl.common.RefreshHelper refreshHelper>;
+
+        virtualinvoke $r6.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: void addDependency(org.apache.mahout.cf.taste.common.Refreshable)>(r1);
+
+        return;
+    }
+
+    public double userSimilarity(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity r0;
+        long l0, l1;
+        byte $b2;
+        org.apache.mahout.cf.taste.impl.common.Cache $r2;
+        java.lang.Object $r3;
+        java.lang.Double $r4;
+        double $d0;
+        org.apache.mahout.common.LongPair $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $b2 = l0 cmp l1;
+
+        if $b2 >= 0 goto label1;
+
+        $r5 = new org.apache.mahout.common.LongPair;
+
+        specialinvoke $r5.<org.apache.mahout.common.LongPair: void <init>(long,long)>(l0, l1);
+
+        goto label2;
+
+     label1:
+        $r5 = new org.apache.mahout.common.LongPair;
+
+        specialinvoke $r5.<org.apache.mahout.common.LongPair: void <init>(long,long)>(l1, l0);
+
+     label2:
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity: org.apache.mahout.cf.taste.impl.common.Cache similarityCache>;
+
+        $r3 = virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.Cache: java.lang.Object get(java.lang.Object)>($r5);
+
+        $r4 = (java.lang.Double) $r3;
+
+        $d0 = virtualinvoke $r4.<java.lang.Double: double doubleValue()>();
+
+        return $d0;
+    }
+
+    public void setPreferenceInferrer(org.apache.mahout.cf.taste.similarity.PreferenceInferrer)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity r0;
+        org.apache.mahout.cf.taste.similarity.PreferenceInferrer r1;
+        org.apache.mahout.cf.taste.impl.common.Cache $r2;
+        org.apache.mahout.cf.taste.similarity.UserSimilarity $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.PreferenceInferrer;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity: org.apache.mahout.cf.taste.impl.common.Cache similarityCache>;
+
+        virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.Cache: void clear()>();
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity: org.apache.mahout.cf.taste.similarity.UserSimilarity similarity>;
+
+        interfaceinvoke $r3.<org.apache.mahout.cf.taste.similarity.UserSimilarity: void setPreferenceInferrer(org.apache.mahout.cf.taste.similarity.PreferenceInferrer)>(r1);
+
+        return;
+    }
+
+    public void clearCacheForUser(long)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity r0;
+        long l0;
+        org.apache.mahout.cf.taste.impl.similarity.LongPairMatchPredicate $r1;
+        org.apache.mahout.cf.taste.impl.common.Cache $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity;
+
+        l0 := @parameter0: long;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity: org.apache.mahout.cf.taste.impl.common.Cache similarityCache>;
+
+        $r1 = new org.apache.mahout.cf.taste.impl.similarity.LongPairMatchPredicate;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.impl.similarity.LongPairMatchPredicate: void <init>(long)>(l0);
+
+        virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.Cache: void removeKeysMatching(org.apache.mahout.cf.taste.impl.common.Cache$MatchPredicate)>($r1);
+
+        return;
+    }
+
+    public void refresh(java.util.Collection)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity r0;
+        java.util.Collection r1;
+        org.apache.mahout.cf.taste.impl.common.RefreshHelper $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity;
+
+        r1 := @parameter0: java.util.Collection;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity: org.apache.mahout.cf.taste.impl.common.RefreshHelper refreshHelper>;
+
+        virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: void refresh(java.util.Collection)>(r1);
+
+        return;
+    }
+
+    static org.apache.mahout.cf.taste.impl.common.Cache access$100(org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity r0;
+        org.apache.mahout.cf.taste.impl.common.Cache $r1;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.similarity.CachingUserSimilarity: org.apache.mahout.cf.taste.impl.common.Cache similarityCache>;
+
+        return $r1;
+    }
+}

@@ -1,0 +1,258 @@
+public final class org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable extends java.lang.Object implements org.apache.hadoop.io.Writable
+{
+    private org.apache.mahout.math.Vector vector;
+    private long userID;
+    private float value;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable r0;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: org.apache.mahout.math.Vector vector> = r1;
+
+        return;
+    }
+
+    public void <init>(long, float)
+    {
+        org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable r0;
+        long l0;
+        float f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable;
+
+        l0 := @parameter0: long;
+
+        f0 := @parameter1: float;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: long userID> = l0;
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: float value> = f0;
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector getVector()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable r0;
+        org.apache.mahout.math.Vector $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: org.apache.mahout.math.Vector vector>;
+
+        return $r1;
+    }
+
+    public long getUserID()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable r0;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable;
+
+        $l0 = r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: long userID>;
+
+        return $l0;
+    }
+
+    public float getValue()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable r0;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable;
+
+        $f0 = r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: float value>;
+
+        return $f0;
+    }
+
+    void set(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable r0;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: org.apache.mahout.math.Vector vector> = r1;
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: long userID> = -9223372036854775808L;
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: float value> = #NaNF;
+
+        return;
+    }
+
+    public void set(long, float)
+    {
+        org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable r0;
+        long l0;
+        float f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable;
+
+        l0 := @parameter0: long;
+
+        f0 := @parameter1: float;
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: org.apache.mahout.math.Vector vector> = null;
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: long userID> = l0;
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: float value> = f0;
+
+        return;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable r0;
+        java.io.DataOutput r1;
+        org.apache.mahout.math.Vector $r3, $r5;
+        org.apache.mahout.math.VectorWritable $r4;
+        long $l0;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: org.apache.mahout.math.Vector vector>;
+
+        if $r3 != null goto label1;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeBoolean(boolean)>(0);
+
+        $l0 = r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: long userID>;
+
+        staticinvoke <org.apache.mahout.math.Varint: void writeSignedVarLong(long,java.io.DataOutput)>($l0, r1);
+
+        $f0 = r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: float value>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeFloat(float)>($f0);
+
+        goto label2;
+
+     label1:
+        interfaceinvoke r1.<java.io.DataOutput: void writeBoolean(boolean)>(1);
+
+        $r4 = new org.apache.mahout.math.VectorWritable;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: org.apache.mahout.math.Vector vector>;
+
+        specialinvoke $r4.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r5);
+
+        virtualinvoke $r4.<org.apache.mahout.math.VectorWritable: void setWritesLaxPrecision(boolean)>(1);
+
+        virtualinvoke $r4.<org.apache.mahout.math.VectorWritable: void write(java.io.DataOutput)>(r1);
+
+     label2:
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable r0;
+        java.io.DataInput r1;
+        boolean z0;
+        float f0;
+        org.apache.mahout.math.VectorWritable $r2;
+        org.apache.mahout.math.Vector $r3;
+        long l0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        z0 = interfaceinvoke r1.<java.io.DataInput: boolean readBoolean()>();
+
+        if z0 == 0 goto label1;
+
+        $r2 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r2.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        virtualinvoke $r2.<org.apache.mahout.math.VectorWritable: void readFields(java.io.DataInput)>(r1);
+
+        $r3 = virtualinvoke $r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: void set(org.apache.mahout.math.Vector)>($r3);
+
+        goto label2;
+
+     label1:
+        l0 = staticinvoke <org.apache.mahout.math.Varint: long readSignedVarLong(java.io.DataInput)>(r1);
+
+        f0 = interfaceinvoke r1.<java.io.DataInput: float readFloat()>();
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: void set(long,float)>(l0, f0);
+
+     label2:
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable r0;
+        org.apache.mahout.math.Vector $r1, $r2;
+        java.lang.StringBuilder $r3, $r4, $r5, $r6;
+        long $l0;
+        float $f0;
+        java.lang.String $r7;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: org.apache.mahout.math.Vector vector>;
+
+        if $r1 != null goto label1;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $l0 = r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: long userID>;
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(":");
+
+        $f0 = r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: float value>;
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(float)>($f0);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        goto label2;
+
+     label1:
+        $r2 = r0.<org.apache.mahout.cf.taste.hadoop.item.VectorOrPrefWritable: org.apache.mahout.math.Vector vector>;
+
+        $r7 = virtualinvoke $r2.<java.lang.Object: java.lang.String toString()>();
+
+     label2:
+        return $r7;
+    }
+}

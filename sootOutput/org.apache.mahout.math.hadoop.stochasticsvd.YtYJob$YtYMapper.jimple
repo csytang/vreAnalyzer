@@ -1,0 +1,335 @@
+public class org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private int kp;
+    private org.apache.mahout.math.hadoop.stochasticsvd.Omega omega;
+    private org.apache.mahout.math.UpperTriangular mYtY;
+    private org.apache.mahout.math.Vector yRow;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        int i0, i1, $i3, $i4, $i5, $i6;
+        long l2;
+        org.apache.hadoop.conf.Configuration $r2, $r3, $r6;
+        java.lang.Object[] $r4, $r5;
+        java.lang.String $r7;
+        org.apache.mahout.math.hadoop.stochasticsvd.Omega $r8;
+        org.apache.mahout.math.UpperTriangular $r9;
+        org.apache.mahout.math.DenseVector $r10;
+        boolean $z0, $z1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        i0 = virtualinvoke $r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("ssvd.k", -1);
+
+        $r3 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        i1 = virtualinvoke $r3.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("ssvd.p", -1);
+
+        if i0 <= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        $r4 = newarray (java.lang.Object)[0];
+
+        staticinvoke <org.apache.commons.lang3.Validate: void isTrue(boolean,java.lang.String,java.lang.Object[])>($z0, "invalid k parameter", $r4);
+
+        if i1 <= 0 goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        $r5 = newarray (java.lang.Object)[0];
+
+        staticinvoke <org.apache.commons.lang3.Validate: void isTrue(boolean,java.lang.String,java.lang.Object[])>($z1, "invalid p parameter", $r5);
+
+        $i3 = i0 + i1;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: int kp> = $i3;
+
+        $r6 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r7 = virtualinvoke $r6.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvd.omegaseed");
+
+        l2 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r7);
+
+        $r8 = new org.apache.mahout.math.hadoop.stochasticsvd.Omega;
+
+        $i4 = i0 + i1;
+
+        specialinvoke $r8.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: void <init>(long,int)>(l2, $i4);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: org.apache.mahout.math.hadoop.stochasticsvd.Omega omega> = $r8;
+
+        $r9 = new org.apache.mahout.math.UpperTriangular;
+
+        $i5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: int kp>;
+
+        specialinvoke $r9.<org.apache.mahout.math.UpperTriangular: void <init>(int)>($i5);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: org.apache.mahout.math.UpperTriangular mYtY> = $r9;
+
+        $r10 = new org.apache.mahout.math.DenseVector;
+
+        $i6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: int kp>;
+
+        specialinvoke $r10.<org.apache.mahout.math.DenseVector: void <init>(int)>($i6);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: org.apache.mahout.math.Vector yRow> = $r10;
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.Writable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper r0;
+        org.apache.hadoop.io.Writable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        int i0, i1, $i3, $i4, i6, i7;
+        org.apache.mahout.math.hadoop.stochasticsvd.Omega $r4;
+        org.apache.mahout.math.Vector $r5, $r6, $r7, $r8, $r11, $r16, $r17;
+        boolean $z0, $z1, $z2;
+        java.lang.Iterable $r9, $r12;
+        java.lang.Object $r10, $r13;
+        org.apache.mahout.math.UpperTriangular $r14, $r15, $r18, $r19;
+        double $d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9;
+        byte $b2, $b5;
+        java.util.Iterator r20, r22;
+        org.apache.mahout.math.Vector$Element r21, r23;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.Writable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: org.apache.mahout.math.hadoop.stochasticsvd.Omega omega>;
+
+        $r5 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: org.apache.mahout.math.Vector yRow>;
+
+        virtualinvoke $r4.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: void computeYRow(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>($r5, $r6);
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: org.apache.mahout.math.Vector yRow>;
+
+        $z0 = interfaceinvoke $r7.<org.apache.mahout.math.Vector: boolean isDense()>();
+
+        if $z0 == 0 goto label06;
+
+        i6 = 0;
+
+     label01:
+        $i3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: int kp>;
+
+        if i6 >= $i3 goto label10;
+
+        $r16 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: org.apache.mahout.math.Vector yRow>;
+
+        $d5 = interfaceinvoke $r16.<org.apache.mahout.math.Vector: double getQuick(int)>(i6);
+
+        $b2 = $d5 cmpl 0.0;
+
+        if $b2 != 0 goto label02;
+
+        goto label05;
+
+     label02:
+        i7 = i6;
+
+     label03:
+        $i4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: int kp>;
+
+        if i7 >= $i4 goto label05;
+
+        $r17 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: org.apache.mahout.math.Vector yRow>;
+
+        $d6 = interfaceinvoke $r17.<org.apache.mahout.math.Vector: double getQuick(int)>(i7);
+
+        $b5 = $d6 cmpl 0.0;
+
+        if $b5 == 0 goto label04;
+
+        $r18 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: org.apache.mahout.math.UpperTriangular mYtY>;
+
+        $r19 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: org.apache.mahout.math.UpperTriangular mYtY>;
+
+        $d8 = virtualinvoke $r19.<org.apache.mahout.math.UpperTriangular: double getQuick(int,int)>(i6, i7);
+
+        $d7 = $d5 * $d6;
+
+        $d9 = $d8 + $d7;
+
+        virtualinvoke $r18.<org.apache.mahout.math.UpperTriangular: void setQuick(int,int,double)>(i6, i7, $d9);
+
+     label04:
+        i7 = i7 + 1;
+
+        goto label03;
+
+     label05:
+        i6 = i6 + 1;
+
+        goto label01;
+
+     label06:
+        $r8 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: org.apache.mahout.math.Vector yRow>;
+
+        $r9 = interfaceinvoke $r8.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r20 = interfaceinvoke $r9.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label07:
+        $z1 = interfaceinvoke r20.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label10;
+
+        $r10 = interfaceinvoke r20.<java.util.Iterator: java.lang.Object next()>();
+
+        r21 = (org.apache.mahout.math.Vector$Element) $r10;
+
+        i0 = interfaceinvoke r21.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: org.apache.mahout.math.Vector yRow>;
+
+        $r12 = interfaceinvoke $r11.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r22 = interfaceinvoke $r12.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label08:
+        $z2 = interfaceinvoke r22.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label07;
+
+        $r13 = interfaceinvoke r22.<java.util.Iterator: java.lang.Object next()>();
+
+        r23 = (org.apache.mahout.math.Vector$Element) $r13;
+
+        i1 = interfaceinvoke r23.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        if i1 >= i0 goto label09;
+
+        goto label08;
+
+     label09:
+        $r14 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: org.apache.mahout.math.UpperTriangular mYtY>;
+
+        $r15 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: org.apache.mahout.math.UpperTriangular mYtY>;
+
+        $d1 = virtualinvoke $r15.<org.apache.mahout.math.UpperTriangular: double getQuick(int,int)>(i0, i1);
+
+        $d0 = interfaceinvoke r21.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        $d3 = interfaceinvoke r23.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        $d4 = $d0 * $d3;
+
+        $d2 = $d1 + $d4;
+
+        virtualinvoke $r14.<org.apache.mahout.math.UpperTriangular: void setQuick(int,int,double)>(i0, i1, $d2);
+
+        goto label08;
+
+     label10:
+        return;
+    }
+
+    protected void cleanup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.io.IntWritable $r2;
+        org.apache.hadoop.mapreduce.TaskAttemptID $r3;
+        org.apache.hadoop.mapreduce.TaskID $r4;
+        int $i0;
+        org.apache.mahout.math.VectorWritable $r5;
+        org.apache.mahout.math.DenseVector $r6;
+        org.apache.mahout.math.UpperTriangular $r7;
+        double[] $r8;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r2 = new org.apache.hadoop.io.IntWritable;
+
+        $r3 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.mapreduce.TaskAttemptID getTaskAttemptID()>();
+
+        $r4 = virtualinvoke $r3.<org.apache.hadoop.mapreduce.TaskAttemptID: org.apache.hadoop.mapreduce.TaskID getTaskID()>();
+
+        $i0 = virtualinvoke $r4.<org.apache.hadoop.mapreduce.TaskID: int getId()>();
+
+        specialinvoke $r2.<org.apache.hadoop.io.IntWritable: void <init>(int)>($i0);
+
+        $r5 = new org.apache.mahout.math.VectorWritable;
+
+        $r6 = new org.apache.mahout.math.DenseVector;
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: org.apache.mahout.math.UpperTriangular mYtY>;
+
+        $r8 = virtualinvoke $r7.<org.apache.mahout.math.UpperTriangular: double[] getData()>();
+
+        specialinvoke $r6.<org.apache.mahout.math.DenseVector: void <init>(double[])>($r8);
+
+        specialinvoke $r5.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r6);
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r2, $r5);
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.Writable $r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.Writable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYMapper: void map(org.apache.hadoop.io.Writable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

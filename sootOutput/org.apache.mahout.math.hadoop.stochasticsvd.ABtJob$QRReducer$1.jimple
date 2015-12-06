@@ -1,0 +1,54 @@
+class org.apache.mahout.math.hadoop.stochasticsvd.ABtJob$QRReducer$1 extends java.lang.Object implements org.apache.hadoop.mapred.OutputCollector
+{
+    final org.apache.hadoop.io.SequenceFile$Writer val$w;
+    final org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable val$spw;
+    final org.apache.mahout.math.hadoop.stochasticsvd.ABtJob$QRReducer this$0;
+
+    void <init>(org.apache.mahout.math.hadoop.stochasticsvd.ABtJob$QRReducer, org.apache.hadoop.io.SequenceFile$Writer, org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.ABtJob$QRReducer$1 r0;
+        org.apache.mahout.math.hadoop.stochasticsvd.ABtJob$QRReducer r1;
+        org.apache.hadoop.io.SequenceFile$Writer r2;
+        org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable r3;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.ABtJob$QRReducer$1;
+
+        r1 := @parameter0: org.apache.mahout.math.hadoop.stochasticsvd.ABtJob$QRReducer;
+
+        r2 := @parameter1: org.apache.hadoop.io.SequenceFile$Writer;
+
+        r3 := @parameter2: org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtJob$QRReducer$1: org.apache.mahout.math.hadoop.stochasticsvd.ABtJob$QRReducer this$0> = r1;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtJob$QRReducer$1: org.apache.hadoop.io.SequenceFile$Writer val$w> = r2;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtJob$QRReducer$1: org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable val$spw> = r3;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void collect(java.lang.Object, java.lang.Object) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.ABtJob$QRReducer$1 r0;
+        java.lang.Object r1, r2;
+        org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable $r3;
+        org.apache.hadoop.io.SequenceFile$Writer $r4;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.ABtJob$QRReducer$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtJob$QRReducer$1: org.apache.hadoop.io.SequenceFile$Writer val$w>;
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.ABtJob$QRReducer$1: org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable val$spw>;
+
+        virtualinvoke $r4.<org.apache.hadoop.io.SequenceFile$Writer: void append(java.lang.Object,java.lang.Object)>($r3, r2);
+
+        return;
+    }
+}

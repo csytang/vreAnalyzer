@@ -1,0 +1,45 @@
+class org.apache.mahout.vectorizer.collocations.llr.GramKeyGroupComparator extends org.apache.hadoop.io.WritableComparator implements java.io.Serializable
+{
+
+    void <init>()
+    {
+        org.apache.mahout.vectorizer.collocations.llr.GramKeyGroupComparator r0;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.GramKeyGroupComparator;
+
+        specialinvoke r0.<org.apache.hadoop.io.WritableComparator: void <init>(java.lang.Class,boolean)>(class "org/apache/mahout/vectorizer/collocations/llr/GramKey", 1);
+
+        return;
+    }
+
+    public int compare(org.apache.hadoop.io.WritableComparable, org.apache.hadoop.io.WritableComparable)
+    {
+        org.apache.mahout.vectorizer.collocations.llr.GramKeyGroupComparator r0;
+        org.apache.hadoop.io.WritableComparable r1, r2;
+        org.apache.mahout.vectorizer.collocations.llr.GramKey r3, r4;
+        byte[] $r5, $r6;
+        int $i0, $i1, $i2;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.GramKeyGroupComparator;
+
+        r1 := @parameter0: org.apache.hadoop.io.WritableComparable;
+
+        r2 := @parameter1: org.apache.hadoop.io.WritableComparable;
+
+        r3 = (org.apache.mahout.vectorizer.collocations.llr.GramKey) r1;
+
+        r4 = (org.apache.mahout.vectorizer.collocations.llr.GramKey) r2;
+
+        $r5 = virtualinvoke r3.<org.apache.mahout.vectorizer.collocations.llr.GramKey: byte[] getBytes()>();
+
+        $i0 = virtualinvoke r3.<org.apache.mahout.vectorizer.collocations.llr.GramKey: int getPrimaryLength()>();
+
+        $r6 = virtualinvoke r4.<org.apache.mahout.vectorizer.collocations.llr.GramKey: byte[] getBytes()>();
+
+        $i1 = virtualinvoke r4.<org.apache.mahout.vectorizer.collocations.llr.GramKey: int getPrimaryLength()>();
+
+        $i2 = staticinvoke <org.apache.hadoop.io.WritableComparator: int compareBytes(byte[],int,int,byte[],int,int)>($r5, 0, $i0, $r6, 0, $i1);
+
+        return $i2;
+    }
+}

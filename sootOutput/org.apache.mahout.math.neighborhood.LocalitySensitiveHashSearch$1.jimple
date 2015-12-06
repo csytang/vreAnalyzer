@@ -1,0 +1,55 @@
+class org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch$1 extends java.lang.Object implements com.google.common.base.Function
+{
+    final org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch this$0;
+
+    void <init>(org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch)
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch$1 r0;
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch r1;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch$1;
+
+        r1 := @parameter0: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch;
+
+        r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch$1: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector apply(org.apache.mahout.math.neighborhood.HashedVector)
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch$1 r0;
+        org.apache.mahout.math.neighborhood.HashedVector r1;
+        org.apache.mahout.math.Vector $r3;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch$1;
+
+        r1 := @parameter0: org.apache.mahout.math.neighborhood.HashedVector;
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r3 = virtualinvoke r1.<org.apache.mahout.math.neighborhood.HashedVector: org.apache.mahout.math.Vector getVector()>();
+
+        return $r3;
+    }
+
+    public volatile java.lang.Object apply(java.lang.Object)
+    {
+        org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch$1 r0;
+        java.lang.Object r1;
+        org.apache.mahout.math.neighborhood.HashedVector $r2;
+        org.apache.mahout.math.Vector $r3;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (org.apache.mahout.math.neighborhood.HashedVector) r1;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.math.neighborhood.LocalitySensitiveHashSearch$1: org.apache.mahout.math.Vector apply(org.apache.mahout.math.neighborhood.HashedVector)>($r2);
+
+        return $r3;
+    }
+}

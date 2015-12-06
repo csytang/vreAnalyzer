@@ -1,0 +1,84 @@
+public final class org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator extends org.apache.mahout.cf.taste.impl.eval.AbstractDifferenceRecommenderEvaluator
+{
+    private org.apache.mahout.cf.taste.impl.common.RunningAverage average;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.eval.AbstractDifferenceRecommenderEvaluator: void <init>()>();
+
+        return;
+    }
+
+    protected void reset()
+    {
+        org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator r0;
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator;
+
+        $r1 = new org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator: org.apache.mahout.cf.taste.impl.common.RunningAverage average> = $r1;
+
+        return;
+    }
+
+    protected void processOneEstimate(float, org.apache.mahout.cf.taste.model.Preference)
+    {
+        org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator r0;
+        float f0, $f1, $f2, $f3;
+        org.apache.mahout.cf.taste.model.Preference r1;
+        org.apache.mahout.cf.taste.impl.common.RunningAverage $r2;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator;
+
+        f0 := @parameter0: float;
+
+        r1 := @parameter1: org.apache.mahout.cf.taste.model.Preference;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator: org.apache.mahout.cf.taste.impl.common.RunningAverage average>;
+
+        $f1 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.Preference: float getValue()>();
+
+        $f2 = $f1 - f0;
+
+        $f3 = staticinvoke <java.lang.Math: float abs(float)>($f2);
+
+        $d0 = (double) $f3;
+
+        interfaceinvoke $r2.<org.apache.mahout.cf.taste.impl.common.RunningAverage: void addDatum(double)>($d0);
+
+        return;
+    }
+
+    protected double computeFinalEvaluation()
+    {
+        org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator r0;
+        org.apache.mahout.cf.taste.impl.common.RunningAverage $r1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator: org.apache.mahout.cf.taste.impl.common.RunningAverage average>;
+
+        $d0 = interfaceinvoke $r1.<org.apache.mahout.cf.taste.impl.common.RunningAverage: double getAverage()>();
+
+        return $d0;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.eval.AverageAbsoluteDifferenceRecommenderEvaluator;
+
+        return "AverageAbsoluteDifferenceRecommenderEvaluator";
+    }
+}

@@ -1,0 +1,377 @@
+public class org.apache.mahout.math.stats.GroupedOnlineAuc extends java.lang.Object implements org.apache.mahout.math.stats.OnlineAuc
+{
+    private final java.util.Map map;
+    private org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy policy;
+    private int windowSize;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.stats.GroupedOnlineAuc r0;
+        java.util.HashMap $r1;
+
+        r0 := @this: org.apache.mahout.math.stats.GroupedOnlineAuc;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = staticinvoke <com.google.common.collect.Maps: java.util.HashMap newHashMap()>();
+
+        r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: java.util.Map map> = $r1;
+
+        return;
+    }
+
+    public double addSample(int, java.lang.String, double)
+    {
+        org.apache.mahout.math.stats.GroupedOnlineAuc r0;
+        int i0, $i1, $i2;
+        java.lang.String r1;
+        double d0, $d2;
+        java.util.Map $r2, $r6;
+        java.lang.Object $r3;
+        org.apache.mahout.math.stats.GlobalOnlineAuc $r4;
+        org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy $r5, $r8;
+        org.apache.mahout.math.stats.OnlineAuc r9;
+
+        r0 := @this: org.apache.mahout.math.stats.GroupedOnlineAuc;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: java.lang.String;
+
+        d0 := @parameter2: double;
+
+        if r1 != null goto label1;
+
+        virtualinvoke r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: double addSample(int,double)>(i0, d0);
+
+     label1:
+        $r2 = r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: java.util.Map map>;
+
+        $r3 = interfaceinvoke $r2.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        r9 = (org.apache.mahout.math.stats.OnlineAuc) $r3;
+
+        if r9 != null goto label4;
+
+        $r4 = new org.apache.mahout.math.stats.GlobalOnlineAuc;
+
+        specialinvoke $r4.<org.apache.mahout.math.stats.GlobalOnlineAuc: void <init>()>();
+
+        r9 = $r4;
+
+        $r5 = r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy policy>;
+
+        if $r5 == null goto label2;
+
+        $r8 = r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy policy>;
+
+        interfaceinvoke $r4.<org.apache.mahout.math.stats.OnlineAuc: void setPolicy(org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy)>($r8);
+
+     label2:
+        $i1 = r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: int windowSize>;
+
+        if $i1 <= 0 goto label3;
+
+        $i2 = r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: int windowSize>;
+
+        interfaceinvoke $r4.<org.apache.mahout.math.stats.OnlineAuc: void setWindowSize(int)>($i2);
+
+     label3:
+        $r6 = r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: java.util.Map map>;
+
+        interfaceinvoke $r6.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, $r4);
+
+     label4:
+        $d2 = interfaceinvoke r9.<org.apache.mahout.math.stats.OnlineAuc: double addSample(int,double)>(i0, d0);
+
+        return $d2;
+    }
+
+    public double addSample(int, double)
+    {
+        org.apache.mahout.math.stats.GroupedOnlineAuc r0;
+        int i0;
+        double d0;
+        java.lang.UnsupportedOperationException $r1;
+        java.lang.StringBuilder $r2, $r3, $r5, $r6;
+        java.lang.Class $r4;
+        java.lang.String $r7;
+
+        r0 := @this: org.apache.mahout.math.stats.GroupedOnlineAuc;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Can\'t add to ");
+
+        $r4 = virtualinvoke r0.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r5 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r4);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" without group key");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>(java.lang.String)>($r7);
+
+        throw $r1;
+    }
+
+    public double auc()
+    {
+        org.apache.mahout.math.stats.GroupedOnlineAuc r0;
+        java.util.Iterator r1;
+        org.apache.mahout.math.stats.OnlineAuc r2;
+        java.util.Map $r3, $r5;
+        java.util.Collection $r4;
+        boolean $z0;
+        int $i0;
+        double $d0, $d1, $d2, d3;
+        java.lang.Object $r6;
+
+        r0 := @this: org.apache.mahout.math.stats.GroupedOnlineAuc;
+
+        d3 = 0.0;
+
+        $r3 = r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: java.util.Map map>;
+
+        $r4 = interfaceinvoke $r3.<java.util.Map: java.util.Collection values()>();
+
+        r1 = interfaceinvoke $r4.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (org.apache.mahout.math.stats.OnlineAuc) $r6;
+
+        $d2 = interfaceinvoke r2.<org.apache.mahout.math.stats.OnlineAuc: double auc()>();
+
+        d3 = d3 + $d2;
+
+        goto label1;
+
+     label2:
+        $r5 = r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: java.util.Map map>;
+
+        $i0 = interfaceinvoke $r5.<java.util.Map: int size()>();
+
+        $d0 = (double) $i0;
+
+        $d1 = d3 / $d0;
+
+        return $d1;
+    }
+
+    public void setPolicy(org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy)
+    {
+        org.apache.mahout.math.stats.GroupedOnlineAuc r0;
+        org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy r1;
+        java.util.Iterator r2;
+        org.apache.mahout.math.stats.OnlineAuc r3;
+        java.util.Map $r4;
+        java.util.Collection $r5;
+        boolean $z0;
+        java.lang.Object $r6;
+
+        r0 := @this: org.apache.mahout.math.stats.GroupedOnlineAuc;
+
+        r1 := @parameter0: org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy;
+
+        r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy policy> = r1;
+
+        $r4 = r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: java.util.Map map>;
+
+        $r5 = interfaceinvoke $r4.<java.util.Map: java.util.Collection values()>();
+
+        r2 = interfaceinvoke $r5.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.math.stats.OnlineAuc) $r6;
+
+        interfaceinvoke r3.<org.apache.mahout.math.stats.OnlineAuc: void setPolicy(org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy)>(r1);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void setWindowSize(int)
+    {
+        org.apache.mahout.math.stats.GroupedOnlineAuc r0;
+        int i0;
+        java.util.Iterator r1;
+        org.apache.mahout.math.stats.OnlineAuc r2;
+        java.util.Map $r3;
+        java.util.Collection $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+
+        r0 := @this: org.apache.mahout.math.stats.GroupedOnlineAuc;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: int windowSize> = i0;
+
+        $r3 = r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: java.util.Map map>;
+
+        $r4 = interfaceinvoke $r3.<java.util.Map: java.util.Collection values()>();
+
+        r1 = interfaceinvoke $r4.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (org.apache.mahout.math.stats.OnlineAuc) $r5;
+
+        interfaceinvoke r2.<org.apache.mahout.math.stats.OnlineAuc: void setWindowSize(int)>(i0);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.math.stats.GroupedOnlineAuc r0;
+        java.io.DataOutput r1;
+        java.util.Iterator r2;
+        java.util.Map$Entry r3;
+        java.util.Map $r4, $r5;
+        int $i0, $i1, $i2;
+        java.util.Set $r6;
+        boolean $z0;
+        org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy $r7;
+        java.lang.Object $r8, $r9, $r12;
+        java.lang.String $r10;
+        org.apache.hadoop.io.Writable $r11;
+
+        r0 := @this: org.apache.mahout.math.stats.GroupedOnlineAuc;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $r4 = r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: java.util.Map map>;
+
+        $i0 = interfaceinvoke $r4.<java.util.Map: int size()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i0);
+
+        $r5 = r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: java.util.Map map>;
+
+        $r6 = interfaceinvoke $r5.<java.util.Map: java.util.Set entrySet()>();
+
+        r2 = interfaceinvoke $r6.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r8 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.util.Map$Entry) $r8;
+
+        $r9 = interfaceinvoke r3.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r10 = (java.lang.String) $r9;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeUTF(java.lang.String)>($r10);
+
+        $r12 = interfaceinvoke r3.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r11 = (org.apache.hadoop.io.Writable) $r12;
+
+        staticinvoke <org.apache.mahout.classifier.sgd.PolymorphicWritable: void write(java.io.DataOutput,org.apache.hadoop.io.Writable)>(r1, $r11);
+
+        goto label1;
+
+     label2:
+        $r7 = r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy policy>;
+
+        $i1 = virtualinvoke $r7.<org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy: int ordinal()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i1);
+
+        $i2 = r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: int windowSize>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i2);
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.math.stats.GroupedOnlineAuc r0;
+        java.io.DataInput r1;
+        int i0, $i1, $i2, i3;
+        java.lang.String r2;
+        java.util.Map $r3, $r6;
+        org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy[] $r4;
+        org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy $r5;
+        org.apache.hadoop.io.Writable $r7;
+
+        r0 := @this: org.apache.mahout.math.stats.GroupedOnlineAuc;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        i0 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        $r3 = r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: java.util.Map map>;
+
+        interfaceinvoke $r3.<java.util.Map: void clear()>();
+
+        i3 = 0;
+
+     label1:
+        if i3 >= i0 goto label2;
+
+        r2 = interfaceinvoke r1.<java.io.DataInput: java.lang.String readUTF()>();
+
+        $r6 = r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: java.util.Map map>;
+
+        $r7 = staticinvoke <org.apache.mahout.classifier.sgd.PolymorphicWritable: org.apache.hadoop.io.Writable read(java.io.DataInput,java.lang.Class)>(r1, class "org/apache/mahout/math/stats/OnlineAuc");
+
+        interfaceinvoke $r6.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r2, $r7);
+
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label2:
+        $r4 = staticinvoke <org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy: org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy[] values()>();
+
+        $i1 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        $r5 = $r4[$i1];
+
+        r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy policy> = $r5;
+
+        $i2 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.math.stats.GroupedOnlineAuc: int windowSize> = $i2;
+
+        return;
+    }
+}

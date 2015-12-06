@@ -1,0 +1,76 @@
+final class org.apache.mahout.cf.taste.impl.neighborhood.CachingUserNeighborhood$NeighborhoodRetriever extends java.lang.Object implements org.apache.mahout.cf.taste.impl.common.Retriever
+{
+    private final org.apache.mahout.cf.taste.neighborhood.UserNeighborhood neighborhood;
+
+    private void <init>(org.apache.mahout.cf.taste.neighborhood.UserNeighborhood)
+    {
+        org.apache.mahout.cf.taste.impl.neighborhood.CachingUserNeighborhood$NeighborhoodRetriever r0;
+        org.apache.mahout.cf.taste.neighborhood.UserNeighborhood r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.neighborhood.CachingUserNeighborhood$NeighborhoodRetriever;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.neighborhood.CachingUserNeighborhood$NeighborhoodRetriever: org.apache.mahout.cf.taste.neighborhood.UserNeighborhood neighborhood> = r1;
+
+        return;
+    }
+
+    public long[] get(java.lang.Long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.neighborhood.CachingUserNeighborhood$NeighborhoodRetriever r0;
+        java.lang.Long r1;
+        org.apache.mahout.cf.taste.neighborhood.UserNeighborhood $r2;
+        long $l0;
+        long[] $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.neighborhood.CachingUserNeighborhood$NeighborhoodRetriever;
+
+        r1 := @parameter0: java.lang.Long;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.neighborhood.CachingUserNeighborhood$NeighborhoodRetriever: org.apache.mahout.cf.taste.neighborhood.UserNeighborhood neighborhood>;
+
+        $l0 = virtualinvoke r1.<java.lang.Long: long longValue()>();
+
+        $r3 = interfaceinvoke $r2.<org.apache.mahout.cf.taste.neighborhood.UserNeighborhood: long[] getUserNeighborhood(long)>($l0);
+
+        return $r3;
+    }
+
+    public volatile java.lang.Object get(java.lang.Object) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.neighborhood.CachingUserNeighborhood$NeighborhoodRetriever r0;
+        java.lang.Object r1;
+        java.lang.Long $r2;
+        long[] $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.neighborhood.CachingUserNeighborhood$NeighborhoodRetriever;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.lang.Long) r1;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.neighborhood.CachingUserNeighborhood$NeighborhoodRetriever: long[] get(java.lang.Long)>($r2);
+
+        return $r3;
+    }
+
+    void <init>(org.apache.mahout.cf.taste.neighborhood.UserNeighborhood, org.apache.mahout.cf.taste.impl.neighborhood.CachingUserNeighborhood$1)
+    {
+        org.apache.mahout.cf.taste.impl.neighborhood.CachingUserNeighborhood$NeighborhoodRetriever r0;
+        org.apache.mahout.cf.taste.neighborhood.UserNeighborhood r1;
+        org.apache.mahout.cf.taste.impl.neighborhood.CachingUserNeighborhood$1 r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.neighborhood.CachingUserNeighborhood$NeighborhoodRetriever;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.neighborhood.UserNeighborhood;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.impl.neighborhood.CachingUserNeighborhood$1;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.neighborhood.CachingUserNeighborhood$NeighborhoodRetriever: void <init>(org.apache.mahout.cf.taste.neighborhood.UserNeighborhood)>(r1);
+
+        return;
+    }
+}

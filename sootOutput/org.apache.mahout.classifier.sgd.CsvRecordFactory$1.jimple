@@ -1,0 +1,87 @@
+class org.apache.mahout.classifier.sgd.CsvRecordFactory$1 extends java.lang.Object implements com.google.common.base.Function
+{
+    final java.util.Map val$vars;
+    final org.apache.mahout.classifier.sgd.CsvRecordFactory this$0;
+
+    void <init>(org.apache.mahout.classifier.sgd.CsvRecordFactory, java.util.Map)
+    {
+        org.apache.mahout.classifier.sgd.CsvRecordFactory$1 r0;
+        org.apache.mahout.classifier.sgd.CsvRecordFactory r1;
+        java.util.Map r2;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.CsvRecordFactory$1;
+
+        r1 := @parameter0: org.apache.mahout.classifier.sgd.CsvRecordFactory;
+
+        r2 := @parameter1: java.util.Map;
+
+        r0.<org.apache.mahout.classifier.sgd.CsvRecordFactory$1: org.apache.mahout.classifier.sgd.CsvRecordFactory this$0> = r1;
+
+        r0.<org.apache.mahout.classifier.sgd.CsvRecordFactory$1: java.util.Map val$vars> = r2;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public java.lang.Integer apply(java.lang.String)
+    {
+        org.apache.mahout.classifier.sgd.CsvRecordFactory$1 r0;
+        java.lang.String r1;
+        java.lang.Integer r2;
+        java.util.Map $r3, $r6;
+        java.lang.Object $r4;
+        java.lang.Object[] $r5;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.CsvRecordFactory$1;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r3 = r0.<org.apache.mahout.classifier.sgd.CsvRecordFactory$1: java.util.Map val$vars>;
+
+        $r4 = interfaceinvoke $r3.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        r2 = (java.lang.Integer) $r4;
+
+        if r2 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        $r5 = newarray (java.lang.Object)[2];
+
+        $r5[0] = r1;
+
+        $r6 = r0.<org.apache.mahout.classifier.sgd.CsvRecordFactory$1: java.util.Map val$vars>;
+
+        $r5[1] = $r6;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.String,java.lang.Object[])>($z0, "Can\'t find variable %s, only know about %s", $r5);
+
+        return r2;
+    }
+
+    public volatile java.lang.Object apply(java.lang.Object)
+    {
+        org.apache.mahout.classifier.sgd.CsvRecordFactory$1 r0;
+        java.lang.Object r1;
+        java.lang.String $r2;
+        java.lang.Integer $r3;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.CsvRecordFactory$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.lang.String) r1;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.CsvRecordFactory$1: java.lang.Integer apply(java.lang.String)>($r2);
+
+        return $r3;
+    }
+}

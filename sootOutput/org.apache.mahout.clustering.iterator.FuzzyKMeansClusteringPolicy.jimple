@@ -1,0 +1,215 @@
+public class org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy extends org.apache.mahout.clustering.iterator.AbstractClusteringPolicy
+{
+    private double m;
+    private double convergenceDelta;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy r0;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy;
+
+        specialinvoke r0.<org.apache.mahout.clustering.iterator.AbstractClusteringPolicy: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy: double m> = 2.0;
+
+        r0.<org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy: double convergenceDelta> = 0.05;
+
+        return;
+    }
+
+    public void <init>(double, double)
+    {
+        org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy r0;
+        double d0, d1;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        specialinvoke r0.<org.apache.mahout.clustering.iterator.AbstractClusteringPolicy: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy: double m> = 2.0;
+
+        r0.<org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy: double convergenceDelta> = 0.05;
+
+        r0.<org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy: double m> = d0;
+
+        r0.<org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy: double convergenceDelta> = d1;
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector select(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy r0;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        return r1;
+    }
+
+    public org.apache.mahout.math.Vector classify(org.apache.mahout.math.Vector, org.apache.mahout.clustering.classify.ClusterClassifier)
+    {
+        org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy r0;
+        org.apache.mahout.math.Vector r1, $r11, $r13;
+        org.apache.mahout.clustering.classify.ClusterClassifier r2;
+        org.apache.mahout.clustering.Cluster r5;
+        org.apache.mahout.clustering.fuzzykmeans.SoftCluster r6;
+        java.util.ArrayList $r7, $r8;
+        java.util.List $r9;
+        boolean $z0;
+        org.apache.mahout.clustering.fuzzykmeans.FuzzyKMeansClusterer $r10;
+        double $d0, $d1;
+        java.lang.Object $r12;
+        org.apache.mahout.common.distance.DistanceMeasure $r14;
+        java.lang.Double $r15;
+        java.util.Iterator r16;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 := @parameter1: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        $r7 = new java.util.ArrayList;
+
+        specialinvoke $r7.<java.util.ArrayList: void <init>()>();
+
+        $r8 = new java.util.ArrayList;
+
+        specialinvoke $r8.<java.util.ArrayList: void <init>()>();
+
+        $r9 = virtualinvoke r2.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List getModels()>();
+
+        r16 = interfaceinvoke $r9.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r16.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r12 = interfaceinvoke r16.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.clustering.Cluster) $r12;
+
+        r6 = (org.apache.mahout.clustering.fuzzykmeans.SoftCluster) r5;
+
+        interfaceinvoke $r7.<java.util.Collection: boolean add(java.lang.Object)>(r6);
+
+        $r14 = virtualinvoke r6.<org.apache.mahout.clustering.fuzzykmeans.SoftCluster: org.apache.mahout.common.distance.DistanceMeasure getMeasure()>();
+
+        $r13 = virtualinvoke r6.<org.apache.mahout.clustering.fuzzykmeans.SoftCluster: org.apache.mahout.math.Vector getCenter()>();
+
+        $d1 = interfaceinvoke $r14.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r1, $r13);
+
+        $r15 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d1);
+
+        interfaceinvoke $r8.<java.util.List: boolean add(java.lang.Object)>($r15);
+
+        goto label1;
+
+     label2:
+        $r10 = new org.apache.mahout.clustering.fuzzykmeans.FuzzyKMeansClusterer;
+
+        specialinvoke $r10.<org.apache.mahout.clustering.fuzzykmeans.FuzzyKMeansClusterer: void <init>()>();
+
+        $d0 = r0.<org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy: double m>;
+
+        virtualinvoke $r10.<org.apache.mahout.clustering.fuzzykmeans.FuzzyKMeansClusterer: void setM(double)>($d0);
+
+        $r11 = virtualinvoke $r10.<org.apache.mahout.clustering.fuzzykmeans.FuzzyKMeansClusterer: org.apache.mahout.math.Vector computePi(java.util.Collection,java.util.List)>($r7, $r8);
+
+        return $r11;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy r0;
+        java.io.DataOutput r1;
+        double $d0, $d1;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $d0 = r0.<org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy: double m>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d0);
+
+        $d1 = r0.<org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy: double convergenceDelta>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d1);
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy r0;
+        java.io.DataInput r1;
+        double $d0, $d1;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $d0 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy: double m> = $d0;
+
+        $d1 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy: double convergenceDelta> = $d1;
+
+        return;
+    }
+
+    public void close(org.apache.mahout.clustering.classify.ClusterClassifier)
+    {
+        org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy r0;
+        org.apache.mahout.clustering.classify.ClusterClassifier r1;
+        java.util.Iterator r2;
+        org.apache.mahout.clustering.Cluster r3;
+        java.util.List $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+        double $d0;
+        org.apache.mahout.clustering.kmeans.Kluster $r6;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy;
+
+        r1 := @parameter0: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        $r4 = virtualinvoke r1.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List getModels()>();
+
+        r2 = interfaceinvoke $r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.clustering.Cluster) $r5;
+
+        $r6 = (org.apache.mahout.clustering.kmeans.Kluster) r3;
+
+        $d0 = r0.<org.apache.mahout.clustering.iterator.FuzzyKMeansClusteringPolicy: double convergenceDelta>;
+
+        virtualinvoke $r6.<org.apache.mahout.clustering.kmeans.Kluster: boolean calculateConvergence(double)>($d0);
+
+        interfaceinvoke r3.<org.apache.mahout.clustering.Cluster: void computeParameters()>();
+
+        goto label1;
+
+     label2:
+        return;
+    }
+}

@@ -1,0 +1,397 @@
+public final class org.apache.mahout.math.hadoop.TimesSquaredJob extends java.lang.Object
+{
+    public static final java.lang.String INPUT_VECTOR;
+    public static final java.lang.String IS_SPARSE_OUTPUT;
+    public static final java.lang.String OUTPUT_VECTOR_DIMENSION;
+    public static final java.lang.String OUTPUT_VECTOR_FILENAME;
+
+    private void <init>()
+    {
+        org.apache.mahout.math.hadoop.TimesSquaredJob r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.TimesSquaredJob;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.hadoop.mapreduce.Job createTimesSquaredJob(org.apache.mahout.math.Vector, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.mahout.math.Vector r0;
+        org.apache.hadoop.fs.Path r1, r2;
+        org.apache.hadoop.conf.Configuration $r3;
+        org.apache.hadoop.mapreduce.Job $r4;
+
+        r0 := @parameter0: org.apache.mahout.math.Vector;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        $r3 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r3.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r4 = staticinvoke <org.apache.mahout.math.hadoop.TimesSquaredJob: org.apache.hadoop.mapreduce.Job createTimesSquaredJob(org.apache.hadoop.conf.Configuration,org.apache.mahout.math.Vector,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r3, r0, r1, r2);
+
+        return $r4;
+    }
+
+    public static org.apache.hadoop.mapreduce.Job createTimesSquaredJob(org.apache.hadoop.conf.Configuration, org.apache.mahout.math.Vector, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.mahout.math.Vector r1;
+        org.apache.hadoop.fs.Path r2, r3;
+        org.apache.hadoop.mapreduce.Job $r4;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter3: org.apache.hadoop.fs.Path;
+
+        $r4 = staticinvoke <org.apache.mahout.math.hadoop.TimesSquaredJob: org.apache.hadoop.mapreduce.Job createTimesSquaredJob(org.apache.hadoop.conf.Configuration,org.apache.mahout.math.Vector,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>(r0, r1, r2, r3, class "org/apache/mahout/math/hadoop/TimesSquaredJob$TimesSquaredMapper", class "org/apache/mahout/math/hadoop/TimesSquaredJob$VectorSummingReducer");
+
+        return $r4;
+    }
+
+    public static org.apache.hadoop.mapreduce.Job createTimesJob(org.apache.mahout.math.Vector, int, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.mahout.math.Vector r0;
+        int i0;
+        org.apache.hadoop.fs.Path r1, r2;
+        org.apache.hadoop.conf.Configuration $r3;
+        org.apache.hadoop.mapreduce.Job $r4;
+
+        r0 := @parameter0: org.apache.mahout.math.Vector;
+
+        i0 := @parameter1: int;
+
+        r1 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter3: org.apache.hadoop.fs.Path;
+
+        $r3 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r3.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r4 = staticinvoke <org.apache.mahout.math.hadoop.TimesSquaredJob: org.apache.hadoop.mapreduce.Job createTimesJob(org.apache.hadoop.conf.Configuration,org.apache.mahout.math.Vector,int,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r3, r0, i0, r1, r2);
+
+        return $r4;
+    }
+
+    public static org.apache.hadoop.mapreduce.Job createTimesJob(org.apache.hadoop.conf.Configuration, org.apache.mahout.math.Vector, int, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.mahout.math.Vector r1;
+        int i0;
+        org.apache.hadoop.fs.Path r2, r3;
+        org.apache.hadoop.mapreduce.Job $r4;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        i0 := @parameter2: int;
+
+        r2 := @parameter3: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter4: org.apache.hadoop.fs.Path;
+
+        $r4 = staticinvoke <org.apache.mahout.math.hadoop.TimesSquaredJob: org.apache.hadoop.mapreduce.Job createTimesSquaredJob(org.apache.hadoop.conf.Configuration,org.apache.mahout.math.Vector,int,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>(r0, r1, i0, r2, r3, class "org/apache/mahout/math/hadoop/TimesSquaredJob$TimesMapper", class "org/apache/mahout/math/hadoop/TimesSquaredJob$VectorSummingReducer");
+
+        return $r4;
+    }
+
+    public static org.apache.hadoop.mapreduce.Job createTimesSquaredJob(org.apache.mahout.math.Vector, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, java.lang.Class, java.lang.Class) throws java.io.IOException
+    {
+        org.apache.mahout.math.Vector r0;
+        org.apache.hadoop.fs.Path r1, r2;
+        java.lang.Class r3, r4;
+        org.apache.hadoop.conf.Configuration $r5;
+        org.apache.hadoop.mapreduce.Job $r6;
+
+        r0 := @parameter0: org.apache.mahout.math.Vector;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter3: java.lang.Class;
+
+        r4 := @parameter4: java.lang.Class;
+
+        $r5 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r5.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r6 = staticinvoke <org.apache.mahout.math.hadoop.TimesSquaredJob: org.apache.hadoop.mapreduce.Job createTimesSquaredJob(org.apache.hadoop.conf.Configuration,org.apache.mahout.math.Vector,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>($r5, r0, r1, r2, r3, r4);
+
+        return $r6;
+    }
+
+    public static org.apache.hadoop.mapreduce.Job createTimesSquaredJob(org.apache.hadoop.conf.Configuration, org.apache.mahout.math.Vector, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, java.lang.Class, java.lang.Class) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.mahout.math.Vector r1;
+        org.apache.hadoop.fs.Path r2, r3;
+        java.lang.Class r4, r5;
+        int $i0;
+        org.apache.hadoop.mapreduce.Job $r6;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter3: org.apache.hadoop.fs.Path;
+
+        r4 := @parameter4: java.lang.Class;
+
+        r5 := @parameter5: java.lang.Class;
+
+        $i0 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int size()>();
+
+        $r6 = staticinvoke <org.apache.mahout.math.hadoop.TimesSquaredJob: org.apache.hadoop.mapreduce.Job createTimesSquaredJob(org.apache.hadoop.conf.Configuration,org.apache.mahout.math.Vector,int,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>(r0, r1, $i0, r2, r3, r4, r5);
+
+        return $r6;
+    }
+
+    public static org.apache.hadoop.mapreduce.Job createTimesSquaredJob(org.apache.mahout.math.Vector, int, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, java.lang.Class, java.lang.Class) throws java.io.IOException
+    {
+        org.apache.mahout.math.Vector r0;
+        int i0;
+        org.apache.hadoop.fs.Path r1, r2;
+        java.lang.Class r3, r4;
+        org.apache.hadoop.conf.Configuration $r5;
+        org.apache.hadoop.mapreduce.Job $r6;
+
+        r0 := @parameter0: org.apache.mahout.math.Vector;
+
+        i0 := @parameter1: int;
+
+        r1 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter3: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter4: java.lang.Class;
+
+        r4 := @parameter5: java.lang.Class;
+
+        $r5 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r5.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r6 = staticinvoke <org.apache.mahout.math.hadoop.TimesSquaredJob: org.apache.hadoop.mapreduce.Job createTimesSquaredJob(org.apache.hadoop.conf.Configuration,org.apache.mahout.math.Vector,int,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>($r5, r0, i0, r1, r2, r3, r4);
+
+        return $r6;
+    }
+
+    public static org.apache.hadoop.mapreduce.Job createTimesSquaredJob(org.apache.hadoop.conf.Configuration, org.apache.mahout.math.Vector, int, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, java.lang.Class, java.lang.Class) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0, r7;
+        org.apache.mahout.math.Vector r1;
+        int i0;
+        java.lang.Class r2, r3;
+        org.apache.hadoop.fs.FileSystem r4;
+        long l1;
+        org.apache.hadoop.mapreduce.Job r6;
+        java.net.URI $r8, r33;
+        java.lang.StringBuilder $r9, $r11, $r12, $r19, $r21, $r22;
+        org.apache.hadoop.fs.Path $r10, $r18, r27, r28, r29, r30;
+        org.apache.hadoop.io.SequenceFile$Writer $r13, r31;
+        java.lang.String $r14, $r20, $r23;
+        org.apache.mahout.math.VectorWritable $r15;
+        org.apache.hadoop.io.NullWritable $r16;
+        java.net.URI[] $r17;
+        boolean $z0, $z1;
+        java.lang.Throwable $r26;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        i0 := @parameter2: int;
+
+        r27 := @parameter3: org.apache.hadoop.fs.Path;
+
+        r28 := @parameter4: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter5: java.lang.Class;
+
+        r3 := @parameter6: java.lang.Class;
+
+        $r8 = virtualinvoke r27.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r4 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r8, r0);
+
+        r29 = virtualinvoke r4.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.Path makeQualified(org.apache.hadoop.fs.Path)>(r27);
+
+        r30 = virtualinvoke r4.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.Path makeQualified(org.apache.hadoop.fs.Path)>(r28);
+
+        l1 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $r10 = new org.apache.hadoop.fs.Path;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r12 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("DistributedMatrix.times.inputVector/");
+
+        $r11 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l1);
+
+        $r14 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r10.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r30, $r14);
+
+        r31 = null;
+
+     label1:
+        $r13 = new org.apache.hadoop.io.SequenceFile$Writer;
+
+        specialinvoke $r13.<org.apache.hadoop.io.SequenceFile$Writer: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>(r4, r0, $r10, class "org/apache/hadoop/io/NullWritable", class "org/apache/mahout/math/VectorWritable");
+
+        r31 = $r13;
+
+        $r16 = staticinvoke <org.apache.hadoop.io.NullWritable: org.apache.hadoop.io.NullWritable get()>();
+
+        $r15 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r15.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r1);
+
+        virtualinvoke $r13.<org.apache.hadoop.io.SequenceFile$Writer: void append(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r16, $r15);
+
+     label2:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r13, 0);
+
+        goto label5;
+
+     label3:
+        $r26 := @caughtexception;
+
+     label4:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>(r31, 0);
+
+        throw $r26;
+
+     label5:
+        r33 = virtualinvoke $r10.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        $r17 = newarray (java.net.URI)[1];
+
+        $r17[0] = r33;
+
+        staticinvoke <org.apache.hadoop.filecache.DistributedCache: void setCacheFiles(java.net.URI[],org.apache.hadoop.conf.Configuration)>($r17, r0);
+
+        $r18 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r18.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r30, "DistributedMatrix.times.outputVector");
+
+        r6 = staticinvoke <org.apache.mahout.common.HadoopUtil: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,org.apache.hadoop.conf.Configuration)>(r29, $r18, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", r2, class "org/apache/hadoop/io/NullWritable", class "org/apache/mahout/math/VectorWritable", r3, class "org/apache/hadoop/io/NullWritable", class "org/apache/mahout/math/VectorWritable", class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat", r0);
+
+        virtualinvoke r6.<org.apache.hadoop.mapreduce.Job: void setCombinerClass(java.lang.Class)>(r3);
+
+        $r21 = new java.lang.StringBuilder;
+
+        specialinvoke $r21.<java.lang.StringBuilder: void <init>()>();
+
+        $r22 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("TimesSquaredJob: ");
+
+        $r19 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r29);
+
+        $r20 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r6.<org.apache.hadoop.mapreduce.Job: void setJobName(java.lang.String)>($r20);
+
+        r7 = virtualinvoke r6.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r23 = virtualinvoke r33.<java.net.URI: java.lang.String toString()>();
+
+        virtualinvoke r7.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("DistributedMatrix.times.inputVector", $r23);
+
+        $z0 = interfaceinvoke r1.<org.apache.mahout.math.Vector: boolean isDense()>();
+
+        if $z0 != 0 goto label6;
+
+        $z1 = 1;
+
+        goto label7;
+
+     label6:
+        $z1 = 0;
+
+     label7:
+        virtualinvoke r7.<org.apache.hadoop.conf.Configuration: void setBoolean(java.lang.String,boolean)>("DistributedMatrix.times.outputVector.sparse", $z1);
+
+        virtualinvoke r7.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>("DistributedMatrix.times.output.dimension", i0);
+
+        return r6;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public static org.apache.mahout.math.Vector retrieveTimesSquaredOutputVector(org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration) throws java.io.IOException
+    {
+        org.apache.hadoop.fs.Path r0, $r6;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.mahout.math.Vector r4;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator $r7;
+        java.lang.Object $r8;
+        org.apache.mahout.math.VectorWritable $r9;
+        java.lang.Throwable $r10;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        $r6 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r6.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r0, "DistributedMatrix.times.outputVector/part-r-00000");
+
+        $r7 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator;
+
+        specialinvoke $r7.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: void <init>(org.apache.hadoop.fs.Path,boolean,org.apache.hadoop.conf.Configuration)>($r6, 1, r1);
+
+     label1:
+        $r8 = virtualinvoke $r7.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: java.lang.Object next()>();
+
+        $r9 = (org.apache.mahout.math.VectorWritable) $r8;
+
+        r4 = virtualinvoke $r9.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+     label2:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r7, 1);
+
+        return r4;
+
+     label3:
+        $r10 := @caughtexception;
+
+     label4:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r7, 1);
+
+        throw $r10;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.math.hadoop.TimesSquaredJob: java.lang.String OUTPUT_VECTOR_FILENAME> = "DistributedMatrix.times.outputVector";
+
+        <org.apache.mahout.math.hadoop.TimesSquaredJob: java.lang.String OUTPUT_VECTOR_DIMENSION> = "DistributedMatrix.times.output.dimension";
+
+        <org.apache.mahout.math.hadoop.TimesSquaredJob: java.lang.String IS_SPARSE_OUTPUT> = "DistributedMatrix.times.outputVector.sparse";
+
+        <org.apache.mahout.math.hadoop.TimesSquaredJob: java.lang.String INPUT_VECTOR> = "DistributedMatrix.times.inputVector";
+
+        return;
+    }
+}

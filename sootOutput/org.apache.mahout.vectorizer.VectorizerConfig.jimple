@@ -1,0 +1,451 @@
+public final class org.apache.mahout.vectorizer.VectorizerConfig extends java.lang.Object
+{
+    private org.apache.hadoop.conf.Configuration conf;
+    private java.lang.String analyzerClassName;
+    private java.lang.String encoderName;
+    private boolean sequentialAccess;
+    private boolean namedVectors;
+    private int cardinality;
+    private java.lang.String encoderClass;
+    private java.lang.String tfDirName;
+    private int minSupport;
+    private int maxNGramSize;
+    private float minLLRValue;
+    private float normPower;
+    private boolean logNormalize;
+    private int numReducers;
+    private int chunkSizeInMegabytes;
+
+    public void <init>(org.apache.hadoop.conf.Configuration, java.lang.String, java.lang.String, java.lang.String, boolean, boolean, int)
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        org.apache.hadoop.conf.Configuration r1;
+        java.lang.String r2, r3, r4;
+        boolean z0, z1;
+        int i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r2 := @parameter1: java.lang.String;
+
+        r3 := @parameter2: java.lang.String;
+
+        r4 := @parameter3: java.lang.String;
+
+        z0 := @parameter4: boolean;
+
+        z1 := @parameter5: boolean;
+
+        i0 := @parameter6: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: org.apache.hadoop.conf.Configuration conf> = r1;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: java.lang.String analyzerClassName> = r2;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: java.lang.String encoderClass> = r3;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: java.lang.String encoderName> = r4;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: boolean sequentialAccess> = z0;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: boolean namedVectors> = z1;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: int cardinality> = i0;
+
+        return;
+    }
+
+    public org.apache.hadoop.conf.Configuration getConf()
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        org.apache.hadoop.conf.Configuration $r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $r1 = r0.<org.apache.mahout.vectorizer.VectorizerConfig: org.apache.hadoop.conf.Configuration conf>;
+
+        return $r1;
+    }
+
+    public void setConf(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        org.apache.hadoop.conf.Configuration r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: org.apache.hadoop.conf.Configuration conf> = r1;
+
+        return;
+    }
+
+    public java.lang.String getAnalyzerClassName()
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $r1 = r0.<org.apache.mahout.vectorizer.VectorizerConfig: java.lang.String analyzerClassName>;
+
+        return $r1;
+    }
+
+    public void setAnalyzerClassName(java.lang.String)
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        java.lang.String r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        r1 := @parameter0: java.lang.String;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: java.lang.String analyzerClassName> = r1;
+
+        return;
+    }
+
+    public java.lang.String getEncoderName()
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $r1 = r0.<org.apache.mahout.vectorizer.VectorizerConfig: java.lang.String encoderName>;
+
+        return $r1;
+    }
+
+    public void setEncoderName(java.lang.String)
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        java.lang.String r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        r1 := @parameter0: java.lang.String;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: java.lang.String encoderName> = r1;
+
+        return;
+    }
+
+    public boolean isSequentialAccess()
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $z0 = r0.<org.apache.mahout.vectorizer.VectorizerConfig: boolean sequentialAccess>;
+
+        return $z0;
+    }
+
+    public void setSequentialAccess(boolean)
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        boolean z0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        z0 := @parameter0: boolean;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: boolean sequentialAccess> = z0;
+
+        return;
+    }
+
+    public java.lang.String getTfDirName()
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $r1 = r0.<org.apache.mahout.vectorizer.VectorizerConfig: java.lang.String tfDirName>;
+
+        return $r1;
+    }
+
+    public void setTfDirName(java.lang.String)
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        java.lang.String r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        r1 := @parameter0: java.lang.String;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: java.lang.String tfDirName> = r1;
+
+        return;
+    }
+
+    public boolean isNamedVectors()
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $z0 = r0.<org.apache.mahout.vectorizer.VectorizerConfig: boolean namedVectors>;
+
+        return $z0;
+    }
+
+    public void setNamedVectors(boolean)
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        boolean z0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        z0 := @parameter0: boolean;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: boolean namedVectors> = z0;
+
+        return;
+    }
+
+    public int getCardinality()
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $i0 = r0.<org.apache.mahout.vectorizer.VectorizerConfig: int cardinality>;
+
+        return $i0;
+    }
+
+    public void setCardinality(int)
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: int cardinality> = i0;
+
+        return;
+    }
+
+    public java.lang.String getEncoderClass()
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $r1 = r0.<org.apache.mahout.vectorizer.VectorizerConfig: java.lang.String encoderClass>;
+
+        return $r1;
+    }
+
+    public void setEncoderClass(java.lang.String)
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        java.lang.String r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        r1 := @parameter0: java.lang.String;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: java.lang.String encoderClass> = r1;
+
+        return;
+    }
+
+    public int getMinSupport()
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $i0 = r0.<org.apache.mahout.vectorizer.VectorizerConfig: int minSupport>;
+
+        return $i0;
+    }
+
+    public void setMinSupport(int)
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: int minSupport> = i0;
+
+        return;
+    }
+
+    public int getMaxNGramSize()
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $i0 = r0.<org.apache.mahout.vectorizer.VectorizerConfig: int maxNGramSize>;
+
+        return $i0;
+    }
+
+    public void setMaxNGramSize(int)
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: int maxNGramSize> = i0;
+
+        return;
+    }
+
+    public float getMinLLRValue()
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $f0 = r0.<org.apache.mahout.vectorizer.VectorizerConfig: float minLLRValue>;
+
+        return $f0;
+    }
+
+    public void setMinLLRValue(float)
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        float f0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        f0 := @parameter0: float;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: float minLLRValue> = f0;
+
+        return;
+    }
+
+    public float getNormPower()
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $f0 = r0.<org.apache.mahout.vectorizer.VectorizerConfig: float normPower>;
+
+        return $f0;
+    }
+
+    public void setNormPower(float)
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        float f0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        f0 := @parameter0: float;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: float normPower> = f0;
+
+        return;
+    }
+
+    public boolean isLogNormalize()
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $z0 = r0.<org.apache.mahout.vectorizer.VectorizerConfig: boolean logNormalize>;
+
+        return $z0;
+    }
+
+    public void setLogNormalize(boolean)
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        boolean z0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        z0 := @parameter0: boolean;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: boolean logNormalize> = z0;
+
+        return;
+    }
+
+    public int getNumReducers()
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $i0 = r0.<org.apache.mahout.vectorizer.VectorizerConfig: int numReducers>;
+
+        return $i0;
+    }
+
+    public void setNumReducers(int)
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: int numReducers> = i0;
+
+        return;
+    }
+
+    public int getChunkSizeInMegabytes()
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $i0 = r0.<org.apache.mahout.vectorizer.VectorizerConfig: int chunkSizeInMegabytes>;
+
+        return $i0;
+    }
+
+    public void setChunkSizeInMegabytes(int)
+    {
+        org.apache.mahout.vectorizer.VectorizerConfig r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.vectorizer.VectorizerConfig: int chunkSizeInMegabytes> = i0;
+
+        return;
+    }
+}

@@ -1,0 +1,240 @@
+public abstract class org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCComponent extends java.lang.Object
+{
+    private static final org.slf4j.Logger log;
+    private static final int DEFAULT_FETCH_SIZE;
+    protected static final java.lang.String DEFAULT_DATASOURCE_NAME;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCComponent r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCComponent;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    protected static void checkNotNullAndLog(java.lang.String, java.lang.Object)
+    {
+        java.lang.String r0, $r2, $r6;
+        java.lang.Object r1;
+        boolean $z0, $z1;
+        java.lang.StringBuilder $r3, $r4, $r5;
+        org.slf4j.Logger $r7;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: java.lang.Object;
+
+        if r1 == null goto label1;
+
+        $r2 = virtualinvoke r1.<java.lang.Object: java.lang.String toString()>();
+
+        $z0 = virtualinvoke $r2.<java.lang.String: boolean isEmpty()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" is null or empty");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, $r6);
+
+        $r7 = <org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCComponent: org.slf4j.Logger log>;
+
+        interfaceinvoke $r7.<org.slf4j.Logger: void debug(java.lang.String,java.lang.Object,java.lang.Object)>("{}: {}", r0, r1);
+
+        return;
+    }
+
+    protected static void checkNotNullAndLog(java.lang.String, java.lang.Object[])
+    {
+        java.lang.String r0, $r7;
+        java.lang.Object[] r1;
+        int i0, $i1, i2;
+        java.lang.Object r3;
+        boolean $z0;
+        java.lang.StringBuilder $r4, $r5, $r6;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: java.lang.Object[];
+
+        if r1 == null goto label1;
+
+        $i1 = lengthof r1;
+
+        if $i1 == 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" is null or zero-length");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, $r7);
+
+        i0 = lengthof r1;
+
+        i2 = 0;
+
+     label3:
+        if i2 >= i0 goto label4;
+
+        r3 = r1[i2];
+
+        staticinvoke <org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCComponent: void checkNotNullAndLog(java.lang.String,java.lang.Object)>(r0, r3);
+
+        i2 = i2 + 1;
+
+        goto label3;
+
+     label4:
+        return;
+    }
+
+    public static javax.sql.DataSource lookupDataSource(java.lang.String) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        java.lang.String r0, $r8;
+        javax.naming.InitialContext $r4, r17;
+        java.lang.StringBuilder $r5, $r6, $r7;
+        java.lang.Object $r9;
+        javax.naming.NamingException $r10, $r12, $r13;
+        org.slf4j.Logger $r11, $r14;
+        java.lang.Throwable $r15;
+        org.apache.mahout.cf.taste.common.TasteException $r16;
+        javax.sql.DataSource r18;
+
+        r0 := @parameter0: java.lang.String;
+
+        r17 = null;
+
+     label01:
+        $r4 = new javax.naming.InitialContext;
+
+        specialinvoke $r4.<javax.naming.InitialContext: void <init>()>();
+
+        r17 = $r4;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("java:comp/env/");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r9 = interfaceinvoke $r4.<javax.naming.Context: java.lang.Object lookup(java.lang.String)>($r8);
+
+        r18 = (javax.sql.DataSource) $r9;
+
+     label02:
+        if $r4 == null goto label06;
+
+     label03:
+        interfaceinvoke $r4.<javax.naming.Context: void close()>();
+
+     label04:
+        goto label06;
+
+     label05:
+        $r10 := @caughtexception;
+
+        $r11 = <org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCComponent: org.slf4j.Logger log>;
+
+        interfaceinvoke $r11.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Error while closing Context; continuing...", $r10);
+
+     label06:
+        return r18;
+
+     label07:
+        $r13 := @caughtexception;
+
+        $r16 = new org.apache.mahout.cf.taste.common.TasteException;
+
+        specialinvoke $r16.<org.apache.mahout.cf.taste.common.TasteException: void <init>(java.lang.Throwable)>($r13);
+
+        throw $r16;
+
+     label08:
+        $r15 := @caughtexception;
+
+     label09:
+        if r17 == null goto label13;
+
+     label10:
+        interfaceinvoke r17.<javax.naming.Context: void close()>();
+
+     label11:
+        goto label13;
+
+     label12:
+        $r12 := @caughtexception;
+
+        $r14 = <org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCComponent: org.slf4j.Logger log>;
+
+        interfaceinvoke $r14.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Error while closing Context; continuing...", $r12);
+
+     label13:
+        throw $r15;
+
+        catch javax.naming.NamingException from label03 to label04 with label05;
+        catch javax.naming.NamingException from label01 to label02 with label07;
+        catch java.lang.Throwable from label01 to label02 with label08;
+        catch javax.naming.NamingException from label10 to label11 with label12;
+        catch java.lang.Throwable from label07 to label09 with label08;
+    }
+
+    protected int getFetchSize()
+    {
+        org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCComponent r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCComponent;
+
+        return 1000;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCComponent: java.lang.String DEFAULT_DATASOURCE_NAME> = "jdbc/taste";
+
+        <org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCComponent: int DEFAULT_FETCH_SIZE> = 1000;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/cf/taste/impl/common/jdbc/AbstractJDBCComponent");
+
+        <org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCComponent: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

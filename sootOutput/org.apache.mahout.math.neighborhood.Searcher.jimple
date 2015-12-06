@@ -1,0 +1,318 @@
+public abstract class org.apache.mahout.math.neighborhood.Searcher extends java.lang.Object implements java.lang.Iterable
+{
+    protected org.apache.mahout.common.distance.DistanceMeasure distanceMeasure;
+
+    protected void <init>(org.apache.mahout.common.distance.DistanceMeasure)
+    {
+        org.apache.mahout.math.neighborhood.Searcher r0;
+        org.apache.mahout.common.distance.DistanceMeasure r1;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.Searcher;
+
+        r1 := @parameter0: org.apache.mahout.common.distance.DistanceMeasure;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.math.neighborhood.Searcher: org.apache.mahout.common.distance.DistanceMeasure distanceMeasure> = r1;
+
+        return;
+    }
+
+    public org.apache.mahout.common.distance.DistanceMeasure getDistanceMeasure()
+    {
+        org.apache.mahout.math.neighborhood.Searcher r0;
+        org.apache.mahout.common.distance.DistanceMeasure $r1;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.Searcher;
+
+        $r1 = r0.<org.apache.mahout.math.neighborhood.Searcher: org.apache.mahout.common.distance.DistanceMeasure distanceMeasure>;
+
+        return $r1;
+    }
+
+    public abstract void add(org.apache.mahout.math.Vector);
+
+    public abstract int size();
+
+    public abstract java.util.List search(org.apache.mahout.math.Vector, int);
+
+    public java.util.List search(java.lang.Iterable, int)
+    {
+        org.apache.mahout.math.neighborhood.Searcher r0;
+        java.lang.Iterable r1;
+        int i0, $i1;
+        java.util.ArrayList r2;
+        java.util.Iterator r3;
+        org.apache.mahout.math.Vector r4;
+        boolean $z0;
+        java.lang.Object $r5;
+        java.util.List $r6;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.Searcher;
+
+        r1 := @parameter0: java.lang.Iterable;
+
+        i0 := @parameter1: int;
+
+        $i1 = staticinvoke <com.google.common.collect.Iterables: int size(java.lang.Iterable)>(r1);
+
+        r2 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayListWithExpectedSize(int)>($i1);
+
+        r3 = interfaceinvoke r1.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.math.Vector) $r5;
+
+        $r6 = virtualinvoke r0.<org.apache.mahout.math.neighborhood.Searcher: java.util.List search(org.apache.mahout.math.Vector,int)>(r4, i0);
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r6);
+
+        goto label1;
+
+     label2:
+        return r2;
+    }
+
+    public abstract org.apache.mahout.math.random.WeightedThing searchFirst(org.apache.mahout.math.Vector, boolean);
+
+    public java.util.List searchFirst(java.lang.Iterable, boolean)
+    {
+        org.apache.mahout.math.neighborhood.Searcher r0;
+        java.lang.Iterable r1;
+        boolean z0, $z1;
+        java.util.ArrayList r2;
+        java.util.Iterator r3;
+        org.apache.mahout.math.Vector r4;
+        int $i0;
+        java.lang.Object $r5;
+        org.apache.mahout.math.random.WeightedThing $r6;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.Searcher;
+
+        r1 := @parameter0: java.lang.Iterable;
+
+        z0 := @parameter1: boolean;
+
+        $i0 = staticinvoke <com.google.common.collect.Iterables: int size(java.lang.Iterable)>(r1);
+
+        r2 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayListWithExpectedSize(int)>($i0);
+
+        r3 = interfaceinvoke r1.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z1 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label2;
+
+        $r5 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.math.Vector) $r5;
+
+        $r6 = virtualinvoke r0.<org.apache.mahout.math.neighborhood.Searcher: org.apache.mahout.math.random.WeightedThing searchFirst(org.apache.mahout.math.Vector,boolean)>(r4, z0);
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r6);
+
+        goto label1;
+
+     label2:
+        return r2;
+    }
+
+    public void addAll(java.lang.Iterable)
+    {
+        org.apache.mahout.math.neighborhood.Searcher r0;
+        java.lang.Iterable r1;
+        java.util.Iterator r2;
+        org.apache.mahout.math.Vector r3;
+        boolean $z0;
+        java.lang.Object $r4;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.Searcher;
+
+        r1 := @parameter0: java.lang.Iterable;
+
+        r2 = interfaceinvoke r1.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.math.Vector) $r4;
+
+        virtualinvoke r0.<org.apache.mahout.math.neighborhood.Searcher: void add(org.apache.mahout.math.Vector)>(r3);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void addAllMatrixSlices(java.lang.Iterable)
+    {
+        org.apache.mahout.math.neighborhood.Searcher r0;
+        java.lang.Iterable r1;
+        java.util.Iterator r2;
+        org.apache.mahout.math.MatrixSlice r3;
+        boolean $z0;
+        java.lang.Object $r4;
+        org.apache.mahout.math.Vector $r5;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.Searcher;
+
+        r1 := @parameter0: java.lang.Iterable;
+
+        r2 = interfaceinvoke r1.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.math.MatrixSlice) $r4;
+
+        $r5 = virtualinvoke r3.<org.apache.mahout.math.MatrixSlice: org.apache.mahout.math.Vector vector()>();
+
+        virtualinvoke r0.<org.apache.mahout.math.neighborhood.Searcher: void add(org.apache.mahout.math.Vector)>($r5);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void addAllMatrixSlicesAsWeightedVectors(java.lang.Iterable)
+    {
+        org.apache.mahout.math.neighborhood.Searcher r0;
+        java.lang.Iterable r1;
+        java.util.Iterator r2;
+        org.apache.mahout.math.MatrixSlice r3;
+        boolean $z0;
+        java.lang.Object $r4;
+        org.apache.mahout.math.WeightedVector $r5;
+        org.apache.mahout.math.Vector $r6;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.Searcher;
+
+        r1 := @parameter0: java.lang.Iterable;
+
+        r2 = interfaceinvoke r1.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.math.MatrixSlice) $r4;
+
+        $r5 = new org.apache.mahout.math.WeightedVector;
+
+        $r6 = virtualinvoke r3.<org.apache.mahout.math.MatrixSlice: org.apache.mahout.math.Vector vector()>();
+
+        $i0 = virtualinvoke r3.<org.apache.mahout.math.MatrixSlice: int index()>();
+
+        specialinvoke $r5.<org.apache.mahout.math.WeightedVector: void <init>(org.apache.mahout.math.Vector,double,int)>($r6, 1.0, $i0);
+
+        virtualinvoke r0.<org.apache.mahout.math.neighborhood.Searcher: void add(org.apache.mahout.math.Vector)>($r5);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public boolean remove(org.apache.mahout.math.Vector, double)
+    {
+        org.apache.mahout.math.neighborhood.Searcher r0;
+        org.apache.mahout.math.Vector r1;
+        double d0;
+        java.lang.UnsupportedOperationException $r2;
+        java.lang.StringBuilder $r3, $r4, $r7;
+        java.lang.Class $r5;
+        java.lang.String $r6, $r8;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.Searcher;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        d0 := @parameter1: double;
+
+        $r2 = new java.lang.UnsupportedOperationException;
+
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Can\'t remove a vector from a ");
+
+        $r5 = virtualinvoke r0.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.Class: java.lang.String getName()>();
+
+        $r7 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r2.<java.lang.UnsupportedOperationException: void <init>(java.lang.String)>($r8);
+
+        throw $r2;
+    }
+
+    public void clear()
+    {
+        org.apache.mahout.math.neighborhood.Searcher r0;
+        java.lang.UnsupportedOperationException $r1;
+        java.lang.StringBuilder $r2, $r3, $r6;
+        java.lang.Class $r4;
+        java.lang.String $r5, $r7;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.Searcher;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Can\'t remove vectors from a ");
+
+        $r4 = virtualinvoke r0.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.Class: java.lang.String getName()>();
+
+        $r6 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>(java.lang.String)>($r7);
+
+        throw $r1;
+    }
+
+    public static org.apache.lucene.util.PriorityQueue getCandidateQueue(int)
+    {
+        int i0;
+        org.apache.mahout.math.neighborhood.Searcher$1 $r0;
+
+        i0 := @parameter0: int;
+
+        $r0 = new org.apache.mahout.math.neighborhood.Searcher$1;
+
+        specialinvoke $r0.<org.apache.mahout.math.neighborhood.Searcher$1: void <init>(int)>(i0);
+
+        return $r0;
+    }
+}

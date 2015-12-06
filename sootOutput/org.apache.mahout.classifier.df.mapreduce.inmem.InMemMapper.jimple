@@ -1,0 +1,240 @@
+public class org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper extends org.apache.mahout.classifier.df.mapreduce.MapredMapper
+{
+    private static final org.slf4j.Logger log;
+    private org.apache.mahout.classifier.df.Bagging bagging;
+    private java.util.Random rng;
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper r0;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper;
+
+        specialinvoke r0.<org.apache.mahout.classifier.df.mapreduce.MapredMapper: void <init>()>();
+
+        return;
+    }
+
+    private static org.apache.mahout.classifier.df.data.Data loadData(org.apache.hadoop.conf.Configuration, org.apache.mahout.classifier.df.data.Dataset) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.mahout.classifier.df.data.Dataset r1;
+        org.apache.hadoop.fs.Path r2;
+        org.apache.hadoop.fs.FileSystem r3;
+        java.net.URI $r4;
+        org.apache.mahout.classifier.df.data.Data $r5;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.mahout.classifier.df.data.Dataset;
+
+        r2 = staticinvoke <org.apache.mahout.classifier.df.mapreduce.Builder: org.apache.hadoop.fs.Path getDistributedCacheFile(org.apache.hadoop.conf.Configuration,int)>(r0, 1);
+
+        $r4 = virtualinvoke r2.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r3 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r4, r0);
+
+        $r5 = staticinvoke <org.apache.mahout.classifier.df.data.DataLoader: org.apache.mahout.classifier.df.data.Data loadData(org.apache.mahout.classifier.df.data.Dataset,org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path)>(r1, r3, r2);
+
+        return $r5;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.mahout.classifier.df.data.Data r3;
+        org.slf4j.Logger $r4, $r6;
+        org.apache.mahout.classifier.df.data.Dataset $r5;
+        int $i0;
+        java.lang.Integer $r7;
+        org.apache.mahout.classifier.df.Bagging $r8;
+        org.apache.mahout.classifier.df.builder.TreeBuilder $r9;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        specialinvoke r0.<org.apache.mahout.classifier.df.mapreduce.MapredMapper: void setup(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r4 = <org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r4.<org.slf4j.Logger: void info(java.lang.String)>("Loading the data...");
+
+        $r5 = virtualinvoke r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        r3 = staticinvoke <org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: org.apache.mahout.classifier.df.data.Data loadData(org.apache.hadoop.conf.Configuration,org.apache.mahout.classifier.df.data.Dataset)>(r2, $r5);
+
+        $r6 = <org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: org.slf4j.Logger log>;
+
+        $i0 = virtualinvoke r3.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        interfaceinvoke $r6.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Data loaded : {} instances", $r7);
+
+        $r8 = new org.apache.mahout.classifier.df.Bagging;
+
+        $r9 = virtualinvoke r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: org.apache.mahout.classifier.df.builder.TreeBuilder getTreeBuilder()>();
+
+        specialinvoke $r8.<org.apache.mahout.classifier.df.Bagging: void <init>(org.apache.mahout.classifier.df.builder.TreeBuilder,org.apache.mahout.classifier.df.data.Data)>($r9, r3);
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: org.apache.mahout.classifier.df.Bagging bagging> = $r8;
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.IntWritable, org.apache.hadoop.io.NullWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper r0;
+        org.apache.hadoop.io.IntWritable r1;
+        org.apache.hadoop.io.NullWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: org.apache.hadoop.io.NullWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: void map(org.apache.hadoop.io.IntWritable,org.apache.hadoop.mapreduce.Mapper$Context)>(r1, r3);
+
+        return;
+    }
+
+    void map(org.apache.hadoop.io.IntWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper r0;
+        org.apache.hadoop.io.IntWritable r1;
+        org.apache.hadoop.mapreduce.Mapper$Context r2;
+        org.apache.mahout.classifier.df.node.Node r3;
+        org.apache.hadoop.mapreduce.InputSplit $r5;
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit $r6;
+        org.slf4j.Logger $r7, $r10;
+        java.util.Random $r8;
+        org.apache.mahout.classifier.df.Bagging $r9;
+        boolean $z0;
+        org.apache.mahout.classifier.df.mapreduce.MapredOutput $r11;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = virtualinvoke r2.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.mapreduce.InputSplit getInputSplit()>();
+
+        $r6 = (org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit) $r5;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: void initRandom(org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit)>($r6);
+
+        $r7 = <org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r7.<org.slf4j.Logger: void debug(java.lang.String)>("Building...");
+
+        $r9 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: org.apache.mahout.classifier.df.Bagging bagging>;
+
+        $r8 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: java.util.Random rng>;
+
+        r3 = virtualinvoke $r9.<org.apache.mahout.classifier.df.Bagging: org.apache.mahout.classifier.df.node.Node build(java.util.Random)>($r8);
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: boolean isOutput()>();
+
+        if $z0 == 0 goto label1;
+
+        $r10 = <org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r10.<org.slf4j.Logger: void debug(java.lang.String)>("Outputing...");
+
+        $r11 = new org.apache.mahout.classifier.df.mapreduce.MapredOutput;
+
+        specialinvoke $r11.<org.apache.mahout.classifier.df.mapreduce.MapredOutput: void <init>(org.apache.mahout.classifier.df.node.Node)>(r3);
+
+        virtualinvoke r2.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>(r1, $r11);
+
+     label1:
+        return;
+    }
+
+    void initRandom(org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit)
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper r0;
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit r1;
+        java.lang.Long r2;
+        java.util.Random $r3, $r6;
+        org.slf4j.Logger $r4;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit;
+
+        $r3 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: java.util.Random rng>;
+
+        if $r3 != null goto label3;
+
+        r2 = virtualinvoke r1.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit: java.lang.Long getSeed()>();
+
+        $r4 = <org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r4.<org.slf4j.Logger: void debug(java.lang.String,java.lang.Object)>("Initialising rng with seed : {}", r2);
+
+        if r2 != null goto label1;
+
+        $r6 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        goto label2;
+
+     label1:
+        $l0 = virtualinvoke r2.<java.lang.Long: long longValue()>();
+
+        $r6 = staticinvoke <org.apache.mahout.common.RandomUtils: java.util.Random getRandom(long)>($l0);
+
+     label2:
+        r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: java.util.Random rng> = $r6;
+
+     label3:
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.hadoop.io.NullWritable $r4;
+        org.apache.hadoop.io.IntWritable $r5;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.IntWritable) r1;
+
+        $r4 = (org.apache.hadoop.io.NullWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: void map(org.apache.hadoop.io.IntWritable,org.apache.hadoop.io.NullWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/classifier/df/mapreduce/inmem/InMemMapper");
+
+        <org.apache.mahout.classifier.df.mapreduce.inmem.InMemMapper: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

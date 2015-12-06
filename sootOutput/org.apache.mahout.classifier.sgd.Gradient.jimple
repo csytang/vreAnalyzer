@@ -1,0 +1,5 @@
+public interface  org.apache.mahout.classifier.sgd.Gradient extends java.lang.Object
+{
+
+    public abstract org.apache.mahout.math.Vector apply(java.lang.String, int, org.apache.mahout.math.Vector, org.apache.mahout.classifier.AbstractVectorClassifier);
+}

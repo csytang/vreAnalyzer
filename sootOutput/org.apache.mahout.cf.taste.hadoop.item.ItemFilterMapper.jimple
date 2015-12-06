@@ -1,0 +1,117 @@
+public class org.apache.mahout.cf.taste.hadoop.item.ItemFilterMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private static final java.util.regex.Pattern SEPARATOR;
+    private final org.apache.mahout.math.VarLongWritable itemIDWritable;
+    private final org.apache.mahout.math.VarLongWritable userIDWritable;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.ItemFilterMapper r0;
+        org.apache.mahout.math.VarLongWritable $r1, $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.ItemFilterMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.VarLongWritable;
+
+        specialinvoke $r1.<org.apache.mahout.math.VarLongWritable: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.ItemFilterMapper: org.apache.mahout.math.VarLongWritable itemIDWritable> = $r1;
+
+        $r2 = new org.apache.mahout.math.VarLongWritable;
+
+        specialinvoke $r2.<org.apache.mahout.math.VarLongWritable: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.ItemFilterMapper: org.apache.mahout.math.VarLongWritable userIDWritable> = $r2;
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.LongWritable, org.apache.hadoop.io.Text, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.ItemFilterMapper r0;
+        org.apache.hadoop.io.LongWritable r1;
+        org.apache.hadoop.io.Text r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        java.lang.String[] r4;
+        long l0, l1;
+        java.util.regex.Pattern $r5;
+        java.lang.String $r6, $r7, $r8;
+        org.apache.mahout.math.VarLongWritable $r9, $r10, $r11, $r12;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.ItemFilterMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.LongWritable;
+
+        r2 := @parameter1: org.apache.hadoop.io.Text;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = <org.apache.mahout.cf.taste.hadoop.item.ItemFilterMapper: java.util.regex.Pattern SEPARATOR>;
+
+        $r6 = virtualinvoke r2.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        r4 = virtualinvoke $r5.<java.util.regex.Pattern: java.lang.String[] split(java.lang.CharSequence)>($r6);
+
+        $r7 = r4[0];
+
+        l0 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r7);
+
+        $r8 = r4[1];
+
+        l1 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r8);
+
+        $r10 = r0.<org.apache.mahout.cf.taste.hadoop.item.ItemFilterMapper: org.apache.mahout.math.VarLongWritable itemIDWritable>;
+
+        virtualinvoke $r10.<org.apache.mahout.math.VarLongWritable: void set(long)>(l1);
+
+        $r9 = r0.<org.apache.mahout.cf.taste.hadoop.item.ItemFilterMapper: org.apache.mahout.math.VarLongWritable userIDWritable>;
+
+        virtualinvoke $r9.<org.apache.mahout.math.VarLongWritable: void set(long)>(l0);
+
+        $r11 = r0.<org.apache.mahout.cf.taste.hadoop.item.ItemFilterMapper: org.apache.mahout.math.VarLongWritable itemIDWritable>;
+
+        $r12 = r0.<org.apache.mahout.cf.taste.hadoop.item.ItemFilterMapper: org.apache.mahout.math.VarLongWritable userIDWritable>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r11, $r12);
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.ItemFilterMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.hadoop.io.Text $r4;
+        org.apache.hadoop.io.LongWritable $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.ItemFilterMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.LongWritable) r1;
+
+        $r4 = (org.apache.hadoop.io.Text) r2;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.ItemFilterMapper: void map(org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        java.util.regex.Pattern $r0;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("[\t,]");
+
+        <org.apache.mahout.cf.taste.hadoop.item.ItemFilterMapper: java.util.regex.Pattern SEPARATOR> = $r0;
+
+        return;
+    }
+}

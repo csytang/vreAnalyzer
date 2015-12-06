@@ -1,0 +1,72 @@
+public class org.apache.mahout.clustering.lda.cvb.CVB0TopicTermVectorNormalizerMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.lda.cvb.CVB0TopicTermVectorNormalizerMapper r0;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CVB0TopicTermVectorNormalizerMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.IntWritable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CVB0TopicTermVectorNormalizerMapper r0;
+        org.apache.hadoop.io.IntWritable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.Vector $r4, $r5;
+        double $d0;
+        org.apache.mahout.math.function.DoubleFunction $r6;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CVB0TopicTermVectorNormalizerMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r4 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r5 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $d0 = interfaceinvoke $r5.<org.apache.mahout.math.Vector: double norm(double)>(1.0);
+
+        $r6 = staticinvoke <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleFunction div(double)>($d0);
+
+        interfaceinvoke $r4.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.function.DoubleFunction)>($r6);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>(r1, r2);
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CVB0TopicTermVectorNormalizerMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.IntWritable $r5;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CVB0TopicTermVectorNormalizerMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.IntWritable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.CVB0TopicTermVectorNormalizerMapper: void map(org.apache.hadoop.io.IntWritable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

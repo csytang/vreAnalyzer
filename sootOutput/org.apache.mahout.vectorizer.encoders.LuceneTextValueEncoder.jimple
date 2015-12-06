@@ -1,0 +1,80 @@
+public class org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder extends org.apache.mahout.vectorizer.encoders.TextValueEncoder
+{
+    private org.apache.lucene.analysis.Analyzer analyzer;
+
+    public void <init>(java.lang.String)
+    {
+        org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder r0;
+        java.lang.String r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder;
+
+        r1 := @parameter0: java.lang.String;
+
+        specialinvoke r0.<org.apache.mahout.vectorizer.encoders.TextValueEncoder: void <init>(java.lang.String)>(r1);
+
+        return;
+    }
+
+    public void setAnalyzer(org.apache.lucene.analysis.Analyzer)
+    {
+        org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder r0;
+        org.apache.lucene.analysis.Analyzer r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder;
+
+        r1 := @parameter0: org.apache.lucene.analysis.Analyzer;
+
+        r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder: org.apache.lucene.analysis.Analyzer analyzer> = r1;
+
+        return;
+    }
+
+    protected java.lang.Iterable tokenize(java.lang.CharSequence)
+    {
+        org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder r0;
+        java.lang.CharSequence r1;
+        org.apache.lucene.analysis.Analyzer $r2;
+        java.lang.String $r3;
+        org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader $r4;
+        org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable $r6;
+        java.io.IOException $r7;
+        java.lang.IllegalStateException $r8;
+        org.apache.lucene.analysis.TokenStream r9;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder;
+
+        r1 := @parameter0: java.lang.CharSequence;
+
+     label1:
+        $r2 = r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder: org.apache.lucene.analysis.Analyzer analyzer>;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder: java.lang.String getName()>();
+
+        $r4 = new org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader;
+
+        specialinvoke $r4.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader: void <init>(java.lang.CharSequence,org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$1)>(r1, null);
+
+        r9 = virtualinvoke $r2.<org.apache.lucene.analysis.Analyzer: org.apache.lucene.analysis.TokenStream tokenStream(java.lang.String,java.io.Reader)>($r3, $r4);
+
+        virtualinvoke r9.<org.apache.lucene.analysis.TokenStream: org.apache.lucene.util.Attribute addAttribute(java.lang.Class)>(class "org/apache/lucene/analysis/tokenattributes/CharTermAttribute");
+
+        $r6 = new org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable;
+
+        specialinvoke $r6.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable: void <init>(org.apache.lucene.analysis.TokenStream,boolean,org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$1)>(r9, 0, null);
+
+     label2:
+        return $r6;
+
+     label3:
+        $r7 := @caughtexception;
+
+        $r8 = new java.lang.IllegalStateException;
+
+        specialinvoke $r8.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r7);
+
+        throw $r8;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+}

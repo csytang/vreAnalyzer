@@ -1,0 +1,62 @@
+public class org.apache.mahout.vectorizer.TFIDF extends java.lang.Object implements org.apache.mahout.vectorizer.Weight
+{
+    private final org.apache.lucene.search.similarities.DefaultSimilarity sim;
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.TFIDF r0;
+        org.apache.lucene.search.similarities.DefaultSimilarity $r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.TFIDF;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new org.apache.lucene.search.similarities.DefaultSimilarity;
+
+        specialinvoke $r1.<org.apache.lucene.search.similarities.DefaultSimilarity: void <init>()>();
+
+        r0.<org.apache.mahout.vectorizer.TFIDF: org.apache.lucene.search.similarities.DefaultSimilarity sim> = $r1;
+
+        return;
+    }
+
+    public double calculate(int, int, int, int)
+    {
+        org.apache.mahout.vectorizer.TFIDF r0;
+        int i0, i1, i2, i3;
+        float $f0, $f1, $f2, $f3;
+        org.apache.lucene.search.similarities.DefaultSimilarity $r1, $r2;
+        long $l4, $l5;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.vectorizer.TFIDF;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 := @parameter2: int;
+
+        i3 := @parameter3: int;
+
+        $r1 = r0.<org.apache.mahout.vectorizer.TFIDF: org.apache.lucene.search.similarities.DefaultSimilarity sim>;
+
+        $f0 = (float) i0;
+
+        $f1 = virtualinvoke $r1.<org.apache.lucene.search.similarities.DefaultSimilarity: float tf(float)>($f0);
+
+        $r2 = r0.<org.apache.mahout.vectorizer.TFIDF: org.apache.lucene.search.similarities.DefaultSimilarity sim>;
+
+        $l5 = (long) i1;
+
+        $l4 = (long) i3;
+
+        $f2 = virtualinvoke $r2.<org.apache.lucene.search.similarities.DefaultSimilarity: float idf(long,long)>($l5, $l4);
+
+        $f3 = $f1 * $f2;
+
+        $d0 = (double) $f3;
+
+        return $d0;
+    }
+}

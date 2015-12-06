@@ -1,0 +1,11 @@
+public interface  org.apache.mahout.cf.taste.model.Preference extends java.lang.Object
+{
+
+    public abstract long getUserID();
+
+    public abstract long getItemID();
+
+    public abstract float getValue();
+
+    public abstract void setValue(float);
+}

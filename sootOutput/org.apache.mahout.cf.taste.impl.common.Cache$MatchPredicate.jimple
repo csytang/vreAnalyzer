@@ -1,0 +1,5 @@
+public interface  org.apache.mahout.cf.taste.impl.common.Cache$MatchPredicate extends java.lang.Object
+{
+
+    public abstract boolean matches(java.lang.Object);
+}

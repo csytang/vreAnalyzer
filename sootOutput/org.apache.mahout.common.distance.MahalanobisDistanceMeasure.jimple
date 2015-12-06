@@ -1,0 +1,691 @@
+public class org.apache.mahout.common.distance.MahalanobisDistanceMeasure extends java.lang.Object implements org.apache.mahout.common.distance.DistanceMeasure
+{
+    private org.apache.mahout.math.Matrix inverseCovarianceMatrix;
+    private org.apache.mahout.math.Vector meanVector;
+    private org.apache.mahout.common.parameters.ClassParameter vectorClass;
+    private org.apache.mahout.common.parameters.ClassParameter matrixClass;
+    private java.util.List parameters;
+    private org.apache.mahout.common.parameters.Parameter inverseCovarianceFile;
+    private org.apache.mahout.common.parameters.Parameter meanVectorFile;
+
+    public void <init>()
+    {
+        org.apache.mahout.common.distance.MahalanobisDistanceMeasure r0;
+
+        r0 := @this: org.apache.mahout.common.distance.MahalanobisDistanceMeasure;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void configure(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.common.distance.MahalanobisDistanceMeasure r0;
+        org.apache.hadoop.conf.Configuration r1;
+        java.util.List $r6;
+        org.apache.mahout.common.parameters.Parameter $r7, $r10, $r16, $r20, $r26, $r30, $r35, $r39, $r43, $r65;
+        java.lang.Object $r8, $r9, $r15, $r17, $r19, $r22, $r23, $r27, $r31, $r34, $r36, $r38, $r47, $r66;
+        java.net.URI $r11, $r33;
+        org.apache.hadoop.fs.Path $r12, $r18, $r21, $r24, $r28, $r40, $r41, $r48;
+        org.apache.mahout.common.parameters.ClassParameter $r13, $r32;
+        java.lang.Class $r14, $r37;
+        boolean $z0, $z1, $z2, $z3;
+        java.io.FileNotFoundException $r25, $r42;
+        java.lang.String $r29, $r49;
+        java.lang.Throwable $r45, $r46, $r50, $r51, $r52, $r53, r60, r70;
+        java.lang.IllegalStateException $r55;
+        java.io.IOException $r56;
+        org.apache.hadoop.fs.FileSystem r57, r67;
+        org.apache.mahout.math.MatrixWritable r58;
+        org.apache.hadoop.fs.FSDataInputStream r59, r69;
+        org.apache.mahout.math.Matrix $r63, $r64;
+        org.apache.mahout.math.VectorWritable r68;
+        org.apache.mahout.math.Vector $r73, $r74;
+
+        r0 := @this: org.apache.mahout.common.distance.MahalanobisDistanceMeasure;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        $r6 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: java.util.List parameters>;
+
+        if $r6 != null goto label01;
+
+        staticinvoke <org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations: void configureParameters(org.apache.mahout.common.parameters.Parametered,org.apache.hadoop.conf.Configuration)>(r0, r1);
+
+     label01:
+        $r7 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.Parameter inverseCovarianceFile>;
+
+        $r8 = interfaceinvoke $r7.<org.apache.mahout.common.parameters.Parameter: java.lang.Object get()>();
+
+        if $r8 == null goto label16;
+
+        $r30 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.Parameter inverseCovarianceFile>;
+
+        $r27 = interfaceinvoke $r30.<org.apache.mahout.common.parameters.Parameter: java.lang.Object get()>();
+
+        $r28 = (org.apache.hadoop.fs.Path) $r27;
+
+        $r33 = virtualinvoke $r28.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r57 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r33, r1);
+
+        $r32 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.ClassParameter matrixClass>;
+
+        $r31 = virtualinvoke $r32.<org.apache.mahout.common.parameters.ClassParameter: java.lang.Object get()>();
+
+        $r37 = (java.lang.Class) $r31;
+
+        $r36 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.Class,java.lang.Class)>($r37, class "org/apache/mahout/math/MatrixWritable");
+
+        r58 = (org.apache.mahout.math.MatrixWritable) $r36;
+
+        $r35 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.Parameter inverseCovarianceFile>;
+
+        $r34 = interfaceinvoke $r35.<org.apache.mahout.common.parameters.Parameter: java.lang.Object get()>();
+
+        $r40 = (org.apache.hadoop.fs.Path) $r34;
+
+        $z1 = virtualinvoke r57.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>($r40);
+
+        if $z1 != 0 goto label02;
+
+        $r42 = new java.io.FileNotFoundException;
+
+        $r43 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.Parameter inverseCovarianceFile>;
+
+        $r47 = interfaceinvoke $r43.<org.apache.mahout.common.parameters.Parameter: java.lang.Object get()>();
+
+        $r48 = (org.apache.hadoop.fs.Path) $r47;
+
+        $r49 = virtualinvoke $r48.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        specialinvoke $r42.<java.io.FileNotFoundException: void <init>(java.lang.String)>($r49);
+
+        throw $r42;
+
+     label02:
+        $r39 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.Parameter inverseCovarianceFile>;
+
+        $r38 = interfaceinvoke $r39.<org.apache.mahout.common.parameters.Parameter: java.lang.Object get()>();
+
+        $r41 = (org.apache.hadoop.fs.Path) $r38;
+
+        r59 = virtualinvoke r57.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataInputStream open(org.apache.hadoop.fs.Path)>($r41);
+
+        r60 = null;
+
+     label03:
+        virtualinvoke r58.<org.apache.mahout.math.MatrixWritable: void readFields(java.io.DataInput)>(r59);
+
+     label04:
+        if r59 == null goto label13;
+
+        virtualinvoke r59.<java.io.DataInputStream: void close()>();
+
+        goto label13;
+
+     label05:
+        $r52 := @caughtexception;
+
+        r60 = $r52;
+
+        throw $r52;
+
+     label06:
+        $r45 := @caughtexception;
+
+     label07:
+        if r59 == null goto label12;
+
+        if r60 == null goto label11;
+
+     label08:
+        virtualinvoke r59.<java.io.DataInputStream: void close()>();
+
+     label09:
+        goto label12;
+
+     label10:
+        $r46 := @caughtexception;
+
+        virtualinvoke r60.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r46);
+
+        goto label12;
+
+     label11:
+        virtualinvoke r59.<java.io.DataInputStream: void close()>();
+
+     label12:
+        throw $r45;
+
+     label13:
+        $r63 = virtualinvoke r58.<org.apache.mahout.math.MatrixWritable: org.apache.mahout.math.Matrix get()>();
+
+        r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.math.Matrix inverseCovarianceMatrix> = $r63;
+
+        $r64 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.math.Matrix inverseCovarianceMatrix>;
+
+        if $r64 == null goto label14;
+
+        $z2 = 1;
+
+        goto label15;
+
+     label14:
+        $z2 = 0;
+
+     label15:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z2, "inverseCovarianceMatrix not initialized");
+
+     label16:
+        $r65 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.Parameter meanVectorFile>;
+
+        $r66 = interfaceinvoke $r65.<org.apache.mahout.common.parameters.Parameter: java.lang.Object get()>();
+
+        if $r66 == null goto label33;
+
+        $r10 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.Parameter meanVectorFile>;
+
+        $r9 = interfaceinvoke $r10.<org.apache.mahout.common.parameters.Parameter: java.lang.Object get()>();
+
+        $r12 = (org.apache.hadoop.fs.Path) $r9;
+
+        $r11 = virtualinvoke $r12.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r67 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r11, r1);
+
+        $r13 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.ClassParameter vectorClass>;
+
+        $r15 = virtualinvoke $r13.<org.apache.mahout.common.parameters.ClassParameter: java.lang.Object get()>();
+
+        $r14 = (java.lang.Class) $r15;
+
+        $r17 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.Class,java.lang.Class)>($r14, class "org/apache/mahout/math/VectorWritable");
+
+        r68 = (org.apache.mahout.math.VectorWritable) $r17;
+
+        $r16 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.Parameter meanVectorFile>;
+
+        $r19 = interfaceinvoke $r16.<org.apache.mahout.common.parameters.Parameter: java.lang.Object get()>();
+
+        $r18 = (org.apache.hadoop.fs.Path) $r19;
+
+        $z0 = virtualinvoke r67.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>($r18);
+
+        if $z0 != 0 goto label17;
+
+        $r25 = new java.io.FileNotFoundException;
+
+        $r26 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.Parameter meanVectorFile>;
+
+        $r23 = interfaceinvoke $r26.<org.apache.mahout.common.parameters.Parameter: java.lang.Object get()>();
+
+        $r24 = (org.apache.hadoop.fs.Path) $r23;
+
+        $r29 = virtualinvoke $r24.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        specialinvoke $r25.<java.io.FileNotFoundException: void <init>(java.lang.String)>($r29);
+
+        throw $r25;
+
+     label17:
+        $r20 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.Parameter meanVectorFile>;
+
+        $r22 = interfaceinvoke $r20.<org.apache.mahout.common.parameters.Parameter: java.lang.Object get()>();
+
+        $r21 = (org.apache.hadoop.fs.Path) $r22;
+
+        r69 = virtualinvoke r67.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataInputStream open(org.apache.hadoop.fs.Path)>($r21);
+
+        r70 = null;
+
+     label18:
+        virtualinvoke r68.<org.apache.mahout.math.VectorWritable: void readFields(java.io.DataInput)>(r69);
+
+     label19:
+        if r69 == null goto label28;
+
+        virtualinvoke r69.<java.io.DataInputStream: void close()>();
+
+        goto label28;
+
+     label20:
+        $r51 := @caughtexception;
+
+        r70 = $r51;
+
+        throw $r51;
+
+     label21:
+        $r50 := @caughtexception;
+
+     label22:
+        if r69 == null goto label27;
+
+        if r70 == null goto label26;
+
+     label23:
+        virtualinvoke r69.<java.io.DataInputStream: void close()>();
+
+     label24:
+        goto label27;
+
+     label25:
+        $r53 := @caughtexception;
+
+        virtualinvoke r70.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r53);
+
+        goto label27;
+
+     label26:
+        virtualinvoke r69.<java.io.DataInputStream: void close()>();
+
+     label27:
+        throw $r50;
+
+     label28:
+        $r73 = virtualinvoke r68.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.math.Vector meanVector> = $r73;
+
+        $r74 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.math.Vector meanVector>;
+
+        if $r74 == null goto label29;
+
+        $z3 = 1;
+
+        goto label30;
+
+     label29:
+        $z3 = 0;
+
+     label30:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z3, "meanVector not initialized");
+
+     label31:
+        goto label33;
+
+     label32:
+        $r56 := @caughtexception;
+
+        $r55 = new java.lang.IllegalStateException;
+
+        specialinvoke $r55.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r56);
+
+        throw $r55;
+
+     label33:
+        return;
+
+        catch java.lang.Throwable from label03 to label04 with label05;
+        catch java.lang.Throwable from label03 to label04 with label06;
+        catch java.lang.Throwable from label08 to label09 with label10;
+        catch java.lang.Throwable from label05 to label07 with label06;
+        catch java.lang.Throwable from label18 to label19 with label20;
+        catch java.lang.Throwable from label18 to label19 with label21;
+        catch java.lang.Throwable from label23 to label24 with label25;
+        catch java.lang.Throwable from label20 to label22 with label21;
+        catch java.io.IOException from label01 to label31 with label32;
+    }
+
+    public java.util.Collection getParameters()
+    {
+        org.apache.mahout.common.distance.MahalanobisDistanceMeasure r0;
+        java.util.List $r1;
+
+        r0 := @this: org.apache.mahout.common.distance.MahalanobisDistanceMeasure;
+
+        $r1 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: java.util.List parameters>;
+
+        return $r1;
+    }
+
+    public void createParameters(java.lang.String, org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.common.distance.MahalanobisDistanceMeasure r0;
+        java.lang.String r1;
+        org.apache.hadoop.conf.Configuration r2;
+        java.util.ArrayList $r3;
+        org.apache.mahout.common.parameters.PathParameter $r4, $r10;
+        org.apache.mahout.common.parameters.Parameter $r5, $r11;
+        java.util.List $r6, $r9, $r12, $r15;
+        org.apache.mahout.common.parameters.ClassParameter $r7, $r8, $r13, $r14;
+
+        r0 := @this: org.apache.mahout.common.distance.MahalanobisDistanceMeasure;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        $r3 = new java.util.ArrayList;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>()>();
+
+        r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: java.util.List parameters> = $r3;
+
+        $r4 = new org.apache.mahout.common.parameters.PathParameter;
+
+        specialinvoke $r4.<org.apache.mahout.common.parameters.PathParameter: void <init>(java.lang.String,java.lang.String,org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.lang.String)>(r1, "inverseCovarianceFile", r2, null, "Path on DFS to a file containing the inverse covariance matrix.");
+
+        r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.Parameter inverseCovarianceFile> = $r4;
+
+        $r6 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: java.util.List parameters>;
+
+        $r5 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.Parameter inverseCovarianceFile>;
+
+        interfaceinvoke $r6.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        $r7 = new org.apache.mahout.common.parameters.ClassParameter;
+
+        specialinvoke $r7.<org.apache.mahout.common.parameters.ClassParameter: void <init>(java.lang.String,java.lang.String,org.apache.hadoop.conf.Configuration,java.lang.Class,java.lang.String)>(r1, "maxtrixClass", r2, class "org/apache/mahout/math/DenseMatrix", "Class<Matix> file specified in parameter inverseCovarianceFile has been serialized with.");
+
+        r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.ClassParameter matrixClass> = $r7;
+
+        $r9 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: java.util.List parameters>;
+
+        $r8 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.ClassParameter matrixClass>;
+
+        interfaceinvoke $r9.<java.util.List: boolean add(java.lang.Object)>($r8);
+
+        $r10 = new org.apache.mahout.common.parameters.PathParameter;
+
+        specialinvoke $r10.<org.apache.mahout.common.parameters.PathParameter: void <init>(java.lang.String,java.lang.String,org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.lang.String)>(r1, "meanVectorFile", r2, null, "Path on DFS to a file containing the mean Vector.");
+
+        r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.Parameter meanVectorFile> = $r10;
+
+        $r12 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: java.util.List parameters>;
+
+        $r11 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.Parameter meanVectorFile>;
+
+        interfaceinvoke $r12.<java.util.List: boolean add(java.lang.Object)>($r11);
+
+        $r14 = new org.apache.mahout.common.parameters.ClassParameter;
+
+        specialinvoke $r14.<org.apache.mahout.common.parameters.ClassParameter: void <init>(java.lang.String,java.lang.String,org.apache.hadoop.conf.Configuration,java.lang.Class,java.lang.String)>(r1, "vectorClass", r2, class "org/apache/mahout/math/DenseVector", "Class file specified in parameter meanVectorFile has been serialized with.");
+
+        r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.ClassParameter vectorClass> = $r14;
+
+        $r15 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: java.util.List parameters>;
+
+        $r13 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.ClassParameter vectorClass>;
+
+        interfaceinvoke $r15.<java.util.List: boolean add(java.lang.Object)>($r13);
+
+        return;
+    }
+
+    public double distance(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.common.distance.MahalanobisDistanceMeasure r0;
+        org.apache.mahout.math.Vector r1, $r2, $r3, $r4, $r6, $r7;
+        org.apache.mahout.math.Matrix $r5;
+        double $d0, $d1;
+
+        r0 := @this: org.apache.mahout.common.distance.MahalanobisDistanceMeasure;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $r2 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.math.Vector meanVector>;
+
+        $r3 = interfaceinvoke r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector minus(org.apache.mahout.math.Vector)>($r2);
+
+        $r5 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.math.Matrix inverseCovarianceMatrix>;
+
+        $r4 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.math.Vector meanVector>;
+
+        $r6 = interfaceinvoke r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector minus(org.apache.mahout.math.Vector)>($r4);
+
+        $r7 = staticinvoke <org.apache.mahout.math.Algebra: org.apache.mahout.math.Vector mult(org.apache.mahout.math.Matrix,org.apache.mahout.math.Vector)>($r5, $r6);
+
+        $d0 = interfaceinvoke $r3.<org.apache.mahout.math.Vector: double dot(org.apache.mahout.math.Vector)>($r7);
+
+        $d1 = staticinvoke <java.lang.Math: double sqrt(double)>($d0);
+
+        return $d1;
+    }
+
+    public double distance(org.apache.mahout.math.Vector, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.common.distance.MahalanobisDistanceMeasure r0;
+        org.apache.mahout.math.Vector r1, r2, $r3, $r5, $r6;
+        int $i0, $i1, $i2, $i3;
+        org.apache.mahout.math.Matrix $r4;
+        double $d0, $d1;
+        org.apache.mahout.math.CardinalityException $r7;
+
+        r0 := @this: org.apache.mahout.common.distance.MahalanobisDistanceMeasure;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 := @parameter1: org.apache.mahout.math.Vector;
+
+        $i0 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int size()>();
+
+        $i1 = interfaceinvoke r2.<org.apache.mahout.math.Vector: int size()>();
+
+        if $i0 == $i1 goto label1;
+
+        $r7 = new org.apache.mahout.math.CardinalityException;
+
+        $i2 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int size()>();
+
+        $i3 = interfaceinvoke r2.<org.apache.mahout.math.Vector: int size()>();
+
+        specialinvoke $r7.<org.apache.mahout.math.CardinalityException: void <init>(int,int)>($i2, $i3);
+
+        throw $r7;
+
+     label1:
+        $r3 = interfaceinvoke r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector minus(org.apache.mahout.math.Vector)>(r2);
+
+        $r4 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.math.Matrix inverseCovarianceMatrix>;
+
+        $r5 = interfaceinvoke r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector minus(org.apache.mahout.math.Vector)>(r2);
+
+        $r6 = staticinvoke <org.apache.mahout.math.Algebra: org.apache.mahout.math.Vector mult(org.apache.mahout.math.Matrix,org.apache.mahout.math.Vector)>($r4, $r5);
+
+        $d0 = interfaceinvoke $r3.<org.apache.mahout.math.Vector: double dot(org.apache.mahout.math.Vector)>($r6);
+
+        $d1 = staticinvoke <java.lang.Math: double sqrt(double)>($d0);
+
+        return $d1;
+    }
+
+    public double distance(double, org.apache.mahout.math.Vector, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.common.distance.MahalanobisDistanceMeasure r0;
+        double d0, $d1;
+        org.apache.mahout.math.Vector r1, r2;
+
+        r0 := @this: org.apache.mahout.common.distance.MahalanobisDistanceMeasure;
+
+        d0 := @parameter0: double;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        r2 := @parameter2: org.apache.mahout.math.Vector;
+
+        $d1 = virtualinvoke r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r1, r2);
+
+        return $d1;
+    }
+
+    public void setInverseCovarianceMatrix(org.apache.mahout.math.Matrix)
+    {
+        org.apache.mahout.common.distance.MahalanobisDistanceMeasure r0;
+        org.apache.mahout.math.Matrix r1;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.common.distance.MahalanobisDistanceMeasure;
+
+        r1 := @parameter0: org.apache.mahout.math.Matrix;
+
+        if r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "inverseCovarianceMatrix not initialized");
+
+        r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.math.Matrix inverseCovarianceMatrix> = r1;
+
+        return;
+    }
+
+    public void setCovarianceMatrix(org.apache.mahout.math.Matrix)
+    {
+        org.apache.mahout.common.distance.MahalanobisDistanceMeasure r0;
+        org.apache.mahout.math.Matrix r1, r3, $r5, $r6, $r7, $r8, $r9, $r10;
+        double d0, $d1;
+        int $i0, $i1, $i2, $i4, $i5, i6;
+        org.apache.mahout.math.SingularValueDecomposition $r4;
+        byte $b3;
+        java.lang.IllegalStateException $r11;
+        org.apache.mahout.math.CardinalityException $r12;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.common.distance.MahalanobisDistanceMeasure;
+
+        r1 := @parameter0: org.apache.mahout.math.Matrix;
+
+        $i0 = interfaceinvoke r1.<org.apache.mahout.math.Matrix: int numRows()>();
+
+        $i1 = interfaceinvoke r1.<org.apache.mahout.math.Matrix: int numCols()>();
+
+        if $i0 == $i1 goto label1;
+
+        $r12 = new org.apache.mahout.math.CardinalityException;
+
+        $i4 = interfaceinvoke r1.<org.apache.mahout.math.Matrix: int numRows()>();
+
+        $i5 = interfaceinvoke r1.<org.apache.mahout.math.Matrix: int numCols()>();
+
+        specialinvoke $r12.<org.apache.mahout.math.CardinalityException: void <init>(int,int)>($i4, $i5);
+
+        throw $r12;
+
+     label1:
+        $r4 = new org.apache.mahout.math.SingularValueDecomposition;
+
+        specialinvoke $r4.<org.apache.mahout.math.SingularValueDecomposition: void <init>(org.apache.mahout.math.Matrix)>(r1);
+
+        r3 = virtualinvoke $r4.<org.apache.mahout.math.SingularValueDecomposition: org.apache.mahout.math.Matrix getS()>();
+
+        i6 = 0;
+
+     label2:
+        $i2 = interfaceinvoke r3.<org.apache.mahout.math.Matrix: int numRows()>();
+
+        if i6 >= $i2 goto label5;
+
+        d0 = interfaceinvoke r3.<org.apache.mahout.math.Matrix: double get(int,int)>(i6, i6);
+
+        $b3 = d0 cmpl 0.0;
+
+        if $b3 <= 0 goto label3;
+
+        $d1 = 1.0 / d0;
+
+        interfaceinvoke r3.<org.apache.mahout.math.Matrix: void set(int,int,double)>(i6, i6, $d1);
+
+        goto label4;
+
+     label3:
+        $r11 = new java.lang.IllegalStateException;
+
+        specialinvoke $r11.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Eigen Value equals to 0 found.");
+
+        throw $r11;
+
+     label4:
+        i6 = i6 + 1;
+
+        goto label2;
+
+     label5:
+        $r5 = virtualinvoke $r4.<org.apache.mahout.math.SingularValueDecomposition: org.apache.mahout.math.Matrix getU()>();
+
+        $r6 = virtualinvoke $r4.<org.apache.mahout.math.SingularValueDecomposition: org.apache.mahout.math.Matrix getU()>();
+
+        $r7 = interfaceinvoke $r6.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Matrix transpose()>();
+
+        $r8 = interfaceinvoke r3.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Matrix times(org.apache.mahout.math.Matrix)>($r7);
+
+        $r10 = interfaceinvoke $r5.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Matrix times(org.apache.mahout.math.Matrix)>($r8);
+
+        r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.math.Matrix inverseCovarianceMatrix> = $r10;
+
+        $r9 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.math.Matrix inverseCovarianceMatrix>;
+
+        if $r9 == null goto label6;
+
+        $z0 = 1;
+
+        goto label7;
+
+     label6:
+        $z0 = 0;
+
+     label7:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "inverseCovarianceMatrix not initialized");
+
+        return;
+    }
+
+    public org.apache.mahout.math.Matrix getInverseCovarianceMatrix()
+    {
+        org.apache.mahout.common.distance.MahalanobisDistanceMeasure r0;
+        org.apache.mahout.math.Matrix $r1;
+
+        r0 := @this: org.apache.mahout.common.distance.MahalanobisDistanceMeasure;
+
+        $r1 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.math.Matrix inverseCovarianceMatrix>;
+
+        return $r1;
+    }
+
+    public void setMeanVector(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.common.distance.MahalanobisDistanceMeasure r0;
+        org.apache.mahout.math.Vector r1;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.common.distance.MahalanobisDistanceMeasure;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        if r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "meanVector not initialized");
+
+        r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.math.Vector meanVector> = r1;
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector getMeanVector()
+    {
+        org.apache.mahout.common.distance.MahalanobisDistanceMeasure r0;
+        org.apache.mahout.math.Vector $r1;
+
+        r0 := @this: org.apache.mahout.common.distance.MahalanobisDistanceMeasure;
+
+        $r1 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.math.Vector meanVector>;
+
+        return $r1;
+    }
+}

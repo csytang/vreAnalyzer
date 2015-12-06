@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import javax.swing.table.DefaultTableModel;
+
 import vreAnalyzer.Util.RandomColor;
 
 public class VariantColorMap {
@@ -66,11 +68,7 @@ public class VariantColorMap {
 	// 将Color转化为十六进制字符串
 	public String ColorToHex(Color col){
 		String hex = "";
-		hex = Integer.toHexString(col.getRGB() & 0xffffff);
-		if (hex.length() < 6) {
-		    hex = "0" + hex;
-		}
-		hex = "#" + hex;
+		hex = String.format("#%02x%02x%02x", col.getRed(), col.getGreen(), col.getBlue());
 		return hex;
 	}
 	public void removeColorMap (Variant vi) {

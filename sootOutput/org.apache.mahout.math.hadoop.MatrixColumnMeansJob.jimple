@@ -1,0 +1,209 @@
+public final class org.apache.mahout.math.hadoop.MatrixColumnMeansJob extends java.lang.Object
+{
+    public static final java.lang.String VECTOR_CLASS;
+
+    private void <init>()
+    {
+        org.apache.mahout.math.hadoop.MatrixColumnMeansJob r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.MatrixColumnMeansJob;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.mahout.math.Vector run(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r2;
+        org.apache.mahout.math.Vector $r3;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        $r3 = staticinvoke <org.apache.mahout.math.hadoop.MatrixColumnMeansJob: org.apache.mahout.math.Vector run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.String)>(r0, r1, r2, null);
+
+        return $r3;
+    }
+
+    public static org.apache.mahout.math.Vector run(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, java.lang.String) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0, $r8;
+        org.apache.hadoop.fs.Path r1, r2, $r10;
+        java.lang.String r3, $r28;
+        org.apache.hadoop.mapreduce.Job $r7;
+        org.apache.hadoop.fs.FileSystem $r9;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator $r11;
+        java.lang.Class $r12, $r13, $r22;
+        boolean $z2;
+        java.lang.Class[] $r14;
+        java.lang.Object[] $r15;
+        java.lang.reflect.Constructor $r16;
+        java.lang.Integer $r17;
+        java.lang.Object $r18, $r19;
+        org.apache.mahout.math.VectorWritable $r20;
+        java.io.IOException $r24, $r26;
+        java.lang.Throwable $r25, $r27;
+        org.apache.mahout.math.Vector r30, r31;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter3: java.lang.String;
+
+     label01:
+        if r3 != null goto label02;
+
+        $r22 = class "org/apache/mahout/math/DenseVector";
+
+        $r28 = virtualinvoke $r22.<java.lang.Class: java.lang.String getName()>();
+
+        goto label03;
+
+     label02:
+        $r28 = r3;
+
+     label03:
+        virtualinvoke r0.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("DistributedRowMatrix.columnMeans.vector.class", $r28);
+
+        $r7 = new org.apache.hadoop.mapreduce.Job;
+
+        specialinvoke $r7.<org.apache.hadoop.mapreduce.Job: void <init>(org.apache.hadoop.conf.Configuration,java.lang.String)>(r0, "MatrixColumnMeansJob");
+
+        virtualinvoke $r7.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(class "org/apache/mahout/math/hadoop/MatrixColumnMeansJob");
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r7, r2);
+
+        $r8 = virtualinvoke $r7.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r9 = virtualinvoke r2.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>($r8);
+
+        virtualinvoke $r9.<org.apache.hadoop.fs.FileSystem: boolean delete(org.apache.hadoop.fs.Path,boolean)>(r2, 1);
+
+        virtualinvoke $r7.<org.apache.hadoop.mapreduce.Job: void setNumReduceTasks(int)>(1);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r7, r2);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void addInputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r7, r1);
+
+        virtualinvoke $r7.<org.apache.hadoop.mapreduce.Job: void setInputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat");
+
+        virtualinvoke $r7.<org.apache.hadoop.mapreduce.Job: void setOutputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r7, r2);
+
+        virtualinvoke $r7.<org.apache.hadoop.mapreduce.Job: void setMapperClass(java.lang.Class)>(class "org/apache/mahout/math/hadoop/MatrixColumnMeansJob$MatrixColumnMeansMapper");
+
+        virtualinvoke $r7.<org.apache.hadoop.mapreduce.Job: void setReducerClass(java.lang.Class)>(class "org/apache/mahout/math/hadoop/MatrixColumnMeansJob$MatrixColumnMeansReducer");
+
+        virtualinvoke $r7.<org.apache.hadoop.mapreduce.Job: void setMapOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/NullWritable");
+
+        virtualinvoke $r7.<org.apache.hadoop.mapreduce.Job: void setMapOutputValueClass(java.lang.Class)>(class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke $r7.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/IntWritable");
+
+        virtualinvoke $r7.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke $r7.<org.apache.hadoop.mapreduce.Job: void submit()>();
+
+        virtualinvoke $r7.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        $r10 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r10.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r2, "part-r-00000");
+
+        $r11 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator;
+
+        specialinvoke $r11.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: void <init>(org.apache.hadoop.fs.Path,boolean,org.apache.hadoop.conf.Configuration)>($r10, 1, r0);
+
+     label04:
+        $z2 = virtualinvoke $r11.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label07;
+
+        $r18 = virtualinvoke $r11.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: java.lang.Object next()>();
+
+        $r20 = (org.apache.mahout.math.VectorWritable) $r18;
+
+        r30 = virtualinvoke $r20.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+     label05:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r11, 1);
+
+     label06:
+        return r30;
+
+     label07:
+        $r12 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>(r3);
+
+        $r14 = newarray (java.lang.Class)[1];
+
+        $r13 = <java.lang.Integer: java.lang.Class TYPE>;
+
+        $r14[0] = $r13;
+
+        $r16 = virtualinvoke $r12.<java.lang.Class: java.lang.reflect.Constructor getConstructor(java.lang.Class[])>($r14);
+
+        $r15 = newarray (java.lang.Object)[1];
+
+        $r17 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(0);
+
+        $r15[0] = $r17;
+
+        $r19 = virtualinvoke $r16.<java.lang.reflect.Constructor: java.lang.Object newInstance(java.lang.Object[])>($r15);
+
+        r31 = (org.apache.mahout.math.Vector) $r19;
+
+     label08:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r11, 1);
+
+     label09:
+        return r31;
+
+     label10:
+        $r25 := @caughtexception;
+
+     label11:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r11, 1);
+
+        throw $r25;
+
+     label12:
+        $r26 := @caughtexception;
+
+        throw $r26;
+
+     label13:
+        $r27 := @caughtexception;
+
+        $r24 = new java.io.IOException;
+
+        specialinvoke $r24.<java.io.IOException: void <init>(java.lang.Throwable)>($r27);
+
+        throw $r24;
+
+        catch java.lang.Throwable from label04 to label05 with label10;
+        catch java.lang.Throwable from label07 to label08 with label10;
+        catch java.lang.Throwable from label10 to label11 with label10;
+        catch java.io.IOException from label01 to label06 with label12;
+        catch java.io.IOException from label07 to label09 with label12;
+        catch java.io.IOException from label10 to label12 with label12;
+        catch java.lang.Throwable from label01 to label06 with label13;
+        catch java.lang.Throwable from label07 to label09 with label13;
+        catch java.lang.Throwable from label10 to label12 with label13;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.math.hadoop.MatrixColumnMeansJob: java.lang.String VECTOR_CLASS> = "DistributedRowMatrix.columnMeans.vector.class";
+
+        return;
+    }
+}

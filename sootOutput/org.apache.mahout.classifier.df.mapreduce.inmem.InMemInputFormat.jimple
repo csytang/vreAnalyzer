@@ -1,0 +1,233 @@
+public class org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat extends org.apache.hadoop.mapreduce.InputFormat
+{
+    private static final org.slf4j.Logger log;
+    private java.util.Random rng;
+    private java.lang.Long seed;
+    private boolean isSingleSeed;
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat r0;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.InputFormat: void <init>()>();
+
+        return;
+    }
+
+    private static boolean isSingleSeed(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        boolean $z0;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        $z0 = virtualinvoke r0.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("debug.mahout.rf.single.seed", 0);
+
+        return $z0;
+    }
+
+    public org.apache.hadoop.mapreduce.RecordReader createRecordReader(org.apache.hadoop.mapreduce.InputSplit, org.apache.hadoop.mapreduce.TaskAttemptContext) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat r0;
+        org.apache.hadoop.mapreduce.InputSplit r1;
+        org.apache.hadoop.mapreduce.TaskAttemptContext r2;
+        boolean $z0;
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader $r3;
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit $r4;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.InputSplit;
+
+        r2 := @parameter1: org.apache.hadoop.mapreduce.TaskAttemptContext;
+
+        $z0 = r1 instanceof org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean)>($z0);
+
+        $r3 = new org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader;
+
+        $r4 = (org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit) r1;
+
+        specialinvoke $r3.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemRecordReader: void <init>(org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit)>($r4);
+
+        return $r3;
+    }
+
+    public java.util.List getSplits(org.apache.hadoop.mapreduce.JobContext) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat r0;
+        org.apache.hadoop.mapreduce.JobContext r1;
+        org.apache.hadoop.conf.Configuration r2;
+        int i0;
+        java.util.List $r3;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.JobContext;
+
+        r2 = interfaceinvoke r1.<org.apache.hadoop.mapreduce.JobContext: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        i0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("mapred.map.tasks", -1);
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: java.util.List getSplits(org.apache.hadoop.conf.Configuration,int)>(r2, i0);
+
+        return $r3;
+    }
+
+    public java.util.List getSplits(org.apache.hadoop.conf.Configuration, int)
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat r0;
+        org.apache.hadoop.conf.Configuration r1;
+        int i0, i1, i2, $i3, i5, i6, $i7;
+        java.lang.Long $r3, $r7, $r9, $r10, $r13, $r14;
+        boolean $z0, $z3;
+        java.util.Random $r4, $r15;
+        java.util.ArrayList $r5;
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit $r6, $r8;
+        long $l4;
+        org.slf4j.Logger $r12;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        i0 := @parameter1: int;
+
+        i1 = staticinvoke <org.apache.mahout.classifier.df.mapreduce.Builder: int getNbTrees(org.apache.hadoop.conf.Configuration)>(r1);
+
+        i2 = i1 / i0;
+
+        $r3 = staticinvoke <org.apache.mahout.classifier.df.mapreduce.Builder: java.lang.Long getRandomSeed(org.apache.hadoop.conf.Configuration)>(r1);
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: java.lang.Long seed> = $r3;
+
+        $z0 = staticinvoke <org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: boolean isSingleSeed(org.apache.hadoop.conf.Configuration)>(r1);
+
+        r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: boolean isSingleSeed> = $z0;
+
+        $r4 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: java.util.Random rng>;
+
+        if $r4 == null goto label1;
+
+        $r13 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: java.lang.Long seed>;
+
+        if $r13 == null goto label1;
+
+        $r12 = <org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: org.slf4j.Logger log>;
+
+        interfaceinvoke $r12.<org.slf4j.Logger: void warn(java.lang.String)>("getSplits() was called more than once and the \'seed\' is set, this can lead to no-repeatable behavior");
+
+     label1:
+        $r14 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: java.lang.Long seed>;
+
+        if $r14 == null goto label2;
+
+        $z3 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: boolean isSingleSeed>;
+
+        if $z3 == 0 goto label3;
+
+     label2:
+        $r15 = null;
+
+        goto label4;
+
+     label3:
+        $r10 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: java.lang.Long seed>;
+
+        $l4 = virtualinvoke $r10.<java.lang.Long: long longValue()>();
+
+        $r15 = staticinvoke <org.apache.mahout.common.RandomUtils: java.util.Random getRandom(long)>($l4);
+
+     label4:
+        r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: java.util.Random rng> = $r15;
+
+        i5 = 0;
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>(int)>(i0);
+
+        i6 = 0;
+
+     label5:
+        $i7 = i0 - 1;
+
+        if i6 >= $i7 goto label6;
+
+        $r8 = new org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit;
+
+        $r9 = specialinvoke r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: java.lang.Long nextSeed()>();
+
+        specialinvoke $r8.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit: void <init>(int,int,java.lang.Long)>(i5, i2, $r9);
+
+        interfaceinvoke $r5.<java.util.List: boolean add(java.lang.Object)>($r8);
+
+        i5 = i5 + i2;
+
+        i6 = i6 + 1;
+
+        goto label5;
+
+     label6:
+        $r6 = new org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit;
+
+        $i3 = i1 - i5;
+
+        $r7 = specialinvoke r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: java.lang.Long nextSeed()>();
+
+        specialinvoke $r6.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat$InMemInputSplit: void <init>(int,int,java.lang.Long)>(i5, $i3, $r7);
+
+        interfaceinvoke $r5.<java.util.List: boolean add(java.lang.Object)>($r6);
+
+        return $r5;
+    }
+
+    private java.lang.Long nextSeed()
+    {
+        org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat r0;
+        java.lang.Long $r1, $r3, $r4;
+        boolean $z0;
+        java.util.Random $r2;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: java.lang.Long seed>;
+
+        if $r1 != null goto label1;
+
+        return null;
+
+     label1:
+        $z0 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: boolean isSingleSeed>;
+
+        if $z0 == 0 goto label2;
+
+        $r4 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: java.lang.Long seed>;
+
+        return $r4;
+
+     label2:
+        $r2 = r0.<org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: java.util.Random rng>;
+
+        $l0 = virtualinvoke $r2.<java.util.Random: long nextLong()>();
+
+        $r3 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        return $r3;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/classifier/df/mapreduce/inmem/InMemInputFormat$InMemInputSplit");
+
+        <org.apache.mahout.classifier.df.mapreduce.inmem.InMemInputFormat: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

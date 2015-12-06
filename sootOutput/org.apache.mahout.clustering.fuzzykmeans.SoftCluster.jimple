@@ -1,0 +1,136 @@
+public class org.apache.mahout.clustering.fuzzykmeans.SoftCluster extends org.apache.mahout.clustering.kmeans.Kluster
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.fuzzykmeans.SoftCluster r0;
+
+        r0 := @this: org.apache.mahout.clustering.fuzzykmeans.SoftCluster;
+
+        specialinvoke r0.<org.apache.mahout.clustering.kmeans.Kluster: void <init>()>();
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.math.Vector, int, org.apache.mahout.common.distance.DistanceMeasure)
+    {
+        org.apache.mahout.clustering.fuzzykmeans.SoftCluster r0;
+        org.apache.mahout.math.Vector r1;
+        int i0;
+        org.apache.mahout.common.distance.DistanceMeasure r2;
+
+        r0 := @this: org.apache.mahout.clustering.fuzzykmeans.SoftCluster;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: org.apache.mahout.common.distance.DistanceMeasure;
+
+        specialinvoke r0.<org.apache.mahout.clustering.kmeans.Kluster: void <init>(org.apache.mahout.math.Vector,int,org.apache.mahout.common.distance.DistanceMeasure)>(r1, i0, r2);
+
+        return;
+    }
+
+    public java.lang.String asFormatString()
+    {
+        org.apache.mahout.clustering.fuzzykmeans.SoftCluster r0;
+        java.lang.StringBuilder $r1, $r3, $r4, $r7;
+        java.lang.String $r2, $r6, $r8;
+        org.apache.mahout.math.Vector $r5;
+
+        r0 := @this: org.apache.mahout.clustering.fuzzykmeans.SoftCluster;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke r0.<org.apache.mahout.clustering.fuzzykmeans.SoftCluster: java.lang.String getIdentifier()>();
+
+        $r3 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(": ");
+
+        $r5 = virtualinvoke r0.<org.apache.mahout.clustering.fuzzykmeans.SoftCluster: org.apache.mahout.math.Vector computeCentroid()>();
+
+        $r6 = interfaceinvoke $r5.<org.apache.mahout.math.Vector: java.lang.String asFormatString()>();
+
+        $r7 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r8;
+    }
+
+    public java.lang.String getIdentifier()
+    {
+        org.apache.mahout.clustering.fuzzykmeans.SoftCluster r0;
+        java.lang.StringBuilder $r1, $r2, $r3;
+        boolean $z0;
+        int $i0;
+        java.lang.String $r4, $r5;
+
+        r0 := @this: org.apache.mahout.clustering.fuzzykmeans.SoftCluster;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.clustering.fuzzykmeans.SoftCluster: boolean isConverged()>();
+
+        if $z0 == 0 goto label1;
+
+        $r5 = "SV-";
+
+        goto label2;
+
+     label1:
+        $r5 = "SC-";
+
+     label2:
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.clustering.fuzzykmeans.SoftCluster: int getId()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r4;
+    }
+
+    public double pdf(org.apache.mahout.math.VectorWritable)
+    {
+        org.apache.mahout.clustering.fuzzykmeans.SoftCluster r0;
+        org.apache.mahout.math.VectorWritable r1;
+        java.lang.UnsupportedOperationException $r2;
+
+        r0 := @this: org.apache.mahout.clustering.fuzzykmeans.SoftCluster;
+
+        r1 := @parameter0: org.apache.mahout.math.VectorWritable;
+
+        $r2 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r2.<java.lang.UnsupportedOperationException: void <init>(java.lang.String)>("SoftCluster pdf cannot be calculated out of context. See FuzzyKMeansClusterer");
+
+        throw $r2;
+    }
+
+    public volatile double pdf(java.lang.Object)
+    {
+        org.apache.mahout.clustering.fuzzykmeans.SoftCluster r0;
+        java.lang.Object r1;
+        org.apache.mahout.math.VectorWritable $r2;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.clustering.fuzzykmeans.SoftCluster;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (org.apache.mahout.math.VectorWritable) r1;
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.clustering.fuzzykmeans.SoftCluster: double pdf(org.apache.mahout.math.VectorWritable)>($r2);
+
+        return $d0;
+    }
+}

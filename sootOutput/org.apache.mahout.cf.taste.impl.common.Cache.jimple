@@ -1,0 +1,420 @@
+public final class org.apache.mahout.cf.taste.impl.common.Cache extends java.lang.Object implements org.apache.mahout.cf.taste.impl.common.Retriever
+{
+    private static final java.lang.Object NULL;
+    private final org.apache.mahout.cf.taste.impl.common.FastMap cache;
+    private final org.apache.mahout.cf.taste.impl.common.Retriever retriever;
+
+    public void <init>(org.apache.mahout.cf.taste.impl.common.Retriever)
+    {
+        org.apache.mahout.cf.taste.impl.common.Cache r0;
+        org.apache.mahout.cf.taste.impl.common.Retriever r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.Cache;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.common.Retriever;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.common.Cache: void <init>(org.apache.mahout.cf.taste.impl.common.Retriever,int)>(r1, 2147483647);
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.cf.taste.impl.common.Retriever, int)
+    {
+        org.apache.mahout.cf.taste.impl.common.Cache r0;
+        org.apache.mahout.cf.taste.impl.common.Retriever r1;
+        int i0;
+        org.apache.mahout.cf.taste.impl.common.FastMap $r2;
+        boolean $z0, $z1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.Cache;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.common.Retriever;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        if r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "retriever is null");
+
+        if i0 < 1 goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, "maxEntries must be at least 1");
+
+        $r2 = new org.apache.mahout.cf.taste.impl.common.FastMap;
+
+        specialinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastMap: void <init>(int,int)>(11, i0);
+
+        r0.<org.apache.mahout.cf.taste.impl.common.Cache: org.apache.mahout.cf.taste.impl.common.FastMap cache> = $r2;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.Cache: org.apache.mahout.cf.taste.impl.common.Retriever retriever> = r1;
+
+        return;
+    }
+
+    public java.lang.Object get(java.lang.Object) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.common.Cache r0;
+        java.lang.Object r1, r2, $r7, $r8, $r10;
+        org.apache.mahout.cf.taste.impl.common.FastMap $r5, $r6;
+        java.lang.Throwable $r9;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.Cache;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.common.Cache: org.apache.mahout.cf.taste.impl.common.FastMap cache>;
+
+        entermonitor $r5;
+
+     label1:
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.common.Cache: org.apache.mahout.cf.taste.impl.common.FastMap cache>;
+
+        r2 = virtualinvoke $r6.<org.apache.mahout.cf.taste.impl.common.FastMap: java.lang.Object get(java.lang.Object)>(r1);
+
+        exitmonitor $r5;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r9 := @caughtexception;
+
+        exitmonitor $r5;
+
+     label4:
+        throw $r9;
+
+     label5:
+        if r2 != null goto label6;
+
+        $r8 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.common.Cache: java.lang.Object getAndCacheValue(java.lang.Object)>(r1);
+
+        return $r8;
+
+     label6:
+        $r7 = <org.apache.mahout.cf.taste.impl.common.Cache: java.lang.Object NULL>;
+
+        if r2 != $r7 goto label7;
+
+        $r10 = null;
+
+        goto label8;
+
+     label7:
+        $r10 = r2;
+
+     label8:
+        return $r10;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public void remove(java.lang.Object)
+    {
+        org.apache.mahout.cf.taste.impl.common.Cache r0;
+        java.lang.Object r1;
+        org.apache.mahout.cf.taste.impl.common.FastMap $r4, $r5;
+        java.lang.Throwable $r7;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.Cache;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.common.Cache: org.apache.mahout.cf.taste.impl.common.FastMap cache>;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.common.Cache: org.apache.mahout.cf.taste.impl.common.FastMap cache>;
+
+        virtualinvoke $r5.<org.apache.mahout.cf.taste.impl.common.FastMap: java.lang.Object remove(java.lang.Object)>(r1);
+
+        exitmonitor $r4;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r7 := @caughtexception;
+
+        exitmonitor $r4;
+
+     label4:
+        throw $r7;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public void removeKeysMatching(org.apache.mahout.cf.taste.impl.common.Cache$MatchPredicate)
+    {
+        org.apache.mahout.cf.taste.impl.common.Cache r0;
+        org.apache.mahout.cf.taste.impl.common.Cache$MatchPredicate r1;
+        java.util.Iterator r3;
+        java.lang.Object r4;
+        org.apache.mahout.cf.taste.impl.common.FastMap $r6, $r7;
+        java.util.Set $r8;
+        boolean $z0, $z1;
+        java.lang.Throwable $r9;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.Cache;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.common.Cache$MatchPredicate;
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.common.Cache: org.apache.mahout.cf.taste.impl.common.FastMap cache>;
+
+        entermonitor $r6;
+
+     label1:
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.common.Cache: org.apache.mahout.cf.taste.impl.common.FastMap cache>;
+
+        $r8 = virtualinvoke $r7.<org.apache.mahout.cf.taste.impl.common.FastMap: java.util.Set keySet()>();
+
+        r3 = interfaceinvoke $r8.<java.util.Set: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        r4 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $z1 = interfaceinvoke r1.<org.apache.mahout.cf.taste.impl.common.Cache$MatchPredicate: boolean matches(java.lang.Object)>(r4);
+
+        if $z1 == 0 goto label2;
+
+        interfaceinvoke r3.<java.util.Iterator: void remove()>();
+
+        goto label2;
+
+     label3:
+        exitmonitor $r6;
+
+     label4:
+        goto label7;
+
+     label5:
+        $r9 := @caughtexception;
+
+        exitmonitor $r6;
+
+     label6:
+        throw $r9;
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    public void removeValueMatching(org.apache.mahout.cf.taste.impl.common.Cache$MatchPredicate)
+    {
+        org.apache.mahout.cf.taste.impl.common.Cache r0;
+        org.apache.mahout.cf.taste.impl.common.Cache$MatchPredicate r1;
+        java.util.Iterator r3;
+        java.lang.Object r4;
+        org.apache.mahout.cf.taste.impl.common.FastMap $r6, $r7;
+        java.util.Collection $r8;
+        boolean $z0, $z1;
+        java.lang.Throwable $r9;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.Cache;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.common.Cache$MatchPredicate;
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.common.Cache: org.apache.mahout.cf.taste.impl.common.FastMap cache>;
+
+        entermonitor $r6;
+
+     label1:
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.common.Cache: org.apache.mahout.cf.taste.impl.common.FastMap cache>;
+
+        $r8 = virtualinvoke $r7.<org.apache.mahout.cf.taste.impl.common.FastMap: java.util.Collection values()>();
+
+        r3 = interfaceinvoke $r8.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        r4 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        $z1 = interfaceinvoke r1.<org.apache.mahout.cf.taste.impl.common.Cache$MatchPredicate: boolean matches(java.lang.Object)>(r4);
+
+        if $z1 == 0 goto label2;
+
+        interfaceinvoke r3.<java.util.Iterator: void remove()>();
+
+        goto label2;
+
+     label3:
+        exitmonitor $r6;
+
+     label4:
+        goto label7;
+
+     label5:
+        $r9 := @caughtexception;
+
+        exitmonitor $r6;
+
+     label6:
+        throw $r9;
+
+     label7:
+        return;
+
+        catch java.lang.Throwable from label1 to label4 with label5;
+        catch java.lang.Throwable from label5 to label6 with label5;
+    }
+
+    public void clear()
+    {
+        org.apache.mahout.cf.taste.impl.common.Cache r0;
+        org.apache.mahout.cf.taste.impl.common.FastMap $r3, $r4;
+        java.lang.Throwable $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.Cache;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.common.Cache: org.apache.mahout.cf.taste.impl.common.FastMap cache>;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.common.Cache: org.apache.mahout.cf.taste.impl.common.FastMap cache>;
+
+        virtualinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FastMap: void clear()>();
+
+        exitmonitor $r3;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r5 := @caughtexception;
+
+        exitmonitor $r3;
+
+     label4:
+        throw $r5;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    private java.lang.Object getAndCacheValue(java.lang.Object) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.common.Cache r0;
+        java.lang.Object r1, r9;
+        org.apache.mahout.cf.taste.impl.common.Retriever $r4;
+        org.apache.mahout.cf.taste.impl.common.FastMap $r5, $r6;
+        java.lang.Throwable $r8;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.Cache;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.common.Cache: org.apache.mahout.cf.taste.impl.common.Retriever retriever>;
+
+        r9 = interfaceinvoke $r4.<org.apache.mahout.cf.taste.impl.common.Retriever: java.lang.Object get(java.lang.Object)>(r1);
+
+        if r9 != null goto label1;
+
+        r9 = <org.apache.mahout.cf.taste.impl.common.Cache: java.lang.Object NULL>;
+
+     label1:
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.common.Cache: org.apache.mahout.cf.taste.impl.common.FastMap cache>;
+
+        entermonitor $r5;
+
+     label2:
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.common.Cache: org.apache.mahout.cf.taste.impl.common.FastMap cache>;
+
+        virtualinvoke $r6.<org.apache.mahout.cf.taste.impl.common.FastMap: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, r9);
+
+        exitmonitor $r5;
+
+     label3:
+        goto label6;
+
+     label4:
+        $r8 := @caughtexception;
+
+        exitmonitor $r5;
+
+     label5:
+        throw $r8;
+
+     label6:
+        return r9;
+
+        catch java.lang.Throwable from label2 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.common.Cache r0;
+        java.lang.StringBuilder $r1, $r2, $r4, $r5;
+        org.apache.mahout.cf.taste.impl.common.Retriever $r3;
+        java.lang.String $r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.Cache;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Cache[retriever:");
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.common.Cache: org.apache.mahout.cf.taste.impl.common.Retriever retriever>;
+
+        $r4 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r3);
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(93);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r6;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.Object $r0;
+
+        $r0 = new java.lang.Object;
+
+        specialinvoke $r0.<java.lang.Object: void <init>()>();
+
+        <org.apache.mahout.cf.taste.impl.common.Cache: java.lang.Object NULL> = $r0;
+
+        return;
+    }
+}

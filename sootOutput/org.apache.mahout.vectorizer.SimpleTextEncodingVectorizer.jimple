@@ -1,0 +1,106 @@
+public class org.apache.mahout.vectorizer.SimpleTextEncodingVectorizer extends java.lang.Object implements org.apache.mahout.vectorizer.Vectorizer
+{
+    private static final org.slf4j.Logger log;
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.SimpleTextEncodingVectorizer r0;
+
+        r0 := @this: org.apache.mahout.vectorizer.SimpleTextEncodingVectorizer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void createVectors(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.mahout.vectorizer.VectorizerConfig) throws java.io.IOException, java.lang.ClassNotFoundException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.SimpleTextEncodingVectorizer r0;
+        org.apache.hadoop.fs.Path r1, r2;
+        org.apache.mahout.vectorizer.VectorizerConfig r3;
+        org.apache.hadoop.mapreduce.Job r4;
+        org.apache.hadoop.conf.Configuration r5, $r6;
+        boolean z0, $z1, $z2;
+        java.lang.String $r7, $r8, $r9, $r10, $r11, $r12;
+        int $i0;
+        org.slf4j.Logger $r13;
+        java.lang.IllegalStateException $r14;
+        java.lang.Boolean $r15;
+
+        r0 := @this: org.apache.mahout.vectorizer.SimpleTextEncodingVectorizer;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $r6 = virtualinvoke r3.<org.apache.mahout.vectorizer.VectorizerConfig: org.apache.hadoop.conf.Configuration getConf()>();
+
+        r4 = staticinvoke <org.apache.mahout.common.HadoopUtil: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,org.apache.hadoop.conf.Configuration)>(r1, r2, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", class "org/apache/mahout/vectorizer/EncodingMapper", class "org/apache/hadoop/io/Text", class "org/apache/mahout/math/VectorWritable", class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat", $r6);
+
+        r5 = virtualinvoke r4.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $z1 = virtualinvoke r3.<org.apache.mahout.vectorizer.VectorizerConfig: boolean isSequentialAccess()>();
+
+        $r7 = staticinvoke <java.lang.String: java.lang.String valueOf(boolean)>($z1);
+
+        virtualinvoke r5.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("sequential", $r7);
+
+        $z2 = virtualinvoke r3.<org.apache.mahout.vectorizer.VectorizerConfig: boolean isNamedVectors()>();
+
+        $r8 = staticinvoke <java.lang.String: java.lang.String valueOf(boolean)>($z2);
+
+        virtualinvoke r5.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("namedVectors", $r8);
+
+        $r9 = virtualinvoke r3.<org.apache.mahout.vectorizer.VectorizerConfig: java.lang.String getAnalyzerClassName()>();
+
+        virtualinvoke r5.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("analyzer", $r9);
+
+        $r10 = virtualinvoke r3.<org.apache.mahout.vectorizer.VectorizerConfig: java.lang.String getEncoderName()>();
+
+        virtualinvoke r5.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("encoderFieldName", $r10);
+
+        $r11 = virtualinvoke r3.<org.apache.mahout.vectorizer.VectorizerConfig: java.lang.String getEncoderClass()>();
+
+        virtualinvoke r5.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("encoderClass", $r11);
+
+        $i0 = virtualinvoke r3.<org.apache.mahout.vectorizer.VectorizerConfig: int getCardinality()>();
+
+        $r12 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+        virtualinvoke r5.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("cardinality", $r12);
+
+        virtualinvoke r4.<org.apache.hadoop.mapreduce.Job: void setNumReduceTasks(int)>(0);
+
+        z0 = virtualinvoke r4.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        $r13 = <org.apache.mahout.vectorizer.SimpleTextEncodingVectorizer: org.slf4j.Logger log>;
+
+        $r15 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(z0);
+
+        interfaceinvoke $r13.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("result of run: {}", $r15);
+
+        if z0 != 0 goto label1;
+
+        $r14 = new java.lang.IllegalStateException;
+
+        specialinvoke $r14.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Job failed!");
+
+        throw $r14;
+
+     label1:
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/vectorizer/SimpleTextEncodingVectorizer");
+
+        <org.apache.mahout.vectorizer.SimpleTextEncodingVectorizer: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

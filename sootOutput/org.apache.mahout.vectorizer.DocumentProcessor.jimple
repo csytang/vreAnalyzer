@@ -1,0 +1,113 @@
+public final class org.apache.mahout.vectorizer.DocumentProcessor extends java.lang.Object
+{
+    public static final java.lang.String TOKENIZED_DOCUMENT_OUTPUT_FOLDER;
+    public static final java.lang.String ANALYZER_CLASS;
+
+    private void <init>()
+    {
+        org.apache.mahout.vectorizer.DocumentProcessor r0;
+
+        r0 := @this: org.apache.mahout.vectorizer.DocumentProcessor;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void tokenizeDocuments(org.apache.hadoop.fs.Path, java.lang.Class, org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.fs.Path r0, r2;
+        java.lang.Class r1;
+        org.apache.hadoop.conf.Configuration r3, $r6;
+        boolean z0;
+        java.lang.String $r7, $r12;
+        org.apache.hadoop.mapreduce.Job $r8;
+        java.lang.StringBuilder $r9, $r10, $r11;
+        org.apache.hadoop.fs.Path[] $r13, $r14;
+        java.lang.IllegalStateException $r15;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: java.lang.Class;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter3: org.apache.hadoop.conf.Configuration;
+
+        $r6 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r6.<org.apache.hadoop.conf.Configuration: void <init>(org.apache.hadoop.conf.Configuration)>(r3);
+
+        virtualinvoke $r6.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("io.serializations", "org.apache.hadoop.io.serializer.JavaSerialization,org.apache.hadoop.io.serializer.WritableSerialization");
+
+        $r7 = virtualinvoke r1.<java.lang.Class: java.lang.String getName()>();
+
+        virtualinvoke $r6.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("analyzer.class", $r7);
+
+        $r8 = new org.apache.hadoop.mapreduce.Job;
+
+        specialinvoke $r8.<org.apache.hadoop.mapreduce.Job: void <init>(org.apache.hadoop.conf.Configuration)>($r6);
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("DocumentProcessor::DocumentTokenizer: input-folder: ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r0);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setJobName(java.lang.String)>($r12);
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(class "org/apache/mahout/vectorizer/DocumentProcessor");
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/Text");
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(class "org/apache/mahout/common/StringTuple");
+
+        $r13 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r13[0] = r0;
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void setInputPaths(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path[])>($r8, $r13);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r8, r2);
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setMapperClass(java.lang.Class)>(class "org/apache/mahout/vectorizer/document/SequenceFileTokenizerMapper");
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setInputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat");
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setNumReduceTasks(int)>(0);
+
+        virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: void setOutputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        $r14 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r14[0] = r2;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r6, $r14);
+
+        z0 = virtualinvoke $r8.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z0 != 0 goto label1;
+
+        $r15 = new java.lang.IllegalStateException;
+
+        specialinvoke $r15.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Job failed!");
+
+        throw $r15;
+
+     label1:
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.vectorizer.DocumentProcessor: java.lang.String ANALYZER_CLASS> = "analyzer.class";
+
+        <org.apache.mahout.vectorizer.DocumentProcessor: java.lang.String TOKENIZED_DOCUMENT_OUTPUT_FOLDER> = "tokenized-documents";
+
+        return;
+    }
+}

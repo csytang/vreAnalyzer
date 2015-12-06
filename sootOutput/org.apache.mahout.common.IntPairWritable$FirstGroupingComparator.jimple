@@ -1,0 +1,85 @@
+public class org.apache.mahout.common.IntPairWritable$FirstGroupingComparator extends org.apache.hadoop.io.WritableComparator implements java.io.Serializable
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.common.IntPairWritable$FirstGroupingComparator r0;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable$FirstGroupingComparator;
+
+        specialinvoke r0.<org.apache.hadoop.io.WritableComparator: void <init>(java.lang.Class)>(class "org/apache/mahout/common/IntPairWritable");
+
+        return;
+    }
+
+    public int compare(byte[], int, int, byte[], int, int)
+    {
+        org.apache.mahout.common.IntPairWritable$FirstGroupingComparator r0;
+        byte[] r1, r2;
+        int i0, i1, i2, i3, i4, i5;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable$FirstGroupingComparator;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        r2 := @parameter3: byte[];
+
+        i2 := @parameter4: int;
+
+        i3 := @parameter5: int;
+
+        i4 = staticinvoke <org.apache.hadoop.io.WritableComparator: int readInt(byte[],int)>(r1, i0);
+
+        i5 = staticinvoke <org.apache.hadoop.io.WritableComparator: int readInt(byte[],int)>(r2, i2);
+
+        if i4 >= i5 goto label1;
+
+        return -1;
+
+     label1:
+        if i4 <= i5 goto label2;
+
+        return 1;
+
+     label2:
+        return 0;
+    }
+
+    public int compare(java.lang.Object, java.lang.Object)
+    {
+        org.apache.mahout.common.IntPairWritable$FirstGroupingComparator r0;
+        java.lang.Object r1, r2;
+        int i0, i1;
+        org.apache.mahout.common.IntPairWritable $r3, $r4;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable$FirstGroupingComparator;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        $r3 = (org.apache.mahout.common.IntPairWritable) r1;
+
+        i0 = virtualinvoke $r3.<org.apache.mahout.common.IntPairWritable: int getFirst()>();
+
+        $r4 = (org.apache.mahout.common.IntPairWritable) r2;
+
+        i1 = virtualinvoke $r4.<org.apache.mahout.common.IntPairWritable: int getFirst()>();
+
+        if i0 >= i1 goto label1;
+
+        return -1;
+
+     label1:
+        if i0 <= i1 goto label2;
+
+        return 1;
+
+     label2:
+        return 0;
+    }
+}

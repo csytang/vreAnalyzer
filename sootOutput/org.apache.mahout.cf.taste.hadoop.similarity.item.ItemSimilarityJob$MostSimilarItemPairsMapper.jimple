@@ -1,0 +1,223 @@
+public class org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob$MostSimilarItemPairsMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private org.apache.mahout.math.map.OpenIntLongHashMap indexItemIDMap;
+    private int maxSimilarItemsPerItem;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob$MostSimilarItemPairsMapper r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob$MostSimilarItemPairsMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context)
+    {
+        org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob$MostSimilarItemPairsMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        java.lang.String $r3, $r4, $r5;
+        int $i0, $i1;
+        org.apache.mahout.math.map.OpenIntLongHashMap $r6;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob$MostSimilarItemPairsMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r3 = <org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: java.lang.String MAX_SIMILARITIES_PER_ITEM>;
+
+        $i0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>($r3, -1);
+
+        r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob$MostSimilarItemPairsMapper: int maxSimilarItemsPerItem> = $i0;
+
+        $r4 = <org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: java.lang.String ITEM_ID_INDEX_PATH_STR>;
+
+        $r5 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>($r4);
+
+        $r6 = staticinvoke <org.apache.mahout.cf.taste.hadoop.TasteHadoopUtils: org.apache.mahout.math.map.OpenIntLongHashMap readIDIndexMap(java.lang.String,org.apache.hadoop.conf.Configuration)>($r5, r2);
+
+        r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob$MostSimilarItemPairsMapper: org.apache.mahout.math.map.OpenIntLongHashMap indexItemIDMap> = $r6;
+
+        $i1 = r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob$MostSimilarItemPairsMapper: int maxSimilarItemsPerItem>;
+
+        if $i1 <= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "maxSimilarItemsPerItem must be greater then 0!");
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.IntWritable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob$MostSimilarItemPairsMapper r0;
+        org.apache.hadoop.io.IntWritable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        int i0, $i2, $i6;
+        org.apache.mahout.math.Vector$Element r5;
+        long l1, $l5, l7;
+        org.apache.mahout.cf.taste.hadoop.similarity.item.TopSimilarItemsQueue $r6;
+        org.apache.mahout.math.Vector $r7;
+        java.lang.Iterable $r8;
+        org.apache.mahout.math.map.OpenIntLongHashMap $r9, $r19;
+        boolean $z0, $z1;
+        java.util.List $r10;
+        java.lang.Object $r11, $r15, $r16;
+        org.apache.mahout.cf.taste.hadoop.EntityEntityWritable $r12, $r14;
+        byte $b3, $b4;
+        double $d0, $d1, $d2, d3;
+        org.apache.hadoop.io.DoubleWritable $r13, $r17;
+        java.util.Iterator r20, r22;
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItem r21, r23;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob$MostSimilarItemPairsMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        i0 = virtualinvoke r1.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $r6 = new org.apache.mahout.cf.taste.hadoop.similarity.item.TopSimilarItemsQueue;
+
+        $i2 = r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob$MostSimilarItemPairsMapper: int maxSimilarItemsPerItem>;
+
+        specialinvoke $r6.<org.apache.mahout.cf.taste.hadoop.similarity.item.TopSimilarItemsQueue: void <init>(int)>($i2);
+
+        $r7 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r8 = interfaceinvoke $r7.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r20 = interfaceinvoke $r8.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r20.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r15 = interfaceinvoke r20.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.Vector$Element) $r15;
+
+        $r16 = virtualinvoke $r6.<org.apache.mahout.cf.taste.hadoop.similarity.item.TopSimilarItemsQueue: java.lang.Object top()>();
+
+        r21 = (org.apache.mahout.cf.taste.similarity.precompute.SimilarItem) $r16;
+
+        d3 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        $d2 = virtualinvoke r21.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItem: double getSimilarity()>();
+
+        $b4 = d3 cmpl $d2;
+
+        if $b4 <= 0 goto label1;
+
+        $r19 = r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob$MostSimilarItemPairsMapper: org.apache.mahout.math.map.OpenIntLongHashMap indexItemIDMap>;
+
+        $i6 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $l5 = virtualinvoke $r19.<org.apache.mahout.math.map.OpenIntLongHashMap: long get(int)>($i6);
+
+        virtualinvoke r21.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItem: void set(long,double)>($l5, d3);
+
+        virtualinvoke $r6.<org.apache.mahout.cf.taste.hadoop.similarity.item.TopSimilarItemsQueue: java.lang.Object updateTop()>();
+
+        goto label1;
+
+     label2:
+        $r9 = r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob$MostSimilarItemPairsMapper: org.apache.mahout.math.map.OpenIntLongHashMap indexItemIDMap>;
+
+        l7 = virtualinvoke $r9.<org.apache.mahout.math.map.OpenIntLongHashMap: long get(int)>(i0);
+
+        $r10 = virtualinvoke $r6.<org.apache.mahout.cf.taste.hadoop.similarity.item.TopSimilarItemsQueue: java.util.List getTopItems()>();
+
+        r22 = interfaceinvoke $r10.<java.util.List: java.util.Iterator iterator()>();
+
+     label3:
+        $z1 = interfaceinvoke r22.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label5;
+
+        $r11 = interfaceinvoke r22.<java.util.Iterator: java.lang.Object next()>();
+
+        r23 = (org.apache.mahout.cf.taste.similarity.precompute.SimilarItem) $r11;
+
+        l1 = virtualinvoke r23.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItem: long getItemID()>();
+
+        $b3 = l7 cmp l1;
+
+        if $b3 >= 0 goto label4;
+
+        $r14 = new org.apache.mahout.cf.taste.hadoop.EntityEntityWritable;
+
+        specialinvoke $r14.<org.apache.mahout.cf.taste.hadoop.EntityEntityWritable: void <init>(long,long)>(l7, l1);
+
+        $r17 = new org.apache.hadoop.io.DoubleWritable;
+
+        $d1 = virtualinvoke r23.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItem: double getSimilarity()>();
+
+        specialinvoke $r17.<org.apache.hadoop.io.DoubleWritable: void <init>(double)>($d1);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r14, $r17);
+
+        goto label3;
+
+     label4:
+        $r12 = new org.apache.mahout.cf.taste.hadoop.EntityEntityWritable;
+
+        specialinvoke $r12.<org.apache.mahout.cf.taste.hadoop.EntityEntityWritable: void <init>(long,long)>(l1, l7);
+
+        $r13 = new org.apache.hadoop.io.DoubleWritable;
+
+        $d0 = virtualinvoke r23.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItem: double getSimilarity()>();
+
+        specialinvoke $r13.<org.apache.hadoop.io.DoubleWritable: void <init>(double)>($d0);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r12, $r13);
+
+        goto label3;
+
+     label5:
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob$MostSimilarItemPairsMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.IntWritable $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob$MostSimilarItemPairsMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.IntWritable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob$MostSimilarItemPairsMapper: void map(org.apache.hadoop.io.IntWritable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

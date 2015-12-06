@@ -1,0 +1,1212 @@
+public class org.apache.mahout.classifier.df.data.Dataset extends java.lang.Object
+{
+    private org.apache.mahout.classifier.df.data.Dataset$Attribute[] attributes;
+    private int[] ignored;
+    private java.lang.String[][] values;
+    private int labelId;
+    private int nbInstances;
+    private static final org.codehaus.jackson.map.ObjectMapper OBJECT_MAPPER;
+    static final java.lang.String TYPE;
+    static final java.lang.String VALUES;
+    static final java.lang.String LABEL;
+
+    protected void <init>()
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    void <init>(org.apache.mahout.classifier.df.data.Dataset$Attribute[], java.util.List[], int, boolean)
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute[] r1, $r3, $r22;
+        java.util.List[] r2;
+        int i0, i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, i9, i10, i11, $i12;
+        boolean z0, $z1, $z2, $z3, $z4;
+        java.lang.String[][] $r4, $r9, $r13;
+        int[] $r5, $r20;
+        java.lang.IllegalStateException $r6, $r18;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute $r7, $r8, $r16, $r17, $r19, $r21, $r23;
+        java.util.List $r10, $r15;
+        java.lang.String[] $r11, $r12;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.data.Dataset$Attribute[];
+
+        r2 := @parameter1: java.util.List[];
+
+        i0 := @parameter2: int;
+
+        z0 := @parameter3: boolean;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        staticinvoke <org.apache.mahout.classifier.df.data.Dataset: void validateValues(org.apache.mahout.classifier.df.data.Dataset$Attribute[],java.util.List[])>(r1, r2);
+
+        i1 = staticinvoke <org.apache.mahout.classifier.df.data.Dataset: int countAttributes(org.apache.mahout.classifier.df.data.Dataset$Attribute[])>(r1);
+
+        $r3 = newarray (org.apache.mahout.classifier.df.data.Dataset$Attribute)[i1];
+
+        r0.<org.apache.mahout.classifier.df.data.Dataset: org.apache.mahout.classifier.df.data.Dataset$Attribute[] attributes> = $r3;
+
+        $r4 = newarray (java.lang.String[])[i1];
+
+        r0.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String[][] values> = $r4;
+
+        $i2 = lengthof r1;
+
+        $i3 = $i2 - i1;
+
+        $r5 = newarray (int)[$i3];
+
+        r0.<org.apache.mahout.classifier.df.data.Dataset: int[] ignored> = $r5;
+
+        r0.<org.apache.mahout.classifier.df.data.Dataset: int labelId> = -1;
+
+        i9 = 0;
+
+        i10 = 0;
+
+        i11 = 0;
+
+     label01:
+        $i4 = lengthof r1;
+
+        if i11 >= $i4 goto label09;
+
+        $r7 = r1[i11];
+
+        $z1 = virtualinvoke $r7.<org.apache.mahout.classifier.df.data.Dataset$Attribute: boolean isIgnored()>();
+
+        if $z1 == 0 goto label02;
+
+        $r20 = r0.<org.apache.mahout.classifier.df.data.Dataset: int[] ignored>;
+
+        $i8 = i9;
+
+        i9 = i9 + 1;
+
+        $r20[$i8] = i11;
+
+        goto label08;
+
+     label02:
+        $r8 = r1[i11];
+
+        $z2 = virtualinvoke $r8.<org.apache.mahout.classifier.df.data.Dataset$Attribute: boolean isLabel()>();
+
+        if $z2 == 0 goto label05;
+
+        $i7 = r0.<org.apache.mahout.classifier.df.data.Dataset: int labelId>;
+
+        if $i7 == -1 goto label03;
+
+        $r18 = new java.lang.IllegalStateException;
+
+        specialinvoke $r18.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Label found more than once");
+
+        throw $r18;
+
+     label03:
+        r0.<org.apache.mahout.classifier.df.data.Dataset: int labelId> = i10;
+
+        if z0 == 0 goto label04;
+
+        $r19 = <org.apache.mahout.classifier.df.data.Dataset$Attribute: org.apache.mahout.classifier.df.data.Dataset$Attribute NUMERICAL>;
+
+        r1[i11] = $r19;
+
+        goto label05;
+
+     label04:
+        $r17 = <org.apache.mahout.classifier.df.data.Dataset$Attribute: org.apache.mahout.classifier.df.data.Dataset$Attribute CATEGORICAL>;
+
+        r1[i11] = $r17;
+
+     label05:
+        $r21 = r1[i11];
+
+        $z4 = virtualinvoke $r21.<org.apache.mahout.classifier.df.data.Dataset$Attribute: boolean isCategorical()>();
+
+        if $z4 != 0 goto label06;
+
+        if z0 != 0 goto label07;
+
+        $r16 = r1[i11];
+
+        $z3 = virtualinvoke $r16.<org.apache.mahout.classifier.df.data.Dataset$Attribute: boolean isLabel()>();
+
+        if $z3 == 0 goto label07;
+
+     label06:
+        $r9 = r0.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String[][] values>;
+
+        $r10 = r2[i11];
+
+        $i6 = interfaceinvoke $r10.<java.util.List: int size()>();
+
+        $r11 = newarray (java.lang.String)[$i6];
+
+        $r9[i10] = $r11;
+
+        $r15 = r2[i11];
+
+        $r13 = r0.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String[][] values>;
+
+        $r12 = $r13[i10];
+
+        interfaceinvoke $r15.<java.util.List: java.lang.Object[] toArray(java.lang.Object[])>($r12);
+
+     label07:
+        $r22 = r0.<org.apache.mahout.classifier.df.data.Dataset: org.apache.mahout.classifier.df.data.Dataset$Attribute[] attributes>;
+
+        $i12 = i10;
+
+        i10 = i10 + 1;
+
+        $r23 = r1[i11];
+
+        $r22[$i12] = $r23;
+
+     label08:
+        i11 = i11 + 1;
+
+        goto label01;
+
+     label09:
+        $i5 = r0.<org.apache.mahout.classifier.df.data.Dataset: int labelId>;
+
+        if $i5 != -1 goto label10;
+
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Label not found");
+
+        throw $r6;
+
+     label10:
+        r0.<org.apache.mahout.classifier.df.data.Dataset: int nbInstances> = i0;
+
+        return;
+    }
+
+    public int nbValues(int)
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        int i0, $i1;
+        java.lang.String[][] $r1;
+        java.lang.String[] $r2;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String[][] values>;
+
+        $r2 = $r1[i0];
+
+        $i1 = lengthof $r2;
+
+        return $i1;
+    }
+
+    public java.lang.String[] labels()
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        int $i0, $i1;
+        java.lang.String[][] $r1;
+        java.lang.String[] $r2, $r4;
+        java.lang.Object[] $r3;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String[][] values>;
+
+        $i0 = r0.<org.apache.mahout.classifier.df.data.Dataset: int labelId>;
+
+        $r2 = $r1[$i0];
+
+        $i1 = virtualinvoke r0.<org.apache.mahout.classifier.df.data.Dataset: int nblabels()>();
+
+        $r3 = staticinvoke <java.util.Arrays: java.lang.Object[] copyOf(java.lang.Object[],int)>($r2, $i1);
+
+        $r4 = (java.lang.String[]) $r3;
+
+        return $r4;
+    }
+
+    public int nblabels()
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        int $i0, $i1;
+        java.lang.String[][] $r1;
+        java.lang.String[] $r2;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String[][] values>;
+
+        $i0 = r0.<org.apache.mahout.classifier.df.data.Dataset: int labelId>;
+
+        $r2 = $r1[$i0];
+
+        $i1 = lengthof $r2;
+
+        return $i1;
+    }
+
+    public int getLabelId()
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        $i0 = r0.<org.apache.mahout.classifier.df.data.Dataset: int labelId>;
+
+        return $i0;
+    }
+
+    public double getLabel(org.apache.mahout.classifier.df.data.Instance)
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        org.apache.mahout.classifier.df.data.Instance r1;
+        int $i0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.data.Instance;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.classifier.df.data.Dataset: int getLabelId()>();
+
+        $d0 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Instance: double get(int)>($i0);
+
+        return $d0;
+    }
+
+    public org.apache.mahout.classifier.df.data.Dataset$Attribute getAttribute(int)
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        int i0;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute[] $r1;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute $r2;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.data.Dataset: org.apache.mahout.classifier.df.data.Dataset$Attribute[] attributes>;
+
+        $r2 = $r1[i0];
+
+        return $r2;
+    }
+
+    public int labelCode(java.lang.String)
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        java.lang.String r1;
+        int $i0, $i1;
+        java.lang.String[][] $r2;
+        java.lang.String[] $r3;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = r0.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String[][] values>;
+
+        $i0 = r0.<org.apache.mahout.classifier.df.data.Dataset: int labelId>;
+
+        $r3 = $r2[$i0];
+
+        $i1 = staticinvoke <org.apache.commons.lang3.ArrayUtils: int indexOf(java.lang.Object[],java.lang.Object)>($r3, r1);
+
+        return $i1;
+    }
+
+    public java.lang.String getLabelString(double)
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        double d0;
+        boolean $z0;
+        int $i0, $i1;
+        java.lang.String[][] $r1;
+        java.lang.String[] $r2;
+        java.lang.String $r3;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        d0 := @parameter0: double;
+
+        $z0 = staticinvoke <java.lang.Double: boolean isNaN(double)>(d0);
+
+        if $z0 == 0 goto label1;
+
+        return "unknown";
+
+     label1:
+        $r1 = r0.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String[][] values>;
+
+        $i0 = r0.<org.apache.mahout.classifier.df.data.Dataset: int labelId>;
+
+        $r2 = $r1[$i0];
+
+        $i1 = (int) d0;
+
+        $r3 = $r2[$i1];
+
+        return $r3;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        java.lang.StringBuilder $r1, $r2, $r5;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute[] $r3;
+        java.lang.String $r4, $r6;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("attributes=");
+
+        $r3 = r0.<org.apache.mahout.classifier.df.data.Dataset: org.apache.mahout.classifier.df.data.Dataset$Attribute[] attributes>;
+
+        $r4 = staticinvoke <java.util.Arrays: java.lang.String toString(java.lang.Object[])>($r3);
+
+        $r5 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r6;
+    }
+
+    public int valueOf(int, java.lang.String)
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        int i0, $i1;
+        java.lang.String r1;
+        boolean $z0, $z1, $z2;
+        java.lang.String[][] $r2, $r3;
+        java.lang.String[] $r4;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: java.lang.String;
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.classifier.df.data.Dataset: boolean isNumerical(int)>(i0);
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, "Only for CATEGORICAL attributes");
+
+        $r2 = r0.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String[][] values>;
+
+        if $r2 == null goto label3;
+
+        $z2 = 1;
+
+        goto label4;
+
+     label3:
+        $z2 = 0;
+
+     label4:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z2, "Values not found (equals null)");
+
+        $r3 = r0.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String[][] values>;
+
+        $r4 = $r3[i0];
+
+        $i1 = staticinvoke <org.apache.commons.lang3.ArrayUtils: int indexOf(java.lang.Object[],java.lang.Object)>($r4, r1);
+
+        return $i1;
+    }
+
+    public int[] getIgnored()
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        int[] $r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.data.Dataset: int[] ignored>;
+
+        return $r1;
+    }
+
+    private static int countAttributes(org.apache.mahout.classifier.df.data.Dataset$Attribute[])
+    {
+        org.apache.mahout.classifier.df.data.Dataset$Attribute[] r0;
+        int i0, i1, i2;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute r2;
+        boolean $z0;
+
+        r0 := @parameter0: org.apache.mahout.classifier.df.data.Dataset$Attribute[];
+
+        i1 = 0;
+
+        i0 = lengthof r0;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label3;
+
+        r2 = r0[i2];
+
+        $z0 = virtualinvoke r2.<org.apache.mahout.classifier.df.data.Dataset$Attribute: boolean isIgnored()>();
+
+        if $z0 != 0 goto label2;
+
+        i1 = i1 + 1;
+
+     label2:
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label3:
+        return i1;
+    }
+
+    private static void validateValues(org.apache.mahout.classifier.df.data.Dataset$Attribute[], java.util.List[])
+    {
+        org.apache.mahout.classifier.df.data.Dataset$Attribute[] r0;
+        java.util.List[] r1;
+        int $i0, $i1, i2, $i3;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute $r2;
+        boolean $z0, $z1, $z2;
+        java.lang.StringBuilder $r3, $r4, $r5;
+        java.lang.String $r6;
+        java.util.List $r7;
+
+        r0 := @parameter0: org.apache.mahout.classifier.df.data.Dataset$Attribute[];
+
+        r1 := @parameter1: java.util.List[];
+
+        $i1 = lengthof r0;
+
+        $i0 = lengthof r1;
+
+        if $i1 != $i0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, "attrs.length != values.length");
+
+        i2 = 0;
+
+     label3:
+        $i3 = lengthof r0;
+
+        if i2 >= $i3 goto label7;
+
+        $r2 = r0[i2];
+
+        $z0 = virtualinvoke $r2.<org.apache.mahout.classifier.df.data.Dataset$Attribute: boolean isCategorical()>();
+
+        if $z0 == 0 goto label4;
+
+        $r7 = r1[i2];
+
+        if $r7 == null goto label5;
+
+     label4:
+        $z2 = 1;
+
+        goto label6;
+
+     label5:
+        $z2 = 0;
+
+     label6:
+        $r3 = new java.lang.StringBuilder;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("values not found for attribute ");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i2);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z2, $r6);
+
+        i2 = i2 + 1;
+
+        goto label3;
+
+     label7:
+        return;
+    }
+
+    public int nbAttributes()
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute[] $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.data.Dataset: org.apache.mahout.classifier.df.data.Dataset$Attribute[] attributes>;
+
+        $i0 = lengthof $r1;
+
+        return $i0;
+    }
+
+    public boolean isNumerical(int)
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        int i0;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute[] $r1;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute $r2;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.data.Dataset: org.apache.mahout.classifier.df.data.Dataset$Attribute[] attributes>;
+
+        $r2 = $r1[i0];
+
+        $z0 = virtualinvoke $r2.<org.apache.mahout.classifier.df.data.Dataset$Attribute: boolean isNumerical()>();
+
+        return $z0;
+    }
+
+    public boolean equals(java.lang.Object)
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0, r2;
+        java.lang.Object r1;
+        boolean $z0, $z1, $z2, $z3;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute[] $r3, $r4;
+        int $i0, $i1, $i2, $i3, $i4, i5;
+        java.lang.String[][] $r5, $r6;
+        java.lang.String[] $r7, $r8;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        r1 := @parameter0: java.lang.Object;
+
+        if r0 != r1 goto label1;
+
+        return 1;
+
+     label1:
+        $z0 = r1 instanceof org.apache.mahout.classifier.df.data.Dataset;
+
+        if $z0 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        r2 = (org.apache.mahout.classifier.df.data.Dataset) r1;
+
+        $r4 = r0.<org.apache.mahout.classifier.df.data.Dataset: org.apache.mahout.classifier.df.data.Dataset$Attribute[] attributes>;
+
+        $r3 = r2.<org.apache.mahout.classifier.df.data.Dataset: org.apache.mahout.classifier.df.data.Dataset$Attribute[] attributes>;
+
+        $z1 = staticinvoke <java.util.Arrays: boolean equals(java.lang.Object[],java.lang.Object[])>($r4, $r3);
+
+        if $z1 != 0 goto label3;
+
+        return 0;
+
+     label3:
+        i5 = 0;
+
+     label4:
+        $i0 = virtualinvoke r0.<org.apache.mahout.classifier.df.data.Dataset: int nbAttributes()>();
+
+        if i5 >= $i0 goto label6;
+
+        $r5 = r0.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String[][] values>;
+
+        $r7 = $r5[i5];
+
+        $r6 = r2.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String[][] values>;
+
+        $r8 = $r6[i5];
+
+        $z2 = staticinvoke <java.util.Arrays: boolean equals(java.lang.Object[],java.lang.Object[])>($r7, $r8);
+
+        if $z2 != 0 goto label5;
+
+        return 0;
+
+     label5:
+        i5 = i5 + 1;
+
+        goto label4;
+
+     label6:
+        $i2 = r0.<org.apache.mahout.classifier.df.data.Dataset: int labelId>;
+
+        $i1 = r2.<org.apache.mahout.classifier.df.data.Dataset: int labelId>;
+
+        if $i2 != $i1 goto label7;
+
+        $i4 = r0.<org.apache.mahout.classifier.df.data.Dataset: int nbInstances>;
+
+        $i3 = r2.<org.apache.mahout.classifier.df.data.Dataset: int nbInstances>;
+
+        if $i4 != $i3 goto label7;
+
+        $z3 = 1;
+
+        goto label8;
+
+     label7:
+        $z3 = 0;
+
+     label8:
+        return $z3;
+    }
+
+    public int hashCode()
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, i8, i9, i10, i11, i12, i13;
+        java.lang.String r2;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute[] r3;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute r4;
+        java.lang.String[][] r5;
+        java.lang.String[] r6;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        $i3 = r0.<org.apache.mahout.classifier.df.data.Dataset: int labelId>;
+
+        $i1 = r0.<org.apache.mahout.classifier.df.data.Dataset: int nbInstances>;
+
+        $i2 = 31 * $i1;
+
+        i8 = $i3 + $i2;
+
+        r3 = r0.<org.apache.mahout.classifier.df.data.Dataset: org.apache.mahout.classifier.df.data.Dataset$Attribute[] attributes>;
+
+        i9 = lengthof r3;
+
+        i10 = 0;
+
+     label1:
+        if i10 >= i9 goto label2;
+
+        r4 = r3[i10];
+
+        $i6 = 31 * i8;
+
+        $i7 = virtualinvoke r4.<org.apache.mahout.classifier.df.data.Dataset$Attribute: int hashCode()>();
+
+        i8 = $i6 + $i7;
+
+        i10 = i10 + 1;
+
+        goto label1;
+
+     label2:
+        r5 = r0.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String[][] values>;
+
+        i11 = lengthof r5;
+
+        i12 = 0;
+
+     label3:
+        if i12 >= i11 goto label7;
+
+        r6 = r5[i12];
+
+        if r6 != null goto label4;
+
+        goto label6;
+
+     label4:
+        i0 = lengthof r6;
+
+        i13 = 0;
+
+     label5:
+        if i13 >= i0 goto label6;
+
+        r2 = r6[i13];
+
+        $i4 = 31 * i8;
+
+        $i5 = virtualinvoke r2.<java.lang.String: int hashCode()>();
+
+        i8 = $i4 + $i5;
+
+        i13 = i13 + 1;
+
+        goto label5;
+
+     label6:
+        i12 = i12 + 1;
+
+        goto label3;
+
+     label7:
+        return i8;
+    }
+
+    public static org.apache.mahout.classifier.df.data.Dataset load(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1;
+        org.apache.hadoop.fs.FileSystem r2;
+        long l0;
+        byte[] r3;
+        org.apache.hadoop.fs.FSDataInputStream r4;
+        org.apache.hadoop.fs.FileStatus $r5;
+        java.lang.Long $r6;
+        int $i1;
+        java.lang.String $r7;
+        java.nio.charset.Charset $r8;
+        java.lang.Throwable $r9;
+        org.apache.mahout.classifier.df.data.Dataset $r10;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r0);
+
+        $r5 = virtualinvoke r2.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus getFileStatus(org.apache.hadoop.fs.Path)>(r1);
+
+        l0 = virtualinvoke $r5.<org.apache.hadoop.fs.FileStatus: long getLen()>();
+
+        $r6 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l0);
+
+        $i1 = virtualinvoke $r6.<java.lang.Long: int intValue()>();
+
+        r3 = newarray (byte)[$i1];
+
+        r4 = virtualinvoke r2.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataInputStream open(org.apache.hadoop.fs.Path)>(r1);
+
+     label1:
+        virtualinvoke r4.<org.apache.hadoop.fs.FSDataInputStream: void readFully(byte[])>(r3);
+
+     label2:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>(r4, 1);
+
+        goto label5;
+
+     label3:
+        $r9 := @caughtexception;
+
+     label4:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>(r4, 1);
+
+        throw $r9;
+
+     label5:
+        $r7 = new java.lang.String;
+
+        $r8 = staticinvoke <java.nio.charset.Charset: java.nio.charset.Charset defaultCharset()>();
+
+        specialinvoke $r7.<java.lang.String: void <init>(byte[],java.nio.charset.Charset)>(r3, $r8);
+
+        $r10 = staticinvoke <org.apache.mahout.classifier.df.data.Dataset: org.apache.mahout.classifier.df.data.Dataset fromJSON(java.lang.String)>($r7);
+
+        return $r10;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public java.lang.String toJSON()
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, i7, i8;
+        java.util.LinkedList $r2;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute[] $r3, $r8, $r13;
+        int[] $r4, $r7, $r16;
+        org.codehaus.jackson.map.ObjectMapper $r5;
+        java.lang.String $r6;
+        java.lang.String[] $r9, $r15;
+        java.lang.String[][] $r10, $r12;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute $r11, $r14, $r18;
+        java.lang.Exception $r17;
+        java.lang.RuntimeException $r19;
+        java.util.Map r20;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        $r2 = new java.util.LinkedList;
+
+        specialinvoke $r2.<java.util.LinkedList: void <init>()>();
+
+        i7 = 0;
+
+        i8 = 0;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.classifier.df.data.Dataset: org.apache.mahout.classifier.df.data.Dataset$Attribute[] attributes>;
+
+        $i2 = lengthof $r3;
+
+        $r4 = r0.<org.apache.mahout.classifier.df.data.Dataset: int[] ignored>;
+
+        $i1 = lengthof $r4;
+
+        $i3 = $i2 + $i1;
+
+        if i8 >= $i3 goto label5;
+
+        i0 = i8 - i7;
+
+        $r7 = r0.<org.apache.mahout.classifier.df.data.Dataset: int[] ignored>;
+
+        $i4 = lengthof $r7;
+
+        if i7 >= $i4 goto label2;
+
+        $r16 = r0.<org.apache.mahout.classifier.df.data.Dataset: int[] ignored>;
+
+        $i6 = $r16[i7];
+
+        if i8 != $i6 goto label2;
+
+        $r18 = <org.apache.mahout.classifier.df.data.Dataset$Attribute: org.apache.mahout.classifier.df.data.Dataset$Attribute IGNORED>;
+
+        r20 = specialinvoke r0.<org.apache.mahout.classifier.df.data.Dataset: java.util.Map getMap(org.apache.mahout.classifier.df.data.Dataset$Attribute,java.lang.String[],boolean)>($r18, null, 0);
+
+        i7 = i7 + 1;
+
+        goto label4;
+
+     label2:
+        $i5 = r0.<org.apache.mahout.classifier.df.data.Dataset: int labelId>;
+
+        if i0 != $i5 goto label3;
+
+        $r13 = r0.<org.apache.mahout.classifier.df.data.Dataset: org.apache.mahout.classifier.df.data.Dataset$Attribute[] attributes>;
+
+        $r14 = $r13[i0];
+
+        $r12 = r0.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String[][] values>;
+
+        $r15 = $r12[i0];
+
+        r20 = specialinvoke r0.<org.apache.mahout.classifier.df.data.Dataset: java.util.Map getMap(org.apache.mahout.classifier.df.data.Dataset$Attribute,java.lang.String[],boolean)>($r14, $r15, 1);
+
+        goto label4;
+
+     label3:
+        $r8 = r0.<org.apache.mahout.classifier.df.data.Dataset: org.apache.mahout.classifier.df.data.Dataset$Attribute[] attributes>;
+
+        $r11 = $r8[i0];
+
+        $r10 = r0.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String[][] values>;
+
+        $r9 = $r10[i0];
+
+        r20 = specialinvoke r0.<org.apache.mahout.classifier.df.data.Dataset: java.util.Map getMap(org.apache.mahout.classifier.df.data.Dataset$Attribute,java.lang.String[],boolean)>($r11, $r9, 0);
+
+     label4:
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>(r20);
+
+        i8 = i8 + 1;
+
+        goto label1;
+
+     label5:
+        $r5 = <org.apache.mahout.classifier.df.data.Dataset: org.codehaus.jackson.map.ObjectMapper OBJECT_MAPPER>;
+
+        $r6 = virtualinvoke $r5.<org.codehaus.jackson.map.ObjectMapper: java.lang.String writeValueAsString(java.lang.Object)>($r2);
+
+     label6:
+        return $r6;
+
+     label7:
+        $r17 := @caughtexception;
+
+        $r19 = new java.lang.RuntimeException;
+
+        specialinvoke $r19.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r17);
+
+        throw $r19;
+
+        catch java.lang.Exception from label5 to label6 with label7;
+    }
+
+    public static org.apache.mahout.classifier.df.data.Dataset fromJSON(java.lang.String)
+    {
+        java.lang.String r0, $r24, $r27;
+        java.util.List r1, r7;
+        java.lang.String[][] r3;
+        java.util.Map r5;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute r6, $r28, $r29;
+        java.lang.String[] r8, $r34;
+        org.apache.mahout.classifier.df.data.Dataset$1 $r9;
+        org.codehaus.jackson.map.ObjectMapper $r10;
+        java.lang.Object $r11, $r22, $r23, $r25, $r26, $r30, $r32, $r35;
+        java.util.LinkedList $r12, $r13;
+        org.apache.mahout.classifier.df.data.Dataset $r14;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, i11, i12;
+        java.lang.Object[] $r15, $r33;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute[] $r16, $r17;
+        int[] $r18, $r19, $r20;
+        java.lang.Integer $r21, $r36;
+        java.lang.Boolean $r31;
+        boolean $z1;
+        java.lang.RuntimeException $r37;
+        java.lang.Exception $r38;
+
+        r0 := @parameter0: java.lang.String;
+
+     label01:
+        $r10 = <org.apache.mahout.classifier.df.data.Dataset: org.codehaus.jackson.map.ObjectMapper OBJECT_MAPPER>;
+
+        $r9 = new org.apache.mahout.classifier.df.data.Dataset$1;
+
+        specialinvoke $r9.<org.apache.mahout.classifier.df.data.Dataset$1: void <init>()>();
+
+        $r11 = virtualinvoke $r10.<org.codehaus.jackson.map.ObjectMapper: java.lang.Object readValue(java.lang.String,org.codehaus.jackson.type.TypeReference)>(r0, $r9);
+
+        r1 = (java.util.List) $r11;
+
+     label02:
+        goto label04;
+
+     label03:
+        $r38 := @caughtexception;
+
+        $r37 = new java.lang.RuntimeException;
+
+        specialinvoke $r37.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r38);
+
+        throw $r37;
+
+     label04:
+        $r12 = new java.util.LinkedList;
+
+        specialinvoke $r12.<java.util.LinkedList: void <init>()>();
+
+        $r13 = new java.util.LinkedList;
+
+        specialinvoke $r13.<java.util.LinkedList: void <init>()>();
+
+        $i0 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        r3 = newarray (java.lang.String[])[$i0];
+
+        $r14 = new org.apache.mahout.classifier.df.data.Dataset;
+
+        specialinvoke $r14.<org.apache.mahout.classifier.df.data.Dataset: void <init>()>();
+
+        i11 = 0;
+
+     label05:
+        $i2 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        if i11 >= $i2 goto label09;
+
+        $r25 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i11);
+
+        r5 = (java.util.Map) $r25;
+
+        $r23 = interfaceinvoke r5.<java.util.Map: java.lang.Object get(java.lang.Object)>("type");
+
+        $r24 = (java.lang.String) $r23;
+
+        $r28 = staticinvoke <org.apache.mahout.classifier.df.data.Dataset$Attribute: org.apache.mahout.classifier.df.data.Dataset$Attribute access$000(java.lang.String)>($r24);
+
+        $r29 = <org.apache.mahout.classifier.df.data.Dataset$Attribute: org.apache.mahout.classifier.df.data.Dataset$Attribute IGNORED>;
+
+        if $r28 != $r29 goto label06;
+
+        $r36 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i11);
+
+        interfaceinvoke $r13.<java.util.List: boolean add(java.lang.Object)>($r36);
+
+        goto label08;
+
+     label06:
+        $r26 = interfaceinvoke r5.<java.util.Map: java.lang.Object get(java.lang.Object)>("type");
+
+        $r27 = (java.lang.String) $r26;
+
+        r6 = staticinvoke <org.apache.mahout.classifier.df.data.Dataset$Attribute: org.apache.mahout.classifier.df.data.Dataset$Attribute access$000(java.lang.String)>($r27);
+
+        interfaceinvoke $r12.<java.util.List: boolean add(java.lang.Object)>(r6);
+
+        $r30 = interfaceinvoke r5.<java.util.Map: java.lang.Object get(java.lang.Object)>("label");
+
+        $r31 = (java.lang.Boolean) $r30;
+
+        $z1 = virtualinvoke $r31.<java.lang.Boolean: boolean booleanValue()>();
+
+        if $z1 == 0 goto label07;
+
+        $i8 = interfaceinvoke $r13.<java.util.List: int size()>();
+
+        $i7 = i11 - $i8;
+
+        $r14.<org.apache.mahout.classifier.df.data.Dataset: int labelId> = $i7;
+
+     label07:
+        $r32 = interfaceinvoke r5.<java.util.Map: java.lang.Object get(java.lang.Object)>("values");
+
+        if $r32 == null goto label08;
+
+        $r35 = interfaceinvoke r5.<java.util.Map: java.lang.Object get(java.lang.Object)>("values");
+
+        r7 = (java.util.List) $r35;
+
+        $i6 = interfaceinvoke r7.<java.util.List: int size()>();
+
+        $r34 = newarray (java.lang.String)[$i6];
+
+        $r33 = interfaceinvoke r7.<java.util.List: java.lang.Object[] toArray(java.lang.Object[])>($r34);
+
+        r8 = (java.lang.String[]) $r33;
+
+        $i10 = interfaceinvoke $r13.<java.util.List: int size()>();
+
+        $i9 = i11 - $i10;
+
+        r3[$i9] = r8;
+
+     label08:
+        i11 = i11 + 1;
+
+        goto label05;
+
+     label09:
+        $i1 = interfaceinvoke $r12.<java.util.List: int size()>();
+
+        $r16 = newarray (org.apache.mahout.classifier.df.data.Dataset$Attribute)[$i1];
+
+        $r15 = interfaceinvoke $r12.<java.util.List: java.lang.Object[] toArray(java.lang.Object[])>($r16);
+
+        $r17 = (org.apache.mahout.classifier.df.data.Dataset$Attribute[]) $r15;
+
+        $r14.<org.apache.mahout.classifier.df.data.Dataset: org.apache.mahout.classifier.df.data.Dataset$Attribute[] attributes> = $r17;
+
+        $i3 = interfaceinvoke $r13.<java.util.List: int size()>();
+
+        $r19 = newarray (int)[$i3];
+
+        $r14.<org.apache.mahout.classifier.df.data.Dataset: int[] ignored> = $r19;
+
+        $r14.<org.apache.mahout.classifier.df.data.Dataset: java.lang.String[][] values> = r3;
+
+        i12 = 0;
+
+     label10:
+        $r18 = $r14.<org.apache.mahout.classifier.df.data.Dataset: int[] ignored>;
+
+        $i4 = lengthof $r18;
+
+        if i12 >= $i4 goto label11;
+
+        $r20 = $r14.<org.apache.mahout.classifier.df.data.Dataset: int[] ignored>;
+
+        $r22 = interfaceinvoke $r13.<java.util.List: java.lang.Object get(int)>(i12);
+
+        $r21 = (java.lang.Integer) $r22;
+
+        $i5 = virtualinvoke $r21.<java.lang.Integer: int intValue()>();
+
+        $r20[i12] = $i5;
+
+        i12 = i12 + 1;
+
+        goto label10;
+
+     label11:
+        return $r14;
+
+        catch java.lang.Exception from label01 to label02 with label03;
+    }
+
+    private java.util.Map getMap(org.apache.mahout.classifier.df.data.Dataset$Attribute, java.lang.String[], boolean)
+    {
+        org.apache.mahout.classifier.df.data.Dataset r0;
+        org.apache.mahout.classifier.df.data.Dataset$Attribute r1;
+        java.lang.String[] r2;
+        boolean z0;
+        java.util.HashMap $r4;
+        java.lang.String $r5, $r7;
+        java.util.Locale $r6;
+        java.lang.Boolean $r10;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Dataset;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.data.Dataset$Attribute;
+
+        r2 := @parameter1: java.lang.String[];
+
+        z0 := @parameter2: boolean;
+
+        $r4 = new java.util.HashMap;
+
+        specialinvoke $r4.<java.util.HashMap: void <init>()>();
+
+        $r5 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Dataset$Attribute: java.lang.String toString()>();
+
+        $r6 = staticinvoke <java.util.Locale: java.util.Locale getDefault()>();
+
+        $r7 = virtualinvoke $r5.<java.lang.String: java.lang.String toLowerCase(java.util.Locale)>($r6);
+
+        interfaceinvoke $r4.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("type", $r7);
+
+        interfaceinvoke $r4.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("values", r2);
+
+        $r10 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(boolean)>(z0);
+
+        interfaceinvoke $r4.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("label", $r10);
+
+        return $r4;
+    }
+
+    static void <clinit>()
+    {
+        org.codehaus.jackson.map.ObjectMapper $r0;
+
+        <org.apache.mahout.classifier.df.data.Dataset: java.lang.String LABEL> = "label";
+
+        <org.apache.mahout.classifier.df.data.Dataset: java.lang.String VALUES> = "values";
+
+        <org.apache.mahout.classifier.df.data.Dataset: java.lang.String TYPE> = "type";
+
+        $r0 = new org.codehaus.jackson.map.ObjectMapper;
+
+        specialinvoke $r0.<org.codehaus.jackson.map.ObjectMapper: void <init>()>();
+
+        <org.apache.mahout.classifier.df.data.Dataset: org.codehaus.jackson.map.ObjectMapper OBJECT_MAPPER> = $r0;
+
+        return;
+    }
+}

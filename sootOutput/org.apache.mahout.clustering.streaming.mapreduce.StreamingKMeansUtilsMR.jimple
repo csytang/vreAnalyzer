@@ -1,0 +1,427 @@
+public final class org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR r0;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.mahout.math.neighborhood.UpdatableSearcher searcherFromConfiguration(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.mahout.common.distance.DistanceMeasure r1;
+        java.lang.String r2, r3, $r10, $r11, $r23, $r26;
+        int i0, i1;
+        java.lang.Class $r4, $r9, $r12, $r14, $r15, $r21, $r22, $r27;
+        java.lang.Class[] $r5, $r13, $r25, $r33;
+        java.lang.reflect.Constructor $r6;
+        java.lang.Object[] $r7, $r16, $r28, $r32;
+        java.lang.Object $r8, $r20, $r31, $r37;
+        boolean $z0, $z1, $z2, $z3;
+        java.lang.Integer $r17, $r18, $r30;
+        org.apache.mahout.math.neighborhood.UpdatableSearcher $r19, $r29, $r36;
+        java.lang.IllegalStateException $r24;
+        java.lang.RuntimeException $r34;
+        java.lang.Exception $r35;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r2 = virtualinvoke r0.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("distanceMeasure");
+
+     label1:
+        $r4 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>(r2);
+
+        $r5 = newarray (java.lang.Class)[0];
+
+        $r6 = virtualinvoke $r4.<java.lang.Class: java.lang.reflect.Constructor getConstructor(java.lang.Class[])>($r5);
+
+        $r7 = newarray (java.lang.Object)[0];
+
+        $r8 = virtualinvoke $r6.<java.lang.reflect.Constructor: java.lang.Object newInstance(java.lang.Object[])>($r7);
+
+        r1 = (org.apache.mahout.common.distance.DistanceMeasure) $r8;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r35 := @caughtexception;
+
+        $r34 = new java.lang.RuntimeException;
+
+        specialinvoke $r34.<java.lang.RuntimeException: void <init>(java.lang.String,java.lang.Throwable)>("Failed to instantiate distanceMeasure", $r35);
+
+        throw $r34;
+
+     label4:
+        i1 = virtualinvoke r0.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("numProjections", 20);
+
+        i0 = virtualinvoke r0.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("searchSize", 10);
+
+        r3 = virtualinvoke r0.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("searcherClass");
+
+        $r9 = class "org/apache/mahout/math/neighborhood/BruteSearch";
+
+        $r10 = virtualinvoke $r9.<java.lang.Class: java.lang.String getName()>();
+
+        $z0 = virtualinvoke r3.<java.lang.String: boolean equals(java.lang.Object)>($r10);
+
+        if $z0 == 0 goto label5;
+
+        $r33 = newarray (java.lang.Class)[1];
+
+        $r33[0] = class "org/apache/mahout/common/distance/DistanceMeasure";
+
+        $r32 = newarray (java.lang.Object)[1];
+
+        $r32[0] = r1;
+
+        $r37 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.String,java.lang.Class,java.lang.Class[],java.lang.Object[])>(r3, class "org/apache/mahout/math/neighborhood/UpdatableSearcher", $r33, $r32);
+
+        $r36 = (org.apache.mahout.math.neighborhood.UpdatableSearcher) $r37;
+
+        return $r36;
+
+     label5:
+        $r12 = class "org/apache/mahout/math/neighborhood/FastProjectionSearch";
+
+        $r11 = virtualinvoke $r12.<java.lang.Class: java.lang.String getName()>();
+
+        $z1 = virtualinvoke r3.<java.lang.String: boolean equals(java.lang.Object)>($r11);
+
+        if $z1 != 0 goto label6;
+
+        $r22 = class "org/apache/mahout/math/neighborhood/ProjectionSearch";
+
+        $r23 = virtualinvoke $r22.<java.lang.Class: java.lang.String getName()>();
+
+        $z2 = virtualinvoke r3.<java.lang.String: boolean equals(java.lang.Object)>($r23);
+
+        if $z2 == 0 goto label7;
+
+     label6:
+        $r13 = newarray (java.lang.Class)[3];
+
+        $r13[0] = class "org/apache/mahout/common/distance/DistanceMeasure";
+
+        $r15 = <java.lang.Integer: java.lang.Class TYPE>;
+
+        $r13[1] = $r15;
+
+        $r14 = <java.lang.Integer: java.lang.Class TYPE>;
+
+        $r13[2] = $r14;
+
+        $r16 = newarray (java.lang.Object)[3];
+
+        $r16[0] = r1;
+
+        $r17 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        $r16[1] = $r17;
+
+        $r18 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r16[2] = $r18;
+
+        $r20 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.String,java.lang.Class,java.lang.Class[],java.lang.Object[])>(r3, class "org/apache/mahout/math/neighborhood/UpdatableSearcher", $r13, $r16);
+
+        $r19 = (org.apache.mahout.math.neighborhood.UpdatableSearcher) $r20;
+
+        return $r19;
+
+     label7:
+        $r21 = class "org/apache/mahout/math/neighborhood/LocalitySensitiveHashSearch";
+
+        $r26 = virtualinvoke $r21.<java.lang.Class: java.lang.String getName()>();
+
+        $z3 = virtualinvoke r3.<java.lang.String: boolean equals(java.lang.Object)>($r26);
+
+        if $z3 == 0 goto label8;
+
+        $r25 = newarray (java.lang.Class)[2];
+
+        $r25[0] = class "org/apache/mahout/common/distance/DistanceMeasure";
+
+        $r27 = <java.lang.Integer: java.lang.Class TYPE>;
+
+        $r25[1] = $r27;
+
+        $r28 = newarray (java.lang.Object)[2];
+
+        $r28[0] = r1;
+
+        $r30 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r28[1] = $r30;
+
+        $r31 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.String,java.lang.Class,java.lang.Class[],java.lang.Object[])>(r3, class "org/apache/mahout/math/neighborhood/LocalitySensitiveHashSearch", $r25, $r28);
+
+        $r29 = (org.apache.mahout.math.neighborhood.UpdatableSearcher) $r31;
+
+        return $r29;
+
+     label8:
+        $r24 = new java.lang.IllegalStateException;
+
+        specialinvoke $r24.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Unknown class instantiation requested");
+
+        throw $r24;
+
+        catch java.lang.Exception from label1 to label2 with label3;
+    }
+
+    public static java.lang.Iterable getCentroidsFromVectorWritable(java.lang.Iterable)
+    {
+        java.lang.Iterable r0, $r2;
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$1 $r1;
+
+        r0 := @parameter0: java.lang.Iterable;
+
+        $r1 = new org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$1;
+
+        specialinvoke $r1.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$1: void <init>()>();
+
+        $r2 = staticinvoke <com.google.common.collect.Iterables: java.lang.Iterable transform(java.lang.Iterable,com.google.common.base.Function)>(r0, $r1);
+
+        return $r2;
+    }
+
+    public static java.lang.Iterable castVectorsToCentroids(java.lang.Iterable)
+    {
+        java.lang.Iterable r0, $r2;
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$2 $r1;
+
+        r0 := @parameter0: java.lang.Iterable;
+
+        $r1 = new org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$2;
+
+        specialinvoke $r1.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR$2: void <init>()>();
+
+        $r2 = staticinvoke <com.google.common.collect.Iterables: java.lang.Iterable transform(java.lang.Iterable,com.google.common.base.Function)>(r0, $r1);
+
+        return $r2;
+    }
+
+    public static void writeCentroidsToSequenceFile(java.lang.Iterable, org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration) throws java.io.IOException
+    {
+        java.lang.Iterable r0;
+        org.apache.hadoop.fs.Path r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.hadoop.io.SequenceFile$Writer r3;
+        java.util.Iterator r4;
+        org.apache.mahout.math.Centroid r5;
+        org.apache.hadoop.fs.FileSystem $r8;
+        boolean $z0;
+        java.lang.Object $r9;
+        org.apache.hadoop.io.IntWritable $r10;
+        org.apache.mahout.clustering.streaming.mapreduce.CentroidWritable $r11;
+        int $i0, i1;
+        java.lang.Throwable $r12, $r13, $r14, r16;
+
+        r0 := @parameter0: java.lang.Iterable;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.conf.Configuration;
+
+        $r8 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(org.apache.hadoop.conf.Configuration)>(r2);
+
+        r3 = staticinvoke <org.apache.hadoop.io.SequenceFile: org.apache.hadoop.io.SequenceFile$Writer createWriter(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>($r8, r2, r1, class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/clustering/streaming/mapreduce/CentroidWritable");
+
+        r16 = null;
+
+     label01:
+        i1 = 0;
+
+        r4 = interfaceinvoke r0.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label02:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label03;
+
+        $r9 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.Centroid) $r9;
+
+        $r10 = new org.apache.hadoop.io.IntWritable;
+
+        $i0 = i1;
+
+        i1 = i1 + 1;
+
+        specialinvoke $r10.<org.apache.hadoop.io.IntWritable: void <init>(int)>($i0);
+
+        $r11 = new org.apache.mahout.clustering.streaming.mapreduce.CentroidWritable;
+
+        specialinvoke $r11.<org.apache.mahout.clustering.streaming.mapreduce.CentroidWritable: void <init>(org.apache.mahout.math.Centroid)>(r5);
+
+        virtualinvoke r3.<org.apache.hadoop.io.SequenceFile$Writer: void append(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r10, $r11);
+
+        goto label02;
+
+     label03:
+        if r3 == null goto label12;
+
+        virtualinvoke r3.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
+
+        goto label12;
+
+     label04:
+        $r12 := @caughtexception;
+
+        r16 = $r12;
+
+        throw $r12;
+
+     label05:
+        $r13 := @caughtexception;
+
+     label06:
+        if r3 == null goto label11;
+
+        if r16 == null goto label10;
+
+     label07:
+        virtualinvoke r3.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
+
+     label08:
+        goto label11;
+
+     label09:
+        $r14 := @caughtexception;
+
+        virtualinvoke r16.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r14);
+
+        goto label11;
+
+     label10:
+        virtualinvoke r3.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
+
+     label11:
+        throw $r13;
+
+     label12:
+        return;
+
+        catch java.lang.Throwable from label01 to label03 with label04;
+        catch java.lang.Throwable from label01 to label03 with label05;
+        catch java.lang.Throwable from label07 to label08 with label09;
+        catch java.lang.Throwable from label04 to label06 with label05;
+    }
+
+    public static void writeVectorsToSequenceFile(java.lang.Iterable, org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration) throws java.io.IOException
+    {
+        java.lang.Iterable r0;
+        org.apache.hadoop.fs.Path r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.hadoop.io.SequenceFile$Writer r3;
+        java.util.Iterator r4;
+        org.apache.mahout.math.Vector r5;
+        org.apache.hadoop.fs.FileSystem $r8;
+        boolean $z0;
+        java.lang.Object $r9;
+        org.apache.hadoop.io.IntWritable $r10;
+        org.apache.mahout.math.VectorWritable $r11;
+        int $i0, i1;
+        java.lang.Throwable $r12, $r14, $r15, r16;
+
+        r0 := @parameter0: java.lang.Iterable;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.conf.Configuration;
+
+        $r8 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(org.apache.hadoop.conf.Configuration)>(r2);
+
+        r3 = staticinvoke <org.apache.hadoop.io.SequenceFile: org.apache.hadoop.io.SequenceFile$Writer createWriter(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>($r8, r2, r1, class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable");
+
+        r16 = null;
+
+     label01:
+        i1 = 0;
+
+        r4 = interfaceinvoke r0.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label02:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label03;
+
+        $r9 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.Vector) $r9;
+
+        $r10 = new org.apache.hadoop.io.IntWritable;
+
+        $i0 = i1;
+
+        i1 = i1 + 1;
+
+        specialinvoke $r10.<org.apache.hadoop.io.IntWritable: void <init>(int)>($i0);
+
+        $r11 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r11.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r5);
+
+        virtualinvoke r3.<org.apache.hadoop.io.SequenceFile$Writer: void append(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r10, $r11);
+
+        goto label02;
+
+     label03:
+        if r3 == null goto label12;
+
+        virtualinvoke r3.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
+
+        goto label12;
+
+     label04:
+        $r14 := @caughtexception;
+
+        r16 = $r14;
+
+        throw $r14;
+
+     label05:
+        $r15 := @caughtexception;
+
+     label06:
+        if r3 == null goto label11;
+
+        if r16 == null goto label10;
+
+     label07:
+        virtualinvoke r3.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
+
+     label08:
+        goto label11;
+
+     label09:
+        $r12 := @caughtexception;
+
+        virtualinvoke r16.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r12);
+
+        goto label11;
+
+     label10:
+        virtualinvoke r3.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
+
+     label11:
+        throw $r15;
+
+     label12:
+        return;
+
+        catch java.lang.Throwable from label01 to label03 with label04;
+        catch java.lang.Throwable from label01 to label03 with label05;
+        catch java.lang.Throwable from label07 to label08 with label09;
+        catch java.lang.Throwable from label04 to label06 with label05;
+    }
+}

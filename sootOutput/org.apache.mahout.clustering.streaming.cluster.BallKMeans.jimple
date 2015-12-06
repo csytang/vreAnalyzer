@@ -1,0 +1,1152 @@
+public class org.apache.mahout.clustering.streaming.cluster.BallKMeans extends java.lang.Object implements java.lang.Iterable
+{
+    private final org.apache.mahout.math.neighborhood.UpdatableSearcher centroids;
+    private final int numClusters;
+    private final int maxNumIterations;
+    private final double trimFraction;
+    private final boolean kMeansPlusPlusInit;
+    private final boolean correctWeights;
+    private final double testProbability;
+    private final boolean splitTrainTest;
+    private final int numRuns;
+    private final java.util.Random random;
+
+    public void <init>(org.apache.mahout.math.neighborhood.UpdatableSearcher, int, int)
+    {
+        org.apache.mahout.clustering.streaming.cluster.BallKMeans r0;
+        org.apache.mahout.math.neighborhood.UpdatableSearcher r1;
+        int i0, i1;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.cluster.BallKMeans;
+
+        r1 := @parameter0: org.apache.mahout.math.neighborhood.UpdatableSearcher;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        specialinvoke r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: void <init>(org.apache.mahout.math.neighborhood.UpdatableSearcher,int,int,double,boolean,boolean,double,int)>(r1, i0, i1, 0.9, 1, 1, 0.0, 1);
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.math.neighborhood.UpdatableSearcher, int, int, boolean, int)
+    {
+        org.apache.mahout.clustering.streaming.cluster.BallKMeans r0;
+        org.apache.mahout.math.neighborhood.UpdatableSearcher r1;
+        int i0, i1, i2;
+        boolean z0;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.cluster.BallKMeans;
+
+        r1 := @parameter0: org.apache.mahout.math.neighborhood.UpdatableSearcher;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        z0 := @parameter3: boolean;
+
+        i2 := @parameter4: int;
+
+        specialinvoke r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: void <init>(org.apache.mahout.math.neighborhood.UpdatableSearcher,int,int,double,boolean,boolean,double,int)>(r1, i0, i1, 0.9, z0, 1, 0.1, i2);
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.math.neighborhood.UpdatableSearcher, int, int, double, boolean, boolean, double, int)
+    {
+        org.apache.mahout.clustering.streaming.cluster.BallKMeans r0;
+        org.apache.mahout.math.neighborhood.UpdatableSearcher r1;
+        int i0, i1, i2, $i3;
+        double d0, d1;
+        boolean z0, z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8;
+        byte $b4, $b5, $b6, $b7;
+        org.apache.mahout.common.RandomWrapper $r2;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.cluster.BallKMeans;
+
+        r1 := @parameter0: org.apache.mahout.math.neighborhood.UpdatableSearcher;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        d0 := @parameter3: double;
+
+        z0 := @parameter4: boolean;
+
+        z1 := @parameter5: boolean;
+
+        d1 := @parameter6: double;
+
+        i2 := @parameter7: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $i3 = virtualinvoke r1.<org.apache.mahout.math.neighborhood.UpdatableSearcher: int size()>();
+
+        if $i3 != 0 goto label01;
+
+        $z2 = 1;
+
+        goto label02;
+
+     label01:
+        $z2 = 0;
+
+     label02:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z2, "Searcher must be empty initially to populate with centroids");
+
+        if i0 <= 0 goto label03;
+
+        $z3 = 1;
+
+        goto label04;
+
+     label03:
+        $z3 = 0;
+
+     label04:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z3, "The requested number of clusters must be positive");
+
+        if i1 <= 0 goto label05;
+
+        $z4 = 1;
+
+        goto label06;
+
+     label05:
+        $z4 = 0;
+
+     label06:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z4, "The maximum number of iterations must be positive");
+
+        $b4 = d0 cmpl 0.0;
+
+        if $b4 <= 0 goto label07;
+
+        $z5 = 1;
+
+        goto label08;
+
+     label07:
+        $z5 = 0;
+
+     label08:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z5, "The trim fraction must be positive");
+
+        $b5 = d1 cmpl 0.0;
+
+        if $b5 < 0 goto label09;
+
+        $b7 = d1 cmpg 1.0;
+
+        if $b7 >= 0 goto label09;
+
+        $z6 = 1;
+
+        goto label10;
+
+     label09:
+        $z6 = 0;
+
+     label10:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z6, "The testProbability must be in [0, 1)");
+
+        if i2 <= 0 goto label11;
+
+        $z7 = 1;
+
+        goto label12;
+
+     label11:
+        $z7 = 0;
+
+     label12:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z7, "There has to be at least one run");
+
+        r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids> = r1;
+
+        r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: int numClusters> = i0;
+
+        r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: int maxNumIterations> = i1;
+
+        r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: double trimFraction> = d0;
+
+        r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: boolean kMeansPlusPlusInit> = z0;
+
+        r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: boolean correctWeights> = z1;
+
+        r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: double testProbability> = d1;
+
+        $b6 = d1 cmpl 0.0;
+
+        if $b6 <= 0 goto label13;
+
+        $z8 = 1;
+
+        goto label14;
+
+     label13:
+        $z8 = 0;
+
+     label14:
+        r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: boolean splitTrainTest> = $z8;
+
+        r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: int numRuns> = i2;
+
+        $r2 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: java.util.Random random> = $r2;
+
+        return;
+    }
+
+    public org.apache.mahout.common.Pair splitTrainTest(java.util.List)
+    {
+        org.apache.mahout.clustering.streaming.cluster.BallKMeans r0;
+        java.util.List r1, $r8, $r9;
+        int i0, $i2, $i3, $i4, $i5;
+        double $d0, $d1, $d2, $d3, $d4, $d5;
+        byte $b1;
+        org.apache.mahout.common.Pair $r2, $r7;
+        java.util.ArrayList $r3;
+        boolean $z0;
+        java.lang.Object[] $r4;
+        java.lang.Double $r5;
+        java.lang.Integer $r6;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.cluster.BallKMeans;
+
+        r1 := @parameter0: java.util.List;
+
+        $d0 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: double testProbability>;
+
+        $b1 = $d0 cmpl 0.0;
+
+        if $b1 != 0 goto label1;
+
+        $r2 = new org.apache.mahout.common.Pair;
+
+        $r3 = new java.util.ArrayList;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>()>();
+
+        specialinvoke $r2.<org.apache.mahout.common.Pair: void <init>(java.lang.Object,java.lang.Object)>(r1, $r3);
+
+        return $r2;
+
+     label1:
+        $d1 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: double testProbability>;
+
+        $i2 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        $d2 = (double) $i2;
+
+        $d3 = $d1 * $d2;
+
+        i0 = (int) $d3;
+
+        if i0 <= 0 goto label2;
+
+        $i3 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        if i0 >= $i3 goto label2;
+
+        $z0 = 1;
+
+        goto label3;
+
+     label2:
+        $z0 = 0;
+
+     label3:
+        $r4 = newarray (java.lang.Object)[2];
+
+        $d4 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: double testProbability>;
+
+        $d5 = $d4 * 100.0;
+
+        $r5 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d5);
+
+        $r4[0] = $r5;
+
+        $i4 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i4);
+
+        $r4[1] = $r6;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.String,java.lang.Object[])>($z0, "Must have nonzero number of training and test vectors. Asked for %.1f %% of %d vectors for test", $r4);
+
+        staticinvoke <java.util.Collections: void shuffle(java.util.List)>(r1);
+
+        $r7 = new org.apache.mahout.common.Pair;
+
+        $i5 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        $r8 = interfaceinvoke r1.<java.util.List: java.util.List subList(int,int)>(i0, $i5);
+
+        $r9 = interfaceinvoke r1.<java.util.List: java.util.List subList(int,int)>(0, i0);
+
+        specialinvoke $r7.<org.apache.mahout.common.Pair: void <init>(java.lang.Object,java.lang.Object)>($r8, $r9);
+
+        return $r7;
+    }
+
+    public org.apache.mahout.math.neighborhood.UpdatableSearcher cluster(java.util.List)
+    {
+        org.apache.mahout.clustering.streaming.cluster.BallKMeans r0;
+        java.util.List r1, $r8, $r18, $r20, $r26, $r28;
+        org.apache.mahout.common.Pair r2;
+        org.apache.mahout.math.WeightedVector r4, r5;
+        java.util.ArrayList $r6;
+        int $i0, $i3, i5;
+        byte $b1, $b2, $b4;
+        org.apache.mahout.math.neighborhood.UpdatableSearcher $r7, $r12, $r14, $r16, $r17, $r21, $r24, $r25;
+        boolean $z0, $z1, $z2, $z3;
+        java.lang.Object $r9, $r10, $r13, $r19, $r22, $r23, $r27;
+        org.apache.mahout.math.random.WeightedThing $r11;
+        double $d0, $d1, $d2, d3, d4;
+        java.lang.RuntimeException $r15;
+        java.util.Iterator r29;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.cluster.BallKMeans;
+
+        r1 := @parameter0: java.util.List;
+
+        r2 = virtualinvoke r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.common.Pair splitTrainTest(java.util.List)>(r1);
+
+        $r6 = new java.util.ArrayList;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>()>();
+
+        d3 = #Infinity;
+
+        d4 = #Infinity;
+
+        i5 = 0;
+
+     label01:
+        $i0 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: int numRuns>;
+
+        if i5 >= $i0 goto label08;
+
+        $r16 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        virtualinvoke $r16.<org.apache.mahout.math.neighborhood.UpdatableSearcher: void clear()>();
+
+        $z2 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: boolean kMeansPlusPlusInit>;
+
+        if $z2 == 0 goto label02;
+
+        $r27 = virtualinvoke r2.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r26 = (java.util.List) $r27;
+
+        specialinvoke r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: void initializeSeedsKMeansPlusPlus(java.util.List)>($r26);
+
+        goto label03;
+
+     label02:
+        $r19 = virtualinvoke r2.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r18 = (java.util.List) $r19;
+
+        specialinvoke r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: void initializeSeedsRandomly(java.util.List)>($r18);
+
+     label03:
+        $i3 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: int numRuns>;
+
+        if $i3 <= 1 goto label06;
+
+        $r22 = virtualinvoke r2.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r20 = (java.util.List) $r22;
+
+        specialinvoke r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: void iterativeAssignment(java.util.List)>($r20);
+
+        $z3 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: boolean splitTrainTest>;
+
+        if $z3 == 0 goto label04;
+
+        $r28 = r1;
+
+        goto label05;
+
+     label04:
+        $r23 = virtualinvoke r2.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r28 = (java.util.List) $r23;
+
+     label05:
+        $r24 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        d3 = staticinvoke <org.apache.mahout.clustering.ClusteringUtils: double totalClusterCost(java.lang.Iterable,org.apache.mahout.math.neighborhood.Searcher)>($r28, $r24);
+
+        $b4 = d3 cmpg d4;
+
+        if $b4 >= 0 goto label07;
+
+        d4 = d3;
+
+        interfaceinvoke $r6.<java.util.List: void clear()>();
+
+        $r25 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        staticinvoke <com.google.common.collect.Iterables: boolean addAll(java.util.Collection,java.lang.Iterable)>($r6, $r25);
+
+        goto label07;
+
+     label06:
+        specialinvoke r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: void iterativeAssignment(java.util.List)>(r1);
+
+        $r21 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        return $r21;
+
+     label07:
+        i5 = i5 + 1;
+
+        goto label01;
+
+     label08:
+        $b1 = d4 cmpl #Infinity;
+
+        if $b1 != 0 goto label09;
+
+        $r15 = new java.lang.RuntimeException;
+
+        specialinvoke $r15.<java.lang.RuntimeException: void <init>(java.lang.String)>("No valid clustering was found");
+
+        throw $r15;
+
+     label09:
+        $b2 = d3 cmpl d4;
+
+        if $b2 == 0 goto label10;
+
+        $r14 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        virtualinvoke $r14.<org.apache.mahout.math.neighborhood.UpdatableSearcher: void clear()>();
+
+        $r17 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        virtualinvoke $r17.<org.apache.mahout.math.neighborhood.UpdatableSearcher: void addAll(java.lang.Iterable)>($r6);
+
+     label10:
+        $z0 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: boolean correctWeights>;
+
+        if $z0 == 0 goto label12;
+
+        $r9 = virtualinvoke r2.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r8 = (java.util.List) $r9;
+
+        r29 = interfaceinvoke $r8.<java.util.List: java.util.Iterator iterator()>();
+
+     label11:
+        $z1 = interfaceinvoke r29.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label12;
+
+        $r10 = interfaceinvoke r29.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.math.WeightedVector) $r10;
+
+        $r12 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        $r11 = virtualinvoke $r12.<org.apache.mahout.math.neighborhood.UpdatableSearcher: org.apache.mahout.math.random.WeightedThing searchFirst(org.apache.mahout.math.Vector,boolean)>(r4, 0);
+
+        $r13 = virtualinvoke $r11.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        r5 = (org.apache.mahout.math.WeightedVector) $r13;
+
+        $d0 = virtualinvoke r5.<org.apache.mahout.math.WeightedVector: double getWeight()>();
+
+        $d2 = virtualinvoke r4.<org.apache.mahout.math.WeightedVector: double getWeight()>();
+
+        $d1 = $d0 + $d2;
+
+        virtualinvoke r5.<org.apache.mahout.math.WeightedVector: void setWeight(double)>($d1);
+
+        goto label11;
+
+     label12:
+        $r7 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        return $r7;
+    }
+
+    private void initializeSeedsRandomly(java.util.List)
+    {
+        org.apache.mahout.clustering.streaming.cluster.BallKMeans r0;
+        java.util.List r1;
+        int i0, i1, $i2, i3, i4;
+        boolean $z0;
+        org.apache.mahout.math.random.Multinomial $r3;
+        java.lang.Object $r4, $r7, $r11, $r14;
+        java.lang.Integer $r5, $r6, $r12;
+        org.apache.mahout.math.Centroid $r8;
+        org.apache.mahout.math.neighborhood.UpdatableSearcher $r9;
+        org.apache.mahout.math.WeightedVector $r10, $r13, r16;
+        double $d0, $d1, $d2, d3;
+        java.util.Iterator r15;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.cluster.BallKMeans;
+
+        r1 := @parameter0: java.util.List;
+
+        i0 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        d3 = 0.0;
+
+        r15 = interfaceinvoke r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r15.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r14 = interfaceinvoke r15.<java.util.Iterator: java.lang.Object next()>();
+
+        r16 = (org.apache.mahout.math.WeightedVector) $r14;
+
+        $d2 = virtualinvoke r16.<org.apache.mahout.math.WeightedVector: double getWeight()>();
+
+        d3 = d3 + $d2;
+
+        goto label1;
+
+     label2:
+        $r3 = new org.apache.mahout.math.random.Multinomial;
+
+        specialinvoke $r3.<org.apache.mahout.math.random.Multinomial: void <init>()>();
+
+        i3 = 0;
+
+     label3:
+        if i3 >= i0 goto label4;
+
+        $r12 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i3);
+
+        $r11 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i3);
+
+        $r13 = (org.apache.mahout.math.WeightedVector) $r11;
+
+        $d0 = virtualinvoke $r13.<org.apache.mahout.math.WeightedVector: double getWeight()>();
+
+        $d1 = $d0 / d3;
+
+        virtualinvoke $r3.<org.apache.mahout.math.random.Multinomial: void add(java.lang.Object,double)>($r12, $d1);
+
+        i3 = i3 + 1;
+
+        goto label3;
+
+     label4:
+        i4 = 0;
+
+     label5:
+        $i2 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: int numClusters>;
+
+        if i4 >= $i2 goto label6;
+
+        $r4 = virtualinvoke $r3.<org.apache.mahout.math.random.Multinomial: java.lang.Object sample()>();
+
+        $r5 = (java.lang.Integer) $r4;
+
+        i1 = virtualinvoke $r5.<java.lang.Integer: int intValue()>();
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        virtualinvoke $r3.<org.apache.mahout.math.random.Multinomial: void delete(java.lang.Object)>($r6);
+
+        $r8 = new org.apache.mahout.math.Centroid;
+
+        $r7 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i1);
+
+        $r10 = (org.apache.mahout.math.WeightedVector) $r7;
+
+        specialinvoke $r8.<org.apache.mahout.math.Centroid: void <init>(org.apache.mahout.math.WeightedVector)>($r10);
+
+        virtualinvoke $r8.<org.apache.mahout.math.Centroid: void setIndex(int)>(i4);
+
+        $r9 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        virtualinvoke $r9.<org.apache.mahout.math.neighborhood.UpdatableSearcher: void add(org.apache.mahout.math.Vector)>($r8);
+
+        i4 = i4 + 1;
+
+        goto label5;
+
+     label6:
+        return;
+    }
+
+    private void initializeSeedsKMeansPlusPlus(java.util.List)
+    {
+        org.apache.mahout.clustering.streaming.cluster.BallKMeans r0;
+        java.util.List r1;
+        org.apache.mahout.math.WeightedVector r3, r6, $r15, $r22, $r23, $r31, r46, r49;
+        org.apache.mahout.common.distance.DistanceMeasure r4;
+        java.util.Iterator r5, $r11, r44, r45;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i13, i14, i15, i16, i17, i18;
+        double d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10, $d11, $d12, d13, d14, d15;
+        java.lang.Object[] $r7;
+        java.lang.Integer $r8, $r10, $r28, $r29, $r33, $r35, $r37, $r38, $r40;
+        java.lang.String $r9;
+        org.apache.mahout.math.Centroid $r12, $r19, $r27;
+        java.lang.Iterable $r13;
+        java.lang.Object $r14, $r20, $r24, $r26, $r32, $r34, $r36, $r41, $r42, $r43;
+        org.apache.mahout.math.neighborhood.UpdatableSearcher $r16, $r21, $r25, $r30;
+        java.util.Random $r17;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        org.apache.mahout.math.random.Multinomial $r18;
+        byte $b12;
+        org.apache.mahout.math.Vector $r39;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.cluster.BallKMeans;
+
+        r1 := @parameter0: java.util.List;
+
+        $i1 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        if $i1 <= 1 goto label01;
+
+        $z2 = 1;
+
+        goto label02;
+
+     label01:
+        $z2 = 0;
+
+     label02:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z2, "Must have at least two datapoints points to cluster sensibly");
+
+        $i3 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        $i2 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: int numClusters>;
+
+        if $i3 < $i2 goto label03;
+
+        $z3 = 1;
+
+        goto label04;
+
+     label03:
+        $z3 = 0;
+
+     label04:
+        $r7 = newarray (java.lang.Object)[2];
+
+        $i4 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i4);
+
+        $r7[0] = $r8;
+
+        $i5 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: int numClusters>;
+
+        $r10 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i5);
+
+        $r7[1] = $r10;
+
+        $r9 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Must have more datapoints [%d] than clusters [%d]", $r7);
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z3, $r9);
+
+        $r12 = new org.apache.mahout.math.Centroid;
+
+        $r11 = interfaceinvoke r1.<java.util.List: java.util.Iterator iterator()>();
+
+        $r14 = interfaceinvoke $r11.<java.util.Iterator: java.lang.Object next()>();
+
+        $r15 = (org.apache.mahout.math.WeightedVector) $r14;
+
+        specialinvoke $r12.<org.apache.mahout.math.Centroid: void <init>(org.apache.mahout.math.WeightedVector)>($r15);
+
+        $r13 = staticinvoke <com.google.common.collect.Iterables: java.lang.Iterable skip(java.lang.Iterable,int)>(r1, 1);
+
+        r44 = interfaceinvoke $r13.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label05:
+        $z4 = interfaceinvoke r44.<java.util.Iterator: boolean hasNext()>();
+
+        if $z4 == 0 goto label06;
+
+        $r42 = interfaceinvoke r44.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.math.WeightedVector) $r42;
+
+        virtualinvoke $r12.<org.apache.mahout.math.Centroid: void update(org.apache.mahout.math.Vector)>(r3);
+
+        goto label05;
+
+     label06:
+        d13 = 0.0;
+
+        $r16 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        r4 = virtualinvoke $r16.<org.apache.mahout.math.neighborhood.UpdatableSearcher: org.apache.mahout.common.distance.DistanceMeasure getDistanceMeasure()>();
+
+        r45 = interfaceinvoke r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label07:
+        $z0 = interfaceinvoke r45.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label08;
+
+        $r43 = interfaceinvoke r45.<java.util.Iterator: java.lang.Object next()>();
+
+        r46 = (org.apache.mahout.math.WeightedVector) $r43;
+
+        $d12 = interfaceinvoke r4.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r46, $r12);
+
+        d13 = d13 + $d12;
+
+        goto label07;
+
+     label08:
+        $r18 = new org.apache.mahout.math.random.Multinomial;
+
+        specialinvoke $r18.<org.apache.mahout.math.random.Multinomial: void <init>()>();
+
+        i14 = 0;
+
+     label09:
+        $i6 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        if i14 >= $i6 goto label10;
+
+        $i13 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        $d11 = (double) $i13;
+
+        $r41 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i14);
+
+        $r39 = (org.apache.mahout.math.Vector) $r41;
+
+        $d9 = interfaceinvoke r4.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>($r39, $r12);
+
+        $d10 = $d11 * $d9;
+
+        d14 = d13 + $d10;
+
+        $r40 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i14);
+
+        virtualinvoke $r18.<org.apache.mahout.math.random.Multinomial: void add(java.lang.Object,double)>($r40, d14);
+
+        i14 = i14 + 1;
+
+        goto label09;
+
+     label10:
+        $r17 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: java.util.Random random>;
+
+        $i7 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        i15 = virtualinvoke $r17.<java.util.Random: int nextInt(int)>($i7);
+
+        $r19 = new org.apache.mahout.math.Centroid;
+
+        $r20 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i15);
+
+        $r23 = (org.apache.mahout.math.WeightedVector) $r20;
+
+        $r22 = virtualinvoke $r23.<org.apache.mahout.math.WeightedVector: org.apache.mahout.math.WeightedVector clone()>();
+
+        specialinvoke $r19.<org.apache.mahout.math.Centroid: void <init>(org.apache.mahout.math.WeightedVector)>($r22);
+
+        virtualinvoke $r19.<org.apache.mahout.math.Centroid: void setIndex(int)>(0);
+
+        i16 = 0;
+
+     label11:
+        $i8 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        if i16 >= $i8 goto label12;
+
+        $r36 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i16);
+
+        r49 = (org.apache.mahout.math.WeightedVector) $r36;
+
+        $d7 = interfaceinvoke r4.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>($r19, r49);
+
+        $d6 = $d7 * 2.0;
+
+        $d8 = virtualinvoke r49.<org.apache.mahout.math.WeightedVector: double getWeight()>();
+
+        $d5 = 1.0 + $d8;
+
+        $d4 = staticinvoke <java.lang.Math: double log(double)>($d5);
+
+        d15 = $d6 * $d4;
+
+        $r38 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i16);
+
+        virtualinvoke $r18.<org.apache.mahout.math.random.Multinomial: void set(java.lang.Object,double)>($r38, d15);
+
+        i16 = i16 + 1;
+
+        goto label11;
+
+     label12:
+        $r21 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        virtualinvoke $r21.<org.apache.mahout.math.neighborhood.UpdatableSearcher: void add(org.apache.mahout.math.Vector)>($r19);
+
+        i17 = 1;
+
+     label13:
+        $r25 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        $i10 = virtualinvoke $r25.<org.apache.mahout.math.neighborhood.UpdatableSearcher: int size()>();
+
+        $i9 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: int numClusters>;
+
+        if $i10 >= $i9 goto label15;
+
+        $r24 = virtualinvoke $r18.<org.apache.mahout.math.random.Multinomial: java.lang.Object sample()>();
+
+        $r28 = (java.lang.Integer) $r24;
+
+        i18 = virtualinvoke $r28.<java.lang.Integer: int intValue()>();
+
+        $r27 = new org.apache.mahout.math.Centroid;
+
+        $r26 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i18);
+
+        $r31 = (org.apache.mahout.math.WeightedVector) $r26;
+
+        specialinvoke $r27.<org.apache.mahout.math.Centroid: void <init>(org.apache.mahout.math.WeightedVector)>($r31);
+
+        $i11 = i17;
+
+        i17 = i17 + 1;
+
+        virtualinvoke $r27.<org.apache.mahout.math.Centroid: void setIndex(int)>($i11);
+
+        $r30 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        virtualinvoke $r30.<org.apache.mahout.math.neighborhood.UpdatableSearcher: void add(org.apache.mahout.math.Vector)>($r27);
+
+        $r29 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i18);
+
+        virtualinvoke $r18.<org.apache.mahout.math.random.Multinomial: void delete(java.lang.Object)>($r29);
+
+        r5 = virtualinvoke $r18.<org.apache.mahout.math.random.Multinomial: java.util.Iterator iterator()>();
+
+     label14:
+        $z1 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label13;
+
+        $r32 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        $r33 = (java.lang.Integer) $r32;
+
+        i0 = virtualinvoke $r33.<java.lang.Integer: int intValue()>();
+
+        $r34 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i0);
+
+        r6 = (org.apache.mahout.math.WeightedVector) $r34;
+
+        $d1 = virtualinvoke $r27.<org.apache.mahout.math.Centroid: double getWeight()>();
+
+        $d2 = interfaceinvoke r4.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>($r27, r6);
+
+        d0 = $d1 * $d2;
+
+        $r37 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $d3 = virtualinvoke $r18.<org.apache.mahout.math.random.Multinomial: double getWeight(java.lang.Object)>($r37);
+
+        $b12 = d0 cmpg $d3;
+
+        if $b12 >= 0 goto label14;
+
+        $r35 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        virtualinvoke $r18.<org.apache.mahout.math.random.Multinomial: void set(java.lang.Object,double)>($r35, d0);
+
+        goto label14;
+
+     label15:
+        return;
+    }
+
+    private void iterativeAssignment(java.util.List)
+    {
+        org.apache.mahout.clustering.streaming.cluster.BallKMeans r0;
+        java.util.List r1, $r8;
+        org.apache.mahout.common.distance.DistanceMeasure r2;
+        int i0, $i1, $i2, $i3, $i4, $i5, i7, i8;
+        double d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7;
+        org.apache.mahout.math.neighborhood.UpdatableSearcher $r5, $r10, $r11, $r17, $r19, $r20, $r21, $r23, $r39;
+        java.util.ArrayList $r6, $r7, $r18;
+        java.lang.Integer $r9, $r28, $r34;
+        boolean $z0, $z1, $z2, $z3, $z4, z7;
+        java.lang.Object $r12, $r13, $r15, $r22, $r24, $r25, $r27, $r29, $r32, $r36, $r40;
+        org.apache.mahout.math.random.WeightedThing $r14, $r37, r49;
+        org.apache.mahout.math.Centroid $r16, $r30, r47, r54;
+        org.apache.mahout.math.WeightedVector $r26, r48, r53;
+        java.lang.Double $r31, $r38;
+        byte $b6;
+        org.apache.mahout.math.Vector $r33, r42, r43, r46, r51;
+        java.util.Iterator r41, r45, r50, r52;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.cluster.BallKMeans;
+
+        r1 := @parameter0: java.util.List;
+
+        $r5 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        r2 = virtualinvoke $r5.<org.apache.mahout.math.neighborhood.UpdatableSearcher: org.apache.mahout.common.distance.DistanceMeasure getDistanceMeasure()>();
+
+        $r6 = new java.util.ArrayList;
+
+        $i1 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: int numClusters>;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>(int)>($i1);
+
+        $r7 = new java.util.ArrayList;
+
+        $i2 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        $r9 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(-1);
+
+        $r8 = staticinvoke <java.util.Collections: java.util.List nCopies(int,java.lang.Object)>($i2, $r9);
+
+        specialinvoke $r7.<java.util.ArrayList: void <init>(java.util.Collection)>($r8);
+
+        z7 = 1;
+
+        i7 = 0;
+
+     label01:
+        if z7 == 0 goto label10;
+
+        $i3 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: int maxNumIterations>;
+
+        if i7 >= $i3 goto label10;
+
+        z7 = 0;
+
+        interfaceinvoke $r6.<java.util.List: void clear()>();
+
+        $r17 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        r41 = virtualinvoke $r17.<org.apache.mahout.math.neighborhood.UpdatableSearcher: java.util.Iterator iterator()>();
+
+     label02:
+        $z3 = interfaceinvoke r41.<java.util.Iterator: boolean hasNext()>();
+
+        if $z3 == 0 goto label03;
+
+        $r40 = interfaceinvoke r41.<java.util.Iterator: java.lang.Object next()>();
+
+        r42 = (org.apache.mahout.math.Vector) $r40;
+
+        $r39 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        $r37 = virtualinvoke $r39.<org.apache.mahout.math.neighborhood.UpdatableSearcher: org.apache.mahout.math.random.WeightedThing searchFirst(org.apache.mahout.math.Vector,boolean)>(r42, 1);
+
+        $r36 = virtualinvoke $r37.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        r43 = (org.apache.mahout.math.Vector) $r36;
+
+        $d7 = interfaceinvoke r2.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r42, r43);
+
+        $r38 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d7);
+
+        interfaceinvoke $r6.<java.util.List: boolean add(java.lang.Object)>($r38);
+
+        goto label02;
+
+     label03:
+        $r18 = new java.util.ArrayList;
+
+        specialinvoke $r18.<java.util.ArrayList: void <init>()>();
+
+        $r19 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        r45 = virtualinvoke $r19.<org.apache.mahout.math.neighborhood.UpdatableSearcher: java.util.Iterator iterator()>();
+
+     label04:
+        $z4 = interfaceinvoke r45.<java.util.Iterator: boolean hasNext()>();
+
+        if $z4 == 0 goto label05;
+
+        $r32 = interfaceinvoke r45.<java.util.Iterator: java.lang.Object next()>();
+
+        r46 = (org.apache.mahout.math.Vector) $r32;
+
+        $r33 = interfaceinvoke r46.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        r47 = (org.apache.mahout.math.Centroid) $r33;
+
+        virtualinvoke r47.<org.apache.mahout.math.Centroid: void setWeight(double)>(0.0);
+
+        interfaceinvoke $r18.<java.util.List: boolean add(java.lang.Object)>(r47);
+
+        goto label04;
+
+     label05:
+        i8 = 0;
+
+     label06:
+        $i4 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        if i8 >= $i4 goto label09;
+
+        $r24 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i8);
+
+        r48 = (org.apache.mahout.math.WeightedVector) $r24;
+
+        $r23 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        r49 = virtualinvoke $r23.<org.apache.mahout.math.neighborhood.UpdatableSearcher: org.apache.mahout.math.random.WeightedThing searchFirst(org.apache.mahout.math.Vector,boolean)>(r48, 0);
+
+        $r22 = virtualinvoke r49.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        $r26 = (org.apache.mahout.math.WeightedVector) $r22;
+
+        i0 = virtualinvoke $r26.<org.apache.mahout.math.WeightedVector: int getIndex()>();
+
+        d0 = virtualinvoke r49.<org.apache.mahout.math.random.WeightedThing: double getWeight()>();
+
+        $r25 = interfaceinvoke $r7.<java.util.List: java.lang.Object get(int)>(i8);
+
+        $r28 = (java.lang.Integer) $r25;
+
+        $i5 = virtualinvoke $r28.<java.lang.Integer: int intValue()>();
+
+        if i0 == $i5 goto label07;
+
+        z7 = 1;
+
+        $r34 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r7.<java.util.List: java.lang.Object set(int,java.lang.Object)>(i8, $r34);
+
+     label07:
+        $d4 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: double trimFraction>;
+
+        $r27 = interfaceinvoke $r6.<java.util.List: java.lang.Object get(int)>(i0);
+
+        $r31 = (java.lang.Double) $r27;
+
+        $d5 = virtualinvoke $r31.<java.lang.Double: double doubleValue()>();
+
+        $d6 = $d4 * $d5;
+
+        $b6 = d0 cmpg $d6;
+
+        if $b6 >= 0 goto label08;
+
+        $r29 = interfaceinvoke $r18.<java.util.List: java.lang.Object get(int)>(i0);
+
+        $r30 = (org.apache.mahout.math.Centroid) $r29;
+
+        virtualinvoke $r30.<org.apache.mahout.math.Centroid: void update(org.apache.mahout.math.Vector)>(r48);
+
+     label08:
+        i8 = i8 + 1;
+
+        goto label06;
+
+     label09:
+        $r21 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        virtualinvoke $r21.<org.apache.mahout.math.neighborhood.UpdatableSearcher: void clear()>();
+
+        $r20 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        virtualinvoke $r20.<org.apache.mahout.math.neighborhood.UpdatableSearcher: void addAll(java.lang.Iterable)>($r18);
+
+        i7 = i7 + 1;
+
+        goto label01;
+
+     label10:
+        $z0 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: boolean correctWeights>;
+
+        if $z0 == 0 goto label14;
+
+        $r10 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        r50 = virtualinvoke $r10.<org.apache.mahout.math.neighborhood.UpdatableSearcher: java.util.Iterator iterator()>();
+
+     label11:
+        $z1 = interfaceinvoke r50.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label12;
+
+        $r15 = interfaceinvoke r50.<java.util.Iterator: java.lang.Object next()>();
+
+        r51 = (org.apache.mahout.math.Vector) $r15;
+
+        $r16 = (org.apache.mahout.math.Centroid) r51;
+
+        virtualinvoke $r16.<org.apache.mahout.math.Centroid: void setWeight(double)>(0.0);
+
+        goto label11;
+
+     label12:
+        r52 = interfaceinvoke r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label13:
+        $z2 = interfaceinvoke r52.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label14;
+
+        $r12 = interfaceinvoke r52.<java.util.Iterator: java.lang.Object next()>();
+
+        r53 = (org.apache.mahout.math.WeightedVector) $r12;
+
+        $r11 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        $r14 = virtualinvoke $r11.<org.apache.mahout.math.neighborhood.UpdatableSearcher: org.apache.mahout.math.random.WeightedThing searchFirst(org.apache.mahout.math.Vector,boolean)>(r53, 0);
+
+        $r13 = virtualinvoke $r14.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        r54 = (org.apache.mahout.math.Centroid) $r13;
+
+        $d2 = virtualinvoke r54.<org.apache.mahout.math.Centroid: double getWeight()>();
+
+        $d3 = virtualinvoke r53.<org.apache.mahout.math.WeightedVector: double getWeight()>();
+
+        $d1 = $d2 + $d3;
+
+        virtualinvoke r54.<org.apache.mahout.math.Centroid: void setWeight(double)>($d1);
+
+        goto label13;
+
+     label14:
+        return;
+    }
+
+    public java.util.Iterator iterator()
+    {
+        org.apache.mahout.clustering.streaming.cluster.BallKMeans r0;
+        org.apache.mahout.math.neighborhood.UpdatableSearcher $r1;
+        java.util.Iterator $r2, $r4;
+        org.apache.mahout.clustering.streaming.cluster.BallKMeans$1 $r3;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.cluster.BallKMeans;
+
+        $r1 = r0.<org.apache.mahout.clustering.streaming.cluster.BallKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher centroids>;
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.math.neighborhood.UpdatableSearcher: java.util.Iterator iterator()>();
+
+        $r3 = new org.apache.mahout.clustering.streaming.cluster.BallKMeans$1;
+
+        specialinvoke $r3.<org.apache.mahout.clustering.streaming.cluster.BallKMeans$1: void <init>(org.apache.mahout.clustering.streaming.cluster.BallKMeans)>(r0);
+
+        $r4 = staticinvoke <com.google.common.collect.Iterators: java.util.Iterator transform(java.util.Iterator,com.google.common.base.Function)>($r2, $r3);
+
+        return $r4;
+    }
+}

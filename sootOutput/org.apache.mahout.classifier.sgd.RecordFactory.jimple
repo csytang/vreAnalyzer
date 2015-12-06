@@ -1,0 +1,21 @@
+public interface  org.apache.mahout.classifier.sgd.RecordFactory extends java.lang.Object
+{
+
+    public abstract void defineTargetCategories(java.util.List);
+
+    public abstract org.apache.mahout.classifier.sgd.RecordFactory maxTargetValue(int);
+
+    public abstract boolean usesFirstLineAsSchema();
+
+    public abstract int processLine(java.lang.String, org.apache.mahout.math.Vector);
+
+    public abstract java.lang.Iterable getPredictors();
+
+    public abstract java.util.Map getTraceDictionary();
+
+    public abstract org.apache.mahout.classifier.sgd.RecordFactory includeBiasTerm(boolean);
+
+    public abstract java.util.List getTargetCategories();
+
+    public abstract void firstLine(java.lang.String);
+}

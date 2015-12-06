@@ -1,0 +1,71 @@
+public final class org.apache.mahout.common.iterator.sequencefile.PathFilters extends java.lang.Object
+{
+    private static final org.apache.hadoop.fs.PathFilter PART_FILE_INSTANCE;
+    private static final org.apache.hadoop.fs.PathFilter CLUSTER_FINAL;
+    private static final org.apache.hadoop.fs.PathFilter LOGS_CRC_INSTANCE;
+
+    private void <init>()
+    {
+        org.apache.mahout.common.iterator.sequencefile.PathFilters r0;
+
+        r0 := @this: org.apache.mahout.common.iterator.sequencefile.PathFilters;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.hadoop.fs.PathFilter partFilter()
+    {
+        org.apache.hadoop.fs.PathFilter $r0;
+
+        $r0 = <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter PART_FILE_INSTANCE>;
+
+        return $r0;
+    }
+
+    public static org.apache.hadoop.fs.PathFilter finalPartFilter()
+    {
+        org.apache.hadoop.fs.PathFilter $r0;
+
+        $r0 = <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter CLUSTER_FINAL>;
+
+        return $r0;
+    }
+
+    public static org.apache.hadoop.fs.PathFilter logsCRCFilter()
+    {
+        org.apache.hadoop.fs.PathFilter $r0;
+
+        $r0 = <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter LOGS_CRC_INSTANCE>;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        org.apache.mahout.common.iterator.sequencefile.PathFilters$1 $r0;
+        org.apache.mahout.common.iterator.sequencefile.PathFilters$2 $r1;
+        org.apache.mahout.common.iterator.sequencefile.PathFilters$3 $r2;
+
+        $r0 = new org.apache.mahout.common.iterator.sequencefile.PathFilters$1;
+
+        specialinvoke $r0.<org.apache.mahout.common.iterator.sequencefile.PathFilters$1: void <init>()>();
+
+        <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter PART_FILE_INSTANCE> = $r0;
+
+        $r1 = new org.apache.mahout.common.iterator.sequencefile.PathFilters$2;
+
+        specialinvoke $r1.<org.apache.mahout.common.iterator.sequencefile.PathFilters$2: void <init>()>();
+
+        <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter CLUSTER_FINAL> = $r1;
+
+        $r2 = new org.apache.mahout.common.iterator.sequencefile.PathFilters$3;
+
+        specialinvoke $r2.<org.apache.mahout.common.iterator.sequencefile.PathFilters$3: void <init>()>();
+
+        <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter LOGS_CRC_INSTANCE> = $r2;
+
+        return;
+    }
+}

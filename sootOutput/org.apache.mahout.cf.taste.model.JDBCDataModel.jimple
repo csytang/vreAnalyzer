@@ -1,0 +1,9 @@
+public interface  org.apache.mahout.cf.taste.model.JDBCDataModel extends java.lang.Object implements org.apache.mahout.cf.taste.model.DataModel
+{
+
+    public abstract javax.sql.DataSource getDataSource();
+
+    public abstract org.apache.mahout.cf.taste.impl.common.FastByIDMap exportWithPrefs() throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract org.apache.mahout.cf.taste.impl.common.FastByIDMap exportWithIDsOnly() throws org.apache.mahout.cf.taste.common.TasteException;
+}

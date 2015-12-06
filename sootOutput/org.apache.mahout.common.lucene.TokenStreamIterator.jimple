@@ -1,0 +1,93 @@
+public final class org.apache.mahout.common.lucene.TokenStreamIterator extends com.google.common.collect.AbstractIterator
+{
+    private final org.apache.lucene.analysis.TokenStream tokenStream;
+
+    public void <init>(org.apache.lucene.analysis.TokenStream)
+    {
+        org.apache.mahout.common.lucene.TokenStreamIterator r0;
+        org.apache.lucene.analysis.TokenStream r1;
+
+        r0 := @this: org.apache.mahout.common.lucene.TokenStreamIterator;
+
+        r1 := @parameter0: org.apache.lucene.analysis.TokenStream;
+
+        specialinvoke r0.<com.google.common.collect.AbstractIterator: void <init>()>();
+
+        r0.<org.apache.mahout.common.lucene.TokenStreamIterator: org.apache.lucene.analysis.TokenStream tokenStream> = r1;
+
+        return;
+    }
+
+    protected java.lang.String computeNext()
+    {
+        org.apache.mahout.common.lucene.TokenStreamIterator r0;
+        org.apache.lucene.analysis.TokenStream $r2, $r3, $r4, $r7;
+        boolean $z0;
+        java.lang.Object $r5;
+        java.lang.String $r6, $r10;
+        org.apache.lucene.util.Attribute $r8;
+        org.apache.lucene.analysis.tokenattributes.CharTermAttribute $r9;
+        java.io.IOException $r11;
+        java.lang.IllegalStateException $r12;
+
+        r0 := @this: org.apache.mahout.common.lucene.TokenStreamIterator;
+
+     label1:
+        $r2 = r0.<org.apache.mahout.common.lucene.TokenStreamIterator: org.apache.lucene.analysis.TokenStream tokenStream>;
+
+        $z0 = virtualinvoke $r2.<org.apache.lucene.analysis.TokenStream: boolean incrementToken()>();
+
+        if $z0 == 0 goto label3;
+
+        $r7 = r0.<org.apache.mahout.common.lucene.TokenStreamIterator: org.apache.lucene.analysis.TokenStream tokenStream>;
+
+        $r8 = virtualinvoke $r7.<org.apache.lucene.analysis.TokenStream: org.apache.lucene.util.Attribute getAttribute(java.lang.Class)>(class "org/apache/lucene/analysis/tokenattributes/CharTermAttribute");
+
+        $r9 = (org.apache.lucene.analysis.tokenattributes.CharTermAttribute) $r8;
+
+        $r10 = virtualinvoke $r9.<java.lang.Object: java.lang.String toString()>();
+
+     label2:
+        return $r10;
+
+     label3:
+        $r3 = r0.<org.apache.mahout.common.lucene.TokenStreamIterator: org.apache.lucene.analysis.TokenStream tokenStream>;
+
+        virtualinvoke $r3.<org.apache.lucene.analysis.TokenStream: void end()>();
+
+        $r4 = r0.<org.apache.mahout.common.lucene.TokenStreamIterator: org.apache.lucene.analysis.TokenStream tokenStream>;
+
+        virtualinvoke $r4.<org.apache.lucene.analysis.TokenStream: void close()>();
+
+        $r5 = virtualinvoke r0.<org.apache.mahout.common.lucene.TokenStreamIterator: java.lang.Object endOfData()>();
+
+        $r6 = (java.lang.String) $r5;
+
+     label4:
+        return $r6;
+
+     label5:
+        $r11 := @caughtexception;
+
+        $r12 = new java.lang.IllegalStateException;
+
+        specialinvoke $r12.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("IO error while tokenizing", $r11);
+
+        throw $r12;
+
+        catch java.io.IOException from label1 to label2 with label5;
+        catch java.io.IOException from label3 to label4 with label5;
+    }
+
+    protected volatile java.lang.Object computeNext()
+    {
+        org.apache.mahout.common.lucene.TokenStreamIterator r0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.common.lucene.TokenStreamIterator;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.common.lucene.TokenStreamIterator: java.lang.String computeNext()>();
+
+        return $r1;
+    }
+}

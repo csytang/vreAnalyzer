@@ -1,0 +1,138 @@
+public class org.apache.mahout.cf.taste.hadoop.preparation.ToItemVectorsMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private final org.apache.hadoop.io.IntWritable itemID;
+    private final org.apache.mahout.math.VectorWritable itemVectorWritable;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.preparation.ToItemVectorsMapper r0;
+        org.apache.hadoop.io.IntWritable $r1;
+        org.apache.mahout.math.VectorWritable $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.preparation.ToItemVectorsMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        $r1 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r1.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.preparation.ToItemVectorsMapper: org.apache.hadoop.io.IntWritable itemID> = $r1;
+
+        $r2 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r2.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.preparation.ToItemVectorsMapper: org.apache.mahout.math.VectorWritable itemVectorWritable> = $r2;
+
+        return;
+    }
+
+    protected void map(org.apache.mahout.math.VarLongWritable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.preparation.ToItemVectorsMapper r0;
+        org.apache.mahout.math.VarLongWritable r1;
+        org.apache.mahout.math.VectorWritable r2, $r8, $r13, $r15;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.Vector r4;
+        int i0, $i2, $i3;
+        java.util.Iterator r6;
+        org.apache.mahout.math.Vector$Element r7;
+        long $l1;
+        org.apache.mahout.math.RandomAccessSparseVector $r9;
+        java.lang.Iterable $r10;
+        java.lang.Object $r11;
+        boolean $z0;
+        org.apache.hadoop.io.IntWritable $r12, $r14;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.preparation.ToItemVectorsMapper;
+
+        r1 := @parameter0: org.apache.mahout.math.VarLongWritable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        r4 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $l1 = virtualinvoke r1.<org.apache.mahout.math.VarLongWritable: long get()>();
+
+        i0 = staticinvoke <org.apache.mahout.cf.taste.hadoop.TasteHadoopUtils: int idToIndex(long)>($l1);
+
+        $r8 = r0.<org.apache.mahout.cf.taste.hadoop.preparation.ToItemVectorsMapper: org.apache.mahout.math.VectorWritable itemVectorWritable>;
+
+        virtualinvoke $r8.<org.apache.mahout.math.VectorWritable: void setWritesLaxPrecision(boolean)>(1);
+
+        $r9 = new org.apache.mahout.math.RandomAccessSparseVector;
+
+        specialinvoke $r9.<org.apache.mahout.math.RandomAccessSparseVector: void <init>(int,int)>(2147483647, 1);
+
+        $r10 = interfaceinvoke r4.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r6 = interfaceinvoke $r10.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r11 = interfaceinvoke r6.<java.util.Iterator: java.lang.Object next()>();
+
+        r7 = (org.apache.mahout.math.Vector$Element) $r11;
+
+        $r12 = r0.<org.apache.mahout.cf.taste.hadoop.preparation.ToItemVectorsMapper: org.apache.hadoop.io.IntWritable itemID>;
+
+        $i2 = interfaceinvoke r7.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        virtualinvoke $r12.<org.apache.hadoop.io.IntWritable: void set(int)>($i2);
+
+        $d0 = interfaceinvoke r7.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        interfaceinvoke $r9.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i0, $d0);
+
+        $r13 = r0.<org.apache.mahout.cf.taste.hadoop.preparation.ToItemVectorsMapper: org.apache.mahout.math.VectorWritable itemVectorWritable>;
+
+        virtualinvoke $r13.<org.apache.mahout.math.VectorWritable: void set(org.apache.mahout.math.Vector)>($r9);
+
+        $r14 = r0.<org.apache.mahout.cf.taste.hadoop.preparation.ToItemVectorsMapper: org.apache.hadoop.io.IntWritable itemID>;
+
+        $r15 = r0.<org.apache.mahout.cf.taste.hadoop.preparation.ToItemVectorsMapper: org.apache.mahout.math.VectorWritable itemVectorWritable>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r14, $r15);
+
+        $i3 = interfaceinvoke r7.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        interfaceinvoke $r9.<org.apache.mahout.math.Vector: void setQuick(int,double)>($i3, 0.0);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.preparation.ToItemVectorsMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.mahout.math.VarLongWritable $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.preparation.ToItemVectorsMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.mahout.math.VarLongWritable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.preparation.ToItemVectorsMapper: void map(org.apache.mahout.math.VarLongWritable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

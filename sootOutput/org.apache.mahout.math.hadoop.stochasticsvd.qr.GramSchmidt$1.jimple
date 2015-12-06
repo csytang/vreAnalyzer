@@ -1,0 +1,36 @@
+final class org.apache.mahout.math.hadoop.stochasticsvd.qr.GramSchmidt$1 extends org.apache.mahout.math.function.DoubleFunction
+{
+    final double val$norm2;
+
+    void <init>(double)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GramSchmidt$1 r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GramSchmidt$1;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GramSchmidt$1: double val$norm2> = d0;
+
+        specialinvoke r0.<org.apache.mahout.math.function.DoubleFunction: void <init>()>();
+
+        return;
+    }
+
+    public double apply(double)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GramSchmidt$1 r0;
+        double d0, $d1, $d2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GramSchmidt$1;
+
+        d0 := @parameter0: double;
+
+        $d1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GramSchmidt$1: double val$norm2>;
+
+        $d2 = d0 / $d1;
+
+        return $d2;
+    }
+}

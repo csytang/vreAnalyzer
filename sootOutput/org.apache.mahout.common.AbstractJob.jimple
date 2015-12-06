@@ -1,0 +1,1720 @@
+public abstract class org.apache.mahout.common.AbstractJob extends org.apache.hadoop.conf.Configured implements org.apache.hadoop.util.Tool
+{
+    private static final org.slf4j.Logger log;
+    public org.apache.commons.cli2.Option inputOption;
+    public org.apache.commons.cli2.Option outputOption;
+    protected org.apache.hadoop.fs.Path inputPath;
+    protected java.io.File inputFile;
+    protected org.apache.hadoop.fs.Path outputPath;
+    protected java.io.File outputFile;
+    protected org.apache.hadoop.fs.Path tempPath;
+    protected java.util.Map argMap;
+    public final java.util.List options;
+    private org.apache.commons.cli2.Group group;
+
+    protected void <init>()
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.util.LinkedList $r1;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        specialinvoke r0.<org.apache.hadoop.conf.Configured: void <init>()>();
+
+        $r1 = new java.util.LinkedList;
+
+        specialinvoke $r1.<java.util.LinkedList: void <init>()>();
+
+        r0.<org.apache.mahout.common.AbstractJob: java.util.List options> = $r1;
+
+        return;
+    }
+
+    protected org.apache.hadoop.fs.Path getInputPath()
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        org.apache.hadoop.fs.Path $r1;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        $r1 = r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path inputPath>;
+
+        return $r1;
+    }
+
+    protected org.apache.hadoop.fs.Path getOutputPath()
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        org.apache.hadoop.fs.Path $r1;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        $r1 = r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path outputPath>;
+
+        return $r1;
+    }
+
+    protected org.apache.hadoop.fs.Path getOutputPath(java.lang.String)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String r1;
+        org.apache.hadoop.fs.Path $r2, $r3;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = new org.apache.hadoop.fs.Path;
+
+        $r3 = r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path outputPath>;
+
+        specialinvoke $r2.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r3, r1);
+
+        return $r2;
+    }
+
+    protected java.io.File getInputFile()
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.io.File $r1;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        $r1 = r0.<org.apache.mahout.common.AbstractJob: java.io.File inputFile>;
+
+        return $r1;
+    }
+
+    protected java.io.File getOutputFile()
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.io.File $r1;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        $r1 = r0.<org.apache.mahout.common.AbstractJob: java.io.File outputFile>;
+
+        return $r1;
+    }
+
+    protected org.apache.hadoop.fs.Path getTempPath()
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        org.apache.hadoop.fs.Path $r1;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        $r1 = r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path tempPath>;
+
+        return $r1;
+    }
+
+    protected org.apache.hadoop.fs.Path getTempPath(java.lang.String)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String r1;
+        org.apache.hadoop.fs.Path $r2, $r3;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = new org.apache.hadoop.fs.Path;
+
+        $r3 = r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path tempPath>;
+
+        specialinvoke $r2.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r3, r1);
+
+        return $r2;
+    }
+
+    public org.apache.hadoop.conf.Configuration getConf()
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        org.apache.hadoop.conf.Configuration r1, $r2;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 = specialinvoke r0.<org.apache.hadoop.conf.Configured: org.apache.hadoop.conf.Configuration getConf()>();
+
+        if r1 != null goto label1;
+
+        $r2 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r2.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        return $r2;
+
+     label1:
+        return r1;
+    }
+
+    protected void addFlag(java.lang.String, java.lang.String, java.lang.String)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String r1, r2, r3;
+        java.util.List $r4;
+        org.apache.commons.cli2.Option $r5;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.lang.String;
+
+        r3 := @parameter2: java.lang.String;
+
+        $r4 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        $r5 = staticinvoke <org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option buildOption(java.lang.String,java.lang.String,java.lang.String,boolean,boolean,java.lang.String)>(r1, r2, r3, 0, 0, null);
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        return;
+    }
+
+    protected void addOption(java.lang.String, java.lang.String, java.lang.String)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String r1, r2, r3;
+        java.util.List $r4;
+        org.apache.commons.cli2.Option $r5;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.lang.String;
+
+        r3 := @parameter2: java.lang.String;
+
+        $r4 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        $r5 = staticinvoke <org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option buildOption(java.lang.String,java.lang.String,java.lang.String,boolean,boolean,java.lang.String)>(r1, r2, r3, 1, 0, null);
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        return;
+    }
+
+    protected void addOption(java.lang.String, java.lang.String, java.lang.String, boolean)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String r1, r2, r3;
+        boolean z0;
+        java.util.List $r4;
+        org.apache.commons.cli2.Option $r5;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.lang.String;
+
+        r3 := @parameter2: java.lang.String;
+
+        z0 := @parameter3: boolean;
+
+        $r4 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        $r5 = staticinvoke <org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option buildOption(java.lang.String,java.lang.String,java.lang.String,boolean,boolean,java.lang.String)>(r1, r2, r3, 1, z0, null);
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        return;
+    }
+
+    protected void addOption(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String r1, r2, r3, r4;
+        java.util.List $r5;
+        org.apache.commons.cli2.Option $r6;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.lang.String;
+
+        r3 := @parameter2: java.lang.String;
+
+        r4 := @parameter3: java.lang.String;
+
+        $r5 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        $r6 = staticinvoke <org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option buildOption(java.lang.String,java.lang.String,java.lang.String,boolean,int,int,boolean,java.lang.String)>(r1, r2, r3, 1, 1, 1, 0, r4);
+
+        interfaceinvoke $r5.<java.util.List: boolean add(java.lang.Object)>($r6);
+
+        return;
+    }
+
+    protected org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        org.apache.commons.cli2.Option r1;
+        java.util.List $r2;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: org.apache.commons.cli2.Option;
+
+        $r2 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>(r1);
+
+        return r1;
+    }
+
+    protected org.apache.commons.cli2.Group getGroup()
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        org.apache.commons.cli2.Group $r1;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        $r1 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Group group>;
+
+        return $r1;
+    }
+
+    protected void addInputOption()
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r1;
+        java.lang.NullPointerException r2;
+        org.apache.commons.cli2.option.DefaultOption r4;
+        java.util.List $r5;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        $r1 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder inputOption()>();
+
+        if r0 == null goto label1;
+
+        r4 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r5 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        interfaceinvoke $r5.<java.util.List: boolean add(java.lang.Object)>(r4);
+
+        r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option inputOption> = r4;
+
+        return;
+
+     label1:
+        r2 = new java.lang.NullPointerException;
+
+        specialinvoke r2.<java.lang.NullPointerException: void <init>()>();
+
+        throw r2;
+    }
+
+    protected void addOutputOption()
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r1;
+        java.lang.NullPointerException r2;
+        org.apache.commons.cli2.option.DefaultOption r4;
+        java.util.List $r5;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        $r1 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder outputOption()>();
+
+        if r0 == null goto label1;
+
+        r4 = virtualinvoke $r1.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r5 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        interfaceinvoke $r5.<java.util.List: boolean add(java.lang.Object)>(r4);
+
+        r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option outputOption> = r4;
+
+        return;
+
+     label1:
+        r2 = new java.lang.NullPointerException;
+
+        specialinvoke r2.<java.lang.NullPointerException: void <init>()>();
+
+        throw r2;
+    }
+
+    protected static org.apache.commons.cli2.Option buildOption(java.lang.String, java.lang.String, java.lang.String, boolean, boolean, java.lang.String)
+    {
+        java.lang.String r0, r1, r2, r3;
+        boolean z0, z1;
+        org.apache.commons.cli2.Option $r4;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: java.lang.String;
+
+        r2 := @parameter2: java.lang.String;
+
+        z0 := @parameter3: boolean;
+
+        z1 := @parameter4: boolean;
+
+        r3 := @parameter5: java.lang.String;
+
+        $r4 = staticinvoke <org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option buildOption(java.lang.String,java.lang.String,java.lang.String,boolean,int,int,boolean,java.lang.String)>(r0, r1, r2, z0, 1, 1, z1, r3);
+
+        return $r4;
+    }
+
+    protected static org.apache.commons.cli2.Option buildOption(java.lang.String, java.lang.String, java.lang.String, boolean, int, int, boolean, java.lang.String)
+    {
+        java.lang.String r0, r1, r2, r3;
+        boolean z0, z1;
+        int i0, i1;
+        org.apache.commons.cli2.builder.DefaultOptionBuilder r4, $r5, $r6, $r7;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r8, $r9, $r10, r14;
+        org.apache.commons.cli2.Argument $r11;
+        org.apache.commons.cli2.option.DefaultOption $r15;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: java.lang.String;
+
+        r2 := @parameter2: java.lang.String;
+
+        z0 := @parameter3: boolean;
+
+        i0 := @parameter4: int;
+
+        i1 := @parameter5: int;
+
+        z1 := @parameter6: boolean;
+
+        r3 := @parameter7: java.lang.String;
+
+        $r5 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r5.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>(r0);
+
+        $r7 = virtualinvoke $r6.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>(r2);
+
+        r4 = virtualinvoke $r7.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(z1);
+
+        if r1 == null goto label1;
+
+        virtualinvoke r4.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>(r1);
+
+     label1:
+        if z0 == 0 goto label3;
+
+        $r8 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r8.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r8.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>(r0);
+
+        $r9 = virtualinvoke $r10.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(i0);
+
+        r14 = virtualinvoke $r9.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(i1);
+
+        if r3 == null goto label2;
+
+        r14 = virtualinvoke r14.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>(r3);
+
+     label2:
+        $r11 = virtualinvoke r14.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        virtualinvoke r4.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r11);
+
+     label3:
+        $r15 = virtualinvoke r4.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        return $r15;
+    }
+
+    protected org.apache.commons.cli2.Option getCLIOption(java.lang.String)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String r1, $r6;
+        java.util.Iterator r2;
+        org.apache.commons.cli2.Option r3;
+        java.util.List $r4;
+        boolean $z0, $z1;
+        java.lang.Object $r5;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r4 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        r2 = interfaceinvoke $r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.commons.cli2.Option) $r5;
+
+        $r6 = interfaceinvoke r3.<org.apache.commons.cli2.Option: java.lang.String getPreferredName()>();
+
+        $z1 = virtualinvoke $r6.<java.lang.String: boolean equals(java.lang.Object)>(r1);
+
+        if $z1 == 0 goto label1;
+
+        return r3;
+
+     label2:
+        return null;
+    }
+
+    public java.util.Map parseArguments(java.lang.String[]) throws java.io.IOException
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String[] r1;
+        java.util.Map $r2;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String[];
+
+        $r2 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: java.util.Map parseArguments(java.lang.String[],boolean,boolean)>(r1, 0, 0);
+
+        return $r2;
+    }
+
+    public java.util.Map parseArguments(java.lang.String[], boolean, boolean) throws java.io.IOException
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String[] r1;
+        boolean z0, z1, $z2, $z3, $z4, $z5;
+        org.apache.commons.cli2.builder.GroupBuilder $r3, r64;
+        java.util.List $r4, $r8, $r10, $r42, $r44, $r47, $r51, r55;
+        org.apache.commons.cli2.Group $r5, $r6, $r17, $r22, $r26;
+        org.apache.commons.cli2.commandline.Parser $r7;
+        java.util.TreeMap $r9;
+        java.util.Map $r11, $r15, $r18, $r56, $r62;
+        org.apache.commons.cli2.Option[] $r12, $r13;
+        int $i0;
+        java.lang.Object[] $r14;
+        org.apache.hadoop.fs.Path $r16;
+        org.slf4j.Logger $r19, $r24, $r28;
+        org.apache.commons.cli2.OptionException $r20;
+        java.lang.Object $r21, $r58, $r59;
+        java.lang.IllegalArgumentException $r23;
+        java.lang.String $r25, $r27, r50, $r57, $r63, $r65;
+        java.util.Iterator r29;
+        org.apache.commons.cli2.Option r30, $r45, $r48, $r52;
+        org.apache.commons.cli2.CommandLine r32;
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r35, $r36, $r37, $r38;
+        java.lang.NullPointerException r39;
+        org.apache.commons.cli2.option.DefaultOption r41;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String[];
+
+        z0 := @parameter1: boolean;
+
+        z1 := @parameter2: boolean;
+
+        $r35 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r35.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r36 = virtualinvoke $r35.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("help");
+
+        $r37 = virtualinvoke $r36.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Print out help");
+
+        $r38 = virtualinvoke $r37.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("h");
+
+        if r0 == null goto label14;
+
+        r41 = virtualinvoke $r38.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r42 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        interfaceinvoke $r42.<java.util.List: boolean add(java.lang.Object)>(r41);
+
+        if r0 == null goto label14;
+
+        $r44 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        $r45 = staticinvoke <org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option buildOption(java.lang.String,java.lang.String,java.lang.String,boolean,boolean,java.lang.String)>("tempDir", null, "Intermediate output directory", 1, 0, "temp");
+
+        interfaceinvoke $r44.<java.util.List: boolean add(java.lang.Object)>($r45);
+
+        if r0 == null goto label14;
+
+        $r47 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        $r48 = staticinvoke <org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option buildOption(java.lang.String,java.lang.String,java.lang.String,boolean,boolean,java.lang.String)>("startPhase", null, "First phase to run", 1, 0, "0");
+
+        interfaceinvoke $r47.<java.util.List: boolean add(java.lang.Object)>($r48);
+
+        if r0 == null goto label14;
+
+        r50 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(2147483647);
+
+        $r51 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        $r52 = staticinvoke <org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option buildOption(java.lang.String,java.lang.String,java.lang.String,boolean,boolean,java.lang.String)>("endPhase", null, "Last phase to run", 1, 0, r50);
+
+        interfaceinvoke $r51.<java.util.List: boolean add(java.lang.Object)>($r52);
+
+        $r3 = new org.apache.commons.cli2.builder.GroupBuilder;
+
+        specialinvoke $r3.<org.apache.commons.cli2.builder.GroupBuilder: void <init>()>();
+
+        r64 = virtualinvoke $r3.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withName(java.lang.String)>("Job-Specific Options:");
+
+        $r4 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        r29 = interfaceinvoke $r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label01:
+        $z2 = interfaceinvoke r29.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label02;
+
+        $r21 = interfaceinvoke r29.<java.util.Iterator: java.lang.Object next()>();
+
+        r30 = (org.apache.commons.cli2.Option) $r21;
+
+        r64 = virtualinvoke r64.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r30);
+
+        goto label01;
+
+     label02:
+        $r5 = virtualinvoke r64.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.Group create()>();
+
+        r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Group group> = $r5;
+
+     label03:
+        $r7 = new org.apache.commons.cli2.commandline.Parser;
+
+        specialinvoke $r7.<org.apache.commons.cli2.commandline.Parser: void <init>()>();
+
+        $r6 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Group group>;
+
+        virtualinvoke $r7.<org.apache.commons.cli2.commandline.Parser: void setGroup(org.apache.commons.cli2.Group)>($r6);
+
+        virtualinvoke $r7.<org.apache.commons.cli2.commandline.Parser: void setHelpOption(org.apache.commons.cli2.Option)>(r41);
+
+        r32 = virtualinvoke $r7.<org.apache.commons.cli2.commandline.Parser: org.apache.commons.cli2.CommandLine parse(java.lang.String[])>(r1);
+
+     label04:
+        goto label06;
+
+     label05:
+        $r20 := @caughtexception;
+
+        $r24 = <org.apache.mahout.common.AbstractJob: org.slf4j.Logger log>;
+
+        $r25 = virtualinvoke $r20.<org.apache.commons.cli2.OptionException: java.lang.String getMessage()>();
+
+        interfaceinvoke $r24.<org.slf4j.Logger: void error(java.lang.String)>($r25);
+
+        $r22 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Group group>;
+
+        staticinvoke <org.apache.mahout.common.CommandLineUtil: void printHelpWithGenericOptions(org.apache.commons.cli2.Group,org.apache.commons.cli2.OptionException)>($r22, $r20);
+
+        return null;
+
+     label06:
+        $z3 = interfaceinvoke r32.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r41);
+
+        if $z3 == 0 goto label07;
+
+        $r17 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Group group>;
+
+        staticinvoke <org.apache.mahout.common.CommandLineUtil: void printHelpWithGenericOptions(org.apache.commons.cli2.Group)>($r17);
+
+        return null;
+
+     label07:
+        virtualinvoke r0.<org.apache.mahout.common.AbstractJob: void parseDirectories(org.apache.commons.cli2.CommandLine,boolean,boolean)>(r32, z0, z1);
+
+     label08:
+        goto label10;
+
+     label09:
+        $r23 := @caughtexception;
+
+        $r28 = <org.apache.mahout.common.AbstractJob: org.slf4j.Logger log>;
+
+        $r27 = virtualinvoke $r23.<java.lang.IllegalArgumentException: java.lang.String getMessage()>();
+
+        interfaceinvoke $r28.<org.slf4j.Logger: void error(java.lang.String)>($r27);
+
+        $r26 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Group group>;
+
+        staticinvoke <org.apache.mahout.common.CommandLineUtil: void printHelpWithGenericOptions(org.apache.commons.cli2.Group)>($r26);
+
+        return null;
+
+     label10:
+        $r9 = new java.util.TreeMap;
+
+        specialinvoke $r9.<java.util.TreeMap: void <init>()>();
+
+        r0.<org.apache.mahout.common.AbstractJob: java.util.Map argMap> = $r9;
+
+        $r11 = r0.<org.apache.mahout.common.AbstractJob: java.util.Map argMap>;
+
+        $r10 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        $r8 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        $i0 = interfaceinvoke $r8.<java.util.List: int size()>();
+
+        $r12 = newarray (org.apache.commons.cli2.Option)[$i0];
+
+        $r14 = interfaceinvoke $r10.<java.util.List: java.lang.Object[] toArray(java.lang.Object[])>($r12);
+
+        $r13 = (org.apache.commons.cli2.Option[]) $r14;
+
+        staticinvoke <org.apache.mahout.common.AbstractJob: void maybePut(java.util.Map,org.apache.commons.cli2.CommandLine,org.apache.commons.cli2.Option[])>($r11, r32, $r13);
+
+        $r16 = new org.apache.hadoop.fs.Path;
+
+        if r0 == null goto label14;
+
+        $r56 = r0.<org.apache.mahout.common.AbstractJob: java.util.Map argMap>;
+
+        $r57 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String keyFor(java.lang.String)>("tempDir");
+
+        $r58 = interfaceinvoke $r56.<java.util.Map: java.lang.Object get(java.lang.Object)>($r57);
+
+        r55 = (java.util.List) $r58;
+
+        if r55 == null goto label11;
+
+        $z5 = interfaceinvoke r55.<java.util.List: boolean isEmpty()>();
+
+        if $z5 != 0 goto label11;
+
+        $r59 = interfaceinvoke r55.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r65 = (java.lang.String) $r59;
+
+        goto label12;
+
+     label11:
+        $r65 = null;
+
+     label12:
+        specialinvoke $r16.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r65);
+
+        r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path tempPath> = $r16;
+
+        if r0 == null goto label14;
+
+        $r62 = r0.<org.apache.mahout.common.AbstractJob: java.util.Map argMap>;
+
+        $r63 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String keyFor(java.lang.String)>("quiet");
+
+        $z4 = interfaceinvoke $r62.<java.util.Map: boolean containsKey(java.lang.Object)>($r63);
+
+        if $z4 != 0 goto label13;
+
+        $r19 = <org.apache.mahout.common.AbstractJob: org.slf4j.Logger log>;
+
+        $r18 = r0.<org.apache.mahout.common.AbstractJob: java.util.Map argMap>;
+
+        interfaceinvoke $r19.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Command line arguments: {}", $r18);
+
+     label13:
+        $r15 = r0.<org.apache.mahout.common.AbstractJob: java.util.Map argMap>;
+
+        return $r15;
+
+     label14:
+        r39 = new java.lang.NullPointerException;
+
+        specialinvoke r39.<java.lang.NullPointerException: void <init>()>();
+
+        throw r39;
+
+        catch org.apache.commons.cli2.OptionException from label03 to label04 with label05;
+        catch java.lang.IllegalArgumentException from label07 to label08 with label09;
+    }
+
+    public static java.lang.String keyFor(java.lang.String)
+    {
+        java.lang.String r0, $r4;
+        java.lang.StringBuilder $r1, $r2, $r3;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("--");
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r4;
+    }
+
+    public java.lang.String getOption(java.lang.String)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String r1, $r4, $r7;
+        java.util.List r2;
+        java.util.Map $r3;
+        java.lang.Object $r5, $r6;
+        boolean $z0;
+        java.lang.StringBuilder $r9, $r10, $r11;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r3 = r0.<org.apache.mahout.common.AbstractJob: java.util.Map argMap>;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("--");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r4 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r5 = interfaceinvoke $r3.<java.util.Map: java.lang.Object get(java.lang.Object)>($r4);
+
+        r2 = (java.util.List) $r5;
+
+        if r2 == null goto label1;
+
+        $z0 = interfaceinvoke r2.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label1;
+
+        $r6 = interfaceinvoke r2.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r7 = (java.lang.String) $r6;
+
+        return $r7;
+
+     label1:
+        return null;
+    }
+
+    public java.lang.String getOption(java.lang.String, java.lang.String)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String r1, r2, r3;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.lang.String;
+
+        r3 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.lang.String)>(r1);
+
+        if r3 != null goto label1;
+
+        r3 = r2;
+
+     label1:
+        return r3;
+    }
+
+    public int getInt(java.lang.String)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String r1, $r2;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.lang.String)>(r1);
+
+        $i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r2);
+
+        return $i0;
+    }
+
+    public int getInt(java.lang.String, int)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String r1, $r2, $r3;
+        int i0, $i1;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        $r2 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i0);
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.lang.String,java.lang.String)>(r1, $r2);
+
+        $i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r3);
+
+        return $i1;
+    }
+
+    public float getFloat(java.lang.String)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String r1, $r2;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.lang.String)>(r1);
+
+        $f0 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>($r2);
+
+        return $f0;
+    }
+
+    public float getFloat(java.lang.String, float)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String r1, $r2, $r3;
+        float f0, $f1;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String;
+
+        f0 := @parameter1: float;
+
+        $r2 = staticinvoke <java.lang.String: java.lang.String valueOf(float)>(f0);
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.lang.String,java.lang.String)>(r1, $r2);
+
+        $f1 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>($r3);
+
+        return $f1;
+    }
+
+    public java.util.List getOptions(java.lang.String)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String r1, $r3;
+        java.util.Map $r2;
+        java.lang.Object $r4;
+        java.util.List $r5;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = r0.<org.apache.mahout.common.AbstractJob: java.util.Map argMap>;
+
+        $r3 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String keyFor(java.lang.String)>(r1);
+
+        $r4 = interfaceinvoke $r2.<java.util.Map: java.lang.Object get(java.lang.Object)>($r3);
+
+        $r5 = (java.util.List) $r4;
+
+        return $r5;
+    }
+
+    public boolean hasOption(java.lang.String)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String r1, $r3;
+        java.util.Map $r2;
+        boolean $z0;
+        java.lang.StringBuilder $r5, $r6, $r7;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = r0.<org.apache.mahout.common.AbstractJob: java.util.Map argMap>;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("--");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r3 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $z0 = interfaceinvoke $r2.<java.util.Map: boolean containsKey(java.lang.Object)>($r3);
+
+        return $z0;
+    }
+
+    public int getDimensions(org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        org.apache.hadoop.fs.Path r1;
+        boolean z0, $z1;
+        int i0;
+        org.apache.hadoop.io.SequenceFile$Reader $r7;
+        org.apache.hadoop.conf.Configuration $r8, $r10;
+        org.apache.hadoop.fs.FileSystem $r9;
+        java.lang.Class $r11, $r13, $r14;
+        java.lang.Object $r12;
+        org.apache.mahout.math.VectorWritable $r15;
+        org.apache.mahout.math.Vector $r16;
+        java.lang.Throwable $r17, $r18, $r19, r21;
+        org.apache.hadoop.io.Writable r22;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        $r7 = new org.apache.hadoop.io.SequenceFile$Reader;
+
+        $r8 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $r9 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(org.apache.hadoop.conf.Configuration)>($r8);
+
+        $r10 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        specialinvoke $r7.<org.apache.hadoop.io.SequenceFile$Reader: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r9, r1, $r10);
+
+        r21 = null;
+
+     label01:
+        $r11 = virtualinvoke $r7.<org.apache.hadoop.io.SequenceFile$Reader: java.lang.Class getKeyClass()>();
+
+        $r13 = virtualinvoke $r11.<java.lang.Class: java.lang.Class asSubclass(java.lang.Class)>(class "org/apache/hadoop/io/Writable");
+
+        $r12 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.Class,java.lang.Class)>($r13, class "org/apache/hadoop/io/Writable");
+
+        r22 = (org.apache.hadoop.io.Writable) $r12;
+
+        $r14 = virtualinvoke $r7.<org.apache.hadoop.io.SequenceFile$Reader: java.lang.Class getValueClass()>();
+
+        $z1 = virtualinvoke $r14.<java.lang.Object: boolean equals(java.lang.Object)>(class "org/apache/mahout/math/VectorWritable");
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, "value type of sequencefile must be a VectorWritable");
+
+        $r15 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r15.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        z0 = virtualinvoke $r7.<org.apache.hadoop.io.SequenceFile$Reader: boolean next(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>(r22, $r15);
+
+        staticinvoke <com.google.common.base.Preconditions: void checkState(boolean,java.lang.Object)>(z0, "matrix must have at least one row");
+
+        $r16 = virtualinvoke $r15.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        i0 = interfaceinvoke $r16.<org.apache.mahout.math.Vector: int size()>();
+
+     label02:
+        if $r7 == null goto label03;
+
+        virtualinvoke $r7.<org.apache.hadoop.io.SequenceFile$Reader: void close()>();
+
+     label03:
+        return i0;
+
+     label04:
+        $r19 := @caughtexception;
+
+        r21 = $r19;
+
+        throw $r19;
+
+     label05:
+        $r18 := @caughtexception;
+
+     label06:
+        if $r7 == null goto label11;
+
+        if r21 == null goto label10;
+
+     label07:
+        virtualinvoke $r7.<org.apache.hadoop.io.SequenceFile$Reader: void close()>();
+
+     label08:
+        goto label11;
+
+     label09:
+        $r17 := @caughtexception;
+
+        virtualinvoke r21.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r17);
+
+        goto label11;
+
+     label10:
+        virtualinvoke $r7.<org.apache.hadoop.io.SequenceFile$Reader: void close()>();
+
+     label11:
+        throw $r18;
+
+        catch java.lang.Throwable from label01 to label02 with label04;
+        catch java.lang.Throwable from label01 to label02 with label05;
+        catch java.lang.Throwable from label07 to label08 with label09;
+        catch java.lang.Throwable from label04 to label06 with label05;
+    }
+
+    protected void parseDirectories(org.apache.commons.cli2.CommandLine, boolean, boolean)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        org.apache.commons.cli2.CommandLine r1;
+        boolean z0, z1, $z2, $z3, $z4, $z5;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.commons.cli2.Option $r3, $r4, $r6, $r10, $r12, $r16, $r21, $r24, $r27, $r33;
+        org.apache.hadoop.fs.Path $r5, $r7, $r9, $r13, $r22, $r26, $r32, $r34;
+        java.lang.String $r8, $r11, $r14, $r18, $r20, $r23, $r29, $r31;
+        java.lang.Object $r15, $r19, $r25, $r28;
+        java.io.File $r17, $r30;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: org.apache.commons.cli2.CommandLine;
+
+        z0 := @parameter1: boolean;
+
+        z1 := @parameter2: boolean;
+
+        r2 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $r3 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option inputOption>;
+
+        if $r3 == null goto label01;
+
+        $r21 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option inputOption>;
+
+        $z3 = interfaceinvoke r1.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>($r21);
+
+        if $z3 == 0 goto label01;
+
+        $r26 = new org.apache.hadoop.fs.Path;
+
+        $r24 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option inputOption>;
+
+        $r25 = interfaceinvoke r1.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>($r24);
+
+        $r29 = virtualinvoke $r25.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r26.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r29);
+
+        r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path inputPath> = $r26;
+
+        $r30 = new java.io.File;
+
+        $r27 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option inputOption>;
+
+        $r28 = interfaceinvoke r1.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>($r27);
+
+        $r31 = virtualinvoke $r28.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r30.<java.io.File: void <init>(java.lang.String)>($r31);
+
+        r0.<org.apache.mahout.common.AbstractJob: java.io.File inputFile> = $r30;
+
+     label01:
+        $r32 = r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path inputPath>;
+
+        if $r32 != null goto label02;
+
+        $r18 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("mapred.input.dir");
+
+        if $r18 == null goto label02;
+
+        $r22 = new org.apache.hadoop.fs.Path;
+
+        $r23 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("mapred.input.dir");
+
+        specialinvoke $r22.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r23);
+
+        r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path inputPath> = $r22;
+
+     label02:
+        $r33 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option outputOption>;
+
+        if $r33 == null goto label03;
+
+        $r10 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option outputOption>;
+
+        $z2 = interfaceinvoke r1.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>($r10);
+
+        if $z2 == 0 goto label03;
+
+        $r13 = new org.apache.hadoop.fs.Path;
+
+        $r12 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option outputOption>;
+
+        $r15 = interfaceinvoke r1.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>($r12);
+
+        $r14 = virtualinvoke $r15.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r13.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r14);
+
+        r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path outputPath> = $r13;
+
+        $r17 = new java.io.File;
+
+        $r16 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option outputOption>;
+
+        $r19 = interfaceinvoke r1.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>($r16);
+
+        $r20 = virtualinvoke $r19.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r17.<java.io.File: void <init>(java.lang.String)>($r20);
+
+        r0.<org.apache.mahout.common.AbstractJob: java.io.File outputFile> = $r17;
+
+     label03:
+        $r34 = r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path outputPath>;
+
+        if $r34 != null goto label04;
+
+        $r8 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("mapred.output.dir");
+
+        if $r8 == null goto label04;
+
+        $r9 = new org.apache.hadoop.fs.Path;
+
+        $r11 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("mapred.output.dir");
+
+        specialinvoke $r9.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r11);
+
+        r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path outputPath> = $r9;
+
+     label04:
+        if z0 != 0 goto label05;
+
+        $r6 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option inputOption>;
+
+        if $r6 == null goto label05;
+
+        $r7 = r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path inputPath>;
+
+        if $r7 == null goto label06;
+
+     label05:
+        $z4 = 1;
+
+        goto label07;
+
+     label06:
+        $z4 = 0;
+
+     label07:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z4, "No input specified or -Dmapred.input.dir must be provided to specify input directory");
+
+        if z1 != 0 goto label08;
+
+        $r4 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option outputOption>;
+
+        if $r4 == null goto label08;
+
+        $r5 = r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path outputPath>;
+
+        if $r5 == null goto label09;
+
+     label08:
+        $z5 = 1;
+
+        goto label10;
+
+     label09:
+        $z5 = 0;
+
+     label10:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z5, "No output specified:  or -Dmapred.output.dir must be provided to specify output directory");
+
+        return;
+    }
+
+    protected static transient void maybePut(java.util.Map, org.apache.commons.cli2.CommandLine, org.apache.commons.cli2.Option[])
+    {
+        java.util.Map r0;
+        org.apache.commons.cli2.CommandLine r1;
+        org.apache.commons.cli2.Option[] r2;
+        int i0, i1;
+        org.apache.commons.cli2.Option r4;
+        java.util.List r5, $r16, $r17;
+        java.util.Iterator r7;
+        java.lang.Object r8, $r15;
+        boolean $z0, $z1, $z2, $z4;
+        java.lang.String $r9, $r13, $r14;
+        java.util.ArrayList $r11;
+
+        r0 := @parameter0: java.util.Map;
+
+        r1 := @parameter1: org.apache.commons.cli2.CommandLine;
+
+        r2 := @parameter2: org.apache.commons.cli2.Option[];
+
+        i0 = lengthof r2;
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label7;
+
+        r4 = r2[i1];
+
+        $z0 = interfaceinvoke r1.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r4);
+
+        if $z0 != 0 goto label2;
+
+        $r15 = interfaceinvoke r1.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r4);
+
+        if $r15 != null goto label2;
+
+        $r16 = interfaceinvoke r1.<org.apache.commons.cli2.CommandLine: java.util.List getValues(org.apache.commons.cli2.Option)>(r4);
+
+        if $r16 == null goto label6;
+
+        $r17 = interfaceinvoke r1.<org.apache.commons.cli2.CommandLine: java.util.List getValues(org.apache.commons.cli2.Option)>(r4);
+
+        $z4 = interfaceinvoke $r17.<java.util.List: boolean isEmpty()>();
+
+        if $z4 != 0 goto label6;
+
+     label2:
+        r5 = interfaceinvoke r1.<org.apache.commons.cli2.CommandLine: java.util.List getValues(org.apache.commons.cli2.Option)>(r4);
+
+        if r5 == null goto label5;
+
+        $z1 = interfaceinvoke r5.<java.util.List: boolean isEmpty()>();
+
+        if $z1 != 0 goto label5;
+
+        $r11 = new java.util.ArrayList;
+
+        specialinvoke $r11.<java.util.ArrayList: void <init>()>();
+
+        r7 = interfaceinvoke r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label3:
+        $z2 = interfaceinvoke r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label4;
+
+        r8 = interfaceinvoke r7.<java.util.Iterator: java.lang.Object next()>();
+
+        $r14 = virtualinvoke r8.<java.lang.Object: java.lang.String toString()>();
+
+        interfaceinvoke $r11.<java.util.List: boolean add(java.lang.Object)>($r14);
+
+        goto label3;
+
+     label4:
+        $r13 = interfaceinvoke r4.<org.apache.commons.cli2.Option: java.lang.String getPreferredName()>();
+
+        interfaceinvoke r0.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r13, $r11);
+
+        goto label6;
+
+     label5:
+        $r9 = interfaceinvoke r4.<org.apache.commons.cli2.Option: java.lang.String getPreferredName()>();
+
+        interfaceinvoke r0.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r9, null);
+
+     label6:
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label7:
+        return;
+    }
+
+    public static java.lang.String getOption(java.util.Map, java.lang.String)
+    {
+        java.util.Map r0;
+        java.lang.String r1, $r5;
+        java.util.List r2;
+        java.lang.Object $r3, $r4;
+        boolean $z0;
+
+        r0 := @parameter0: java.util.Map;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r3 = interfaceinvoke r0.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        r2 = (java.util.List) $r3;
+
+        if r2 == null goto label1;
+
+        $z0 = interfaceinvoke r2.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label1;
+
+        $r4 = interfaceinvoke r2.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r5 = (java.lang.String) $r4;
+
+        return $r5;
+
+     label1:
+        return null;
+    }
+
+    protected static boolean shouldRunNextPhase(java.util.Map, java.util.concurrent.atomic.AtomicInteger)
+    {
+        java.util.Map r0;
+        java.util.concurrent.atomic.AtomicInteger r1;
+        int i0, $i1, $i2;
+        java.lang.String r2, r3;
+        boolean z0, $z1, $z2;
+        org.slf4j.Logger $r4;
+        java.lang.Integer $r5;
+
+        r0 := @parameter0: java.util.Map;
+
+        r1 := @parameter1: java.util.concurrent.atomic.AtomicInteger;
+
+        i0 = virtualinvoke r1.<java.util.concurrent.atomic.AtomicInteger: int getAndIncrement()>();
+
+        r2 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>(r0, "--startPhase");
+
+        r3 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.util.Map,java.lang.String)>(r0, "--endPhase");
+
+        if r2 == null goto label1;
+
+        $i2 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>(r2);
+
+        if i0 < $i2 goto label2;
+
+     label1:
+        if r3 == null goto label3;
+
+        $i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>(r3);
+
+        if i0 <= $i1 goto label3;
+
+     label2:
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        z0 = $z1;
+
+        if $z1 == 0 goto label5;
+
+        $r4 = <org.apache.mahout.common.AbstractJob: org.slf4j.Logger log>;
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r4.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Skipping phase {}", $r5);
+
+     label5:
+        if z0 != 0 goto label6;
+
+        $z2 = 1;
+
+        goto label7;
+
+     label6:
+        $z2 = 0;
+
+     label7:
+        return $z2;
+    }
+
+    protected org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, java.lang.Class, java.lang.Class, java.lang.Class, java.lang.Class, java.lang.Class) throws java.io.IOException
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        org.apache.hadoop.fs.Path r1, r2;
+        java.lang.Class r3, r4, r5, r6, r7, $r20;
+        java.lang.NullPointerException r8;
+        org.apache.hadoop.mapreduce.Job r17;
+        org.apache.hadoop.conf.Configuration $r19;
+        java.lang.String $r21, $r22;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: java.lang.Class;
+
+        r4 := @parameter3: java.lang.Class;
+
+        r5 := @parameter4: java.lang.Class;
+
+        r6 := @parameter5: java.lang.Class;
+
+        r7 := @parameter6: java.lang.Class;
+
+        if r0 == null goto label1;
+
+        $r19 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        r17 = staticinvoke <org.apache.mahout.common.HadoopUtil: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,org.apache.hadoop.conf.Configuration)>(r1, r2, r3, r4, r5, r6, r7, $r19);
+
+        $r20 = virtualinvoke r0.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r21 = virtualinvoke $r20.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        $r22 = staticinvoke <org.apache.mahout.common.HadoopUtil: java.lang.String getCustomJobName(java.lang.String,org.apache.hadoop.mapreduce.JobContext,java.lang.Class,java.lang.Class)>($r21, r17, r4, class "org/apache/hadoop/mapreduce/Reducer");
+
+        virtualinvoke r17.<org.apache.hadoop.mapreduce.Job: void setJobName(java.lang.String)>($r22);
+
+        return r17;
+
+     label1:
+        r8 = new java.lang.NullPointerException;
+
+        specialinvoke r8.<java.lang.NullPointerException: void <init>()>();
+
+        throw r8;
+    }
+
+    protected org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, java.lang.Class, java.lang.Class, java.lang.Class, java.lang.Class, java.lang.Class, java.lang.String) throws java.io.IOException
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        org.apache.hadoop.fs.Path r1, r2;
+        java.lang.Class r3, r4, r5, r6, r7, $r12;
+        java.lang.String r8, $r13, $r14;
+        org.apache.hadoop.mapreduce.Job r9;
+        org.apache.hadoop.conf.Configuration $r11;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: java.lang.Class;
+
+        r4 := @parameter3: java.lang.Class;
+
+        r5 := @parameter4: java.lang.Class;
+
+        r6 := @parameter5: java.lang.Class;
+
+        r7 := @parameter6: java.lang.Class;
+
+        r8 := @parameter7: java.lang.String;
+
+        $r11 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        r9 = staticinvoke <org.apache.mahout.common.HadoopUtil: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,org.apache.hadoop.conf.Configuration)>(r1, r2, r3, r4, r5, r6, r7, $r11);
+
+        if r8 == null goto label1;
+
+        $r14 = r8;
+
+        goto label2;
+
+     label1:
+        $r12 = virtualinvoke r0.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r13 = virtualinvoke $r12.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        $r14 = staticinvoke <org.apache.mahout.common.HadoopUtil: java.lang.String getCustomJobName(java.lang.String,org.apache.hadoop.mapreduce.JobContext,java.lang.Class,java.lang.Class)>($r13, r9, r4, class "org/apache/hadoop/mapreduce/Reducer");
+
+     label2:
+        virtualinvoke r9.<org.apache.hadoop.mapreduce.Job: void setJobName(java.lang.String)>($r14);
+
+        return r9;
+    }
+
+    protected org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, java.lang.Class, java.lang.Class, java.lang.Class, java.lang.Class, java.lang.Class, java.lang.Class) throws java.io.IOException
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        org.apache.hadoop.fs.Path r1, r2;
+        java.lang.Class r3, r4, r5, r6, r7, r8;
+        org.apache.hadoop.mapreduce.Job $r9;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: java.lang.Class;
+
+        r4 := @parameter3: java.lang.Class;
+
+        r5 := @parameter4: java.lang.Class;
+
+        r6 := @parameter5: java.lang.Class;
+
+        r7 := @parameter6: java.lang.Class;
+
+        r8 := @parameter7: java.lang.Class;
+
+        $r9 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>(r1, r2, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", r3, r4, r5, r6, r7, r8, class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        return $r9;
+    }
+
+    protected org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, java.lang.Class, java.lang.Class, java.lang.Class, java.lang.Class, java.lang.Class, java.lang.Class, java.lang.Class, java.lang.Class) throws java.io.IOException
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        org.apache.hadoop.fs.Path r1, r2;
+        java.lang.Class r3, r4, r5, r6, r7, r8, r9, r10, $r13;
+        org.apache.hadoop.mapreduce.Job r11;
+        org.apache.hadoop.conf.Configuration $r12;
+        java.lang.String $r14, $r15;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter2: java.lang.Class;
+
+        r4 := @parameter3: java.lang.Class;
+
+        r5 := @parameter4: java.lang.Class;
+
+        r6 := @parameter5: java.lang.Class;
+
+        r7 := @parameter6: java.lang.Class;
+
+        r8 := @parameter7: java.lang.Class;
+
+        r9 := @parameter8: java.lang.Class;
+
+        r10 := @parameter9: java.lang.Class;
+
+        $r12 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        r11 = staticinvoke <org.apache.mahout.common.HadoopUtil: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,org.apache.hadoop.conf.Configuration)>(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, $r12);
+
+        $r13 = virtualinvoke r0.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r14 = virtualinvoke $r13.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        $r15 = staticinvoke <org.apache.mahout.common.HadoopUtil: java.lang.String getCustomJobName(java.lang.String,org.apache.hadoop.mapreduce.JobContext,java.lang.Class,java.lang.Class)>($r14, r11, r4, class "org/apache/hadoop/mapreduce/Reducer");
+
+        virtualinvoke r11.<org.apache.hadoop.mapreduce.Job: void setJobName(java.lang.String)>($r15);
+
+        return r11;
+    }
+
+    public static void setS3SafeCombinedInputPath(org.apache.hadoop.mapreduce.Job, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.hadoop.mapreduce.Job r0;
+        org.apache.hadoop.fs.Path r1, r2, r3, $r8, $r9;
+        org.apache.hadoop.fs.FileSystem r4;
+        java.net.URI $r5;
+        org.apache.hadoop.conf.Configuration $r6;
+        org.apache.hadoop.fs.Path[] $r7;
+
+        r0 := @parameter0: org.apache.hadoop.mapreduce.Job;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter3: org.apache.hadoop.fs.Path;
+
+        $r5 = virtualinvoke r1.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        $r6 = virtualinvoke r0.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        r4 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r5, $r6);
+
+        $r7 = newarray (org.apache.hadoop.fs.Path)[2];
+
+        $r8 = virtualinvoke r2.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.Path makeQualified(org.apache.hadoop.fs.FileSystem)>(r4);
+
+        $r7[0] = $r8;
+
+        $r9 = virtualinvoke r3.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.Path makeQualified(org.apache.hadoop.fs.FileSystem)>(r4);
+
+        $r7[1] = $r9;
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void setInputPaths(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path[])>(r0, $r7);
+
+        return;
+    }
+
+    protected java.lang.Class getAnalyzerClassFromOption() throws java.lang.ClassNotFoundException
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        java.lang.String r1;
+        boolean $z0;
+        java.lang.Class $r2, r4;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r4 = class "org/apache/lucene/analysis/standard/StandardAnalyzer";
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: boolean hasOption(java.lang.String)>("analyzerName");
+
+        if $z0 == 0 goto label1;
+
+        r1 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: java.lang.String getOption(java.lang.String)>("analyzerName");
+
+        $r2 = staticinvoke <java.lang.Class: java.lang.Class forName(java.lang.String)>(r1);
+
+        r4 = virtualinvoke $r2.<java.lang.Class: java.lang.Class asSubclass(java.lang.Class)>(class "org/apache/lucene/analysis/Analyzer");
+
+        staticinvoke <org.apache.mahout.common.lucene.AnalyzerUtils: org.apache.lucene.analysis.Analyzer createAnalyzer(java.lang.Class)>(r4);
+
+     label1:
+        return r4;
+    }
+
+    public void setConf(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.common.AbstractJob r0;
+        org.apache.hadoop.conf.Configuration r1;
+        java.lang.String r2;
+        org.apache.hadoop.fs.Path $r3;
+        org.slf4j.Logger $r4;
+
+        r0 := @this: org.apache.mahout.common.AbstractJob;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        specialinvoke r0.<org.apache.hadoop.conf.Configured: void setConf(org.apache.hadoop.conf.Configuration)>(r1);
+
+        r2 = staticinvoke <java.lang.System: java.lang.String getProperty(java.lang.String)>("oozie.action.conf.xml");
+
+        if r2 == null goto label1;
+
+        if r1 == null goto label1;
+
+        $r3 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r3.<org.apache.hadoop.fs.Path: void <init>(java.lang.String,java.lang.String)>("file:///", r2);
+
+        virtualinvoke r1.<org.apache.hadoop.conf.Configuration: void addResource(org.apache.hadoop.fs.Path)>($r3);
+
+        $r4 = <org.apache.mahout.common.AbstractJob: org.slf4j.Logger log>;
+
+        interfaceinvoke $r4.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Added Oozie action Configuration resource {} to the Hadoop Configuration", r2);
+
+     label1:
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/common/AbstractJob");
+
+        <org.apache.mahout.common.AbstractJob: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

@@ -1,0 +1,245 @@
+public final class org.apache.mahout.math.hadoop.stats.BasicStats extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.math.hadoop.stats.BasicStats r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stats.BasicStats;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static double variance(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.fs.Path r0, r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.mahout.math.hadoop.stats.VarianceTotals r3;
+        double $d0;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.conf.Configuration;
+
+        r3 = staticinvoke <org.apache.mahout.math.hadoop.stats.BasicStats: org.apache.mahout.math.hadoop.stats.VarianceTotals computeVarianceTotals(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r0, r1, r2);
+
+        $d0 = virtualinvoke r3.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double computeVariance()>();
+
+        return $d0;
+    }
+
+    public static double varianceForGivenMean(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, double, org.apache.hadoop.conf.Configuration) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.fs.Path r0, r1;
+        double d0, $d1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.mahout.math.hadoop.stats.VarianceTotals r3;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        d0 := @parameter2: double;
+
+        r2 := @parameter3: org.apache.hadoop.conf.Configuration;
+
+        r3 = staticinvoke <org.apache.mahout.math.hadoop.stats.BasicStats: org.apache.mahout.math.hadoop.stats.VarianceTotals computeVarianceTotals(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r0, r1, r2);
+
+        $d1 = virtualinvoke r3.<org.apache.mahout.math.hadoop.stats.VarianceTotals: double computeVarianceForGivenMean(double)>(d0);
+
+        return $d1;
+    }
+
+    private static org.apache.mahout.math.hadoop.stats.VarianceTotals computeVarianceTotals(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.fs.Path r0, r1, $r10;
+        org.apache.hadoop.conf.Configuration r2, $r7;
+        org.apache.hadoop.mapreduce.Job r4;
+        boolean z0, $z1;
+        org.apache.mahout.common.Pair r6;
+        int i0, $i1, $i2, $i3;
+        org.apache.hadoop.fs.Path[] $r8;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable $r9;
+        org.apache.mahout.common.iterator.sequencefile.PathType $r11;
+        org.apache.mahout.math.hadoop.stats.VarianceTotals $r12;
+        java.lang.Object $r13, $r14, $r20, $r21, $r22;
+        org.apache.hadoop.io.IntWritable $r15, $r16, $r17, $r18;
+        org.apache.hadoop.io.DoubleWritable $r19, $r23, $r25;
+        double $d0, $d1, $d2, d3, d4, d5;
+        java.lang.IllegalStateException $r24;
+        java.util.Iterator r26;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.conf.Configuration;
+
+        $r7 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r7.<org.apache.hadoop.conf.Configuration: void <init>(org.apache.hadoop.conf.Configuration)>(r2);
+
+        virtualinvoke $r7.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("io.serializations", "org.apache.hadoop.io.serializer.JavaSerialization,org.apache.hadoop.io.serializer.WritableSerialization");
+
+        r4 = staticinvoke <org.apache.mahout.common.HadoopUtil: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,org.apache.hadoop.conf.Configuration)>(r0, r1, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", class "org/apache/mahout/math/hadoop/stats/StandardDeviationCalculatorMapper", class "org/apache/hadoop/io/IntWritable", class "org/apache/hadoop/io/DoubleWritable", class "org/apache/mahout/math/hadoop/stats/StandardDeviationCalculatorReducer", class "org/apache/hadoop/io/IntWritable", class "org/apache/hadoop/io/DoubleWritable", class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat", $r7);
+
+        $r8 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r8[0] = r1;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r7, $r8);
+
+        virtualinvoke r4.<org.apache.hadoop.mapreduce.Job: void setCombinerClass(java.lang.Class)>(class "org/apache/mahout/math/hadoop/stats/StandardDeviationCalculatorReducer");
+
+        z0 = virtualinvoke r4.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z0 != 0 goto label1;
+
+        $r24 = new java.lang.IllegalStateException;
+
+        specialinvoke $r24.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Job failed!");
+
+        throw $r24;
+
+     label1:
+        $r10 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r10.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r1, "part-*");
+
+        d3 = 0.0;
+
+        d4 = 0.0;
+
+        d5 = 0.0;
+
+        $r9 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable;
+
+        $r11 = <org.apache.mahout.common.iterator.sequencefile.PathType: org.apache.mahout.common.iterator.sequencefile.PathType GLOB>;
+
+        specialinvoke $r9.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable: void <init>(org.apache.hadoop.fs.Path,org.apache.mahout.common.iterator.sequencefile.PathType,org.apache.hadoop.fs.PathFilter,java.util.Comparator,boolean,org.apache.hadoop.conf.Configuration)>($r10, $r11, null, null, 1, $r7);
+
+        r26 = virtualinvoke $r9.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterable: java.util.Iterator iterator()>();
+
+     label2:
+        $z1 = interfaceinvoke r26.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label5;
+
+        $r14 = interfaceinvoke r26.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.common.Pair) $r14;
+
+        $r13 = virtualinvoke r6.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r15 = (org.apache.hadoop.io.IntWritable) $r13;
+
+        i0 = virtualinvoke $r15.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $r16 = <org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper: org.apache.hadoop.io.IntWritable SUM_OF_SQUARES>;
+
+        $i1 = virtualinvoke $r16.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        if i0 != $i1 goto label3;
+
+        $r21 = virtualinvoke r6.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r25 = (org.apache.hadoop.io.DoubleWritable) $r21;
+
+        $d2 = virtualinvoke $r25.<org.apache.hadoop.io.DoubleWritable: double get()>();
+
+        d3 = d3 + $d2;
+
+        goto label2;
+
+     label3:
+        $r18 = <org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper: org.apache.hadoop.io.IntWritable TOTAL_COUNT>;
+
+        $i3 = virtualinvoke $r18.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        if i0 != $i3 goto label4;
+
+        $r22 = virtualinvoke r6.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r23 = (org.apache.hadoop.io.DoubleWritable) $r22;
+
+        $d1 = virtualinvoke $r23.<org.apache.hadoop.io.DoubleWritable: double get()>();
+
+        d5 = d5 + $d1;
+
+        goto label2;
+
+     label4:
+        $r17 = <org.apache.mahout.math.hadoop.stats.StandardDeviationCalculatorMapper: org.apache.hadoop.io.IntWritable SUM>;
+
+        $i2 = virtualinvoke $r17.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        if i0 != $i2 goto label2;
+
+        $r20 = virtualinvoke r6.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r19 = (org.apache.hadoop.io.DoubleWritable) $r20;
+
+        $d0 = virtualinvoke $r19.<org.apache.hadoop.io.DoubleWritable: double get()>();
+
+        d4 = d4 + $d0;
+
+        goto label2;
+
+     label5:
+        $r12 = new org.apache.mahout.math.hadoop.stats.VarianceTotals;
+
+        specialinvoke $r12.<org.apache.mahout.math.hadoop.stats.VarianceTotals: void <init>()>();
+
+        virtualinvoke $r12.<org.apache.mahout.math.hadoop.stats.VarianceTotals: void setSum(double)>(d4);
+
+        virtualinvoke $r12.<org.apache.mahout.math.hadoop.stats.VarianceTotals: void setSumOfSquares(double)>(d3);
+
+        virtualinvoke $r12.<org.apache.mahout.math.hadoop.stats.VarianceTotals: void setTotalCount(double)>(d5);
+
+        return $r12;
+    }
+
+    public static double stdDev(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.fs.Path r0, r1;
+        org.apache.hadoop.conf.Configuration r2;
+        double $d0, $d1;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.conf.Configuration;
+
+        $d0 = staticinvoke <org.apache.mahout.math.hadoop.stats.BasicStats: double variance(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r0, r1, r2);
+
+        $d1 = staticinvoke <java.lang.Math: double sqrt(double)>($d0);
+
+        return $d1;
+    }
+
+    public static double stdDevForGivenMean(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, double, org.apache.hadoop.conf.Configuration) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.fs.Path r0, r1;
+        double d0, $d1, $d2;
+        org.apache.hadoop.conf.Configuration r2;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        d0 := @parameter2: double;
+
+        r2 := @parameter3: org.apache.hadoop.conf.Configuration;
+
+        $d1 = staticinvoke <org.apache.mahout.math.hadoop.stats.BasicStats: double varianceForGivenMean(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,double,org.apache.hadoop.conf.Configuration)>(r0, r1, d0, r2);
+
+        $d2 = staticinvoke <java.lang.Math: double sqrt(double)>($d1);
+
+        return $d2;
+    }
+}

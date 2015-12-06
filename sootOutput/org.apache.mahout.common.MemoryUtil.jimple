@@ -1,0 +1,124 @@
+public final class org.apache.mahout.common.MemoryUtil extends java.lang.Object
+{
+    private static final org.slf4j.Logger log;
+    private static volatile java.util.concurrent.ScheduledExecutorService scheduler;
+
+    private void <init>()
+    {
+        org.apache.mahout.common.MemoryUtil r0;
+
+        r0 := @this: org.apache.mahout.common.MemoryUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void logMemoryStatistics()
+    {
+        java.lang.Runtime r0;
+        long l0, l1, l2, l3;
+        java.lang.Object[] $r1;
+        org.slf4j.Logger $r2;
+        java.lang.Long $r3, $r4, $r5;
+
+        r0 = staticinvoke <java.lang.Runtime: java.lang.Runtime getRuntime()>();
+
+        l0 = virtualinvoke r0.<java.lang.Runtime: long freeMemory()>();
+
+        l1 = virtualinvoke r0.<java.lang.Runtime: long maxMemory()>();
+
+        l2 = virtualinvoke r0.<java.lang.Runtime: long totalMemory()>();
+
+        l3 = l2 - l0;
+
+        $r2 = <org.apache.mahout.common.MemoryUtil: org.slf4j.Logger log>;
+
+        $r1 = newarray (java.lang.Object)[3];
+
+        $r3 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l3);
+
+        $r1[0] = $r3;
+
+        $r4 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l2);
+
+        $r1[1] = $r4;
+
+        $r5 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l1);
+
+        $r1[2] = $r5;
+
+        interfaceinvoke $r2.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object[])>("Memory (bytes): {} used, {} heap, {} max", $r1);
+
+        return;
+    }
+
+    public static void startMemoryLogger(long)
+    {
+        long l0;
+        org.apache.mahout.common.MemoryUtil$1 $r1;
+        java.util.concurrent.ScheduledExecutorService $r2, $r5;
+        org.apache.mahout.common.MemoryUtil$2 $r3;
+        java.util.concurrent.TimeUnit $r4;
+
+        l0 := @parameter0: long;
+
+        staticinvoke <org.apache.mahout.common.MemoryUtil: void stopMemoryLogger()>();
+
+        $r1 = new org.apache.mahout.common.MemoryUtil$1;
+
+        specialinvoke $r1.<org.apache.mahout.common.MemoryUtil$1: void <init>()>();
+
+        $r2 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ScheduledExecutorService newScheduledThreadPool(int,java.util.concurrent.ThreadFactory)>(1, $r1);
+
+        <org.apache.mahout.common.MemoryUtil: java.util.concurrent.ScheduledExecutorService scheduler> = $r2;
+
+        $r3 = new org.apache.mahout.common.MemoryUtil$2;
+
+        specialinvoke $r3.<org.apache.mahout.common.MemoryUtil$2: void <init>()>();
+
+        $r5 = <org.apache.mahout.common.MemoryUtil: java.util.concurrent.ScheduledExecutorService scheduler>;
+
+        $r4 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit MILLISECONDS>;
+
+        interfaceinvoke $r5.<java.util.concurrent.ScheduledExecutorService: java.util.concurrent.ScheduledFuture scheduleAtFixedRate(java.lang.Runnable,long,long,java.util.concurrent.TimeUnit)>($r3, l0, l0, $r4);
+
+        return;
+    }
+
+    public static void startMemoryLogger()
+    {
+        staticinvoke <org.apache.mahout.common.MemoryUtil: void startMemoryLogger(long)>(1000L);
+
+        return;
+    }
+
+    public static void stopMemoryLogger()
+    {
+        java.util.concurrent.ScheduledExecutorService $r0, $r1;
+
+        $r0 = <org.apache.mahout.common.MemoryUtil: java.util.concurrent.ScheduledExecutorService scheduler>;
+
+        if $r0 == null goto label1;
+
+        $r1 = <org.apache.mahout.common.MemoryUtil: java.util.concurrent.ScheduledExecutorService scheduler>;
+
+        interfaceinvoke $r1.<java.util.concurrent.ScheduledExecutorService: java.util.List shutdownNow()>();
+
+        <org.apache.mahout.common.MemoryUtil: java.util.concurrent.ScheduledExecutorService scheduler> = null;
+
+     label1:
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/common/MemoryUtil");
+
+        <org.apache.mahout.common.MemoryUtil: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

@@ -1,0 +1,83 @@
+class org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper$1 extends java.lang.Object implements org.apache.hadoop.mapred.OutputCollector
+{
+    final org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper this$0;
+
+    void <init>(org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper$1 r0;
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper$1;
+
+        r1 := @parameter0: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper$1: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void collect(org.apache.hadoop.io.LongWritable, org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper$1 r0;
+        org.apache.hadoop.io.LongWritable r1;
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable r2;
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper $r4;
+        org.apache.hadoop.mapreduce.Mapper$Context $r5;
+        java.lang.InterruptedException $r6;
+        java.io.IOException $r7;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper$1;
+
+        r1 := @parameter0: org.apache.hadoop.io.LongWritable;
+
+        r2 := @parameter1: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+     label1:
+        $r4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper$1: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper this$0>;
+
+        $r5 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper: org.apache.hadoop.mapreduce.Mapper$Context access$000(org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper)>($r4);
+
+        virtualinvoke $r5.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>(r1, r2);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r6 := @caughtexception;
+
+        $r7 = new java.io.IOException;
+
+        specialinvoke $r7.<java.io.IOException: void <init>(java.lang.String,java.lang.Throwable)>("Interrupted.", $r6);
+
+        throw $r7;
+
+     label4:
+        return;
+
+        catch java.lang.InterruptedException from label1 to label2 with label3;
+    }
+
+    public volatile void collect(java.lang.Object, java.lang.Object) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper$1 r0;
+        java.lang.Object r1, r2;
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable $r3;
+        org.apache.hadoop.io.LongWritable $r4;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        $r4 = (org.apache.hadoop.io.LongWritable) r1;
+
+        $r3 = (org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$BtMapper$1: void collect(org.apache.hadoop.io.LongWritable,org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable)>($r4, $r3);
+
+        return;
+    }
+}

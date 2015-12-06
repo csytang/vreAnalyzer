@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import soot.SootMethod;
 import soot.Value;
 import soot.tagkit.AttributeValueException;
@@ -15,6 +16,7 @@ public class RBTag implements Tag{
 	 * Namely require binding tag
 	 */
 	public static String TAG_NAME = "rtbind";
+	@SuppressWarnings("unused")
 	private boolean fromRemoteCaller = false;// 如果有
 
 	private Map<SootMethod,Set<CallSite>>callerToSites = new HashMap<SootMethod,Set<CallSite>>();

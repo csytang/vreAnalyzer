@@ -1,0 +1,93 @@
+public class org.apache.mahout.cf.taste.similarity.precompute.SimilarItem extends java.lang.Object
+{
+    public static final java.util.Comparator COMPARE_BY_SIMILARITY;
+    private long itemID;
+    private double similarity;
+
+    public void <init>(long, double)
+    {
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItem r0;
+        long l0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.similarity.precompute.SimilarItem;
+
+        l0 := @parameter0: long;
+
+        d0 := @parameter1: double;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItem: void set(long,double)>(l0, d0);
+
+        return;
+    }
+
+    public void set(long, double)
+    {
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItem r0;
+        long l0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.similarity.precompute.SimilarItem;
+
+        l0 := @parameter0: long;
+
+        d0 := @parameter1: double;
+
+        r0.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItem: long itemID> = l0;
+
+        r0.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItem: double similarity> = d0;
+
+        return;
+    }
+
+    public long getItemID()
+    {
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItem r0;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.cf.taste.similarity.precompute.SimilarItem;
+
+        $l0 = r0.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItem: long itemID>;
+
+        return $l0;
+    }
+
+    public double getSimilarity()
+    {
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItem r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.similarity.precompute.SimilarItem;
+
+        $d0 = r0.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItem: double similarity>;
+
+        return $d0;
+    }
+
+    static double access$000(org.apache.mahout.cf.taste.similarity.precompute.SimilarItem)
+    {
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItem r0;
+        double $d0;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.similarity.precompute.SimilarItem;
+
+        $d0 = r0.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItem: double similarity>;
+
+        return $d0;
+    }
+
+    static void <clinit>()
+    {
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItem$1 $r0;
+
+        $r0 = new org.apache.mahout.cf.taste.similarity.precompute.SimilarItem$1;
+
+        specialinvoke $r0.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItem$1: void <init>()>();
+
+        <org.apache.mahout.cf.taste.similarity.precompute.SimilarItem: java.util.Comparator COMPARE_BY_SIMILARITY> = $r0;
+
+        return;
+    }
+}

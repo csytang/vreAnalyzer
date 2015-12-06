@@ -1,0 +1,128 @@
+public class org.apache.mahout.clustering.iterator.KMeansClusteringPolicy extends org.apache.mahout.clustering.iterator.AbstractClusteringPolicy
+{
+    private double convergenceDelta;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.iterator.KMeansClusteringPolicy r0;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.KMeansClusteringPolicy;
+
+        specialinvoke r0.<org.apache.mahout.clustering.iterator.AbstractClusteringPolicy: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.iterator.KMeansClusteringPolicy: double convergenceDelta> = 0.001;
+
+        return;
+    }
+
+    public void <init>(double)
+    {
+        org.apache.mahout.clustering.iterator.KMeansClusteringPolicy r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.KMeansClusteringPolicy;
+
+        d0 := @parameter0: double;
+
+        specialinvoke r0.<org.apache.mahout.clustering.iterator.AbstractClusteringPolicy: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.iterator.KMeansClusteringPolicy: double convergenceDelta> = 0.001;
+
+        r0.<org.apache.mahout.clustering.iterator.KMeansClusteringPolicy: double convergenceDelta> = d0;
+
+        return;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.iterator.KMeansClusteringPolicy r0;
+        java.io.DataOutput r1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.KMeansClusteringPolicy;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $d0 = r0.<org.apache.mahout.clustering.iterator.KMeansClusteringPolicy: double convergenceDelta>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d0);
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.iterator.KMeansClusteringPolicy r0;
+        java.io.DataInput r1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.KMeansClusteringPolicy;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $d0 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.clustering.iterator.KMeansClusteringPolicy: double convergenceDelta> = $d0;
+
+        return;
+    }
+
+    public void close(org.apache.mahout.clustering.classify.ClusterClassifier)
+    {
+        org.apache.mahout.clustering.iterator.KMeansClusteringPolicy r0;
+        org.apache.mahout.clustering.classify.ClusterClassifier r1;
+        java.util.Iterator r2;
+        org.apache.mahout.clustering.Cluster r3;
+        org.apache.mahout.clustering.kmeans.Kluster r4;
+        boolean z0, $z1, z2, $z3;
+        java.util.List $r5;
+        java.lang.Object $r6;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.KMeansClusteringPolicy;
+
+        r1 := @parameter0: org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        z2 = 1;
+
+        $r5 = virtualinvoke r1.<org.apache.mahout.clustering.classify.ClusterClassifier: java.util.List getModels()>();
+
+        r2 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z1 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label4;
+
+        $r6 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.clustering.Cluster) $r6;
+
+        r4 = (org.apache.mahout.clustering.kmeans.Kluster) r3;
+
+        $d0 = r0.<org.apache.mahout.clustering.iterator.KMeansClusteringPolicy: double convergenceDelta>;
+
+        z0 = virtualinvoke r4.<org.apache.mahout.clustering.kmeans.Kluster: boolean calculateConvergence(double)>($d0);
+
+        if z2 == 0 goto label2;
+
+        if z0 == 0 goto label2;
+
+        $z3 = 1;
+
+        goto label3;
+
+     label2:
+        $z3 = 0;
+
+     label3:
+        z2 = $z3;
+
+        interfaceinvoke r3.<org.apache.mahout.clustering.Cluster: void computeParameters()>();
+
+        goto label1;
+
+     label4:
+        return;
+    }
+}

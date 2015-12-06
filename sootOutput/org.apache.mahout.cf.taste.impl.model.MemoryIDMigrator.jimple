@@ -1,0 +1,141 @@
+public final class org.apache.mahout.cf.taste.impl.model.MemoryIDMigrator extends org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator implements org.apache.mahout.cf.taste.model.UpdatableIDMigrator
+{
+    private final org.apache.mahout.cf.taste.impl.common.FastByIDMap longToString;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.impl.model.MemoryIDMigrator r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.MemoryIDMigrator;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.model.AbstractIDMigrator: void <init>()>();
+
+        $r1 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>(int)>(100);
+
+        r0.<org.apache.mahout.cf.taste.impl.model.MemoryIDMigrator: org.apache.mahout.cf.taste.impl.common.FastByIDMap longToString> = $r1;
+
+        return;
+    }
+
+    public void storeMapping(long, java.lang.String)
+    {
+        org.apache.mahout.cf.taste.impl.model.MemoryIDMigrator r0;
+        long l0;
+        java.lang.String r1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r4, $r5;
+        java.lang.Throwable $r7;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.MemoryIDMigrator;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: java.lang.String;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.model.MemoryIDMigrator: org.apache.mahout.cf.taste.impl.common.FastByIDMap longToString>;
+
+        entermonitor $r4;
+
+     label1:
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.model.MemoryIDMigrator: org.apache.mahout.cf.taste.impl.common.FastByIDMap longToString>;
+
+        virtualinvoke $r5.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object put(long,java.lang.Object)>(l0, r1);
+
+        exitmonitor $r4;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r7 := @caughtexception;
+
+        exitmonitor $r4;
+
+     label4:
+        throw $r7;
+
+     label5:
+        return;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public java.lang.String toStringID(long)
+    {
+        org.apache.mahout.cf.taste.impl.model.MemoryIDMigrator r0;
+        long l0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r3, $r4;
+        java.lang.Object $r5;
+        java.lang.String $r6;
+        java.lang.Throwable $r7;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.MemoryIDMigrator;
+
+        l0 := @parameter0: long;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.model.MemoryIDMigrator: org.apache.mahout.cf.taste.impl.common.FastByIDMap longToString>;
+
+        entermonitor $r3;
+
+     label1:
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.model.MemoryIDMigrator: org.apache.mahout.cf.taste.impl.common.FastByIDMap longToString>;
+
+        $r5 = virtualinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        $r6 = (java.lang.String) $r5;
+
+        exitmonitor $r3;
+
+     label2:
+        return $r6;
+
+     label3:
+        $r7 := @caughtexception;
+
+        exitmonitor $r3;
+
+     label4:
+        throw $r7;
+
+        catch java.lang.Throwable from label1 to label2 with label3;
+        catch java.lang.Throwable from label3 to label4 with label3;
+    }
+
+    public void initialize(java.lang.Iterable)
+    {
+        org.apache.mahout.cf.taste.impl.model.MemoryIDMigrator r0;
+        java.lang.Iterable r1;
+        java.util.Iterator r2;
+        java.lang.String r3;
+        boolean $z0;
+        java.lang.Object $r4;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.MemoryIDMigrator;
+
+        r1 := @parameter0: java.lang.Iterable;
+
+        r2 = interfaceinvoke r1.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.lang.String) $r4;
+
+        $l0 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.model.MemoryIDMigrator: long toLongID(java.lang.String)>(r3);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.model.MemoryIDMigrator: void storeMapping(long,java.lang.String)>($l0, r3);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+}

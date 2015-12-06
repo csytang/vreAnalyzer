@@ -1,0 +1,98 @@
+public class org.apache.mahout.clustering.lda.cvb.CVB0Driver$DualDoubleSumReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+    private final org.apache.hadoop.io.DoubleWritable outKey;
+    private final org.apache.hadoop.io.DoubleWritable outValue;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.lda.cvb.CVB0Driver$DualDoubleSumReducer r0;
+        org.apache.hadoop.io.DoubleWritable $r1, $r2;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CVB0Driver$DualDoubleSumReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        $r1 = new org.apache.hadoop.io.DoubleWritable;
+
+        specialinvoke $r1.<org.apache.hadoop.io.DoubleWritable: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver$DualDoubleSumReducer: org.apache.hadoop.io.DoubleWritable outKey> = $r1;
+
+        $r2 = new org.apache.hadoop.io.DoubleWritable;
+
+        specialinvoke $r2.<org.apache.hadoop.io.DoubleWritable: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver$DualDoubleSumReducer: org.apache.hadoop.io.DoubleWritable outValue> = $r2;
+
+        return;
+    }
+
+    public void run(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.lda.cvb.CVB0Driver$DualDoubleSumReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        java.util.Iterator r2;
+        org.apache.hadoop.io.DoubleWritable r3, $r4, $r5, $r6, $r7, $r9;
+        boolean $z0, $z1;
+        java.lang.Object $r8, $r11;
+        double $d0, $d1, d2, d3;
+        java.lang.Iterable $r10;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.CVB0Driver$DualDoubleSumReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        d2 = 0.0;
+
+        d3 = 0.0;
+
+     label1:
+        $z0 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: boolean nextKey()>();
+
+        if $z0 == 0 goto label3;
+
+        $r8 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: java.lang.Object getCurrentKey()>();
+
+        $r9 = (org.apache.hadoop.io.DoubleWritable) $r8;
+
+        $d0 = virtualinvoke $r9.<org.apache.hadoop.io.DoubleWritable: double get()>();
+
+        d2 = d2 + $d0;
+
+        $r10 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: java.lang.Iterable getValues()>();
+
+        r2 = interfaceinvoke $r10.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label2:
+        $z1 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label1;
+
+        $r11 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.hadoop.io.DoubleWritable) $r11;
+
+        $d1 = virtualinvoke r3.<org.apache.hadoop.io.DoubleWritable: double get()>();
+
+        d3 = d3 + $d1;
+
+        goto label2;
+
+     label3:
+        $r4 = r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver$DualDoubleSumReducer: org.apache.hadoop.io.DoubleWritable outKey>;
+
+        virtualinvoke $r4.<org.apache.hadoop.io.DoubleWritable: void set(double)>(d2);
+
+        $r5 = r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver$DualDoubleSumReducer: org.apache.hadoop.io.DoubleWritable outValue>;
+
+        virtualinvoke $r5.<org.apache.hadoop.io.DoubleWritable: void set(double)>(d3);
+
+        $r7 = r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver$DualDoubleSumReducer: org.apache.hadoop.io.DoubleWritable outKey>;
+
+        $r6 = r0.<org.apache.mahout.clustering.lda.cvb.CVB0Driver$DualDoubleSumReducer: org.apache.hadoop.io.DoubleWritable outValue>;
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>($r7, $r6);
+
+        return;
+    }
+}

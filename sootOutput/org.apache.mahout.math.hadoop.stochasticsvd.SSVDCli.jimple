@@ -1,0 +1,454 @@
+public class org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli extends org.apache.mahout.common.AbstractJob
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        return;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli r0;
+        java.lang.String[] r1;
+        java.util.Map r2;
+        int i0, i1, i2, i3, i4, i5, i6, i7;
+        boolean z0, z1, z2, z3, z4, z5, z6, z7, $z8, $z10, $z12, $z13, $z14, $z15, $z17;
+        java.lang.String r3, $r10, $r11, $r12, $r13, $r14, $r15, $r16, $r17, $r18, $r19, $r20, $r21, $r23, $r24, $r25, $r28, $r29, $r30, $r31, $r32, $r33, $r34, $r35, $r36, $r37, $r38, $r39, $r42, $r49, $r55, $r58, $r64, $r67;
+        org.apache.hadoop.conf.Configuration r4, $r74, $r76;
+        org.apache.hadoop.fs.Path r5, $r40, $r43, $r45, $r46, $r48, $r51, $r52, $r53, $r54, $r57, $r59, $r61, $r63, $r65, $r66, $r68, $r70, $r71, $r72, $r73, $r80, r81, $r83;
+        org.apache.hadoop.fs.FileSystem r8;
+        org.apache.mahout.math.Vector r9, $r50;
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r22;
+        org.apache.commons.cli2.option.DefaultOption $r27;
+        org.apache.hadoop.fs.Path[] $r41, $r75, $r77;
+        java.net.URI $r44;
+        java.io.IOException $r47, $r56, $r60, $r62, $r69, $r79;
+        org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver $r82;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli;
+
+        r1 := @parameter0: java.lang.String[];
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addInputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOutputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("rank", "k", "decomposition rank", 1);
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(15);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("oversampling", "p", "oversampling", $r10);
+
+        $r11 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(10000);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("blockHeight", "r", "Y block height (must be > (k+p))", $r11);
+
+        $r12 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(30000);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("outerProdBlockHeight", "oh", "block height of outer products during multiplication, increase for sparse inputs", $r12);
+
+        $r13 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(200000);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("abtBlockHeight", "abth", "block height of Y_i in ABtJob during AB\' multiplication, increase for extremely sparse inputs", $r13);
+
+        $r14 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(-1);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("minSplitSize", "s", "minimum split size", $r14);
+
+        $r15 = staticinvoke <java.lang.String: java.lang.String valueOf(boolean)>(1);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("computeU", "U", "compute U (true/false)", $r15);
+
+        $r16 = staticinvoke <java.lang.String: java.lang.String valueOf(boolean)>(0);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("uHalfSigma", "uhs", "Compute U * Sigma^0.5", $r16);
+
+        $r17 = staticinvoke <java.lang.String: java.lang.String valueOf(boolean)>(0);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("uSigma", "us", "Compute U * Sigma", $r17);
+
+        $r18 = staticinvoke <java.lang.String: java.lang.String valueOf(boolean)>(1);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("computeV", "V", "compute V (true/false)", $r18);
+
+        $r20 = staticinvoke <java.lang.String: java.lang.String valueOf(boolean)>(0);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("vHalfSigma", "vhs", "compute V * Sigma^0.5", $r20);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("reduceTasks", "t", "number of reduce tasks (where applicable)", 1);
+
+        $r19 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(0);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("powerIter", "q", "number of additional power iterations (0..2 is good)", $r19);
+
+        $r23 = staticinvoke <java.lang.String: java.lang.String valueOf(boolean)>(1);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("broadcast", "br", "whether use distributed cache to broadcast matrices wherever possible", $r23);
+
+        $r21 = staticinvoke <java.lang.String: java.lang.String valueOf(boolean)>(0);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("pca", "pca", "run in pca mode: compute column-wise mean and subtract from input", $r21);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void addOption(java.lang.String,java.lang.String,java.lang.String)>("pcaOffset", "xi", "path(glob) of external pca mean (optional, dont compute, use external mean");
+
+        $r22 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder overwriteOption()>();
+
+        $r27 = virtualinvoke $r22.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r27);
+
+        r2 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.util.Map parseArguments(java.lang.String[])>(r1);
+
+        if r2 != null goto label01;
+
+        return -1;
+
+     label01:
+        $r28 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.lang.String getOption(java.lang.String)>("rank");
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r28);
+
+        $r24 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.lang.String getOption(java.lang.String)>("oversampling");
+
+        i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r24);
+
+        $r25 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.lang.String getOption(java.lang.String)>("blockHeight");
+
+        i2 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r25);
+
+        $r31 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.lang.String getOption(java.lang.String)>("outerProdBlockHeight");
+
+        i3 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r31);
+
+        $r32 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.lang.String getOption(java.lang.String)>("abtBlockHeight");
+
+        i4 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r32);
+
+        $r29 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.lang.String getOption(java.lang.String)>("powerIter");
+
+        i5 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r29);
+
+        $r30 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.lang.String getOption(java.lang.String)>("minSplitSize");
+
+        i6 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r30);
+
+        $r36 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.lang.String getOption(java.lang.String)>("computeU");
+
+        z0 = staticinvoke <java.lang.Boolean: boolean parseBoolean(java.lang.String)>($r36);
+
+        $r35 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.lang.String getOption(java.lang.String)>("computeV");
+
+        z1 = staticinvoke <java.lang.Boolean: boolean parseBoolean(java.lang.String)>($r35);
+
+        $r34 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.lang.String getOption(java.lang.String)>("uHalfSigma");
+
+        z2 = staticinvoke <java.lang.Boolean: boolean parseBoolean(java.lang.String)>($r34);
+
+        $r33 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.lang.String getOption(java.lang.String)>("uSigma");
+
+        z3 = staticinvoke <java.lang.Boolean: boolean parseBoolean(java.lang.String)>($r33);
+
+        $r39 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.lang.String getOption(java.lang.String)>("vHalfSigma");
+
+        z4 = staticinvoke <java.lang.Boolean: boolean parseBoolean(java.lang.String)>($r39);
+
+        $r38 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.lang.String getOption(java.lang.String)>("reduceTasks");
+
+        i7 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r38);
+
+        $r37 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.lang.String getOption(java.lang.String)>("broadcast");
+
+        z5 = staticinvoke <java.lang.Boolean: boolean parseBoolean(java.lang.String)>($r37);
+
+        r3 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.lang.String getOption(java.lang.String)>("pcaOffset");
+
+        if r3 != null goto label02;
+
+        $r80 = null;
+
+        goto label03;
+
+     label02:
+        $r80 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r80.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r3);
+
+     label03:
+        r81 = $r80;
+
+        $r42 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: java.lang.String getOption(java.lang.String)>("pca");
+
+        $z8 = staticinvoke <java.lang.Boolean: boolean parseBoolean(java.lang.String)>($r42);
+
+        if $z8 != 0 goto label04;
+
+        if $r80 == null goto label05;
+
+     label04:
+        $z17 = 1;
+
+        goto label06;
+
+     label05:
+        $z17 = 0;
+
+     label06:
+        z6 = $z17;
+
+        z7 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: boolean hasOption(java.lang.String)>("overwrite");
+
+        r4 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.hadoop.conf.Configuration getConf()>();
+
+        if r4 != null goto label07;
+
+        $r79 = new java.io.IOException;
+
+        specialinvoke $r79.<java.io.IOException: void <init>(java.lang.String)>("No Hadoop configuration present");
+
+        throw $r79;
+
+     label07:
+        $r41 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r40 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.hadoop.fs.Path getInputPath()>();
+
+        $r41[0] = $r40;
+
+        r5 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.hadoop.fs.Path getTempPath()>();
+
+        $r45 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.hadoop.fs.Path getTempPath()>();
+
+        $r44 = virtualinvoke $r45.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r8 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r44, r4);
+
+        if z7 == 0 goto label08;
+
+        $r76 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $r77 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r73 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        $r77[0] = $r73;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r76, $r77);
+
+        $r74 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $r75 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r72 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.hadoop.fs.Path getTempPath()>();
+
+        $r75[0] = $r72;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r74, $r75);
+
+     label08:
+        $r43 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        virtualinvoke r8.<org.apache.hadoop.fs.FileSystem: boolean mkdirs(org.apache.hadoop.fs.Path)>($r43);
+
+        if z6 == 0 goto label10;
+
+        if r81 != null goto label10;
+
+        $r71 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r71.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r5, "xi");
+
+        r81 = $r71;
+
+        if z7 == 0 goto label09;
+
+        virtualinvoke r8.<org.apache.hadoop.fs.FileSystem: boolean delete(org.apache.hadoop.fs.Path,boolean)>($r71, 1);
+
+     label09:
+        $r70 = $r41[0];
+
+        staticinvoke <org.apache.mahout.math.hadoop.MatrixColumnMeansJob: org.apache.mahout.math.Vector run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>(r4, $r70, $r71);
+
+     label10:
+        $r82 = new org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver;
+
+        $r83 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r83.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r5, "ssvd");
+
+        specialinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void <init>(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[],org.apache.hadoop.fs.Path,int,int,int,int)>(r4, $r41, $r83, i2, i0, i1, i7);
+
+        virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void setMinSplitSize(int)>(i6);
+
+        virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void setComputeU(boolean)>(z0);
+
+        virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void setComputeV(boolean)>(z1);
+
+        virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void setcUHalfSigma(boolean)>(z2);
+
+        virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void setcVHalfSigma(boolean)>(z4);
+
+        virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void setcUSigma(boolean)>(z3);
+
+        virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void setOuterBlockHeight(int)>(i3);
+
+        virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void setAbtBlockHeight(int)>(i4);
+
+        virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void setQ(int)>(i5);
+
+        virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void setBroadcast(boolean)>(z5);
+
+        virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void setOverwrite(boolean)>(z7);
+
+        if r81 == null goto label11;
+
+        $r68 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r68.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r81, "part-*");
+
+        virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void setPcaMeanPath(org.apache.hadoop.fs.Path)>($r68);
+
+     label11:
+        virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: void run()>();
+
+        $r50 = virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: org.apache.mahout.math.Vector getSingularValues()>();
+
+        r9 = interfaceinvoke $r50.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector viewPart(int,int)>(0, i0);
+
+        $r52 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.hadoop.fs.Path getOutputPath(java.lang.String)>("sigma");
+
+        staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper: void saveVector(org.apache.mahout.math.Vector,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r9, $r52, r4);
+
+        if z0 == 0 goto label12;
+
+        $r61 = new org.apache.hadoop.fs.Path;
+
+        $r67 = virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: java.lang.String getUPath()>();
+
+        specialinvoke $r61.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r67);
+
+        $r66 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        $z15 = virtualinvoke r8.<org.apache.hadoop.fs.FileSystem: boolean rename(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r61, $r66);
+
+        if $z15 != 0 goto label12;
+
+        $r69 = new java.io.IOException;
+
+        specialinvoke $r69.<java.io.IOException: void <init>(java.lang.String)>("Unable to move U results to the output path.");
+
+        throw $r69;
+
+     label12:
+        if z2 == 0 goto label13;
+
+        $r57 = new org.apache.hadoop.fs.Path;
+
+        $r58 = virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: java.lang.String getuHalfSigmaPath()>();
+
+        specialinvoke $r57.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r58);
+
+        $r59 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        $z12 = virtualinvoke r8.<org.apache.hadoop.fs.FileSystem: boolean rename(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r57, $r59);
+
+        if $z12 != 0 goto label13;
+
+        $r60 = new java.io.IOException;
+
+        specialinvoke $r60.<java.io.IOException: void <init>(java.lang.String)>("Unable to move U*Sigma^0.5 results to the output path.");
+
+        throw $r60;
+
+     label13:
+        if z3 == 0 goto label14;
+
+        $r63 = new org.apache.hadoop.fs.Path;
+
+        $r64 = virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: java.lang.String getuSigmaPath()>();
+
+        specialinvoke $r63.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r64);
+
+        $r65 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        $z14 = virtualinvoke r8.<org.apache.hadoop.fs.FileSystem: boolean rename(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r63, $r65);
+
+        if $z14 != 0 goto label14;
+
+        $r56 = new java.io.IOException;
+
+        specialinvoke $r56.<java.io.IOException: void <init>(java.lang.String)>("Unable to move U*Sigma results to the output path.");
+
+        throw $r56;
+
+     label14:
+        if z1 == 0 goto label15;
+
+        $r46 = new org.apache.hadoop.fs.Path;
+
+        $r49 = virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: java.lang.String getVPath()>();
+
+        specialinvoke $r46.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r49);
+
+        $r48 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        $z13 = virtualinvoke r8.<org.apache.hadoop.fs.FileSystem: boolean rename(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r46, $r48);
+
+        if $z13 != 0 goto label15;
+
+        $r62 = new java.io.IOException;
+
+        specialinvoke $r62.<java.io.IOException: void <init>(java.lang.String)>("Unable to move V results to the output path.");
+
+        throw $r62;
+
+     label15:
+        if z4 == 0 goto label16;
+
+        $r53 = new org.apache.hadoop.fs.Path;
+
+        $r55 = virtualinvoke $r82.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDSolver: java.lang.String getvHalfSigmaPath()>();
+
+        specialinvoke $r53.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r55);
+
+        $r54 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        $z10 = virtualinvoke r8.<org.apache.hadoop.fs.FileSystem: boolean rename(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>($r53, $r54);
+
+        if $z10 != 0 goto label16;
+
+        $r47 = new java.io.IOException;
+
+        specialinvoke $r47.<java.io.IOException: void <init>(java.lang.String)>("Unable to move V*Sigma^0.5 results to the output path.");
+
+        throw $r47;
+
+     label16:
+        $r51 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: org.apache.hadoop.fs.Path getTempPath()>();
+
+        virtualinvoke r8.<org.apache.hadoop.fs.FileSystem: boolean deleteOnExit(org.apache.hadoop.fs.Path)>($r51);
+
+        return 0;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli $r1;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli;
+
+        specialinvoke $r1.<org.apache.mahout.math.hadoop.stochasticsvd.SSVDCli: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.util.Tool,java.lang.String[])>($r1, r0);
+
+        return;
+    }
+}

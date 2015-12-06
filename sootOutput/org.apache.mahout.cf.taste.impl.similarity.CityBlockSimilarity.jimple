@@ -1,0 +1,197 @@
+public final class org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity extends org.apache.mahout.cf.taste.impl.similarity.AbstractItemSimilarity implements org.apache.mahout.cf.taste.similarity.UserSimilarity
+{
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.AbstractItemSimilarity: void <init>(org.apache.mahout.cf.taste.model.DataModel)>(r1);
+
+        return;
+    }
+
+    public void setPreferenceInferrer(org.apache.mahout.cf.taste.similarity.PreferenceInferrer)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity r0;
+        org.apache.mahout.cf.taste.similarity.PreferenceInferrer r1;
+        java.lang.UnsupportedOperationException $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.PreferenceInferrer;
+
+        $r2 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r2.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r2;
+    }
+
+    public void refresh(java.util.Collection)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity r0;
+        java.util.Collection r1, r2;
+        org.apache.mahout.cf.taste.model.DataModel $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity;
+
+        r1 := @parameter0: java.util.Collection;
+
+        r2 = staticinvoke <org.apache.mahout.cf.taste.impl.common.RefreshHelper: java.util.Collection buildRefreshed(java.util.Collection)>(r1);
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        staticinvoke <org.apache.mahout.cf.taste.impl.common.RefreshHelper: void maybeRefresh(java.util.Collection,org.apache.mahout.cf.taste.common.Refreshable)>(r2, $r3);
+
+        return;
+    }
+
+    public double itemSimilarity(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity r0;
+        long l0, l1;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        int i2, i3, i4;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        i2 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long)>(l0);
+
+        i3 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long)>(l1);
+
+        i4 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long,long)>(l0, l1);
+
+        $d0 = staticinvoke <org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity: double doSimilarity(int,int,int)>(i2, i3, i4);
+
+        return $d0;
+    }
+
+    public double[] itemSimilarities(long, long[]) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity r0;
+        long l0, $l6, $l7;
+        long[] r1;
+        org.apache.mahout.cf.taste.model.DataModel r2;
+        int i1, i2, i3, $i4, $i5, i8;
+        double[] r3;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: long[];
+
+        r2 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        i1 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long)>(l0);
+
+        $i4 = lengthof r1;
+
+        r3 = newarray (double)[$i4];
+
+        i8 = 0;
+
+     label1:
+        $i5 = lengthof r1;
+
+        if i8 >= $i5 goto label2;
+
+        $l6 = r1[i8];
+
+        i2 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long)>($l6);
+
+        $l7 = r1[i8];
+
+        i3 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long,long)>(l0, $l7);
+
+        $d0 = staticinvoke <org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity: double doSimilarity(int,int,int)>(i1, i2, i3);
+
+        r3[i8] = $d0;
+
+        i8 = i8 + 1;
+
+        goto label1;
+
+     label2:
+        return r3;
+    }
+
+    public double userSimilarity(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity r0;
+        long l0, l1;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet r2, r3;
+        int i2, i3, $i5;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity: org.apache.mahout.cf.taste.model.DataModel getDataModel()>();
+
+        r2 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.FastIDSet getItemIDsFromUser(long)>(l0);
+
+        r3 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.FastIDSet getItemIDsFromUser(long)>(l1);
+
+        i2 = virtualinvoke r2.<org.apache.mahout.cf.taste.impl.common.FastIDSet: int size()>();
+
+        i3 = virtualinvoke r3.<org.apache.mahout.cf.taste.impl.common.FastIDSet: int size()>();
+
+        if i2 >= i3 goto label1;
+
+        $i5 = virtualinvoke r3.<org.apache.mahout.cf.taste.impl.common.FastIDSet: int intersectionSize(org.apache.mahout.cf.taste.impl.common.FastIDSet)>(r2);
+
+        goto label2;
+
+     label1:
+        $i5 = virtualinvoke r2.<org.apache.mahout.cf.taste.impl.common.FastIDSet: int intersectionSize(org.apache.mahout.cf.taste.impl.common.FastIDSet)>(r3);
+
+     label2:
+        $d0 = staticinvoke <org.apache.mahout.cf.taste.impl.similarity.CityBlockSimilarity: double doSimilarity(int,int,int)>(i2, i3, $i5);
+
+        return $d0;
+    }
+
+    private static double doSimilarity(int, int, int)
+    {
+        int i0, i1, i2, i3, $i4, $i5;
+        double $d0, $d1, $d2;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        i2 := @parameter2: int;
+
+        $i5 = i0 + i1;
+
+        $i4 = 2 * i2;
+
+        i3 = $i5 - $i4;
+
+        $d0 = (double) i3;
+
+        $d1 = 1.0 + $d0;
+
+        $d2 = 1.0 / $d1;
+
+        return $d2;
+    }
+}

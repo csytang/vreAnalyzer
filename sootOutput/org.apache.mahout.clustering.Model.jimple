@@ -1,0 +1,19 @@
+public interface  org.apache.mahout.clustering.Model extends java.lang.Object implements org.apache.hadoop.io.Writable
+{
+
+    public abstract double pdf(java.lang.Object);
+
+    public abstract void observe(java.lang.Object);
+
+    public abstract void observe(java.lang.Object, double);
+
+    public abstract void observe(org.apache.mahout.clustering.Model);
+
+    public abstract void computeParameters();
+
+    public abstract long getNumObservations();
+
+    public abstract long getTotalObservations();
+
+    public abstract org.apache.mahout.clustering.Model sampleFromPosterior();
+}

@@ -1,0 +1,139 @@
+public class org.apache.mahout.cf.taste.similarity.precompute.SimilarItems extends java.lang.Object
+{
+    private final long itemID;
+    private final long[] similarItemIDs;
+    private final double[] similarities;
+
+    public void <init>(long, java.util.List)
+    {
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItems r0;
+        long l0, $l2;
+        java.util.List r1;
+        int i1, i3;
+        long[] $r2, $r4;
+        double[] $r3, $r7;
+        java.lang.Object $r5, $r8;
+        org.apache.mahout.cf.taste.recommender.RecommendedItem $r6, $r9;
+        double $d0;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.similarity.precompute.SimilarItems;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: java.util.List;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItems: long itemID> = l0;
+
+        i1 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        $r2 = newarray (long)[i1];
+
+        r0.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItems: long[] similarItemIDs> = $r2;
+
+        $r3 = newarray (double)[i1];
+
+        r0.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItems: double[] similarities> = $r3;
+
+        i3 = 0;
+
+     label1:
+        if i3 >= i1 goto label2;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItems: long[] similarItemIDs>;
+
+        $r5 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i3);
+
+        $r6 = (org.apache.mahout.cf.taste.recommender.RecommendedItem) $r5;
+
+        $l2 = interfaceinvoke $r6.<org.apache.mahout.cf.taste.recommender.RecommendedItem: long getItemID()>();
+
+        $r4[i3] = $l2;
+
+        $r7 = r0.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItems: double[] similarities>;
+
+        $r8 = interfaceinvoke r1.<java.util.List: java.lang.Object get(int)>(i3);
+
+        $r9 = (org.apache.mahout.cf.taste.recommender.RecommendedItem) $r8;
+
+        $f0 = interfaceinvoke $r9.<org.apache.mahout.cf.taste.recommender.RecommendedItem: float getValue()>();
+
+        $d0 = (double) $f0;
+
+        $r7[i3] = $d0;
+
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public long getItemID()
+    {
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItems r0;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.cf.taste.similarity.precompute.SimilarItems;
+
+        $l0 = r0.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItems: long itemID>;
+
+        return $l0;
+    }
+
+    public int numSimilarItems()
+    {
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItems r0;
+        long[] $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.similarity.precompute.SimilarItems;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItems: long[] similarItemIDs>;
+
+        $i0 = lengthof $r1;
+
+        return $i0;
+    }
+
+    public java.lang.Iterable getSimilarItems()
+    {
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItems r0;
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItems$1 $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.similarity.precompute.SimilarItems;
+
+        $r1 = new org.apache.mahout.cf.taste.similarity.precompute.SimilarItems$1;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItems$1: void <init>(org.apache.mahout.cf.taste.similarity.precompute.SimilarItems)>(r0);
+
+        return $r1;
+    }
+
+    static long[] access$100(org.apache.mahout.cf.taste.similarity.precompute.SimilarItems)
+    {
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItems r0;
+        long[] $r1;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.similarity.precompute.SimilarItems;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItems: long[] similarItemIDs>;
+
+        return $r1;
+    }
+
+    static double[] access$200(org.apache.mahout.cf.taste.similarity.precompute.SimilarItems)
+    {
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItems r0;
+        double[] $r1;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.similarity.precompute.SimilarItems;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItems: double[] similarities>;
+
+        return $r1;
+    }
+}

@@ -1,0 +1,817 @@
+public class org.apache.mahout.cf.taste.hadoop.item.IDReader extends java.lang.Object
+{
+    static final java.lang.String USER_ITEM_FILE;
+    private static final org.slf4j.Logger log;
+    private static final java.util.regex.Pattern SEPARATOR;
+    private org.apache.hadoop.conf.Configuration conf;
+    private java.lang.String usersFile;
+    private java.lang.String itemsFile;
+    private java.lang.String userItemFile;
+    private org.apache.mahout.cf.taste.impl.common.FastIDSet userIds;
+    private org.apache.mahout.cf.taste.impl.common.FastIDSet itemIds;
+    private org.apache.mahout.cf.taste.impl.common.FastIDSet emptySet;
+    private java.util.Map userItemFilter;
+
+    public void <init>(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r2;
+        java.lang.String $r3, $r4, $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: org.apache.hadoop.conf.Configuration conf> = r1;
+
+        $r2 = new org.apache.mahout.cf.taste.impl.common.FastIDSet;
+
+        specialinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastIDSet: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: org.apache.mahout.cf.taste.impl.common.FastIDSet emptySet> = $r2;
+
+        $r3 = virtualinvoke r1.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("usersFile");
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.lang.String usersFile> = $r3;
+
+        $r4 = virtualinvoke r1.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("itemsFile");
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.lang.String itemsFile> = $r4;
+
+        $r5 = virtualinvoke r1.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("userItemFile");
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.lang.String userItemFile> = $r5;
+
+        return;
+    }
+
+    public void readIDs() throws java.io.IOException, java.lang.IllegalStateException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        boolean $z0, $z1, $z2, $z3, $z4;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isUserItemFileSpecified()>();
+
+        if $z0 == 0 goto label1;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: void readUserItemFilterIfNeeded()>();
+
+     label1:
+        $z1 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isUsersFileSpecified()>();
+
+        if $z1 != 0 goto label2;
+
+        $z3 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isUserItemFilterSpecified()>();
+
+        if $z3 == 0 goto label3;
+
+     label2:
+        specialinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: void readUserIds()>();
+
+     label3:
+        $z4 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isItemsFileSpecified()>();
+
+        if $z4 != 0 goto label4;
+
+        $z2 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isUserItemFilterSpecified()>();
+
+        if $z2 == 0 goto label5;
+
+     label4:
+        specialinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: void readItemIds()>();
+
+     label5:
+        return;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.FastIDSet getItemsToRecommendForUser(java.lang.Long)
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        java.lang.Long r1;
+        boolean $z0, $z1;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r2, $r6;
+        java.util.Map $r3, $r4;
+        java.lang.Object $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        r1 := @parameter0: java.lang.Long;
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isUserItemFilterSpecified()>();
+
+        if $z0 == 0 goto label1;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.util.Map userItemFilter>;
+
+        $z1 = interfaceinvoke $r3.<java.util.Map: boolean containsKey(java.lang.Object)>(r1);
+
+        if $z1 == 0 goto label1;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.util.Map userItemFilter>;
+
+        $r5 = interfaceinvoke $r4.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        $r6 = (org.apache.mahout.cf.taste.impl.common.FastIDSet) $r5;
+
+        return $r6;
+
+     label1:
+        $r2 = r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: org.apache.mahout.cf.taste.impl.common.FastIDSet emptySet>;
+
+        return $r2;
+    }
+
+    private void readUserIds() throws java.io.IOException, java.lang.IllegalStateException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        java.lang.IllegalStateException $r1, $r2;
+        java.util.Map $r3;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r4, $r6;
+        java.lang.String $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isUsersFileSpecified()>();
+
+        if $z0 == 0 goto label1;
+
+        $z4 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isUserItemFileSpecified()>();
+
+        if $z4 != 0 goto label1;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.lang.String usersFile>;
+
+        $r6 = specialinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: org.apache.mahout.cf.taste.impl.common.FastIDSet readIDList(java.lang.String)>($r5);
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: org.apache.mahout.cf.taste.impl.common.FastIDSet userIds> = $r6;
+
+        goto label4;
+
+     label1:
+        $z1 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isUserItemFileSpecified()>();
+
+        if $z1 == 0 goto label2;
+
+        $z3 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isUsersFileSpecified()>();
+
+        if $z3 != 0 goto label2;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: void readUserItemFilterIfNeeded()>();
+
+        $r3 = r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.util.Map userItemFilter>;
+
+        $r4 = staticinvoke <org.apache.mahout.cf.taste.hadoop.item.IDReader: org.apache.mahout.cf.taste.impl.common.FastIDSet extractAllUserIdsFromUserItemFilter(java.util.Map)>($r3);
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: org.apache.mahout.cf.taste.impl.common.FastIDSet userIds> = $r4;
+
+        goto label4;
+
+     label2:
+        $z2 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isUsersFileSpecified()>();
+
+        if $z2 != 0 goto label3;
+
+        $r2 = new java.lang.IllegalStateException;
+
+        specialinvoke $r2.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Neither usersFile nor userItemFile options are specified");
+
+        throw $r2;
+
+     label3:
+        $r1 = new java.lang.IllegalStateException;
+
+        specialinvoke $r1.<java.lang.IllegalStateException: void <init>(java.lang.String)>("usersFile and userItemFile options cannot be used simultaneously");
+
+        throw $r1;
+
+     label4:
+        return;
+    }
+
+    private void readItemIds() throws java.io.IOException, java.lang.IllegalStateException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        java.lang.IllegalStateException $r1, $r2;
+        java.util.Map $r3;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r4, $r6;
+        java.lang.String $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isItemsFileSpecified()>();
+
+        if $z0 == 0 goto label1;
+
+        $z4 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isUserItemFileSpecified()>();
+
+        if $z4 != 0 goto label1;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.lang.String itemsFile>;
+
+        $r6 = specialinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: org.apache.mahout.cf.taste.impl.common.FastIDSet readIDList(java.lang.String)>($r5);
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: org.apache.mahout.cf.taste.impl.common.FastIDSet itemIds> = $r6;
+
+        goto label4;
+
+     label1:
+        $z1 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isUserItemFileSpecified()>();
+
+        if $z1 == 0 goto label2;
+
+        $z3 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isItemsFileSpecified()>();
+
+        if $z3 != 0 goto label2;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: void readUserItemFilterIfNeeded()>();
+
+        $r3 = r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.util.Map userItemFilter>;
+
+        $r4 = specialinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: org.apache.mahout.cf.taste.impl.common.FastIDSet extractAllItemIdsFromUserItemFilter(java.util.Map)>($r3);
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: org.apache.mahout.cf.taste.impl.common.FastIDSet itemIds> = $r4;
+
+        goto label4;
+
+     label2:
+        $z2 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isItemsFileSpecified()>();
+
+        if $z2 != 0 goto label3;
+
+        $r2 = new java.lang.IllegalStateException;
+
+        specialinvoke $r2.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Neither itemsFile nor userItemFile options are specified");
+
+        throw $r2;
+
+     label3:
+        $r1 = new java.lang.IllegalStateException;
+
+        specialinvoke $r1.<java.lang.IllegalStateException: void <init>(java.lang.String)>("itemsFile and userItemFile options cannot be specified simultaneously");
+
+        throw $r1;
+
+     label4:
+        return;
+    }
+
+    private void readUserItemFilterIfNeeded() throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        boolean $z0, $z1;
+        java.lang.String $r1;
+        java.util.Map $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isUserItemFilterSpecified()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: boolean isUserItemFileSpecified()>();
+
+        if $z1 == 0 goto label1;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.lang.String userItemFile>;
+
+        $r2 = specialinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.util.Map readUserItemFilter(java.lang.String)>($r1);
+
+        r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.util.Map userItemFilter> = $r2;
+
+     label1:
+        return;
+    }
+
+    private java.util.Map readUserItemFilter(java.lang.String) throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        java.lang.String r1, r4, $r13, $r14;
+        java.io.InputStream r3;
+        java.lang.Long r5, r6;
+        java.util.HashMap $r9;
+        org.apache.mahout.common.iterator.FileLineIterable $r10;
+        boolean $z0;
+        java.util.regex.Pattern $r11;
+        java.lang.Object $r12;
+        long $l0, $l1;
+        org.slf4j.Logger $r15;
+        java.lang.NumberFormatException $r16;
+        java.lang.Throwable $r17, $r18, $r20, r21;
+        java.util.Iterator r22;
+        java.lang.String[] r23;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r9 = new java.util.HashMap;
+
+        specialinvoke $r9.<java.util.HashMap: void <init>()>();
+
+        r3 = specialinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.io.InputStream openFile(java.lang.String)>(r1);
+
+        r21 = null;
+
+     label01:
+        $r10 = new org.apache.mahout.common.iterator.FileLineIterable;
+
+        specialinvoke $r10.<org.apache.mahout.common.iterator.FileLineIterable: void <init>(java.io.InputStream)>(r3);
+
+        r22 = virtualinvoke $r10.<org.apache.mahout.common.iterator.FileLineIterable: java.util.Iterator iterator()>();
+
+     label02:
+        $z0 = interfaceinvoke r22.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label06;
+
+        $r12 = interfaceinvoke r22.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (java.lang.String) $r12;
+
+     label03:
+        $r11 = <org.apache.mahout.cf.taste.hadoop.item.IDReader: java.util.regex.Pattern SEPARATOR>;
+
+        r23 = virtualinvoke $r11.<java.util.regex.Pattern: java.lang.String[] split(java.lang.CharSequence)>(r4);
+
+        $r13 = r23[0];
+
+        $l0 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r13);
+
+        r5 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        $r14 = r23[1];
+
+        $l1 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r14);
+
+        r6 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l1);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: void addUserAndItemIdToUserItemFilter(java.util.Map,java.lang.Long,java.lang.Long)>($r9, r5, r6);
+
+     label04:
+        goto label02;
+
+     label05:
+        $r16 := @caughtexception;
+
+        $r15 = <org.apache.mahout.cf.taste.hadoop.item.IDReader: org.slf4j.Logger log>;
+
+        interfaceinvoke $r15.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Object)>("userItemFile line ignored: {}", r4);
+
+        goto label02;
+
+     label06:
+        if r3 == null goto label15;
+
+        virtualinvoke r3.<java.io.InputStream: void close()>();
+
+        goto label15;
+
+     label07:
+        $r20 := @caughtexception;
+
+        r21 = $r20;
+
+        throw $r20;
+
+     label08:
+        $r17 := @caughtexception;
+
+     label09:
+        if r3 == null goto label14;
+
+        if r21 == null goto label13;
+
+     label10:
+        virtualinvoke r3.<java.io.InputStream: void close()>();
+
+     label11:
+        goto label14;
+
+     label12:
+        $r18 := @caughtexception;
+
+        virtualinvoke r21.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r18);
+
+        goto label14;
+
+     label13:
+        virtualinvoke r3.<java.io.InputStream: void close()>();
+
+     label14:
+        throw $r17;
+
+     label15:
+        return $r9;
+
+        catch java.lang.NumberFormatException from label03 to label04 with label05;
+        catch java.lang.Throwable from label01 to label06 with label07;
+        catch java.lang.Throwable from label01 to label06 with label08;
+        catch java.lang.Throwable from label10 to label11 with label12;
+        catch java.lang.Throwable from label07 to label09 with label08;
+    }
+
+    void addUserAndItemIdToUserItemFilter(java.util.Map, java.lang.Long, java.lang.Long)
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        java.util.Map r1;
+        java.lang.Long r2, r3;
+        boolean $z0;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r4, r7;
+        long $l0;
+        java.lang.Object $r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        r1 := @parameter0: java.util.Map;
+
+        r2 := @parameter1: java.lang.Long;
+
+        r3 := @parameter2: java.lang.Long;
+
+        $z0 = interfaceinvoke r1.<java.util.Map: boolean containsKey(java.lang.Object)>(r2);
+
+        if $z0 == 0 goto label1;
+
+        $r6 = interfaceinvoke r1.<java.util.Map: java.lang.Object get(java.lang.Object)>(r2);
+
+        r7 = (org.apache.mahout.cf.taste.impl.common.FastIDSet) $r6;
+
+        goto label2;
+
+     label1:
+        $r4 = new org.apache.mahout.cf.taste.impl.common.FastIDSet;
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FastIDSet: void <init>()>();
+
+        r7 = $r4;
+
+        interfaceinvoke r1.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r2, $r4);
+
+     label2:
+        $l0 = virtualinvoke r3.<java.lang.Long: long longValue()>();
+
+        virtualinvoke r7.<org.apache.mahout.cf.taste.impl.common.FastIDSet: boolean add(long)>($l0);
+
+        return;
+    }
+
+    static org.apache.mahout.cf.taste.impl.common.FastIDSet extractAllUserIdsFromUserItemFilter(java.util.Map)
+    {
+        java.util.Map r0;
+        java.util.Iterator r2;
+        java.lang.Long r3;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r4;
+        java.util.Set $r5;
+        boolean $z0;
+        java.lang.Object $r6;
+        long $l0;
+
+        r0 := @parameter0: java.util.Map;
+
+        $r4 = new org.apache.mahout.cf.taste.impl.common.FastIDSet;
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FastIDSet: void <init>()>();
+
+        $r5 = interfaceinvoke r0.<java.util.Map: java.util.Set keySet()>();
+
+        r2 = interfaceinvoke $r5.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.lang.Long) $r6;
+
+        $l0 = virtualinvoke r3.<java.lang.Long: long longValue()>();
+
+        virtualinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FastIDSet: boolean add(long)>($l0);
+
+        goto label1;
+
+     label2:
+        return $r4;
+    }
+
+    private org.apache.mahout.cf.taste.impl.common.FastIDSet extractAllItemIdsFromUserItemFilter(java.util.Map)
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        java.util.Map r1;
+        java.util.Iterator r3;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet r4, $r5;
+        java.util.Collection $r6;
+        boolean $z0;
+        java.lang.Object $r7;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        r1 := @parameter0: java.util.Map;
+
+        $r5 = new org.apache.mahout.cf.taste.impl.common.FastIDSet;
+
+        specialinvoke $r5.<org.apache.mahout.cf.taste.impl.common.FastIDSet: void <init>()>();
+
+        $r6 = interfaceinvoke r1.<java.util.Map: java.util.Collection values()>();
+
+        r3 = interfaceinvoke $r6.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r7 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.cf.taste.impl.common.FastIDSet) $r7;
+
+        virtualinvoke $r5.<org.apache.mahout.cf.taste.impl.common.FastIDSet: boolean addAll(org.apache.mahout.cf.taste.impl.common.FastIDSet)>(r4);
+
+        goto label1;
+
+     label2:
+        return $r5;
+    }
+
+    private org.apache.mahout.cf.taste.impl.common.FastIDSet readIDList(java.lang.String) throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        java.lang.String r1, r3;
+        java.io.InputStream r2;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r7, r16;
+        org.apache.mahout.common.iterator.FileLineIterable $r8;
+        boolean $z0;
+        long $l0;
+        java.lang.Object $r9;
+        java.lang.Throwable $r10, $r11, $r15, r17;
+        org.slf4j.Logger $r13;
+        java.lang.NumberFormatException $r14;
+        java.util.Iterator r18;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        r1 := @parameter0: java.lang.String;
+
+        r16 = null;
+
+        if r1 == null goto label15;
+
+        $r7 = new org.apache.mahout.cf.taste.impl.common.FastIDSet;
+
+        specialinvoke $r7.<org.apache.mahout.cf.taste.impl.common.FastIDSet: void <init>()>();
+
+        r16 = $r7;
+
+        r2 = specialinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.io.InputStream openFile(java.lang.String)>(r1);
+
+        r17 = null;
+
+     label01:
+        $r8 = new org.apache.mahout.common.iterator.FileLineIterable;
+
+        specialinvoke $r8.<org.apache.mahout.common.iterator.FileLineIterable: void <init>(java.io.InputStream)>(r2);
+
+        r18 = virtualinvoke $r8.<org.apache.mahout.common.iterator.FileLineIterable: java.util.Iterator iterator()>();
+
+     label02:
+        $z0 = interfaceinvoke r18.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label06;
+
+        $r9 = interfaceinvoke r18.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (java.lang.String) $r9;
+
+     label03:
+        $l0 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>(r3);
+
+        virtualinvoke $r7.<org.apache.mahout.cf.taste.impl.common.FastIDSet: boolean add(long)>($l0);
+
+     label04:
+        goto label02;
+
+     label05:
+        $r14 := @caughtexception;
+
+        $r13 = <org.apache.mahout.cf.taste.hadoop.item.IDReader: org.slf4j.Logger log>;
+
+        interfaceinvoke $r13.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Object)>("line ignored: {}", r3);
+
+        goto label02;
+
+     label06:
+        if r2 == null goto label15;
+
+        virtualinvoke r2.<java.io.InputStream: void close()>();
+
+        goto label15;
+
+     label07:
+        $r15 := @caughtexception;
+
+        r17 = $r15;
+
+        throw $r15;
+
+     label08:
+        $r10 := @caughtexception;
+
+     label09:
+        if r2 == null goto label14;
+
+        if r17 == null goto label13;
+
+     label10:
+        virtualinvoke r2.<java.io.InputStream: void close()>();
+
+     label11:
+        goto label14;
+
+     label12:
+        $r11 := @caughtexception;
+
+        virtualinvoke r17.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r11);
+
+        goto label14;
+
+     label13:
+        virtualinvoke r2.<java.io.InputStream: void close()>();
+
+     label14:
+        throw $r10;
+
+     label15:
+        return r16;
+
+        catch java.lang.NumberFormatException from label03 to label04 with label05;
+        catch java.lang.Throwable from label01 to label06 with label07;
+        catch java.lang.Throwable from label01 to label06 with label08;
+        catch java.lang.Throwable from label10 to label11 with label12;
+        catch java.lang.Throwable from label07 to label09 with label08;
+    }
+
+    private java.io.InputStream openFile(java.lang.String) throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        java.lang.String r1;
+        org.apache.hadoop.fs.Path $r2;
+        org.apache.hadoop.conf.Configuration $r3;
+        java.io.InputStream $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r2.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r1);
+
+        $r3 = r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: org.apache.hadoop.conf.Configuration conf>;
+
+        $r4 = staticinvoke <org.apache.mahout.common.HadoopUtil: java.io.InputStream openStream(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r2, $r3);
+
+        return $r4;
+    }
+
+    public boolean isUsersFileSpecified()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        java.lang.String $r1;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.lang.String usersFile>;
+
+        if $r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    public boolean isItemsFileSpecified()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        java.lang.String $r1;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.lang.String itemsFile>;
+
+        if $r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    public boolean isUserItemFileSpecified()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        java.lang.String $r1;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.lang.String userItemFile>;
+
+        if $r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    public boolean isUserItemFilterSpecified()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        java.util.Map $r1;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: java.util.Map userItemFilter>;
+
+        if $r1 == null goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        return $z0;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.FastIDSet getUserIds()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: org.apache.mahout.cf.taste.impl.common.FastIDSet userIds>;
+
+        return $r1;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.FastIDSet getItemIds()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.IDReader r0;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.hadoop.item.IDReader: org.apache.mahout.cf.taste.impl.common.FastIDSet itemIds>;
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+        java.util.regex.Pattern $r1;
+
+        <org.apache.mahout.cf.taste.hadoop.item.IDReader: java.lang.String USER_ITEM_FILE> = "userItemFile";
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/cf/taste/hadoop/item/IDReader");
+
+        <org.apache.mahout.cf.taste.hadoop.item.IDReader: org.slf4j.Logger log> = $r0;
+
+        $r1 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("[\t,]");
+
+        <org.apache.mahout.cf.taste.hadoop.item.IDReader: java.util.regex.Pattern SEPARATOR> = $r1;
+
+        return;
+    }
+}

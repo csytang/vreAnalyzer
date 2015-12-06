@@ -1,0 +1,72 @@
+public abstract class org.apache.mahout.cf.taste.impl.model.AbstractDataModel extends java.lang.Object implements org.apache.mahout.cf.taste.model.DataModel
+{
+    private float maxPreference;
+    private float minPreference;
+
+    protected void <init>()
+    {
+        org.apache.mahout.cf.taste.impl.model.AbstractDataModel r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.AbstractDataModel;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.model.AbstractDataModel: float maxPreference> = #NaNF;
+
+        r0.<org.apache.mahout.cf.taste.impl.model.AbstractDataModel: float minPreference> = #NaNF;
+
+        return;
+    }
+
+    public float getMaxPreference()
+    {
+        org.apache.mahout.cf.taste.impl.model.AbstractDataModel r0;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.AbstractDataModel;
+
+        $f0 = r0.<org.apache.mahout.cf.taste.impl.model.AbstractDataModel: float maxPreference>;
+
+        return $f0;
+    }
+
+    protected void setMaxPreference(float)
+    {
+        org.apache.mahout.cf.taste.impl.model.AbstractDataModel r0;
+        float f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.AbstractDataModel;
+
+        f0 := @parameter0: float;
+
+        r0.<org.apache.mahout.cf.taste.impl.model.AbstractDataModel: float maxPreference> = f0;
+
+        return;
+    }
+
+    public float getMinPreference()
+    {
+        org.apache.mahout.cf.taste.impl.model.AbstractDataModel r0;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.AbstractDataModel;
+
+        $f0 = r0.<org.apache.mahout.cf.taste.impl.model.AbstractDataModel: float minPreference>;
+
+        return $f0;
+    }
+
+    protected void setMinPreference(float)
+    {
+        org.apache.mahout.cf.taste.impl.model.AbstractDataModel r0;
+        float f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.AbstractDataModel;
+
+        f0 := @parameter0: float;
+
+        r0.<org.apache.mahout.cf.taste.impl.model.AbstractDataModel: float minPreference> = f0;
+
+        return;
+    }
+}

@@ -1,0 +1,233 @@
+public final class org.apache.mahout.math.MultiLabelVectorWritable extends java.lang.Object implements org.apache.hadoop.io.Writable
+{
+    private final org.apache.mahout.math.VectorWritable vectorWritable;
+    private int[] labels;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.MultiLabelVectorWritable r0;
+        org.apache.mahout.math.VectorWritable $r1;
+
+        r0 := @this: org.apache.mahout.math.MultiLabelVectorWritable;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r1.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        r0.<org.apache.mahout.math.MultiLabelVectorWritable: org.apache.mahout.math.VectorWritable vectorWritable> = $r1;
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.math.Vector, int[])
+    {
+        org.apache.mahout.math.MultiLabelVectorWritable r0;
+        org.apache.mahout.math.Vector r1;
+        int[] r2;
+        org.apache.mahout.math.VectorWritable $r3, $r4;
+
+        r0 := @this: org.apache.mahout.math.MultiLabelVectorWritable;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 := @parameter1: int[];
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r3.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        r0.<org.apache.mahout.math.MultiLabelVectorWritable: org.apache.mahout.math.VectorWritable vectorWritable> = $r3;
+
+        $r4 = r0.<org.apache.mahout.math.MultiLabelVectorWritable: org.apache.mahout.math.VectorWritable vectorWritable>;
+
+        virtualinvoke $r4.<org.apache.mahout.math.VectorWritable: void set(org.apache.mahout.math.Vector)>(r1);
+
+        r0.<org.apache.mahout.math.MultiLabelVectorWritable: int[] labels> = r2;
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector getVector()
+    {
+        org.apache.mahout.math.MultiLabelVectorWritable r0;
+        org.apache.mahout.math.VectorWritable $r1;
+        org.apache.mahout.math.Vector $r2;
+
+        r0 := @this: org.apache.mahout.math.MultiLabelVectorWritable;
+
+        $r1 = r0.<org.apache.mahout.math.MultiLabelVectorWritable: org.apache.mahout.math.VectorWritable vectorWritable>;
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        return $r2;
+    }
+
+    public void setVector(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.MultiLabelVectorWritable r0;
+        org.apache.mahout.math.Vector r1;
+        org.apache.mahout.math.VectorWritable $r2;
+
+        r0 := @this: org.apache.mahout.math.MultiLabelVectorWritable;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $r2 = r0.<org.apache.mahout.math.MultiLabelVectorWritable: org.apache.mahout.math.VectorWritable vectorWritable>;
+
+        virtualinvoke $r2.<org.apache.mahout.math.VectorWritable: void set(org.apache.mahout.math.Vector)>(r1);
+
+        return;
+    }
+
+    public void setLabels(int[])
+    {
+        org.apache.mahout.math.MultiLabelVectorWritable r0;
+        int[] r1;
+
+        r0 := @this: org.apache.mahout.math.MultiLabelVectorWritable;
+
+        r1 := @parameter0: int[];
+
+        r0.<org.apache.mahout.math.MultiLabelVectorWritable: int[] labels> = r1;
+
+        return;
+    }
+
+    public int[] getLabels()
+    {
+        org.apache.mahout.math.MultiLabelVectorWritable r0;
+        int[] $r1;
+
+        r0 := @this: org.apache.mahout.math.MultiLabelVectorWritable;
+
+        $r1 = r0.<org.apache.mahout.math.MultiLabelVectorWritable: int[] labels>;
+
+        return $r1;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.math.MultiLabelVectorWritable r0;
+        java.io.DataInput r1;
+        int i0, $i1, i2;
+        org.apache.mahout.math.VectorWritable $r2;
+        int[] $r3, $r4;
+
+        r0 := @this: org.apache.mahout.math.MultiLabelVectorWritable;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $r2 = r0.<org.apache.mahout.math.MultiLabelVectorWritable: org.apache.mahout.math.VectorWritable vectorWritable>;
+
+        virtualinvoke $r2.<org.apache.mahout.math.VectorWritable: void readFields(java.io.DataInput)>(r1);
+
+        i0 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        $r3 = newarray (int)[i0];
+
+        r0.<org.apache.mahout.math.MultiLabelVectorWritable: int[] labels> = $r3;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label2;
+
+        $r4 = r0.<org.apache.mahout.math.MultiLabelVectorWritable: int[] labels>;
+
+        $i1 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        $r4[i2] = $i1;
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.math.MultiLabelVectorWritable r0;
+        java.io.DataOutput r1;
+        int[] r2, $r4;
+        int i0, i1, $i2, i3;
+        org.apache.mahout.math.VectorWritable $r3;
+
+        r0 := @this: org.apache.mahout.math.MultiLabelVectorWritable;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $r3 = r0.<org.apache.mahout.math.MultiLabelVectorWritable: org.apache.mahout.math.VectorWritable vectorWritable>;
+
+        virtualinvoke $r3.<org.apache.mahout.math.VectorWritable: void write(java.io.DataOutput)>(r1);
+
+        $r4 = r0.<org.apache.mahout.math.MultiLabelVectorWritable: int[] labels>;
+
+        $i2 = lengthof $r4;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i2);
+
+        r2 = r0.<org.apache.mahout.math.MultiLabelVectorWritable: int[] labels>;
+
+        i0 = lengthof r2;
+
+        i3 = 0;
+
+     label1:
+        if i3 >= i0 goto label2;
+
+        i1 = r2[i3];
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>(i1);
+
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public static org.apache.mahout.math.MultiLabelVectorWritable read(java.io.DataInput) throws java.io.IOException
+    {
+        java.io.DataInput r0;
+        org.apache.mahout.math.MultiLabelVectorWritable $r2;
+
+        r0 := @parameter0: java.io.DataInput;
+
+        $r2 = new org.apache.mahout.math.MultiLabelVectorWritable;
+
+        specialinvoke $r2.<org.apache.mahout.math.MultiLabelVectorWritable: void <init>()>();
+
+        virtualinvoke $r2.<org.apache.mahout.math.MultiLabelVectorWritable: void readFields(java.io.DataInput)>(r0);
+
+        return $r2;
+    }
+
+    public static void write(java.io.DataOutput, org.apache.mahout.math.SequentialAccessSparseVector, int[]) throws java.io.IOException
+    {
+        java.io.DataOutput r0;
+        org.apache.mahout.math.SequentialAccessSparseVector r1;
+        int[] r2;
+        org.apache.mahout.math.MultiLabelVectorWritable $r3;
+
+        r0 := @parameter0: java.io.DataOutput;
+
+        r1 := @parameter1: org.apache.mahout.math.SequentialAccessSparseVector;
+
+        r2 := @parameter2: int[];
+
+        $r3 = new org.apache.mahout.math.MultiLabelVectorWritable;
+
+        specialinvoke $r3.<org.apache.mahout.math.MultiLabelVectorWritable: void <init>(org.apache.mahout.math.Vector,int[])>(r1, r2);
+
+        virtualinvoke $r3.<org.apache.mahout.math.MultiLabelVectorWritable: void write(java.io.DataOutput)>(r0);
+
+        return;
+    }
+}

@@ -1,0 +1,214 @@
+public final class org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator extends com.google.common.collect.ForwardingIterator implements java.io.Closeable
+{
+    private static final org.apache.hadoop.fs.FileStatus[] NO_STATUSES;
+    private java.util.Iterator delegate;
+    private final java.util.List iterators;
+
+    public void <init>(org.apache.hadoop.fs.Path[], boolean, org.apache.hadoop.conf.Configuration) throws java.io.IOException
+    {
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator r0;
+        org.apache.hadoop.fs.Path[] r1;
+        boolean z0;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.hadoop.fs.FileSystem r3;
+        org.apache.hadoop.fs.FileStatus[] r4;
+        java.util.ArrayList $r5;
+        org.apache.hadoop.fs.Path $r6, $r8;
+        java.net.URI $r7;
+        int $i0, $i1, i2;
+        org.apache.hadoop.fs.FileStatus $r9;
+
+        r0 := @this: org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path[];
+
+        z0 := @parameter1: boolean;
+
+        r2 := @parameter2: org.apache.hadoop.conf.Configuration;
+
+        specialinvoke r0.<com.google.common.collect.ForwardingIterator: void <init>()>();
+
+        $r5 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList()>();
+
+        r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator: java.util.List iterators> = $r5;
+
+        $r6 = r1[0];
+
+        $r7 = virtualinvoke $r6.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r3 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r7, r2);
+
+        $i0 = lengthof r1;
+
+        r4 = newarray (org.apache.hadoop.fs.FileStatus)[$i0];
+
+        i2 = 0;
+
+     label1:
+        $i1 = lengthof r4;
+
+        if i2 >= $i1 goto label2;
+
+        $r8 = r1[i2];
+
+        $r9 = virtualinvoke r3.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus getFileStatus(org.apache.hadoop.fs.Path)>($r8);
+
+        r4[i2] = $r9;
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        specialinvoke r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator: void init(org.apache.hadoop.fs.FileStatus[],boolean,org.apache.hadoop.conf.Configuration)>(r4, z0, r2);
+
+        return;
+    }
+
+    public void <init>(org.apache.hadoop.fs.Path, org.apache.mahout.common.iterator.sequencefile.PathType, org.apache.hadoop.fs.PathFilter, java.util.Comparator, boolean, org.apache.hadoop.conf.Configuration) throws java.io.IOException
+    {
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator r0;
+        org.apache.hadoop.fs.Path r1;
+        org.apache.mahout.common.iterator.sequencefile.PathType r2;
+        org.apache.hadoop.fs.PathFilter r3;
+        java.util.Comparator r4;
+        boolean z0;
+        org.apache.hadoop.conf.Configuration r5;
+        org.apache.hadoop.fs.FileStatus[] r6;
+        java.util.ArrayList $r7;
+
+        r0 := @this: org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.mahout.common.iterator.sequencefile.PathType;
+
+        r3 := @parameter2: org.apache.hadoop.fs.PathFilter;
+
+        r4 := @parameter3: java.util.Comparator;
+
+        z0 := @parameter4: boolean;
+
+        r5 := @parameter5: org.apache.hadoop.conf.Configuration;
+
+        specialinvoke r0.<com.google.common.collect.ForwardingIterator: void <init>()>();
+
+        r6 = staticinvoke <org.apache.mahout.common.HadoopUtil: org.apache.hadoop.fs.FileStatus[] getFileStatus(org.apache.hadoop.fs.Path,org.apache.mahout.common.iterator.sequencefile.PathType,org.apache.hadoop.fs.PathFilter,java.util.Comparator,org.apache.hadoop.conf.Configuration)>(r1, r2, r3, r4, r5);
+
+        $r7 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList()>();
+
+        r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator: java.util.List iterators> = $r7;
+
+        specialinvoke r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator: void init(org.apache.hadoop.fs.FileStatus[],boolean,org.apache.hadoop.conf.Configuration)>(r6, z0, r5);
+
+        return;
+    }
+
+    private void init(org.apache.hadoop.fs.FileStatus[], boolean, org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator r0;
+        boolean z0;
+        org.apache.hadoop.conf.Configuration r1;
+        com.google.common.collect.UnmodifiableIterator r2;
+        java.util.Iterator r3, $r6;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator$1 $r4;
+        java.util.List $r5;
+        org.apache.hadoop.fs.FileStatus[] r7;
+
+        r0 := @this: org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator;
+
+        r7 := @parameter0: org.apache.hadoop.fs.FileStatus[];
+
+        z0 := @parameter1: boolean;
+
+        r1 := @parameter2: org.apache.hadoop.conf.Configuration;
+
+        if r7 != null goto label1;
+
+        r7 = <org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator: org.apache.hadoop.fs.FileStatus[] NO_STATUSES>;
+
+     label1:
+        r2 = staticinvoke <com.google.common.collect.Iterators: com.google.common.collect.UnmodifiableIterator forArray(java.lang.Object[])>(r7);
+
+        $r4 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator$1;
+
+        specialinvoke $r4.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator$1: void <init>(org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator,boolean,org.apache.hadoop.conf.Configuration)>(r0, z0, r1);
+
+        r3 = staticinvoke <com.google.common.collect.Iterators: java.util.Iterator transform(java.util.Iterator,com.google.common.base.Function)>(r2, $r4);
+
+        $r5 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator: java.util.List iterators>;
+
+        staticinvoke <java.util.Collections: void reverse(java.util.List)>($r5);
+
+        $r6 = staticinvoke <com.google.common.collect.Iterators: java.util.Iterator concat(java.util.Iterator)>(r3);
+
+        r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator: java.util.Iterator delegate> = $r6;
+
+        return;
+    }
+
+    protected java.util.Iterator delegate()
+    {
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator r0;
+        java.util.Iterator $r1;
+
+        r0 := @this: org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator;
+
+        $r1 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator: java.util.Iterator delegate>;
+
+        return $r1;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator r0;
+        java.util.List $r1, $r2;
+
+        r0 := @this: org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator;
+
+        $r1 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator: java.util.List iterators>;
+
+        staticinvoke <org.apache.mahout.common.IOUtils: void close(java.util.Collection)>($r1);
+
+        $r2 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator: java.util.List iterators>;
+
+        interfaceinvoke $r2.<java.util.List: void clear()>();
+
+        return;
+    }
+
+    protected volatile java.lang.Object delegate()
+    {
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator r0;
+        java.util.Iterator $r1;
+
+        r0 := @this: org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator: java.util.Iterator delegate()>();
+
+        return $r1;
+    }
+
+    static java.util.List access$000(org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator)
+    {
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator r0;
+        java.util.List $r1;
+
+        r0 := @parameter0: org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator;
+
+        $r1 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator: java.util.List iterators>;
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        org.apache.hadoop.fs.FileStatus[] $r0;
+
+        $r0 = newarray (org.apache.hadoop.fs.FileStatus)[0];
+
+        <org.apache.mahout.common.iterator.sequencefile.SequenceFileDirIterator: org.apache.hadoop.fs.FileStatus[] NO_STATUSES> = $r0;
+
+        return;
+    }
+}

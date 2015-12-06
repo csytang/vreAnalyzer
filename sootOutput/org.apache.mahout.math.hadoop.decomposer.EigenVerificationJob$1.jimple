@@ -1,0 +1,79 @@
+class org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob$1 extends java.lang.Object implements java.util.Comparator
+{
+    final org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob this$0;
+
+    void <init>(org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob)
+    {
+        org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob$1 r0;
+        org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob$1;
+
+        r1 := @parameter0: org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob;
+
+        r0.<org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob$1: org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public int compare(java.util.Map$Entry, java.util.Map$Entry)
+    {
+        org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob$1 r0;
+        java.util.Map$Entry r1, r2;
+        java.lang.Double r3, r4;
+        java.lang.Object $r5, $r7;
+        org.apache.mahout.math.decomposer.EigenStatus $r6, $r8;
+        double $d0, $d1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob$1;
+
+        r1 := @parameter0: java.util.Map$Entry;
+
+        r2 := @parameter1: java.util.Map$Entry;
+
+        $r5 = interfaceinvoke r1.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r6 = (org.apache.mahout.math.decomposer.EigenStatus) $r5;
+
+        $d0 = virtualinvoke $r6.<org.apache.mahout.math.decomposer.EigenStatus: double getEigenValue()>();
+
+        r3 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d0);
+
+        $r7 = interfaceinvoke r2.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r8 = (org.apache.mahout.math.decomposer.EigenStatus) $r7;
+
+        $d1 = virtualinvoke $r8.<org.apache.mahout.math.decomposer.EigenStatus: double getEigenValue()>();
+
+        r4 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d1);
+
+        $i0 = virtualinvoke r3.<java.lang.Double: int compareTo(java.lang.Double)>(r4);
+
+        return $i0;
+    }
+
+    public volatile int compare(java.lang.Object, java.lang.Object)
+    {
+        org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob$1 r0;
+        java.lang.Object r1, r2;
+        java.util.Map$Entry $r3, $r4;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        $r4 = (java.util.Map$Entry) r1;
+
+        $r3 = (java.util.Map$Entry) r2;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.EigenVerificationJob$1: int compare(java.util.Map$Entry,java.util.Map$Entry)>($r4, $r3);
+
+        return $i0;
+    }
+}

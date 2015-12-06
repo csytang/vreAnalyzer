@@ -1,0 +1,97 @@
+class org.apache.mahout.common.iterator.CopyConstructorIterator$1 extends java.lang.Object implements com.google.common.base.Function
+{
+    final org.apache.mahout.common.iterator.CopyConstructorIterator this$0;
+
+    void <init>(org.apache.mahout.common.iterator.CopyConstructorIterator)
+    {
+        org.apache.mahout.common.iterator.CopyConstructorIterator$1 r0;
+        org.apache.mahout.common.iterator.CopyConstructorIterator r1;
+
+        r0 := @this: org.apache.mahout.common.iterator.CopyConstructorIterator$1;
+
+        r1 := @parameter0: org.apache.mahout.common.iterator.CopyConstructorIterator;
+
+        r0.<org.apache.mahout.common.iterator.CopyConstructorIterator$1: org.apache.mahout.common.iterator.CopyConstructorIterator this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public java.lang.Object apply(java.lang.Object)
+    {
+        org.apache.mahout.common.iterator.CopyConstructorIterator$1 r0;
+        java.lang.Object r1, $r8;
+        org.apache.mahout.common.iterator.CopyConstructorIterator $r3, $r5, $r10;
+        java.lang.reflect.Constructor $r4, $r6, $r11;
+        java.lang.Object[] $r7;
+        java.lang.Class[] $r9;
+        java.lang.NoSuchMethodException $r13;
+        java.lang.ReflectiveOperationException $r14;
+        java.lang.IllegalStateException $r15, $r16;
+        java.lang.Class r17;
+
+        r0 := @this: org.apache.mahout.common.iterator.CopyConstructorIterator$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r3 = r0.<org.apache.mahout.common.iterator.CopyConstructorIterator$1: org.apache.mahout.common.iterator.CopyConstructorIterator this$0>;
+
+        $r4 = staticinvoke <org.apache.mahout.common.iterator.CopyConstructorIterator: java.lang.reflect.Constructor access$000(org.apache.mahout.common.iterator.CopyConstructorIterator)>($r3);
+
+        if $r4 != null goto label4;
+
+        r17 = virtualinvoke r1.<java.lang.Object: java.lang.Class getClass()>();
+
+     label1:
+        $r10 = r0.<org.apache.mahout.common.iterator.CopyConstructorIterator$1: org.apache.mahout.common.iterator.CopyConstructorIterator this$0>;
+
+        $r9 = newarray (java.lang.Class)[1];
+
+        $r9[0] = r17;
+
+        $r11 = virtualinvoke r17.<java.lang.Class: java.lang.reflect.Constructor getConstructor(java.lang.Class[])>($r9);
+
+        staticinvoke <org.apache.mahout.common.iterator.CopyConstructorIterator: java.lang.reflect.Constructor access$002(org.apache.mahout.common.iterator.CopyConstructorIterator,java.lang.reflect.Constructor)>($r10, $r11);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r13 := @caughtexception;
+
+        $r15 = new java.lang.IllegalStateException;
+
+        specialinvoke $r15.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r13);
+
+        throw $r15;
+
+     label4:
+        $r5 = r0.<org.apache.mahout.common.iterator.CopyConstructorIterator$1: org.apache.mahout.common.iterator.CopyConstructorIterator this$0>;
+
+        $r6 = staticinvoke <org.apache.mahout.common.iterator.CopyConstructorIterator: java.lang.reflect.Constructor access$000(org.apache.mahout.common.iterator.CopyConstructorIterator)>($r5);
+
+        $r7 = newarray (java.lang.Object)[1];
+
+        $r7[0] = r1;
+
+        $r8 = virtualinvoke $r6.<java.lang.reflect.Constructor: java.lang.Object newInstance(java.lang.Object[])>($r7);
+
+     label5:
+        return $r8;
+
+     label6:
+        $r14 := @caughtexception;
+
+        $r16 = new java.lang.IllegalStateException;
+
+        specialinvoke $r16.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r14);
+
+        throw $r16;
+
+        catch java.lang.NoSuchMethodException from label1 to label2 with label3;
+        catch java.lang.InstantiationException from label4 to label5 with label6;
+        catch java.lang.IllegalAccessException from label4 to label5 with label6;
+        catch java.lang.reflect.InvocationTargetException from label4 to label5 with label6;
+    }
+}

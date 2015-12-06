@@ -1,0 +1,108 @@
+final class org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView extends java.lang.Object implements org.apache.mahout.cf.taste.model.Preference
+{
+    private final int i;
+    final org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray this$0;
+
+    private void <init>(org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray, int)
+    {
+        org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView r0;
+        org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray r1;
+        int i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray;
+
+        i0 := @parameter1: int;
+
+        r0.<org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView: org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView: int i> = i0;
+
+        return;
+    }
+
+    public long getUserID()
+    {
+        org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView r0;
+        int $i0;
+        org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray $r1;
+        long $l1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView: org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray this$0>;
+
+        $i0 = r0.<org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView: int i>;
+
+        $l1 = virtualinvoke $r1.<org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray: long getUserID(int)>($i0);
+
+        return $l1;
+    }
+
+    public long getItemID()
+    {
+        org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView r0;
+        int $i0;
+        org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray $r1;
+        long $l1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView: org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray this$0>;
+
+        $i0 = r0.<org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView: int i>;
+
+        $l1 = virtualinvoke $r1.<org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray: long getItemID(int)>($i0);
+
+        return $l1;
+    }
+
+    public float getValue()
+    {
+        org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView;
+
+        return 1.0F;
+    }
+
+    public void setValue(float)
+    {
+        org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView r0;
+        float f0;
+        java.lang.UnsupportedOperationException $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView;
+
+        f0 := @parameter0: float;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r1;
+    }
+
+    void <init>(org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray, int, org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$1)
+    {
+        org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView r0;
+        org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray r1;
+        int i0;
+        org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$1 r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$1;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray$PreferenceView: void <init>(org.apache.mahout.cf.taste.impl.model.BooleanItemPreferenceArray,int)>(r1, i0);
+
+        return;
+    }
+}

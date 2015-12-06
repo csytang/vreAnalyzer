@@ -1,0 +1,196 @@
+public final class org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles extends org.apache.mahout.common.AbstractJob
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles r0;
+
+        r0 := @this: org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        return;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.hadoop.conf.Configuration $r1;
+        org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles $r2;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r1.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r2 = new org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles;
+
+        specialinvoke $r2.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.util.Tool,java.lang.String[])>($r1, $r2, r0);
+
+        return;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles r0;
+        java.lang.String[] r1;
+        org.apache.hadoop.fs.Path r2, r3;
+        java.lang.Class r4, $r18, $r22, $r27;
+        org.apache.hadoop.conf.Configuration r5, $r35;
+        boolean z0, z1, $z2, $z3, $z4, $z5;
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r8, $r24;
+        org.apache.commons.cli2.option.DefaultOption $r9, $r23;
+        org.apache.commons.cli2.Option $r12, $r14;
+        java.lang.StringBuilder $r15, $r16, $r20;
+        java.lang.String $r17, $r19, $r21, $r32, $r34, r37, r38;
+        java.util.Map $r26;
+        org.apache.mahout.vectorizer.SimpleTextEncodingVectorizer $r28;
+        org.apache.mahout.vectorizer.VectorizerConfig $r29;
+        java.lang.Object[] $r30;
+        java.lang.Class[] $r31;
+        org.apache.hadoop.fs.Path[] $r36;
+        int i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles;
+
+        r1 := @parameter0: java.lang.String[];
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: void addInputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: void addOutputOption()>();
+
+        $r8 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder analyzerOption()>();
+
+        $r9 = virtualinvoke $r8.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r9);
+
+        $r12 = staticinvoke <org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: org.apache.commons.cli2.Option buildOption(java.lang.String,java.lang.String,java.lang.String,boolean,boolean,java.lang.String)>("sequentialAccessVector", "seq", "(Optional) Whether output vectors should be SequentialAccessVectors. If set true else false", 0, 0, null);
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r12);
+
+        $r14 = staticinvoke <org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: org.apache.commons.cli2.Option buildOption(java.lang.String,java.lang.String,java.lang.String,boolean,boolean,java.lang.String)>("namedVector", "nv", "Create named vectors using the key.  False by default", 0, 0, null);
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r14);
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("cardinality", "c", "The cardinality to use for creating the vectors.  Default is 5000", "5000");
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("encoderFieldName", "en", "The name of the encoder to be passed to the FeatureVectorEncoder constructor. Default is text. Note this is not the class name of a FeatureValueEncoder, but is instead the construction argument.", "text");
+
+        $r15 = new java.lang.StringBuilder;
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+        $r16 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("The class name of the encoder to be used. Default is ");
+
+        $r18 = class "org/apache/mahout/vectorizer/encoders/LuceneTextValueEncoder";
+
+        $r17 = virtualinvoke $r18.<java.lang.Class: java.lang.String getName()>();
+
+        $r20 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r17);
+
+        $r19 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $r22 = class "org/apache/mahout/vectorizer/encoders/LuceneTextValueEncoder";
+
+        $r21 = virtualinvoke $r22.<java.lang.Class: java.lang.String getName()>();
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("encoderClass", "ec", $r19, $r21);
+
+        $r24 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder overwriteOption()>();
+
+        $r23 = virtualinvoke $r24.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r23);
+
+        $r26 = virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: java.util.Map parseArguments(java.lang.String[])>(r1);
+
+        if $r26 != null goto label1;
+
+        return -1;
+
+     label1:
+        r2 = virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: org.apache.hadoop.fs.Path getInputPath()>();
+
+        r3 = virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        $z2 = virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: boolean hasOption(java.lang.String)>("overwrite");
+
+        if $z2 == 0 goto label2;
+
+        $r35 = virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $r36 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r36[0] = r3;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r35, $r36);
+
+     label2:
+        r4 = virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: java.lang.Class getAnalyzerClassFromOption()>();
+
+        r5 = virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: org.apache.hadoop.conf.Configuration getConf()>();
+
+        z0 = virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: boolean hasOption(java.lang.String)>("sequentialAccessVector");
+
+        z1 = virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: boolean hasOption(java.lang.String)>("namedVector");
+
+        i0 = 5000;
+
+        $z4 = virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: boolean hasOption(java.lang.String)>("cardinality");
+
+        if $z4 == 0 goto label3;
+
+        $r34 = virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: java.lang.String getOption(java.lang.String)>("cardinality");
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r34);
+
+     label3:
+        r37 = "text";
+
+        $z3 = virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: boolean hasOption(java.lang.String)>("encoderFieldName");
+
+        if $z3 == 0 goto label4;
+
+        r37 = virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: java.lang.String getOption(java.lang.String)>("encoderFieldName");
+
+     label4:
+        $r27 = class "org/apache/mahout/vectorizer/encoders/LuceneTextValueEncoder";
+
+        r38 = virtualinvoke $r27.<java.lang.Class: java.lang.String getName()>();
+
+        $z5 = virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: boolean hasOption(java.lang.String)>("encoderClass");
+
+        if $z5 == 0 goto label5;
+
+        r38 = virtualinvoke r0.<org.apache.mahout.vectorizer.EncodedVectorsFromSequenceFiles: java.lang.String getOption(java.lang.String)>("encoderClass");
+
+        $r31 = newarray (java.lang.Class)[1];
+
+        $r31[0] = class "java/lang/String";
+
+        $r30 = newarray (java.lang.Object)[1];
+
+        $r30[0] = r37;
+
+        staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.String,java.lang.Class,java.lang.Class[],java.lang.Object[])>(r38, class "org/apache/mahout/vectorizer/encoders/FeatureVectorEncoder", $r31, $r30);
+
+     label5:
+        $r28 = new org.apache.mahout.vectorizer.SimpleTextEncodingVectorizer;
+
+        specialinvoke $r28.<org.apache.mahout.vectorizer.SimpleTextEncodingVectorizer: void <init>()>();
+
+        $r29 = new org.apache.mahout.vectorizer.VectorizerConfig;
+
+        $r32 = virtualinvoke r4.<java.lang.Class: java.lang.String getName()>();
+
+        specialinvoke $r29.<org.apache.mahout.vectorizer.VectorizerConfig: void <init>(org.apache.hadoop.conf.Configuration,java.lang.String,java.lang.String,java.lang.String,boolean,boolean,int)>(r5, $r32, r38, r37, z0, z1, i0);
+
+        virtualinvoke $r28.<org.apache.mahout.vectorizer.SimpleTextEncodingVectorizer: void createVectors(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.mahout.vectorizer.VectorizerConfig)>(r2, r3, $r29);
+
+        return 0;
+    }
+}

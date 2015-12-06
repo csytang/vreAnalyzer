@@ -1,0 +1,155 @@
+public class org.apache.mahout.classifier.naivebayes.test.BayesTestMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private static final java.util.regex.Pattern SLASH;
+    private org.apache.mahout.classifier.naivebayes.AbstractNaiveBayesClassifier classifier;
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.naivebayes.test.BayesTestMapper r0;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.test.BayesTestMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.naivebayes.test.BayesTestMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.hadoop.fs.Path r3;
+        org.apache.mahout.classifier.naivebayes.NaiveBayesModel r4;
+        boolean z0, $z1;
+        java.lang.String $r5;
+        org.apache.mahout.classifier.naivebayes.StandardNaiveBayesClassifier $r6;
+        org.apache.mahout.classifier.naivebayes.ComplementaryNaiveBayesClassifier $r7;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.test.BayesTestMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void setup(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        r3 = staticinvoke <org.apache.mahout.common.HadoopUtil: org.apache.hadoop.fs.Path getSingleCachedFile(org.apache.hadoop.conf.Configuration)>(r2);
+
+        r4 = staticinvoke <org.apache.mahout.classifier.naivebayes.NaiveBayesModel: org.apache.mahout.classifier.naivebayes.NaiveBayesModel materialize(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r3, r2);
+
+        $r5 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("class");
+
+        z0 = staticinvoke <java.lang.Boolean: boolean parseBoolean(java.lang.String)>($r5);
+
+        if z0 == 0 goto label1;
+
+        $z1 = virtualinvoke r4.<org.apache.mahout.classifier.naivebayes.NaiveBayesModel: boolean isComplemtary()>();
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, "Complementary mode in model is different than test mode");
+
+     label1:
+        if z0 == 0 goto label2;
+
+        $r7 = new org.apache.mahout.classifier.naivebayes.ComplementaryNaiveBayesClassifier;
+
+        specialinvoke $r7.<org.apache.mahout.classifier.naivebayes.ComplementaryNaiveBayesClassifier: void <init>(org.apache.mahout.classifier.naivebayes.NaiveBayesModel)>(r4);
+
+        r0.<org.apache.mahout.classifier.naivebayes.test.BayesTestMapper: org.apache.mahout.classifier.naivebayes.AbstractNaiveBayesClassifier classifier> = $r7;
+
+        goto label3;
+
+     label2:
+        $r6 = new org.apache.mahout.classifier.naivebayes.StandardNaiveBayesClassifier;
+
+        specialinvoke $r6.<org.apache.mahout.classifier.naivebayes.StandardNaiveBayesClassifier: void <init>(org.apache.mahout.classifier.naivebayes.NaiveBayesModel)>(r4);
+
+        r0.<org.apache.mahout.classifier.naivebayes.test.BayesTestMapper: org.apache.mahout.classifier.naivebayes.AbstractNaiveBayesClassifier classifier> = $r6;
+
+     label3:
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.Text, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.naivebayes.test.BayesTestMapper r0;
+        org.apache.hadoop.io.Text r1, $r7;
+        org.apache.mahout.math.VectorWritable r2, $r12;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.Vector r4, $r6;
+        org.apache.mahout.classifier.naivebayes.AbstractNaiveBayesClassifier $r5;
+        java.util.regex.Pattern $r8;
+        java.lang.String $r9, $r11;
+        java.lang.String[] $r10;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.test.BayesTestMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.Text;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = r0.<org.apache.mahout.classifier.naivebayes.test.BayesTestMapper: org.apache.mahout.classifier.naivebayes.AbstractNaiveBayesClassifier classifier>;
+
+        $r6 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        r4 = virtualinvoke $r5.<org.apache.mahout.classifier.naivebayes.AbstractNaiveBayesClassifier: org.apache.mahout.math.Vector classifyFull(org.apache.mahout.math.Vector)>($r6);
+
+        $r7 = new org.apache.hadoop.io.Text;
+
+        $r8 = <org.apache.mahout.classifier.naivebayes.test.BayesTestMapper: java.util.regex.Pattern SLASH>;
+
+        $r9 = virtualinvoke r1.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        $r10 = virtualinvoke $r8.<java.util.regex.Pattern: java.lang.String[] split(java.lang.CharSequence)>($r9);
+
+        $r11 = $r10[1];
+
+        specialinvoke $r7.<org.apache.hadoop.io.Text: void <init>(java.lang.String)>($r11);
+
+        $r12 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r12.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r4);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r7, $r12);
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.classifier.naivebayes.test.BayesTestMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.Text $r5;
+
+        r0 := @this: org.apache.mahout.classifier.naivebayes.test.BayesTestMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.Text) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.naivebayes.test.BayesTestMapper: void map(org.apache.hadoop.io.Text,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        java.util.regex.Pattern $r0;
+
+        $r0 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("/");
+
+        <org.apache.mahout.classifier.naivebayes.test.BayesTestMapper: java.util.regex.Pattern SLASH> = $r0;
+
+        return;
+    }
+}

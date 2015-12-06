@@ -1,0 +1,107 @@
+public class org.apache.mahout.classifier.df.data.Instance extends java.lang.Object
+{
+    private final org.apache.mahout.math.Vector attrs;
+
+    public void <init>(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.df.data.Instance r0;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Instance;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.df.data.Instance: org.apache.mahout.math.Vector attrs> = r1;
+
+        return;
+    }
+
+    public double get(int)
+    {
+        org.apache.mahout.classifier.df.data.Instance r0;
+        int i0;
+        org.apache.mahout.math.Vector $r1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Instance;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.data.Instance: org.apache.mahout.math.Vector attrs>;
+
+        $d0 = interfaceinvoke $r1.<org.apache.mahout.math.Vector: double getQuick(int)>(i0);
+
+        return $d0;
+    }
+
+    public void set(int, double)
+    {
+        org.apache.mahout.classifier.df.data.Instance r0;
+        int i0;
+        double d0;
+        org.apache.mahout.math.Vector $r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Instance;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.data.Instance: org.apache.mahout.math.Vector attrs>;
+
+        interfaceinvoke $r1.<org.apache.mahout.math.Vector: void set(int,double)>(i0, d0);
+
+        return;
+    }
+
+    public boolean equals(java.lang.Object)
+    {
+        org.apache.mahout.classifier.df.data.Instance r0, r2;
+        java.lang.Object r1;
+        boolean $z0, $z1;
+        org.apache.mahout.math.Vector $r3, $r4;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Instance;
+
+        r1 := @parameter0: java.lang.Object;
+
+        if r0 != r1 goto label1;
+
+        return 1;
+
+     label1:
+        $z0 = r1 instanceof org.apache.mahout.classifier.df.data.Instance;
+
+        if $z0 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        r2 = (org.apache.mahout.classifier.df.data.Instance) r1;
+
+        $r4 = r0.<org.apache.mahout.classifier.df.data.Instance: org.apache.mahout.math.Vector attrs>;
+
+        $r3 = r2.<org.apache.mahout.classifier.df.data.Instance: org.apache.mahout.math.Vector attrs>;
+
+        $z1 = virtualinvoke $r4.<java.lang.Object: boolean equals(java.lang.Object)>($r3);
+
+        return $z1;
+    }
+
+    public int hashCode()
+    {
+        org.apache.mahout.classifier.df.data.Instance r0;
+        org.apache.mahout.math.Vector $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.df.data.Instance;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.data.Instance: org.apache.mahout.math.Vector attrs>;
+
+        $i0 = virtualinvoke $r1.<java.lang.Object: int hashCode()>();
+
+        return $i0;
+    }
+}

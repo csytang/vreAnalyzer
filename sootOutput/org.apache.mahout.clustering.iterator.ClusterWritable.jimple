@@ -1,0 +1,94 @@
+public class org.apache.mahout.clustering.iterator.ClusterWritable extends java.lang.Object implements org.apache.hadoop.io.Writable
+{
+    private org.apache.mahout.clustering.Cluster value;
+
+    public void <init>(org.apache.mahout.clustering.Cluster)
+    {
+        org.apache.mahout.clustering.iterator.ClusterWritable r0;
+        org.apache.mahout.clustering.Cluster r1;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.ClusterWritable;
+
+        r1 := @parameter0: org.apache.mahout.clustering.Cluster;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.iterator.ClusterWritable: org.apache.mahout.clustering.Cluster value> = r1;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.iterator.ClusterWritable r0;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.ClusterWritable;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.mahout.clustering.Cluster getValue()
+    {
+        org.apache.mahout.clustering.iterator.ClusterWritable r0;
+        org.apache.mahout.clustering.Cluster $r1;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.ClusterWritable;
+
+        $r1 = r0.<org.apache.mahout.clustering.iterator.ClusterWritable: org.apache.mahout.clustering.Cluster value>;
+
+        return $r1;
+    }
+
+    public void setValue(org.apache.mahout.clustering.Cluster)
+    {
+        org.apache.mahout.clustering.iterator.ClusterWritable r0;
+        org.apache.mahout.clustering.Cluster r1;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.ClusterWritable;
+
+        r1 := @parameter0: org.apache.mahout.clustering.Cluster;
+
+        r0.<org.apache.mahout.clustering.iterator.ClusterWritable: org.apache.mahout.clustering.Cluster value> = r1;
+
+        return;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.iterator.ClusterWritable r0;
+        java.io.DataOutput r1;
+        org.apache.mahout.clustering.Cluster $r2;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.ClusterWritable;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $r2 = r0.<org.apache.mahout.clustering.iterator.ClusterWritable: org.apache.mahout.clustering.Cluster value>;
+
+        staticinvoke <org.apache.mahout.classifier.sgd.PolymorphicWritable: void write(java.io.DataOutput,org.apache.hadoop.io.Writable)>(r1, $r2);
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.iterator.ClusterWritable r0;
+        java.io.DataInput r1;
+        org.apache.hadoop.io.Writable $r2;
+        org.apache.mahout.clustering.Cluster $r3;
+
+        r0 := @this: org.apache.mahout.clustering.iterator.ClusterWritable;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $r2 = staticinvoke <org.apache.mahout.classifier.sgd.PolymorphicWritable: org.apache.hadoop.io.Writable read(java.io.DataInput,java.lang.Class)>(r1, class "org/apache/mahout/clustering/Cluster");
+
+        $r3 = (org.apache.mahout.clustering.Cluster) $r2;
+
+        r0.<org.apache.mahout.clustering.iterator.ClusterWritable: org.apache.mahout.clustering.Cluster value> = $r3;
+
+        return;
+    }
+}

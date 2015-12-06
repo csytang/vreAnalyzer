@@ -1,0 +1,7 @@
+public interface  org.apache.mahout.classifier.sgd.PriorFunction extends java.lang.Object implements org.apache.hadoop.io.Writable
+{
+
+    public abstract double age(double, double, double);
+
+    public abstract double logP(double);
+}

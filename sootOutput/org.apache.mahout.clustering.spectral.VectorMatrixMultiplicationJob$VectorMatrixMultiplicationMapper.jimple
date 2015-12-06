@@ -1,0 +1,180 @@
+public class org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private org.apache.mahout.math.Vector diagonal;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper r0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.mahout.math.Vector $r3, $r4, $r5, $r7;
+        boolean $z0;
+        org.apache.mahout.math.DenseVector $r6;
+        java.io.IOException $r8;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void setup(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r3 = staticinvoke <org.apache.mahout.clustering.spectral.VectorCache: org.apache.mahout.math.Vector load(org.apache.hadoop.conf.Configuration)>(r2);
+
+        r0.<org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper: org.apache.mahout.math.Vector diagonal> = $r3;
+
+        $r4 = r0.<org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper: org.apache.mahout.math.Vector diagonal>;
+
+        if $r4 != null goto label1;
+
+        $r8 = new java.io.IOException;
+
+        specialinvoke $r8.<java.io.IOException: void <init>(java.lang.String)>("No vector loaded from cache!");
+
+        throw $r8;
+
+     label1:
+        $r5 = r0.<org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper: org.apache.mahout.math.Vector diagonal>;
+
+        $z0 = $r5 instanceof org.apache.mahout.math.DenseVector;
+
+        if $z0 != 0 goto label2;
+
+        $r6 = new org.apache.mahout.math.DenseVector;
+
+        $r7 = r0.<org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper: org.apache.mahout.math.Vector diagonal>;
+
+        specialinvoke $r6.<org.apache.mahout.math.DenseVector: void <init>(org.apache.mahout.math.Vector)>($r7);
+
+        r0.<org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper: org.apache.mahout.math.Vector diagonal> = $r6;
+
+     label2:
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.IntWritable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper r0;
+        org.apache.hadoop.io.IntWritable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        java.util.Iterator r4;
+        org.apache.mahout.math.Vector$Element r5;
+        double d0, d1, d2, $d3, $d4, $d5, $d6;
+        org.apache.mahout.math.Vector $r6, $r10, $r11;
+        java.lang.Iterable $r7;
+        boolean $z0;
+        org.apache.mahout.math.function.DoubleFunction $r8, $r12;
+        java.lang.Object $r9;
+        int $i0, $i1;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r6 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r7 = interfaceinvoke $r6.<org.apache.mahout.math.Vector: java.lang.Iterable all()>();
+
+        r4 = interfaceinvoke $r7.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r9 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.Vector$Element) $r9;
+
+        $r8 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleFunction SQRT>;
+
+        $r10 = r0.<org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper: org.apache.mahout.math.Vector diagonal>;
+
+        $i0 = virtualinvoke r1.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $d3 = interfaceinvoke $r10.<org.apache.mahout.math.Vector: double get(int)>($i0);
+
+        d0 = virtualinvoke $r8.<org.apache.mahout.math.function.DoubleFunction: double apply(double)>($d3);
+
+        $r12 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleFunction SQRT>;
+
+        $r11 = r0.<org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper: org.apache.mahout.math.Vector diagonal>;
+
+        $i1 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $d4 = interfaceinvoke $r11.<org.apache.mahout.math.Vector: double get(int)>($i1);
+
+        d1 = virtualinvoke $r12.<org.apache.mahout.math.function.DoubleFunction: double apply(double)>($d4);
+
+        d2 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        $d6 = d0 * d2;
+
+        $d5 = $d6 * d1;
+
+        interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: void set(double)>($d5);
+
+        goto label1;
+
+     label2:
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>(r1, r2);
+
+        return;
+    }
+
+    void setup(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper r0;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r0.<org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper: org.apache.mahout.math.Vector diagonal> = r1;
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.IntWritable $r5;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.IntWritable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.spectral.VectorMatrixMultiplicationJob$VectorMatrixMultiplicationMapper: void map(org.apache.hadoop.io.IntWritable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

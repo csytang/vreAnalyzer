@@ -1,0 +1,240 @@
+public final class org.apache.mahout.vectorizer.common.PartialVectorMerger extends java.lang.Object
+{
+    public static final float NO_NORMALIZING;
+    public static final java.lang.String NORMALIZATION_POWER;
+    public static final java.lang.String DIMENSION;
+    public static final java.lang.String SEQUENTIAL_ACCESS;
+    public static final java.lang.String NAMED_VECTOR;
+    public static final java.lang.String LOG_NORMALIZE;
+
+    private void <init>()
+    {
+        org.apache.mahout.vectorizer.common.PartialVectorMerger r0;
+
+        r0 := @this: org.apache.mahout.vectorizer.common.PartialVectorMerger;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void mergePartialVectors(java.lang.Iterable, org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration, float, boolean, int, boolean, boolean, int) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        java.lang.Iterable r0;
+        org.apache.hadoop.fs.Path r1;
+        org.apache.hadoop.conf.Configuration r2, $r10;
+        float f0;
+        boolean z0, z1, z2, z3, $z4, $z5, $z6;
+        int i0, i1;
+        byte $b2, $b3, $b4, $b5;
+        java.lang.Object[] $r5, $r7;
+        java.lang.Float $r6, $r8;
+        org.apache.hadoop.mapreduce.Job $r9;
+        org.apache.hadoop.fs.Path[] $r11;
+        java.lang.String $r12;
+        java.lang.IllegalStateException $r13;
+        double $d0;
+
+        r0 := @parameter0: java.lang.Iterable;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.conf.Configuration;
+
+        f0 := @parameter3: float;
+
+        z0 := @parameter4: boolean;
+
+        i0 := @parameter5: int;
+
+        z1 := @parameter6: boolean;
+
+        z2 := @parameter7: boolean;
+
+        i1 := @parameter8: int;
+
+        $b2 = f0 cmpl -1.0F;
+
+        if $b2 == 0 goto label1;
+
+        $b5 = f0 cmpl 0.0F;
+
+        if $b5 < 0 goto label2;
+
+     label1:
+        $z5 = 1;
+
+        goto label3;
+
+     label2:
+        $z5 = 0;
+
+     label3:
+        $r5 = newarray (java.lang.Object)[1];
+
+        $r6 = staticinvoke <java.lang.Float: java.lang.Float valueOf(float)>(f0);
+
+        $r5[0] = $r6;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.String,java.lang.Object[])>($z5, "If specified normPower must be nonnegative", $r5);
+
+        $b3 = f0 cmpl -1.0F;
+
+        if $b3 == 0 goto label5;
+
+        $b4 = f0 cmpl 1.0F;
+
+        if $b4 <= 0 goto label4;
+
+        $d0 = (double) f0;
+
+        $z4 = staticinvoke <java.lang.Double: boolean isInfinite(double)>($d0);
+
+        if $z4 == 0 goto label5;
+
+     label4:
+        if z0 != 0 goto label6;
+
+     label5:
+        $z6 = 1;
+
+        goto label7;
+
+     label6:
+        $z6 = 0;
+
+     label7:
+        $r7 = newarray (java.lang.Object)[1];
+
+        $r8 = staticinvoke <java.lang.Float: java.lang.Float valueOf(float)>(f0);
+
+        $r7[0] = $r8;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.String,java.lang.Object[])>($z6, "normPower must be > 1 and not infinite if log normalization is chosen", $r7);
+
+        $r10 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r10.<org.apache.hadoop.conf.Configuration: void <init>(org.apache.hadoop.conf.Configuration)>(r2);
+
+        virtualinvoke $r10.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("io.serializations", "org.apache.hadoop.io.serializer.JavaSerialization,org.apache.hadoop.io.serializer.WritableSerialization");
+
+        virtualinvoke $r10.<org.apache.hadoop.conf.Configuration: void setBoolean(java.lang.String,boolean)>("vector.sequentialAccess", z1);
+
+        virtualinvoke $r10.<org.apache.hadoop.conf.Configuration: void setBoolean(java.lang.String,boolean)>("vector.named", z2);
+
+        virtualinvoke $r10.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>("vector.dimension", i0);
+
+        virtualinvoke $r10.<org.apache.hadoop.conf.Configuration: void setFloat(java.lang.String,float)>("normalization.power", f0);
+
+        virtualinvoke $r10.<org.apache.hadoop.conf.Configuration: void setBoolean(java.lang.String,boolean)>("vector.lognormalize", z0);
+
+        $r9 = new org.apache.hadoop.mapreduce.Job;
+
+        specialinvoke $r9.<org.apache.hadoop.mapreduce.Job: void <init>(org.apache.hadoop.conf.Configuration)>($r10);
+
+        virtualinvoke $r9.<org.apache.hadoop.mapreduce.Job: void setJobName(java.lang.String)>("PartialVectorMerger::MergePartialVectors");
+
+        virtualinvoke $r9.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(class "org/apache/mahout/vectorizer/common/PartialVectorMerger");
+
+        virtualinvoke $r9.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/Text");
+
+        virtualinvoke $r9.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(class "org/apache/mahout/math/VectorWritable");
+
+        $r12 = staticinvoke <org.apache.mahout.vectorizer.common.PartialVectorMerger: java.lang.String getCommaSeparatedPaths(java.lang.Iterable)>(r0);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void setInputPaths(org.apache.hadoop.mapreduce.Job,java.lang.String)>($r9, $r12);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r9, r1);
+
+        virtualinvoke $r9.<org.apache.hadoop.mapreduce.Job: void setMapperClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/Mapper");
+
+        virtualinvoke $r9.<org.apache.hadoop.mapreduce.Job: void setInputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat");
+
+        virtualinvoke $r9.<org.apache.hadoop.mapreduce.Job: void setReducerClass(java.lang.Class)>(class "org/apache/mahout/vectorizer/common/PartialVectorMergeReducer");
+
+        virtualinvoke $r9.<org.apache.hadoop.mapreduce.Job: void setOutputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        virtualinvoke $r9.<org.apache.hadoop.mapreduce.Job: void setNumReduceTasks(int)>(i1);
+
+        $r11 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r11[0] = r1;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r10, $r11);
+
+        z3 = virtualinvoke $r9.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z3 != 0 goto label8;
+
+        $r13 = new java.lang.IllegalStateException;
+
+        specialinvoke $r13.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Job failed!");
+
+        throw $r13;
+
+     label8:
+        return;
+    }
+
+    private static java.lang.String getCommaSeparatedPaths(java.lang.Iterable)
+    {
+        java.lang.Iterable r0;
+        java.util.Iterator r2;
+        org.apache.hadoop.fs.Path r3;
+        java.lang.StringBuilder $r4, $r7;
+        boolean $z0;
+        java.lang.String $r5, $r8, r10;
+        java.lang.Object $r6;
+
+        r0 := @parameter0: java.lang.Iterable;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>(int)>(100);
+
+        r10 = "";
+
+        r2 = interfaceinvoke r0.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.hadoop.fs.Path) $r6;
+
+        $r7 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r10);
+
+        $r8 = virtualinvoke r3.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        r10 = ",";
+
+        goto label1;
+
+     label2:
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r5;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.vectorizer.common.PartialVectorMerger: java.lang.String LOG_NORMALIZE> = "vector.lognormalize";
+
+        <org.apache.mahout.vectorizer.common.PartialVectorMerger: java.lang.String NAMED_VECTOR> = "vector.named";
+
+        <org.apache.mahout.vectorizer.common.PartialVectorMerger: java.lang.String SEQUENTIAL_ACCESS> = "vector.sequentialAccess";
+
+        <org.apache.mahout.vectorizer.common.PartialVectorMerger: java.lang.String DIMENSION> = "vector.dimension";
+
+        <org.apache.mahout.vectorizer.common.PartialVectorMerger: java.lang.String NORMALIZATION_POWER> = "normalization.power";
+
+        <org.apache.mahout.vectorizer.common.PartialVectorMerger: float NO_NORMALIZING> = -1.0F;
+
+        return;
+    }
+}

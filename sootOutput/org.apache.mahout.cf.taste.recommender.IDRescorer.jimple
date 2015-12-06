@@ -1,0 +1,7 @@
+public interface  org.apache.mahout.cf.taste.recommender.IDRescorer extends java.lang.Object
+{
+
+    public abstract double rescore(long, double);
+
+    public abstract boolean isFiltered(long);
+}

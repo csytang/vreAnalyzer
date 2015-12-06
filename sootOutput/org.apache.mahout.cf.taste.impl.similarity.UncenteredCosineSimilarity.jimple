@@ -1,0 +1,119 @@
+public final class org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity extends org.apache.mahout.cf.taste.impl.similarity.AbstractSimilarity
+{
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        org.apache.mahout.cf.taste.common.Weighting $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        $r2 = <org.apache.mahout.cf.taste.common.Weighting: org.apache.mahout.cf.taste.common.Weighting UNWEIGHTED>;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity: void <init>(org.apache.mahout.cf.taste.model.DataModel,org.apache.mahout.cf.taste.common.Weighting)>(r1, $r2);
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel, org.apache.mahout.cf.taste.common.Weighting) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        org.apache.mahout.cf.taste.common.Weighting r2;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.common.Weighting;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.AbstractSimilarity: void <init>(org.apache.mahout.cf.taste.model.DataModel,org.apache.mahout.cf.taste.common.Weighting,boolean)>(r1, r2, 0);
+
+        $z0 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.DataModel: boolean hasPreferenceValues()>();
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, "DataModel doesn\'t have preference values");
+
+        return;
+    }
+
+    double computeResult(int, double, double, double, double)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity r0;
+        int i0;
+        double d0, d1, d2, d3, d4, $d5, $d6, $d7;
+        byte $b1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        d1 := @parameter2: double;
+
+        d2 := @parameter3: double;
+
+        d3 := @parameter4: double;
+
+        if i0 != 0 goto label1;
+
+        return #NaN;
+
+     label1:
+        $d5 = staticinvoke <java.lang.Math: double sqrt(double)>(d1);
+
+        $d6 = staticinvoke <java.lang.Math: double sqrt(double)>(d2);
+
+        d4 = $d5 * $d6;
+
+        $b1 = d4 cmpl 0.0;
+
+        if $b1 != 0 goto label2;
+
+        return #NaN;
+
+     label2:
+        $d7 = d0 / d4;
+
+        return $d7;
+    }
+
+    public volatile double[] itemSimilarities(long, long[]) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity r0;
+        long l0;
+        long[] r1;
+        double[] $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: long[];
+
+        $r2 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.AbstractSimilarity: double[] itemSimilarities(long,long[])>(l0, r1);
+
+        return $r2;
+    }
+
+    public volatile double userSimilarity(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity r0;
+        long l0, l1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.UncenteredCosineSimilarity;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $d0 = specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.AbstractSimilarity: double userSimilarity(long,long)>(l0, l1);
+
+        return $d0;
+    }
+}

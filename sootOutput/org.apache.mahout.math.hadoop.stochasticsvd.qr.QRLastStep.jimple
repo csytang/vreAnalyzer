@@ -1,0 +1,335 @@
+public class org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep extends java.lang.Object implements java.io.Closeable, java.util.Iterator
+{
+    private final java.util.Iterator qHatInput;
+    private final java.util.List mRs;
+    private final int blockNum;
+    private double[][] mQt;
+    private int cnt;
+    private int r;
+    private int kp;
+    private org.apache.mahout.math.Vector qRow;
+
+    public void <init>(java.util.Iterator, java.util.Iterator, int)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep r0;
+        java.util.Iterator r1, r2;
+        int i0, i1;
+        org.apache.mahout.math.Vector r3;
+        java.util.ArrayList $r4;
+        boolean $z0;
+        java.lang.Object $r5, $r11;
+        org.apache.mahout.math.VectorWritable $r6;
+        org.apache.mahout.math.UpperTriangular $r7, $r10, $r12;
+        java.util.List $r8, $r9;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep;
+
+        r1 := @parameter0: java.util.Iterator;
+
+        r2 := @parameter1: java.util.Iterator;
+
+        i0 := @parameter2: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r4 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: java.util.List mRs> = $r4;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: int blockNum> = i0;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: java.util.Iterator qHatInput> = r1;
+
+        i1 = 0;
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r6 = (org.apache.mahout.math.VectorWritable) $r5;
+
+        r3 = virtualinvoke $r6.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        if i1 >= i0 goto label2;
+
+        if i1 <= 0 goto label2;
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: java.util.List mRs>;
+
+        $r11 = interfaceinvoke $r9.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r12 = (org.apache.mahout.math.UpperTriangular) $r11;
+
+        $r10 = new org.apache.mahout.math.UpperTriangular;
+
+        specialinvoke $r10.<org.apache.mahout.math.UpperTriangular: void <init>(org.apache.mahout.math.Vector)>(r3);
+
+        staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: void mergeR(org.apache.mahout.math.UpperTriangular,org.apache.mahout.math.UpperTriangular)>($r12, $r10);
+
+        goto label3;
+
+     label2:
+        $r8 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: java.util.List mRs>;
+
+        $r7 = new org.apache.mahout.math.UpperTriangular;
+
+        specialinvoke $r7.<org.apache.mahout.math.UpperTriangular: void <init>(org.apache.mahout.math.Vector)>(r3);
+
+        interfaceinvoke $r8.<java.util.List: boolean add(java.lang.Object)>($r7);
+
+     label3:
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label4:
+        return;
+    }
+
+    private boolean loadNextQt()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep r0;
+        boolean z0;
+        org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable r1;
+        java.util.Iterator $r2, $r3, $r8;
+        java.lang.Object $r4;
+        double[][] $r5, $r9, $r10, $r12;
+        int $i0, $i1, $i2, $i3;
+        org.apache.mahout.common.iterator.CopyConstructorIterator $r6;
+        java.util.List $r7;
+        double[] $r11;
+        org.apache.mahout.math.Vector $r13;
+        org.apache.mahout.math.DenseVector $r14;
+        byte $b4;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: java.util.Iterator qHatInput>;
+
+        z0 = interfaceinvoke $r2.<java.util.Iterator: boolean hasNext()>();
+
+        if z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: java.util.Iterator qHatInput>;
+
+        $r4 = interfaceinvoke $r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r1 = (org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable) $r4;
+
+        $r5 = virtualinvoke r1.<org.apache.mahout.math.hadoop.stochasticsvd.DenseBlockWritable: double[][] getBlock()>();
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: int blockNum>;
+
+        if $i0 != 0 goto label2;
+
+        $b4 = 0;
+
+        goto label3;
+
+     label2:
+        $b4 = 1;
+
+     label3:
+        $r6 = new org.apache.mahout.common.iterator.CopyConstructorIterator;
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: java.util.List mRs>;
+
+        $r8 = interfaceinvoke $r7.<java.util.List: java.util.Iterator iterator()>();
+
+        specialinvoke $r6.<org.apache.mahout.common.iterator.CopyConstructorIterator: void <init>(java.util.Iterator)>($r8);
+
+        $r9 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver: double[][] computeQtHat(double[][],int,java.util.Iterator)>($r5, $b4, $r6);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: double[][] mQt> = $r9;
+
+        $r10 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: double[][] mQt>;
+
+        $r11 = $r10[0];
+
+        $i1 = lengthof $r11;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: int r> = $i1;
+
+        $r12 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: double[][] mQt>;
+
+        $i2 = lengthof $r12;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: int kp> = $i2;
+
+        $r13 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: org.apache.mahout.math.Vector qRow>;
+
+        if $r13 != null goto label4;
+
+        $r14 = new org.apache.mahout.math.DenseVector;
+
+        $i3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: int kp>;
+
+        specialinvoke $r14.<org.apache.mahout.math.DenseVector: void <init>(int)>($i3);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: org.apache.mahout.math.Vector qRow> = $r14;
+
+     label4:
+        return 1;
+    }
+
+    public boolean hasNext()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep r0;
+        double[][] $r1, $r2, $r3;
+        int $i0, $i1;
+        boolean z0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: double[][] mQt>;
+
+        if $r1 == null goto label1;
+
+        $i1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: int cnt>;
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: int r>;
+
+        if $i1 != $i0 goto label1;
+
+        $r2 = (double[][]) null;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: double[][] mQt> = $r2;
+
+     label1:
+        z0 = 1;
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: double[][] mQt>;
+
+        if $r3 != null goto label2;
+
+        z0 = specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: boolean loadNextQt()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: int cnt> = 0;
+
+     label2:
+        return z0;
+    }
+
+    public org.apache.mahout.math.Vector next()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep r0;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, i7;
+        boolean $z0, $z1;
+        java.lang.Object[] $r1;
+        org.apache.mahout.math.Vector $r2, $r5;
+        double[][] $r3;
+        double[] $r4;
+        double $d0;
+        java.util.NoSuchElementException $r6;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep;
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: boolean hasNext()>();
+
+        if $z0 != 0 goto label1;
+
+        $r6 = new java.util.NoSuchElementException;
+
+        specialinvoke $r6.<java.util.NoSuchElementException: void <init>()>();
+
+        throw $r6;
+
+     label1:
+        $z1 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: boolean hasNext()>();
+
+        $r1 = newarray (java.lang.Object)[0];
+
+        staticinvoke <org.apache.commons.lang3.Validate: void isTrue(boolean,java.lang.String,java.lang.Object[])>($z1, "Q input overrun", $r1);
+
+        $i2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: int r>;
+
+        $i1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: int cnt>;
+
+        $i3 = $i2 - $i1;
+
+        i0 = $i3 - 1;
+
+        i7 = 0;
+
+     label2:
+        $i4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: int kp>;
+
+        if i7 >= $i4 goto label3;
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: org.apache.mahout.math.Vector qRow>;
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: double[][] mQt>;
+
+        $r4 = $r3[i7];
+
+        $d0 = $r4[i0];
+
+        interfaceinvoke $r5.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i7, $d0);
+
+        i7 = i7 + 1;
+
+        goto label2;
+
+     label3:
+        $i5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: int cnt>;
+
+        $i6 = $i5 + 1;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: int cnt> = $i6;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: org.apache.mahout.math.Vector qRow>;
+
+        return $r2;
+    }
+
+    public void remove()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep r0;
+        java.lang.UnsupportedOperationException $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r1;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep r0;
+        double[][] $r1;
+        java.util.List $r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep;
+
+        $r1 = (double[][]) null;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: double[][] mQt> = $r1;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: java.util.List mRs>;
+
+        interfaceinvoke $r2.<java.util.List: void clear()>();
+
+        return;
+    }
+
+    public volatile java.lang.Object next()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep r0;
+        org.apache.mahout.math.Vector $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRLastStep: org.apache.mahout.math.Vector next()>();
+
+        return $r1;
+    }
+}

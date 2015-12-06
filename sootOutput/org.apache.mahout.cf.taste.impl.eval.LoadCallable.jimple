@@ -1,0 +1,55 @@
+final class org.apache.mahout.cf.taste.impl.eval.LoadCallable extends java.lang.Object implements java.util.concurrent.Callable
+{
+    private final org.apache.mahout.cf.taste.recommender.Recommender recommender;
+    private final long userID;
+
+    void <init>(org.apache.mahout.cf.taste.recommender.Recommender, long)
+    {
+        org.apache.mahout.cf.taste.impl.eval.LoadCallable r0;
+        org.apache.mahout.cf.taste.recommender.Recommender r1;
+        long l0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.eval.LoadCallable;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.recommender.Recommender;
+
+        l0 := @parameter1: long;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.eval.LoadCallable: org.apache.mahout.cf.taste.recommender.Recommender recommender> = r1;
+
+        r0.<org.apache.mahout.cf.taste.impl.eval.LoadCallable: long userID> = l0;
+
+        return;
+    }
+
+    public java.lang.Void call() throws java.lang.Exception
+    {
+        org.apache.mahout.cf.taste.impl.eval.LoadCallable r0;
+        long $l0;
+        org.apache.mahout.cf.taste.recommender.Recommender $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.eval.LoadCallable;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.eval.LoadCallable: org.apache.mahout.cf.taste.recommender.Recommender recommender>;
+
+        $l0 = r0.<org.apache.mahout.cf.taste.impl.eval.LoadCallable: long userID>;
+
+        interfaceinvoke $r1.<org.apache.mahout.cf.taste.recommender.Recommender: java.util.List recommend(long,int)>($l0, 10);
+
+        return null;
+    }
+
+    public volatile java.lang.Object call() throws java.lang.Exception
+    {
+        org.apache.mahout.cf.taste.impl.eval.LoadCallable r0;
+        java.lang.Void $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.eval.LoadCallable;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.eval.LoadCallable: java.lang.Void call()>();
+
+        return $r1;
+    }
+}

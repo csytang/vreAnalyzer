@@ -1,0 +1,178 @@
+public class org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+    private final org.apache.mahout.math.VectorWritable accum;
+    private org.apache.mahout.math.DenseVector acc;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer r0;
+        org.apache.mahout.math.VectorWritable $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r1.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer: org.apache.mahout.math.VectorWritable accum> = $r1;
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        int i0, i1, $i2;
+        org.apache.hadoop.conf.Configuration $r2, $r3;
+        java.lang.Object[] $r4, $r5;
+        org.apache.mahout.math.DenseVector $r6;
+        org.apache.mahout.math.VectorWritable $r7;
+        boolean $z0, $z1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        i0 = virtualinvoke $r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("ssvd.k", -1);
+
+        $r3 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        i1 = virtualinvoke $r3.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("ssvd.p", -1);
+
+        if i0 <= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        $r4 = newarray (java.lang.Object)[0];
+
+        staticinvoke <org.apache.commons.lang3.Validate: void isTrue(boolean,java.lang.String,java.lang.Object[])>($z0, "invalid k parameter", $r4);
+
+        if i1 <= 0 goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        $r5 = newarray (java.lang.Object)[0];
+
+        staticinvoke <org.apache.commons.lang3.Validate: void isTrue(boolean,java.lang.String,java.lang.Object[])>($z1, "invalid p parameter", $r5);
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer: org.apache.mahout.math.VectorWritable accum>;
+
+        $r6 = new org.apache.mahout.math.DenseVector;
+
+        $i2 = i0 + i1;
+
+        specialinvoke $r6.<org.apache.mahout.math.DenseVector: void <init>(int)>($i2);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer: org.apache.mahout.math.DenseVector acc> = $r6;
+
+        virtualinvoke $r7.<org.apache.mahout.math.VectorWritable: void set(org.apache.mahout.math.Vector)>($r6);
+
+        return;
+    }
+
+    protected void cleanup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        org.apache.hadoop.io.IntWritable $r2;
+        org.apache.mahout.math.VectorWritable $r3;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r2 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r2.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer: org.apache.mahout.math.VectorWritable accum>;
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>($r2, $r3);
+
+        return;
+    }
+
+    protected void reduce(org.apache.hadoop.io.IntWritable, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer r0;
+        org.apache.hadoop.io.IntWritable r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        java.util.Iterator r4;
+        org.apache.mahout.math.VectorWritable r5;
+        boolean $z0;
+        java.lang.Object $r6;
+        org.apache.mahout.math.DenseVector $r7;
+        org.apache.mahout.math.Vector $r8;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        r4 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.VectorWritable) $r6;
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer: org.apache.mahout.math.DenseVector acc>;
+
+        $r8 = virtualinvoke r5.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        virtualinvoke $r7.<org.apache.mahout.math.DenseVector: void addAll(org.apache.mahout.math.Vector)>($r8);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    protected volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.hadoop.io.IntWritable $r4;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.hadoop.io.IntWritable) r1;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.YtYJob$YtYReducer: void reduce(org.apache.hadoop.io.IntWritable,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+}

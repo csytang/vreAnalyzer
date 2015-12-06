@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 import soot.Value;
 import vreAnalyzer.Elements.CallSite;
 
@@ -15,6 +16,7 @@ public class ValueToVariant {
 	private Set<Variant> variantSet = new HashSet<Variant>();
 	
 	// 如果函数是一个调用函数 那么这里为空
+	@SuppressWarnings("unused")
 	private CallSite callsite = null;
 	
 	public ValueToVariant(CallSite callsite){

@@ -1,0 +1,77 @@
+public final class org.apache.mahout.math.DistributedRowMatrixWriter extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.math.DistributedRowMatrixWriter r0;
+
+        r0 := @this: org.apache.mahout.math.DistributedRowMatrixWriter;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void write(org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration, java.lang.Iterable) throws java.io.IOException
+    {
+        org.apache.hadoop.fs.Path r0;
+        org.apache.hadoop.conf.Configuration r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.fs.FileSystem r3;
+        org.apache.hadoop.io.SequenceFile$Writer r4;
+        java.util.Iterator r7;
+        org.apache.mahout.math.MatrixSlice r8;
+        org.apache.hadoop.io.IntWritable $r9;
+        org.apache.mahout.math.VectorWritable $r10;
+        boolean $z0;
+        java.lang.Object $r11;
+        org.apache.mahout.math.Vector $r12;
+        int $i0;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        r2 := @parameter2: java.lang.Iterable;
+
+        r3 = virtualinvoke r0.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r1);
+
+        r4 = staticinvoke <org.apache.hadoop.io.SequenceFile: org.apache.hadoop.io.SequenceFile$Writer createWriter(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>(r3, r1, r0, class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable");
+
+        $r9 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r9.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+        $r10 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r10.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        r7 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r11 = interfaceinvoke r7.<java.util.Iterator: java.lang.Object next()>();
+
+        r8 = (org.apache.mahout.math.MatrixSlice) $r11;
+
+        $i0 = virtualinvoke r8.<org.apache.mahout.math.MatrixSlice: int index()>();
+
+        virtualinvoke $r9.<org.apache.hadoop.io.IntWritable: void set(int)>($i0);
+
+        $r12 = virtualinvoke r8.<org.apache.mahout.math.MatrixSlice: org.apache.mahout.math.Vector vector()>();
+
+        virtualinvoke $r10.<org.apache.mahout.math.VectorWritable: void set(org.apache.mahout.math.Vector)>($r12);
+
+        virtualinvoke r4.<org.apache.hadoop.io.SequenceFile$Writer: void append(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r9, $r10);
+
+        goto label1;
+
+     label2:
+        virtualinvoke r4.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
+
+        return;
+    }
+}

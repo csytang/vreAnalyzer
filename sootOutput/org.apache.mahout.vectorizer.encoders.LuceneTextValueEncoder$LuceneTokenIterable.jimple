@@ -1,0 +1,96 @@
+final class org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable extends java.lang.Object implements java.lang.Iterable
+{
+    private boolean firstTime;
+    private final org.apache.lucene.analysis.TokenStream tokenStream;
+
+    private void <init>(org.apache.lucene.analysis.TokenStream, boolean)
+    {
+        org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable r0;
+        org.apache.lucene.analysis.TokenStream r1;
+        boolean z0;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable;
+
+        r1 := @parameter0: org.apache.lucene.analysis.TokenStream;
+
+        z0 := @parameter1: boolean;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable: boolean firstTime> = 1;
+
+        r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable: org.apache.lucene.analysis.TokenStream tokenStream> = r1;
+
+        r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable: boolean firstTime> = z0;
+
+        return;
+    }
+
+    public java.util.Iterator iterator()
+    {
+        org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable r0;
+        boolean $z0;
+        org.apache.lucene.analysis.TokenStream $r2, $r4;
+        org.apache.mahout.common.lucene.TokenStreamIterator $r3;
+        java.io.IOException $r5;
+        java.lang.IllegalStateException $r6;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable;
+
+        $z0 = r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable: boolean firstTime>;
+
+        if $z0 == 0 goto label1;
+
+        r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable: boolean firstTime> = 0;
+
+        goto label4;
+
+     label1:
+        $r2 = r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable: org.apache.lucene.analysis.TokenStream tokenStream>;
+
+        virtualinvoke $r2.<org.apache.lucene.analysis.TokenStream: void reset()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.String)>("This token stream can\'t be reset");
+
+        throw $r6;
+
+     label4:
+        $r3 = new org.apache.mahout.common.lucene.TokenStreamIterator;
+
+        $r4 = r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable: org.apache.lucene.analysis.TokenStream tokenStream>;
+
+        specialinvoke $r3.<org.apache.mahout.common.lucene.TokenStreamIterator: void <init>(org.apache.lucene.analysis.TokenStream)>($r4);
+
+        return $r3;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    void <init>(org.apache.lucene.analysis.TokenStream, boolean, org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$1)
+    {
+        org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable r0;
+        org.apache.lucene.analysis.TokenStream r1;
+        boolean z0;
+        org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$1 r2;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable;
+
+        r1 := @parameter0: org.apache.lucene.analysis.TokenStream;
+
+        z0 := @parameter1: boolean;
+
+        r2 := @parameter2: org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$1;
+
+        specialinvoke r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$LuceneTokenIterable: void <init>(org.apache.lucene.analysis.TokenStream,boolean)>(r1, z0);
+
+        return;
+    }
+}

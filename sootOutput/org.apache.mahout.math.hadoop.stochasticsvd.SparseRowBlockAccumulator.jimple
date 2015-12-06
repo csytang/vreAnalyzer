@@ -1,0 +1,180 @@
+public class org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator extends java.lang.Object implements org.apache.hadoop.mapred.OutputCollector, java.io.Closeable
+{
+    private final int height;
+    private final org.apache.hadoop.mapred.OutputCollector delegate;
+    private long currentBlockNum;
+    private org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable block;
+    private final org.apache.hadoop.io.LongWritable blockKeyW;
+
+    public void <init>(int, org.apache.hadoop.mapred.OutputCollector)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator r0;
+        int i0;
+        org.apache.hadoop.mapred.OutputCollector r1;
+        org.apache.hadoop.io.LongWritable $r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: org.apache.hadoop.mapred.OutputCollector;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: long currentBlockNum> = -1L;
+
+        $r2 = new org.apache.hadoop.io.LongWritable;
+
+        specialinvoke $r2.<org.apache.hadoop.io.LongWritable: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: org.apache.hadoop.io.LongWritable blockKeyW> = $r2;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: int height> = i0;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: org.apache.hadoop.mapred.OutputCollector delegate> = r1;
+
+        return;
+    }
+
+    private void flushBlock() throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator r0;
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable $r1, $r2, $r4, $r7;
+        int $i0;
+        long $l1;
+        org.apache.hadoop.io.LongWritable $r3, $r5;
+        org.apache.hadoop.mapred.OutputCollector $r6;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable block>;
+
+        if $r1 == null goto label1;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable block>;
+
+        $i0 = virtualinvoke $r2.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int getNumRows()>();
+
+        if $i0 != 0 goto label2;
+
+     label1:
+        return;
+
+     label2:
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: org.apache.hadoop.io.LongWritable blockKeyW>;
+
+        $l1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: long currentBlockNum>;
+
+        virtualinvoke $r3.<org.apache.hadoop.io.LongWritable: void set(long)>($l1);
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: org.apache.hadoop.mapred.OutputCollector delegate>;
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: org.apache.hadoop.io.LongWritable blockKeyW>;
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable block>;
+
+        interfaceinvoke $r6.<org.apache.hadoop.mapred.OutputCollector: void collect(java.lang.Object,java.lang.Object)>($r5, $r4);
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable block>;
+
+        virtualinvoke $r7.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: void clear()>();
+
+        return;
+    }
+
+    public void collect(java.lang.Long, org.apache.mahout.math.Vector) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator r0;
+        java.lang.Long r1;
+        org.apache.mahout.math.Vector r2;
+        long l0, $l1, $l3, $l4, $l6, $l8, $l9;
+        int $i2, $i7, $i10;
+        byte $b5;
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable $r3, $r4, $r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator;
+
+        r1 := @parameter0: java.lang.Long;
+
+        r2 := @parameter1: org.apache.mahout.math.Vector;
+
+        $l1 = virtualinvoke r1.<java.lang.Long: long longValue()>();
+
+        $i2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: int height>;
+
+        $l3 = (long) $i2;
+
+        l0 = $l1 / $l3;
+
+        $l4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: long currentBlockNum>;
+
+        $b5 = l0 cmp $l4;
+
+        if $b5 == 0 goto label2;
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: void flushBlock()>();
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable block>;
+
+        if $r3 != null goto label1;
+
+        $r4 = new org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+        specialinvoke $r4.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: void <init>(int)>(100);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable block> = $r4;
+
+     label1:
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: long currentBlockNum> = l0;
+
+     label2:
+        $r5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable block>;
+
+        $l6 = virtualinvoke r1.<java.lang.Long: long longValue()>();
+
+        $i7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: int height>;
+
+        $l8 = (long) $i7;
+
+        $l9 = $l6 % $l8;
+
+        $i10 = (int) $l9;
+
+        virtualinvoke $r5.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: void plusRow(int,org.apache.mahout.math.Vector)>($i10, r2);
+
+        return;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator;
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: void flushBlock()>();
+
+        return;
+    }
+
+    public volatile void collect(java.lang.Object, java.lang.Object) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator r0;
+        java.lang.Object r1, r2;
+        org.apache.mahout.math.Vector $r3;
+        java.lang.Long $r4;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        $r4 = (java.lang.Long) r1;
+
+        $r3 = (org.apache.mahout.math.Vector) r2;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockAccumulator: void collect(java.lang.Long,org.apache.mahout.math.Vector)>($r4, $r3);
+
+        return;
+    }
+}

@@ -1,0 +1,245 @@
+public class org.apache.mahout.cf.taste.impl.common.FullRunningAverage extends java.lang.Object implements org.apache.mahout.cf.taste.impl.common.RunningAverage, java.io.Serializable
+{
+    private int count;
+    private double average;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: void <init>(int,double)>(0, #NaN);
+
+        return;
+    }
+
+    public void <init>(int, double)
+    {
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage r0;
+        int i0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int count> = i0;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double average> = d0;
+
+        return;
+    }
+
+    public synchronized void addDatum(double)
+    {
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage r0;
+        double d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8;
+        int $i0, $i1, $i2, $i3, $i4, $i5;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        d0 := @parameter0: double;
+
+        $i0 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int count>;
+
+        $i1 = $i0 + 1;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int count> = $i1;
+
+        if $i1 != 1 goto label1;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double average> = d0;
+
+        goto label2;
+
+     label1:
+        $d2 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double average>;
+
+        $i2 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int count>;
+
+        $i3 = $i2 - 1;
+
+        $d1 = (double) $i3;
+
+        $d4 = $d2 * $d1;
+
+        $i4 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int count>;
+
+        $d3 = (double) $i4;
+
+        $d7 = $d4 / $d3;
+
+        $i5 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int count>;
+
+        $d5 = (double) $i5;
+
+        $d6 = d0 / $d5;
+
+        $d8 = $d7 + $d6;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double average> = $d8;
+
+     label2:
+        return;
+    }
+
+    public synchronized void removeDatum(double)
+    {
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage r0;
+        double d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6;
+        java.lang.IllegalStateException $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        d0 := @parameter0: double;
+
+        $i0 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int count>;
+
+        if $i0 != 0 goto label1;
+
+        $r1 = new java.lang.IllegalStateException;
+
+        specialinvoke $r1.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r1;
+
+     label1:
+        $i1 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int count>;
+
+        $i2 = $i1 - 1;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int count> = $i2;
+
+        if $i2 != 0 goto label2;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double average> = #NaN;
+
+        goto label3;
+
+     label2:
+        $d2 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double average>;
+
+        $i3 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int count>;
+
+        $i4 = $i3 + 1;
+
+        $d1 = (double) $i4;
+
+        $d4 = $d2 * $d1;
+
+        $i5 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int count>;
+
+        $d3 = (double) $i5;
+
+        $d8 = $d4 / $d3;
+
+        $i6 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int count>;
+
+        $d5 = (double) $i6;
+
+        $d6 = d0 / $d5;
+
+        $d7 = $d8 - $d6;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double average> = $d7;
+
+     label3:
+        return;
+    }
+
+    public synchronized void changeDatum(double)
+    {
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage r0;
+        double d0, $d1, $d2, $d3, $d4;
+        int $i0, $i1;
+        java.lang.IllegalStateException $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        d0 := @parameter0: double;
+
+        $i0 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int count>;
+
+        if $i0 != 0 goto label1;
+
+        $r1 = new java.lang.IllegalStateException;
+
+        specialinvoke $r1.<java.lang.IllegalStateException: void <init>()>();
+
+        throw $r1;
+
+     label1:
+        $d3 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double average>;
+
+        $i1 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int count>;
+
+        $d1 = (double) $i1;
+
+        $d2 = d0 / $d1;
+
+        $d4 = $d3 + $d2;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double average> = $d4;
+
+        return;
+    }
+
+    public synchronized int getCount()
+    {
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        $i0 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: int count>;
+
+        return $i0;
+    }
+
+    public synchronized double getAverage()
+    {
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        $d0 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double average>;
+
+        return $d0;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.RunningAverage inverse()
+    {
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage r0;
+        org.apache.mahout.cf.taste.impl.common.InvertedRunningAverage $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        $r1 = new org.apache.mahout.cf.taste.impl.common.InvertedRunningAverage;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.impl.common.InvertedRunningAverage: void <init>(org.apache.mahout.cf.taste.impl.common.RunningAverage)>(r0);
+
+        return $r1;
+    }
+
+    public synchronized java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.common.FullRunningAverage r0;
+        double $d0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.FullRunningAverage;
+
+        $d0 = r0.<org.apache.mahout.cf.taste.impl.common.FullRunningAverage: double average>;
+
+        $r1 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>($d0);
+
+        return $r1;
+    }
+}

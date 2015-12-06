@@ -1,0 +1,54 @@
+public class org.apache.mahout.common.distance.EuclideanDistanceMeasure extends org.apache.mahout.common.distance.SquaredEuclideanDistanceMeasure
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.common.distance.EuclideanDistanceMeasure r0;
+
+        r0 := @this: org.apache.mahout.common.distance.EuclideanDistanceMeasure;
+
+        specialinvoke r0.<org.apache.mahout.common.distance.SquaredEuclideanDistanceMeasure: void <init>()>();
+
+        return;
+    }
+
+    public double distance(org.apache.mahout.math.Vector, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.common.distance.EuclideanDistanceMeasure r0;
+        org.apache.mahout.math.Vector r1, r2;
+        double $d0, $d1;
+
+        r0 := @this: org.apache.mahout.common.distance.EuclideanDistanceMeasure;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 := @parameter1: org.apache.mahout.math.Vector;
+
+        $d0 = specialinvoke r0.<org.apache.mahout.common.distance.SquaredEuclideanDistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r1, r2);
+
+        $d1 = staticinvoke <java.lang.Math: double sqrt(double)>($d0);
+
+        return $d1;
+    }
+
+    public double distance(double, org.apache.mahout.math.Vector, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.common.distance.EuclideanDistanceMeasure r0;
+        double d0, $d1, $d2;
+        org.apache.mahout.math.Vector r1, r2;
+
+        r0 := @this: org.apache.mahout.common.distance.EuclideanDistanceMeasure;
+
+        d0 := @parameter0: double;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        r2 := @parameter2: org.apache.mahout.math.Vector;
+
+        $d1 = specialinvoke r0.<org.apache.mahout.common.distance.SquaredEuclideanDistanceMeasure: double distance(double,org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(d0, r1, r2);
+
+        $d2 = staticinvoke <java.lang.Math: double sqrt(double)>($d1);
+
+        return $d2;
+    }
+}

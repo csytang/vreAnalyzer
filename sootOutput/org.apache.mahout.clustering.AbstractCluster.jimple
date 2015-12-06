@@ -1,0 +1,1170 @@
+public abstract class org.apache.mahout.clustering.AbstractCluster extends java.lang.Object implements org.apache.mahout.clustering.Cluster
+{
+    private int id;
+    private long numObservations;
+    private long totalObservations;
+    private org.apache.mahout.math.Vector center;
+    private org.apache.mahout.math.Vector radius;
+    private double s0;
+    private org.apache.mahout.math.Vector s1;
+    private org.apache.mahout.math.Vector s2;
+    private static final org.codehaus.jackson.map.ObjectMapper jxn;
+
+    protected void <init>()
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    protected void <init>(org.apache.mahout.math.Vector, int)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        org.apache.mahout.math.Vector r1, $r2, $r3, $r4, $r5, $r6, $r7, $r8;
+        int i0;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: long numObservations> = 0L;
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: long totalObservations> = 0L;
+
+        $r2 = interfaceinvoke r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector center> = $r2;
+
+        $r3 = r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector center>;
+
+        $r4 = interfaceinvoke $r3.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector like()>();
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector radius> = $r4;
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: double s0> = 0.0;
+
+        $r5 = r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector center>;
+
+        $r6 = interfaceinvoke $r5.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector like()>();
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector s1> = $r6;
+
+        $r7 = r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector center>;
+
+        $r8 = interfaceinvoke $r7.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector like()>();
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector s2> = $r8;
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: int id> = i0;
+
+        return;
+    }
+
+    protected void <init>(org.apache.mahout.math.Vector, org.apache.mahout.math.Vector, int)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        org.apache.mahout.math.Vector r1, r2, $r5, $r6, $r7, $r8;
+        int i0;
+        org.apache.mahout.math.RandomAccessSparseVector $r3, $r4;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 := @parameter1: org.apache.mahout.math.Vector;
+
+        i0 := @parameter2: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: long numObservations> = 0L;
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: long totalObservations> = 0L;
+
+        $r3 = new org.apache.mahout.math.RandomAccessSparseVector;
+
+        specialinvoke $r3.<org.apache.mahout.math.RandomAccessSparseVector: void <init>(org.apache.mahout.math.Vector)>(r1);
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector center> = $r3;
+
+        $r4 = new org.apache.mahout.math.RandomAccessSparseVector;
+
+        specialinvoke $r4.<org.apache.mahout.math.RandomAccessSparseVector: void <init>(org.apache.mahout.math.Vector)>(r2);
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector radius> = $r4;
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: double s0> = 0.0;
+
+        $r5 = r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector center>;
+
+        $r6 = interfaceinvoke $r5.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector like()>();
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector s1> = $r6;
+
+        $r7 = r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector center>;
+
+        $r8 = interfaceinvoke $r7.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector like()>();
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector s2> = $r8;
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: int id> = i0;
+
+        return;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        java.io.DataOutput r1;
+        int $i0;
+        long $l1, $l2;
+        org.apache.mahout.math.Vector $r2, $r3, $r4, $r5;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $i0 = r0.<org.apache.mahout.clustering.AbstractCluster: int id>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i0);
+
+        $l1 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: long getNumObservations()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeLong(long)>($l1);
+
+        $l2 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: long getTotalObservations()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeLong(long)>($l2);
+
+        $r2 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getCenter()>();
+
+        staticinvoke <org.apache.mahout.math.VectorWritable: void writeVector(java.io.DataOutput,org.apache.mahout.math.Vector)>(r1, $r2);
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getRadius()>();
+
+        staticinvoke <org.apache.mahout.math.VectorWritable: void writeVector(java.io.DataOutput,org.apache.mahout.math.Vector)>(r1, $r3);
+
+        $d0 = r0.<org.apache.mahout.clustering.AbstractCluster: double s0>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d0);
+
+        $r4 = r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector s1>;
+
+        staticinvoke <org.apache.mahout.math.VectorWritable: void writeVector(java.io.DataOutput,org.apache.mahout.math.Vector)>(r1, $r4);
+
+        $r5 = r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector s2>;
+
+        staticinvoke <org.apache.mahout.math.VectorWritable: void writeVector(java.io.DataOutput,org.apache.mahout.math.Vector)>(r1, $r5);
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        java.io.DataInput r1;
+        int $i0;
+        long $l1, $l2;
+        org.apache.mahout.math.Vector $r2, $r3, $r4, $r5;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $i0 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: int id> = $i0;
+
+        $l1 = interfaceinvoke r1.<java.io.DataInput: long readLong()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setNumObservations(long)>($l1);
+
+        $l2 = interfaceinvoke r1.<java.io.DataInput: long readLong()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setTotalObservations(long)>($l2);
+
+        $r2 = staticinvoke <org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector readVector(java.io.DataInput)>(r1);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setCenter(org.apache.mahout.math.Vector)>($r2);
+
+        $r3 = staticinvoke <org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector readVector(java.io.DataInput)>(r1);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setRadius(org.apache.mahout.math.Vector)>($r3);
+
+        $d0 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setS0(double)>($d0);
+
+        $r4 = staticinvoke <org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector readVector(java.io.DataInput)>(r1);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setS1(org.apache.mahout.math.Vector)>($r4);
+
+        $r5 = staticinvoke <org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector readVector(java.io.DataInput)>(r1);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setS2(org.apache.mahout.math.Vector)>($r5);
+
+        return;
+    }
+
+    public void configure(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        org.apache.hadoop.conf.Configuration r1;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        return;
+    }
+
+    public java.util.Collection getParameters()
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        java.util.List $r1;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        $r1 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        return $r1;
+    }
+
+    public void createParameters(java.lang.String, org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        java.lang.String r1;
+        org.apache.hadoop.conf.Configuration r2;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        return;
+    }
+
+    public int getId()
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        $i0 = r0.<org.apache.mahout.clustering.AbstractCluster: int id>;
+
+        return $i0;
+    }
+
+    protected void setId(int)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: int id> = i0;
+
+        return;
+    }
+
+    public long getNumObservations()
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        $l0 = r0.<org.apache.mahout.clustering.AbstractCluster: long numObservations>;
+
+        return $l0;
+    }
+
+    protected void setNumObservations(long)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        long l0;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        l0 := @parameter0: long;
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: long numObservations> = l0;
+
+        return;
+    }
+
+    public long getTotalObservations()
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        $l0 = r0.<org.apache.mahout.clustering.AbstractCluster: long totalObservations>;
+
+        return $l0;
+    }
+
+    protected void setTotalObservations(long)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        long l0;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        l0 := @parameter0: long;
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: long totalObservations> = l0;
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector getCenter()
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        org.apache.mahout.math.Vector $r1;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        $r1 = r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector center>;
+
+        return $r1;
+    }
+
+    protected void setCenter(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector center> = r1;
+
+        return;
+    }
+
+    public org.apache.mahout.math.Vector getRadius()
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        org.apache.mahout.math.Vector $r1;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        $r1 = r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector radius>;
+
+        return $r1;
+    }
+
+    protected void setRadius(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector radius> = r1;
+
+        return;
+    }
+
+    protected double getS0()
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        $d0 = r0.<org.apache.mahout.clustering.AbstractCluster: double s0>;
+
+        return $d0;
+    }
+
+    protected void setS0(double)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: double s0> = d0;
+
+        return;
+    }
+
+    protected org.apache.mahout.math.Vector getS1()
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        org.apache.mahout.math.Vector $r1;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        $r1 = r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector s1>;
+
+        return $r1;
+    }
+
+    protected void setS1(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector s1> = r1;
+
+        return;
+    }
+
+    protected org.apache.mahout.math.Vector getS2()
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        org.apache.mahout.math.Vector $r1;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        $r1 = r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector s2>;
+
+        return $r1;
+    }
+
+    protected void setS2(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector s2> = r1;
+
+        return;
+    }
+
+    public void observe(org.apache.mahout.clustering.Model)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0, r2;
+        org.apache.mahout.clustering.Model r1;
+        double $d0, $d1, $d2;
+        org.apache.mahout.math.Vector $r3, $r4, $r5, $r6, $r7, $r8;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: org.apache.mahout.clustering.Model;
+
+        r2 = (org.apache.mahout.clustering.AbstractCluster) r1;
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: double getS0()>();
+
+        $d1 = virtualinvoke r2.<org.apache.mahout.clustering.AbstractCluster: double getS0()>();
+
+        $d2 = $d0 + $d1;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setS0(double)>($d2);
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS1()>();
+
+        $r4 = virtualinvoke r2.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS1()>();
+
+        $r5 = interfaceinvoke $r3.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector plus(org.apache.mahout.math.Vector)>($r4);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setS1(org.apache.mahout.math.Vector)>($r5);
+
+        $r6 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS2()>();
+
+        $r7 = virtualinvoke r2.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS2()>();
+
+        $r8 = interfaceinvoke $r6.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector plus(org.apache.mahout.math.Vector)>($r7);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setS2(org.apache.mahout.math.Vector)>($r8);
+
+        return;
+    }
+
+    public void observe(org.apache.mahout.math.VectorWritable)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        org.apache.mahout.math.VectorWritable r1;
+        org.apache.mahout.math.Vector $r2;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: org.apache.mahout.math.VectorWritable;
+
+        $r2 = virtualinvoke r1.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void observe(org.apache.mahout.math.Vector)>($r2);
+
+        return;
+    }
+
+    public void observe(org.apache.mahout.math.VectorWritable, double)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        org.apache.mahout.math.VectorWritable r1;
+        double d0;
+        org.apache.mahout.math.Vector $r2;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: org.apache.mahout.math.VectorWritable;
+
+        d0 := @parameter1: double;
+
+        $r2 = virtualinvoke r1.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void observe(org.apache.mahout.math.Vector,double)>($r2, d0);
+
+        return;
+    }
+
+    public void observe(org.apache.mahout.math.Vector, double)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        org.apache.mahout.math.Vector r1, r2, r3, $r4, $r5, $r8, $r9, $r10;
+        double d0, $d1, $d2;
+        byte $b0;
+        org.apache.mahout.math.function.DoubleDoubleFunction $r6, $r12;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        d0 := @parameter1: double;
+
+        $b0 = d0 cmpl 1.0;
+
+        if $b0 != 0 goto label1;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void observe(org.apache.mahout.math.Vector)>(r1);
+
+        goto label5;
+
+     label1:
+        $d1 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: double getS0()>();
+
+        $d2 = $d1 + d0;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setS0(double)>($d2);
+
+        r2 = interfaceinvoke r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector times(double)>(d0);
+
+        $r4 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS1()>();
+
+        if $r4 != null goto label2;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setS1(org.apache.mahout.math.Vector)>(r2);
+
+        goto label3;
+
+     label2:
+        $r5 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS1()>();
+
+        $r6 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction PLUS>;
+
+        interfaceinvoke $r5.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>(r2, $r6);
+
+     label3:
+        $r8 = interfaceinvoke r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector times(org.apache.mahout.math.Vector)>(r1);
+
+        r3 = interfaceinvoke $r8.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector times(double)>(d0);
+
+        $r10 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS2()>();
+
+        if $r10 != null goto label4;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setS2(org.apache.mahout.math.Vector)>(r3);
+
+        goto label5;
+
+     label4:
+        $r9 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS2()>();
+
+        $r12 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction PLUS>;
+
+        interfaceinvoke $r9.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>(r3, $r12);
+
+     label5:
+        return;
+    }
+
+    public void observe(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        org.apache.mahout.math.Vector r1, r2, $r3, $r4, $r7, $r8, $r11;
+        double $d0, $d1;
+        org.apache.mahout.math.function.DoubleDoubleFunction $r5, $r9;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: double getS0()>();
+
+        $d1 = $d0 + 1.0;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setS0(double)>($d1);
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS1()>();
+
+        if $r3 != null goto label1;
+
+        $r11 = interfaceinvoke r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector clone()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setS1(org.apache.mahout.math.Vector)>($r11);
+
+        goto label2;
+
+     label1:
+        $r4 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS1()>();
+
+        $r5 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction PLUS>;
+
+        interfaceinvoke $r4.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>(r1, $r5);
+
+     label2:
+        r2 = interfaceinvoke r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector times(org.apache.mahout.math.Vector)>(r1);
+
+        $r7 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS2()>();
+
+        if $r7 != null goto label3;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setS2(org.apache.mahout.math.Vector)>(r2);
+
+        goto label4;
+
+     label3:
+        $r8 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS2()>();
+
+        $r9 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction PLUS>;
+
+        interfaceinvoke $r8.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>(r2, $r9);
+
+     label4:
+        return;
+    }
+
+    public void computeParameters()
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        double $d0, $d1, $d2, $d3, $d4, $d5;
+        byte $b0, $b5;
+        long $l1, $l2, $l3, $l4;
+        org.apache.mahout.math.Vector $r1, $r2, $r3, $r4, $r5, $r6, $r7, $r8, $r9, $r10, $r11, $r12, $r13, $r15;
+        org.apache.mahout.math.function.SquareRootFunction $r14;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: double getS0()>();
+
+        $b0 = $d0 cmpl 0.0;
+
+        if $b0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $d1 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: double getS0()>();
+
+        $l1 = (long) $d1;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setNumObservations(long)>($l1);
+
+        $l2 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: long getTotalObservations()>();
+
+        $l3 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: long getNumObservations()>();
+
+        $l4 = $l2 + $l3;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setTotalObservations(long)>($l4);
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS1()>();
+
+        $d2 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: double getS0()>();
+
+        $r2 = interfaceinvoke $r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector divide(double)>($d2);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setCenter(org.apache.mahout.math.Vector)>($r2);
+
+        $d3 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: double getS0()>();
+
+        $b5 = $d3 cmpl 1.0;
+
+        if $b5 <= 0 goto label2;
+
+        $r6 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS2()>();
+
+        $d4 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: double getS0()>();
+
+        $r8 = interfaceinvoke $r6.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector times(double)>($d4);
+
+        $r10 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS1()>();
+
+        $r9 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS1()>();
+
+        $r12 = interfaceinvoke $r10.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector times(org.apache.mahout.math.Vector)>($r9);
+
+        $r11 = interfaceinvoke $r8.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector minus(org.apache.mahout.math.Vector)>($r12);
+
+        $r14 = new org.apache.mahout.math.function.SquareRootFunction;
+
+        specialinvoke $r14.<org.apache.mahout.math.function.SquareRootFunction: void <init>()>();
+
+        $r13 = interfaceinvoke $r11.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.function.DoubleFunction)>($r14);
+
+        $d5 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: double getS0()>();
+
+        $r15 = interfaceinvoke $r13.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector divide(double)>($d5);
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setRadius(org.apache.mahout.math.Vector)>($r15);
+
+     label2:
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setS0(double)>(0.0);
+
+        $r3 = r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector center>;
+
+        $r4 = interfaceinvoke $r3.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector like()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setS1(org.apache.mahout.math.Vector)>($r4);
+
+        $r5 = r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector center>;
+
+        $r7 = interfaceinvoke $r5.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector like()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void setS2(org.apache.mahout.math.Vector)>($r7);
+
+        return;
+    }
+
+    public java.lang.String asFormatString(java.lang.String[])
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        java.lang.String[] r1;
+        org.codehaus.jackson.map.ObjectMapper $r3;
+        java.util.Map $r4;
+        java.io.IOException $r5;
+        org.slf4j.Logger $r6;
+        java.lang.String r7;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: java.lang.String[];
+
+        r7 = "";
+
+     label1:
+        $r3 = <org.apache.mahout.clustering.AbstractCluster: org.codehaus.jackson.map.ObjectMapper jxn>;
+
+        $r4 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: java.util.Map asJson(java.lang.String[])>(r1);
+
+        r7 = virtualinvoke $r3.<org.codehaus.jackson.map.ObjectMapper: java.lang.String writeValueAsString(java.lang.Object)>($r4);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        $r6 = <org.apache.mahout.clustering.AbstractCluster: org.slf4j.Logger log>;
+
+        interfaceinvoke $r6.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>("Error writing JSON as String.", $r5);
+
+     label4:
+        return r7;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public java.util.Map asJson(java.lang.String[])
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        java.lang.String[] r1;
+        java.util.HashMap $r3;
+        java.lang.String $r4;
+        long $l0;
+        java.lang.Long $r6;
+        org.apache.mahout.math.Vector $r8, $r9, $r13, $r20;
+        java.util.List $r11, $r12;
+        org.slf4j.Logger $r15, $r17;
+        java.io.IOException $r16, $r18;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: java.lang.String[];
+
+        $r3 = new java.util.HashMap;
+
+        specialinvoke $r3.<java.util.HashMap: void <init>()>();
+
+        $r4 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: java.lang.String getIdentifier()>();
+
+        interfaceinvoke $r3.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("identifier", $r4);
+
+        $l0 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: long getNumObservations()>();
+
+        $r6 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        interfaceinvoke $r3.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("n", $r6);
+
+        $r8 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getCenter()>();
+
+        if $r8 == null goto label4;
+
+     label1:
+        $r13 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getCenter()>();
+
+        $r12 = staticinvoke <org.apache.mahout.clustering.AbstractCluster: java.util.List formatVectorAsJson(org.apache.mahout.math.Vector,java.lang.String[])>($r13, r1);
+
+        interfaceinvoke $r3.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("c", $r12);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r16 := @caughtexception;
+
+        $r15 = <org.apache.mahout.clustering.AbstractCluster: org.slf4j.Logger log>;
+
+        interfaceinvoke $r15.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>("IOException:  ", $r16);
+
+     label4:
+        $r20 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getRadius()>();
+
+        if $r20 == null goto label8;
+
+     label5:
+        $r9 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getRadius()>();
+
+        $r11 = staticinvoke <org.apache.mahout.clustering.AbstractCluster: java.util.List formatVectorAsJson(org.apache.mahout.math.Vector,java.lang.String[])>($r9, r1);
+
+        interfaceinvoke $r3.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>("r", $r11);
+
+     label6:
+        goto label8;
+
+     label7:
+        $r18 := @caughtexception;
+
+        $r17 = <org.apache.mahout.clustering.AbstractCluster: org.slf4j.Logger log>;
+
+        interfaceinvoke $r17.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>("IOException:  ", $r18);
+
+     label8:
+        return $r3;
+
+        catch java.io.IOException from label1 to label2 with label3;
+        catch java.io.IOException from label5 to label6 with label7;
+    }
+
+    public abstract java.lang.String getIdentifier();
+
+    public org.apache.mahout.math.Vector computeCentroid()
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        double $d0, $d1;
+        byte $b0;
+        org.apache.mahout.math.Vector $r1, $r2;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: double getS0()>();
+
+        $b0 = $d0 cmpl 0.0;
+
+        if $b0 != 0 goto label1;
+
+        $r2 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getCenter()>();
+
+        goto label2;
+
+     label1:
+        $r1 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getS1()>();
+
+        $d1 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: double getS0()>();
+
+        $r2 = interfaceinvoke $r1.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector divide(double)>($d1);
+
+     label2:
+        return $r2;
+    }
+
+    public static java.lang.String formatVector(org.apache.mahout.math.Vector, java.lang.String[])
+    {
+        org.apache.mahout.math.Vector r0;
+        java.lang.String[] r1;
+        org.codehaus.jackson.map.ObjectMapper $r3;
+        java.util.List $r4;
+        java.io.IOException $r5;
+        org.slf4j.Logger $r6;
+        java.lang.String r7;
+
+        r0 := @parameter0: org.apache.mahout.math.Vector;
+
+        r1 := @parameter1: java.lang.String[];
+
+        r7 = "";
+
+     label1:
+        $r3 = <org.apache.mahout.clustering.AbstractCluster: org.codehaus.jackson.map.ObjectMapper jxn>;
+
+        $r4 = staticinvoke <org.apache.mahout.clustering.AbstractCluster: java.util.List formatVectorAsJson(org.apache.mahout.math.Vector,java.lang.String[])>(r0, r1);
+
+        r7 = virtualinvoke $r3.<org.codehaus.jackson.map.ObjectMapper: java.lang.String writeValueAsString(java.lang.Object)>($r4);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        $r6 = <org.apache.mahout.clustering.AbstractCluster: org.slf4j.Logger log>;
+
+        interfaceinvoke $r6.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>("Error writing JSON as String.", $r5);
+
+     label4:
+        return r7;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public static java.util.List formatVectorAsJson(org.apache.mahout.math.Vector, java.lang.String[]) throws java.io.IOException
+    {
+        org.apache.mahout.math.Vector r0, $r14;
+        java.lang.String[] r1;
+        boolean z0, z1, $z2, $z5, $z6, $z7, $z8;
+        java.util.Iterator r4;
+        org.apache.mahout.math.Vector$Element r5;
+        double d0, $d1, $d2, $d3;
+        java.lang.Iterable $r8;
+        java.lang.Object $r9;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7;
+        java.lang.Double $r10, $r12;
+        java.lang.String $r13, r15;
+        long $l8;
+        org.apache.mahout.math.SequentialAccessSparseVector r17;
+        java.util.LinkedList r18;
+        java.util.HashMap r19;
+
+        r0 := @parameter0: org.apache.mahout.math.Vector;
+
+        r1 := @parameter1: java.lang.String[];
+
+        if r1 == null goto label01;
+
+        $z5 = 1;
+
+        goto label02;
+
+     label01:
+        $z5 = 0;
+
+     label02:
+        z0 = $z5;
+
+        $z2 = interfaceinvoke r0.<org.apache.mahout.math.Vector: boolean isDense()>();
+
+        if $z2 != 0 goto label03;
+
+        $i7 = interfaceinvoke r0.<org.apache.mahout.math.Vector: int getNumNondefaultElements()>();
+
+        $i6 = interfaceinvoke r0.<org.apache.mahout.math.Vector: int size()>();
+
+        if $i7 == $i6 goto label03;
+
+        $z6 = 1;
+
+        goto label04;
+
+     label03:
+        $z6 = 0;
+
+     label04:
+        z1 = $z6;
+
+        $z7 = interfaceinvoke r0.<org.apache.mahout.math.Vector: boolean isSequentialAccess()>();
+
+        if $z7 == 0 goto label05;
+
+        $r14 = r0;
+
+        goto label06;
+
+     label05:
+        r17 = new org.apache.mahout.math.SequentialAccessSparseVector;
+
+        $r14 = r17;
+
+        specialinvoke r17.<org.apache.mahout.math.SequentialAccessSparseVector: void <init>(org.apache.mahout.math.Vector)>(r0);
+
+     label06:
+        r18 = new java.util.LinkedList;
+
+        specialinvoke r18.<java.util.LinkedList: void <init>()>();
+
+        r15 = "";
+
+        $r8 = interfaceinvoke $r14.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r4 = interfaceinvoke $r8.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label07:
+        $z8 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z8 == 0 goto label13;
+
+        $r9 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.Vector$Element) $r9;
+
+        if z0 == 0 goto label08;
+
+        $i2 = lengthof r1;
+
+        $i3 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $i1 = $i3 + 1;
+
+        if $i2 < $i1 goto label08;
+
+        $i5 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $r13 = r1[$i5];
+
+        if $r13 == null goto label08;
+
+        $i4 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        r15 = r1[$i4];
+
+        goto label10;
+
+     label08:
+        if z0 != 0 goto label09;
+
+        if z1 == 0 goto label10;
+
+     label09:
+        $i0 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        r15 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>($i0);
+
+     label10:
+        r19 = new java.util.HashMap;
+
+        specialinvoke r19.<java.util.HashMap: void <init>()>();
+
+        $d1 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        $d2 = $d1 * 1000.0;
+
+        $l8 = staticinvoke <java.lang.Math: long round(double)>($d2);
+
+        $d3 = (double) $l8;
+
+        d0 = $d3 / 1000.0;
+
+        if z0 != 0 goto label11;
+
+        if z1 == 0 goto label12;
+
+     label11:
+        $r10 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d0);
+
+        interfaceinvoke r19.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r15, $r10);
+
+        interfaceinvoke r18.<java.util.List: boolean add(java.lang.Object)>(r19);
+
+        goto label07;
+
+     label12:
+        $r12 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d0);
+
+        interfaceinvoke r18.<java.util.List: boolean add(java.lang.Object)>($r12);
+
+        goto label07;
+
+     label13:
+        return r18;
+    }
+
+    public boolean isConverged()
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        return 0;
+    }
+
+    public volatile void observe(java.lang.Object, double)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        java.lang.Object r1;
+        double d0;
+        org.apache.mahout.math.VectorWritable $r2;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: java.lang.Object;
+
+        d0 := @parameter1: double;
+
+        $r2 = (org.apache.mahout.math.VectorWritable) r1;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void observe(org.apache.mahout.math.VectorWritable,double)>($r2, d0);
+
+        return;
+    }
+
+    public volatile void observe(java.lang.Object)
+    {
+        org.apache.mahout.clustering.AbstractCluster r0;
+        java.lang.Object r1;
+        org.apache.mahout.math.VectorWritable $r2;
+
+        r0 := @this: org.apache.mahout.clustering.AbstractCluster;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (org.apache.mahout.math.VectorWritable) r1;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: void observe(org.apache.mahout.math.VectorWritable)>($r2);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.codehaus.jackson.map.ObjectMapper $r0;
+
+        $r0 = new org.codehaus.jackson.map.ObjectMapper;
+
+        specialinvoke $r0.<org.codehaus.jackson.map.ObjectMapper: void <init>()>();
+
+        <org.apache.mahout.clustering.AbstractCluster: org.codehaus.jackson.map.ObjectMapper jxn> = $r0;
+
+        return;
+    }
+}

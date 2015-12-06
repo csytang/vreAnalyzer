@@ -1,0 +1,135 @@
+class org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private java.util.Random random;
+    private double trainingBound;
+    private double probeBound;
+
+    void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.mahout.common.RandomWrapper $r2;
+        org.apache.hadoop.conf.Configuration $r3, $r6;
+        java.lang.String $r4, $r5, $r7, $r8;
+        double $d0, $d1, $d2, $d3;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r2 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper: java.util.Random random> = $r2;
+
+        $r3 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r4 = staticinvoke <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: java.lang.String access$000()>();
+
+        $r5 = virtualinvoke $r3.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>($r4);
+
+        $d0 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r5);
+
+        r0.<org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper: double trainingBound> = $d0;
+
+        $d1 = r0.<org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper: double trainingBound>;
+
+        $r6 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r7 = staticinvoke <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: java.lang.String access$100()>();
+
+        $r8 = virtualinvoke $r6.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>($r7);
+
+        $d2 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r8);
+
+        $d3 = $d1 + $d2;
+
+        r0.<org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper: double probeBound> = $d3;
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.LongWritable, org.apache.hadoop.io.Text, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper r0;
+        org.apache.hadoop.io.LongWritable r1;
+        org.apache.hadoop.io.Text r2, $r5, $r6;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        double d0, $d1, $d2;
+        java.util.Random $r4;
+        byte $b0, $b1;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.LongWritable;
+
+        r2 := @parameter1: org.apache.hadoop.io.Text;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper: java.util.Random random>;
+
+        d0 = virtualinvoke $r4.<java.util.Random: double nextDouble()>();
+
+        $d1 = r0.<org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper: double trainingBound>;
+
+        $b0 = d0 cmpg $d1;
+
+        if $b0 > 0 goto label1;
+
+        $r6 = staticinvoke <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: org.apache.hadoop.io.Text access$200()>();
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r6, r2);
+
+        goto label2;
+
+     label1:
+        $d2 = r0.<org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper: double probeBound>;
+
+        $b1 = d0 cmpg $d2;
+
+        if $b1 > 0 goto label2;
+
+        $r5 = staticinvoke <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: org.apache.hadoop.io.Text access$300()>();
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r5, r2);
+
+     label2:
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.hadoop.io.Text $r4;
+        org.apache.hadoop.io.LongWritable $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.LongWritable) r1;
+
+        $r4 = (org.apache.hadoop.io.Text) r2;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter$MarkPreferencesMapper: void map(org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

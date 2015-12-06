@@ -1,0 +1,113 @@
+public class org.apache.mahout.math.hadoop.MatrixMultiplicationJob$MatrixMultiplicationReducer extends org.apache.hadoop.mapred.MapReduceBase implements org.apache.hadoop.mapred.Reducer
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.MatrixMultiplicationJob$MatrixMultiplicationReducer r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.MatrixMultiplicationJob$MatrixMultiplicationReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapred.MapReduceBase: void <init>()>();
+
+        return;
+    }
+
+    public void reduce(org.apache.hadoop.io.IntWritable, java.util.Iterator, org.apache.hadoop.mapred.OutputCollector, org.apache.hadoop.mapred.Reporter) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.MatrixMultiplicationJob$MatrixMultiplicationReducer r0;
+        org.apache.hadoop.io.IntWritable r1;
+        java.util.Iterator r2;
+        org.apache.hadoop.mapred.OutputCollector r3;
+        org.apache.hadoop.mapred.Reporter r4;
+        org.apache.mahout.math.Vector r6, $r10;
+        boolean $z0, $z1;
+        org.apache.mahout.math.RandomAccessSparseVector $r7;
+        java.lang.Object $r8, $r13;
+        org.apache.mahout.math.VectorWritable $r9, $r11, $r14;
+        org.apache.mahout.math.SequentialAccessSparseVector $r12;
+        org.apache.mahout.math.function.DoubleDoubleFunction $r16;
+
+        r0 := @this: org.apache.mahout.math.hadoop.MatrixMultiplicationJob$MatrixMultiplicationReducer;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: java.util.Iterator;
+
+        r3 := @parameter2: org.apache.hadoop.mapred.OutputCollector;
+
+        r4 := @parameter3: org.apache.hadoop.mapred.Reporter;
+
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 != 0 goto label1;
+
+        return;
+
+     label1:
+        $r7 = new org.apache.mahout.math.RandomAccessSparseVector;
+
+        $r8 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r9 = (org.apache.mahout.math.VectorWritable) $r8;
+
+        $r10 = virtualinvoke $r9.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        specialinvoke $r7.<org.apache.mahout.math.RandomAccessSparseVector: void <init>(org.apache.mahout.math.Vector)>($r10);
+
+     label2:
+        $z1 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label3;
+
+        $r13 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        $r14 = (org.apache.mahout.math.VectorWritable) $r13;
+
+        r6 = virtualinvoke $r14.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r16 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction PLUS>;
+
+        interfaceinvoke $r7.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>(r6, $r16);
+
+        goto label2;
+
+     label3:
+        $r11 = new org.apache.mahout.math.VectorWritable;
+
+        $r12 = new org.apache.mahout.math.SequentialAccessSparseVector;
+
+        specialinvoke $r12.<org.apache.mahout.math.SequentialAccessSparseVector: void <init>(org.apache.mahout.math.Vector)>($r7);
+
+        specialinvoke $r11.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r12);
+
+        interfaceinvoke r3.<org.apache.hadoop.mapred.OutputCollector: void collect(java.lang.Object,java.lang.Object)>(r1, $r11);
+
+        return;
+    }
+
+    public volatile void reduce(java.lang.Object, java.util.Iterator, org.apache.hadoop.mapred.OutputCollector, org.apache.hadoop.mapred.Reporter) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.MatrixMultiplicationJob$MatrixMultiplicationReducer r0;
+        java.lang.Object r1;
+        java.util.Iterator r2;
+        org.apache.hadoop.mapred.OutputCollector r3;
+        org.apache.hadoop.mapred.Reporter r4;
+        org.apache.hadoop.io.IntWritable $r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.MatrixMultiplicationJob$MatrixMultiplicationReducer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.util.Iterator;
+
+        r3 := @parameter2: org.apache.hadoop.mapred.OutputCollector;
+
+        r4 := @parameter3: org.apache.hadoop.mapred.Reporter;
+
+        $r5 = (org.apache.hadoop.io.IntWritable) r1;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.MatrixMultiplicationJob$MatrixMultiplicationReducer: void reduce(org.apache.hadoop.io.IntWritable,java.util.Iterator,org.apache.hadoop.mapred.OutputCollector,org.apache.hadoop.mapred.Reporter)>($r5, r2, r3, r4);
+
+        return;
+    }
+}

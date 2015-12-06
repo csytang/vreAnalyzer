@@ -1,0 +1,292 @@
+public class org.apache.mahout.classifier.df.split.DefaultIgSplit extends org.apache.mahout.classifier.df.split.IgSplit
+{
+    private int[] counts;
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.df.split.DefaultIgSplit r0;
+
+        r0 := @this: org.apache.mahout.classifier.df.split.DefaultIgSplit;
+
+        specialinvoke r0.<org.apache.mahout.classifier.df.split.IgSplit: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.mahout.classifier.df.split.Split computeSplit(org.apache.mahout.classifier.df.data.Data, int)
+    {
+        org.apache.mahout.classifier.df.split.DefaultIgSplit r0;
+        org.apache.mahout.classifier.df.data.Data r1;
+        int i0, i1, i3;
+        double d0, d1, d2, d3, d4;
+        org.apache.mahout.classifier.df.data.Dataset $r3;
+        boolean $z0;
+        org.apache.mahout.classifier.df.split.Split $r4, $r5;
+        byte $b2;
+        double[] r6;
+
+        r0 := @this: org.apache.mahout.classifier.df.split.DefaultIgSplit;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.data.Data;
+
+        i0 := @parameter1: int;
+
+        $r3 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        $z0 = virtualinvoke $r3.<org.apache.mahout.classifier.df.data.Dataset: boolean isNumerical(int)>(i0);
+
+        if $z0 == 0 goto label4;
+
+        r6 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: double[] values(int)>(i0);
+
+        d2 = -1.0;
+
+        d3 = 0.0;
+
+        i1 = lengthof r6;
+
+        i3 = 0;
+
+     label1:
+        if i3 >= i1 goto label3;
+
+        d0 = r6[i3];
+
+        d1 = virtualinvoke r0.<org.apache.mahout.classifier.df.split.DefaultIgSplit: double numericalIg(org.apache.mahout.classifier.df.data.Data,int,double)>(r1, i0, d0);
+
+        $b2 = d1 cmpl d2;
+
+        if $b2 <= 0 goto label2;
+
+        d2 = d1;
+
+        d3 = d0;
+
+     label2:
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label3:
+        $r5 = new org.apache.mahout.classifier.df.split.Split;
+
+        specialinvoke $r5.<org.apache.mahout.classifier.df.split.Split: void <init>(int,double,double)>(i0, d2, d3);
+
+        return $r5;
+
+     label4:
+        d4 = virtualinvoke r0.<org.apache.mahout.classifier.df.split.DefaultIgSplit: double categoricalIg(org.apache.mahout.classifier.df.data.Data,int)>(r1, i0);
+
+        $r4 = new org.apache.mahout.classifier.df.split.Split;
+
+        specialinvoke $r4.<org.apache.mahout.classifier.df.split.Split: void <init>(int,double)>(i0, d4);
+
+        return $r4;
+    }
+
+    double categoricalIg(org.apache.mahout.classifier.df.data.Data, int)
+    {
+        org.apache.mahout.classifier.df.split.DefaultIgSplit r0;
+        org.apache.mahout.classifier.df.data.Data r1, r4;
+        int i0, i1, $i2, $i3, i4;
+        double[] r2;
+        double d0, d1, d2, $d3, $d4, $d5, $d6, $d7, $d8, d9;
+        org.apache.mahout.classifier.df.data.conditions.Condition $r5;
+
+        r0 := @this: org.apache.mahout.classifier.df.split.DefaultIgSplit;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.data.Data;
+
+        i0 := @parameter1: int;
+
+        r2 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: double[] values(int)>(i0);
+
+        d0 = virtualinvoke r0.<org.apache.mahout.classifier.df.split.DefaultIgSplit: double entropy(org.apache.mahout.classifier.df.data.Data)>(r1);
+
+        d9 = 0.0;
+
+        $i2 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        $d4 = (double) $i2;
+
+        d1 = 1.0 / $d4;
+
+        i1 = lengthof r2;
+
+        i4 = 0;
+
+     label1:
+        if i4 >= i1 goto label2;
+
+        d2 = r2[i4];
+
+        $r5 = staticinvoke <org.apache.mahout.classifier.df.data.conditions.Condition: org.apache.mahout.classifier.df.data.conditions.Condition equals(int,double)>(i0, d2);
+
+        r4 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Data subset(org.apache.mahout.classifier.df.data.conditions.Condition)>($r5);
+
+        $i3 = virtualinvoke r4.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        $d5 = (double) $i3;
+
+        $d7 = $d5 * d1;
+
+        $d6 = virtualinvoke r0.<org.apache.mahout.classifier.df.split.DefaultIgSplit: double entropy(org.apache.mahout.classifier.df.data.Data)>(r4);
+
+        $d8 = $d7 * $d6;
+
+        d9 = d9 + $d8;
+
+        i4 = i4 + 1;
+
+        goto label1;
+
+     label2:
+        $d3 = d0 - d9;
+
+        return $d3;
+    }
+
+    double numericalIg(org.apache.mahout.classifier.df.data.Data, int, double)
+    {
+        org.apache.mahout.classifier.df.split.DefaultIgSplit r0;
+        org.apache.mahout.classifier.df.data.Data r1, r4, r5;
+        int i0, $i1, $i2, $i3;
+        double d0, d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10, d11, d12, d13;
+        org.apache.mahout.classifier.df.data.conditions.Condition $r2, $r3;
+
+        r0 := @this: org.apache.mahout.classifier.df.split.DefaultIgSplit;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.data.Data;
+
+        i0 := @parameter1: int;
+
+        d0 := @parameter2: double;
+
+        d11 = virtualinvoke r0.<org.apache.mahout.classifier.df.split.DefaultIgSplit: double entropy(org.apache.mahout.classifier.df.data.Data)>(r1);
+
+        $i1 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        $d2 = (double) $i1;
+
+        d1 = 1.0 / $d2;
+
+        $r2 = staticinvoke <org.apache.mahout.classifier.df.data.conditions.Condition: org.apache.mahout.classifier.df.data.conditions.Condition lesser(int,double)>(i0, d0);
+
+        r4 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Data subset(org.apache.mahout.classifier.df.data.conditions.Condition)>($r2);
+
+        $i2 = virtualinvoke r4.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        $d3 = (double) $i2;
+
+        $d5 = $d3 * d1;
+
+        $d4 = virtualinvoke r0.<org.apache.mahout.classifier.df.split.DefaultIgSplit: double entropy(org.apache.mahout.classifier.df.data.Data)>(r4);
+
+        $d6 = $d5 * $d4;
+
+        d12 = d11 - $d6;
+
+        $r3 = staticinvoke <org.apache.mahout.classifier.df.data.conditions.Condition: org.apache.mahout.classifier.df.data.conditions.Condition greaterOrEquals(int,double)>(i0, d0);
+
+        r5 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Data subset(org.apache.mahout.classifier.df.data.conditions.Condition)>($r3);
+
+        $i3 = virtualinvoke r5.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        $d8 = (double) $i3;
+
+        $d7 = $d8 * d1;
+
+        $d10 = virtualinvoke r0.<org.apache.mahout.classifier.df.split.DefaultIgSplit: double entropy(org.apache.mahout.classifier.df.data.Data)>(r5);
+
+        $d9 = $d7 * $d10;
+
+        d13 = d12 - $d9;
+
+        return d13;
+    }
+
+    protected double entropy(org.apache.mahout.classifier.df.data.Data)
+    {
+        org.apache.mahout.classifier.df.split.DefaultIgSplit r0;
+        org.apache.mahout.classifier.df.data.Data r1;
+        double d0, d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, d9;
+        int i0, $i1, $i2, i3, $i4;
+        int[] $r2, $r3, $r4, $r5, $r7;
+        org.apache.mahout.classifier.df.data.Dataset $r6, $r8;
+
+        r0 := @this: org.apache.mahout.classifier.df.split.DefaultIgSplit;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.data.Data;
+
+        $i1 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        $d2 = (double) $i1;
+
+        d0 = 1.0 / $d2;
+
+        $r2 = r0.<org.apache.mahout.classifier.df.split.DefaultIgSplit: int[] counts>;
+
+        if $r2 != null goto label1;
+
+        $r6 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        $i2 = virtualinvoke $r6.<org.apache.mahout.classifier.df.data.Dataset: int nblabels()>();
+
+        $r7 = newarray (int)[$i2];
+
+        r0.<org.apache.mahout.classifier.df.split.DefaultIgSplit: int[] counts> = $r7;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.classifier.df.split.DefaultIgSplit: int[] counts>;
+
+        staticinvoke <java.util.Arrays: void fill(int[],int)>($r3, 0);
+
+        $r4 = r0.<org.apache.mahout.classifier.df.split.DefaultIgSplit: int[] counts>;
+
+        virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: void countLabels(int[])>($r4);
+
+        d9 = 0.0;
+
+        i3 = 0;
+
+     label2:
+        $r8 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Dataset getDataset()>();
+
+        $i4 = virtualinvoke $r8.<org.apache.mahout.classifier.df.data.Dataset: int nblabels()>();
+
+        if i3 >= $i4 goto label5;
+
+        $r5 = r0.<org.apache.mahout.classifier.df.split.DefaultIgSplit: int[] counts>;
+
+        i0 = $r5[i3];
+
+        if i0 != 0 goto label3;
+
+        goto label4;
+
+     label3:
+        $d3 = (double) i0;
+
+        d1 = $d3 * d0;
+
+        $d5 = neg d1;
+
+        $d4 = staticinvoke <java.lang.Math: double log(double)>(d1);
+
+        $d6 = $d5 * $d4;
+
+        $d7 = <org.apache.mahout.classifier.df.split.DefaultIgSplit: double LOG2>;
+
+        $d8 = $d6 / $d7;
+
+        d9 = d9 + $d8;
+
+     label4:
+        i3 = i3 + 1;
+
+        goto label2;
+
+     label5:
+        return d9;
+    }
+}

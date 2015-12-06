@@ -1,0 +1,127 @@
+public final enum class org.apache.mahout.vectorizer.collocations.llr.Gram$Type extends java.lang.Enum
+{
+    public static final enum org.apache.mahout.vectorizer.collocations.llr.Gram$Type HEAD;
+    public static final enum org.apache.mahout.vectorizer.collocations.llr.Gram$Type TAIL;
+    public static final enum org.apache.mahout.vectorizer.collocations.llr.Gram$Type UNIGRAM;
+    public static final enum org.apache.mahout.vectorizer.collocations.llr.Gram$Type NGRAM;
+    private final char x;
+    private static final org.apache.mahout.vectorizer.collocations.llr.Gram$Type[] $VALUES;
+
+    public static org.apache.mahout.vectorizer.collocations.llr.Gram$Type[] values()
+    {
+        org.apache.mahout.vectorizer.collocations.llr.Gram$Type[] $r0, $r2;
+        java.lang.Object $r1;
+
+        $r0 = <org.apache.mahout.vectorizer.collocations.llr.Gram$Type: org.apache.mahout.vectorizer.collocations.llr.Gram$Type[] $VALUES>;
+
+        $r1 = virtualinvoke $r0.<java.lang.Object: java.lang.Object clone()>();
+
+        $r2 = (org.apache.mahout.vectorizer.collocations.llr.Gram$Type[]) $r1;
+
+        return $r2;
+    }
+
+    public static org.apache.mahout.vectorizer.collocations.llr.Gram$Type valueOf(java.lang.String)
+    {
+        java.lang.String r0;
+        java.lang.Enum $r1;
+        org.apache.mahout.vectorizer.collocations.llr.Gram$Type $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <java.lang.Enum: java.lang.Enum valueOf(java.lang.Class,java.lang.String)>(class "org/apache/mahout/vectorizer/collocations/llr/Gram$Type", r0);
+
+        $r2 = (org.apache.mahout.vectorizer.collocations.llr.Gram$Type) $r1;
+
+        return $r2;
+    }
+
+    private void <init>(java.lang.String, int, char)
+    {
+        org.apache.mahout.vectorizer.collocations.llr.Gram$Type r0;
+        java.lang.String r1;
+        int i0;
+        char c1;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.Gram$Type;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        c1 := @parameter2: char;
+
+        specialinvoke r0.<java.lang.Enum: void <init>(java.lang.String,int)>(r1, i0);
+
+        r0.<org.apache.mahout.vectorizer.collocations.llr.Gram$Type: char x> = c1;
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.vectorizer.collocations.llr.Gram$Type r0;
+        char $c0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.Gram$Type;
+
+        $c0 = r0.<org.apache.mahout.vectorizer.collocations.llr.Gram$Type: char x>;
+
+        $r1 = staticinvoke <java.lang.String: java.lang.String valueOf(char)>($c0);
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        org.apache.mahout.vectorizer.collocations.llr.Gram$Type $r0, $r1, $r2, $r3, $r5, $r6, $r7, $r8;
+        org.apache.mahout.vectorizer.collocations.llr.Gram$Type[] $r4;
+
+        $r0 = new org.apache.mahout.vectorizer.collocations.llr.Gram$Type;
+
+        specialinvoke $r0.<org.apache.mahout.vectorizer.collocations.llr.Gram$Type: void <init>(java.lang.String,int,char)>("HEAD", 0, 104);
+
+        <org.apache.mahout.vectorizer.collocations.llr.Gram$Type: org.apache.mahout.vectorizer.collocations.llr.Gram$Type HEAD> = $r0;
+
+        $r1 = new org.apache.mahout.vectorizer.collocations.llr.Gram$Type;
+
+        specialinvoke $r1.<org.apache.mahout.vectorizer.collocations.llr.Gram$Type: void <init>(java.lang.String,int,char)>("TAIL", 1, 116);
+
+        <org.apache.mahout.vectorizer.collocations.llr.Gram$Type: org.apache.mahout.vectorizer.collocations.llr.Gram$Type TAIL> = $r1;
+
+        $r2 = new org.apache.mahout.vectorizer.collocations.llr.Gram$Type;
+
+        specialinvoke $r2.<org.apache.mahout.vectorizer.collocations.llr.Gram$Type: void <init>(java.lang.String,int,char)>("UNIGRAM", 2, 117);
+
+        <org.apache.mahout.vectorizer.collocations.llr.Gram$Type: org.apache.mahout.vectorizer.collocations.llr.Gram$Type UNIGRAM> = $r2;
+
+        $r3 = new org.apache.mahout.vectorizer.collocations.llr.Gram$Type;
+
+        specialinvoke $r3.<org.apache.mahout.vectorizer.collocations.llr.Gram$Type: void <init>(java.lang.String,int,char)>("NGRAM", 3, 110);
+
+        <org.apache.mahout.vectorizer.collocations.llr.Gram$Type: org.apache.mahout.vectorizer.collocations.llr.Gram$Type NGRAM> = $r3;
+
+        $r4 = newarray (org.apache.mahout.vectorizer.collocations.llr.Gram$Type)[4];
+
+        $r5 = <org.apache.mahout.vectorizer.collocations.llr.Gram$Type: org.apache.mahout.vectorizer.collocations.llr.Gram$Type HEAD>;
+
+        $r4[0] = $r5;
+
+        $r6 = <org.apache.mahout.vectorizer.collocations.llr.Gram$Type: org.apache.mahout.vectorizer.collocations.llr.Gram$Type TAIL>;
+
+        $r4[1] = $r6;
+
+        $r7 = <org.apache.mahout.vectorizer.collocations.llr.Gram$Type: org.apache.mahout.vectorizer.collocations.llr.Gram$Type UNIGRAM>;
+
+        $r4[2] = $r7;
+
+        $r8 = <org.apache.mahout.vectorizer.collocations.llr.Gram$Type: org.apache.mahout.vectorizer.collocations.llr.Gram$Type NGRAM>;
+
+        $r4[3] = $r8;
+
+        <org.apache.mahout.vectorizer.collocations.llr.Gram$Type: org.apache.mahout.vectorizer.collocations.llr.Gram$Type[] $VALUES> = $r4;
+
+        return;
+    }
+}

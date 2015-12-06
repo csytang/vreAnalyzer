@@ -1,0 +1,166 @@
+public final class org.apache.mahout.common.iterator.SamplingIterator extends com.google.common.collect.AbstractIterator
+{
+    private final org.apache.commons.math3.distribution.PascalDistribution geometricDistribution;
+    private final java.util.Iterator delegate;
+
+    public void <init>(java.util.Iterator, double)
+    {
+        org.apache.mahout.common.iterator.SamplingIterator r0;
+        java.util.Iterator r1;
+        double d0;
+        org.apache.mahout.common.RandomWrapper $r2;
+
+        r0 := @this: org.apache.mahout.common.iterator.SamplingIterator;
+
+        r1 := @parameter0: java.util.Iterator;
+
+        d0 := @parameter1: double;
+
+        $r2 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        specialinvoke r0.<org.apache.mahout.common.iterator.SamplingIterator: void <init>(org.apache.mahout.common.RandomWrapper,java.util.Iterator,double)>($r2, r1, d0);
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.common.RandomWrapper, java.util.Iterator, double)
+    {
+        org.apache.mahout.common.iterator.SamplingIterator r0;
+        org.apache.mahout.common.RandomWrapper r1;
+        java.util.Iterator r2;
+        double d0;
+        byte $b0, $b1;
+        boolean $z0;
+        java.lang.StringBuilder $r4, $r5, $r6;
+        java.lang.String $r7;
+        org.apache.commons.math3.distribution.PascalDistribution $r8;
+        org.apache.commons.math3.random.RandomGenerator $r9;
+
+        r0 := @this: org.apache.mahout.common.iterator.SamplingIterator;
+
+        r1 := @parameter0: org.apache.mahout.common.RandomWrapper;
+
+        r2 := @parameter1: java.util.Iterator;
+
+        d0 := @parameter2: double;
+
+        specialinvoke r0.<com.google.common.collect.AbstractIterator: void <init>()>();
+
+        staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r2);
+
+        $b0 = d0 cmpl 0.0;
+
+        if $b0 <= 0 goto label1;
+
+        $b1 = d0 cmpg 1.0;
+
+        if $b1 > 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Must be: 0.0 < samplingRate <= 1.0. But samplingRate = ");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(double)>(d0);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z0, $r7);
+
+        $r8 = new org.apache.commons.math3.distribution.PascalDistribution;
+
+        $r9 = virtualinvoke r1.<org.apache.mahout.common.RandomWrapper: org.apache.commons.math3.random.RandomGenerator getRandomGenerator()>();
+
+        specialinvoke $r8.<org.apache.commons.math3.distribution.PascalDistribution: void <init>(org.apache.commons.math3.random.RandomGenerator,int,double)>($r9, 1, d0);
+
+        r0.<org.apache.mahout.common.iterator.SamplingIterator: org.apache.commons.math3.distribution.PascalDistribution geometricDistribution> = $r8;
+
+        r0.<org.apache.mahout.common.iterator.SamplingIterator: java.util.Iterator delegate> = r2;
+
+        return;
+    }
+
+    protected java.lang.Object computeNext()
+    {
+        org.apache.mahout.common.iterator.SamplingIterator r0;
+        int i0, i1;
+        org.apache.commons.math3.distribution.PascalDistribution $r1;
+        java.util.Iterator $r2, $r3, $r5, $r7, $r8, $r10;
+        boolean $z0, $z1, $z2, $z3;
+        java.lang.Object $r4, $r6, $r11;
+        org.apache.mahout.cf.taste.impl.common.SkippingIterator r12;
+
+        r0 := @this: org.apache.mahout.common.iterator.SamplingIterator;
+
+        $r1 = r0.<org.apache.mahout.common.iterator.SamplingIterator: org.apache.commons.math3.distribution.PascalDistribution geometricDistribution>;
+
+        i0 = virtualinvoke $r1.<org.apache.commons.math3.distribution.PascalDistribution: int sample()>();
+
+        $r2 = r0.<org.apache.mahout.common.iterator.SamplingIterator: java.util.Iterator delegate>;
+
+        $z0 = $r2 instanceof org.apache.mahout.cf.taste.impl.common.SkippingIterator;
+
+        if $z0 == 0 goto label1;
+
+        $r10 = r0.<org.apache.mahout.common.iterator.SamplingIterator: java.util.Iterator delegate>;
+
+        r12 = (org.apache.mahout.cf.taste.impl.common.SkippingIterator) $r10;
+
+        interfaceinvoke r12.<org.apache.mahout.cf.taste.impl.common.SkippingIterator: void skip(int)>(i0);
+
+        $z3 = interfaceinvoke r12.<org.apache.mahout.cf.taste.impl.common.SkippingIterator: boolean hasNext()>();
+
+        if $z3 == 0 goto label4;
+
+        $r11 = interfaceinvoke r12.<org.apache.mahout.cf.taste.impl.common.SkippingIterator: java.lang.Object next()>();
+
+        return $r11;
+
+     label1:
+        i1 = 0;
+
+     label2:
+        if i1 >= i0 goto label3;
+
+        $r7 = r0.<org.apache.mahout.common.iterator.SamplingIterator: java.util.Iterator delegate>;
+
+        $z2 = interfaceinvoke $r7.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label3;
+
+        $r8 = r0.<org.apache.mahout.common.iterator.SamplingIterator: java.util.Iterator delegate>;
+
+        interfaceinvoke $r8.<java.util.Iterator: java.lang.Object next()>();
+
+        i1 = i1 + 1;
+
+        goto label2;
+
+     label3:
+        $r3 = r0.<org.apache.mahout.common.iterator.SamplingIterator: java.util.Iterator delegate>;
+
+        $z1 = interfaceinvoke $r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label4;
+
+        $r5 = r0.<org.apache.mahout.common.iterator.SamplingIterator: java.util.Iterator delegate>;
+
+        $r6 = interfaceinvoke $r5.<java.util.Iterator: java.lang.Object next()>();
+
+        return $r6;
+
+     label4:
+        $r4 = virtualinvoke r0.<org.apache.mahout.common.iterator.SamplingIterator: java.lang.Object endOfData()>();
+
+        return $r4;
+    }
+}

@@ -1,0 +1,941 @@
+public final class org.apache.mahout.cf.taste.impl.model.GenericDataModel extends org.apache.mahout.cf.taste.impl.model.AbstractDataModel
+{
+    private static final org.slf4j.Logger log;
+    private final long[] userIDs;
+    private final org.apache.mahout.cf.taste.impl.common.FastByIDMap preferenceFromUsers;
+    private final long[] itemIDs;
+    private final org.apache.mahout.cf.taste.impl.common.FastByIDMap preferenceForItems;
+    private final org.apache.mahout.cf.taste.impl.common.FastByIDMap timestamps;
+
+    public void <init>(org.apache.mahout.cf.taste.impl.common.FastByIDMap)
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: void <init>(org.apache.mahout.cf.taste.impl.common.FastByIDMap,org.apache.mahout.cf.taste.impl.common.FastByIDMap)>(r1, null);
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.cf.taste.impl.common.FastByIDMap, org.apache.mahout.cf.taste.impl.common.FastByIDMap)
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap r1, r2, $r8, $r15, $r16, r39;
+        org.apache.mahout.cf.taste.model.PreferenceArray r4, $r23;
+        java.util.Iterator r5, r33, r36;
+        org.apache.mahout.cf.taste.model.Preference r6;
+        long l0, $l3;
+        float f0, f1, f2;
+        java.util.Set $r10, $r17;
+        org.slf4j.Logger $r11, $r28;
+        java.lang.Integer $r12, $r30;
+        long[] $r13, $r14, $r18, $r19, $r20;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        int $i1, $i2, $i4, i7, i8;
+        java.lang.Object $r21, $r24, $r25, $r26, $r27, $r29, $r31, r35;
+        java.lang.Long $r22;
+        byte $b5, $b6;
+        java.util.Map$Entry r34, r37;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator r38;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet r40;
+        java.util.Collection r41;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.model.AbstractDataModel: void <init>()>();
+
+        if r1 == null goto label01;
+
+        $z3 = 1;
+
+        goto label02;
+
+     label01:
+        $z3 = 0;
+
+     label02:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z3, "userData is null");
+
+        r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.FastByIDMap preferenceFromUsers> = r1;
+
+        r39 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke r39.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>()>();
+
+        r40 = new org.apache.mahout.cf.taste.impl.common.FastIDSet;
+
+        specialinvoke r40.<org.apache.mahout.cf.taste.impl.common.FastIDSet: void <init>()>();
+
+        i7 = 0;
+
+        f1 = #-InfinityF;
+
+        f2 = #InfinityF;
+
+        $r8 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.FastByIDMap preferenceFromUsers>;
+
+        $r10 = virtualinvoke $r8.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.util.Set entrySet()>();
+
+        r33 = interfaceinvoke $r10.<java.util.Set: java.util.Iterator iterator()>();
+
+     label03:
+        $z4 = interfaceinvoke r33.<java.util.Iterator: boolean hasNext()>();
+
+        if $z4 == 0 goto label08;
+
+        $r27 = interfaceinvoke r33.<java.util.Iterator: java.lang.Object next()>();
+
+        r34 = (java.util.Map$Entry) $r27;
+
+        $r26 = interfaceinvoke r34.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        r4 = (org.apache.mahout.cf.taste.model.PreferenceArray) $r26;
+
+        interfaceinvoke r4.<org.apache.mahout.cf.taste.model.PreferenceArray: void sortByItem()>();
+
+        r5 = interfaceinvoke r4.<org.apache.mahout.cf.taste.model.PreferenceArray: java.util.Iterator iterator()>();
+
+     label04:
+        $z2 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z2 == 0 goto label07;
+
+        $r29 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.cf.taste.model.Preference) $r29;
+
+        l0 = interfaceinvoke r6.<org.apache.mahout.cf.taste.model.Preference: long getItemID()>();
+
+        virtualinvoke r40.<org.apache.mahout.cf.taste.impl.common.FastIDSet: boolean add(long)>(l0);
+
+        $r31 = virtualinvoke r39.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        r35 = (java.util.Collection) $r31;
+
+        if r35 != null goto label05;
+
+        r35 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayListWithCapacity(int)>(2);
+
+        virtualinvoke r39.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object put(long,java.lang.Object)>(l0, r35);
+
+     label05:
+        r41 = (java.util.Collection) r35;
+
+        interfaceinvoke r41.<java.util.Collection: boolean add(java.lang.Object)>(r6);
+
+        f0 = interfaceinvoke r6.<org.apache.mahout.cf.taste.model.Preference: float getValue()>();
+
+        $b5 = f0 cmpl f1;
+
+        if $b5 <= 0 goto label06;
+
+        f1 = f0;
+
+     label06:
+        $b6 = f0 cmpg f2;
+
+        if $b6 >= 0 goto label04;
+
+        f2 = f0;
+
+        goto label04;
+
+     label07:
+        i7 = i7 + 1;
+
+        $i4 = i7 % 10000;
+
+        if $i4 != 0 goto label03;
+
+        $r28 = <org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.slf4j.Logger log>;
+
+        $r30 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i7);
+
+        interfaceinvoke $r28.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Processed {} users", $r30);
+
+        goto label03;
+
+     label08:
+        $r11 = <org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.slf4j.Logger log>;
+
+        $r12 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i7);
+
+        interfaceinvoke $r11.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Processed {} users", $r12);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: void setMinPreference(float)>(f2);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: void setMaxPreference(float)>(f1);
+
+        $r14 = virtualinvoke r40.<org.apache.mahout.cf.taste.impl.common.FastIDSet: long[] toArray()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: long[] itemIDs> = $r14;
+
+        $r13 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: long[] itemIDs>;
+
+        staticinvoke <java.util.Arrays: void sort(long[])>($r13);
+
+        $r16 = staticinvoke <org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.FastByIDMap toDataMap(org.apache.mahout.cf.taste.impl.common.FastByIDMap,boolean)>(r39, 0);
+
+        r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.FastByIDMap preferenceForItems> = $r16;
+
+        $r15 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.FastByIDMap preferenceForItems>;
+
+        $r17 = virtualinvoke $r15.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.util.Set entrySet()>();
+
+        r36 = interfaceinvoke $r17.<java.util.Set: java.util.Iterator iterator()>();
+
+     label09:
+        $z0 = interfaceinvoke r36.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label10;
+
+        $r24 = interfaceinvoke r36.<java.util.Iterator: java.lang.Object next()>();
+
+        r37 = (java.util.Map$Entry) $r24;
+
+        $r25 = interfaceinvoke r37.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r23 = (org.apache.mahout.cf.taste.model.PreferenceArray) $r25;
+
+        interfaceinvoke $r23.<org.apache.mahout.cf.taste.model.PreferenceArray: void sortByUser()>();
+
+        goto label09;
+
+     label10:
+        $i1 = virtualinvoke r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: int size()>();
+
+        $r18 = newarray (long)[$i1];
+
+        r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: long[] userIDs> = $r18;
+
+        i8 = 0;
+
+        r38 = virtualinvoke r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator keySetIterator()>();
+
+     label11:
+        $z1 = interfaceinvoke r38.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label12;
+
+        $r19 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: long[] userIDs>;
+
+        $i2 = i8;
+
+        i8 = i8 + 1;
+
+        $r21 = interfaceinvoke r38.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: java.lang.Object next()>();
+
+        $r22 = (java.lang.Long) $r21;
+
+        $l3 = virtualinvoke $r22.<java.lang.Long: long longValue()>();
+
+        $r19[$i2] = $l3;
+
+        goto label11;
+
+     label12:
+        $r20 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: long[] userIDs>;
+
+        staticinvoke <java.util.Arrays: void sort(long[])>($r20);
+
+        r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.FastByIDMap timestamps> = r2;
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        $r2 = staticinvoke <org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.FastByIDMap toDataMap(org.apache.mahout.cf.taste.model.DataModel)>(r1);
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: void <init>(org.apache.mahout.cf.taste.impl.common.FastByIDMap)>($r2);
+
+        return;
+    }
+
+    public static org.apache.mahout.cf.taste.impl.common.FastByIDMap toDataMap(org.apache.mahout.cf.taste.impl.common.FastByIDMap, boolean)
+    {
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap r0;
+        boolean z0, $z1;
+        java.util.Iterator r1;
+        java.util.Map$Entry r2;
+        java.util.List r3;
+        java.util.Set $r4;
+        java.lang.Object $r5, $r6;
+        org.apache.mahout.cf.taste.model.PreferenceArray $r9;
+        org.apache.mahout.cf.taste.impl.model.GenericUserPreferenceArray r10;
+        org.apache.mahout.cf.taste.impl.model.GenericItemPreferenceArray r11;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        z0 := @parameter1: boolean;
+
+        $r4 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.util.Set entrySet()>();
+
+        r1 = interfaceinvoke $r4.<java.util.Set: java.util.Iterator iterator()>();
+
+     label1:
+        $z1 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label4;
+
+        $r5 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (java.util.Map$Entry) $r5;
+
+        $r6 = interfaceinvoke r2.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        r3 = (java.util.List) $r6;
+
+        if z0 == 0 goto label2;
+
+        r10 = new org.apache.mahout.cf.taste.impl.model.GenericUserPreferenceArray;
+
+        $r9 = r10;
+
+        specialinvoke r10.<org.apache.mahout.cf.taste.impl.model.GenericUserPreferenceArray: void <init>(java.util.List)>(r3);
+
+        goto label3;
+
+     label2:
+        r11 = new org.apache.mahout.cf.taste.impl.model.GenericItemPreferenceArray;
+
+        $r9 = r11;
+
+        specialinvoke r11.<org.apache.mahout.cf.taste.impl.model.GenericItemPreferenceArray: void <init>(java.util.List)>(r3);
+
+     label3:
+        interfaceinvoke r2.<java.util.Map$Entry: java.lang.Object setValue(java.lang.Object)>($r9);
+
+        goto label1;
+
+     label4:
+        return r0;
+    }
+
+    public static org.apache.mahout.cf.taste.impl.common.FastByIDMap toDataMap(org.apache.mahout.cf.taste.model.DataModel) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.model.DataModel r0;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator r2;
+        long l0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r3;
+        int $i1;
+        boolean $z0;
+        org.apache.mahout.cf.taste.model.PreferenceArray $r4;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        $r3 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        $i1 = interfaceinvoke r0.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsers()>();
+
+        specialinvoke $r3.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>(int)>($i1);
+
+        r2 = interfaceinvoke r0.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        l0 = interfaceinvoke r2.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator: long nextLong()>();
+
+        $r4 = interfaceinvoke r0.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>(l0);
+
+        virtualinvoke $r3.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object put(long,java.lang.Object)>(l0, $r4);
+
+        goto label1;
+
+     label2:
+        return $r3;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.FastByIDMap getRawUserData()
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.FastByIDMap preferenceFromUsers>;
+
+        return $r1;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.FastByIDMap getRawItemData()
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.FastByIDMap preferenceForItems>;
+
+        return $r1;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.LongPrimitiveArrayIterator getUserIDs()
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveArrayIterator $r1;
+        long[] $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        $r1 = new org.apache.mahout.cf.taste.impl.common.LongPrimitiveArrayIterator;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: long[] userIDs>;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveArrayIterator: void <init>(long[])>($r2);
+
+        return $r1;
+    }
+
+    public org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long) throws org.apache.mahout.cf.taste.common.NoSuchUserException
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        long l0;
+        org.apache.mahout.cf.taste.model.PreferenceArray r1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r2;
+        java.lang.Object $r3;
+        org.apache.mahout.cf.taste.common.NoSuchUserException $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        l0 := @parameter0: long;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.FastByIDMap preferenceFromUsers>;
+
+        $r3 = virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        r1 = (org.apache.mahout.cf.taste.model.PreferenceArray) $r3;
+
+        if r1 != null goto label1;
+
+        $r4 = new org.apache.mahout.cf.taste.common.NoSuchUserException;
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.common.NoSuchUserException: void <init>(long)>(l0);
+
+        throw $r4;
+
+     label1:
+        return r1;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.FastIDSet getItemIDsFromUser(long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        long l0, $l2;
+        org.apache.mahout.cf.taste.model.PreferenceArray r1;
+        int i1, i3;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        l0 := @parameter0: long;
+
+        r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>(l0);
+
+        i1 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        $r3 = new org.apache.mahout.cf.taste.impl.common.FastIDSet;
+
+        specialinvoke $r3.<org.apache.mahout.cf.taste.impl.common.FastIDSet: void <init>(int)>(i1);
+
+        i3 = 0;
+
+     label1:
+        if i3 >= i1 goto label2;
+
+        $l2 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.PreferenceArray: long getItemID(int)>(i3);
+
+        virtualinvoke $r3.<org.apache.mahout.cf.taste.impl.common.FastIDSet: boolean add(long)>($l2);
+
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label2:
+        return $r3;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.LongPrimitiveArrayIterator getItemIDs()
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveArrayIterator $r1;
+        long[] $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        $r1 = new org.apache.mahout.cf.taste.impl.common.LongPrimitiveArrayIterator;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: long[] itemIDs>;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.impl.common.LongPrimitiveArrayIterator: void <init>(long[])>($r2);
+
+        return $r1;
+    }
+
+    public org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesForItem(long) throws org.apache.mahout.cf.taste.common.NoSuchItemException
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        long l0;
+        org.apache.mahout.cf.taste.model.PreferenceArray r1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r2;
+        java.lang.Object $r3;
+        org.apache.mahout.cf.taste.common.NoSuchItemException $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        l0 := @parameter0: long;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.FastByIDMap preferenceForItems>;
+
+        $r3 = virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        r1 = (org.apache.mahout.cf.taste.model.PreferenceArray) $r3;
+
+        if r1 != null goto label1;
+
+        $r4 = new org.apache.mahout.cf.taste.common.NoSuchItemException;
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.common.NoSuchItemException: void <init>(long)>(l0);
+
+        throw $r4;
+
+     label1:
+        return r1;
+    }
+
+    public java.lang.Float getPreferenceValue(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        long l0, l1, $l3;
+        org.apache.mahout.cf.taste.model.PreferenceArray r1;
+        int i2, i5;
+        byte $b4;
+        float $f0;
+        java.lang.Float $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>(l0);
+
+        i2 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        i5 = 0;
+
+     label1:
+        if i5 >= i2 goto label3;
+
+        $l3 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.PreferenceArray: long getItemID(int)>(i5);
+
+        $b4 = $l3 cmp l1;
+
+        if $b4 != 0 goto label2;
+
+        $f0 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.PreferenceArray: float getValue(int)>(i5);
+
+        $r2 = staticinvoke <java.lang.Float: java.lang.Float valueOf(float)>($f0);
+
+        return $r2;
+
+     label2:
+        i5 = i5 + 1;
+
+        goto label1;
+
+     label3:
+        return null;
+    }
+
+    public java.lang.Long getPreferenceTime(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        long l0, l1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap r1, $r2, $r3;
+        java.lang.Object $r4, $r5;
+        java.lang.Long $r6;
+        org.apache.mahout.cf.taste.common.NoSuchUserException $r7;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.FastByIDMap timestamps>;
+
+        if $r2 != null goto label1;
+
+        return null;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.FastByIDMap timestamps>;
+
+        $r4 = virtualinvoke $r3.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        r1 = (org.apache.mahout.cf.taste.impl.common.FastByIDMap) $r4;
+
+        if r1 != null goto label2;
+
+        $r7 = new org.apache.mahout.cf.taste.common.NoSuchUserException;
+
+        specialinvoke $r7.<org.apache.mahout.cf.taste.common.NoSuchUserException: void <init>(long)>(l0);
+
+        throw $r7;
+
+     label2:
+        $r5 = virtualinvoke r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l1);
+
+        $r6 = (java.lang.Long) $r5;
+
+        return $r6;
+    }
+
+    public int getNumItems()
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        long[] $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: long[] itemIDs>;
+
+        $i0 = lengthof $r1;
+
+        return $i0;
+    }
+
+    public int getNumUsers()
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        long[] $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: long[] userIDs>;
+
+        $i0 = lengthof $r1;
+
+        return $i0;
+    }
+
+    public int getNumUsersWithPreferenceFor(long)
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        long l0;
+        org.apache.mahout.cf.taste.model.PreferenceArray r1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r2;
+        java.lang.Object $r3;
+        int $i1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        l0 := @parameter0: long;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.FastByIDMap preferenceForItems>;
+
+        $r3 = virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        r1 = (org.apache.mahout.cf.taste.model.PreferenceArray) $r3;
+
+        if r1 != null goto label1;
+
+        $i1 = 0;
+
+        goto label2;
+
+     label1:
+        $i1 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+     label2:
+        return $i1;
+    }
+
+    public int getNumUsersWithPreferenceFor(long, long)
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        long l0, l1, l8, l9;
+        org.apache.mahout.cf.taste.model.PreferenceArray r1, r2;
+        int i2, i3, i5, i6, i7;
+        java.lang.Object $r3, $r5;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r4, $r6;
+        byte $b4, $b10;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.FastByIDMap preferenceForItems>;
+
+        $r3 = virtualinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        r1 = (org.apache.mahout.cf.taste.model.PreferenceArray) $r3;
+
+        if r1 != null goto label1;
+
+        return 0;
+
+     label1:
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.FastByIDMap preferenceForItems>;
+
+        $r5 = virtualinvoke $r6.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l1);
+
+        r2 = (org.apache.mahout.cf.taste.model.PreferenceArray) $r5;
+
+        if r2 != null goto label2;
+
+        return 0;
+
+     label2:
+        i2 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        i3 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        i5 = 0;
+
+        i6 = 0;
+
+        i7 = 0;
+
+        l8 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.PreferenceArray: long getUserID(int)>(0);
+
+        l9 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.PreferenceArray: long getUserID(int)>(0);
+
+     label3:
+        $b10 = l8 cmp l9;
+
+        if $b10 >= 0 goto label5;
+
+        i6 = i6 + 1;
+
+        if i6 != i2 goto label4;
+
+        goto label9;
+
+     label4:
+        l8 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.PreferenceArray: long getUserID(int)>(i6);
+
+        goto label3;
+
+     label5:
+        $b4 = l8 cmp l9;
+
+        if $b4 <= 0 goto label7;
+
+        i7 = i7 + 1;
+
+        if i7 != i3 goto label6;
+
+        goto label9;
+
+     label6:
+        l9 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.PreferenceArray: long getUserID(int)>(i7);
+
+        goto label3;
+
+     label7:
+        i5 = i5 + 1;
+
+        i6 = i6 + 1;
+
+        if i6 == i2 goto label9;
+
+        i7 = i7 + 1;
+
+        if i7 != i3 goto label8;
+
+        goto label9;
+
+     label8:
+        l8 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.PreferenceArray: long getUserID(int)>(i6);
+
+        l9 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.PreferenceArray: long getUserID(int)>(i7);
+
+        goto label3;
+
+     label9:
+        return i5;
+    }
+
+    public void removePreference(long, long)
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        long l0, l1;
+        java.lang.UnsupportedOperationException $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r1;
+    }
+
+    public void setPreference(long, long, float)
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        long l0, l1;
+        float f0;
+        java.lang.UnsupportedOperationException $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        f0 := @parameter2: float;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r1;
+    }
+
+    public void refresh(java.util.Collection)
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        java.util.Collection r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        r1 := @parameter0: java.util.Collection;
+
+        return;
+    }
+
+    public boolean hasPreferenceValues()
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        return 1;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        java.lang.StringBuilder $r2;
+        long[] $r4, $r5, $r9;
+        int $i0, $i1, $i2, i4;
+        java.lang.String $r7;
+        long $l3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(int)>(200);
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("GenericDataModel[users:");
+
+        i4 = 0;
+
+     label1:
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: long[] userIDs>;
+
+        $i0 = lengthof $r4;
+
+        $i1 = staticinvoke <java.lang.Math: int min(int,int)>(3, $i0);
+
+        if i4 >= $i1 goto label3;
+
+        if i4 <= 0 goto label2;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(44);
+
+     label2:
+        $r9 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: long[] userIDs>;
+
+        $l3 = $r9[i4];
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l3);
+
+        i4 = i4 + 1;
+
+        goto label1;
+
+     label3:
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: long[] userIDs>;
+
+        $i2 = lengthof $r5;
+
+        if $i2 <= 3 goto label4;
+
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("...");
+
+     label4:
+        virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(93);
+
+        $r7 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r7;
+    }
+
+    public volatile org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getItemIDs() throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveArrayIterator $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveArrayIterator getItemIDs()>();
+
+        return $r1;
+    }
+
+    public volatile org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs() throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.GenericDataModel r0;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveArrayIterator $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.GenericDataModel;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveArrayIterator getUserIDs()>();
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/cf/taste/impl/model/GenericDataModel");
+
+        <org.apache.mahout.cf.taste.impl.model.GenericDataModel: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

@@ -1,0 +1,965 @@
+public class org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState extends org.apache.mahout.math.decomposer.lanczos.LanczosState implements org.apache.hadoop.conf.Configurable
+{
+    private static final org.slf4j.Logger log;
+    public static final java.lang.String BASIS_PREFIX;
+    public static final java.lang.String SINGULAR_PREFIX;
+    private org.apache.hadoop.conf.Configuration conf;
+    private final org.apache.hadoop.fs.Path baseDir;
+    private final org.apache.hadoop.fs.Path basisPath;
+    private final org.apache.hadoop.fs.Path singularVectorPath;
+    private org.apache.hadoop.fs.FileSystem fs;
+
+    public void <init>(org.apache.mahout.math.VectorIterable, int, org.apache.mahout.math.Vector, org.apache.hadoop.fs.Path)
+    {
+        org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState r0;
+        org.apache.mahout.math.VectorIterable r1;
+        int i0;
+        org.apache.mahout.math.Vector r2;
+        org.apache.hadoop.fs.Path r3, $r4, $r5;
+        boolean $z0;
+        org.apache.hadoop.conf.Configurable $r6;
+        org.apache.hadoop.conf.Configuration $r7;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState;
+
+        r1 := @parameter0: org.apache.mahout.math.VectorIterable;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: org.apache.mahout.math.Vector;
+
+        r3 := @parameter3: org.apache.hadoop.fs.Path;
+
+        specialinvoke r0.<org.apache.mahout.math.decomposer.lanczos.LanczosState: void <init>(org.apache.mahout.math.VectorIterable,int,org.apache.mahout.math.Vector)>(r1, i0, r2);
+
+        r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path baseDir> = r3;
+
+        $r4 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r4.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r3, "basis");
+
+        r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path basisPath> = $r4;
+
+        $r5 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r5.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r3, "singular");
+
+        r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path singularVectorPath> = $r5;
+
+        $z0 = r1 instanceof org.apache.hadoop.conf.Configurable;
+
+        if $z0 == 0 goto label1;
+
+        $r6 = (org.apache.hadoop.conf.Configurable) r1;
+
+        $r7 = interfaceinvoke $r6.<org.apache.hadoop.conf.Configurable: org.apache.hadoop.conf.Configuration getConf()>();
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: void setConf(org.apache.hadoop.conf.Configuration)>($r7);
+
+     label1:
+        return;
+    }
+
+    public void setConf(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState r0;
+        org.apache.hadoop.conf.Configuration r1, $r4;
+        java.io.IOException $r3;
+        org.slf4j.Logger $r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.conf.Configuration conf> = r1;
+
+     label1:
+        specialinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: void setupDirs()>();
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: void updateHdfsState()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r3 := @caughtexception;
+
+        $r5 = <org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.slf4j.Logger log>;
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.conf.Configuration conf>;
+
+        interfaceinvoke $r5.<org.slf4j.Logger: void error(java.lang.String,java.lang.Object,java.lang.Object)>("Could not retrieve filesystem: {}", $r4, $r3);
+
+     label4:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public org.apache.hadoop.conf.Configuration getConf()
+    {
+        org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState r0;
+        org.apache.hadoop.conf.Configuration $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.conf.Configuration conf>;
+
+        return $r1;
+    }
+
+    private void setupDirs() throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState r0;
+        org.apache.hadoop.conf.Configuration $r1;
+        org.apache.hadoop.fs.Path $r2, $r4, $r5, $r6;
+        org.apache.hadoop.fs.FileSystem $r3;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path baseDir>;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.conf.Configuration conf>;
+
+        $r3 = virtualinvoke $r2.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>($r1);
+
+        r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.FileSystem fs> = $r3;
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path baseDir>;
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: void createDirIfNotExist(org.apache.hadoop.fs.Path)>($r4);
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path basisPath>;
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: void createDirIfNotExist(org.apache.hadoop.fs.Path)>($r5);
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path singularVectorPath>;
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: void createDirIfNotExist(org.apache.hadoop.fs.Path)>($r6);
+
+        return;
+    }
+
+    private void createDirIfNotExist(org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState r0;
+        org.apache.hadoop.fs.Path r1;
+        org.apache.hadoop.fs.FileSystem $r2, $r3;
+        boolean $z0, $z1;
+        java.io.IOException $r4;
+        java.lang.StringBuilder $r5, $r6, $r7;
+        java.lang.String $r8;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.FileSystem fs>;
+
+        $z0 = virtualinvoke $r2.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>(r1);
+
+        if $z0 != 0 goto label1;
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.FileSystem fs>;
+
+        $z1 = virtualinvoke $r3.<org.apache.hadoop.fs.FileSystem: boolean mkdirs(org.apache.hadoop.fs.Path)>(r1);
+
+        if $z1 != 0 goto label1;
+
+        $r4 = new java.io.IOException;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to create: ");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r4.<java.io.IOException: void <init>(java.lang.String)>($r8);
+
+        throw $r4;
+
+     label1:
+        return;
+    }
+
+    public void setIterationNumber(int)
+    {
+        org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState r0;
+        int i0;
+        java.io.IOException $r2;
+        org.slf4j.Logger $r3;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState;
+
+        i0 := @parameter0: int;
+
+        specialinvoke r0.<org.apache.mahout.math.decomposer.lanczos.LanczosState: void setIterationNumber(int)>(i0);
+
+     label1:
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: void updateHdfsState()>();
+
+     label2:
+        goto label4;
+
+     label3:
+        $r2 := @caughtexception;
+
+        $r3 = <org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.slf4j.Logger log>;
+
+        interfaceinvoke $r3.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>("Could not update HDFS state: ", $r2);
+
+     label4:
+        return;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    protected void updateHdfsState() throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState r0;
+        java.util.Iterator r4;
+        java.util.Map$Entry r5;
+        org.apache.hadoop.conf.Configuration $r6;
+        org.apache.hadoop.fs.Path $r7, $r9, $r19, $r20, $r22, $r23, $r24, $r25, $r30, $r32, $r48, $r50, $r54, $r56, r57;
+        java.lang.StringBuilder $r8, $r10, $r11, $r31, $r35, $r37, $r46, $r47, $r49, $r52, $r53, $r55;
+        java.lang.String $r12, $r34, $r45, $r51;
+        boolean $z0, $z1;
+        org.apache.hadoop.fs.FileSystem $r13;
+        double $d0, $d1, $d2, $d3, $d4, $d5;
+        int $i0, $i2, $i3, $i4, $i5, $i6, i7, i8, $i9, $i10;
+        org.apache.mahout.math.Matrix $r14, $r15, $r17, $r21, $r41, $r43, $r58;
+        byte $b1;
+        org.apache.mahout.math.DenseVector $r16, $r18, $r26;
+        double[] $r27;
+        java.util.Map $r28;
+        java.util.Set $r29;
+        java.lang.Object $r33, $r36, $r38, $r40;
+        java.lang.Integer $r39;
+        org.apache.mahout.math.Vector $r42, $r44;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState;
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.conf.Configuration conf>;
+
+        if $r6 != null goto label1;
+
+        return;
+
+     label1:
+        i7 = 0;
+
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path basisPath>;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("basis_");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(0);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r7.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r9, $r12);
+
+        r57 = $r7;
+
+     label2:
+        $r13 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.FileSystem fs>;
+
+        $z0 = virtualinvoke $r13.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>(r57);
+
+        if $z0 == 0 goto label3;
+
+        $r54 = new org.apache.hadoop.fs.Path;
+
+        $r56 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path basisPath>;
+
+        $r53 = new java.lang.StringBuilder;
+
+        specialinvoke $r53.<java.lang.StringBuilder: void <init>()>();
+
+        $r55 = virtualinvoke $r53.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("basis_");
+
+        i7 = i7 + 1;
+
+        $r52 = virtualinvoke $r55.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i7);
+
+        $r51 = virtualinvoke $r52.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r54.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r56, $r51);
+
+        r57 = $r54;
+
+        goto label2;
+
+     label3:
+        $i0 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: int iterationNumber>;
+
+        if i7 >= $i0 goto label4;
+
+        $r44 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Vector getBasisVector(int)>(i7);
+
+        if $r44 == null goto label4;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: void persistVector(org.apache.hadoop.fs.Path,int,org.apache.mahout.math.Vector)>(r57, i7, $r44);
+
+        $r48 = new org.apache.hadoop.fs.Path;
+
+        $r50 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path basisPath>;
+
+        $r47 = new java.lang.StringBuilder;
+
+        specialinvoke $r47.<java.lang.StringBuilder: void <init>()>();
+
+        $r49 = virtualinvoke $r47.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("basis_");
+
+        i7 = i7 + 1;
+
+        $r46 = virtualinvoke $r49.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i7);
+
+        $r45 = virtualinvoke $r46.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r48.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r50, $r45);
+
+        r57 = $r48;
+
+        goto label3;
+
+     label4:
+        $d0 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: double scaleFactor>;
+
+        $b1 = $d0 cmpg 0.0;
+
+        if $b1 > 0 goto label5;
+
+        $d3 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: double getScaleFactor()>();
+
+        r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: double scaleFactor> = $d3;
+
+     label5:
+        $r14 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Matrix getDiagonalMatrix()>();
+
+        r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Matrix diagonalMatrix> = $r14;
+
+        $r16 = new org.apache.mahout.math.DenseVector;
+
+        $r15 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Matrix diagonalMatrix>;
+
+        $i3 = interfaceinvoke $r15.<org.apache.mahout.math.Matrix: int numCols()>();
+
+        $i2 = $i3 - 1;
+
+        specialinvoke $r16.<org.apache.mahout.math.DenseVector: void <init>(int)>($i2);
+
+        $r18 = new org.apache.mahout.math.DenseVector;
+
+        $r17 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Matrix diagonalMatrix>;
+
+        $i4 = interfaceinvoke $r17.<org.apache.mahout.math.Matrix: int numCols()>();
+
+        specialinvoke $r18.<org.apache.mahout.math.DenseVector: void <init>(int)>($i4);
+
+        i8 = 0;
+
+     label6:
+        $r58 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Matrix diagonalMatrix>;
+
+        $i9 = interfaceinvoke $r58.<org.apache.mahout.math.Matrix: int numCols()>();
+
+        $i10 = $i9 - 1;
+
+        if i8 >= $i10 goto label7;
+
+        $r41 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Matrix diagonalMatrix>;
+
+        $i6 = i8 + 1;
+
+        $d4 = interfaceinvoke $r41.<org.apache.mahout.math.Matrix: double get(int,int)>(i8, $i6);
+
+        interfaceinvoke $r16.<org.apache.mahout.math.Vector: void set(int,double)>(i8, $d4);
+
+        $r43 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Matrix diagonalMatrix>;
+
+        $d5 = interfaceinvoke $r43.<org.apache.mahout.math.Matrix: double get(int,int)>(i8, i8);
+
+        interfaceinvoke $r18.<org.apache.mahout.math.Vector: void set(int,double)>(i8, $d5);
+
+        i8 = i8 + 1;
+
+        goto label6;
+
+     label7:
+        $r21 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Matrix diagonalMatrix>;
+
+        $d1 = interfaceinvoke $r21.<org.apache.mahout.math.Matrix: double get(int,int)>(i8, i8);
+
+        interfaceinvoke $r18.<org.apache.mahout.math.Vector: void set(int,double)>(i8, $d1);
+
+        $r19 = new org.apache.hadoop.fs.Path;
+
+        $r20 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path baseDir>;
+
+        specialinvoke $r19.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r20, "projections");
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: void persistVector(org.apache.hadoop.fs.Path,int,org.apache.mahout.math.Vector)>($r19, 0, $r18);
+
+        $r24 = new org.apache.hadoop.fs.Path;
+
+        $r25 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path baseDir>;
+
+        specialinvoke $r24.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r25, "norms");
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: void persistVector(org.apache.hadoop.fs.Path,int,org.apache.mahout.math.Vector)>($r24, 0, $r16);
+
+        $r22 = new org.apache.hadoop.fs.Path;
+
+        $r23 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path baseDir>;
+
+        specialinvoke $r22.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r23, "scaleFactor");
+
+        $r26 = new org.apache.mahout.math.DenseVector;
+
+        $r27 = newarray (double)[1];
+
+        $d2 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: double scaleFactor>;
+
+        $r27[0] = $d2;
+
+        specialinvoke $r26.<org.apache.mahout.math.DenseVector: void <init>(double[])>($r27);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: void persistVector(org.apache.hadoop.fs.Path,int,org.apache.mahout.math.Vector)>($r22, 0, $r26);
+
+        $r28 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: java.util.Map singularVectors>;
+
+        $r29 = interfaceinvoke $r28.<java.util.Map: java.util.Set entrySet()>();
+
+        r4 = interfaceinvoke $r29.<java.util.Set: java.util.Iterator iterator()>();
+
+     label8:
+        $z1 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label9;
+
+        $r33 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (java.util.Map$Entry) $r33;
+
+        $r32 = new org.apache.hadoop.fs.Path;
+
+        $r30 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path singularVectorPath>;
+
+        $r31 = new java.lang.StringBuilder;
+
+        specialinvoke $r31.<java.lang.StringBuilder: void <init>()>();
+
+        $r37 = virtualinvoke $r31.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("singular_");
+
+        $r36 = interfaceinvoke r5.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r35 = virtualinvoke $r37.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r36);
+
+        $r34 = virtualinvoke $r35.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r32.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r30, $r34);
+
+        $r40 = interfaceinvoke r5.<java.util.Map$Entry: java.lang.Object getKey()>();
+
+        $r39 = (java.lang.Integer) $r40;
+
+        $i5 = virtualinvoke $r39.<java.lang.Integer: int intValue()>();
+
+        $r38 = interfaceinvoke r5.<java.util.Map$Entry: java.lang.Object getValue()>();
+
+        $r42 = (org.apache.mahout.math.Vector) $r38;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: void persistVector(org.apache.hadoop.fs.Path,int,org.apache.mahout.math.Vector)>($r32, $i5, $r42);
+
+        goto label8;
+
+     label9:
+        specialinvoke r0.<org.apache.mahout.math.decomposer.lanczos.LanczosState: void setIterationNumber(int)>(i7);
+
+        return;
+    }
+
+    protected void persistVector(org.apache.hadoop.fs.Path, int, org.apache.mahout.math.Vector) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState r0;
+        org.apache.hadoop.fs.Path r1;
+        int i0;
+        org.apache.mahout.math.Vector r2;
+        org.apache.hadoop.fs.FileSystem $r4, $r7, $r11;
+        boolean $z0;
+        org.apache.hadoop.io.SequenceFile$Writer $r5, r13;
+        org.apache.hadoop.conf.Configuration $r6;
+        org.apache.hadoop.io.IntWritable $r8;
+        org.apache.mahout.math.VectorWritable $r9;
+        org.slf4j.Logger $r10;
+        java.lang.Throwable $r12;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: org.apache.mahout.math.Vector;
+
+        r13 = null;
+
+     label1:
+        $r4 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.FileSystem fs>;
+
+        $z0 = virtualinvoke $r4.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>(r1);
+
+        if $z0 == 0 goto label2;
+
+        $r10 = <org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.slf4j.Logger log>;
+
+        interfaceinvoke $r10.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Object)>("{} exists, will overwrite", r1);
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.FileSystem fs>;
+
+        virtualinvoke $r11.<org.apache.hadoop.fs.FileSystem: boolean delete(org.apache.hadoop.fs.Path,boolean)>(r1, 1);
+
+     label2:
+        $r5 = new org.apache.hadoop.io.SequenceFile$Writer;
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.FileSystem fs>;
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.conf.Configuration conf>;
+
+        specialinvoke $r5.<org.apache.hadoop.io.SequenceFile$Writer: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>($r7, $r6, r1, class "org/apache/hadoop/io/IntWritable", class "org/apache/mahout/math/VectorWritable");
+
+        r13 = $r5;
+
+        $r8 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r8.<org.apache.hadoop.io.IntWritable: void <init>(int)>(i0);
+
+        $r9 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r9.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r2);
+
+        virtualinvoke $r5.<org.apache.hadoop.io.SequenceFile$Writer: void append(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r8, $r9);
+
+     label3:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r5, 0);
+
+        goto label6;
+
+     label4:
+        $r12 := @caughtexception;
+
+     label5:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>(r13, 0);
+
+        throw $r12;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    protected org.apache.mahout.math.Vector fetchVector(org.apache.hadoop.fs.Path, int) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState r0;
+        org.apache.hadoop.fs.Path r1;
+        int i0, $i1;
+        org.apache.hadoop.fs.FileSystem $r5, $r8;
+        boolean $z0, $z1;
+        org.apache.hadoop.io.SequenceFile$Reader $r6;
+        org.apache.hadoop.conf.Configuration $r7;
+        org.apache.hadoop.io.IntWritable $r9;
+        org.apache.mahout.math.VectorWritable $r10;
+        org.apache.mahout.math.Vector $r11;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter1: int;
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.FileSystem fs>;
+
+        $z0 = virtualinvoke $r5.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>(r1);
+
+        if $z0 != 0 goto label1;
+
+        return null;
+
+     label1:
+        $r6 = new org.apache.hadoop.io.SequenceFile$Reader;
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.FileSystem fs>;
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.conf.Configuration conf>;
+
+        specialinvoke $r6.<org.apache.hadoop.io.SequenceFile$Reader: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r8, r1, $r7);
+
+        $r9 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r9.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+        $r10 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r10.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+     label2:
+        $z1 = virtualinvoke $r6.<org.apache.hadoop.io.SequenceFile$Reader: boolean next(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r9, $r10);
+
+        if $z1 == 0 goto label3;
+
+        $i1 = virtualinvoke $r9.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        if $i1 != i0 goto label2;
+
+        $r11 = virtualinvoke $r10.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        return $r11;
+
+     label3:
+        return null;
+    }
+
+    public org.apache.mahout.math.Vector getBasisVector(int)
+    {
+        org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState r0;
+        int i0;
+        java.util.Map $r1, $r9;
+        java.lang.Integer $r2, $r10, $r14;
+        boolean $z0;
+        org.apache.hadoop.fs.Path $r3, $r5;
+        java.lang.StringBuilder $r4, $r6, $r7;
+        java.lang.String $r8;
+        java.io.IOException $r12;
+        org.slf4j.Logger $r13;
+        org.apache.mahout.math.Vector r15, $r17;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: java.util.Map basis>;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $z0 = interfaceinvoke $r1.<java.util.Map: boolean containsKey(java.lang.Object)>($r2);
+
+        if $z0 != 0 goto label4;
+
+     label1:
+        $r3 = new org.apache.hadoop.fs.Path;
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path basisPath>;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("basis_");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r5, $r8);
+
+        r15 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Vector fetchVector(org.apache.hadoop.fs.Path,int)>($r3, i0);
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: java.util.Map basis>;
+
+        $r10 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r9.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r10, r15);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r12 := @caughtexception;
+
+        $r13 = <org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.slf4j.Logger log>;
+
+        $r14 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r13.<org.slf4j.Logger: void error(java.lang.String,java.lang.Object,java.lang.Object)>("Could not load basis vector: {}", $r14, $r12);
+
+     label4:
+        $r17 = specialinvoke r0.<org.apache.mahout.math.decomposer.lanczos.LanczosState: org.apache.mahout.math.Vector getBasisVector(int)>(i0);
+
+        return $r17;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public org.apache.mahout.math.Vector getRightSingularVector(int)
+    {
+        org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState r0;
+        int i0;
+        java.util.Map $r1, $r9;
+        java.lang.Integer $r2, $r10, $r14;
+        boolean $z0;
+        org.apache.hadoop.fs.Path $r3, $r5;
+        java.lang.StringBuilder $r4, $r6, $r7;
+        java.lang.String $r8;
+        java.io.IOException $r12;
+        org.slf4j.Logger $r13;
+        org.apache.mahout.math.Vector r15, $r17;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: java.util.Map singularVectors>;
+
+        $r2 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $z0 = interfaceinvoke $r1.<java.util.Map: boolean containsKey(java.lang.Object)>($r2);
+
+        if $z0 != 0 goto label4;
+
+     label1:
+        $r3 = new org.apache.hadoop.fs.Path;
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path singularVectorPath>;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("basis_");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r5, $r8);
+
+        r15 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Vector fetchVector(org.apache.hadoop.fs.Path,int)>($r3, i0);
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: java.util.Map singularVectors>;
+
+        $r10 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r9.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r10, r15);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r12 := @caughtexception;
+
+        $r13 = <org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.slf4j.Logger log>;
+
+        $r14 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r13.<org.slf4j.Logger: void error(java.lang.String,java.lang.Object,java.lang.Object)>("Could not load singular vector: {}", $r14, $r12);
+
+     label4:
+        $r17 = specialinvoke r0.<org.apache.mahout.math.decomposer.lanczos.LanczosState: org.apache.mahout.math.Vector getRightSingularVector(int)>(i0);
+
+        return $r17;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public double getScaleFactor()
+    {
+        org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState r0;
+        double $d0, $d1, $d2;
+        byte $b0;
+        org.apache.hadoop.fs.Path $r1, $r2;
+        int $i1;
+        java.io.IOException $r3;
+        org.slf4j.Logger $r4;
+        org.apache.mahout.math.Vector r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState;
+
+        $d0 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: double scaleFactor>;
+
+        $b0 = $d0 cmpg 0.0;
+
+        if $b0 > 0 goto label4;
+
+     label1:
+        $r1 = new org.apache.hadoop.fs.Path;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path baseDir>;
+
+        specialinvoke $r1.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r2, "scaleFactor");
+
+        r5 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Vector fetchVector(org.apache.hadoop.fs.Path,int)>($r1, 0);
+
+        if r5 == null goto label4;
+
+        $i1 = interfaceinvoke r5.<org.apache.mahout.math.Vector: int size()>();
+
+        if $i1 <= 0 goto label4;
+
+        $d1 = interfaceinvoke r5.<org.apache.mahout.math.Vector: double get(int)>(0);
+
+        r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: double scaleFactor> = $d1;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r3 := @caughtexception;
+
+        $r4 = <org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.slf4j.Logger log>;
+
+        interfaceinvoke $r4.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>("could not load scaleFactor:", $r3);
+
+     label4:
+        $d2 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: double scaleFactor>;
+
+        return $d2;
+
+        catch java.io.IOException from label1 to label2 with label3;
+    }
+
+    public org.apache.mahout.math.Matrix getDiagonalMatrix()
+    {
+        org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState r0;
+        org.apache.mahout.math.Vector r1, r15;
+        org.apache.mahout.math.Matrix $r2, $r3, $r8, $r9, $r10, $r11, $r17;
+        double $d0, $d1, $d2, $d3, $d4;
+        byte $b0;
+        org.apache.hadoop.fs.Path $r4, $r5, $r6, $r7;
+        int $i1, $i2, $i3, $i4, $i5, $i6, i7;
+        org.apache.mahout.math.DenseMatrix $r12;
+        java.io.IOException $r13;
+        org.slf4j.Logger $r14;
+
+        r0 := @this: org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Matrix diagonalMatrix>;
+
+        if $r2 != null goto label1;
+
+        $r12 = new org.apache.mahout.math.DenseMatrix;
+
+        $i6 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: int desiredRank>;
+
+        $i5 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: int desiredRank>;
+
+        specialinvoke $r12.<org.apache.mahout.math.DenseMatrix: void <init>(int,int)>($i6, $i5);
+
+        r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Matrix diagonalMatrix> = $r12;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Matrix diagonalMatrix>;
+
+        $d0 = interfaceinvoke $r3.<org.apache.mahout.math.Matrix: double get(int,int)>(0, 1);
+
+        $b0 = $d0 cmpg 0.0;
+
+        if $b0 > 0 goto label7;
+
+     label2:
+        $r4 = new org.apache.hadoop.fs.Path;
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path baseDir>;
+
+        specialinvoke $r4.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r5, "norms");
+
+        r15 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Vector fetchVector(org.apache.hadoop.fs.Path,int)>($r4, 0);
+
+        $r6 = new org.apache.hadoop.fs.Path;
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.hadoop.fs.Path baseDir>;
+
+        specialinvoke $r6.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r7, "projections");
+
+        r1 = virtualinvoke r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Vector fetchVector(org.apache.hadoop.fs.Path,int)>($r6, 0);
+
+        if r15 == null goto label7;
+
+        if r1 == null goto label7;
+
+        i7 = 0;
+
+     label3:
+        $i2 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int size()>();
+
+        $i1 = $i2 - 1;
+
+        if i7 >= $i1 goto label4;
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Matrix diagonalMatrix>;
+
+        $d2 = interfaceinvoke r1.<org.apache.mahout.math.Vector: double get(int)>(i7);
+
+        interfaceinvoke $r9.<org.apache.mahout.math.Matrix: void set(int,int,double)>(i7, i7, $d2);
+
+        $r10 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Matrix diagonalMatrix>;
+
+        $i3 = i7 + 1;
+
+        $d3 = interfaceinvoke r15.<org.apache.mahout.math.Vector: double get(int)>(i7);
+
+        interfaceinvoke $r10.<org.apache.mahout.math.Matrix: void set(int,int,double)>(i7, $i3, $d3);
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Matrix diagonalMatrix>;
+
+        $i4 = i7 + 1;
+
+        $d4 = interfaceinvoke r15.<org.apache.mahout.math.Vector: double get(int)>(i7);
+
+        interfaceinvoke $r11.<org.apache.mahout.math.Matrix: void set(int,int,double)>($i4, i7, $d4);
+
+        i7 = i7 + 1;
+
+        goto label3;
+
+     label4:
+        $r8 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Matrix diagonalMatrix>;
+
+        $d1 = interfaceinvoke r1.<org.apache.mahout.math.Vector: double get(int)>(i7);
+
+        interfaceinvoke $r8.<org.apache.mahout.math.Matrix: void set(int,int,double)>(i7, i7, $d1);
+
+     label5:
+        goto label7;
+
+     label6:
+        $r13 := @caughtexception;
+
+        $r14 = <org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.slf4j.Logger log>;
+
+        interfaceinvoke $r14.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>("Could not load diagonal matrix of norms and projections: ", $r13);
+
+     label7:
+        $r17 = r0.<org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.apache.mahout.math.Matrix diagonalMatrix>;
+
+        return $r17;
+
+        catch java.io.IOException from label2 to label5 with label6;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: java.lang.String SINGULAR_PREFIX> = "singular";
+
+        <org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: java.lang.String BASIS_PREFIX> = "basis";
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/math/hadoop/decomposer/HdfsBackedLanczosState");
+
+        <org.apache.mahout.math.hadoop.decomposer.HdfsBackedLanczosState: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

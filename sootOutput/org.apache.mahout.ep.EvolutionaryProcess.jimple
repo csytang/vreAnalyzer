@@ -1,0 +1,506 @@
+public class org.apache.mahout.ep.EvolutionaryProcess extends java.lang.Object implements org.apache.hadoop.io.Writable, java.io.Closeable
+{
+    private java.util.concurrent.ExecutorService pool;
+    private int threadCount;
+    private java.util.List population;
+    private int populationSize;
+
+    public void <init>()
+    {
+        org.apache.mahout.ep.EvolutionaryProcess r0;
+        java.util.ArrayList $r1;
+
+        r0 := @this: org.apache.mahout.ep.EvolutionaryProcess;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+        r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List population> = $r1;
+
+        return;
+    }
+
+    public void <init>(int, int, org.apache.mahout.ep.State)
+    {
+        org.apache.mahout.ep.EvolutionaryProcess r0;
+        int i0, i1;
+        org.apache.mahout.ep.State r1;
+
+        r0 := @this: org.apache.mahout.ep.EvolutionaryProcess;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        r1 := @parameter2: org.apache.mahout.ep.State;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.ep.EvolutionaryProcess: int populationSize> = i1;
+
+        virtualinvoke r0.<org.apache.mahout.ep.EvolutionaryProcess: void setThreadCount(int)>(i0);
+
+        specialinvoke r0.<org.apache.mahout.ep.EvolutionaryProcess: void initializePopulation(int,org.apache.mahout.ep.State)>(i1, r1);
+
+        return;
+    }
+
+    private void initializePopulation(int, org.apache.mahout.ep.State)
+    {
+        org.apache.mahout.ep.EvolutionaryProcess r0;
+        int i0, i1;
+        org.apache.mahout.ep.State r1, $r5;
+        org.apache.mahout.ep.State[] $r2;
+        java.util.ArrayList $r3;
+        java.util.List $r4;
+
+        r0 := @this: org.apache.mahout.ep.EvolutionaryProcess;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: org.apache.mahout.ep.State;
+
+        $r2 = newarray (org.apache.mahout.ep.State)[1];
+
+        $r2[0] = r1;
+
+        $r3 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList(java.lang.Object[])>($r2);
+
+        r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List population> = $r3;
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label2;
+
+        $r4 = r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List population>;
+
+        $r5 = virtualinvoke r1.<org.apache.mahout.ep.State: org.apache.mahout.ep.State mutate()>();
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void add(org.apache.mahout.ep.State)
+    {
+        org.apache.mahout.ep.EvolutionaryProcess r0;
+        org.apache.mahout.ep.State r1;
+        java.util.List $r2;
+
+        r0 := @this: org.apache.mahout.ep.EvolutionaryProcess;
+
+        r1 := @parameter0: org.apache.mahout.ep.State;
+
+        $r2 = r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List population>;
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>(r1);
+
+        return;
+    }
+
+    public void mutatePopulation(int)
+    {
+        org.apache.mahout.ep.EvolutionaryProcess r0;
+        int i0, $i1, $i2, $i3, $i4, i5;
+        java.util.List $r2, $r4, $r5, $r6, $r7, $r8, $r9, $r11;
+        java.util.ArrayList $r3;
+        java.lang.Object $r10;
+        org.apache.mahout.ep.State $r12, $r13;
+
+        r0 := @this: org.apache.mahout.ep.EvolutionaryProcess;
+
+        i0 := @parameter0: int;
+
+        $r2 = r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List population>;
+
+        staticinvoke <java.util.Collections: void sort(java.util.List)>($r2);
+
+        $r3 = new java.util.ArrayList;
+
+        $r4 = r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List population>;
+
+        $r5 = interfaceinvoke $r4.<java.util.List: java.util.List subList(int,int)>(0, i0);
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>(java.util.Collection)>($r5);
+
+        $r7 = r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List population>;
+
+        $r6 = r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List population>;
+
+        $i1 = interfaceinvoke $r6.<java.util.List: int size()>();
+
+        $r8 = interfaceinvoke $r7.<java.util.List: java.util.List subList(int,int)>(i0, $i1);
+
+        interfaceinvoke $r8.<java.util.List: void clear()>();
+
+        i5 = 0;
+
+     label1:
+        $r9 = r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List population>;
+
+        $i2 = interfaceinvoke $r9.<java.util.List: int size()>();
+
+        $i3 = r0.<org.apache.mahout.ep.EvolutionaryProcess: int populationSize>;
+
+        if $i2 >= $i3 goto label2;
+
+        $r11 = r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List population>;
+
+        $i4 = i5 % i0;
+
+        $r10 = interfaceinvoke $r3.<java.util.List: java.lang.Object get(int)>($i4);
+
+        $r13 = (org.apache.mahout.ep.State) $r10;
+
+        $r12 = virtualinvoke $r13.<org.apache.mahout.ep.State: org.apache.mahout.ep.State mutate()>();
+
+        interfaceinvoke $r11.<java.util.List: boolean add(java.lang.Object)>($r12);
+
+        i5 = i5 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public org.apache.mahout.ep.State parallelDo(org.apache.mahout.ep.EvolutionaryProcess$Function) throws java.lang.InterruptedException, java.util.concurrent.ExecutionException
+    {
+        org.apache.mahout.ep.EvolutionaryProcess r0;
+        org.apache.mahout.ep.EvolutionaryProcess$Function r1;
+        java.util.Iterator r3, r16;
+        java.util.concurrent.Future r4, $r9;
+        org.apache.mahout.ep.State r5, r17, r19;
+        double d0, d1;
+        java.util.ArrayList $r6;
+        java.util.List $r7, r18;
+        boolean $z0, $z1, $z2;
+        java.util.concurrent.ExecutorService $r8;
+        java.lang.Object $r10, $r11, $r12, $r13, $r15;
+        byte $b0;
+        org.apache.mahout.ep.EvolutionaryProcess$1 $r14;
+
+        r0 := @this: org.apache.mahout.ep.EvolutionaryProcess;
+
+        r1 := @parameter0: org.apache.mahout.ep.EvolutionaryProcess$Function;
+
+        $r6 = new java.util.ArrayList;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>()>();
+
+        $r7 = r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List population>;
+
+        r16 = interfaceinvoke $r7.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r16.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r15 = interfaceinvoke r16.<java.util.Iterator: java.lang.Object next()>();
+
+        r17 = (org.apache.mahout.ep.State) $r15;
+
+        $r14 = new org.apache.mahout.ep.EvolutionaryProcess$1;
+
+        specialinvoke $r14.<org.apache.mahout.ep.EvolutionaryProcess$1: void <init>(org.apache.mahout.ep.EvolutionaryProcess,org.apache.mahout.ep.EvolutionaryProcess$Function,org.apache.mahout.ep.State)>(r0, r1, r17);
+
+        interfaceinvoke $r6.<java.util.Collection: boolean add(java.lang.Object)>($r14);
+
+        goto label1;
+
+     label2:
+        $r8 = r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.concurrent.ExecutorService pool>;
+
+        r18 = interfaceinvoke $r8.<java.util.concurrent.ExecutorService: java.util.List invokeAll(java.util.Collection)>($r6);
+
+        d1 = #-Infinity;
+
+        r19 = null;
+
+        r3 = interfaceinvoke r18.<java.util.List: java.util.Iterator iterator()>();
+
+     label3:
+        $z1 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label4;
+
+        $r13 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (java.util.concurrent.Future) $r13;
+
+        $r12 = interfaceinvoke r4.<java.util.concurrent.Future: java.lang.Object get()>();
+
+        r5 = (org.apache.mahout.ep.State) $r12;
+
+        d0 = virtualinvoke r5.<org.apache.mahout.ep.State: double getValue()>();
+
+        $z2 = staticinvoke <java.lang.Double: boolean isNaN(double)>(d0);
+
+        if $z2 != 0 goto label3;
+
+        $b0 = d0 cmpl d1;
+
+        if $b0 < 0 goto label3;
+
+        d1 = d0;
+
+        r19 = r5;
+
+        goto label3;
+
+     label4:
+        if r19 != null goto label5;
+
+        $r10 = interfaceinvoke r18.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r9 = (java.util.concurrent.Future) $r10;
+
+        $r11 = interfaceinvoke $r9.<java.util.concurrent.Future: java.lang.Object get()>();
+
+        r19 = (org.apache.mahout.ep.State) $r11;
+
+     label5:
+        return r19;
+    }
+
+    public void setThreadCount(int)
+    {
+        org.apache.mahout.ep.EvolutionaryProcess r0;
+        int i0;
+        java.util.concurrent.ExecutorService $r1;
+
+        r0 := @this: org.apache.mahout.ep.EvolutionaryProcess;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.ep.EvolutionaryProcess: int threadCount> = i0;
+
+        $r1 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ExecutorService newFixedThreadPool(int)>(i0);
+
+        r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.concurrent.ExecutorService pool> = $r1;
+
+        return;
+    }
+
+    public int getThreadCount()
+    {
+        org.apache.mahout.ep.EvolutionaryProcess r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.ep.EvolutionaryProcess;
+
+        $i0 = r0.<org.apache.mahout.ep.EvolutionaryProcess: int threadCount>;
+
+        return $i0;
+    }
+
+    public int getPopulationSize()
+    {
+        org.apache.mahout.ep.EvolutionaryProcess r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.ep.EvolutionaryProcess;
+
+        $i0 = r0.<org.apache.mahout.ep.EvolutionaryProcess: int populationSize>;
+
+        return $i0;
+    }
+
+    public java.util.List getPopulation()
+    {
+        org.apache.mahout.ep.EvolutionaryProcess r0;
+        java.util.List $r1;
+
+        r0 := @this: org.apache.mahout.ep.EvolutionaryProcess;
+
+        $r1 = r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List population>;
+
+        return $r1;
+    }
+
+    public void close()
+    {
+        org.apache.mahout.ep.EvolutionaryProcess r0;
+        java.util.List r1;
+        java.util.concurrent.ExecutorService $r3, $r5;
+        java.util.concurrent.TimeUnit $r4;
+        boolean $z1;
+        java.lang.IllegalStateException $r6, $r12;
+        java.lang.StringBuilder $r7, $r8, $r9, $r10, $r14, $r15, $r16, $r18;
+        int $i0, $i1;
+        java.lang.String $r11, $r17;
+        java.lang.InterruptedException $r13;
+
+        r0 := @this: org.apache.mahout.ep.EvolutionaryProcess;
+
+        $r3 = r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.concurrent.ExecutorService pool>;
+
+        r1 = interfaceinvoke $r3.<java.util.concurrent.ExecutorService: java.util.List shutdownNow()>();
+
+     label1:
+        $r5 = r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.concurrent.ExecutorService pool>;
+
+        $r4 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        interfaceinvoke $r5.<java.util.concurrent.ExecutorService: boolean awaitTermination(long,java.util.concurrent.TimeUnit)>(10L, $r4);
+
+     label2:
+        goto label4;
+
+     label3:
+        $r13 := @caughtexception;
+
+        $r12 = new java.lang.IllegalStateException;
+
+        $r15 = new java.lang.StringBuilder;
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Had to forcefully shut down ");
+
+        $i1 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        $r16 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r18 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" tasks");
+
+        $r17 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r12.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r17);
+
+        throw $r12;
+
+     label4:
+        $z1 = interfaceinvoke r1.<java.util.List: boolean isEmpty()>();
+
+        if $z1 != 0 goto label5;
+
+        $r6 = new java.lang.IllegalStateException;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Had to forcefully shut down ");
+
+        $i0 = interfaceinvoke r1.<java.util.List: int size()>();
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" tasks");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r11);
+
+        throw $r6;
+
+     label5:
+        return;
+
+        catch java.lang.InterruptedException from label1 to label2 with label3;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.ep.EvolutionaryProcess r0;
+        java.io.DataOutput r1;
+        java.util.Iterator r2;
+        org.apache.mahout.ep.State r3;
+        int $i0, $i1;
+        java.util.List $r4, $r5;
+        boolean $z0;
+        java.lang.Object $r6;
+
+        r0 := @this: org.apache.mahout.ep.EvolutionaryProcess;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $i0 = r0.<org.apache.mahout.ep.EvolutionaryProcess: int threadCount>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i0);
+
+        $r4 = r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List population>;
+
+        $i1 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i1);
+
+        $r5 = r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List population>;
+
+        r2 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.ep.State) $r6;
+
+        staticinvoke <org.apache.mahout.classifier.sgd.PolymorphicWritable: void write(java.io.DataOutput,org.apache.hadoop.io.Writable)>(r1, r3);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.ep.EvolutionaryProcess r0;
+        java.io.DataInput r1;
+        int i0, $i1, i2;
+        org.apache.mahout.ep.State r2;
+        java.util.ArrayList $r3;
+        org.apache.hadoop.io.Writable $r4;
+        java.util.List $r5;
+
+        r0 := @this: org.apache.mahout.ep.EvolutionaryProcess;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $i1 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        virtualinvoke r0.<org.apache.mahout.ep.EvolutionaryProcess: void setThreadCount(int)>($i1);
+
+        i0 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        $r3 = new java.util.ArrayList;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>()>();
+
+        r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List population> = $r3;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label2;
+
+        $r4 = staticinvoke <org.apache.mahout.classifier.sgd.PolymorphicWritable: org.apache.hadoop.io.Writable read(java.io.DataInput,java.lang.Class)>(r1, class "org/apache/mahout/ep/State");
+
+        r2 = (org.apache.mahout.ep.State) $r4;
+
+        $r5 = r0.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List population>;
+
+        interfaceinvoke $r5.<java.util.List: boolean add(java.lang.Object)>(r2);
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+}

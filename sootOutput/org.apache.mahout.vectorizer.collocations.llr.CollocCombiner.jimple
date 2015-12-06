@@ -1,0 +1,91 @@
+public class org.apache.mahout.vectorizer.collocations.llr.CollocCombiner extends org.apache.hadoop.mapreduce.Reducer
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.collocations.llr.CollocCombiner r0;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.CollocCombiner;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        return;
+    }
+
+    protected void reduce(org.apache.mahout.vectorizer.collocations.llr.GramKey, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.collocations.llr.CollocCombiner r0;
+        org.apache.mahout.vectorizer.collocations.llr.GramKey r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        java.util.Iterator r4;
+        org.apache.mahout.vectorizer.collocations.llr.Gram r5, r7;
+        boolean $z0;
+        java.lang.Object $r6;
+        int $i0, i1;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.CollocCombiner;
+
+        r1 := @parameter0: org.apache.mahout.vectorizer.collocations.llr.GramKey;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        i1 = 0;
+
+        r7 = null;
+
+        r4 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.vectorizer.collocations.llr.Gram) $r6;
+
+        r7 = r5;
+
+        $i0 = virtualinvoke r5.<org.apache.mahout.vectorizer.collocations.llr.Gram: int getFrequency()>();
+
+        i1 = i1 + $i0;
+
+        goto label1;
+
+     label2:
+        if r7 == null goto label3;
+
+        virtualinvoke r7.<org.apache.mahout.vectorizer.collocations.llr.Gram: void setFrequency(int)>(i1);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>(r1, r7);
+
+     label3:
+        return;
+    }
+
+    protected volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.collocations.llr.CollocCombiner r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.mahout.vectorizer.collocations.llr.GramKey $r4;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.CollocCombiner;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.mahout.vectorizer.collocations.llr.GramKey) r1;
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.collocations.llr.CollocCombiner: void reduce(org.apache.mahout.vectorizer.collocations.llr.GramKey,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+}

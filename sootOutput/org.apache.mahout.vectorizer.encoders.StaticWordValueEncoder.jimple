@@ -1,0 +1,143 @@
+public class org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder extends org.apache.mahout.vectorizer.encoders.WordValueEncoder
+{
+    private java.util.Map dictionary;
+    private double missingValueWeight;
+    private final byte[] nameBytes;
+
+    public void <init>(java.lang.String)
+    {
+        org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder r0;
+        java.lang.String r1;
+        byte[] $r2;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder;
+
+        r1 := @parameter0: java.lang.String;
+
+        specialinvoke r0.<org.apache.mahout.vectorizer.encoders.WordValueEncoder: void <init>(java.lang.String)>(r1);
+
+        r0.<org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder: double missingValueWeight> = 1.0;
+
+        $r2 = staticinvoke <org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder: byte[] bytesForString(java.lang.String)>(r1);
+
+        r0.<org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder: byte[] nameBytes> = $r2;
+
+        return;
+    }
+
+    protected int hashForProbe(byte[], int, java.lang.String, int)
+    {
+        org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder r0;
+        byte[] r1, $r3;
+        int i0, i1, $i2, $i3;
+        java.lang.String r2;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder;
+
+        r1 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: java.lang.String;
+
+        i1 := @parameter3: int;
+
+        $r3 = r0.<org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder: byte[] nameBytes>;
+
+        $i2 = 100 + i1;
+
+        $i3 = virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder: int hash(byte[],byte[],int,int)>($r3, r1, $i2, i0);
+
+        return $i3;
+    }
+
+    public void setDictionary(java.util.Map)
+    {
+        org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder r0;
+        java.util.Map r1;
+        java.util.Collection $r2;
+        java.lang.Object $r3;
+        java.lang.Double $r4;
+        double $d0, $d1;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder;
+
+        r1 := @parameter0: java.util.Map;
+
+        r0.<org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder: java.util.Map dictionary> = r1;
+
+        $r2 = interfaceinvoke r1.<java.util.Map: java.util.Collection values()>();
+
+        $r3 = staticinvoke <java.util.Collections: java.lang.Object min(java.util.Collection)>($r2);
+
+        $r4 = (java.lang.Double) $r3;
+
+        $d0 = virtualinvoke $r4.<java.lang.Double: double doubleValue()>();
+
+        $d1 = $d0 / 2.0;
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder: void setMissingValueWeight(double)>($d1);
+
+        return;
+    }
+
+    public void setMissingValueWeight(double)
+    {
+        org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder: double missingValueWeight> = d0;
+
+        return;
+    }
+
+    protected double weight(byte[])
+    {
+        org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder r0;
+        byte[] r1;
+        java.util.Map $r3, $r6, $r7;
+        java.lang.String $r4;
+        java.nio.charset.Charset $r5;
+        boolean $z0;
+        java.lang.Object $r8;
+        java.lang.Double $r9;
+        double d0;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder;
+
+        r1 := @parameter0: byte[];
+
+        d0 = r0.<org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder: double missingValueWeight>;
+
+        $r3 = r0.<org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder: java.util.Map dictionary>;
+
+        if $r3 == null goto label1;
+
+        $r4 = new java.lang.String;
+
+        $r5 = <com.google.common.base.Charsets: java.nio.charset.Charset UTF_8>;
+
+        specialinvoke $r4.<java.lang.String: void <init>(byte[],java.nio.charset.Charset)>(r1, $r5);
+
+        $r6 = r0.<org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder: java.util.Map dictionary>;
+
+        $z0 = interfaceinvoke $r6.<java.util.Map: boolean containsKey(java.lang.Object)>($r4);
+
+        if $z0 == 0 goto label1;
+
+        $r7 = r0.<org.apache.mahout.vectorizer.encoders.StaticWordValueEncoder: java.util.Map dictionary>;
+
+        $r8 = interfaceinvoke $r7.<java.util.Map: java.lang.Object get(java.lang.Object)>($r4);
+
+        $r9 = (java.lang.Double) $r8;
+
+        d0 = virtualinvoke $r9.<java.lang.Double: double doubleValue()>();
+
+     label1:
+        return d0;
+    }
+}

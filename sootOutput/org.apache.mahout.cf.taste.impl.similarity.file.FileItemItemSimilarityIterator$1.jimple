@@ -1,0 +1,75 @@
+class org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator$1 extends java.lang.Object implements com.google.common.base.Function
+{
+    final org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator this$0;
+
+    void <init>(org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator$1 r0;
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator$1;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator;
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator$1: org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity apply(java.lang.String)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator$1 r0;
+        java.lang.String r1, $r5, $r6, $r7;
+        java.lang.String[] r2;
+        java.util.regex.Pattern $r3;
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity $r4;
+        long $l0, $l1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator$1;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r3 = staticinvoke <org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator: java.util.regex.Pattern access$000()>();
+
+        r2 = virtualinvoke $r3.<java.util.regex.Pattern: java.lang.String[] split(java.lang.CharSequence)>(r1);
+
+        $r4 = new org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity;
+
+        $r5 = r2[0];
+
+        $l0 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r5);
+
+        $r6 = r2[1];
+
+        $l1 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r6);
+
+        $r7 = r2[2];
+
+        $d0 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r7);
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity: void <init>(long,long,double)>($l0, $l1, $d0);
+
+        return $r4;
+    }
+
+    public volatile java.lang.Object apply(java.lang.Object)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator$1 r0;
+        java.lang.Object r1;
+        java.lang.String $r2;
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator$1;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (java.lang.String) r1;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.file.FileItemItemSimilarityIterator$1: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity apply(java.lang.String)>($r2);
+
+        return $r3;
+    }
+}

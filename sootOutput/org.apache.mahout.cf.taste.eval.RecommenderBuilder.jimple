@@ -1,0 +1,5 @@
+public interface  org.apache.mahout.cf.taste.eval.RecommenderBuilder extends java.lang.Object
+{
+
+    public abstract org.apache.mahout.cf.taste.recommender.Recommender buildRecommender(org.apache.mahout.cf.taste.model.DataModel) throws org.apache.mahout.cf.taste.common.TasteException;
+}

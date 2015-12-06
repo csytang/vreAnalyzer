@@ -1,0 +1,148 @@
+public final class org.apache.mahout.ep.Mapping$SoftLimit extends org.apache.mahout.ep.Mapping
+{
+    private double min;
+    private double max;
+    private double scale;
+
+    public void <init>()
+    {
+        org.apache.mahout.ep.Mapping$SoftLimit r0;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$SoftLimit;
+
+        specialinvoke r0.<org.apache.mahout.ep.Mapping: void <init>(org.apache.mahout.ep.Mapping$1)>(null);
+
+        return;
+    }
+
+    private void <init>(double, double, double)
+    {
+        org.apache.mahout.ep.Mapping$SoftLimit r0;
+        double d0, d1, d2;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$SoftLimit;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        d2 := @parameter2: double;
+
+        specialinvoke r0.<org.apache.mahout.ep.Mapping: void <init>(org.apache.mahout.ep.Mapping$1)>(null);
+
+        r0.<org.apache.mahout.ep.Mapping$SoftLimit: double min> = d0;
+
+        r0.<org.apache.mahout.ep.Mapping$SoftLimit: double max> = d1;
+
+        r0.<org.apache.mahout.ep.Mapping$SoftLimit: double scale> = d2;
+
+        return;
+    }
+
+    public double apply(double)
+    {
+        org.apache.mahout.ep.Mapping$SoftLimit r0;
+        double d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10, $d11, $d12;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$SoftLimit;
+
+        d0 := @parameter0: double;
+
+        $d7 = r0.<org.apache.mahout.ep.Mapping$SoftLimit: double min>;
+
+        $d2 = r0.<org.apache.mahout.ep.Mapping$SoftLimit: double max>;
+
+        $d1 = r0.<org.apache.mahout.ep.Mapping$SoftLimit: double min>;
+
+        $d3 = $d2 - $d1;
+
+        $d8 = $d3 * 1.0;
+
+        $d5 = neg d0;
+
+        $d4 = r0.<org.apache.mahout.ep.Mapping$SoftLimit: double scale>;
+
+        $d6 = $d5 * $d4;
+
+        $d9 = staticinvoke <java.lang.Math: double exp(double)>($d6);
+
+        $d10 = 1.0 + $d9;
+
+        $d11 = $d8 / $d10;
+
+        $d12 = $d7 + $d11;
+
+        return $d12;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.ep.Mapping$SoftLimit r0;
+        java.io.DataOutput r1;
+        double $d0, $d1, $d2;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$SoftLimit;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $d0 = r0.<org.apache.mahout.ep.Mapping$SoftLimit: double min>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d0);
+
+        $d1 = r0.<org.apache.mahout.ep.Mapping$SoftLimit: double max>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d1);
+
+        $d2 = r0.<org.apache.mahout.ep.Mapping$SoftLimit: double scale>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d2);
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.ep.Mapping$SoftLimit r0;
+        java.io.DataInput r1;
+        double $d0, $d1, $d2;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$SoftLimit;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $d0 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.ep.Mapping$SoftLimit: double min> = $d0;
+
+        $d1 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.ep.Mapping$SoftLimit: double max> = $d1;
+
+        $d2 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.ep.Mapping$SoftLimit: double scale> = $d2;
+
+        return;
+    }
+
+    void <init>(double, double, double, org.apache.mahout.ep.Mapping$1)
+    {
+        org.apache.mahout.ep.Mapping$SoftLimit r0;
+        double d0, d1, d2;
+        org.apache.mahout.ep.Mapping$1 r1;
+
+        r0 := @this: org.apache.mahout.ep.Mapping$SoftLimit;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        d2 := @parameter2: double;
+
+        r1 := @parameter3: org.apache.mahout.ep.Mapping$1;
+
+        specialinvoke r0.<org.apache.mahout.ep.Mapping$SoftLimit: void <init>(double,double,double)>(d0, d1, d2);
+
+        return;
+    }
+}

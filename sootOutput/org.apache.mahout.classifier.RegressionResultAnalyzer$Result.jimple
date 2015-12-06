@@ -1,0 +1,49 @@
+class org.apache.mahout.classifier.RegressionResultAnalyzer$Result extends java.lang.Object
+{
+    private final double actual;
+    private final double result;
+
+    void <init>(double, double)
+    {
+        org.apache.mahout.classifier.RegressionResultAnalyzer$Result r0;
+        double d0, d1;
+
+        r0 := @this: org.apache.mahout.classifier.RegressionResultAnalyzer$Result;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.RegressionResultAnalyzer$Result: double actual> = d0;
+
+        r0.<org.apache.mahout.classifier.RegressionResultAnalyzer$Result: double result> = d1;
+
+        return;
+    }
+
+    double getActual()
+    {
+        org.apache.mahout.classifier.RegressionResultAnalyzer$Result r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.RegressionResultAnalyzer$Result;
+
+        $d0 = r0.<org.apache.mahout.classifier.RegressionResultAnalyzer$Result: double actual>;
+
+        return $d0;
+    }
+
+    double getResult()
+    {
+        org.apache.mahout.classifier.RegressionResultAnalyzer$Result r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.RegressionResultAnalyzer$Result;
+
+        $d0 = r0.<org.apache.mahout.classifier.RegressionResultAnalyzer$Result: double result>;
+
+        return $d0;
+    }
+}

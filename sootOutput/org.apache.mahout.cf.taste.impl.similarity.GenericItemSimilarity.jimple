@@ -1,0 +1,456 @@
+public final class org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity extends java.lang.Object implements org.apache.mahout.cf.taste.similarity.ItemSimilarity
+{
+    private static final long[] NO_IDS;
+    private final org.apache.mahout.cf.taste.impl.common.FastByIDMap similarityMaps;
+    private final org.apache.mahout.cf.taste.impl.common.FastByIDMap similarItemIDsIndex;
+
+    public void <init>(java.lang.Iterable)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity r0;
+        java.lang.Iterable r1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r2, $r3;
+        java.util.Iterator $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity;
+
+        r1 := @parameter0: java.lang.Iterable;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: org.apache.mahout.cf.taste.impl.common.FastByIDMap similarityMaps> = $r2;
+
+        $r3 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke $r3.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: org.apache.mahout.cf.taste.impl.common.FastByIDMap similarItemIDsIndex> = $r3;
+
+        $r4 = interfaceinvoke r1.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: void initSimilarityMaps(java.util.Iterator)>($r4);
+
+        return;
+    }
+
+    public void <init>(java.lang.Iterable, int)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity r0;
+        java.lang.Iterable r1;
+        int i0;
+        java.util.List r2;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r3, $r4;
+        java.util.Iterator $r5, $r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity;
+
+        r1 := @parameter0: java.lang.Iterable;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke $r3.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: org.apache.mahout.cf.taste.impl.common.FastByIDMap similarityMaps> = $r3;
+
+        $r4 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: org.apache.mahout.cf.taste.impl.common.FastByIDMap similarItemIDsIndex> = $r4;
+
+        $r5 = interfaceinvoke r1.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        r2 = staticinvoke <org.apache.mahout.cf.taste.impl.recommender.TopItems: java.util.List getTopItemItemSimilarities(int,java.util.Iterator)>(i0, $r5);
+
+        $r6 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: void initSimilarityMaps(java.util.Iterator)>($r6);
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.cf.taste.similarity.ItemSimilarity, org.apache.mahout.cf.taste.model.DataModel) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity r0;
+        org.apache.mahout.cf.taste.similarity.ItemSimilarity r1;
+        org.apache.mahout.cf.taste.model.DataModel r2;
+        long[] r3;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r4, $r5;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator $r6;
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator $r7;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.ItemSimilarity;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.model.DataModel;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r4 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: org.apache.mahout.cf.taste.impl.common.FastByIDMap similarityMaps> = $r4;
+
+        $r5 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke $r5.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: org.apache.mahout.cf.taste.impl.common.FastByIDMap similarItemIDsIndex> = $r5;
+
+        $r6 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getItemIDs()>();
+
+        r3 = staticinvoke <org.apache.mahout.cf.taste.impl.similarity.GenericUserSimilarity: long[] longIteratorToList(org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator)>($r6);
+
+        $r7 = new org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator;
+
+        specialinvoke $r7.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: void <init>(org.apache.mahout.cf.taste.similarity.ItemSimilarity,long[],org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$1)>(r1, r3, null);
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: void initSimilarityMaps(java.util.Iterator)>($r7);
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.cf.taste.similarity.ItemSimilarity, org.apache.mahout.cf.taste.model.DataModel, int) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity r0;
+        org.apache.mahout.cf.taste.similarity.ItemSimilarity r1;
+        org.apache.mahout.cf.taste.model.DataModel r2;
+        int i0;
+        long[] r3;
+        java.util.List r5;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r6, $r7;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator $r8;
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator $r9;
+        java.util.Iterator $r10;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.ItemSimilarity;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.model.DataModel;
+
+        i0 := @parameter2: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r6 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke $r6.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: org.apache.mahout.cf.taste.impl.common.FastByIDMap similarityMaps> = $r6;
+
+        $r7 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke $r7.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: org.apache.mahout.cf.taste.impl.common.FastByIDMap similarItemIDsIndex> = $r7;
+
+        $r8 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getItemIDs()>();
+
+        r3 = staticinvoke <org.apache.mahout.cf.taste.impl.similarity.GenericUserSimilarity: long[] longIteratorToList(org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator)>($r8);
+
+        $r9 = new org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator;
+
+        specialinvoke $r9.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$DataModelSimilaritiesIterator: void <init>(org.apache.mahout.cf.taste.similarity.ItemSimilarity,long[],org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$1)>(r1, r3, null);
+
+        r5 = staticinvoke <org.apache.mahout.cf.taste.impl.recommender.TopItems: java.util.List getTopItemItemSimilarities(int,java.util.Iterator)>(i0, $r9);
+
+        $r10 = interfaceinvoke r5.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: void initSimilarityMaps(java.util.Iterator)>($r10);
+
+        return;
+    }
+
+    private void initSimilarityMaps(java.util.Iterator)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity r0;
+        java.util.Iterator r1;
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity r2;
+        long l0, l1, l4, l5;
+        boolean $z0;
+        java.lang.Object $r3, $r5;
+        byte $b2, $b3;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r4, $r8, $r9, r11;
+        double $d0;
+        java.lang.Double $r7;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity;
+
+        r1 := @parameter0: java.util.Iterator;
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r3 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity) $r3;
+
+        l0 = virtualinvoke r2.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity: long getItemID1()>();
+
+        l1 = virtualinvoke r2.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity: long getItemID2()>();
+
+        $b2 = l0 cmp l1;
+
+        if $b2 == 0 goto label1;
+
+        $b3 = l0 cmp l1;
+
+        if $b3 >= 0 goto label2;
+
+        l4 = l0;
+
+        l5 = l1;
+
+        goto label3;
+
+     label2:
+        l4 = l1;
+
+        l5 = l0;
+
+     label3:
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: org.apache.mahout.cf.taste.impl.common.FastByIDMap similarityMaps>;
+
+        $r5 = virtualinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l4);
+
+        r11 = (org.apache.mahout.cf.taste.impl.common.FastByIDMap) $r5;
+
+        if r11 != null goto label4;
+
+        $r9 = new org.apache.mahout.cf.taste.impl.common.FastByIDMap;
+
+        specialinvoke $r9.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: void <init>()>();
+
+        r11 = $r9;
+
+        $r8 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: org.apache.mahout.cf.taste.impl.common.FastByIDMap similarityMaps>;
+
+        virtualinvoke $r8.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object put(long,java.lang.Object)>(l4, $r9);
+
+     label4:
+        $d0 = virtualinvoke r2.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity$ItemItemSimilarity: double getValue()>();
+
+        $r7 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d0);
+
+        virtualinvoke r11.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object put(long,java.lang.Object)>(l5, $r7);
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: void doIndex(long,long)>(l4, l5);
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: void doIndex(long,long)>(l5, l4);
+
+        goto label1;
+
+     label5:
+        return;
+    }
+
+    private void doIndex(long, long)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity r0;
+        long l0, l1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r1, $r4;
+        java.lang.Object $r2;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r3, r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: org.apache.mahout.cf.taste.impl.common.FastByIDMap similarItemIDsIndex>;
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        r6 = (org.apache.mahout.cf.taste.impl.common.FastIDSet) $r2;
+
+        if r6 != null goto label1;
+
+        $r3 = new org.apache.mahout.cf.taste.impl.common.FastIDSet;
+
+        specialinvoke $r3.<org.apache.mahout.cf.taste.impl.common.FastIDSet: void <init>()>();
+
+        r6 = $r3;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: org.apache.mahout.cf.taste.impl.common.FastByIDMap similarItemIDsIndex>;
+
+        virtualinvoke $r4.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object put(long,java.lang.Object)>(l0, $r3);
+
+     label1:
+        virtualinvoke r6.<org.apache.mahout.cf.taste.impl.common.FastIDSet: boolean add(long)>(l1);
+
+        return;
+    }
+
+    public double itemSimilarity(long, long)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity r0;
+        long l0, l1, l4, l5;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap r1, $r3;
+        java.lang.Double r2;
+        byte $b2, $b3;
+        java.lang.Object $r4, $r5;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $b2 = l0 cmp l1;
+
+        if $b2 != 0 goto label1;
+
+        return 1.0;
+
+     label1:
+        $b3 = l0 cmp l1;
+
+        if $b3 >= 0 goto label2;
+
+        l4 = l0;
+
+        l5 = l1;
+
+        goto label3;
+
+     label2:
+        l4 = l1;
+
+        l5 = l0;
+
+     label3:
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: org.apache.mahout.cf.taste.impl.common.FastByIDMap similarityMaps>;
+
+        $r4 = virtualinvoke $r3.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l4);
+
+        r1 = (org.apache.mahout.cf.taste.impl.common.FastByIDMap) $r4;
+
+        if r1 != null goto label4;
+
+        return #NaN;
+
+     label4:
+        $r5 = virtualinvoke r1.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l5);
+
+        r2 = (java.lang.Double) $r5;
+
+        if r2 != null goto label5;
+
+        $d0 = #NaN;
+
+        goto label6;
+
+     label5:
+        $d0 = virtualinvoke r2.<java.lang.Double: double doubleValue()>();
+
+     label6:
+        return $d0;
+    }
+
+    public double[] itemSimilarities(long, long[])
+    {
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity r0;
+        long l0, $l2;
+        long[] r1;
+        int i1, i3;
+        double[] r2;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: long[];
+
+        i1 = lengthof r1;
+
+        r2 = newarray (double)[i1];
+
+        i3 = 0;
+
+     label1:
+        if i3 >= i1 goto label2;
+
+        $l2 = r1[i3];
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: double itemSimilarity(long,long)>(l0, $l2);
+
+        r2[i3] = $d0;
+
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label2:
+        return r2;
+    }
+
+    public long[] allSimilarItemIDs(long)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity r0;
+        long l0;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet r1;
+        org.apache.mahout.cf.taste.impl.common.FastByIDMap $r2;
+        java.lang.Object $r3;
+        long[] $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity;
+
+        l0 := @parameter0: long;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: org.apache.mahout.cf.taste.impl.common.FastByIDMap similarItemIDsIndex>;
+
+        $r3 = virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastByIDMap: java.lang.Object get(long)>(l0);
+
+        r1 = (org.apache.mahout.cf.taste.impl.common.FastIDSet) $r3;
+
+        if r1 == null goto label1;
+
+        $r4 = virtualinvoke r1.<org.apache.mahout.cf.taste.impl.common.FastIDSet: long[] toArray()>();
+
+        goto label2;
+
+     label1:
+        $r4 = <org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: long[] NO_IDS>;
+
+     label2:
+        return $r4;
+    }
+
+    public void refresh(java.util.Collection)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity r0;
+        java.util.Collection r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity;
+
+        r1 := @parameter0: java.util.Collection;
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        long[] $r0;
+
+        $r0 = newarray (long)[0];
+
+        <org.apache.mahout.cf.taste.impl.similarity.GenericItemSimilarity: long[] NO_IDS> = $r0;
+
+        return;
+    }
+}

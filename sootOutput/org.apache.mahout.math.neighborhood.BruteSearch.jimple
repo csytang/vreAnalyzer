@@ -1,0 +1,414 @@
+public class org.apache.mahout.math.neighborhood.BruteSearch extends org.apache.mahout.math.neighborhood.UpdatableSearcher
+{
+    private final java.util.List referenceVectors;
+
+    public void <init>(org.apache.mahout.common.distance.DistanceMeasure)
+    {
+        org.apache.mahout.math.neighborhood.BruteSearch r0;
+        org.apache.mahout.common.distance.DistanceMeasure r1;
+        java.util.ArrayList $r2;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.BruteSearch;
+
+        r1 := @parameter0: org.apache.mahout.common.distance.DistanceMeasure;
+
+        specialinvoke r0.<org.apache.mahout.math.neighborhood.UpdatableSearcher: void <init>(org.apache.mahout.common.distance.DistanceMeasure)>(r1);
+
+        $r2 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList()>();
+
+        r0.<org.apache.mahout.math.neighborhood.BruteSearch: java.util.List referenceVectors> = $r2;
+
+        return;
+    }
+
+    public void add(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.neighborhood.BruteSearch r0;
+        org.apache.mahout.math.Vector r1;
+        java.util.List $r2;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.BruteSearch;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $r2 = r0.<org.apache.mahout.math.neighborhood.BruteSearch: java.util.List referenceVectors>;
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>(r1);
+
+        return;
+    }
+
+    public int size()
+    {
+        org.apache.mahout.math.neighborhood.BruteSearch r0;
+        java.util.List $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.BruteSearch;
+
+        $r1 = r0.<org.apache.mahout.math.neighborhood.BruteSearch: java.util.List referenceVectors>;
+
+        $i0 = interfaceinvoke $r1.<java.util.List: int size()>();
+
+        return $i0;
+    }
+
+    public java.util.List search(org.apache.mahout.math.Vector, int)
+    {
+        org.apache.mahout.math.neighborhood.BruteSearch r0;
+        org.apache.mahout.math.Vector r1, r24;
+        java.util.ArrayList r3;
+        double d0, $d1, $d2;
+        java.util.List $r4, $r8, $r12;
+        int $i0, $i1, $i2, $i3, i5, i6, i7, i8;
+        java.util.PriorityQueue $r5;
+        com.google.common.collect.Ordering $r6, $r7;
+        org.apache.mahout.math.random.WeightedThing $r9, $r18, $r20, r25;
+        java.lang.Object $r10, $r11, $r14, $r17, $r22;
+        java.lang.Integer $r13, $r19;
+        org.apache.mahout.common.distance.DistanceMeasure $r16;
+        byte $b4;
+        boolean $z2, $z3;
+        java.util.Iterator r23;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.BruteSearch;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        i5 := @parameter1: int;
+
+        if i5 <= 0 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z2, "limit must be greater then 0!");
+
+        $r4 = r0.<org.apache.mahout.math.neighborhood.BruteSearch: java.util.List referenceVectors>;
+
+        $i0 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        i6 = staticinvoke <java.lang.Math: int min(int,int)>(i5, $i0);
+
+        $r5 = new java.util.PriorityQueue;
+
+        $r6 = staticinvoke <com.google.common.collect.Ordering: com.google.common.collect.Ordering natural()>();
+
+        $r7 = virtualinvoke $r6.<com.google.common.collect.Ordering: com.google.common.collect.Ordering reverse()>();
+
+        specialinvoke $r5.<java.util.PriorityQueue: void <init>(int,java.util.Comparator)>(i6, $r7);
+
+        r3 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayListWithCapacity(int)>(i6);
+
+        i7 = 0;
+
+        $r8 = r0.<org.apache.mahout.math.neighborhood.BruteSearch: java.util.List referenceVectors>;
+
+        r23 = interfaceinvoke $r8.<java.util.List: java.util.Iterator iterator()>();
+
+     label3:
+        $z3 = interfaceinvoke r23.<java.util.Iterator: boolean hasNext()>();
+
+        if $z3 == 0 goto label7;
+
+        $r17 = interfaceinvoke r23.<java.util.Iterator: java.lang.Object next()>();
+
+        r24 = (org.apache.mahout.math.Vector) $r17;
+
+        $r16 = r0.<org.apache.mahout.math.neighborhood.BruteSearch: org.apache.mahout.common.distance.DistanceMeasure distanceMeasure>;
+
+        d0 = interfaceinvoke $r16.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r1, r24);
+
+        $i2 = virtualinvoke $r5.<java.util.PriorityQueue: int size()>();
+
+        if $i2 < i6 goto label4;
+
+        $r22 = virtualinvoke $r5.<java.util.PriorityQueue: java.lang.Object peek()>();
+
+        $r20 = (org.apache.mahout.math.random.WeightedThing) $r22;
+
+        $d2 = virtualinvoke $r20.<org.apache.mahout.math.random.WeightedThing: double getWeight()>();
+
+        $b4 = $d2 cmpl d0;
+
+        if $b4 <= 0 goto label6;
+
+     label4:
+        $r18 = new org.apache.mahout.math.random.WeightedThing;
+
+        $r19 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i7);
+
+        specialinvoke $r18.<org.apache.mahout.math.random.WeightedThing: void <init>(java.lang.Object,double)>($r19, d0);
+
+        virtualinvoke $r5.<java.util.PriorityQueue: boolean add(java.lang.Object)>($r18);
+
+        $i3 = virtualinvoke $r5.<java.util.PriorityQueue: int size()>();
+
+        if $i3 <= i6 goto label5;
+
+        virtualinvoke $r5.<java.util.PriorityQueue: java.lang.Object poll()>();
+
+        goto label6;
+
+     label5:
+        interfaceinvoke r3.<java.util.List: boolean add(java.lang.Object)>(null);
+
+     label6:
+        i7 = i7 + 1;
+
+        goto label3;
+
+     label7:
+        i8 = i6 - 1;
+
+     label8:
+        if i8 < 0 goto label9;
+
+        $r10 = virtualinvoke $r5.<java.util.PriorityQueue: java.lang.Object poll()>();
+
+        r25 = (org.apache.mahout.math.random.WeightedThing) $r10;
+
+        $r9 = new org.apache.mahout.math.random.WeightedThing;
+
+        $r12 = r0.<org.apache.mahout.math.neighborhood.BruteSearch: java.util.List referenceVectors>;
+
+        $r11 = virtualinvoke r25.<org.apache.mahout.math.random.WeightedThing: java.lang.Object getValue()>();
+
+        $r13 = (java.lang.Integer) $r11;
+
+        $i1 = virtualinvoke $r13.<java.lang.Integer: int intValue()>();
+
+        $r14 = interfaceinvoke $r12.<java.util.List: java.lang.Object get(int)>($i1);
+
+        $d1 = virtualinvoke r25.<org.apache.mahout.math.random.WeightedThing: double getWeight()>();
+
+        specialinvoke $r9.<org.apache.mahout.math.random.WeightedThing: void <init>(java.lang.Object,double)>($r14, $d1);
+
+        interfaceinvoke r3.<java.util.List: java.lang.Object set(int,java.lang.Object)>(i8, $r9);
+
+        i8 = i8 + -1;
+
+        goto label8;
+
+     label9:
+        return r3;
+    }
+
+    public org.apache.mahout.math.random.WeightedThing searchFirst(org.apache.mahout.math.Vector, boolean)
+    {
+        org.apache.mahout.math.neighborhood.BruteSearch r0;
+        org.apache.mahout.math.Vector r1, r3, r8;
+        boolean z0, $z1, $z2;
+        java.util.Iterator r2;
+        double d0, d1;
+        java.util.List $r4;
+        org.apache.mahout.math.random.WeightedThing $r5;
+        java.lang.Object $r6;
+        org.apache.mahout.common.distance.DistanceMeasure $r7;
+        byte $b0;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.BruteSearch;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        z0 := @parameter1: boolean;
+
+        d1 = #Infinity;
+
+        r8 = null;
+
+        $r4 = r0.<org.apache.mahout.math.neighborhood.BruteSearch: java.util.List referenceVectors>;
+
+        r2 = interfaceinvoke $r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z1 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label3;
+
+        $r6 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.math.Vector) $r6;
+
+        $r7 = r0.<org.apache.mahout.math.neighborhood.BruteSearch: org.apache.mahout.common.distance.DistanceMeasure distanceMeasure>;
+
+        d0 = interfaceinvoke $r7.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r1, r3);
+
+        $b0 = d0 cmpg d1;
+
+        if $b0 >= 0 goto label1;
+
+        if z0 == 0 goto label2;
+
+        $z2 = virtualinvoke r3.<java.lang.Object: boolean equals(java.lang.Object)>(r1);
+
+        if $z2 != 0 goto label1;
+
+     label2:
+        d1 = d0;
+
+        r8 = r3;
+
+        goto label1;
+
+     label3:
+        $r5 = new org.apache.mahout.math.random.WeightedThing;
+
+        specialinvoke $r5.<org.apache.mahout.math.random.WeightedThing: void <init>(java.lang.Object,double)>(r8, d1);
+
+        return $r5;
+    }
+
+    public java.util.List search(java.lang.Iterable, int, int) throws java.lang.InterruptedException
+    {
+        org.apache.mahout.math.neighborhood.BruteSearch r0;
+        java.lang.Iterable r1;
+        int i0, i1, $i3, i4;
+        java.util.concurrent.ExecutorService r2;
+        java.util.ArrayList r3, r4;
+        java.util.Iterator r5;
+        org.apache.mahout.math.Vector r6;
+        boolean $z0;
+        java.lang.Object $r7;
+        org.apache.mahout.math.neighborhood.BruteSearch$1 $r9;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.BruteSearch;
+
+        r1 := @parameter0: java.lang.Iterable;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        r2 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ExecutorService newFixedThreadPool(int)>(i1);
+
+        r3 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList()>();
+
+        r4 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList()>();
+
+        i4 = 0;
+
+        r5 = interfaceinvoke r1.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r7 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.math.Vector) $r7;
+
+        interfaceinvoke r4.<java.util.List: boolean add(java.lang.Object)>(null);
+
+        $i3 = i4;
+
+        i4 = i4 + 1;
+
+        $r9 = new org.apache.mahout.math.neighborhood.BruteSearch$1;
+
+        specialinvoke $r9.<org.apache.mahout.math.neighborhood.BruteSearch$1: void <init>(org.apache.mahout.math.neighborhood.BruteSearch,java.util.List,int,org.apache.mahout.math.Vector,int)>(r0, r4, $i3, r6, i0);
+
+        interfaceinvoke r3.<java.util.List: boolean add(java.lang.Object)>($r9);
+
+        goto label1;
+
+     label2:
+        interfaceinvoke r2.<java.util.concurrent.ExecutorService: java.util.List invokeAll(java.util.Collection)>(r3);
+
+        interfaceinvoke r2.<java.util.concurrent.ExecutorService: void shutdown()>();
+
+        return r4;
+    }
+
+    public java.util.Iterator iterator()
+    {
+        org.apache.mahout.math.neighborhood.BruteSearch r0;
+        java.util.List $r1;
+        java.util.Iterator $r2;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.BruteSearch;
+
+        $r1 = r0.<org.apache.mahout.math.neighborhood.BruteSearch: java.util.List referenceVectors>;
+
+        $r2 = interfaceinvoke $r1.<java.util.List: java.util.Iterator iterator()>();
+
+        return $r2;
+    }
+
+    public boolean remove(org.apache.mahout.math.Vector, double)
+    {
+        org.apache.mahout.math.neighborhood.BruteSearch r0;
+        org.apache.mahout.math.Vector r1, r3;
+        double d0, d1;
+        java.util.Iterator r2;
+        java.util.List $r4, $r7;
+        boolean $z0;
+        java.lang.Object $r5;
+        org.apache.mahout.common.distance.DistanceMeasure $r6;
+        byte $b0;
+        int i1;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.BruteSearch;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        d0 := @parameter1: double;
+
+        i1 = 0;
+
+        $r4 = r0.<org.apache.mahout.math.neighborhood.BruteSearch: java.util.List referenceVectors>;
+
+        r2 = interfaceinvoke $r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.math.Vector) $r5;
+
+        $r6 = r0.<org.apache.mahout.math.neighborhood.BruteSearch: org.apache.mahout.common.distance.DistanceMeasure distanceMeasure>;
+
+        d1 = interfaceinvoke $r6.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r1, r3);
+
+        $b0 = d1 cmpg d0;
+
+        if $b0 >= 0 goto label2;
+
+        $r7 = r0.<org.apache.mahout.math.neighborhood.BruteSearch: java.util.List referenceVectors>;
+
+        interfaceinvoke $r7.<java.util.List: java.lang.Object remove(int)>(i1);
+
+        return 1;
+
+     label2:
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label3:
+        return 0;
+    }
+
+    public void clear()
+    {
+        org.apache.mahout.math.neighborhood.BruteSearch r0;
+        java.util.List $r1;
+
+        r0 := @this: org.apache.mahout.math.neighborhood.BruteSearch;
+
+        $r1 = r0.<org.apache.mahout.math.neighborhood.BruteSearch: java.util.List referenceVectors>;
+
+        interfaceinvoke $r1.<java.util.List: void clear()>();
+
+        return;
+    }
+}

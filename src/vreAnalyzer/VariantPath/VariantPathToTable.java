@@ -33,6 +33,8 @@ import vreAnalyzer.CSV.CSVWriter;
 import vreAnalyzer.UI.MainFrame;
 import vreAnalyzer.UI.NonEditableModel;
 import vreAnalyzer.Util.Graphviz.ImageDisplay;
+import vreAnalyzer.Variants.BindingResolver;
+import vreAnalyzer.Variants.ConditionCheck;
 import vreAnalyzer.Variants.Variant;
 
 public class VariantPathToTable {
@@ -45,9 +47,20 @@ public class VariantPathToTable {
 	// 对应 从路径id 到 variantfile上
 	private static Map<Integer,Set<File>> pathIdToVarFiles = new HashMap<Integer,Set<File>>();
 	
+	private Map<SootMethod,ConditionCheck> methodToConditionCheck;
+	
 	private boolean verbose = true;
 	private static int tableRowIndex = 0;
 	
+	/*
+	 * 表格结构
+	 * 1. Variant Path
+	 * 2. Variant List
+	 * 3. Classes
+	 * 4. Method
+	 * 5. Branch contains?
+	 * 6. Branch Value
+	 */
 	
 	public static VariantPathToTable inst(){
 		if(instance==null)
@@ -58,15 +71,17 @@ public class VariantPathToTable {
 	private JTable variantPathTable;
 	private NonEditableModel varitablePathModel;
 	
-	public VariantPathToTable(){
-		/*
-		 * "Path ID","Variants(in Id)"
-		 */
+	public VariantPathToTable(){	
 		variantPathTable = MainFrame.inst().getVariantPathTable();
 		varitablePathModel = (NonEditableModel) variantPathTable.getModel();
+		methodToConditionCheck = BindingResolver.inst().getmethodToConditionCheck();
 	}
 	
-	public void addARowToTable(int pathId,Set<Variant>variants,Set<File> variantfile,CSVWriter writer){
+	
+	public void addARowToTable(int pathId,VariantPath vpath, Set<Variant>variants,Set<File> variantfile,CSVWriter writer){
+		// Caller 函数
+		SootMethod callerMethod = vpath.getCallerMethod();
+		ConditionCheck callercondCheck = methodToConditionCheck.get(callerMethod);
 		String idList = "";
 		idList += "[";
 		
@@ -74,6 +89,7 @@ public class VariantPathToTable {
 			idList += variant.getVariantId();
 			idList += ",";
 		}
+		
 		rowToPathId.put(VariantPathToTable.tableRowIndex, pathId);
 		if(verbose){
 			System.out.println("Add Table to row:"+VariantPathToTable.tableRowIndex+"\twith pathId:"+pathId);
@@ -86,7 +102,14 @@ public class VariantPathToTable {
 		pathIdToVarFiles.put(pathId, variantfile);
 		/*
 		 * 写入csv文件
-		 * VariantPath Id,Variants List,Classes,Methods
+		 * VariantPath Id,
+		 * Variants List,
+		 * Classes,
+		 * Methods,
+		 * Branch Contains,
+		 * Branch Value,
+		 * Override
+		 * Overload
 		 */
 		Set<SootClass> classSet = new HashSet<SootClass>();
 		Map<SootMethod,Set<SootMethod>> callerToCallees = new HashMap<SootMethod,Set<SootMethod>>(); 
@@ -100,8 +123,30 @@ public class VariantPathToTable {
 				callerToCallees.put(variant.getCallerMethod(), callees);
 			}
 		}
+		
+		// 是否在caller函数中存在 分支 和 分支开始值
+		String branchContain = "";
+		String branchValue = "";
+		if(callercondCheck==null){
+			branchContain = "N";
+			branchValue = "-";
+		}else{
+			branchContain = "Y";
+			branchValue = callercondCheck.getCallerConditionalValueString();
+		}
+		
 		String classsetString = convertClassessetToString(classSet);
-		String csvString = pathId+",\""+idList+"\",\""+classsetString+"\","+"\""+coverMethodMaptoString(callerToCallees)+"\"";
+		
+		
+		
+		String csvString = pathId+",\""// 这个Variant Path的id
+		+idList+"\",\""// 这个路径上的所有variant的id
+		+classsetString+"\","// 这个路径上涉及的类名
+		+"\""+coverMethodMaptoString(callerToCallees)+"\","// 路径上的method <caller,callee>对
+		+branchContain+","// 是否包含分支
+		+"\""+branchValue+"\""// 如果包含分支 分支开始值
+		;
+		
 		writer.println(csvString);
 		if(verbose){
 			System.out.println("Write to csv:"+csvString);
@@ -109,6 +154,22 @@ public class VariantPathToTable {
 		VariantPathToTable.tableRowIndex++;
 	}
 	
+	private String coverMethodSetToString(Set<SootMethod> allcallees) {
+		String methodsetString = "[";
+		
+		for(SootMethod method:allcallees){
+			methodsetString += method.getName();
+			methodsetString += ",";
+		}
+		if(allcallees.size()>=1){
+			methodsetString = methodsetString.substring(0,methodsetString.length()-1);
+		}
+		methodsetString += "]"; 
+		return methodsetString;
+	}
+
+
+
 	private String convertClassessetToString(Set<SootClass> classSet) {
 		String classString = "[";
 		for(SootClass cls:classSet){
@@ -124,10 +185,9 @@ public class VariantPathToTable {
 	/**
 	 * 加入路径的按键监听
 	 */
-	public void addPathListener(){
-		
+	public void addPathListener() {
 		pathIdToImgFile = VariantPathAnalysis.inst().getpathIdToImgFile();
-		variantPathTable.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+		variantPathTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				if(variantPathTable.getSelectedRow() > -1){
@@ -233,7 +293,11 @@ public class VariantPathToTable {
 	        };
 	    }
 	}
-
+	
+	/**
+	 * @param callerToCallees 从Caller函数到Callee函数的对应
+	 * @return 返回<caller,callee> 对的字符串表示
+	 */
 	public String coverMethodMaptoString(Map<SootMethod,Set<SootMethod>> callerToCallees){
 		/**
 		 * [caller->callee]@[XXX->XXX]

@@ -1,0 +1,699 @@
+public class org.apache.mahout.classifier.df.DecisionForest extends java.lang.Object implements org.apache.hadoop.io.Writable
+{
+    private final java.util.List trees;
+
+    private void <init>()
+    {
+        org.apache.mahout.classifier.df.DecisionForest r0;
+        java.util.ArrayList $r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.DecisionForest;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees> = $r1;
+
+        return;
+    }
+
+    public void <init>(java.util.List)
+    {
+        org.apache.mahout.classifier.df.DecisionForest r0;
+        java.util.List r1;
+        boolean $z0, $z1;
+
+        r0 := @this: org.apache.mahout.classifier.df.DecisionForest;
+
+        r1 := @parameter0: java.util.List;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        if r1 == null goto label1;
+
+        $z0 = interfaceinvoke r1.<java.util.List: boolean isEmpty()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, "trees argument must not be null or empty");
+
+        r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees> = r1;
+
+        return;
+    }
+
+    java.util.List getTrees()
+    {
+        org.apache.mahout.classifier.df.DecisionForest r0;
+        java.util.List $r1;
+
+        r0 := @this: org.apache.mahout.classifier.df.DecisionForest;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees>;
+
+        return $r1;
+    }
+
+    public void classify(org.apache.mahout.classifier.df.data.Data, double[][])
+    {
+        org.apache.mahout.classifier.df.DecisionForest r0;
+        org.apache.mahout.classifier.df.data.Data r1;
+        double[][] r2;
+        java.util.Iterator r3;
+        org.apache.mahout.classifier.df.node.Node r4;
+        int $i0, $i1, $i2, $i3, i4, i5;
+        boolean $z0, $z1, $z2;
+        java.util.List $r5, $r10;
+        java.lang.Object $r6;
+        double[] $r7, $r8, $r11;
+        double $d0;
+        org.apache.mahout.classifier.df.data.Instance $r9;
+
+        r0 := @this: org.apache.mahout.classifier.df.DecisionForest;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.data.Data;
+
+        r2 := @parameter1: double[][];
+
+        $i0 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        $i1 = lengthof r2;
+
+        if $i0 != $i1 goto label1;
+
+        $z2 = 1;
+
+        goto label2;
+
+     label1:
+        $z2 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z2, "predictions.length must be equal to data.size()");
+
+        $z0 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: boolean isEmpty()>();
+
+        if $z0 == 0 goto label3;
+
+        return;
+
+     label3:
+        i4 = 0;
+
+        $r5 = r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees>;
+
+        r3 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label4:
+        $z1 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label8;
+
+        $r6 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.classifier.df.node.Node) $r6;
+
+        i5 = 0;
+
+     label5:
+        $i2 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: int size()>();
+
+        if i5 >= $i2 goto label7;
+
+        $r8 = r2[i5];
+
+        if $r8 != null goto label6;
+
+        $r10 = r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees>;
+
+        $i3 = interfaceinvoke $r10.<java.util.List: int size()>();
+
+        $r11 = newarray (double)[$i3];
+
+        r2[i5] = $r11;
+
+     label6:
+        $r7 = r2[i5];
+
+        $r9 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Data: org.apache.mahout.classifier.df.data.Instance get(int)>(i5);
+
+        $d0 = virtualinvoke r4.<org.apache.mahout.classifier.df.node.Node: double classify(org.apache.mahout.classifier.df.data.Instance)>($r9);
+
+        $r7[i4] = $d0;
+
+        i5 = i5 + 1;
+
+        goto label5;
+
+     label7:
+        i4 = i4 + 1;
+
+        goto label4;
+
+     label8:
+        return;
+    }
+
+    public double classify(org.apache.mahout.classifier.df.data.Dataset, java.util.Random, org.apache.mahout.classifier.df.data.Instance)
+    {
+        org.apache.mahout.classifier.df.DecisionForest r0;
+        org.apache.mahout.classifier.df.data.Dataset r1;
+        java.util.Random r2;
+        org.apache.mahout.classifier.df.data.Instance r3;
+        java.util.Iterator r4, r10;
+        org.apache.mahout.classifier.df.node.Node r5, r12;
+        double d0, $d1, $d2, $d3, d4, d5;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, i7;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        java.util.List $r6, $r8;
+        java.lang.Object $r7, $r9;
+        int[] r11;
+
+        r0 := @this: org.apache.mahout.classifier.df.DecisionForest;
+
+        r1 := @parameter0: org.apache.mahout.classifier.df.data.Dataset;
+
+        r2 := @parameter1: java.util.Random;
+
+        r3 := @parameter2: org.apache.mahout.classifier.df.data.Instance;
+
+        $i0 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Dataset: int getLabelId()>();
+
+        $z0 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Dataset: boolean isNumerical(int)>($i0);
+
+        if $z0 == 0 goto label4;
+
+        d4 = 0.0;
+
+        i7 = 0;
+
+        $r8 = r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees>;
+
+        r10 = interfaceinvoke $r8.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z3 = interfaceinvoke r10.<java.util.Iterator: boolean hasNext()>();
+
+        if $z3 == 0 goto label2;
+
+        $r9 = interfaceinvoke r10.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.classifier.df.node.Node) $r9;
+
+        d0 = virtualinvoke r5.<org.apache.mahout.classifier.df.node.Node: double classify(org.apache.mahout.classifier.df.data.Instance)>(r3);
+
+        $z4 = staticinvoke <java.lang.Double: boolean isNaN(double)>(d0);
+
+        if $z4 != 0 goto label1;
+
+        d4 = d4 + d0;
+
+        i7 = i7 + 1;
+
+        goto label1;
+
+     label2:
+        if i7 <= 0 goto label3;
+
+        $d3 = (double) i7;
+
+        $d2 = d4 / $d3;
+
+        return $d2;
+
+     label3:
+        return #NaN;
+
+     label4:
+        $i1 = virtualinvoke r1.<org.apache.mahout.classifier.df.data.Dataset: int nblabels()>();
+
+        r11 = newarray (int)[$i1];
+
+        $r6 = r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees>;
+
+        r4 = interfaceinvoke $r6.<java.util.List: java.util.Iterator iterator()>();
+
+     label5:
+        $z1 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label6;
+
+        $r7 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r12 = (org.apache.mahout.classifier.df.node.Node) $r7;
+
+        d5 = virtualinvoke r12.<org.apache.mahout.classifier.df.node.Node: double classify(org.apache.mahout.classifier.df.data.Instance)>(r3);
+
+        $z2 = staticinvoke <java.lang.Double: boolean isNaN(double)>(d5);
+
+        if $z2 != 0 goto label5;
+
+        $i5 = (int) d5;
+
+        $i4 = r11[$i5];
+
+        $i6 = $i4 + 1;
+
+        r11[$i5] = $i6;
+
+        goto label5;
+
+     label6:
+        $i2 = staticinvoke <org.apache.mahout.classifier.df.data.DataUtils: int sum(int[])>(r11);
+
+        if $i2 != 0 goto label7;
+
+        return #NaN;
+
+     label7:
+        $i3 = staticinvoke <org.apache.mahout.classifier.df.data.DataUtils: int maxindex(java.util.Random,int[])>(r2, r11);
+
+        $d1 = (double) $i3;
+
+        return $d1;
+    }
+
+    public long meanNbNodes()
+    {
+        org.apache.mahout.classifier.df.DecisionForest r0;
+        java.util.Iterator r1;
+        org.apache.mahout.classifier.df.node.Node r2;
+        java.util.List $r3, $r4;
+        boolean $z0;
+        int $i0;
+        long $l1, $l2, $l3, l4;
+        java.lang.Object $r5;
+
+        r0 := @this: org.apache.mahout.classifier.df.DecisionForest;
+
+        l4 = 0L;
+
+        $r3 = r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees>;
+
+        r1 = interfaceinvoke $r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (org.apache.mahout.classifier.df.node.Node) $r5;
+
+        $l3 = virtualinvoke r2.<org.apache.mahout.classifier.df.node.Node: long nbNodes()>();
+
+        l4 = l4 + $l3;
+
+        goto label1;
+
+     label2:
+        $r4 = r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees>;
+
+        $i0 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        $l1 = (long) $i0;
+
+        $l2 = l4 / $l1;
+
+        return $l2;
+    }
+
+    public long nbNodes()
+    {
+        org.apache.mahout.classifier.df.DecisionForest r0;
+        java.util.Iterator r1;
+        org.apache.mahout.classifier.df.node.Node r2;
+        java.util.List $r3;
+        boolean $z0;
+        java.lang.Object $r4;
+        long $l0, l1;
+
+        r0 := @this: org.apache.mahout.classifier.df.DecisionForest;
+
+        l1 = 0L;
+
+        $r3 = r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees>;
+
+        r1 = interfaceinvoke $r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r4 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (org.apache.mahout.classifier.df.node.Node) $r4;
+
+        $l0 = virtualinvoke r2.<org.apache.mahout.classifier.df.node.Node: long nbNodes()>();
+
+        l1 = l1 + $l0;
+
+        goto label1;
+
+     label2:
+        return l1;
+    }
+
+    public long meanMaxDepth()
+    {
+        org.apache.mahout.classifier.df.DecisionForest r0;
+        java.util.Iterator r1;
+        org.apache.mahout.classifier.df.node.Node r2;
+        java.util.List $r3, $r4;
+        boolean $z0;
+        int $i0;
+        long $l1, $l2, $l3, l4;
+        java.lang.Object $r5;
+
+        r0 := @this: org.apache.mahout.classifier.df.DecisionForest;
+
+        l4 = 0L;
+
+        $r3 = r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees>;
+
+        r1 = interfaceinvoke $r3.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (org.apache.mahout.classifier.df.node.Node) $r5;
+
+        $l3 = virtualinvoke r2.<org.apache.mahout.classifier.df.node.Node: long maxDepth()>();
+
+        l4 = l4 + $l3;
+
+        goto label1;
+
+     label2:
+        $r4 = r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees>;
+
+        $i0 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        $l1 = (long) $i0;
+
+        $l2 = l4 / $l1;
+
+        return $l2;
+    }
+
+    public boolean equals(java.lang.Object)
+    {
+        org.apache.mahout.classifier.df.DecisionForest r0, r2;
+        java.lang.Object r1;
+        boolean $z0, $z1, $z2;
+        java.util.List $r3, $r4, $r5, $r6;
+        int $i0, $i1;
+
+        r0 := @this: org.apache.mahout.classifier.df.DecisionForest;
+
+        r1 := @parameter0: java.lang.Object;
+
+        if r0 != r1 goto label1;
+
+        return 1;
+
+     label1:
+        $z0 = r1 instanceof org.apache.mahout.classifier.df.DecisionForest;
+
+        if $z0 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        r2 = (org.apache.mahout.classifier.df.DecisionForest) r1;
+
+        $r3 = r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees>;
+
+        $i0 = interfaceinvoke $r3.<java.util.List: int size()>();
+
+        $r4 = virtualinvoke r2.<org.apache.mahout.classifier.df.DecisionForest: java.util.List getTrees()>();
+
+        $i1 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        if $i0 != $i1 goto label3;
+
+        $r5 = r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees>;
+
+        $r6 = virtualinvoke r2.<org.apache.mahout.classifier.df.DecisionForest: java.util.List getTrees()>();
+
+        $z1 = interfaceinvoke $r5.<java.util.List: boolean containsAll(java.util.Collection)>($r6);
+
+        if $z1 == 0 goto label3;
+
+        $z2 = 1;
+
+        goto label4;
+
+     label3:
+        $z2 = 0;
+
+     label4:
+        return $z2;
+    }
+
+    public int hashCode()
+    {
+        org.apache.mahout.classifier.df.DecisionForest r0;
+        java.util.List $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.df.DecisionForest;
+
+        $r1 = r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees>;
+
+        $i0 = interfaceinvoke $r1.<java.util.List: int hashCode()>();
+
+        return $i0;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.df.DecisionForest r0;
+        java.io.DataOutput r1;
+        java.util.Iterator r2;
+        org.apache.mahout.classifier.df.node.Node r3;
+        java.util.List $r4, $r5;
+        int $i0;
+        boolean $z0;
+        java.lang.Object $r6;
+
+        r0 := @this: org.apache.mahout.classifier.df.DecisionForest;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $r4 = r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees>;
+
+        $i0 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i0);
+
+        $r5 = r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees>;
+
+        r2 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.classifier.df.node.Node) $r6;
+
+        virtualinvoke r3.<org.apache.mahout.classifier.df.node.Node: void write(java.io.DataOutput)>(r1);
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.df.DecisionForest r0;
+        java.io.DataInput r1;
+        int i0, i1;
+        java.util.List $r2;
+        org.apache.mahout.classifier.df.node.Node $r3;
+
+        r0 := @this: org.apache.mahout.classifier.df.DecisionForest;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        i0 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        i1 = 0;
+
+     label1:
+        if i1 >= i0 goto label2;
+
+        $r2 = r0.<org.apache.mahout.classifier.df.DecisionForest: java.util.List trees>;
+
+        $r3 = staticinvoke <org.apache.mahout.classifier.df.node.Node: org.apache.mahout.classifier.df.node.Node read(java.io.DataInput)>(r1);
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>($r3);
+
+        i1 = i1 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public static org.apache.mahout.classifier.df.DecisionForest read(java.io.DataInput) throws java.io.IOException
+    {
+        java.io.DataInput r0;
+        org.apache.mahout.classifier.df.DecisionForest $r2;
+
+        r0 := @parameter0: java.io.DataInput;
+
+        $r2 = new org.apache.mahout.classifier.df.DecisionForest;
+
+        specialinvoke $r2.<org.apache.mahout.classifier.df.DecisionForest: void <init>()>();
+
+        virtualinvoke $r2.<org.apache.mahout.classifier.df.DecisionForest: void readFields(java.io.DataInput)>(r0);
+
+        return $r2;
+    }
+
+    public static org.apache.mahout.classifier.df.DecisionForest load(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r4;
+        org.apache.hadoop.fs.FileSystem r2;
+        org.apache.hadoop.fs.Path[] r3, $r9, r16;
+        int i0, i1;
+        org.apache.hadoop.fs.FileStatus $r8;
+        boolean $z0;
+        org.apache.hadoop.fs.FSDataInputStream $r10, $r11;
+        java.lang.Throwable $r12, $r14, $r15, r18;
+        org.apache.mahout.classifier.df.DecisionForest r17;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r0);
+
+        $r8 = virtualinvoke r2.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus getFileStatus(org.apache.hadoop.fs.Path)>(r1);
+
+        $z0 = virtualinvoke $r8.<org.apache.hadoop.fs.FileStatus: boolean isDir()>();
+
+        if $z0 == 0 goto label01;
+
+        r16 = staticinvoke <org.apache.mahout.classifier.df.DFUtils: org.apache.hadoop.fs.Path[] listOutputFiles(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path)>(r2, r1);
+
+        goto label02;
+
+     label01:
+        $r9 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r9[0] = r1;
+
+        r16 = $r9;
+
+     label02:
+        r17 = null;
+
+        r3 = r16;
+
+        i0 = lengthof r16;
+
+        i1 = 0;
+
+     label03:
+        if i1 >= i0 goto label16;
+
+        r4 = r3[i1];
+
+        $r11 = new org.apache.hadoop.fs.FSDataInputStream;
+
+        $r10 = virtualinvoke r2.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataInputStream open(org.apache.hadoop.fs.Path)>(r4);
+
+        specialinvoke $r11.<org.apache.hadoop.fs.FSDataInputStream: void <init>(java.io.InputStream)>($r10);
+
+        r18 = null;
+
+     label04:
+        if r17 != null goto label05;
+
+        r17 = staticinvoke <org.apache.mahout.classifier.df.DecisionForest: org.apache.mahout.classifier.df.DecisionForest read(java.io.DataInput)>($r11);
+
+        goto label06;
+
+     label05:
+        virtualinvoke r17.<org.apache.mahout.classifier.df.DecisionForest: void readFields(java.io.DataInput)>($r11);
+
+     label06:
+        if $r11 == null goto label15;
+
+        virtualinvoke $r11.<org.apache.hadoop.fs.FSDataInputStream: void close()>();
+
+        goto label15;
+
+     label07:
+        $r12 := @caughtexception;
+
+        r18 = $r12;
+
+        throw $r12;
+
+     label08:
+        $r15 := @caughtexception;
+
+     label09:
+        if $r11 == null goto label14;
+
+        if r18 == null goto label13;
+
+     label10:
+        virtualinvoke $r11.<org.apache.hadoop.fs.FSDataInputStream: void close()>();
+
+     label11:
+        goto label14;
+
+     label12:
+        $r14 := @caughtexception;
+
+        virtualinvoke r18.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r14);
+
+        goto label14;
+
+     label13:
+        virtualinvoke $r11.<org.apache.hadoop.fs.FSDataInputStream: void close()>();
+
+     label14:
+        throw $r15;
+
+     label15:
+        i1 = i1 + 1;
+
+        goto label03;
+
+     label16:
+        return r17;
+
+        catch java.lang.Throwable from label04 to label06 with label07;
+        catch java.lang.Throwable from label04 to label06 with label08;
+        catch java.lang.Throwable from label10 to label11 with label12;
+        catch java.lang.Throwable from label07 to label09 with label08;
+    }
+}

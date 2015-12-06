@@ -1,0 +1,5 @@
+public interface  org.apache.mahout.cf.taste.impl.common.Retriever extends java.lang.Object
+{
+
+    public abstract java.lang.Object get(java.lang.Object) throws org.apache.mahout.cf.taste.common.TasteException;
+}

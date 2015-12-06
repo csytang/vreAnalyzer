@@ -1,0 +1,368 @@
+public final class org.apache.mahout.clustering.kmeans.RandomSeedGenerator extends java.lang.Object
+{
+    private static final org.slf4j.Logger log;
+    public static final java.lang.String K;
+
+    private void <init>()
+    {
+        org.apache.mahout.clustering.kmeans.RandomSeedGenerator r0;
+
+        r0 := @this: org.apache.mahout.clustering.kmeans.RandomSeedGenerator;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.hadoop.fs.Path buildRandom(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int, org.apache.mahout.common.distance.DistanceMeasure) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r2, $r4;
+        int i0;
+        org.apache.mahout.common.distance.DistanceMeasure r3;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter3: int;
+
+        r3 := @parameter4: org.apache.mahout.common.distance.DistanceMeasure;
+
+        $r4 = staticinvoke <org.apache.mahout.clustering.kmeans.RandomSeedGenerator: org.apache.hadoop.fs.Path buildRandom(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,org.apache.mahout.common.distance.DistanceMeasure,java.lang.Long)>(r0, r1, r2, i0, r3, null);
+
+        return $r4;
+    }
+
+    public static org.apache.hadoop.fs.Path buildRandom(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int, org.apache.mahout.common.distance.DistanceMeasure, java.lang.Long) throws java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r2, $r26, $r43, $r52, r57;
+        int i0, i1, $i2, $i3, i5, i6, i7, i8, i9, i10;
+        org.apache.mahout.common.distance.DistanceMeasure r3;
+        java.lang.Long r4;
+        org.apache.hadoop.fs.FileSystem r5;
+        boolean z0, $z1, $z2, $z3, $z6;
+        org.apache.hadoop.fs.FileStatus[] r7;
+        java.util.Random r8, $r58;
+        org.apache.hadoop.fs.FileStatus r11, $r29;
+        org.apache.mahout.common.Pair r12;
+        java.util.Iterator r13;
+        org.apache.mahout.math.VectorWritable r14;
+        org.apache.hadoop.io.Writable r15, $r33, $r36;
+        java.lang.StringBuilder $r20, $r22, $r24;
+        java.lang.String $r23, $r48;
+        org.apache.hadoop.fs.Path[] $r25;
+        java.net.URI $r27;
+        org.apache.hadoop.fs.PathFilter $r28;
+        java.util.ArrayList $r30, $r31;
+        org.slf4j.Logger $r32;
+        java.lang.Object $r34, $r37, $r39, $r40, $r44;
+        java.lang.Integer $r35;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable $r38;
+        org.apache.mahout.clustering.kmeans.Kluster $r41;
+        org.apache.mahout.math.Vector $r42, $r46;
+        org.apache.hadoop.io.Text $r47;
+        long $l4;
+        org.apache.mahout.clustering.iterator.ClusterWritable $r50, $r51;
+        java.lang.Throwable $r53, $r54, $r56, r62;
+        org.apache.hadoop.io.SequenceFile$Writer r61;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter3: int;
+
+        r3 := @parameter4: org.apache.mahout.common.distance.DistanceMeasure;
+
+        r4 := @parameter5: java.lang.Long;
+
+        if i0 <= 0 goto label01;
+
+        $z6 = 1;
+
+        goto label02;
+
+     label01:
+        $z6 = 0;
+
+     label02:
+        $r20 = new java.lang.StringBuilder;
+
+        specialinvoke $r20.<java.lang.StringBuilder: void <init>()>();
+
+        $r24 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Must be: k > 0, but k = ");
+
+        $r22 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z6, $r23);
+
+        $r27 = virtualinvoke r2.<org.apache.hadoop.fs.Path: java.net.URI toUri()>();
+
+        r5 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(java.net.URI,org.apache.hadoop.conf.Configuration)>($r27, r0);
+
+        $r25 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r25[0] = r2;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>(r0, $r25);
+
+        $r26 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r26.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r2, "part-randomSeed");
+
+        z0 = virtualinvoke r5.<org.apache.hadoop.fs.FileSystem: boolean createNewFile(org.apache.hadoop.fs.Path)>($r26);
+
+        if z0 == 0 goto label25;
+
+        $r29 = virtualinvoke r5.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus getFileStatus(org.apache.hadoop.fs.Path)>(r1);
+
+        $z1 = virtualinvoke $r29.<org.apache.hadoop.fs.FileStatus: boolean isDir()>();
+
+        if $z1 == 0 goto label03;
+
+        $r52 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r52.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r1, "*");
+
+        r57 = $r52;
+
+        goto label04;
+
+     label03:
+        r57 = r1;
+
+     label04:
+        $r28 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter logsCRCFilter()>();
+
+        r7 = virtualinvoke r5.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus[] globStatus(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.PathFilter)>(r57, $r28);
+
+        if r4 == null goto label05;
+
+        $l4 = virtualinvoke r4.<java.lang.Long: long longValue()>();
+
+        $r58 = staticinvoke <org.apache.mahout.common.RandomUtils: java.util.Random getRandom(long)>($l4);
+
+        goto label06;
+
+     label05:
+        $r58 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+     label06:
+        r8 = $r58;
+
+        $r30 = new java.util.ArrayList;
+
+        specialinvoke $r30.<java.util.ArrayList: void <init>(int)>(i0);
+
+        $r31 = new java.util.ArrayList;
+
+        specialinvoke $r31.<java.util.ArrayList: void <init>(int)>(i0);
+
+        i5 = 0;
+
+        i6 = 0;
+
+        i7 = lengthof r7;
+
+        i8 = 0;
+
+     label07:
+        if i8 >= i7 goto label12;
+
+        r11 = r7[i8];
+
+        $z2 = virtualinvoke r11.<org.apache.hadoop.fs.FileStatus: boolean isDir()>();
+
+        if $z2 != 0 goto label11;
+
+        $r38 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable;
+
+        $r43 = virtualinvoke r11.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        specialinvoke $r38.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable: void <init>(org.apache.hadoop.fs.Path,boolean,org.apache.hadoop.conf.Configuration)>($r43, 1, r0);
+
+        r13 = virtualinvoke $r38.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable: java.util.Iterator iterator()>();
+
+     label08:
+        $z3 = interfaceinvoke r13.<java.util.Iterator: boolean hasNext()>();
+
+        if $z3 == 0 goto label11;
+
+        $r44 = interfaceinvoke r13.<java.util.Iterator: java.lang.Object next()>();
+
+        r12 = (org.apache.mahout.common.Pair) $r44;
+
+        $r39 = virtualinvoke r12.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        r15 = (org.apache.hadoop.io.Writable) $r39;
+
+        $r40 = virtualinvoke r12.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        r14 = (org.apache.mahout.math.VectorWritable) $r40;
+
+        $r41 = new org.apache.mahout.clustering.kmeans.Kluster;
+
+        $r42 = virtualinvoke r14.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $i3 = i5;
+
+        i5 = i5 + 1;
+
+        specialinvoke $r41.<org.apache.mahout.clustering.kmeans.Kluster: void <init>(org.apache.mahout.math.Vector,int,org.apache.mahout.common.distance.DistanceMeasure)>($r42, $i3, r3);
+
+        $r46 = virtualinvoke r14.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        virtualinvoke $r41.<org.apache.mahout.clustering.kmeans.Kluster: void observe(org.apache.mahout.math.Vector,double)>($r46, 1.0);
+
+        $r47 = new org.apache.hadoop.io.Text;
+
+        $r48 = virtualinvoke r15.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r47.<org.apache.hadoop.io.Text: void <init>(java.lang.String)>($r48);
+
+        i1 = interfaceinvoke $r30.<java.util.List: int size()>();
+
+        if i1 >= i0 goto label09;
+
+        interfaceinvoke $r30.<java.util.List: boolean add(java.lang.Object)>($r47);
+
+        $r51 = new org.apache.mahout.clustering.iterator.ClusterWritable;
+
+        specialinvoke $r51.<org.apache.mahout.clustering.iterator.ClusterWritable: void <init>()>();
+
+        virtualinvoke $r51.<org.apache.mahout.clustering.iterator.ClusterWritable: void setValue(org.apache.mahout.clustering.Cluster)>($r41);
+
+        interfaceinvoke $r31.<java.util.List: boolean add(java.lang.Object)>($r51);
+
+        goto label10;
+
+     label09:
+        i9 = virtualinvoke r8.<java.util.Random: int nextInt(int)>(i6);
+
+        if i9 >= i0 goto label10;
+
+        interfaceinvoke $r30.<java.util.List: java.lang.Object set(int,java.lang.Object)>(i9, $r47);
+
+        $r50 = new org.apache.mahout.clustering.iterator.ClusterWritable;
+
+        specialinvoke $r50.<org.apache.mahout.clustering.iterator.ClusterWritable: void <init>()>();
+
+        virtualinvoke $r50.<org.apache.mahout.clustering.iterator.ClusterWritable: void setValue(org.apache.mahout.clustering.Cluster)>($r41);
+
+        interfaceinvoke $r31.<java.util.List: java.lang.Object set(int,java.lang.Object)>(i9, $r50);
+
+     label10:
+        i6 = i6 + 1;
+
+        goto label08;
+
+     label11:
+        i8 = i8 + 1;
+
+        goto label07;
+
+     label12:
+        r61 = staticinvoke <org.apache.hadoop.io.SequenceFile: org.apache.hadoop.io.SequenceFile$Writer createWriter(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>(r5, r0, $r26, class "org/apache/hadoop/io/Text", class "org/apache/mahout/clustering/iterator/ClusterWritable");
+
+        r62 = null;
+
+     label13:
+        i10 = 0;
+
+     label14:
+        $i2 = interfaceinvoke $r30.<java.util.List: int size()>();
+
+        if i10 >= $i2 goto label15;
+
+        $r34 = interfaceinvoke $r30.<java.util.List: java.lang.Object get(int)>(i10);
+
+        $r33 = (org.apache.hadoop.io.Writable) $r34;
+
+        $r37 = interfaceinvoke $r31.<java.util.List: java.lang.Object get(int)>(i10);
+
+        $r36 = (org.apache.hadoop.io.Writable) $r37;
+
+        virtualinvoke r61.<org.apache.hadoop.io.SequenceFile$Writer: void append(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r33, $r36);
+
+        i10 = i10 + 1;
+
+        goto label14;
+
+     label15:
+        $r32 = <org.apache.mahout.clustering.kmeans.RandomSeedGenerator: org.slf4j.Logger log>;
+
+        $r35 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r32.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object,java.lang.Object)>("Wrote {} Klusters to {}", $r35, $r26);
+
+     label16:
+        if r61 == null goto label25;
+
+        virtualinvoke r61.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
+
+        goto label25;
+
+     label17:
+        $r53 := @caughtexception;
+
+        r62 = $r53;
+
+        throw $r53;
+
+     label18:
+        $r56 := @caughtexception;
+
+     label19:
+        if r61 == null goto label24;
+
+        if r62 == null goto label23;
+
+     label20:
+        virtualinvoke r61.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
+
+     label21:
+        goto label24;
+
+     label22:
+        $r54 := @caughtexception;
+
+        virtualinvoke r62.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r54);
+
+        goto label24;
+
+     label23:
+        virtualinvoke r61.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
+
+     label24:
+        throw $r56;
+
+     label25:
+        return $r26;
+
+        catch java.lang.Throwable from label13 to label16 with label17;
+        catch java.lang.Throwable from label13 to label16 with label18;
+        catch java.lang.Throwable from label20 to label21 with label22;
+        catch java.lang.Throwable from label17 to label19 with label18;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.clustering.kmeans.RandomSeedGenerator: java.lang.String K> = "k";
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/clustering/kmeans/RandomSeedGenerator");
+
+        <org.apache.mahout.clustering.kmeans.RandomSeedGenerator: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

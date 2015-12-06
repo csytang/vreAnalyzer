@@ -1,0 +1,258 @@
+public class org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private static final int NUM_ESTIMATE_POINTS;
+    private org.apache.mahout.clustering.streaming.cluster.StreamingKMeans clusterer;
+    private int numPoints;
+    private boolean estimateDistanceCutoff;
+    private java.util.List estimatePoints;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper r0;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: int numPoints> = 0;
+
+        r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: boolean estimateDistanceCutoff> = 0;
+
+        return;
+    }
+
+    public void setup(org.apache.hadoop.mapreduce.Mapper$Context)
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.apache.mahout.math.neighborhood.UpdatableSearcher r3;
+        int i0;
+        double d0;
+        float $f0;
+        byte $b1;
+        org.apache.mahout.clustering.streaming.cluster.StreamingKMeans $r4;
+        java.util.ArrayList $r5;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        r3 = staticinvoke <org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansUtilsMR: org.apache.mahout.math.neighborhood.UpdatableSearcher searcherFromConfiguration(org.apache.hadoop.conf.Configuration)>(r2);
+
+        i0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("estimatedNumMapClusters", 1);
+
+        $f0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: float getFloat(java.lang.String,float)>("estimatedDistanceCutoff", -1.0F);
+
+        d0 = (double) $f0;
+
+        $b1 = d0 cmpl -1.0;
+
+        if $b1 != 0 goto label1;
+
+        r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: boolean estimateDistanceCutoff> = 1;
+
+        $r5 = new java.util.ArrayList;
+
+        specialinvoke $r5.<java.util.ArrayList: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: java.util.List estimatePoints> = $r5;
+
+     label1:
+        $r4 = new org.apache.mahout.clustering.streaming.cluster.StreamingKMeans;
+
+        specialinvoke $r4.<org.apache.mahout.clustering.streaming.cluster.StreamingKMeans: void <init>(org.apache.mahout.math.neighborhood.UpdatableSearcher,int,double)>(r3, i0, d0);
+
+        r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: org.apache.mahout.clustering.streaming.cluster.StreamingKMeans clusterer> = $r4;
+
+        return;
+    }
+
+    private void clusterEstimatePoints()
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper r0;
+        org.apache.mahout.clustering.streaming.cluster.StreamingKMeans $r1, $r2, $r6;
+        java.util.List $r3, $r5;
+        org.apache.mahout.common.distance.DistanceMeasure $r4;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper;
+
+        $r2 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: org.apache.mahout.clustering.streaming.cluster.StreamingKMeans clusterer>;
+
+        $r3 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: java.util.List estimatePoints>;
+
+        $r1 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: org.apache.mahout.clustering.streaming.cluster.StreamingKMeans clusterer>;
+
+        $r4 = virtualinvoke $r1.<org.apache.mahout.clustering.streaming.cluster.StreamingKMeans: org.apache.mahout.common.distance.DistanceMeasure getDistanceMeasure()>();
+
+        $d0 = staticinvoke <org.apache.mahout.clustering.ClusteringUtils: double estimateDistanceCutoff(java.util.List,org.apache.mahout.common.distance.DistanceMeasure)>($r3, $r4);
+
+        virtualinvoke $r2.<org.apache.mahout.clustering.streaming.cluster.StreamingKMeans: void setDistanceCutoff(double)>($d0);
+
+        $r6 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: org.apache.mahout.clustering.streaming.cluster.StreamingKMeans clusterer>;
+
+        $r5 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: java.util.List estimatePoints>;
+
+        virtualinvoke $r6.<org.apache.mahout.clustering.streaming.cluster.StreamingKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher cluster(java.lang.Iterable)>($r5);
+
+        r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: boolean estimateDistanceCutoff> = 0;
+
+        return;
+    }
+
+    public void map(org.apache.hadoop.io.Writable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context)
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper r0;
+        org.apache.hadoop.io.Writable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.Centroid $r5;
+        int $i0, $i1, $i2, $i3;
+        org.apache.mahout.math.Vector $r6;
+        boolean $z0;
+        org.apache.mahout.clustering.streaming.cluster.StreamingKMeans $r7;
+        java.util.List $r9;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.Writable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = new org.apache.mahout.math.Centroid;
+
+        $i0 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: int numPoints>;
+
+        $i1 = $i0 + 1;
+
+        r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: int numPoints> = $i1;
+
+        $r6 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        specialinvoke $r5.<org.apache.mahout.math.Centroid: void <init>(int,org.apache.mahout.math.Vector,double)>($i0, $r6, 1.0);
+
+        $z0 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: boolean estimateDistanceCutoff>;
+
+        if $z0 == 0 goto label2;
+
+        $i2 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: int numPoints>;
+
+        if $i2 >= 1000 goto label1;
+
+        $r9 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: java.util.List estimatePoints>;
+
+        interfaceinvoke $r9.<java.util.List: boolean add(java.lang.Object)>($r5);
+
+        goto label3;
+
+     label1:
+        $i3 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: int numPoints>;
+
+        if $i3 != 1000 goto label3;
+
+        specialinvoke r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: void clusterEstimatePoints()>();
+
+        goto label3;
+
+     label2:
+        $r7 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: org.apache.mahout.clustering.streaming.cluster.StreamingKMeans clusterer>;
+
+        virtualinvoke $r7.<org.apache.mahout.clustering.streaming.cluster.StreamingKMeans: org.apache.mahout.math.neighborhood.UpdatableSearcher cluster(org.apache.mahout.math.Centroid)>($r5);
+
+     label3:
+        return;
+    }
+
+    public void cleanup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        java.util.Iterator r2;
+        org.apache.mahout.math.Centroid r3;
+        boolean $z0, $z1;
+        org.apache.mahout.clustering.streaming.cluster.StreamingKMeans $r4, $r5;
+        java.lang.Object $r6;
+        org.apache.hadoop.io.IntWritable $r7;
+        org.apache.mahout.clustering.streaming.mapreduce.CentroidWritable $r8;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $z0 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: boolean estimateDistanceCutoff>;
+
+        if $z0 == 0 goto label1;
+
+        specialinvoke r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: void clusterEstimatePoints()>();
+
+     label1:
+        $r4 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: org.apache.mahout.clustering.streaming.cluster.StreamingKMeans clusterer>;
+
+        virtualinvoke $r4.<org.apache.mahout.clustering.streaming.cluster.StreamingKMeans: void reindexCentroids()>();
+
+        $r5 = r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: org.apache.mahout.clustering.streaming.cluster.StreamingKMeans clusterer>;
+
+        r2 = virtualinvoke $r5.<org.apache.mahout.clustering.streaming.cluster.StreamingKMeans: java.util.Iterator iterator()>();
+
+     label2:
+        $z1 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label3;
+
+        $r6 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.math.Centroid) $r6;
+
+        $r7 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r7.<org.apache.hadoop.io.IntWritable: void <init>(int)>(0);
+
+        $r8 = new org.apache.mahout.clustering.streaming.mapreduce.CentroidWritable;
+
+        specialinvoke $r8.<org.apache.mahout.clustering.streaming.mapreduce.CentroidWritable: void <init>(org.apache.mahout.math.Centroid)>(r3);
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r7, $r8);
+
+        goto label2;
+
+     label3:
+        return;
+    }
+
+    public volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.Writable $r5;
+
+        r0 := @this: org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.Writable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: void map(org.apache.hadoop.io.Writable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.clustering.streaming.mapreduce.StreamingKMeansMapper: int NUM_ESTIMATE_POINTS> = 1000;
+
+        return;
+    }
+}

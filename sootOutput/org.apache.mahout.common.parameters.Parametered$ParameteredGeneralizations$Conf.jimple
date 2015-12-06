@@ -1,0 +1,245 @@
+final class org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf extends java.lang.Object
+{
+    private final java.lang.StringBuilder sb;
+    private int longestName;
+    private int numChars;
+
+    private void <init>(org.apache.mahout.common.parameters.Parametered)
+    {
+        org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf r0;
+        org.apache.mahout.common.parameters.Parametered r1;
+        java.lang.StringBuilder $r2;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf;
+
+        r1 := @parameter0: org.apache.mahout.common.parameters.Parametered;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: int numChars> = 100;
+
+        specialinvoke r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: void recurseCount(org.apache.mahout.common.parameters.Parametered)>(r1);
+
+        $r2 = new java.lang.StringBuilder;
+
+        $i0 = r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: int numChars>;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>(int)>($i0);
+
+        r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: java.lang.StringBuilder sb> = $r2;
+
+        specialinvoke r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: void recurseWrite(org.apache.mahout.common.parameters.Parametered)>(r1);
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf r0;
+        java.lang.StringBuilder $r1;
+        java.lang.String $r2;
+
+        r0 := @this: org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf;
+
+        $r1 = r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: java.lang.StringBuilder sb>;
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r2;
+    }
+
+    private void recurseCount(org.apache.mahout.common.parameters.Parametered)
+    {
+        org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf r0;
+        org.apache.mahout.common.parameters.Parametered r1;
+        java.util.Iterator r2;
+        org.apache.mahout.common.parameters.Parameter r3;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13;
+        java.util.Collection $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+        java.lang.String $r6, $r7, $r8, $r9, $r10;
+
+        r0 := @this: org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf;
+
+        r1 := @parameter0: org.apache.mahout.common.parameters.Parametered;
+
+        $r4 = interfaceinvoke r1.<org.apache.mahout.common.parameters.Parametered: java.util.Collection getParameters()>();
+
+        r2 = interfaceinvoke $r4.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label4;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.common.parameters.Parameter) $r5;
+
+        $r6 = interfaceinvoke r3.<org.apache.mahout.common.parameters.Parameter: java.lang.String prefix()>();
+
+        $i1 = virtualinvoke $r6.<java.lang.String: int length()>();
+
+        $r7 = interfaceinvoke r3.<org.apache.mahout.common.parameters.Parameter: java.lang.String name()>();
+
+        $i2 = virtualinvoke $r7.<java.lang.String: int length()>();
+
+        i0 = $i1 + $i2;
+
+        $i3 = r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: int longestName>;
+
+        if i0 <= $i3 goto label2;
+
+        r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: int longestName> = i0;
+
+     label2:
+        $i4 = r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: int numChars>;
+
+        $i5 = $i4 + i0;
+
+        r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: int numChars> = $i5;
+
+        $i7 = r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: int numChars>;
+
+        $i6 = $i7 + 5;
+
+        r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: int numChars> = $i6;
+
+        $i8 = r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: int numChars>;
+
+        $r8 = interfaceinvoke r3.<org.apache.mahout.common.parameters.Parameter: java.lang.String description()>();
+
+        $i10 = virtualinvoke $r8.<java.lang.String: int length()>();
+
+        $i9 = $i8 + $i10;
+
+        r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: int numChars> = $i9;
+
+        $r9 = interfaceinvoke r3.<org.apache.mahout.common.parameters.Parameter: java.lang.String getStringValue()>();
+
+        if $r9 == null goto label3;
+
+        $i11 = r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: int numChars>;
+
+        $r10 = interfaceinvoke r3.<org.apache.mahout.common.parameters.Parameter: java.lang.String getStringValue()>();
+
+        $i13 = virtualinvoke $r10.<java.lang.String: int length()>();
+
+        $i12 = $i11 + $i13;
+
+        r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: int numChars> = $i12;
+
+     label3:
+        specialinvoke r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: void recurseCount(org.apache.mahout.common.parameters.Parametered)>(r3);
+
+        goto label1;
+
+     label4:
+        return;
+    }
+
+    private void recurseWrite(org.apache.mahout.common.parameters.Parametered)
+    {
+        org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf r0;
+        org.apache.mahout.common.parameters.Parametered r1;
+        java.util.Iterator r2;
+        org.apache.mahout.common.parameters.Parameter r3;
+        java.util.Collection $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+        java.lang.StringBuilder $r6, $r8, $r11, $r13, $r17, $r18, $r23, $r25, $r26;
+        java.lang.String $r9, $r15, $r16, $r20, $r28;
+
+        r0 := @this: org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf;
+
+        r1 := @parameter0: org.apache.mahout.common.parameters.Parametered;
+
+        $r4 = interfaceinvoke r1.<org.apache.mahout.common.parameters.Parametered: java.util.Collection getParameters()>();
+
+        r2 = interfaceinvoke $r4.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.common.parameters.Parameter) $r5;
+
+        $r6 = r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: java.lang.StringBuilder sb>;
+
+        virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("# ");
+
+        $r8 = r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: java.lang.StringBuilder sb>;
+
+        $r9 = interfaceinvoke r3.<org.apache.mahout.common.parameters.Parameter: java.lang.String description()>();
+
+        virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r11 = r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: java.lang.StringBuilder sb>;
+
+        virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(10);
+
+        $r13 = r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: java.lang.StringBuilder sb>;
+
+        $r15 = interfaceinvoke r3.<org.apache.mahout.common.parameters.Parameter: java.lang.String prefix()>();
+
+        virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r15);
+
+        $r17 = r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: java.lang.StringBuilder sb>;
+
+        $r16 = interfaceinvoke r3.<org.apache.mahout.common.parameters.Parameter: java.lang.String name()>();
+
+        virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r16);
+
+        $r18 = r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: java.lang.StringBuilder sb>;
+
+        virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" = ");
+
+        $r20 = interfaceinvoke r3.<org.apache.mahout.common.parameters.Parameter: java.lang.String getStringValue()>();
+
+        if $r20 == null goto label2;
+
+        $r26 = r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: java.lang.StringBuilder sb>;
+
+        $r28 = interfaceinvoke r3.<org.apache.mahout.common.parameters.Parameter: java.lang.String getStringValue()>();
+
+        virtualinvoke $r26.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r28);
+
+     label2:
+        $r23 = r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: java.lang.StringBuilder sb>;
+
+        virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(10);
+
+        $r25 = r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: java.lang.StringBuilder sb>;
+
+        virtualinvoke $r25.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(10);
+
+        specialinvoke r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: void recurseWrite(org.apache.mahout.common.parameters.Parametered)>(r3);
+
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    void <init>(org.apache.mahout.common.parameters.Parametered, org.apache.mahout.common.parameters.Parametered$1)
+    {
+        org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf r0;
+        org.apache.mahout.common.parameters.Parametered r1;
+        org.apache.mahout.common.parameters.Parametered$1 r2;
+
+        r0 := @this: org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf;
+
+        r1 := @parameter0: org.apache.mahout.common.parameters.Parametered;
+
+        r2 := @parameter1: org.apache.mahout.common.parameters.Parametered$1;
+
+        specialinvoke r0.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: void <init>(org.apache.mahout.common.parameters.Parametered)>(r1);
+
+        return;
+    }
+}

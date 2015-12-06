@@ -1,0 +1,639 @@
+public final class org.apache.mahout.cf.taste.hadoop.item.RecommenderJob extends org.apache.mahout.common.AbstractJob
+{
+    public static final java.lang.String BOOLEAN_DATA;
+    public static final java.lang.String DEFAULT_PREPARE_PATH;
+    private static final int DEFAULT_MAX_SIMILARITIES_PER_ITEM;
+    private static final int DEFAULT_MAX_PREFS;
+    private static final int DEFAULT_MIN_PREFS_PER_USER;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.item.RecommenderJob r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.RecommenderJob;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        return;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.cf.taste.hadoop.item.RecommenderJob r0;
+        java.lang.String[] r1, $r57, $r79;
+        java.util.Map r2;
+        org.apache.hadoop.fs.Path r3, r9, r10, r11, r13, $r37, $r38, $r39, $r42, $r47, $r56, $r58, $r66, $r69, $r73, $r77, $r84, $r85;
+        int i0, i1, i2, i3, i4, i10;
+        java.lang.String r4, r5, r6, r7, r8, $r16, $r17, $r18, $r19, $r20, $r22, $r23, $r25, $r28, $r29, $r30, $r31, $r33, $r34, $r36, $r48, $r49, $r50, $r51, $r52, $r55, $r59, $r60, $r62, $r63, $r64, $r68, $r70, $r71, $r72, $r74, $r75, $r76, $r78, $r82, $r83, $r87, r94;
+        boolean z0, z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z10, z11, z12;
+        double d0, $d1;
+        long l5, $l7, $l9;
+        org.apache.hadoop.conf.Configuration r14, $r46, $r54, $r65, $r80, $r86, r90, r92;
+        java.lang.Boolean $r15, $r32, $r61;
+        java.lang.StringBuilder $r21, $r24, $r26, $r27, $r40, $r41, $r43, $r44;
+        java.util.concurrent.atomic.AtomicInteger $r35;
+        org.apache.hadoop.mapreduce.Job $r45, r89, r93, r97;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob $r53;
+        org.apache.mahout.common.iterator.sequencefile.PathType $r67;
+        org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob $r81;
+        java.lang.Class $r95;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.item.RecommenderJob;
+
+        r1 := @parameter0: java.lang.String[];
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addInputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addOutputOption()>();
+
+        $r16 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(10);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("numRecommendations", "n", "Number of recommendations per user", $r16);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("usersFile", null, "File of users to recommend for", null);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("itemsFile", null, "File of items to recommend for", null);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("filterFile", "f", "File containing comma-separated userID,itemID pairs. Used to exclude the item from the recommendations for that user (optional)", null);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("userItemFile", "uif", "File containing comma-separated userID,itemID pairs (optional). Used to include only these items into recommendations. Cannot be used together with usersFile or itemsFile", null);
+
+        $r15 = <java.lang.Boolean: java.lang.Boolean FALSE>;
+
+        $r17 = virtualinvoke $r15.<java.lang.Boolean: java.lang.String toString()>();
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("booleanData", "b", "Treat input as without pref values", $r17);
+
+        $r18 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(10);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("maxPrefsPerUser", "mxp", "Maximum number of preferences considered per user in final recommendation phase", $r18);
+
+        $r19 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(1);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("minPrefsPerUser", "mp", "ignore users with less preferences than this in the similarity computation (default: 1)", $r19);
+
+        $r20 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(100);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("maxSimilaritiesPerItem", "m", "Maximum number of similarities considered per item ", $r20);
+
+        $r22 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(500);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("maxPrefsInItemSimilarity", "mpiis", "max number of preferences to consider per user or item in the item similarity computation phase, users or items with more preferences will be sampled down (default: 500)", $r22);
+
+        $r21 = new java.lang.StringBuilder;
+
+        specialinvoke $r21.<java.lang.StringBuilder: void <init>()>();
+
+        $r24 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Name of distributed similarity measures class to instantiate, alternatively use one of the predefined similarities (");
+
+        $r23 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasures: java.lang.String list()>();
+
+        $r27 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r23);
+
+        $r26 = virtualinvoke $r27.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(41);
+
+        $r25 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("similarityClassname", "s", $r25, 1);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("threshold", "tr", "discard item pairs with a similarity value below this", 0);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("outputPathForSimilarityMatrix", "opfsm", "write the item similarity matrix to this path (optional)", 0);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("randomSeed", null, "use this seed for sampling", 0);
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void addFlag(java.lang.String,java.lang.String,java.lang.String)>("sequencefileOutput", null, "write the output into a SequenceFile instead of a text file");
+
+        r2 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.util.Map parseArguments(java.lang.String[])>(r1);
+
+        if r2 != null goto label01;
+
+        return -1;
+
+     label01:
+        r3 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        $r29 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.lang.String getOption(java.lang.String)>("numRecommendations");
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r29);
+
+        r4 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.lang.String getOption(java.lang.String)>("usersFile");
+
+        r5 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.lang.String getOption(java.lang.String)>("itemsFile");
+
+        r6 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.lang.String getOption(java.lang.String)>("filterFile");
+
+        r7 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.lang.String getOption(java.lang.String)>("userItemFile");
+
+        $r28 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.lang.String getOption(java.lang.String)>("booleanData");
+
+        $r32 = staticinvoke <java.lang.Boolean: java.lang.Boolean valueOf(java.lang.String)>($r28);
+
+        z0 = virtualinvoke $r32.<java.lang.Boolean: boolean booleanValue()>();
+
+        $r33 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.lang.String getOption(java.lang.String)>("maxPrefsPerUser");
+
+        i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r33);
+
+        $r30 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.lang.String getOption(java.lang.String)>("minPrefsPerUser");
+
+        i2 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r30);
+
+        $r31 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.lang.String getOption(java.lang.String)>("maxPrefsInItemSimilarity");
+
+        i3 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r31);
+
+        $r34 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.lang.String getOption(java.lang.String)>("maxSimilaritiesPerItem");
+
+        i4 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r34);
+
+        r8 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.lang.String getOption(java.lang.String)>("similarityClassname");
+
+        $z3 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: boolean hasOption(java.lang.String)>("threshold");
+
+        if $z3 == 0 goto label02;
+
+        $r82 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.lang.String getOption(java.lang.String)>("threshold");
+
+        $d1 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r82);
+
+        goto label03;
+
+     label02:
+        $d1 = 4.9E-324;
+
+     label03:
+        d0 = $d1;
+
+        $z2 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: boolean hasOption(java.lang.String)>("randomSeed");
+
+        if $z2 == 0 goto label04;
+
+        $r87 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.lang.String getOption(java.lang.String)>("randomSeed");
+
+        $l9 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r87);
+
+        goto label05;
+
+     label04:
+        $l9 = -9223372036854775808L;
+
+     label05:
+        l5 = $l9;
+
+        r9 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.fs.Path getTempPath(java.lang.String)>("preparePreferenceMatrix");
+
+        r11 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.fs.Path getTempPath(java.lang.String)>("similarityMatrix");
+
+        r10 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.fs.Path getTempPath(java.lang.String)>("explicitFilterPath");
+
+        r13 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.fs.Path getTempPath(java.lang.String)>("partialMultiply");
+
+        $r35 = new java.util.concurrent.atomic.AtomicInteger;
+
+        specialinvoke $r35.<java.util.concurrent.atomic.AtomicInteger: void <init>()>();
+
+        i10 = -1;
+
+        $z7 = staticinvoke <org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: boolean shouldRunNextPhase(java.util.Map,java.util.concurrent.atomic.AtomicInteger)>(r2, $r35);
+
+        if $z7 == 0 goto label06;
+
+        $r80 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $r81 = new org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob;
+
+        specialinvoke $r81.<org.apache.mahout.cf.taste.hadoop.preparation.PreparePreferenceMatrixJob: void <init>()>();
+
+        $r79 = newarray (java.lang.String)[10];
+
+        $r79[0] = "--input";
+
+        $r77 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.fs.Path getInputPath()>();
+
+        $r78 = virtualinvoke $r77.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        $r79[1] = $r78;
+
+        $r79[2] = "--output";
+
+        $r76 = virtualinvoke r9.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        $r79[3] = $r76;
+
+        $r79[4] = "--minPrefsPerUser";
+
+        $r75 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i2);
+
+        $r79[5] = $r75;
+
+        $r79[6] = "--booleanData";
+
+        $r74 = staticinvoke <java.lang.String: java.lang.String valueOf(boolean)>(z0);
+
+        $r79[7] = $r74;
+
+        $r79[8] = "--tempDir";
+
+        $r84 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.fs.Path getTempPath()>();
+
+        $r83 = virtualinvoke $r84.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        $r79[9] = $r83;
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.util.Tool,java.lang.String[])>($r80, $r81, $r79);
+
+        $r85 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r85.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r9, "numUsers.bin");
+
+        $r86 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        i10 = staticinvoke <org.apache.mahout.common.HadoopUtil: int readInt(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r85, $r86);
+
+     label06:
+        $z6 = staticinvoke <org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: boolean shouldRunNextPhase(java.util.Map,java.util.concurrent.atomic.AtomicInteger)>(r2, $r35);
+
+        if $z6 == 0 goto label08;
+
+        if i10 != -1 goto label07;
+
+        $r66 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r66.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r9, "userVectors");
+
+        $r67 = <org.apache.mahout.common.iterator.sequencefile.PathType: org.apache.mahout.common.iterator.sequencefile.PathType LIST>;
+
+        $r65 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $l7 = staticinvoke <org.apache.mahout.common.HadoopUtil: long countRecords(org.apache.hadoop.fs.Path,org.apache.mahout.common.iterator.sequencefile.PathType,org.apache.hadoop.fs.PathFilter,org.apache.hadoop.conf.Configuration)>($r66, $r67, null, $r65);
+
+        i10 = (int) $l7;
+
+     label07:
+        $r54 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $r53 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob;
+
+        specialinvoke $r53.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: void <init>()>();
+
+        $r57 = newarray (java.lang.String)[22];
+
+        $r57[0] = "--input";
+
+        $r56 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r56.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r9, "ratingMatrix");
+
+        $r55 = virtualinvoke $r56.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        $r57[1] = $r55;
+
+        $r57[2] = "--output";
+
+        $r50 = virtualinvoke r11.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        $r57[3] = $r50;
+
+        $r57[4] = "--numberOfColumns";
+
+        $r49 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i10);
+
+        $r57[5] = $r49;
+
+        $r57[6] = "--similarityClassname";
+
+        $r57[7] = r8;
+
+        $r57[8] = "--maxObservationsPerRow";
+
+        $r52 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i3);
+
+        $r57[9] = $r52;
+
+        $r57[10] = "--maxObservationsPerColumn";
+
+        $r51 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i3);
+
+        $r57[11] = $r51;
+
+        $r57[12] = "--maxSimilaritiesPerRow";
+
+        $r62 = staticinvoke <java.lang.String: java.lang.String valueOf(int)>(i4);
+
+        $r57[13] = $r62;
+
+        $r57[14] = "--excludeSelfSimilarity";
+
+        $r61 = <java.lang.Boolean: java.lang.Boolean TRUE>;
+
+        $r64 = staticinvoke <java.lang.String: java.lang.String valueOf(java.lang.Object)>($r61);
+
+        $r57[15] = $r64;
+
+        $r57[16] = "--threshold";
+
+        $r63 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(d0);
+
+        $r57[17] = $r63;
+
+        $r57[18] = "--randomSeed";
+
+        $r60 = staticinvoke <java.lang.String: java.lang.String valueOf(long)>(l5);
+
+        $r57[19] = $r60;
+
+        $r57[20] = "--tempDir";
+
+        $r58 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.fs.Path getTempPath()>();
+
+        $r59 = virtualinvoke $r58.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        $r57[21] = $r59;
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.util.Tool,java.lang.String[])>($r54, $r53, $r57);
+
+        $z8 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: boolean hasOption(java.lang.String)>("outputPathForSimilarityMatrix");
+
+        if $z8 == 0 goto label08;
+
+        $r73 = new org.apache.hadoop.fs.Path;
+
+        $r72 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.lang.String getOption(java.lang.String)>("outputPathForSimilarityMatrix");
+
+        specialinvoke $r73.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r72);
+
+        r89 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>(r11, $r73, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", class "org/apache/mahout/cf/taste/hadoop/similarity/item/ItemSimilarityJob$MostSimilarItemPairsMapper", class "org/apache/mahout/cf/taste/hadoop/EntityEntityWritable", class "org/apache/hadoop/io/DoubleWritable", class "org/apache/mahout/cf/taste/hadoop/similarity/item/ItemSimilarityJob$MostSimilarItemPairsReducer", class "org/apache/mahout/cf/taste/hadoop/EntityEntityWritable", class "org/apache/hadoop/io/DoubleWritable", class "org/apache/hadoop/mapreduce/lib/output/TextOutputFormat");
+
+        r90 = virtualinvoke r89.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r68 = <org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: java.lang.String ITEM_ID_INDEX_PATH_STR>;
+
+        $r69 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r69.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r9, "itemIDIndex");
+
+        $r71 = virtualinvoke $r69.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        virtualinvoke r90.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r68, $r71);
+
+        $r70 = <org.apache.mahout.cf.taste.hadoop.similarity.item.ItemSimilarityJob: java.lang.String MAX_SIMILARITIES_PER_ITEM>;
+
+        virtualinvoke r90.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>($r70, i4);
+
+        virtualinvoke r89.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+     label08:
+        $z10 = staticinvoke <org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: boolean shouldRunNextPhase(java.util.Map,java.util.concurrent.atomic.AtomicInteger)>(r2, $r35);
+
+        if $z10 == 0 goto label11;
+
+        $r45 = new org.apache.hadoop.mapreduce.Job;
+
+        $r46 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        specialinvoke $r45.<org.apache.hadoop.mapreduce.Job: void <init>(org.apache.hadoop.conf.Configuration,java.lang.String)>($r46, "partialMultiply");
+
+        r92 = virtualinvoke $r45.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.MultipleInputs: void addInputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>($r45, r11, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", class "org/apache/mahout/cf/taste/hadoop/item/SimilarityMatrixRowWrapperMapper");
+
+        $r47 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r47.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r9, "userVectors");
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.MultipleInputs: void addInputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class)>($r45, $r47, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", class "org/apache/mahout/cf/taste/hadoop/item/UserVectorSplitterMapper");
+
+        virtualinvoke $r45.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(class "org/apache/mahout/cf/taste/hadoop/item/ToVectorAndPrefReducer");
+
+        virtualinvoke $r45.<org.apache.hadoop.mapreduce.Job: void setMapOutputKeyClass(java.lang.Class)>(class "org/apache/mahout/math/VarIntWritable");
+
+        virtualinvoke $r45.<org.apache.hadoop.mapreduce.Job: void setMapOutputValueClass(java.lang.Class)>(class "org/apache/mahout/cf/taste/hadoop/item/VectorOrPrefWritable");
+
+        virtualinvoke $r45.<org.apache.hadoop.mapreduce.Job: void setReducerClass(java.lang.Class)>(class "org/apache/mahout/cf/taste/hadoop/item/ToVectorAndPrefReducer");
+
+        virtualinvoke $r45.<org.apache.hadoop.mapreduce.Job: void setOutputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        virtualinvoke $r45.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(class "org/apache/mahout/math/VarIntWritable");
+
+        virtualinvoke $r45.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(class "org/apache/mahout/cf/taste/hadoop/item/VectorAndPrefsWritable");
+
+        virtualinvoke r92.<org.apache.hadoop.conf.Configuration: void setBoolean(java.lang.String,boolean)>("mapred.compress.map.output", 1);
+
+        $r48 = virtualinvoke r13.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        virtualinvoke r92.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("mapred.output.dir", $r48);
+
+        if r4 == null goto label09;
+
+        virtualinvoke r92.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("usersFile", r4);
+
+     label09:
+        if r7 == null goto label10;
+
+        virtualinvoke r92.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("userItemFile", r7);
+
+     label10:
+        virtualinvoke r92.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>("maxPrefsPerUserConsidered", i1);
+
+        z11 = virtualinvoke $r45.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z11 != 0 goto label11;
+
+        return -1;
+
+     label11:
+        $z4 = staticinvoke <org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: boolean shouldRunNextPhase(java.util.Map,java.util.concurrent.atomic.AtomicInteger)>(r2, $r35);
+
+        if $z4 == 0 goto label19;
+
+        if r6 == null goto label12;
+
+        $r42 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r42.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r6);
+
+        r93 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>($r42, r10, class "org/apache/hadoop/mapreduce/lib/input/TextInputFormat", class "org/apache/mahout/cf/taste/hadoop/item/ItemFilterMapper", class "org/apache/mahout/math/VarLongWritable", class "org/apache/mahout/math/VarLongWritable", class "org/apache/mahout/cf/taste/hadoop/item/ItemFilterAsVectorAndPrefsReducer", class "org/apache/mahout/math/VarIntWritable", class "org/apache/mahout/cf/taste/hadoop/item/VectorAndPrefsWritable", class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        z12 = virtualinvoke r93.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z12 != 0 goto label12;
+
+        return -1;
+
+     label12:
+        r94 = virtualinvoke r13.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        if r6 == null goto label13;
+
+        $r44 = new java.lang.StringBuilder;
+
+        specialinvoke $r44.<java.lang.StringBuilder: void <init>()>();
+
+        $r43 = virtualinvoke $r44.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r94);
+
+        $r41 = virtualinvoke $r43.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(",");
+
+        $r40 = virtualinvoke $r41.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r10);
+
+        r94 = virtualinvoke $r40.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label13:
+        $z5 = interfaceinvoke r2.<java.util.Map: boolean containsKey(java.lang.Object)>("--sequencefileOutput");
+
+        if $z5 == 0 goto label14;
+
+        $r95 = class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat";
+
+        goto label15;
+
+     label14:
+        $r95 = class "org/apache/hadoop/mapreduce/lib/output/TextOutputFormat";
+
+     label15:
+        $r38 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r38.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r94);
+
+        r97 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class)>($r38, r3, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", class "org/apache/mahout/cf/taste/hadoop/item/PartialMultiplyMapper", class "org/apache/mahout/math/VarLongWritable", class "org/apache/mahout/cf/taste/hadoop/item/PrefAndSimilarityColumnWritable", class "org/apache/mahout/cf/taste/hadoop/item/AggregateAndRecommendReducer", class "org/apache/mahout/math/VarLongWritable", class "org/apache/mahout/cf/taste/hadoop/RecommendedItemsWritable", $r95);
+
+        r14 = virtualinvoke r97.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        if r5 == null goto label16;
+
+        virtualinvoke r14.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("itemsFile", r5);
+
+     label16:
+        if r7 == null goto label17;
+
+        virtualinvoke r14.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("userItemFile", r7);
+
+     label17:
+        if r6 == null goto label18;
+
+        $r39 = virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: org.apache.hadoop.fs.Path getTempPath()>();
+
+        staticinvoke <org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void setS3SafeCombinedInputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path)>(r97, $r39, r13, r10);
+
+     label18:
+        staticinvoke <org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void setIOSort(org.apache.hadoop.mapreduce.JobContext)>(r97);
+
+        $r37 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r37.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r9, "itemIDIndex");
+
+        $r36 = virtualinvoke $r37.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+
+        virtualinvoke r14.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("itemIDIndexPath", $r36);
+
+        virtualinvoke r14.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>("numRecommendations", i0);
+
+        virtualinvoke r14.<org.apache.hadoop.conf.Configuration: void setBoolean(java.lang.String,boolean)>("booleanData", z0);
+
+        z1 = virtualinvoke r97.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z1 != 0 goto label19;
+
+        return -1;
+
+     label19:
+        return 0;
+    }
+
+    private static void setIOSort(org.apache.hadoop.mapreduce.JobContext)
+    {
+        org.apache.hadoop.mapreduce.JobContext r0;
+        org.apache.hadoop.conf.Configuration r1;
+        java.util.regex.Matcher r2;
+        java.lang.String r3, $r5, $r6, r7;
+        java.util.regex.Pattern $r4;
+        boolean $z0, $z1;
+        int i0, $i1, $i2;
+
+        r0 := @parameter0: org.apache.hadoop.mapreduce.JobContext;
+
+        r1 = interfaceinvoke r0.<org.apache.hadoop.mapreduce.JobContext: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        virtualinvoke r1.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>("io.sort.factor", 100);
+
+        r7 = virtualinvoke r1.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("mapred.map.child.java.opts");
+
+        if r7 != null goto label1;
+
+        r7 = virtualinvoke r1.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("mapred.child.java.opts");
+
+     label1:
+        i0 = 512;
+
+        if r7 == null goto label2;
+
+        $r4 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("-Xmx([0-9]+)([mMgG])");
+
+        r2 = virtualinvoke $r4.<java.util.regex.Pattern: java.util.regex.Matcher matcher(java.lang.CharSequence)>(r7);
+
+        $z0 = virtualinvoke r2.<java.util.regex.Matcher: boolean find()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = virtualinvoke r2.<java.util.regex.Matcher: java.lang.String group(int)>(1);
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r5);
+
+        r3 = virtualinvoke r2.<java.util.regex.Matcher: java.lang.String group(int)>(2);
+
+        $r6 = "g";
+
+        $z1 = virtualinvoke $r6.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>(r3);
+
+        if $z1 == 0 goto label2;
+
+        i0 = i0 * 1024;
+
+     label2:
+        $i1 = i0 / 2;
+
+        $i2 = staticinvoke <java.lang.Math: int min(int,int)>($i1, 1024);
+
+        virtualinvoke r1.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>("io.sort.mb", $i2);
+
+        virtualinvoke r1.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>("mapred.task.timeout", 3600000);
+
+        return;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.hadoop.conf.Configuration $r1;
+        org.apache.mahout.cf.taste.hadoop.item.RecommenderJob $r2;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r1.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r2 = new org.apache.mahout.cf.taste.hadoop.item.RecommenderJob;
+
+        specialinvoke $r2.<org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.util.Tool,java.lang.String[])>($r1, $r2, r0);
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: int DEFAULT_MIN_PREFS_PER_USER> = 1;
+
+        <org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: int DEFAULT_MAX_PREFS> = 500;
+
+        <org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: int DEFAULT_MAX_SIMILARITIES_PER_ITEM> = 100;
+
+        <org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.lang.String DEFAULT_PREPARE_PATH> = "preparePreferenceMatrix";
+
+        <org.apache.mahout.cf.taste.hadoop.item.RecommenderJob: java.lang.String BOOLEAN_DATA> = "booleanData";
+
+        return;
+    }
+}

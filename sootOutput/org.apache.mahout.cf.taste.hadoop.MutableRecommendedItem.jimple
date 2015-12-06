@@ -1,0 +1,221 @@
+public class org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem extends java.lang.Object implements org.apache.mahout.cf.taste.recommender.RecommendedItem
+{
+    private long itemID;
+    private float value;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public void <init>(long, float)
+    {
+        org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem r0;
+        long l0;
+        float f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem;
+
+        l0 := @parameter0: long;
+
+        f0 := @parameter1: float;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem: long itemID> = l0;
+
+        r0.<org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem: float value> = f0;
+
+        return;
+    }
+
+    public long getItemID()
+    {
+        org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem r0;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem;
+
+        $l0 = r0.<org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem: long itemID>;
+
+        return $l0;
+    }
+
+    public float getValue()
+    {
+        org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem r0;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem;
+
+        $f0 = r0.<org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem: float value>;
+
+        return $f0;
+    }
+
+    public void setItemID(long)
+    {
+        org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem r0;
+        long l0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem;
+
+        l0 := @parameter0: long;
+
+        r0.<org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem: long itemID> = l0;
+
+        return;
+    }
+
+    public void set(long, float)
+    {
+        org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem r0;
+        long l0;
+        float f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem;
+
+        l0 := @parameter0: long;
+
+        f0 := @parameter1: float;
+
+        r0.<org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem: long itemID> = l0;
+
+        r0.<org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem: float value> = f0;
+
+        return;
+    }
+
+    public void capToMaxValue(float)
+    {
+        org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem r0;
+        float f0, $f1;
+        byte $b0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem;
+
+        f0 := @parameter0: float;
+
+        $f1 = r0.<org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem: float value>;
+
+        $b0 = $f1 cmpl f0;
+
+        if $b0 <= 0 goto label1;
+
+        r0.<org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem: float value> = f0;
+
+     label1:
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem r0;
+        java.lang.StringBuilder $r1, $r2, $r3, $r4, $r5, $r6;
+        long $l0;
+        float $f0;
+        java.lang.String $r7;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("MutableRecommendedItem[item:");
+
+        $l0 = r0.<org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem: long itemID>;
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", value:");
+
+        $f0 = r0.<org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem: float value>;
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(float)>($f0);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(93);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r7;
+    }
+
+    public int hashCode()
+    {
+        org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem r0;
+        long $l0;
+        float $f0;
+        int $i1, $i2, $i3;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem;
+
+        $l0 = r0.<org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem: long itemID>;
+
+        $i1 = (int) $l0;
+
+        $f0 = r0.<org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem: float value>;
+
+        $i2 = staticinvoke <org.apache.mahout.common.RandomUtils: int hashFloat(float)>($f0);
+
+        $i3 = $i1 ^ $i2;
+
+        return $i3;
+    }
+
+    public boolean equals(java.lang.Object)
+    {
+        org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem r0;
+        java.lang.Object r1;
+        org.apache.mahout.cf.taste.recommender.RecommendedItem r2;
+        boolean $z0, $z1;
+        long $l0, $l1;
+        byte $b2, $b3;
+        float $f0, $f1;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $z0 = r1 instanceof org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem;
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        r2 = (org.apache.mahout.cf.taste.recommender.RecommendedItem) r1;
+
+        $l0 = r0.<org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem: long itemID>;
+
+        $l1 = interfaceinvoke r2.<org.apache.mahout.cf.taste.recommender.RecommendedItem: long getItemID()>();
+
+        $b2 = $l0 cmp $l1;
+
+        if $b2 != 0 goto label2;
+
+        $f0 = r0.<org.apache.mahout.cf.taste.hadoop.MutableRecommendedItem: float value>;
+
+        $f1 = interfaceinvoke r2.<org.apache.mahout.cf.taste.recommender.RecommendedItem: float getValue()>();
+
+        $b3 = $f0 cmpl $f1;
+
+        if $b3 != 0 goto label2;
+
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        return $z1;
+    }
+}

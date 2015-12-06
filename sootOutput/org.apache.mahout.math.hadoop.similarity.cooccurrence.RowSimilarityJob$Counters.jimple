@@ -1,0 +1,117 @@
+final enum class org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters extends java.lang.Enum
+{
+    public static final enum org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters ROWS;
+    public static final enum org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters USED_OBSERVATIONS;
+    public static final enum org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters NEGLECTED_OBSERVATIONS;
+    public static final enum org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters COOCCURRENCES;
+    public static final enum org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters PRUNED_COOCCURRENCES;
+    private static final org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters[] $VALUES;
+
+    public static org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters[] values()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters[] $r0, $r2;
+        java.lang.Object $r1;
+
+        $r0 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters[] $VALUES>;
+
+        $r1 = virtualinvoke $r0.<java.lang.Object: java.lang.Object clone()>();
+
+        $r2 = (org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters[]) $r1;
+
+        return $r2;
+    }
+
+    public static org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters valueOf(java.lang.String)
+    {
+        java.lang.String r0;
+        java.lang.Enum $r1;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <java.lang.Enum: java.lang.Enum valueOf(java.lang.Class,java.lang.String)>(class "org/apache/mahout/math/hadoop/similarity/cooccurrence/RowSimilarityJob$Counters", r0);
+
+        $r2 = (org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters) $r1;
+
+        return $r2;
+    }
+
+    private void <init>(java.lang.String, int)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters r0;
+        java.lang.String r1;
+        int i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Enum: void <init>(java.lang.String,int)>(r1, i0);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters $r0, $r1, $r2, $r3, $r4, $r6, $r7, $r8, $r9, $r10;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters[] $r5;
+
+        $r0 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters;
+
+        specialinvoke $r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: void <init>(java.lang.String,int)>("ROWS", 0);
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters ROWS> = $r0;
+
+        $r1 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters;
+
+        specialinvoke $r1.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: void <init>(java.lang.String,int)>("USED_OBSERVATIONS", 1);
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters USED_OBSERVATIONS> = $r1;
+
+        $r2 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters;
+
+        specialinvoke $r2.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: void <init>(java.lang.String,int)>("NEGLECTED_OBSERVATIONS", 2);
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters NEGLECTED_OBSERVATIONS> = $r2;
+
+        $r3 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters;
+
+        specialinvoke $r3.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: void <init>(java.lang.String,int)>("COOCCURRENCES", 3);
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters COOCCURRENCES> = $r3;
+
+        $r4 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters;
+
+        specialinvoke $r4.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: void <init>(java.lang.String,int)>("PRUNED_COOCCURRENCES", 4);
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters PRUNED_COOCCURRENCES> = $r4;
+
+        $r5 = newarray (org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters)[5];
+
+        $r6 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters ROWS>;
+
+        $r5[0] = $r6;
+
+        $r7 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters USED_OBSERVATIONS>;
+
+        $r5[1] = $r7;
+
+        $r8 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters NEGLECTED_OBSERVATIONS>;
+
+        $r5[2] = $r8;
+
+        $r9 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters COOCCURRENCES>;
+
+        $r5[3] = $r9;
+
+        $r10 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters PRUNED_COOCCURRENCES>;
+
+        $r5[4] = $r10;
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters[] $VALUES> = $r5;
+
+        return;
+    }
+}

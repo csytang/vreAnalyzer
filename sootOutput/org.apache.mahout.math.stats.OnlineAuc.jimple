@@ -1,0 +1,13 @@
+public interface  org.apache.mahout.math.stats.OnlineAuc extends java.lang.Object implements org.apache.hadoop.io.Writable
+{
+
+    public abstract double addSample(int, java.lang.String, double);
+
+    public abstract double addSample(int, double);
+
+    public abstract double auc();
+
+    public abstract void setPolicy(org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy);
+
+    public abstract void setWindowSize(int);
+}

@@ -1,0 +1,165 @@
+public final class org.apache.mahout.clustering.spectral.AffinityMatrixInputJob extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.clustering.spectral.AffinityMatrixInputJob r0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.AffinityMatrixInputJob;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void runJob(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int, int) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.fs.Path r0, r1;
+        int i0, i1;
+        boolean z0;
+        org.apache.hadoop.conf.Configuration $r4;
+        org.apache.hadoop.fs.Path[] $r5;
+        org.apache.hadoop.mapreduce.Job $r6;
+        java.lang.StringBuilder $r7, $r8, $r9, $r10, $r11;
+        java.lang.String $r12;
+        java.lang.IllegalStateException $r13;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter2: int;
+
+        i1 := @parameter3: int;
+
+        $r4 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r4.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r5 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r5[0] = r1;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r4, $r5);
+
+        virtualinvoke $r4.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>("org.apache.mahout.clustering.spectral.common.affinitydimensions", i0);
+
+        $r6 = new org.apache.hadoop.mapreduce.Job;
+
+        $r7 = new java.lang.StringBuilder;
+
+        specialinvoke $r7.<java.lang.StringBuilder: void <init>()>();
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("AffinityMatrixInputJob: ");
+
+        $r9 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r0);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" -> M/R -> ");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r1);
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r6.<org.apache.hadoop.mapreduce.Job: void <init>(org.apache.hadoop.conf.Configuration,java.lang.String)>($r4, $r12);
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setMapOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/IntWritable");
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setMapOutputValueClass(java.lang.Class)>(class "org/apache/mahout/math/hadoop/DistributedRowMatrix$MatrixEntryWritable");
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/IntWritable");
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setOutputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat");
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setMapperClass(java.lang.Class)>(class "org/apache/mahout/clustering/spectral/AffinityMatrixInputMapper");
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setReducerClass(java.lang.Class)>(class "org/apache/mahout/clustering/spectral/AffinityMatrixInputReducer");
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void addInputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r6, r0);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r6, r1);
+
+        virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(class "org/apache/mahout/clustering/spectral/AffinityMatrixInputJob");
+
+        z0 = virtualinvoke $r6.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z0 != 0 goto label1;
+
+        $r13 = new java.lang.IllegalStateException;
+
+        specialinvoke $r13.<java.lang.IllegalStateException: void <init>(java.lang.String)>("Job failed!");
+
+        throw $r13;
+
+     label1:
+        return;
+    }
+
+    public static org.apache.mahout.math.hadoop.DistributedRowMatrix runJob(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.fs.Path r0, r1, $r4, $r10;
+        int i0;
+        java.lang.StringBuilder $r5, $r6, $r7, $r11, $r12, $r14;
+        long $l1, $l2, $l3, $l4;
+        java.lang.String $r8, $r13;
+        org.apache.mahout.math.hadoop.DistributedRowMatrix $r9;
+        org.apache.hadoop.conf.Configuration $r15;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter2: int;
+
+        $r4 = new org.apache.hadoop.fs.Path;
+
+        $r5 = new java.lang.StringBuilder;
+
+        specialinvoke $r5.<java.lang.StringBuilder: void <init>()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("seqfiles-");
+
+        $l1 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l2 = $l1 & 255L;
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l2);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r4.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r1, $r8);
+
+        staticinvoke <org.apache.mahout.clustering.spectral.AffinityMatrixInputJob: void runJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int)>(r0, $r4, i0, i0);
+
+        $r9 = new org.apache.mahout.math.hadoop.DistributedRowMatrix;
+
+        $r10 = new org.apache.hadoop.fs.Path;
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("seqtmp-");
+
+        $l4 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l3 = $l4 & 255L;
+
+        $r14 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l3);
+
+        $r13 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r10.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r4, $r13);
+
+        specialinvoke $r9.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,int)>($r4, $r10, i0, i0);
+
+        $r15 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r15.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        virtualinvoke $r9.<org.apache.mahout.math.hadoop.DistributedRowMatrix: void setConf(org.apache.hadoop.conf.Configuration)>($r15);
+
+        return $r9;
+    }
+}

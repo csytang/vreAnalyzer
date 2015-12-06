@@ -1,0 +1,173 @@
+class org.apache.mahout.clustering.canopy.CanopyMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private final java.util.Collection canopies;
+    private org.apache.mahout.clustering.canopy.CanopyClusterer canopyClusterer;
+    private int clusterFilter;
+
+    void <init>()
+    {
+        org.apache.mahout.clustering.canopy.CanopyMapper r0;
+        java.util.ArrayList $r1;
+
+        r0 := @this: org.apache.mahout.clustering.canopy.CanopyMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        $r1 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList()>();
+
+        r0.<org.apache.mahout.clustering.canopy.CanopyMapper: java.util.Collection canopies> = $r1;
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.WritableComparable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.canopy.CanopyMapper r0;
+        org.apache.hadoop.io.WritableComparable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.clustering.canopy.CanopyClusterer $r4;
+        org.apache.mahout.math.Vector $r5;
+        java.util.Collection $r6;
+
+        r0 := @this: org.apache.mahout.clustering.canopy.CanopyMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.WritableComparable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r4 = r0.<org.apache.mahout.clustering.canopy.CanopyMapper: org.apache.mahout.clustering.canopy.CanopyClusterer canopyClusterer>;
+
+        $r5 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r6 = r0.<org.apache.mahout.clustering.canopy.CanopyMapper: java.util.Collection canopies>;
+
+        virtualinvoke $r4.<org.apache.mahout.clustering.canopy.CanopyClusterer: void addPointToCanopies(org.apache.mahout.math.Vector,java.util.Collection)>($r5, $r6);
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.canopy.CanopyMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration $r2, $r4;
+        org.apache.mahout.clustering.canopy.CanopyClusterer $r3;
+        java.lang.String $r5;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.clustering.canopy.CanopyMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void setup(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        $r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r3 = staticinvoke <org.apache.mahout.clustering.canopy.CanopyConfigKeys: org.apache.mahout.clustering.canopy.CanopyClusterer configureCanopyClusterer(org.apache.hadoop.conf.Configuration)>($r2);
+
+        r0.<org.apache.mahout.clustering.canopy.CanopyMapper: org.apache.mahout.clustering.canopy.CanopyClusterer canopyClusterer> = $r3;
+
+        $r4 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("org.apache.mahout.clustering.canopy.canopyFilter");
+
+        $i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r5);
+
+        r0.<org.apache.mahout.clustering.canopy.CanopyMapper: int clusterFilter> = $i0;
+
+        return;
+    }
+
+    protected void cleanup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.canopy.CanopyMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        java.util.Iterator r2;
+        org.apache.mahout.clustering.canopy.Canopy r3;
+        java.util.Collection $r4;
+        boolean $z0;
+        java.lang.Object $r5;
+        long $l0, $l2;
+        int $i1;
+        byte $b3;
+        org.apache.hadoop.io.Text $r6;
+        org.apache.mahout.math.VectorWritable $r7;
+        org.apache.mahout.math.Vector $r8;
+
+        r0 := @this: org.apache.mahout.clustering.canopy.CanopyMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r4 = r0.<org.apache.mahout.clustering.canopy.CanopyMapper: java.util.Collection canopies>;
+
+        r2 = interfaceinvoke $r4.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r5 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.clustering.canopy.Canopy) $r5;
+
+        virtualinvoke r3.<org.apache.mahout.clustering.canopy.Canopy: void computeParameters()>();
+
+        $l0 = virtualinvoke r3.<org.apache.mahout.clustering.canopy.Canopy: long getNumObservations()>();
+
+        $i1 = r0.<org.apache.mahout.clustering.canopy.CanopyMapper: int clusterFilter>;
+
+        $l2 = (long) $i1;
+
+        $b3 = $l0 cmp $l2;
+
+        if $b3 <= 0 goto label1;
+
+        $r6 = new org.apache.hadoop.io.Text;
+
+        specialinvoke $r6.<org.apache.hadoop.io.Text: void <init>(java.lang.String)>("centroid");
+
+        $r7 = new org.apache.mahout.math.VectorWritable;
+
+        $r8 = virtualinvoke r3.<org.apache.mahout.clustering.canopy.Canopy: org.apache.mahout.math.Vector getCenter()>();
+
+        specialinvoke $r7.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r8);
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r6, $r7);
+
+        goto label1;
+
+     label2:
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void cleanup(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.canopy.CanopyMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.WritableComparable $r5;
+
+        r0 := @this: org.apache.mahout.clustering.canopy.CanopyMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.WritableComparable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.canopy.CanopyMapper: void map(org.apache.hadoop.io.WritableComparable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

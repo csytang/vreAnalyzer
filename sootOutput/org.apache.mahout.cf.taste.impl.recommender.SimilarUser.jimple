@@ -1,0 +1,225 @@
+public final class org.apache.mahout.cf.taste.impl.recommender.SimilarUser extends java.lang.Object implements java.lang.Comparable
+{
+    private final long userID;
+    private final double similarity;
+
+    public void <init>(long, double)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.SimilarUser r0;
+        long l0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.SimilarUser;
+
+        l0 := @parameter0: long;
+
+        d0 := @parameter1: double;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: long userID> = l0;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: double similarity> = d0;
+
+        return;
+    }
+
+    long getUserID()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.SimilarUser r0;
+        long $l0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.SimilarUser;
+
+        $l0 = r0.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: long userID>;
+
+        return $l0;
+    }
+
+    double getSimilarity()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.SimilarUser r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.SimilarUser;
+
+        $d0 = r0.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: double similarity>;
+
+        return $d0;
+    }
+
+    public int hashCode()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.SimilarUser r0;
+        long $l0;
+        double $d0;
+        int $i1, $i2, $i3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.SimilarUser;
+
+        $l0 = r0.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: long userID>;
+
+        $i1 = (int) $l0;
+
+        $d0 = r0.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: double similarity>;
+
+        $i2 = staticinvoke <org.apache.mahout.common.RandomUtils: int hashDouble(double)>($d0);
+
+        $i3 = $i1 ^ $i2;
+
+        return $i3;
+    }
+
+    public boolean equals(java.lang.Object)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.SimilarUser r0, r2;
+        java.lang.Object r1;
+        boolean $z0, $z1;
+        long $l0, $l1;
+        byte $b2, $b3;
+        double $d0, $d1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.SimilarUser;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $z0 = r1 instanceof org.apache.mahout.cf.taste.impl.recommender.SimilarUser;
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        r2 = (org.apache.mahout.cf.taste.impl.recommender.SimilarUser) r1;
+
+        $l0 = r0.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: long userID>;
+
+        $l1 = virtualinvoke r2.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: long getUserID()>();
+
+        $b2 = $l0 cmp $l1;
+
+        if $b2 != 0 goto label2;
+
+        $d0 = r0.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: double similarity>;
+
+        $d1 = virtualinvoke r2.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: double getSimilarity()>();
+
+        $b3 = $d0 cmpl $d1;
+
+        if $b3 != 0 goto label2;
+
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        return $z1;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.SimilarUser r0;
+        java.lang.StringBuilder $r1, $r2, $r3, $r4, $r5, $r6;
+        long $l0;
+        double $d0;
+        java.lang.String $r7;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.SimilarUser;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("SimilarUser[user:");
+
+        $l0 = r0.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: long userID>;
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", similarity:");
+
+        $d0 = r0.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: double similarity>;
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(double)>($d0);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(93);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r7;
+    }
+
+    public int compareTo(org.apache.mahout.cf.taste.impl.recommender.SimilarUser)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.SimilarUser r0, r1;
+        double d0, $d1, $d2;
+        long l0, $l3, $l5;
+        byte $b1, $b2, $b4, $b6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.SimilarUser;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.impl.recommender.SimilarUser;
+
+        d0 = virtualinvoke r1.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: double getSimilarity()>();
+
+        $d1 = r0.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: double similarity>;
+
+        $b1 = $d1 cmpl d0;
+
+        if $b1 <= 0 goto label1;
+
+        return -1;
+
+     label1:
+        $d2 = r0.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: double similarity>;
+
+        $b2 = $d2 cmpg d0;
+
+        if $b2 >= 0 goto label2;
+
+        return 1;
+
+     label2:
+        l0 = virtualinvoke r1.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: long getUserID()>();
+
+        $l3 = r0.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: long userID>;
+
+        $b4 = $l3 cmp l0;
+
+        if $b4 >= 0 goto label3;
+
+        return -1;
+
+     label3:
+        $l5 = r0.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: long userID>;
+
+        $b6 = $l5 cmp l0;
+
+        if $b6 <= 0 goto label4;
+
+        return 1;
+
+     label4:
+        return 0;
+    }
+
+    public volatile int compareTo(java.lang.Object)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.SimilarUser r0, $r2;
+        java.lang.Object r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.SimilarUser;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (org.apache.mahout.cf.taste.impl.recommender.SimilarUser) r1;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.SimilarUser: int compareTo(org.apache.mahout.cf.taste.impl.recommender.SimilarUser)>($r2);
+
+        return $i0;
+    }
+}

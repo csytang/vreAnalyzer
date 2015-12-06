@@ -1,0 +1,7 @@
+public interface  org.apache.mahout.clustering.ModelDistribution extends java.lang.Object
+{
+
+    public abstract org.apache.mahout.clustering.Model[] sampleFromPrior(int);
+
+    public abstract org.apache.mahout.clustering.Model[] sampleFromPosterior(org.apache.mahout.clustering.Model[]);
+}

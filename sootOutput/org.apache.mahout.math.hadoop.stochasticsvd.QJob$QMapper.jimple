@@ -1,0 +1,298 @@
+public class org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private org.apache.hadoop.mapred.lib.MultipleOutputs outputs;
+    private final java.util.Deque closeables;
+    private org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable qHatKey;
+    private org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable rHatKey;
+    private org.apache.mahout.math.Vector yRow;
+    private org.apache.mahout.math.Vector sb;
+    private org.apache.mahout.math.hadoop.stochasticsvd.Omega omega;
+    private int kp;
+    private org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep qr;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper r0;
+        java.util.LinkedList $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        $r1 = staticinvoke <com.google.common.collect.Lists: java.util.LinkedList newLinkedList()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: java.util.Deque closeables> = $r1;
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        int i0, i1, $i3, $i4, $i5;
+        long l2;
+        java.lang.String r3, $r6, $r7, $r8, $r26;
+        org.apache.mahout.math.hadoop.stochasticsvd.Omega $r9;
+        org.apache.hadoop.mapred.lib.MultipleOutputs $r10;
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$1 $r11;
+        org.apache.hadoop.mapred.JobConf $r12;
+        org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable $r13, $r16;
+        java.util.Deque $r14, $r19;
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$2 $r15;
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep $r17, $r20;
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$3 $r18;
+        org.apache.hadoop.fs.Path $r21;
+        org.apache.mahout.math.Vector $r22, $r24;
+        org.apache.mahout.math.DenseVector $r23;
+        java.io.IOException $r25;
+        java.lang.Object[] $r27;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r6 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvd.k");
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r6);
+
+        $r7 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvd.p");
+
+        i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r7);
+
+        $i3 = i0 + i1;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: int kp> = $i3;
+
+        $r8 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvd.omegaseed");
+
+        l2 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r8);
+
+        $r9 = new org.apache.mahout.math.hadoop.stochasticsvd.Omega;
+
+        $i4 = i0 + i1;
+
+        specialinvoke $r9.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: void <init>(long,int)>(l2, $i4);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.hadoop.stochasticsvd.Omega omega> = $r9;
+
+        r3 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvdpca.sb.path");
+
+        if r3 == null goto label1;
+
+        $r21 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r21.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r3);
+
+        $r22 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper: org.apache.mahout.math.Vector loadAndSumUpVectors(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r21, r2);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.Vector sb> = $r22;
+
+        $r24 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.Vector sb>;
+
+        if $r24 != null goto label1;
+
+        $r25 = new java.io.IOException;
+
+        $r27 = newarray (java.lang.Object)[1];
+
+        $r27[0] = r3;
+
+        $r26 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Unable to load s_omega from path %s.", $r27);
+
+        specialinvoke $r25.<java.io.IOException: void <init>(java.lang.String)>($r26);
+
+        throw $r25;
+
+     label1:
+        $r10 = new org.apache.hadoop.mapred.lib.MultipleOutputs;
+
+        $r12 = new org.apache.hadoop.mapred.JobConf;
+
+        specialinvoke $r12.<org.apache.hadoop.mapred.JobConf: void <init>(org.apache.hadoop.conf.Configuration)>(r2);
+
+        specialinvoke $r10.<org.apache.hadoop.mapred.lib.MultipleOutputs: void <init>(org.apache.hadoop.mapred.JobConf)>($r12);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.hadoop.mapred.lib.MultipleOutputs outputs> = $r10;
+
+        $r14 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: java.util.Deque closeables>;
+
+        $r11 = new org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$1;
+
+        specialinvoke $r11.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$1: void <init>(org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper)>(r0);
+
+        interfaceinvoke $r14.<java.util.Deque: void addFirst(java.lang.Object)>($r11);
+
+        $r13 = new org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable;
+
+        specialinvoke $r13.<org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable: void <init>(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable qHatKey> = $r13;
+
+        $r16 = new org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable;
+
+        specialinvoke $r16.<org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable: void <init>(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable rHatKey> = $r16;
+
+        $r15 = new org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$2;
+
+        specialinvoke $r15.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$2: void <init>(org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper)>(r0);
+
+        $r18 = new org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$3;
+
+        specialinvoke $r18.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper$3: void <init>(org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper)>(r0);
+
+        $r17 = new org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep;
+
+        specialinvoke $r17.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: void <init>(org.apache.hadoop.conf.Configuration,org.apache.hadoop.mapred.OutputCollector,org.apache.hadoop.mapred.OutputCollector)>(r2, $r15, $r18);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep qr> = $r17;
+
+        $r19 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: java.util.Deque closeables>;
+
+        $r20 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep qr>;
+
+        interfaceinvoke $r19.<java.util.Deque: void addFirst(java.lang.Object)>($r20);
+
+        $r23 = new org.apache.mahout.math.DenseVector;
+
+        $i5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: int kp>;
+
+        specialinvoke $r23.<org.apache.mahout.math.DenseVector: void <init>(int)>($i5);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.Vector yRow> = $r23;
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.Writable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper r0;
+        org.apache.hadoop.io.Writable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.hadoop.stochasticsvd.Omega $r4;
+        org.apache.mahout.math.Vector $r5, $r6, $r7, $r8, $r11, $r12;
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep $r9;
+        org.apache.mahout.math.function.DoubleDoubleFunction $r10;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.Writable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.hadoop.stochasticsvd.Omega omega>;
+
+        $r5 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.Vector yRow>;
+
+        virtualinvoke $r4.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: void computeYRow(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>($r5, $r6);
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.Vector sb>;
+
+        if $r7 == null goto label1;
+
+        $r12 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.Vector yRow>;
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.Vector sb>;
+
+        $r10 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction MINUS>;
+
+        interfaceinvoke $r12.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>($r11, $r10);
+
+     label1:
+        $r9 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep qr>;
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.Vector yRow>;
+
+        virtualinvoke $r9.<org.apache.mahout.math.hadoop.stochasticsvd.qr.QRFirstStep: void collect(org.apache.hadoop.io.Writable,org.apache.mahout.math.Vector)>(r1, $r8);
+
+        return;
+    }
+
+    protected void cleanup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        java.util.Deque $r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: java.util.Deque closeables>;
+
+        staticinvoke <org.apache.mahout.common.IOUtils: void close(java.util.Collection)>($r2);
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.Writable $r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.Writable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: void map(org.apache.hadoop.io.Writable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+
+    static org.apache.hadoop.mapred.lib.MultipleOutputs access$000(org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper r0;
+        org.apache.hadoop.mapred.lib.MultipleOutputs $r1;
+
+        r0 := @parameter0: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.hadoop.mapred.lib.MultipleOutputs outputs>;
+
+        return $r1;
+    }
+
+    static org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable access$100(org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper r0;
+        org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable $r1;
+
+        r0 := @parameter0: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable qHatKey>;
+
+        return $r1;
+    }
+
+    static org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable access$200(org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper r0;
+        org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable $r1;
+
+        r0 := @parameter0: org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.QJob$QMapper: org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable rHatKey>;
+
+        return $r1;
+    }
+}

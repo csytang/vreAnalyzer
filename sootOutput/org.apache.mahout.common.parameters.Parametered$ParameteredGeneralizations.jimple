@@ -1,0 +1,175 @@
+public final class org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations r0;
+
+        r0 := @this: org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void configureParameters(org.apache.mahout.common.parameters.Parametered, org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.common.parameters.Parametered r0;
+        org.apache.hadoop.conf.Configuration r1;
+        java.lang.StringBuilder $r2, $r5, $r6;
+        java.lang.Class $r3;
+        java.lang.String $r4, $r7;
+
+        r0 := @parameter0: org.apache.mahout.common.parameters.Parametered;
+
+        r1 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke r0.<java.lang.Object: java.lang.Class getClass()>();
+
+        $r4 = virtualinvoke $r3.<java.lang.Class: java.lang.String getSimpleName()>();
+
+        $r5 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(46);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        staticinvoke <org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations: void configureParameters(java.lang.String,org.apache.mahout.common.parameters.Parametered,org.apache.hadoop.conf.Configuration)>($r7, r0, r1);
+
+        return;
+    }
+
+    public static void configureParameters(java.lang.String, org.apache.mahout.common.parameters.Parametered, org.apache.hadoop.conf.Configuration)
+    {
+        java.lang.String r0;
+        org.apache.mahout.common.parameters.Parametered r1;
+        org.apache.hadoop.conf.Configuration r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: org.apache.mahout.common.parameters.Parametered;
+
+        r2 := @parameter2: org.apache.hadoop.conf.Configuration;
+
+        interfaceinvoke r1.<org.apache.mahout.common.parameters.Parametered: void createParameters(java.lang.String,org.apache.hadoop.conf.Configuration)>(r0, r2);
+
+        staticinvoke <org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations: void configureParametersRecursively(org.apache.mahout.common.parameters.Parametered,java.lang.String,org.apache.hadoop.conf.Configuration)>(r1, r0, r2);
+
+        return;
+    }
+
+    private static void configureParametersRecursively(org.apache.mahout.common.parameters.Parametered, java.lang.String, org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.common.parameters.Parametered r0;
+        java.lang.String r1, r5, $r11, $r16;
+        org.apache.hadoop.conf.Configuration r2;
+        java.util.Iterator r3;
+        org.apache.mahout.common.parameters.Parameter r4;
+        java.util.Collection $r6, $r14;
+        boolean $z0, $z1, $z2;
+        java.lang.Object $r7;
+        org.slf4j.Logger $r8, $r15;
+        java.lang.StringBuilder $r9, $r10, $r12, $r13;
+
+        r0 := @parameter0: org.apache.mahout.common.parameters.Parametered;
+
+        r1 := @parameter1: java.lang.String;
+
+        r2 := @parameter2: org.apache.hadoop.conf.Configuration;
+
+        $r6 = interfaceinvoke r0.<org.apache.mahout.common.parameters.Parametered: java.util.Collection getParameters()>();
+
+        r3 = interfaceinvoke $r6.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r7 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.common.parameters.Parameter) $r7;
+
+        $r8 = <org.apache.mahout.common.parameters.Parametered: org.slf4j.Logger log>;
+
+        $z1 = interfaceinvoke $r8.<org.slf4j.Logger: boolean isDebugEnabled()>();
+
+        if $z1 == 0 goto label2;
+
+        $r15 = <org.apache.mahout.common.parameters.Parametered: org.slf4j.Logger log>;
+
+        $r16 = interfaceinvoke r4.<org.apache.mahout.common.parameters.Parameter: java.lang.String name()>();
+
+        interfaceinvoke $r15.<org.slf4j.Logger: void debug(java.lang.String,java.lang.Object,java.lang.Object)>("Configuring {}{}", r1, $r16);
+
+     label2:
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r11 = interfaceinvoke r4.<org.apache.mahout.common.parameters.Parameter: java.lang.String name()>();
+
+        $r12 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r11);
+
+        $r13 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(46);
+
+        r5 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        interfaceinvoke r4.<org.apache.mahout.common.parameters.Parameter: void createParameters(java.lang.String,org.apache.hadoop.conf.Configuration)>(r5, r2);
+
+        interfaceinvoke r4.<org.apache.mahout.common.parameters.Parameter: void configure(org.apache.hadoop.conf.Configuration)>(r2);
+
+        $r14 = interfaceinvoke r4.<org.apache.mahout.common.parameters.Parameter: java.util.Collection getParameters()>();
+
+        $z2 = interfaceinvoke $r14.<java.util.Collection: boolean isEmpty()>();
+
+        if $z2 != 0 goto label1;
+
+        staticinvoke <org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations: void configureParametersRecursively(org.apache.mahout.common.parameters.Parametered,java.lang.String,org.apache.hadoop.conf.Configuration)>(r4, r5, r2);
+
+        goto label1;
+
+     label3:
+        return;
+    }
+
+    public static java.lang.String help(org.apache.mahout.common.parameters.Parametered)
+    {
+        org.apache.mahout.common.parameters.Parametered r0;
+        org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Help $r1;
+        java.lang.String $r2;
+
+        r0 := @parameter0: org.apache.mahout.common.parameters.Parametered;
+
+        $r1 = new org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Help;
+
+        specialinvoke $r1.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Help: void <init>(org.apache.mahout.common.parameters.Parametered,org.apache.mahout.common.parameters.Parametered$1)>(r0, null);
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Help: java.lang.String toString()>();
+
+        return $r2;
+    }
+
+    public static java.lang.String conf(org.apache.mahout.common.parameters.Parametered)
+    {
+        org.apache.mahout.common.parameters.Parametered r0;
+        org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf $r1;
+        java.lang.String $r2;
+
+        r0 := @parameter0: org.apache.mahout.common.parameters.Parametered;
+
+        $r1 = new org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf;
+
+        specialinvoke $r1.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: void <init>(org.apache.mahout.common.parameters.Parametered,org.apache.mahout.common.parameters.Parametered$1)>(r0, null);
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.common.parameters.Parametered$ParameteredGeneralizations$Conf: java.lang.String toString()>();
+
+        return $r2;
+    }
+}

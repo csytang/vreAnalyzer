@@ -1,0 +1,452 @@
+public final class org.apache.mahout.common.IntPairWritable extends org.apache.hadoop.io.BinaryComparable implements org.apache.hadoop.io.WritableComparable, java.lang.Cloneable
+{
+    static final int INT_BYTE_LENGTH;
+    static final int INT_PAIR_BYTE_LENGTH;
+    private byte[] b;
+
+    public void <init>()
+    {
+        org.apache.mahout.common.IntPairWritable r0;
+        byte[] $r1;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        specialinvoke r0.<org.apache.hadoop.io.BinaryComparable: void <init>()>();
+
+        $r1 = newarray (byte)[8];
+
+        r0.<org.apache.mahout.common.IntPairWritable: byte[] b> = $r1;
+
+        virtualinvoke r0.<org.apache.mahout.common.IntPairWritable: void setFirst(int)>(0);
+
+        virtualinvoke r0.<org.apache.mahout.common.IntPairWritable: void setSecond(int)>(0);
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.common.IntPairWritable)
+    {
+        org.apache.mahout.common.IntPairWritable r0, r1;
+        byte[] $r2, $r3, $r4;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        r1 := @parameter0: org.apache.mahout.common.IntPairWritable;
+
+        specialinvoke r0.<org.apache.hadoop.io.BinaryComparable: void <init>()>();
+
+        $r2 = newarray (byte)[8];
+
+        r0.<org.apache.mahout.common.IntPairWritable: byte[] b> = $r2;
+
+        $r3 = virtualinvoke r1.<org.apache.mahout.common.IntPairWritable: byte[] getBytes()>();
+
+        $r4 = staticinvoke <java.util.Arrays: byte[] copyOf(byte[],int)>($r3, 8);
+
+        r0.<org.apache.mahout.common.IntPairWritable: byte[] b> = $r4;
+
+        return;
+    }
+
+    public void <init>(int, int)
+    {
+        org.apache.mahout.common.IntPairWritable r0;
+        int i0, i1;
+        byte[] $r1, $r2, $r3;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        specialinvoke r0.<org.apache.hadoop.io.BinaryComparable: void <init>()>();
+
+        $r1 = newarray (byte)[8];
+
+        r0.<org.apache.mahout.common.IntPairWritable: byte[] b> = $r1;
+
+        $r2 = r0.<org.apache.mahout.common.IntPairWritable: byte[] b>;
+
+        staticinvoke <org.apache.mahout.common.IntPairWritable: void putInt(int,byte[],int)>(i0, $r2, 0);
+
+        $r3 = r0.<org.apache.mahout.common.IntPairWritable: byte[] b>;
+
+        staticinvoke <org.apache.mahout.common.IntPairWritable: void putInt(int,byte[],int)>(i1, $r3, 4);
+
+        return;
+    }
+
+    public void set(int, int)
+    {
+        org.apache.mahout.common.IntPairWritable r0;
+        int i0, i1;
+        byte[] $r1, $r2;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $r1 = r0.<org.apache.mahout.common.IntPairWritable: byte[] b>;
+
+        staticinvoke <org.apache.mahout.common.IntPairWritable: void putInt(int,byte[],int)>(i0, $r1, 0);
+
+        $r2 = r0.<org.apache.mahout.common.IntPairWritable: byte[] b>;
+
+        staticinvoke <org.apache.mahout.common.IntPairWritable: void putInt(int,byte[],int)>(i1, $r2, 4);
+
+        return;
+    }
+
+    public void setFirst(int)
+    {
+        org.apache.mahout.common.IntPairWritable r0;
+        int i0;
+        byte[] $r1;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.common.IntPairWritable: byte[] b>;
+
+        staticinvoke <org.apache.mahout.common.IntPairWritable: void putInt(int,byte[],int)>(i0, $r1, 0);
+
+        return;
+    }
+
+    public int getFirst()
+    {
+        org.apache.mahout.common.IntPairWritable r0;
+        byte[] $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        $r1 = r0.<org.apache.mahout.common.IntPairWritable: byte[] b>;
+
+        $i0 = staticinvoke <org.apache.mahout.common.IntPairWritable: int getInt(byte[],int)>($r1, 0);
+
+        return $i0;
+    }
+
+    public void setSecond(int)
+    {
+        org.apache.mahout.common.IntPairWritable r0;
+        int i0;
+        byte[] $r1;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.common.IntPairWritable: byte[] b>;
+
+        staticinvoke <org.apache.mahout.common.IntPairWritable: void putInt(int,byte[],int)>(i0, $r1, 4);
+
+        return;
+    }
+
+    public int getSecond()
+    {
+        org.apache.mahout.common.IntPairWritable r0;
+        byte[] $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        $r1 = r0.<org.apache.mahout.common.IntPairWritable: byte[] b>;
+
+        $i0 = staticinvoke <org.apache.mahout.common.IntPairWritable: int getInt(byte[],int)>($r1, 4);
+
+        return $i0;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.common.IntPairWritable r0;
+        java.io.DataInput r1;
+        byte[] $r2;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $r2 = r0.<org.apache.mahout.common.IntPairWritable: byte[] b>;
+
+        interfaceinvoke r1.<java.io.DataInput: void readFully(byte[])>($r2);
+
+        return;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.common.IntPairWritable r0;
+        java.io.DataOutput r1;
+        byte[] $r2;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $r2 = r0.<org.apache.mahout.common.IntPairWritable: byte[] b>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void write(byte[])>($r2);
+
+        return;
+    }
+
+    public int hashCode()
+    {
+        org.apache.mahout.common.IntPairWritable r0;
+        byte[] $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        $r1 = r0.<org.apache.mahout.common.IntPairWritable: byte[] b>;
+
+        $i0 = staticinvoke <java.util.Arrays: int hashCode(byte[])>($r1);
+
+        return $i0;
+    }
+
+    public boolean equals(java.lang.Object)
+    {
+        org.apache.mahout.common.IntPairWritable r0, r2;
+        java.lang.Object r1;
+        boolean $z0, $z1, $z2;
+        byte[] $r3, $r4;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        r1 := @parameter0: java.lang.Object;
+
+        if r0 != r1 goto label1;
+
+        return 1;
+
+     label1:
+        $z0 = specialinvoke r0.<org.apache.hadoop.io.BinaryComparable: boolean equals(java.lang.Object)>(r1);
+
+        if $z0 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        $z1 = r1 instanceof org.apache.mahout.common.IntPairWritable;
+
+        if $z1 != 0 goto label3;
+
+        return 0;
+
+     label3:
+        r2 = (org.apache.mahout.common.IntPairWritable) r1;
+
+        $r4 = r0.<org.apache.mahout.common.IntPairWritable: byte[] b>;
+
+        $r3 = r2.<org.apache.mahout.common.IntPairWritable: byte[] b>;
+
+        $z2 = staticinvoke <java.util.Arrays: boolean equals(byte[],byte[])>($r4, $r3);
+
+        return $z2;
+    }
+
+    public int compareTo(org.apache.hadoop.io.BinaryComparable)
+    {
+        org.apache.mahout.common.IntPairWritable r0, $r2;
+        org.apache.hadoop.io.BinaryComparable r1;
+        byte[] $r3, $r4;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        r1 := @parameter0: org.apache.hadoop.io.BinaryComparable;
+
+        $r4 = r0.<org.apache.mahout.common.IntPairWritable: byte[] b>;
+
+        $r2 = (org.apache.mahout.common.IntPairWritable) r1;
+
+        $r3 = $r2.<org.apache.mahout.common.IntPairWritable: byte[] b>;
+
+        $i0 = staticinvoke <org.apache.mahout.common.IntPairWritable$Comparator: int doCompare(byte[],int,byte[],int)>($r4, 0, $r3, 0);
+
+        return $i0;
+    }
+
+    public java.lang.Object clone()
+    {
+        org.apache.mahout.common.IntPairWritable r0, $r1;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        $r1 = new org.apache.mahout.common.IntPairWritable;
+
+        specialinvoke $r1.<org.apache.mahout.common.IntPairWritable: void <init>(org.apache.mahout.common.IntPairWritable)>(r0);
+
+        return $r1;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.common.IntPairWritable r0;
+        java.lang.StringBuilder $r1, $r2, $r3, $r4, $r5, $r6;
+        int $i0, $i1;
+        java.lang.String $r7;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("(");
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.common.IntPairWritable: int getFirst()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(", ");
+
+        $i1 = virtualinvoke r0.<org.apache.mahout.common.IntPairWritable: int getSecond()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(41);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r7;
+    }
+
+    public byte[] getBytes()
+    {
+        org.apache.mahout.common.IntPairWritable r0;
+        byte[] $r1;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        $r1 = r0.<org.apache.mahout.common.IntPairWritable: byte[] b>;
+
+        return $r1;
+    }
+
+    public int getLength()
+    {
+        org.apache.mahout.common.IntPairWritable r0;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        return 8;
+    }
+
+    private static void putInt(int, byte[], int)
+    {
+        int i0, i1, $i2, i4, i5;
+        byte[] r0;
+        byte $b3;
+
+        i0 := @parameter0: int;
+
+        r0 := @parameter1: byte[];
+
+        i1 := @parameter2: int;
+
+        i4 = i1;
+
+        i5 = 24;
+
+     label1:
+        if i5 < 0 goto label2;
+
+        $i2 = i0 >> i5;
+
+        $b3 = (byte) $i2;
+
+        r0[i4] = $b3;
+
+        i4 = i4 + 1;
+
+        i5 = i5 + -8;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    private static int getInt(byte[], int)
+    {
+        byte[] r0;
+        int i0, $i3, i4, i5, i6;
+        byte $b1;
+        short $s2;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        i4 = 0;
+
+        i5 = i0;
+
+        i6 = 24;
+
+     label1:
+        if i6 < 0 goto label2;
+
+        $b1 = r0[i5];
+
+        $s2 = $b1 & 255;
+
+        $i3 = $s2 << i6;
+
+        i4 = i4 | $i3;
+
+        i5 = i5 + 1;
+
+        i6 = i6 + -8;
+
+        goto label1;
+
+     label2:
+        return i4;
+    }
+
+    public volatile int compareTo(java.lang.Object)
+    {
+        org.apache.mahout.common.IntPairWritable r0;
+        java.lang.Object r1;
+        org.apache.hadoop.io.BinaryComparable $r2;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.common.IntPairWritable;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (org.apache.hadoop.io.BinaryComparable) r1;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.common.IntPairWritable: int compareTo(org.apache.hadoop.io.BinaryComparable)>($r2);
+
+        return $i0;
+    }
+
+    static void <clinit>()
+    {
+        org.apache.mahout.common.IntPairWritable$Comparator $r0;
+
+        <org.apache.mahout.common.IntPairWritable: int INT_PAIR_BYTE_LENGTH> = 8;
+
+        <org.apache.mahout.common.IntPairWritable: int INT_BYTE_LENGTH> = 4;
+
+        $r0 = new org.apache.mahout.common.IntPairWritable$Comparator;
+
+        specialinvoke $r0.<org.apache.mahout.common.IntPairWritable$Comparator: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.io.WritableComparator: void define(java.lang.Class,org.apache.hadoop.io.WritableComparator)>(class "org/apache/mahout/common/IntPairWritable", $r0);
+
+        return;
+    }
+}

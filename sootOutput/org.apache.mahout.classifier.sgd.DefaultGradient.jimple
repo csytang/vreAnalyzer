@@ -1,0 +1,51 @@
+public class org.apache.mahout.classifier.sgd.DefaultGradient extends java.lang.Object implements org.apache.mahout.classifier.sgd.Gradient
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.sgd.DefaultGradient r0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.DefaultGradient;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public final org.apache.mahout.math.Vector apply(java.lang.String, int, org.apache.mahout.math.Vector, org.apache.mahout.classifier.AbstractVectorClassifier)
+    {
+        org.apache.mahout.classifier.sgd.DefaultGradient r0;
+        java.lang.String r1;
+        int i0, $i1;
+        org.apache.mahout.math.Vector r2, r4, r5;
+        org.apache.mahout.classifier.AbstractVectorClassifier r3;
+        org.apache.mahout.math.function.DoubleDoubleFunction $r6;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.DefaultGradient;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        r2 := @parameter2: org.apache.mahout.math.Vector;
+
+        r3 := @parameter3: org.apache.mahout.classifier.AbstractVectorClassifier;
+
+        r4 = virtualinvoke r3.<org.apache.mahout.classifier.AbstractVectorClassifier: org.apache.mahout.math.Vector classify(org.apache.mahout.math.Vector)>(r2);
+
+        r5 = interfaceinvoke r4.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector like()>();
+
+        if i0 == 0 goto label1;
+
+        $i1 = i0 - 1;
+
+        interfaceinvoke r5.<org.apache.mahout.math.Vector: void setQuick(int,double)>($i1, 1.0);
+
+     label1:
+        $r6 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction MINUS>;
+
+        interfaceinvoke r5.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>(r4, $r6);
+
+        return r5;
+    }
+}

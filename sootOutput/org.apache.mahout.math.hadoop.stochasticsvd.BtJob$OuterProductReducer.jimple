@@ -1,0 +1,556 @@
+public class org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+    protected final org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable accum;
+    protected final java.util.Deque closeables;
+    protected int blockHeight;
+    private boolean outputBBt;
+    private org.apache.mahout.math.UpperTriangular mBBt;
+    private org.apache.hadoop.mapred.lib.MultipleOutputs outputs;
+    private final org.apache.hadoop.io.IntWritable btKey;
+    private final org.apache.mahout.math.VectorWritable btValue;
+    private org.apache.mahout.math.Vector xi;
+    private final org.apache.mahout.math.function.PlusMult pmult;
+    private org.apache.mahout.math.Vector sbAccum;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer r0;
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable $r1;
+        java.util.ArrayDeque $r2;
+        org.apache.hadoop.io.IntWritable $r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.mahout.math.function.PlusMult $r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        $r1 = new org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable;
+
+        specialinvoke $r1.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable accum> = $r1;
+
+        $r2 = new java.util.ArrayDeque;
+
+        specialinvoke $r2.<java.util.ArrayDeque: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: java.util.Deque closeables> = $r2;
+
+        $r3 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r3.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.hadoop.io.IntWritable btKey> = $r3;
+
+        $r4 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r4.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.VectorWritable btValue> = $r4;
+
+        $r5 = new org.apache.mahout.math.function.PlusMult;
+
+        specialinvoke $r5.<org.apache.mahout.math.function.PlusMult: void <init>(double)>(0.0);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.function.PlusMult pmult> = $r5;
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        int i0, $i1, $i2, i3;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        org.apache.hadoop.mapred.lib.MultipleOutputs $r3, $r6;
+        org.apache.hadoop.mapred.JobConf $r4;
+        org.apache.mahout.common.IOUtils$MultipleOutputsCloseableAdapter $r5;
+        java.util.Deque $r7;
+        org.apache.mahout.math.Vector $r8, $r10, $r11;
+        org.apache.hadoop.fs.Path $r9;
+        java.io.IOException $r12;
+        java.lang.String $r13, r18;
+        java.lang.Object[] $r14, $r15, $r16;
+        org.apache.mahout.math.UpperTriangular $r17;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Reducer$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $i1 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("ssvd.outerProdBlockHeight", -1);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: int blockHeight> = $i1;
+
+        $z0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("ssvd.BtJob.outputBBtProducts", 0);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: boolean outputBBt> = $z0;
+
+        $z1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: boolean outputBBt>;
+
+        if $z1 == 0 goto label5;
+
+        i3 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("ssvd.k", -1);
+
+        i0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("ssvd.p", -1);
+
+        if i3 <= 0 goto label1;
+
+        $z3 = 1;
+
+        goto label2;
+
+     label1:
+        $z3 = 0;
+
+     label2:
+        $r16 = newarray (java.lang.Object)[0];
+
+        staticinvoke <org.apache.commons.lang3.Validate: void isTrue(boolean,java.lang.String,java.lang.Object[])>($z3, "invalid k parameter", $r16);
+
+        if i0 < 0 goto label3;
+
+        $z4 = 1;
+
+        goto label4;
+
+     label3:
+        $z4 = 0;
+
+     label4:
+        $r15 = newarray (java.lang.Object)[0];
+
+        staticinvoke <org.apache.commons.lang3.Validate: void isTrue(boolean,java.lang.String,java.lang.Object[])>($z4, "invalid p parameter", $r15);
+
+        $r17 = new org.apache.mahout.math.UpperTriangular;
+
+        $i2 = i3 + i0;
+
+        specialinvoke $r17.<org.apache.mahout.math.UpperTriangular: void <init>(int)>($i2);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.UpperTriangular mBBt> = $r17;
+
+     label5:
+        r18 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("ssvdpca.xi.path");
+
+        if r18 == null goto label6;
+
+        $r9 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r9.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r18);
+
+        $r11 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper: org.apache.mahout.math.Vector loadAndSumUpVectors(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r9, r2);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.Vector xi> = $r11;
+
+        $r10 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.Vector xi>;
+
+        if $r10 != null goto label6;
+
+        $r12 = new java.io.IOException;
+
+        $r14 = newarray (java.lang.Object)[1];
+
+        $r14[0] = r18;
+
+        $r13 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("unable to load mean path xi from %s.", $r14);
+
+        specialinvoke $r12.<java.io.IOException: void <init>(java.lang.String)>($r13);
+
+        throw $r12;
+
+     label6:
+        $z2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: boolean outputBBt>;
+
+        if $z2 != 0 goto label7;
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.Vector xi>;
+
+        if $r8 == null goto label8;
+
+     label7:
+        $r3 = new org.apache.hadoop.mapred.lib.MultipleOutputs;
+
+        $r4 = new org.apache.hadoop.mapred.JobConf;
+
+        specialinvoke $r4.<org.apache.hadoop.mapred.JobConf: void <init>(org.apache.hadoop.conf.Configuration)>(r2);
+
+        specialinvoke $r3.<org.apache.hadoop.mapred.lib.MultipleOutputs: void <init>(org.apache.hadoop.mapred.JobConf)>($r4);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.hadoop.mapred.lib.MultipleOutputs outputs> = $r3;
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: java.util.Deque closeables>;
+
+        $r5 = new org.apache.mahout.common.IOUtils$MultipleOutputsCloseableAdapter;
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.hadoop.mapred.lib.MultipleOutputs outputs>;
+
+        specialinvoke $r5.<org.apache.mahout.common.IOUtils$MultipleOutputsCloseableAdapter: void <init>(org.apache.hadoop.mapred.lib.MultipleOutputs)>($r6);
+
+        interfaceinvoke $r7.<java.util.Deque: void addFirst(java.lang.Object)>($r5);
+
+     label8:
+        return;
+    }
+
+    protected void reduce(org.apache.hadoop.io.LongWritable, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer r0;
+        org.apache.hadoop.io.LongWritable r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        double d0, d1, $d2, $d3, $d4, $d5;
+        org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable $r4, $r5, $r7, $r9, $r30, $r33, r35;
+        boolean $z0, $z1;
+        byte $b0, $b13, $b14;
+        long $l1, $l3, $l4, $l6, $l8, $l9;
+        int $i2, $i5, $i7, $i10, $i11, $i12, i15, i16, i17, i18, i19;
+        org.apache.mahout.math.Vector[] $r6, $r27;
+        org.apache.hadoop.io.IntWritable $r8, $r12, $r16, $r29;
+        int[] $r10;
+        org.apache.mahout.math.VectorWritable $r11, $r13, $r32;
+        org.apache.mahout.math.Vector $r14, $r15, $r18, $r20, $r23, r36, r38;
+        org.apache.mahout.math.function.PlusMult $r17, $r19;
+        org.apache.mahout.math.DenseVector $r21;
+        org.apache.mahout.math.UpperTriangular $r24, $r25, $r26;
+        org.apache.hadoop.mapred.lib.MultipleOutputs $r28;
+        java.lang.Object $r31;
+        java.util.Iterator r34;
+        org.apache.hadoop.mapred.OutputCollector r37;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer;
+
+        r1 := @parameter0: org.apache.hadoop.io.LongWritable;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable accum>;
+
+        virtualinvoke $r4.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: void clear()>();
+
+        r34 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label01:
+        $z0 = interfaceinvoke r34.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label02;
+
+        $r31 = interfaceinvoke r34.<java.util.Iterator: java.lang.Object next()>();
+
+        r35 = (org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable) $r31;
+
+        $r33 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable accum>;
+
+        virtualinvoke $r33.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: void plusBlock(org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable)>(r35);
+
+        goto label01;
+
+     label02:
+        $l1 = virtualinvoke r1.<org.apache.hadoop.io.LongWritable: long get()>();
+
+        $b0 = $l1 cmp -1L;
+
+        if $b0 != 0 goto label03;
+
+        $r30 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable accum>;
+
+        $r27 = virtualinvoke $r30.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] getRows()>();
+
+        r36 = $r27[0];
+
+        $r28 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.hadoop.mapred.lib.MultipleOutputs outputs>;
+
+        r37 = virtualinvoke $r28.<org.apache.hadoop.mapred.lib.MultipleOutputs: org.apache.hadoop.mapred.OutputCollector getCollector(java.lang.String,org.apache.hadoop.mapred.Reporter)>("sq", null);
+
+        $r29 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r29.<org.apache.hadoop.io.IntWritable: void <init>(int)>(0);
+
+        $r32 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r32.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>(r36);
+
+        interfaceinvoke r37.<org.apache.hadoop.mapred.OutputCollector: void collect(java.lang.Object,java.lang.Object)>($r29, $r32);
+
+        return;
+
+     label03:
+        i15 = 0;
+
+     label04:
+        $r5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable accum>;
+
+        $i2 = virtualinvoke $r5.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int getNumRows()>();
+
+        if i15 >= $i2 goto label14;
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable accum>;
+
+        $r6 = virtualinvoke $r7.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: org.apache.mahout.math.Vector[] getRows()>();
+
+        r38 = $r6[i15];
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.hadoop.io.IntWritable btKey>;
+
+        $l3 = virtualinvoke r1.<org.apache.hadoop.io.LongWritable: long get()>();
+
+        $i5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: int blockHeight>;
+
+        $l4 = (long) $i5;
+
+        $l6 = $l3 * $l4;
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable accum>;
+
+        $r10 = virtualinvoke $r9.<org.apache.mahout.math.hadoop.stochasticsvd.SparseRowBlockWritable: int[] getRowIndices()>();
+
+        $i7 = $r10[i15];
+
+        $l9 = (long) $i7;
+
+        $l8 = $l6 + $l9;
+
+        $i10 = (int) $l8;
+
+        virtualinvoke $r8.<org.apache.hadoop.io.IntWritable: void set(int)>($i10);
+
+        $r13 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.VectorWritable btValue>;
+
+        virtualinvoke $r13.<org.apache.mahout.math.VectorWritable: void set(org.apache.mahout.math.Vector)>(r38);
+
+        $r12 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.hadoop.io.IntWritable btKey>;
+
+        $r11 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.VectorWritable btValue>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>($r12, $r11);
+
+        $z1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: boolean outputBBt>;
+
+        if $z1 == 0 goto label09;
+
+        $r24 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.UpperTriangular mBBt>;
+
+        i16 = virtualinvoke $r24.<org.apache.mahout.math.UpperTriangular: int numRows()>();
+
+        i17 = 0;
+
+     label05:
+        if i17 >= i16 goto label09;
+
+        d0 = interfaceinvoke r38.<org.apache.mahout.math.Vector: double get(int)>(i17);
+
+        $b13 = d0 cmpl 0.0;
+
+        if $b13 == 0 goto label08;
+
+        i18 = i17;
+
+     label06:
+        if i18 >= i16 goto label08;
+
+        d1 = interfaceinvoke r38.<org.apache.mahout.math.Vector: double get(int)>(i18);
+
+        $b14 = d1 cmpl 0.0;
+
+        if $b14 == 0 goto label07;
+
+        $r26 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.UpperTriangular mBBt>;
+
+        $r25 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.UpperTriangular mBBt>;
+
+        $d2 = virtualinvoke $r25.<org.apache.mahout.math.UpperTriangular: double getQuick(int,int)>(i17, i18);
+
+        $d3 = d0 * d1;
+
+        $d4 = $d2 + $d3;
+
+        virtualinvoke $r26.<org.apache.mahout.math.UpperTriangular: void setQuick(int,int,double)>(i17, i18, $d4);
+
+     label07:
+        i18 = i18 + 1;
+
+        goto label06;
+
+     label08:
+        i17 = i17 + 1;
+
+        goto label05;
+
+     label09:
+        $r14 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.Vector xi>;
+
+        if $r14 == null goto label13;
+
+        $r16 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.hadoop.io.IntWritable btKey>;
+
+        i19 = virtualinvoke $r16.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $r15 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.Vector xi>;
+
+        $i11 = interfaceinvoke $r15.<org.apache.mahout.math.Vector: int size()>();
+
+        if $i11 <= i19 goto label10;
+
+        $r23 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.Vector xi>;
+
+        $d5 = interfaceinvoke $r23.<org.apache.mahout.math.Vector: double getQuick(int)>(i19);
+
+        goto label11;
+
+     label10:
+        $d5 = 0.0;
+
+     label11:
+        $r19 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.function.PlusMult pmult>;
+
+        virtualinvoke $r19.<org.apache.mahout.math.function.PlusMult: void setMultiplicator(double)>($d5);
+
+        $r20 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.Vector sbAccum>;
+
+        if $r20 != null goto label12;
+
+        $r21 = new org.apache.mahout.math.DenseVector;
+
+        $i12 = interfaceinvoke r38.<org.apache.mahout.math.Vector: int size()>();
+
+        specialinvoke $r21.<org.apache.mahout.math.DenseVector: void <init>(int)>($i12);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.Vector sbAccum> = $r21;
+
+     label12:
+        $r18 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.Vector sbAccum>;
+
+        $r17 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.function.PlusMult pmult>;
+
+        interfaceinvoke $r18.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>(r38, $r17);
+
+     label13:
+        i15 = i15 + 1;
+
+        goto label04;
+
+     label14:
+        return;
+    }
+
+    protected void cleanup(org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer r0;
+        org.apache.hadoop.mapreduce.Reducer$Context r1;
+        boolean $z0;
+        org.apache.mahout.math.Vector $r3, $r8;
+        java.util.Deque $r4, $r16;
+        org.apache.hadoop.mapred.lib.MultipleOutputs $r5, $r9;
+        org.apache.hadoop.io.IntWritable $r6, $r10;
+        org.apache.mahout.math.VectorWritable $r7, $r12;
+        org.apache.mahout.math.DenseVector $r11;
+        double[] $r13;
+        org.apache.mahout.math.UpperTriangular $r14;
+        java.lang.Throwable $r15;
+        org.apache.hadoop.mapred.OutputCollector r17, r18;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Reducer$Context;
+
+     label1:
+        $z0 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: boolean outputBBt>;
+
+        if $z0 == 0 goto label2;
+
+        $r9 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.hadoop.mapred.lib.MultipleOutputs outputs>;
+
+        r17 = virtualinvoke $r9.<org.apache.hadoop.mapred.lib.MultipleOutputs: org.apache.hadoop.mapred.OutputCollector getCollector(java.lang.String,org.apache.hadoop.mapred.Reporter)>("bbt", null);
+
+        $r10 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r10.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+        $r12 = new org.apache.mahout.math.VectorWritable;
+
+        $r11 = new org.apache.mahout.math.DenseVector;
+
+        $r14 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.UpperTriangular mBBt>;
+
+        $r13 = virtualinvoke $r14.<org.apache.mahout.math.UpperTriangular: double[] getData()>();
+
+        specialinvoke $r11.<org.apache.mahout.math.DenseVector: void <init>(double[])>($r13);
+
+        specialinvoke $r12.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r11);
+
+        interfaceinvoke r17.<org.apache.hadoop.mapred.OutputCollector: void collect(java.lang.Object,java.lang.Object)>($r10, $r12);
+
+     label2:
+        $r3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.Vector sbAccum>;
+
+        if $r3 == null goto label3;
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.hadoop.mapred.lib.MultipleOutputs outputs>;
+
+        r18 = virtualinvoke $r5.<org.apache.hadoop.mapred.lib.MultipleOutputs: org.apache.hadoop.mapred.OutputCollector getCollector(java.lang.String,org.apache.hadoop.mapred.Reporter)>("sb", null);
+
+        $r6 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r6.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+        $r7 = new org.apache.mahout.math.VectorWritable;
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: org.apache.mahout.math.Vector sbAccum>;
+
+        specialinvoke $r7.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r8);
+
+        interfaceinvoke r18.<org.apache.hadoop.mapred.OutputCollector: void collect(java.lang.Object,java.lang.Object)>($r6, $r7);
+
+     label3:
+        $r4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: java.util.Deque closeables>;
+
+        staticinvoke <org.apache.mahout.common.IOUtils: void close(java.util.Collection)>($r4);
+
+        goto label6;
+
+     label4:
+        $r15 := @caughtexception;
+
+     label5:
+        $r16 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: java.util.Deque closeables>;
+
+        staticinvoke <org.apache.mahout.common.IOUtils: void close(java.util.Collection)>($r16);
+
+        throw $r15;
+
+     label6:
+        return;
+
+        catch java.lang.Throwable from label1 to label3 with label4;
+        catch java.lang.Throwable from label4 to label5 with label4;
+    }
+
+    protected volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.hadoop.io.LongWritable $r4;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.hadoop.io.LongWritable) r1;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.BtJob$OuterProductReducer: void reduce(org.apache.hadoop.io.LongWritable,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+}

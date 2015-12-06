@@ -1,0 +1,1215 @@
+public class org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression extends java.lang.Object implements org.apache.mahout.classifier.OnlineLearner, org.apache.hadoop.io.Writable
+{
+    public static final int DEFAULT_THREAD_COUNT;
+    public static final int DEFAULT_POOL_SIZE;
+    private static final int SURVIVORS;
+    private int record;
+    private int cutoff;
+    private int minInterval;
+    private int maxInterval;
+    private int currentStep;
+    private int bufferSize;
+    private java.util.List buffer;
+    private org.apache.mahout.ep.EvolutionaryProcess ep;
+    private org.apache.mahout.ep.State best;
+    private int threadCount;
+    private int poolSize;
+    private org.apache.mahout.ep.State seed;
+    private int numFeatures;
+    private boolean freezeSurvivors;
+    private static final org.slf4j.Logger log;
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        java.util.ArrayList $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int cutoff> = 1000;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int minInterval> = 1000;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int maxInterval> = 1000;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int currentStep> = 1000;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int bufferSize> = 1000;
+
+        $r1 = new java.util.ArrayList;
+
+        specialinvoke $r1.<java.util.ArrayList: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: java.util.List buffer> = $r1;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int threadCount> = 20;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int poolSize> = 20;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: boolean freezeSurvivors> = 1;
+
+        return;
+    }
+
+    public void <init>(int, int, org.apache.mahout.classifier.sgd.PriorFunction)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        int i0, i1;
+        org.apache.mahout.classifier.sgd.PriorFunction r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        r1 := @parameter2: org.apache.mahout.classifier.sgd.PriorFunction;
+
+        specialinvoke r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: void <init>(int,int,org.apache.mahout.classifier.sgd.PriorFunction,int,int)>(i0, i1, r1, 20, 20);
+
+        return;
+    }
+
+    public void <init>(int, int, org.apache.mahout.classifier.sgd.PriorFunction, int, int)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        int i0, i1, i2, i3, $i4;
+        org.apache.mahout.classifier.sgd.PriorFunction r1;
+        java.util.ArrayList $r3;
+        org.apache.mahout.ep.State $r4, $r7, $r8, $r9;
+        double[] $r5;
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper $r6;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        r1 := @parameter2: org.apache.mahout.classifier.sgd.PriorFunction;
+
+        i2 := @parameter3: int;
+
+        i3 := @parameter4: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int cutoff> = 1000;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int minInterval> = 1000;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int maxInterval> = 1000;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int currentStep> = 1000;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int bufferSize> = 1000;
+
+        $r3 = new java.util.ArrayList;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: java.util.List buffer> = $r3;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int threadCount> = 20;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int poolSize> = 20;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: boolean freezeSurvivors> = 1;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int numFeatures> = i1;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int threadCount> = i2;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int poolSize> = i3;
+
+        $r4 = new org.apache.mahout.ep.State;
+
+        $r5 = newarray (double)[2];
+
+        specialinvoke $r4.<org.apache.mahout.ep.State: void <init>(double[],double)>($r5, 10.0);
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State seed> = $r4;
+
+        $r6 = new org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper;
+
+        specialinvoke $r6.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: void <init>(int,int,org.apache.mahout.classifier.sgd.PriorFunction)>(i0, i1, r1);
+
+        $r7 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State seed>;
+
+        virtualinvoke $r7.<org.apache.mahout.ep.State: void setPayload(org.apache.mahout.ep.Payload)>($r6);
+
+        $r8 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State seed>;
+
+        staticinvoke <org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: void setMappings(org.apache.mahout.ep.State)>($r8);
+
+        $r9 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State seed>;
+
+        virtualinvoke $r9.<org.apache.mahout.ep.State: void setPayload(org.apache.mahout.ep.Payload)>($r6);
+
+        $i4 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int poolSize>;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: void setPoolSize(int)>($i4);
+
+        return;
+    }
+
+    public void train(int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        int i0, $i1;
+        org.apache.mahout.math.Vector r1;
+        long $l2;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: org.apache.mahout.math.Vector;
+
+        $i1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int record>;
+
+        $l2 = (long) $i1;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: void train(long,java.lang.String,int,org.apache.mahout.math.Vector)>($l2, null, i0, r1);
+
+        return;
+    }
+
+    public void train(long, int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        long l0;
+        int i1;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        r1 := @parameter2: org.apache.mahout.math.Vector;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: void train(long,java.lang.String,int,org.apache.mahout.math.Vector)>(l0, null, i1, r1);
+
+        return;
+    }
+
+    public void train(long, java.lang.String, int, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        long l0;
+        java.lang.String r1;
+        int i1, $i2, $i3, $i4, $i5;
+        org.apache.mahout.math.Vector r2;
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample $r3;
+        java.util.List $r4, $r5;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: java.lang.String;
+
+        i1 := @parameter2: int;
+
+        r2 := @parameter3: org.apache.mahout.math.Vector;
+
+        $i2 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int record>;
+
+        $i3 = $i2 + 1;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int record> = $i3;
+
+        $r4 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: java.util.List buffer>;
+
+        $r3 = new org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample;
+
+        specialinvoke $r3.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: void <init>(long,java.lang.String,int,org.apache.mahout.math.Vector)>(l0, r1, i1, r2);
+
+        interfaceinvoke $r4.<java.util.List: boolean add(java.lang.Object)>($r3);
+
+        $r5 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: java.util.List buffer>;
+
+        $i4 = interfaceinvoke $r5.<java.util.List: int size()>();
+
+        $i5 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int bufferSize>;
+
+        if $i4 <= $i5 goto label1;
+
+        specialinvoke r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: void trainWithBufferedExamples()>();
+
+     label1:
+        return;
+    }
+
+    private void trainWithBufferedExamples()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        org.apache.mahout.ep.State r1, $r4;
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$1 $r2;
+        org.apache.mahout.ep.EvolutionaryProcess $r3, $r6, $r7;
+        java.util.List $r5, $r8, $r9;
+        int $i0, $i1, $i2, $i3;
+        boolean $z0, $z1;
+        java.lang.Object $r10;
+        org.slf4j.Logger $r11;
+        java.lang.InterruptedException $r12;
+        java.util.concurrent.ExecutionException $r13;
+        java.lang.Throwable $r14;
+        java.lang.IllegalStateException $r15;
+        java.util.Iterator r18;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep>;
+
+        $r2 = new org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$1;
+
+        specialinvoke $r2.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$1: void <init>(org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression)>(r0);
+
+        $r4 = virtualinvoke $r3.<org.apache.mahout.ep.EvolutionaryProcess: org.apache.mahout.ep.State parallelDo(org.apache.mahout.ep.EvolutionaryProcess$Function)>($r2);
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State best> = $r4;
+
+     label2:
+        goto label5;
+
+     label3:
+        $r12 := @caughtexception;
+
+        $r11 = <org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.slf4j.Logger log>;
+
+        interfaceinvoke $r11.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Ignoring exception", $r12);
+
+        goto label5;
+
+     label4:
+        $r13 := @caughtexception;
+
+        $r15 = new java.lang.IllegalStateException;
+
+        $r14 = virtualinvoke $r13.<java.util.concurrent.ExecutionException: java.lang.Throwable getCause()>();
+
+        specialinvoke $r15.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r14);
+
+        throw $r15;
+
+     label5:
+        $r5 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: java.util.List buffer>;
+
+        interfaceinvoke $r5.<java.util.List: void clear()>();
+
+        $i1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int record>;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int cutoff>;
+
+        if $i1 <= $i0 goto label7;
+
+        $i2 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int record>;
+
+        $i3 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int nextStep(int)>($i2);
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int cutoff> = $i3;
+
+        $r6 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep>;
+
+        virtualinvoke $r6.<org.apache.mahout.ep.EvolutionaryProcess: void mutatePopulation(int)>(2);
+
+        $z0 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: boolean freezeSurvivors>;
+
+        if $z0 == 0 goto label7;
+
+        $r7 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep>;
+
+        $r8 = virtualinvoke $r7.<org.apache.mahout.ep.EvolutionaryProcess: java.util.List getPopulation()>();
+
+        $r9 = interfaceinvoke $r8.<java.util.List: java.util.List subList(int,int)>(0, 2);
+
+        r18 = interfaceinvoke $r9.<java.util.List: java.util.Iterator iterator()>();
+
+     label6:
+        $z1 = interfaceinvoke r18.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label7;
+
+        $r10 = interfaceinvoke r18.<java.util.Iterator: java.lang.Object next()>();
+
+        r1 = (org.apache.mahout.ep.State) $r10;
+
+        staticinvoke <org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: void freeze(org.apache.mahout.ep.State)>(r1);
+
+        goto label6;
+
+     label7:
+        return;
+
+        catch java.lang.InterruptedException from label1 to label2 with label3;
+        catch java.util.concurrent.ExecutionException from label1 to label2 with label4;
+    }
+
+    public int nextStep(int)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, i10, i11;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        i0 := @parameter0: int;
+
+        i10 = staticinvoke <org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int stepSize(int,double)>(i0, 2.6);
+
+        $i1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int minInterval>;
+
+        if i10 >= $i1 goto label1;
+
+        i10 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int minInterval>;
+
+     label1:
+        $i2 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int maxInterval>;
+
+        if i10 <= $i2 goto label2;
+
+        i10 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int maxInterval>;
+
+     label2:
+        $i3 = i0 / i10;
+
+        $i4 = $i3 + 1;
+
+        i11 = i10 * $i4;
+
+        $i6 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int cutoff>;
+
+        $i5 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int currentStep>;
+
+        $i7 = $i6 + $i5;
+
+        if i11 >= $i7 goto label3;
+
+        $i9 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int cutoff>;
+
+        $i8 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int currentStep>;
+
+        i11 = $i9 + $i8;
+
+        goto label4;
+
+     label3:
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int currentStep> = i10;
+
+     label4:
+        return i11;
+    }
+
+    public static int stepSize(int, double)
+    {
+        int i0, i1, i2, $i3, $i4, $i5, $i6, $i7;
+        double d0, d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8;
+        int[] $r1;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        $r1 = newarray (int)[3];
+
+        $r1[0] = 1;
+
+        $r1[1] = 2;
+
+        $r1[2] = 5;
+
+        $d2 = (double) i0;
+
+        $d3 = staticinvoke <java.lang.Math: double log10(double)>($d2);
+
+        $d4 = d0 * $d3;
+
+        d1 = staticinvoke <java.lang.Math: double floor(double)>($d4);
+
+        $i4 = (int) d1;
+
+        $i3 = lengthof $r1;
+
+        $i5 = $i4 % $i3;
+
+        i1 = $r1[$i5];
+
+        $i6 = lengthof $r1;
+
+        $d5 = (double) $i6;
+
+        $d6 = d1 / $d5;
+
+        $d8 = staticinvoke <java.lang.Math: double floor(double)>($d6);
+
+        $d7 = staticinvoke <java.lang.Math: double pow(double,double)>(10.0, $d8);
+
+        i2 = (int) $d7;
+
+        $i7 = i1 * i2;
+
+        return $i7;
+    }
+
+    public void close()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$2 $r2;
+        org.apache.mahout.ep.EvolutionaryProcess $r3, $r5, $r9, $r12;
+        java.util.concurrent.ExecutionException $r6;
+        java.lang.IllegalStateException $r7;
+        java.lang.Throwable $r8;
+        java.lang.InterruptedException $r10;
+        org.slf4j.Logger $r11;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        specialinvoke r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: void trainWithBufferedExamples()>();
+
+     label1:
+        $r3 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep>;
+
+        $r2 = new org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$2;
+
+        specialinvoke $r2.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$2: void <init>(org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression)>(r0);
+
+        virtualinvoke $r3.<org.apache.mahout.ep.EvolutionaryProcess: org.apache.mahout.ep.State parallelDo(org.apache.mahout.ep.EvolutionaryProcess$Function)>($r2);
+
+     label2:
+        $r5 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep>;
+
+        virtualinvoke $r5.<org.apache.mahout.ep.EvolutionaryProcess: void close()>();
+
+        goto label8;
+
+     label3:
+        $r10 := @caughtexception;
+
+        $r11 = <org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.slf4j.Logger log>;
+
+        interfaceinvoke $r11.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Ignoring exception", $r10);
+
+     label4:
+        $r12 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep>;
+
+        virtualinvoke $r12.<org.apache.mahout.ep.EvolutionaryProcess: void close()>();
+
+        goto label8;
+
+     label5:
+        $r6 := @caughtexception;
+
+        $r7 = new java.lang.IllegalStateException;
+
+        specialinvoke $r7.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r6);
+
+        throw $r7;
+
+     label6:
+        $r8 := @caughtexception;
+
+     label7:
+        $r9 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep>;
+
+        virtualinvoke $r9.<org.apache.mahout.ep.EvolutionaryProcess: void close()>();
+
+        throw $r8;
+
+     label8:
+        return;
+
+        catch java.lang.InterruptedException from label1 to label2 with label3;
+        catch java.util.concurrent.ExecutionException from label1 to label2 with label5;
+        catch java.lang.Throwable from label1 to label2 with label6;
+        catch java.lang.Throwable from label3 to label4 with label6;
+        catch java.lang.Throwable from label5 to label7 with label6;
+    }
+
+    public void setInterval(int)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        i0 := @parameter0: int;
+
+        virtualinvoke r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: void setInterval(int,int)>(i0, i0);
+
+        return;
+    }
+
+    public void setInterval(int, int)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        int i0, i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $i2 = staticinvoke <java.lang.Math: int max(int,int)>(200, i0);
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int minInterval> = $i2;
+
+        $i3 = staticinvoke <java.lang.Math: int max(int,int)>(200, i1);
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int maxInterval> = $i3;
+
+        $i4 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int record>;
+
+        $i5 = $i4 / i0;
+
+        $i6 = $i5 + 1;
+
+        $i7 = i0 * $i6;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int cutoff> = $i7;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int currentStep> = i0;
+
+        $i8 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int bufferSize>;
+
+        $i9 = staticinvoke <java.lang.Math: int min(int,int)>(i0, $i8);
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int bufferSize> = $i9;
+
+        return;
+    }
+
+    public final void setPoolSize(int)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int poolSize> = i0;
+
+        specialinvoke r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: void setupOptimizer(int)>(i0);
+
+        return;
+    }
+
+    public void setThreadCount(int)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        int i0, $i1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int threadCount> = i0;
+
+        $i1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int poolSize>;
+
+        specialinvoke r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: void setupOptimizer(int)>($i1);
+
+        return;
+    }
+
+    public void setAucEvaluator(org.apache.mahout.math.stats.OnlineAuc)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        org.apache.mahout.math.stats.OnlineAuc r1;
+        org.apache.mahout.ep.State $r2;
+        org.apache.mahout.ep.Payload $r3;
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper $r4;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        r1 := @parameter0: org.apache.mahout.math.stats.OnlineAuc;
+
+        $r2 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State seed>;
+
+        $r3 = virtualinvoke $r2.<org.apache.mahout.ep.State: org.apache.mahout.ep.Payload getPayload()>();
+
+        $r4 = (org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper) $r3;
+
+        virtualinvoke $r4.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: void setAucEvaluator(org.apache.mahout.math.stats.OnlineAuc)>(r1);
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int poolSize>;
+
+        specialinvoke r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: void setupOptimizer(int)>($i0);
+
+        return;
+    }
+
+    private void setupOptimizer(int)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        int i0, $i1;
+        org.apache.mahout.ep.EvolutionaryProcess $r1;
+        org.apache.mahout.ep.State $r2;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        i0 := @parameter0: int;
+
+        $r1 = new org.apache.mahout.ep.EvolutionaryProcess;
+
+        $i1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int threadCount>;
+
+        $r2 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State seed>;
+
+        specialinvoke $r1.<org.apache.mahout.ep.EvolutionaryProcess: void <init>(int,int,org.apache.mahout.ep.State)>($i1, i0, $r2);
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep> = $r1;
+
+        return;
+    }
+
+    public int numFeatures()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int numFeatures>;
+
+        return $i0;
+    }
+
+    public double auc()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper r1;
+        org.apache.mahout.ep.State $r2, $r3;
+        org.apache.mahout.ep.Payload $r4;
+        org.apache.mahout.classifier.sgd.CrossFoldLearner $r5;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        $r2 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State best>;
+
+        if $r2 != null goto label1;
+
+        return #NaN;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State best>;
+
+        $r4 = virtualinvoke $r3.<org.apache.mahout.ep.State: org.apache.mahout.ep.Payload getPayload()>();
+
+        r1 = (org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper) $r4;
+
+        $r5 = virtualinvoke r1.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner getLearner()>();
+
+        $d0 = virtualinvoke $r5.<org.apache.mahout.classifier.sgd.CrossFoldLearner: double auc()>();
+
+        return $d0;
+    }
+
+    public org.apache.mahout.ep.State getBest()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        org.apache.mahout.ep.State $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State best>;
+
+        return $r1;
+    }
+
+    public void setBest(org.apache.mahout.ep.State)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        org.apache.mahout.ep.State r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        r1 := @parameter0: org.apache.mahout.ep.State;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State best> = r1;
+
+        return;
+    }
+
+    public int getRecord()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int record>;
+
+        return $i0;
+    }
+
+    public void setRecord(int)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int record> = i0;
+
+        return;
+    }
+
+    public int getMinInterval()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int minInterval>;
+
+        return $i0;
+    }
+
+    public int getMaxInterval()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int maxInterval>;
+
+        return $i0;
+    }
+
+    public int getNumCategories()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        org.apache.mahout.ep.State $r1;
+        org.apache.mahout.ep.Payload $r2;
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper $r3;
+        org.apache.mahout.classifier.sgd.CrossFoldLearner $r4;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State seed>;
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.ep.State: org.apache.mahout.ep.Payload getPayload()>();
+
+        $r3 = (org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper) $r2;
+
+        $r4 = virtualinvoke $r3.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner getLearner()>();
+
+        $i0 = virtualinvoke $r4.<org.apache.mahout.classifier.sgd.CrossFoldLearner: int numCategories()>();
+
+        return $i0;
+    }
+
+    public org.apache.mahout.classifier.sgd.PriorFunction getPrior()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        org.apache.mahout.ep.State $r1;
+        org.apache.mahout.ep.Payload $r2;
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper $r3;
+        org.apache.mahout.classifier.sgd.CrossFoldLearner $r4;
+        org.apache.mahout.classifier.sgd.PriorFunction $r5;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State seed>;
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.ep.State: org.apache.mahout.ep.Payload getPayload()>();
+
+        $r3 = (org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper) $r2;
+
+        $r4 = virtualinvoke $r3.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner getLearner()>();
+
+        $r5 = virtualinvoke $r4.<org.apache.mahout.classifier.sgd.CrossFoldLearner: org.apache.mahout.classifier.sgd.PriorFunction getPrior()>();
+
+        return $r5;
+    }
+
+    public void setBuffer(java.util.List)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        java.util.List r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        r1 := @parameter0: java.util.List;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: java.util.List buffer> = r1;
+
+        return;
+    }
+
+    public java.util.List getBuffer()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        java.util.List $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: java.util.List buffer>;
+
+        return $r1;
+    }
+
+    public org.apache.mahout.ep.EvolutionaryProcess getEp()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        org.apache.mahout.ep.EvolutionaryProcess $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep>;
+
+        return $r1;
+    }
+
+    public void setEp(org.apache.mahout.ep.EvolutionaryProcess)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        org.apache.mahout.ep.EvolutionaryProcess r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        r1 := @parameter0: org.apache.mahout.ep.EvolutionaryProcess;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep> = r1;
+
+        return;
+    }
+
+    public org.apache.mahout.ep.State getSeed()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        org.apache.mahout.ep.State $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State seed>;
+
+        return $r1;
+    }
+
+    public void setSeed(org.apache.mahout.ep.State)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        org.apache.mahout.ep.State r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        r1 := @parameter0: org.apache.mahout.ep.State;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State seed> = r1;
+
+        return;
+    }
+
+    public int getNumFeatures()
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int numFeatures>;
+
+        return $i0;
+    }
+
+    public void setAveragingWindow(int)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        int i0, $i1;
+        org.apache.mahout.ep.State $r1;
+        org.apache.mahout.ep.Payload $r2;
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper $r3;
+        org.apache.mahout.classifier.sgd.CrossFoldLearner $r4;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State seed>;
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.ep.State: org.apache.mahout.ep.Payload getPayload()>();
+
+        $r3 = (org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper) $r2;
+
+        $r4 = virtualinvoke $r3.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$Wrapper: org.apache.mahout.classifier.sgd.CrossFoldLearner getLearner()>();
+
+        virtualinvoke $r4.<org.apache.mahout.classifier.sgd.CrossFoldLearner: void setWindowSize(int)>(i0);
+
+        $i1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int poolSize>;
+
+        specialinvoke r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: void setupOptimizer(int)>($i1);
+
+        return;
+    }
+
+    public void setFreezeSurvivors(boolean)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        boolean z0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        z0 := @parameter0: boolean;
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: boolean freezeSurvivors> = z0;
+
+        return;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        java.io.DataOutput r1;
+        java.util.Iterator r2;
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample r3;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9;
+        java.util.List $r4, $r5;
+        boolean $z0, $z1;
+        org.apache.mahout.ep.EvolutionaryProcess $r6;
+        org.apache.mahout.ep.State $r7, $r8;
+        java.lang.Object $r9;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int record>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i0);
+
+        $i1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int cutoff>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i1);
+
+        $i2 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int minInterval>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i2);
+
+        $i3 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int maxInterval>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i3);
+
+        $i4 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int currentStep>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i4);
+
+        $i5 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int bufferSize>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i5);
+
+        $r4 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: java.util.List buffer>;
+
+        $i6 = interfaceinvoke $r4.<java.util.List: int size()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i6);
+
+        $r5 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: java.util.List buffer>;
+
+        r2 = interfaceinvoke $r5.<java.util.List: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r2.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r9 = interfaceinvoke r2.<java.util.Iterator: java.lang.Object next()>();
+
+        r3 = (org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample) $r9;
+
+        virtualinvoke r3.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: void write(java.io.DataOutput)>(r1);
+
+        goto label1;
+
+     label2:
+        $r6 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep>;
+
+        virtualinvoke $r6.<org.apache.mahout.ep.EvolutionaryProcess: void write(java.io.DataOutput)>(r1);
+
+        $r7 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State best>;
+
+        virtualinvoke $r7.<org.apache.mahout.ep.State: void write(java.io.DataOutput)>(r1);
+
+        $i7 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int threadCount>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i7);
+
+        $i8 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int poolSize>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i8);
+
+        $r8 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State seed>;
+
+        virtualinvoke $r8.<org.apache.mahout.ep.State: void write(java.io.DataOutput)>(r1);
+
+        $i9 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int numFeatures>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i9);
+
+        $z1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: boolean freezeSurvivors>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeBoolean(boolean)>($z1);
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        java.io.DataInput r1;
+        int i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, i10;
+        java.util.ArrayList $r3;
+        org.apache.mahout.ep.EvolutionaryProcess $r4, $r5;
+        org.apache.mahout.ep.State $r6, $r7, $r8, $r9;
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample $r10;
+        boolean $z0;
+        java.util.List $r11;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $i1 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int record> = $i1;
+
+        $i2 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int cutoff> = $i2;
+
+        $i3 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int minInterval> = $i3;
+
+        $i4 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int maxInterval> = $i4;
+
+        $i5 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int currentStep> = $i5;
+
+        $i6 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int bufferSize> = $i6;
+
+        i0 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        $r3 = new java.util.ArrayList;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: java.util.List buffer> = $r3;
+
+        i10 = 0;
+
+     label1:
+        if i10 >= i0 goto label2;
+
+        $r10 = new org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample;
+
+        specialinvoke $r10.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: void <init>(org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$1)>(null);
+
+        virtualinvoke $r10.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$TrainingExample: void readFields(java.io.DataInput)>(r1);
+
+        $r11 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: java.util.List buffer>;
+
+        interfaceinvoke $r11.<java.util.List: boolean add(java.lang.Object)>($r10);
+
+        i10 = i10 + 1;
+
+        goto label1;
+
+     label2:
+        $r4 = new org.apache.mahout.ep.EvolutionaryProcess;
+
+        specialinvoke $r4.<org.apache.mahout.ep.EvolutionaryProcess: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep> = $r4;
+
+        $r5 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep>;
+
+        virtualinvoke $r5.<org.apache.mahout.ep.EvolutionaryProcess: void readFields(java.io.DataInput)>(r1);
+
+        $r6 = new org.apache.mahout.ep.State;
+
+        specialinvoke $r6.<org.apache.mahout.ep.State: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State best> = $r6;
+
+        $r7 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State best>;
+
+        virtualinvoke $r7.<org.apache.mahout.ep.State: void readFields(java.io.DataInput)>(r1);
+
+        $i7 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int threadCount> = $i7;
+
+        $i8 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int poolSize> = $i8;
+
+        $r8 = new org.apache.mahout.ep.State;
+
+        specialinvoke $r8.<org.apache.mahout.ep.State: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State seed> = $r8;
+
+        $r9 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.State seed>;
+
+        virtualinvoke $r9.<org.apache.mahout.ep.State: void readFields(java.io.DataInput)>(r1);
+
+        $i9 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int numFeatures> = $i9;
+
+        $z0 = interfaceinvoke r1.<java.io.DataInput: boolean readBoolean()>();
+
+        r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: boolean freezeSurvivors> = $z0;
+
+        return;
+    }
+
+    static java.util.List access$000(org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression)
+    {
+        org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
+        java.util.List $r1;
+
+        r0 := @parameter0: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: java.util.List buffer>;
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int SURVIVORS> = 2;
+
+        <org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int DEFAULT_POOL_SIZE> = 20;
+
+        <org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: int DEFAULT_THREAD_COUNT> = 20;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/classifier/sgd/AdaptiveLogisticRegression");
+
+        <org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

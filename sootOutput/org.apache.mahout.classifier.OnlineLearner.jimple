@@ -1,0 +1,11 @@
+public interface  org.apache.mahout.classifier.OnlineLearner extends java.lang.Object implements java.io.Closeable
+{
+
+    public abstract void train(int, org.apache.mahout.math.Vector);
+
+    public abstract void train(long, java.lang.String, int, org.apache.mahout.math.Vector);
+
+    public abstract void train(long, int, org.apache.mahout.math.Vector);
+
+    public abstract void close();
+}

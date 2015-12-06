@@ -1,0 +1,268 @@
+public class org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private org.apache.mahout.math.Vector outputVector;
+    private org.apache.mahout.math.Vector inputVector;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    org.apache.mahout.math.Vector getOutputVector()
+    {
+        org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper r0;
+        org.apache.mahout.math.Vector $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper: org.apache.mahout.math.Vector outputVector>;
+
+        return $r1;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.fs.Path[] r2;
+        org.apache.hadoop.fs.Path r3;
+        boolean $z0, $z1;
+        int $i0, i1;
+        java.io.IOException $r7;
+        java.lang.Throwable $r8;
+        org.apache.hadoop.conf.Configuration r9;
+        java.lang.Object $r11;
+        org.apache.mahout.math.VectorWritable $r12;
+        org.apache.mahout.math.Vector $r13;
+        org.apache.mahout.math.AbstractVector $r15;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator r17;
+        org.apache.mahout.math.RandomAccessSparseVector r18;
+        org.apache.mahout.math.DenseVector r19;
+        java.lang.IllegalStateException r20;
+
+        r0 := @this: org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+     label01:
+        r9 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        r2 = staticinvoke <org.apache.hadoop.filecache.DistributedCache: org.apache.hadoop.fs.Path[] getLocalCacheFiles(org.apache.hadoop.conf.Configuration)>(r9);
+
+        if r2 == null goto label02;
+
+        $i0 = lengthof r2;
+
+        if $i0 < 1 goto label02;
+
+        $z1 = 1;
+
+        goto label03;
+
+     label02:
+        $z1 = 0;
+
+     label03:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, "missing paths from the DistributedCache");
+
+        r3 = staticinvoke <org.apache.mahout.common.HadoopUtil: org.apache.hadoop.fs.Path getSingleCachedFile(org.apache.hadoop.conf.Configuration)>(r9);
+
+        r17 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator;
+
+        specialinvoke r17.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: void <init>(org.apache.hadoop.fs.Path,boolean,org.apache.hadoop.conf.Configuration)>(r3, 1, r9);
+
+     label04:
+        $r11 = virtualinvoke r17.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: java.lang.Object next()>();
+
+        $r12 = (org.apache.mahout.math.VectorWritable) $r11;
+
+        $r13 = virtualinvoke $r12.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        r0.<org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper: org.apache.mahout.math.Vector inputVector> = $r13;
+
+     label05:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>(r17, 1);
+
+        goto label08;
+
+     label06:
+        $r8 := @caughtexception;
+
+     label07:
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>(r17, 1);
+
+        throw $r8;
+
+     label08:
+        i1 = virtualinvoke r9.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("DistributedMatrix.times.output.dimension", 2147483647);
+
+        $z0 = virtualinvoke r9.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("DistributedMatrix.times.outputVector.sparse", 0);
+
+        if $z0 == 0 goto label09;
+
+        r18 = new org.apache.mahout.math.RandomAccessSparseVector;
+
+        $r15 = r18;
+
+        specialinvoke r18.<org.apache.mahout.math.RandomAccessSparseVector: void <init>(int,int)>(i1, 10);
+
+        goto label10;
+
+     label09:
+        r19 = new org.apache.mahout.math.DenseVector;
+
+        $r15 = r19;
+
+        specialinvoke r19.<org.apache.mahout.math.DenseVector: void <init>(int)>(i1);
+
+     label10:
+        r0.<org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper: org.apache.mahout.math.Vector outputVector> = $r15;
+
+     label11:
+        goto label13;
+
+     label12:
+        $r7 := @caughtexception;
+
+        r20 = new java.lang.IllegalStateException;
+
+        specialinvoke r20.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r7);
+
+        throw r20;
+
+     label13:
+        return;
+
+        catch java.lang.Throwable from label04 to label05 with label06;
+        catch java.lang.Throwable from label06 to label07 with label06;
+        catch java.io.IOException from label01 to label11 with label12;
+    }
+
+    protected void map(org.apache.hadoop.io.WritableComparable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper r0;
+        org.apache.hadoop.io.WritableComparable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        double d0;
+        byte $b0, $b1;
+        org.apache.mahout.math.Vector $r4, $r5, $r8, $r9;
+        org.apache.mahout.math.function.DoubleDoubleFunction $r6, $r10;
+
+        r0 := @this: org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.WritableComparable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        d0 = virtualinvoke r0.<org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper: double scale(org.apache.mahout.math.VectorWritable)>(r2);
+
+        $b0 = d0 cmpl 1.0;
+
+        if $b0 != 0 goto label1;
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper: org.apache.mahout.math.Vector outputVector>;
+
+        $r9 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r10 = <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction PLUS>;
+
+        interfaceinvoke $r8.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>($r9, $r10);
+
+        goto label2;
+
+     label1:
+        $b1 = d0 cmpl 0.0;
+
+        if $b1 == 0 goto label2;
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper: org.apache.mahout.math.Vector outputVector>;
+
+        $r5 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r6 = staticinvoke <org.apache.mahout.math.function.Functions: org.apache.mahout.math.function.DoubleDoubleFunction plusMult(double)>(d0);
+
+        interfaceinvoke $r4.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(org.apache.mahout.math.Vector,org.apache.mahout.math.function.DoubleDoubleFunction)>($r5, $r6);
+
+     label2:
+        return;
+    }
+
+    protected double scale(org.apache.mahout.math.VectorWritable)
+    {
+        org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper r0;
+        org.apache.mahout.math.VectorWritable r1;
+        org.apache.mahout.math.Vector $r2, $r3;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper;
+
+        r1 := @parameter0: org.apache.mahout.math.VectorWritable;
+
+        $r2 = virtualinvoke r1.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper: org.apache.mahout.math.Vector inputVector>;
+
+        $d0 = interfaceinvoke $r2.<org.apache.mahout.math.Vector: double dot(org.apache.mahout.math.Vector)>($r3);
+
+        return $d0;
+    }
+
+    protected void cleanup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.io.NullWritable $r2;
+        org.apache.mahout.math.VectorWritable $r3;
+        org.apache.mahout.math.Vector $r4;
+
+        r0 := @this: org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r2 = staticinvoke <org.apache.hadoop.io.NullWritable: org.apache.hadoop.io.NullWritable get()>();
+
+        $r3 = new org.apache.mahout.math.VectorWritable;
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper: org.apache.mahout.math.Vector outputVector>;
+
+        specialinvoke $r3.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r4);
+
+        virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r2, $r3);
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.WritableComparable $r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.WritableComparable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.TimesSquaredJob$TimesSquaredMapper: void map(org.apache.hadoop.io.WritableComparable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

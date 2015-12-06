@@ -1,0 +1,197 @@
+public class org.apache.mahout.clustering.spectral.AffinityMatrixInputMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private static final org.slf4j.Logger log;
+    private static final java.util.regex.Pattern COMMA_PATTERN;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.spectral.AffinityMatrixInputMapper r0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.AffinityMatrixInputMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.LongWritable, org.apache.hadoop.io.Text, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.spectral.AffinityMatrixInputMapper r0;
+        org.apache.hadoop.io.LongWritable r1;
+        org.apache.hadoop.io.Text r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        java.lang.String[] r4;
+        java.util.regex.Pattern $r7;
+        java.lang.String $r8, $r11, $r12, $r13, $r15, $r19, $r20, $r31;
+        org.slf4j.Logger $r9;
+        long $l0;
+        java.lang.Long $r10;
+        int $i1, $i2, $i3, $i4;
+        boolean $z0, $z1, $z2;
+        org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable $r14;
+        org.apache.hadoop.io.IntWritable $r16;
+        java.lang.Integer $r17, $r18;
+        java.io.IOException $r21, $r32;
+        java.lang.StringBuilder $r22, $r24, $r25, $r26, $r27, $r28, $r29, $r30;
+        java.lang.Double $r23;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.AffinityMatrixInputMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.LongWritable;
+
+        r2 := @parameter1: org.apache.hadoop.io.Text;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r7 = <org.apache.mahout.clustering.spectral.AffinityMatrixInputMapper: java.util.regex.Pattern COMMA_PATTERN>;
+
+        $r8 = virtualinvoke r2.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        r4 = virtualinvoke $r7.<java.util.regex.Pattern: java.lang.String[] split(java.lang.CharSequence)>($r8);
+
+        $r9 = <org.apache.mahout.clustering.spectral.AffinityMatrixInputMapper: org.slf4j.Logger log>;
+
+        $l0 = virtualinvoke r1.<org.apache.hadoop.io.LongWritable: long get()>();
+
+        $r10 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l0);
+
+        interfaceinvoke $r9.<org.slf4j.Logger: void debug(java.lang.String,java.lang.Object,java.lang.Object)>("(DEBUG - MAP) Key[{}], Value[{}]", $r10, r2);
+
+        $i1 = lengthof r4;
+
+        if $i1 == 3 goto label1;
+
+        $r21 = new java.io.IOException;
+
+        $r22 = new java.lang.StringBuilder;
+
+        specialinvoke $r22.<java.lang.StringBuilder: void <init>()>();
+
+        $r26 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Expected input of length 3, received ");
+
+        $i4 = lengthof r4;
+
+        $r24 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i4);
+
+        $r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(". Please make sure you adhere to ");
+
+        $r29 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("the structure of (i,j,value) for representing a graph in text. ");
+
+        $r30 = virtualinvoke $r29.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Input line was: \'");
+
+        $r27 = virtualinvoke $r30.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r2);
+
+        $r28 = virtualinvoke $r27.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\'.");
+
+        $r31 = virtualinvoke $r28.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r21.<java.io.IOException: void <init>(java.lang.String)>($r31);
+
+        throw $r21;
+
+     label1:
+        $r11 = r4[0];
+
+        $z0 = virtualinvoke $r11.<java.lang.String: boolean isEmpty()>();
+
+        if $z0 != 0 goto label2;
+
+        $r12 = r4[1];
+
+        $z1 = virtualinvoke $r12.<java.lang.String: boolean isEmpty()>();
+
+        if $z1 != 0 goto label2;
+
+        $r13 = r4[2];
+
+        $z2 = virtualinvoke $r13.<java.lang.String: boolean isEmpty()>();
+
+        if $z2 == 0 goto label3;
+
+     label2:
+        $r32 = new java.io.IOException;
+
+        specialinvoke $r32.<java.io.IOException: void <init>(java.lang.String)>("Found an element of 0 length. Please be sure you adhere to the structure of (i,j,value) for  representing a graph in text.");
+
+        throw $r32;
+
+     label3:
+        $r14 = new org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        specialinvoke $r14.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: void <init>()>();
+
+        $r16 = new org.apache.hadoop.io.IntWritable;
+
+        $r15 = r4[0];
+
+        $r17 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(java.lang.String)>($r15);
+
+        $i2 = virtualinvoke $r17.<java.lang.Integer: int intValue()>();
+
+        specialinvoke $r16.<org.apache.hadoop.io.IntWritable: void <init>(int)>($i2);
+
+        virtualinvoke $r14.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: void setRow(int)>(-1);
+
+        $r19 = r4[1];
+
+        $r18 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(java.lang.String)>($r19);
+
+        $i3 = virtualinvoke $r18.<java.lang.Integer: int intValue()>();
+
+        virtualinvoke $r14.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: void setCol(int)>($i3);
+
+        $r20 = r4[2];
+
+        $r23 = staticinvoke <java.lang.Double: java.lang.Double valueOf(java.lang.String)>($r20);
+
+        $d0 = virtualinvoke $r23.<java.lang.Double: double doubleValue()>();
+
+        virtualinvoke $r14.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: void setVal(double)>($d0);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r16, $r14);
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.clustering.spectral.AffinityMatrixInputMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.hadoop.io.Text $r4;
+        org.apache.hadoop.io.LongWritable $r5;
+
+        r0 := @this: org.apache.mahout.clustering.spectral.AffinityMatrixInputMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.LongWritable) r1;
+
+        $r4 = (org.apache.hadoop.io.Text) r2;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.spectral.AffinityMatrixInputMapper: void map(org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+        java.util.regex.Pattern $r1;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/clustering/spectral/AffinityMatrixInputMapper");
+
+        <org.apache.mahout.clustering.spectral.AffinityMatrixInputMapper: org.slf4j.Logger log> = $r0;
+
+        $r1 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>(",");
+
+        <org.apache.mahout.clustering.spectral.AffinityMatrixInputMapper: java.util.regex.Pattern COMMA_PATTERN> = $r1;
+
+        return;
+    }
+}

@@ -1,0 +1,132 @@
+public class org.apache.mahout.vectorizer.term.TermDocumentCountMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private static final org.apache.hadoop.io.LongWritable ONE;
+    private static final org.apache.hadoop.io.IntWritable TOTAL_COUNT;
+    private final org.apache.hadoop.io.IntWritable out;
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.term.TermDocumentCountMapper r0;
+        org.apache.hadoop.io.IntWritable $r1;
+
+        r0 := @this: org.apache.mahout.vectorizer.term.TermDocumentCountMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        $r1 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r1.<org.apache.hadoop.io.IntWritable: void <init>()>();
+
+        r0.<org.apache.mahout.vectorizer.term.TermDocumentCountMapper: org.apache.hadoop.io.IntWritable out> = $r1;
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.WritableComparable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.term.TermDocumentCountMapper r0;
+        org.apache.hadoop.io.WritableComparable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.Vector r4;
+        java.util.Iterator r5;
+        org.apache.mahout.math.Vector$Element r6;
+        java.lang.Iterable $r7;
+        boolean $z0;
+        org.apache.hadoop.io.LongWritable $r8, $r13;
+        org.apache.hadoop.io.IntWritable $r9, $r11, $r12;
+        java.lang.Object $r10;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.vectorizer.term.TermDocumentCountMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.WritableComparable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        r4 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r7 = interfaceinvoke r4.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r5 = interfaceinvoke $r7.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r10 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.math.Vector$Element) $r10;
+
+        $r11 = r0.<org.apache.mahout.vectorizer.term.TermDocumentCountMapper: org.apache.hadoop.io.IntWritable out>;
+
+        $i0 = interfaceinvoke r6.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        virtualinvoke $r11.<org.apache.hadoop.io.IntWritable: void set(int)>($i0);
+
+        $r12 = r0.<org.apache.mahout.vectorizer.term.TermDocumentCountMapper: org.apache.hadoop.io.IntWritable out>;
+
+        $r13 = <org.apache.mahout.vectorizer.term.TermDocumentCountMapper: org.apache.hadoop.io.LongWritable ONE>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r12, $r13);
+
+        goto label1;
+
+     label2:
+        $r9 = <org.apache.mahout.vectorizer.term.TermDocumentCountMapper: org.apache.hadoop.io.IntWritable TOTAL_COUNT>;
+
+        $r8 = <org.apache.mahout.vectorizer.term.TermDocumentCountMapper: org.apache.hadoop.io.LongWritable ONE>;
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r9, $r8);
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.vectorizer.term.TermDocumentCountMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.WritableComparable $r5;
+
+        r0 := @this: org.apache.mahout.vectorizer.term.TermDocumentCountMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.WritableComparable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.vectorizer.term.TermDocumentCountMapper: void map(org.apache.hadoop.io.WritableComparable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.apache.hadoop.io.LongWritable $r0;
+        org.apache.hadoop.io.IntWritable $r1;
+
+        $r0 = new org.apache.hadoop.io.LongWritable;
+
+        specialinvoke $r0.<org.apache.hadoop.io.LongWritable: void <init>(long)>(1L);
+
+        <org.apache.mahout.vectorizer.term.TermDocumentCountMapper: org.apache.hadoop.io.LongWritable ONE> = $r0;
+
+        $r1 = new org.apache.hadoop.io.IntWritable;
+
+        specialinvoke $r1.<org.apache.hadoop.io.IntWritable: void <init>(int)>(-1);
+
+        <org.apache.mahout.vectorizer.term.TermDocumentCountMapper: org.apache.hadoop.io.IntWritable TOTAL_COUNT> = $r1;
+
+        return;
+    }
+}

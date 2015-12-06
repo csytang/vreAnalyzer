@@ -1,0 +1,154 @@
+public abstract class org.apache.mahout.ep.Mapping extends org.apache.mahout.math.function.DoubleFunction implements org.apache.hadoop.io.Writable
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.ep.Mapping r0;
+
+        r0 := @this: org.apache.mahout.ep.Mapping;
+
+        specialinvoke r0.<org.apache.mahout.math.function.DoubleFunction: void <init>()>();
+
+        return;
+    }
+
+    public static org.apache.mahout.ep.Mapping softLimit(double, double, double)
+    {
+        double d0, d1, d2;
+        org.apache.mahout.ep.Mapping$SoftLimit $r0;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        d2 := @parameter2: double;
+
+        $r0 = new org.apache.mahout.ep.Mapping$SoftLimit;
+
+        specialinvoke $r0.<org.apache.mahout.ep.Mapping$SoftLimit: void <init>(double,double,double,org.apache.mahout.ep.Mapping$1)>(d0, d1, d2, null);
+
+        return $r0;
+    }
+
+    public static org.apache.mahout.ep.Mapping softLimit(double, double)
+    {
+        double d0, d1;
+        org.apache.mahout.ep.Mapping $r0;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        $r0 = staticinvoke <org.apache.mahout.ep.Mapping: org.apache.mahout.ep.Mapping softLimit(double,double,double)>(d0, d1, 1.0);
+
+        return $r0;
+    }
+
+    public static org.apache.mahout.ep.Mapping logLimit(double, double)
+    {
+        double d0, d1;
+        byte $b0, $b1;
+        java.lang.Object[] $r0, $r2;
+        java.lang.Double $r1, $r3;
+        org.apache.mahout.ep.Mapping$LogLimit $r4;
+        boolean $z0, $z1;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        $b0 = d0 cmpl 0.0;
+
+        if $b0 <= 0 goto label1;
+
+        $z0 = 1;
+
+        goto label2;
+
+     label1:
+        $z0 = 0;
+
+     label2:
+        $r0 = newarray (java.lang.Object)[1];
+
+        $r1 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d0);
+
+        $r0[0] = $r1;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.String,java.lang.Object[])>($z0, "Lower bound for log limit must be > 0 but was %f", $r0);
+
+        $b1 = d1 cmpl 0.0;
+
+        if $b1 <= 0 goto label3;
+
+        $z1 = 1;
+
+        goto label4;
+
+     label3:
+        $z1 = 0;
+
+     label4:
+        $r2 = newarray (java.lang.Object)[1];
+
+        $r3 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d1);
+
+        $r2[0] = $r3;
+
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.String,java.lang.Object[])>($z1, "Upper bound for log limit must be > 0 but was %f", $r2);
+
+        $r4 = new org.apache.mahout.ep.Mapping$LogLimit;
+
+        specialinvoke $r4.<org.apache.mahout.ep.Mapping$LogLimit: void <init>(double,double,org.apache.mahout.ep.Mapping$1)>(d0, d1, null);
+
+        return $r4;
+    }
+
+    public static org.apache.mahout.ep.Mapping exponential()
+    {
+        org.apache.mahout.ep.Mapping $r0;
+
+        $r0 = staticinvoke <org.apache.mahout.ep.Mapping: org.apache.mahout.ep.Mapping exponential(double)>(1.0);
+
+        return $r0;
+    }
+
+    public static org.apache.mahout.ep.Mapping exponential(double)
+    {
+        double d0;
+        org.apache.mahout.ep.Mapping$Exponential $r0;
+
+        d0 := @parameter0: double;
+
+        $r0 = new org.apache.mahout.ep.Mapping$Exponential;
+
+        specialinvoke $r0.<org.apache.mahout.ep.Mapping$Exponential: void <init>(double,org.apache.mahout.ep.Mapping$1)>(d0, null);
+
+        return $r0;
+    }
+
+    public static org.apache.mahout.ep.Mapping identity()
+    {
+        org.apache.mahout.ep.Mapping$Identity $r0;
+
+        $r0 = new org.apache.mahout.ep.Mapping$Identity;
+
+        specialinvoke $r0.<org.apache.mahout.ep.Mapping$Identity: void <init>()>();
+
+        return $r0;
+    }
+
+    void <init>(org.apache.mahout.ep.Mapping$1)
+    {
+        org.apache.mahout.ep.Mapping r0;
+        org.apache.mahout.ep.Mapping$1 r1;
+
+        r0 := @this: org.apache.mahout.ep.Mapping;
+
+        r1 := @parameter0: org.apache.mahout.ep.Mapping$1;
+
+        specialinvoke r0.<org.apache.mahout.ep.Mapping: void <init>()>();
+
+        return;
+    }
+}

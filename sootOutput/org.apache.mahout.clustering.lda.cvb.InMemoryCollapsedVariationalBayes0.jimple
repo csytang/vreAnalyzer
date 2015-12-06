@@ -1,0 +1,1681 @@
+public class org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0 extends org.apache.mahout.common.AbstractJob
+{
+    private static final org.slf4j.Logger log;
+    private int numTopics;
+    private int numTerms;
+    private int numDocuments;
+    private double alpha;
+    private double eta;
+    private boolean verbose;
+    private java.lang.String[] terms;
+    private org.apache.mahout.math.Matrix corpusWeights;
+    private double totalCorpusWeight;
+    private double initialModelCorpusFraction;
+    private org.apache.mahout.math.Matrix docTopicCounts;
+    private int numTrainingThreads;
+    private int numUpdatingThreads;
+    private org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer;
+
+    private void <init>()
+    {
+        org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0 r0;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: boolean verbose> = 0;
+
+        return;
+    }
+
+    public void setVerbose(boolean)
+    {
+        org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0 r0;
+        boolean z0;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0;
+
+        z0 := @parameter0: boolean;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: boolean verbose> = z0;
+
+        return;
+    }
+
+    public void <init>(org.apache.mahout.math.Matrix, java.lang.String[], int, double, double, int, int, double)
+    {
+        org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0 r0;
+        org.apache.mahout.math.Matrix r1;
+        java.lang.String[] r2;
+        int i0, i1, i2, $i3, $i4, $i5, i6;
+        double d0, d1, d2;
+        java.util.HashMap $r4;
+        java.lang.Integer $r5;
+        java.lang.String $r6;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0;
+
+        r1 := @parameter0: org.apache.mahout.math.Matrix;
+
+        r2 := @parameter1: java.lang.String[];
+
+        i0 := @parameter2: int;
+
+        d0 := @parameter3: double;
+
+        d1 := @parameter4: double;
+
+        i1 := @parameter5: int;
+
+        i2 := @parameter6: int;
+
+        d2 := @parameter7: double;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: boolean verbose> = 0;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numTopics> = i0;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double alpha> = d0;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double eta> = d1;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.math.Matrix corpusWeights> = r1;
+
+        $i3 = interfaceinvoke r1.<org.apache.mahout.math.Matrix: int numRows()>();
+
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numDocuments> = $i3;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: java.lang.String[] terms> = r2;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double initialModelCorpusFraction> = d2;
+
+        if r2 == null goto label1;
+
+        $i5 = lengthof r2;
+
+        goto label2;
+
+     label1:
+        $i5 = interfaceinvoke r1.<org.apache.mahout.math.Matrix: int numCols()>();
+
+     label2:
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numTerms> = $i5;
+
+        $r4 = new java.util.HashMap;
+
+        specialinvoke $r4.<java.util.HashMap: void <init>()>();
+
+        if r2 == null goto label4;
+
+        i6 = 0;
+
+     label3:
+        $i4 = lengthof r2;
+
+        if i6 >= $i4 goto label4;
+
+        $r6 = r2[i6];
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i6);
+
+        interfaceinvoke $r4.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>($r6, $r5);
+
+        i6 = i6 + 1;
+
+        goto label3;
+
+     label4:
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numTrainingThreads> = i1;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numUpdatingThreads> = i2;
+
+        specialinvoke r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: void postInitCorpus()>();
+
+        specialinvoke r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: void initializeModel()>();
+
+        return;
+    }
+
+    private void postInitCorpus()
+    {
+        org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0 r0;
+        org.apache.mahout.math.Vector r1;
+        int $i0, $i1, $i2, $i3, i5, i6;
+        java.lang.Object[] $r2;
+        org.slf4j.Logger $r3;
+        java.lang.Integer $r4, $r5, $r6;
+        double $d1, $d2, $d3, $d4;
+        java.lang.Double $r7;
+        org.apache.mahout.math.Matrix $r8;
+        java.lang.String $r9;
+        byte $b4;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double totalCorpusWeight> = 0.0;
+
+        i5 = 0;
+
+        i6 = 0;
+
+     label1:
+        $i0 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numDocuments>;
+
+        if i6 >= $i0 goto label3;
+
+        $r8 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.math.Matrix corpusWeights>;
+
+        r1 = interfaceinvoke $r8.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Vector viewRow(int)>(i6);
+
+        if r1 == null goto label2;
+
+        $d2 = interfaceinvoke r1.<org.apache.mahout.math.Vector: double norm(double)>(1.0);
+
+        $b4 = $d2 cmpl 0.0;
+
+        if $b4 == 0 goto label2;
+
+        $i3 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int getNumNondefaultElements()>();
+
+        i5 = i5 + $i3;
+
+        $d4 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double totalCorpusWeight>;
+
+        $d3 = $d4 + $d2;
+
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double totalCorpusWeight> = $d3;
+
+     label2:
+        i6 = i6 + 1;
+
+        goto label1;
+
+     label3:
+        $r3 = <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.slf4j.Logger log>;
+
+        $r2 = newarray (java.lang.Object)[4];
+
+        $i1 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numDocuments>;
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        $r2[0] = $r4;
+
+        $i2 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numTerms>;
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        $r2[1] = $r5;
+
+        $r6 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i5);
+
+        $r2[2] = $r6;
+
+        $d1 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double totalCorpusWeight>;
+
+        $r7 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d1);
+
+        $r2[3] = $r7;
+
+        $r9 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Initializing corpus with %d docs, %d terms, %d nonzero entries, total termWeight %f", $r2);
+
+        interfaceinvoke $r3.<org.slf4j.Logger: void info(java.lang.String)>($r9);
+
+        return;
+    }
+
+    private void initializeModel()
+    {
+        org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0 r0;
+        org.apache.mahout.clustering.lda.cvb.TopicModel $r3, $r13;
+        int $i0, $i1, $i3, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13;
+        double $d0, $d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10;
+        org.apache.mahout.common.RandomWrapper $r4;
+        byte $b2, $b4;
+        java.lang.String[] $r5, $r12;
+        org.apache.hadoop.conf.Configuration $r6, $r7;
+        org.apache.mahout.math.DenseMatrix $r8;
+        org.apache.mahout.math.Matrix $r10;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer $r11;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0;
+
+        $r3 = new org.apache.mahout.clustering.lda.cvb.TopicModel;
+
+        $i0 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numTopics>;
+
+        $i1 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numTerms>;
+
+        $d0 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double eta>;
+
+        $d1 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double alpha>;
+
+        $r4 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        $r5 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: java.lang.String[] terms>;
+
+        $i3 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numUpdatingThreads>;
+
+        $d2 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double initialModelCorpusFraction>;
+
+        $b2 = $d2 cmpl 0.0;
+
+        if $b2 != 0 goto label1;
+
+        $d10 = 1.0;
+
+        goto label2;
+
+     label1:
+        $d4 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double initialModelCorpusFraction>;
+
+        $d3 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double totalCorpusWeight>;
+
+        $d10 = $d4 * $d3;
+
+     label2:
+        specialinvoke $r3.<org.apache.mahout.clustering.lda.cvb.TopicModel: void <init>(int,int,double,double,java.util.Random,java.lang.String[],int,double)>($i0, $i1, $d0, $d1, $r4, $r5, $i3, $d10);
+
+        $r6 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.hadoop.conf.Configuration getConf()>();
+
+        virtualinvoke $r3.<org.apache.mahout.clustering.lda.cvb.TopicModel: void setConf(org.apache.hadoop.conf.Configuration)>($r6);
+
+        $d5 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double initialModelCorpusFraction>;
+
+        $b4 = $d5 cmpl 0.0;
+
+        if $b4 != 0 goto label3;
+
+        $r13 = new org.apache.mahout.clustering.lda.cvb.TopicModel;
+
+        $i12 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numTopics>;
+
+        $i13 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numTerms>;
+
+        $d9 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double eta>;
+
+        $d8 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double alpha>;
+
+        $r12 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: java.lang.String[] terms>;
+
+        $i11 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numUpdatingThreads>;
+
+        specialinvoke $r13.<org.apache.mahout.clustering.lda.cvb.TopicModel: void <init>(int,int,double,double,java.util.Random,java.lang.String[],int,double)>($i12, $i13, $d9, $d8, null, $r12, $i11, 1.0);
+
+        goto label4;
+
+     label3:
+        $r13 = $r3;
+
+     label4:
+        $r7 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.hadoop.conf.Configuration getConf()>();
+
+        virtualinvoke $r13.<org.apache.mahout.clustering.lda.cvb.TopicModel: void setConf(org.apache.hadoop.conf.Configuration)>($r7);
+
+        $r8 = new org.apache.mahout.math.DenseMatrix;
+
+        $i7 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numDocuments>;
+
+        $i5 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numTopics>;
+
+        specialinvoke $r8.<org.apache.mahout.math.DenseMatrix: void <init>(int,int)>($i7, $i5);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.math.Matrix docTopicCounts> = $r8;
+
+        $r10 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.math.Matrix docTopicCounts>;
+
+        $i6 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numTopics>;
+
+        $d7 = (double) $i6;
+
+        $d6 = 1.0 / $d7;
+
+        interfaceinvoke $r10.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Matrix assign(double)>($d6);
+
+        $r11 = new org.apache.mahout.clustering.lda.cvb.ModelTrainer;
+
+        $i9 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numTrainingThreads>;
+
+        $i10 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numTopics>;
+
+        $i8 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numTerms>;
+
+        specialinvoke $r11.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void <init>(org.apache.mahout.clustering.lda.cvb.TopicModel,org.apache.mahout.clustering.lda.cvb.TopicModel,int,int,int)>($r3, $r13, $i9, $i10, $i8);
+
+        r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer> = $r11;
+
+        return;
+    }
+
+    public void trainDocuments()
+    {
+        org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0 r0;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: void trainDocuments(double)>(0.0);
+
+        return;
+    }
+
+    public void trainDocuments(double)
+    {
+        org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0 r0;
+        double d0, $d1, $d2, $d3, $d4, $d5;
+        long l0, $l2, $l3;
+        org.apache.mahout.math.Vector r1, $r8;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer $r2, $r4, $r6;
+        org.apache.mahout.math.Matrix $r3, $r7;
+        int $i1, $i5, $i6, i8;
+        byte $b4, $b7;
+        org.apache.mahout.math.DenseVector $r5;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0;
+
+        d0 := @parameter0: double;
+
+        l0 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $r2 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer>;
+
+        virtualinvoke $r2.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void start()>();
+
+        i8 = 0;
+
+     label1:
+        $r3 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.math.Matrix corpusWeights>;
+
+        $i1 = interfaceinvoke $r3.<org.apache.mahout.math.Matrix: int numRows()>();
+
+        if i8 >= $i1 goto label4;
+
+        $b4 = d0 cmpl 0.0;
+
+        if $b4 == 0 goto label2;
+
+        $d5 = (double) i8;
+
+        $d3 = 1.0 / d0;
+
+        $d4 = $d5 % $d3;
+
+        $b7 = $d4 cmpl 0.0;
+
+        if $b7 == 0 goto label3;
+
+     label2:
+        $r5 = new org.apache.mahout.math.DenseVector;
+
+        $i5 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numTopics>;
+
+        specialinvoke $r5.<org.apache.mahout.math.DenseVector: void <init>(int)>($i5);
+
+        $i6 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int numTopics>;
+
+        $d1 = (double) $i6;
+
+        $d2 = 1.0 / $d1;
+
+        r1 = virtualinvoke $r5.<org.apache.mahout.math.DenseVector: org.apache.mahout.math.Vector assign(double)>($d2);
+
+        $r6 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer>;
+
+        $r7 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.math.Matrix corpusWeights>;
+
+        $r8 = interfaceinvoke $r7.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Vector viewRow(int)>(i8);
+
+        virtualinvoke $r6.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void trainSync(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector,boolean,int)>($r8, r1, 1, 10);
+
+     label3:
+        i8 = i8 + 1;
+
+        goto label1;
+
+     label4:
+        $r4 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer>;
+
+        virtualinvoke $r4.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void stop()>();
+
+        $l2 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l3 = $l2 - l0;
+
+        staticinvoke <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: void logTime(java.lang.String,long)>("train documents", $l3);
+
+        return;
+    }
+
+    public double iterateUntilConvergence(double, int, int)
+    {
+        org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0 r0;
+        double d0, $d1;
+        int i0, i1;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0;
+
+        d0 := @parameter0: double;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        $d1 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double iterateUntilConvergence(double,int,int,double)>(d0, i0, i1, 0.0);
+
+        return $d1;
+    }
+
+    public double iterateUntilConvergence(double, int, int, double)
+    {
+        org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0 r0;
+        double d0, d1, $d2, $d3, d4, d5, d6;
+        int i0, i1, i3;
+        java.lang.Object[] $r1, $r8;
+        org.slf4j.Logger $r2, $r7, $r16, $r17, $r18, $r23, $r29, $r31;
+        java.lang.Integer $r3, $r22, $r24, $r33;
+        java.lang.Double $r4, $r6, $r9, $r11, $r15, $r19, $r26;
+        java.lang.String $r5, $r10;
+        byte $b2;
+        org.apache.mahout.math.Matrix $r12, $r14, $r25, $r27;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer $r13, $r21, $r28, $r32;
+        boolean $z0, $z1;
+        org.apache.mahout.clustering.lda.cvb.TopicModel $r20, $r30;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0;
+
+        d0 := @parameter0: double;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        d1 := @parameter3: double;
+
+        i3 = 0;
+
+        d4 = 0.0;
+
+     label1:
+        if i3 >= i1 goto label3;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: void trainDocuments(double)>(d1);
+
+        $z1 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: boolean verbose>;
+
+        if $z1 == 0 goto label2;
+
+        $r31 = <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.slf4j.Logger log>;
+
+        $r33 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i3);
+
+        $r32 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer>;
+
+        $r30 = virtualinvoke $r32.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel getReadModel()>();
+
+        interfaceinvoke $r31.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object,java.lang.Object)>("model after: {}: {}", $r33, $r30);
+
+     label2:
+        $r23 = <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.slf4j.Logger log>;
+
+        $r24 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i3);
+
+        interfaceinvoke $r23.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("iteration {} complete", $r24);
+
+        $r28 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer>;
+
+        $r27 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.math.Matrix corpusWeights>;
+
+        $r25 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.math.Matrix docTopicCounts>;
+
+        d4 = virtualinvoke $r28.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: double calculatePerplexity(org.apache.mahout.math.VectorIterable,org.apache.mahout.math.VectorIterable,double)>($r27, $r25, d1);
+
+        $r29 = <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.slf4j.Logger log>;
+
+        $r26 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d4);
+
+        interfaceinvoke $r29.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("{} = perplexity", $r26);
+
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label3:
+        d5 = 0.0;
+
+        d6 = 1.7976931348623157E308;
+
+     label4:
+        if i3 >= i0 goto label6;
+
+        $b2 = d6 cmpl d0;
+
+        if $b2 <= 0 goto label6;
+
+        virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: void trainDocuments()>();
+
+        $z0 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: boolean verbose>;
+
+        if $z0 == 0 goto label5;
+
+        $r18 = <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.slf4j.Logger log>;
+
+        $r22 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i3);
+
+        $r21 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer>;
+
+        $r20 = virtualinvoke $r21.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: org.apache.mahout.clustering.lda.cvb.TopicModel getReadModel()>();
+
+        interfaceinvoke $r18.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object,java.lang.Object)>("model after: {}: {}", $r22, $r20);
+
+     label5:
+        $r13 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer>;
+
+        $r12 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.math.Matrix corpusWeights>;
+
+        $r14 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.math.Matrix docTopicCounts>;
+
+        d5 = virtualinvoke $r13.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: double calculatePerplexity(org.apache.mahout.math.VectorIterable,org.apache.mahout.math.VectorIterable,double)>($r12, $r14, d1);
+
+        $r16 = <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.slf4j.Logger log>;
+
+        $r15 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d5);
+
+        interfaceinvoke $r16.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("{} = perplexity", $r15);
+
+        i3 = i3 + 1;
+
+        $d2 = d5 - d4;
+
+        $d3 = staticinvoke <java.lang.Math: double abs(double)>($d2);
+
+        d6 = $d3 / d4;
+
+        $r17 = <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.slf4j.Logger log>;
+
+        $r19 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d6);
+
+        interfaceinvoke $r17.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("{} = fractionalChange", $r19);
+
+        d4 = d5;
+
+        goto label4;
+
+     label6:
+        if i3 >= i0 goto label7;
+
+        $r7 = <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.slf4j.Logger log>;
+
+        $r8 = newarray (java.lang.Object)[2];
+
+        $r9 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d6);
+
+        $r8[0] = $r9;
+
+        $r11 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d5);
+
+        $r8[1] = $r11;
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Converged! fractional error change: %f, error %f", $r8);
+
+        interfaceinvoke $r7.<org.slf4j.Logger: void info(java.lang.String)>($r10);
+
+        goto label8;
+
+     label7:
+        $r2 = <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.slf4j.Logger log>;
+
+        $r1 = newarray (java.lang.Object)[3];
+
+        $r3 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r1[0] = $r3;
+
+        $r4 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d6);
+
+        $r1[1] = $r4;
+
+        $r6 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d5);
+
+        $r1[2] = $r6;
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Reached max iteration count (%d), fractional error change: %f, error: %f", $r1);
+
+        interfaceinvoke $r2.<org.slf4j.Logger: void info(java.lang.String)>($r5);
+
+     label8:
+        return d5;
+    }
+
+    public void writeModel(org.apache.hadoop.fs.Path) throws java.io.IOException
+    {
+        org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0 r0;
+        org.apache.hadoop.fs.Path r1;
+        org.apache.mahout.clustering.lda.cvb.ModelTrainer $r2;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        $r2 = r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.clustering.lda.cvb.ModelTrainer modelTrainer>;
+
+        virtualinvoke $r2.<org.apache.mahout.clustering.lda.cvb.ModelTrainer: void persist(org.apache.hadoop.fs.Path)>(r1);
+
+        return;
+    }
+
+    private static void logTime(java.lang.String, long)
+    {
+        java.lang.String r0;
+        long l0;
+        double $d0, $d1;
+        org.slf4j.Logger $r1;
+        java.lang.Double $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        l0 := @parameter1: long;
+
+        $r1 = <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.slf4j.Logger log>;
+
+        $d0 = (double) l0;
+
+        $d1 = $d0 / 1000000.0;
+
+        $r2 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>($d1);
+
+        interfaceinvoke $r1.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object,java.lang.Object)>("{} time: {}ms", r0, $r2);
+
+        return;
+    }
+
+    public static int main2(java.lang.String[], org.apache.hadoop.conf.Configuration) throws java.lang.Exception
+    {
+        java.lang.String[] r0, r240;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.commons.cli2.Option r5;
+        org.apache.commons.cli2.option.DefaultOption r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20, r21;
+        org.apache.commons.cli2.Group r22;
+        java.lang.String r23, r25, r26, r27, $r205, $r206, $r209, $r210, $r214, $r216, $r217, $r218, $r222, $r224, $r225, $r238, r239;
+        org.apache.commons.cli2.CommandLine r24;
+        int i0, i1, i2, i3, i4;
+        double d0, d1, d2, d3;
+        boolean z0, $z1, $z2;
+        org.apache.mahout.math.Matrix r28, $r233;
+        org.apache.commons.cli2.builder.GroupBuilder $r30, $r176, $r177, $r189, $r190, $r191, $r192, $r193, $r194, $r195, $r196, $r197, $r198, $r199, $r200, $r201, $r202, $r203;
+        org.apache.commons.cli2.builder.ArgumentBuilder $r31, $r33, $r34, $r40, $r47, $r48, $r49, $r51, $r57, $r58, $r59, $r60, $r62, $r68, $r69, $r78, $r83, $r85, $r86, $r89, $r90, $r91, $r92, $r95, $r96, $r97, $r102, $r103, $r104, $r105, $r111, $r122, $r123, $r126, $r127, $r128, $r129, $r131, $r132, $r133, $r138, $r141, $r142, $r151, $r156, $r157, $r158, $r159, $r160, $r161, $r166, $r167, $r171, $r172, $r174, $r178, $r183, $r184, $r185;
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r32, $r35, $r36, $r37, $r38, $r41, $r42, $r43, $r44, $r45, $r46, $r53, $r54, $r55, $r56, $r63, $r64, $r65, $r66, $r67, $r70, $r71, $r72, $r73, $r74, $r75, $r76, $r77, $r80, $r81, $r82, $r87, $r93, $r94, $r98, $r99, $r100, $r101, $r106, $r108, $r109, $r112, $r113, $r114, $r115, $r116, $r117, $r118, $r119, $r120, $r121, $r124, $r125, $r134, $r135, $r136, $r139, $r143, $r144, $r145, $r146, $r147, $r149, $r150, $r152, $r153, $r154, $r155, $r162, $r164, $r165, $r168, $r169, $r170, $r175, $r180, $r181, $r182, $r186, $r187, $r188;
+        org.apache.commons.cli2.Argument $r39, $r50, $r52, $r61, $r79, $r84, $r88, $r107, $r110, $r130, $r137, $r140, $r148, $r163, $r173, $r179;
+        java.lang.Object $r204, $r207, $r208, $r211, $r212, $r215, $r219, $r220, $r221, $r223, $r226, $r227, $r228, $r229, $r234;
+        org.apache.commons.cli2.commandline.Parser $r213;
+        long $l5, $l6, $l7, $l8, $l9, $l10, $l11, $l12, $l13, $l14, l15, l16, l17, l18, l19;
+        org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0 $r230;
+        org.apache.hadoop.fs.Path $r231, $r232;
+        org.apache.commons.cli2.OptionException $r235;
+        org.slf4j.Logger $r236;
+
+        r0 := @parameter0: java.lang.String[];
+
+        r1 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        $r32 = new org.apache.commons.cli2.builder.DefaultOptionBuilder;
+
+        specialinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: void <init>()>();
+
+        $r31 = new org.apache.commons.cli2.builder.ArgumentBuilder;
+
+        specialinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: void <init>()>();
+
+        $r30 = new org.apache.commons.cli2.builder.GroupBuilder;
+
+        specialinvoke $r30.<org.apache.commons.cli2.builder.GroupBuilder: void <init>()>();
+
+        r5 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.Option helpOption()>();
+
+        $r36 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("input");
+
+        $r35 = virtualinvoke $r36.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(1);
+
+        $r34 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("input");
+
+        $r33 = virtualinvoke $r34.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r40 = virtualinvoke $r33.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r39 = virtualinvoke $r40.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r38 = virtualinvoke $r35.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r39);
+
+        $r37 = virtualinvoke $r38.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The Directory on HDFS containing the collapsed, properly formatted files having one doc per line");
+
+        $r43 = virtualinvoke $r37.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("i");
+
+        r6 = virtualinvoke $r43.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r42 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("dictionary");
+
+        $r41 = virtualinvoke $r42.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r47 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("dictionary");
+
+        $r48 = virtualinvoke $r47.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r49 = virtualinvoke $r48.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r50 = virtualinvoke $r49.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r44 = virtualinvoke $r41.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r50);
+
+        $r45 = virtualinvoke $r44.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The path to the term-dictionary format is ... ");
+
+        $r46 = virtualinvoke $r45.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("d");
+
+        r7 = virtualinvoke $r46.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r55 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("dfs");
+
+        $r56 = virtualinvoke $r55.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r57 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("dfs");
+
+        $r58 = virtualinvoke $r57.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r51 = virtualinvoke $r58.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r52 = virtualinvoke $r51.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r53 = virtualinvoke $r56.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r52);
+
+        $r54 = virtualinvoke $r53.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("HDFS namenode URI");
+
+        $r63 = virtualinvoke $r54.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("dfs");
+
+        r8 = virtualinvoke $r63.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r65 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("numTopics");
+
+        $r64 = virtualinvoke $r65.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(1);
+
+        $r60 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("numTopics");
+
+        $r59 = virtualinvoke $r60.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r62 = virtualinvoke $r59.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r61 = virtualinvoke $r62.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r71 = virtualinvoke $r64.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r61);
+
+        $r70 = virtualinvoke $r71.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Number of topics to learn");
+
+        $r72 = virtualinvoke $r70.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("top");
+
+        r9 = virtualinvoke $r72.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r67 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("topicOutputFile");
+
+        $r66 = virtualinvoke $r67.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(1);
+
+        $r69 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("topicOutputFile");
+
+        $r68 = virtualinvoke $r69.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r78 = virtualinvoke $r68.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r79 = virtualinvoke $r78.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r76 = virtualinvoke $r66.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r79);
+
+        $r77 = virtualinvoke $r76.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("File to write out p(term | topic)");
+
+        $r75 = virtualinvoke $r77.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("to");
+
+        r10 = virtualinvoke $r75.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r73 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("docOutputFile");
+
+        $r74 = virtualinvoke $r73.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(1);
+
+        $r85 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("docOutputFile");
+
+        $r86 = virtualinvoke $r85.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r83 = virtualinvoke $r86.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r84 = virtualinvoke $r83.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r81 = virtualinvoke $r74.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r84);
+
+        $r82 = virtualinvoke $r81.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("File to write out p(topic | docid)");
+
+        $r80 = virtualinvoke $r82.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("do");
+
+        r11 = virtualinvoke $r80.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r94 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("alpha");
+
+        $r93 = virtualinvoke $r94.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r92 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("alpha");
+
+        $r91 = virtualinvoke $r92.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r90 = virtualinvoke $r91.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r89 = virtualinvoke $r90.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>("0.1");
+
+        $r88 = virtualinvoke $r89.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r87 = virtualinvoke $r93.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r88);
+
+        $r101 = virtualinvoke $r87.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Smoothing parameter for p(topic | document) prior");
+
+        $r100 = virtualinvoke $r101.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("a");
+
+        r12 = virtualinvoke $r100.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r99 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("eta");
+
+        $r98 = virtualinvoke $r99.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r97 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("eta");
+
+        $r96 = virtualinvoke $r97.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r95 = virtualinvoke $r96.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r111 = virtualinvoke $r95.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>("0.1");
+
+        $r110 = virtualinvoke $r111.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r113 = virtualinvoke $r98.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r110);
+
+        $r112 = virtualinvoke $r113.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Smoothing parameter for p(term | topic)");
+
+        $r114 = virtualinvoke $r112.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("e");
+
+        r13 = virtualinvoke $r114.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r116 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("maxIterations");
+
+        $r115 = virtualinvoke $r116.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r103 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("maxIterations");
+
+        $r102 = virtualinvoke $r103.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r105 = virtualinvoke $r102.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r104 = virtualinvoke $r105.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>("10");
+
+        $r107 = virtualinvoke $r104.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r106 = virtualinvoke $r115.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r107);
+
+        $r109 = virtualinvoke $r106.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Maximum number of training passes");
+
+        $r108 = virtualinvoke $r109.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("m");
+
+        r14 = virtualinvoke $r108.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r124 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("modelCorpusFraction");
+
+        $r125 = virtualinvoke $r124.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r126 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("modelCorpusFraction");
+
+        $r127 = virtualinvoke $r126.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r128 = virtualinvoke $r127.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r129 = virtualinvoke $r128.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>("0.0");
+
+        $r130 = virtualinvoke $r129.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r117 = virtualinvoke $r125.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r130);
+
+        $r118 = virtualinvoke $r117.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("mcf");
+
+        $r119 = virtualinvoke $r118.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("For online updates, initial value of |model|/|corpus|");
+
+        r15 = virtualinvoke $r119.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r120 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("burnInIterations");
+
+        $r121 = virtualinvoke $r120.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r122 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("burnInIterations");
+
+        $r123 = virtualinvoke $r122.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r142 = virtualinvoke $r123.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r141 = virtualinvoke $r142.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>("5");
+
+        $r140 = virtualinvoke $r141.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r139 = virtualinvoke $r121.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r140);
+
+        $r145 = virtualinvoke $r139.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Minimum number of iterations");
+
+        $r144 = virtualinvoke $r145.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("b");
+
+        r17 = virtualinvoke $r144.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r143 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("convergence");
+
+        $r134 = virtualinvoke $r143.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r133 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("convergence");
+
+        $r132 = virtualinvoke $r133.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r131 = virtualinvoke $r132.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r138 = virtualinvoke $r131.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>("0.0");
+
+        $r137 = virtualinvoke $r138.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r136 = virtualinvoke $r134.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r137);
+
+        $r135 = virtualinvoke $r136.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("Fractional rate of perplexity to consider convergence");
+
+        $r155 = virtualinvoke $r135.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("c");
+
+        r16 = virtualinvoke $r155.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r153 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("reInferDocTopics");
+
+        $r154 = virtualinvoke $r153.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r158 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("reInferDocTopics");
+
+        $r159 = virtualinvoke $r158.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r156 = virtualinvoke $r159.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r157 = virtualinvoke $r156.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>("no");
+
+        $r148 = virtualinvoke $r157.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r149 = virtualinvoke $r154.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r148);
+
+        $r146 = virtualinvoke $r149.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("re-infer p(topic | doc) : [no | randstart | continue]");
+
+        $r147 = virtualinvoke $r146.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("rdt");
+
+        r19 = virtualinvoke $r147.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r152 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("numTrainThreads");
+
+        $r150 = virtualinvoke $r152.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r151 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("numTrainThreads");
+
+        $r172 = virtualinvoke $r151.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r171 = virtualinvoke $r172.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r174 = virtualinvoke $r171.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>("1");
+
+        $r173 = virtualinvoke $r174.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r169 = virtualinvoke $r150.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r173);
+
+        $r168 = virtualinvoke $r169.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("number of threads to train with");
+
+        $r170 = virtualinvoke $r168.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("ntt");
+
+        r18 = virtualinvoke $r170.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r165 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("numUpdateThreads");
+
+        $r164 = virtualinvoke $r165.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r167 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("numUpdateThreads");
+
+        $r166 = virtualinvoke $r167.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r161 = virtualinvoke $r166.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r160 = virtualinvoke $r161.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>("1");
+
+        $r163 = virtualinvoke $r160.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r162 = virtualinvoke $r164.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r163);
+
+        $r186 = virtualinvoke $r162.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("number of threads to update the model with");
+
+        $r187 = virtualinvoke $r186.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("nut");
+
+        r21 = virtualinvoke $r187.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r188 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withLongName(java.lang.String)>("verbose");
+
+        $r182 = virtualinvoke $r188.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withRequired(boolean)>(0);
+
+        $r183 = virtualinvoke $r31.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withName(java.lang.String)>("verbose");
+
+        $r184 = virtualinvoke $r183.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMinimum(int)>(1);
+
+        $r185 = virtualinvoke $r184.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withMaximum(int)>(1);
+
+        $r178 = virtualinvoke $r185.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.builder.ArgumentBuilder withDefault(java.lang.Object)>("false");
+
+        $r179 = virtualinvoke $r178.<org.apache.commons.cli2.builder.ArgumentBuilder: org.apache.commons.cli2.Argument create()>();
+
+        $r180 = virtualinvoke $r182.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withArgument(org.apache.commons.cli2.Argument)>($r179);
+
+        $r181 = virtualinvoke $r180.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("print verbose information, like top-terms in each topic, during iteration");
+
+        $r175 = virtualinvoke $r181.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withShortName(java.lang.String)>("v");
+
+        r20 = virtualinvoke $r175.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r176 = virtualinvoke $r30.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withName(java.lang.String)>("Options");
+
+        $r177 = virtualinvoke $r176.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r6);
+
+        $r203 = virtualinvoke $r177.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r9);
+
+        $r202 = virtualinvoke $r203.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r12);
+
+        $r201 = virtualinvoke $r202.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r13);
+
+        $r200 = virtualinvoke $r201.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r14);
+
+        $r199 = virtualinvoke $r200.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r17);
+
+        $r198 = virtualinvoke $r199.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r16);
+
+        $r197 = virtualinvoke $r198.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r7);
+
+        $r196 = virtualinvoke $r197.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r19);
+
+        $r195 = virtualinvoke $r196.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r11);
+
+        $r194 = virtualinvoke $r195.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r10);
+
+        $r193 = virtualinvoke $r194.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r8);
+
+        $r192 = virtualinvoke $r193.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r18);
+
+        $r191 = virtualinvoke $r192.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r21);
+
+        $r190 = virtualinvoke $r191.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r15);
+
+        $r189 = virtualinvoke $r190.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.builder.GroupBuilder withOption(org.apache.commons.cli2.Option)>(r20);
+
+        r22 = virtualinvoke $r189.<org.apache.commons.cli2.builder.GroupBuilder: org.apache.commons.cli2.Group create()>();
+
+     label1:
+        $r213 = new org.apache.commons.cli2.commandline.Parser;
+
+        specialinvoke $r213.<org.apache.commons.cli2.commandline.Parser: void <init>()>();
+
+        virtualinvoke $r213.<org.apache.commons.cli2.commandline.Parser: void setGroup(org.apache.commons.cli2.Group)>(r22);
+
+        virtualinvoke $r213.<org.apache.commons.cli2.commandline.Parser: void setHelpOption(org.apache.commons.cli2.Option)>(r5);
+
+        r24 = virtualinvoke $r213.<org.apache.commons.cli2.commandline.Parser: org.apache.commons.cli2.CommandLine parse(java.lang.String[])>(r0);
+
+        $z2 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r5);
+
+        if $z2 == 0 goto label3;
+
+        staticinvoke <org.apache.mahout.common.CommandLineUtil: void printHelp(org.apache.commons.cli2.Group)>(r22);
+
+     label2:
+        return -1;
+
+     label3:
+        $r212 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r6);
+
+        r23 = (java.lang.String) $r212;
+
+        $z1 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: boolean hasOption(org.apache.commons.cli2.Option)>(r7);
+
+        if $z1 == 0 goto label4;
+
+        $r234 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r7);
+
+        $r238 = (java.lang.String) $r234;
+
+        goto label5;
+
+     label4:
+        $r238 = null;
+
+     label5:
+        r25 = $r238;
+
+        $r211 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r9);
+
+        $r210 = (java.lang.String) $r211;
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r210);
+
+        $r208 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r12);
+
+        $r209 = (java.lang.String) $r208;
+
+        d0 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r209);
+
+        $r207 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r13);
+
+        $r206 = (java.lang.String) $r207;
+
+        d1 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r206);
+
+        $r204 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r14);
+
+        $r205 = (java.lang.String) $r204;
+
+        i1 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r205);
+
+        $r219 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r17);
+
+        $r218 = (java.lang.String) $r219;
+
+        i2 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r218);
+
+        $r221 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r16);
+
+        $r222 = (java.lang.String) $r221;
+
+        d2 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r222);
+
+        $r220 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r18);
+
+        $r225 = (java.lang.String) $r220;
+
+        i3 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r225);
+
+        $r223 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r21);
+
+        $r224 = (java.lang.String) $r223;
+
+        i4 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r224);
+
+        $r228 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r10);
+
+        r26 = (java.lang.String) $r228;
+
+        $r226 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r11);
+
+        r27 = (java.lang.String) $r226;
+
+        $r227 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r20);
+
+        $r216 = (java.lang.String) $r227;
+
+        z0 = staticinvoke <java.lang.Boolean: boolean parseBoolean(java.lang.String)>($r216);
+
+        $r215 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r15);
+
+        $r214 = (java.lang.String) $r215;
+
+        d3 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r214);
+
+        l15 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $r217 = virtualinvoke r1.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("fs.default.name");
+
+        if $r217 != null goto label6;
+
+        $r229 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r8);
+
+        r239 = (java.lang.String) $r229;
+
+        virtualinvoke r1.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>("fs.default.name", r239);
+
+     label6:
+        r240 = staticinvoke <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: java.lang.String[] loadDictionary(java.lang.String,org.apache.hadoop.conf.Configuration)>(r25, r1);
+
+        $l6 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l5 = $l6 - l15;
+
+        staticinvoke <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: void logTime(java.lang.String,long)>("dictionary loading", $l5);
+
+        l16 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        r28 = staticinvoke <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.math.Matrix loadVectors(java.lang.String,org.apache.hadoop.conf.Configuration)>(r23, r1);
+
+        $l8 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l7 = $l8 - l16;
+
+        staticinvoke <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: void logTime(java.lang.String,long)>("vector seqfile corpus loading", $l7);
+
+        l17 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $r230 = new org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0;
+
+        specialinvoke $r230.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: void <init>(org.apache.mahout.math.Matrix,java.lang.String[],int,double,double,int,int,double)>(r28, r240, i0, d0, d1, i3, i4, d3);
+
+        $l10 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l11 = $l10 - l17;
+
+        staticinvoke <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: void logTime(java.lang.String,long)>("cvb0 init", $l11);
+
+        l18 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        virtualinvoke $r230.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: void setVerbose(boolean)>(z0);
+
+        virtualinvoke $r230.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: double iterateUntilConvergence(double,int,int)>(d2, i1, i2);
+
+        $l12 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l13 = $l12 - l18;
+
+        staticinvoke <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: void logTime(java.lang.String,long)>("total training time", $l13);
+
+        l19 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $r231 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r231.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r26);
+
+        virtualinvoke $r230.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: void writeModel(org.apache.hadoop.fs.Path)>($r231);
+
+        $r232 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r232.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r27);
+
+        $r233 = $r230.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.mahout.math.Matrix docTopicCounts>;
+
+        staticinvoke <org.apache.mahout.math.DistributedRowMatrixWriter: void write(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration,java.lang.Iterable)>($r232, r1, $r233);
+
+        $l14 = staticinvoke <java.lang.System: long nanoTime()>();
+
+        $l9 = $l14 - l19;
+
+        staticinvoke <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: void logTime(java.lang.String,long)>("printTopics", $l9);
+
+     label7:
+        goto label9;
+
+     label8:
+        $r235 := @caughtexception;
+
+        $r236 = <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.slf4j.Logger log>;
+
+        interfaceinvoke $r236.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>("Error while parsing options", $r235);
+
+        staticinvoke <org.apache.mahout.common.CommandLineUtil: void printHelp(org.apache.commons.cli2.Group)>(r22);
+
+     label9:
+        return 0;
+
+        catch org.apache.commons.cli2.OptionException from label1 to label2 with label8;
+        catch org.apache.commons.cli2.OptionException from label3 to label7 with label8;
+    }
+
+    private static java.lang.String[] loadDictionary(java.lang.String, org.apache.hadoop.conf.Configuration)
+    {
+        java.lang.String r0, $r11, $r19;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.mahout.common.Pair r4, $r15, r24;
+        org.apache.hadoop.fs.Path $r5;
+        java.util.ArrayList $r6;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable $r7;
+        boolean $z0, $z1;
+        int $i0, $i1, $i2, $i3, i4;
+        java.lang.Object $r8, $r9, $r12, $r13, $r14, $r17, $r22;
+        java.lang.Integer $r10, $r18;
+        org.apache.hadoop.io.IntWritable $r16, $r21;
+        org.apache.hadoop.io.Writable $r20;
+        java.util.Iterator r23, r26;
+        java.lang.String[] r25;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        if r0 != null goto label1;
+
+        return null;
+
+     label1:
+        $r5 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r5.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r0);
+
+        $r6 = new java.util.ArrayList;
+
+        specialinvoke $r6.<java.util.ArrayList: void <init>()>();
+
+        i4 = 0;
+
+        $r7 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable;
+
+        specialinvoke $r7.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable: void <init>(org.apache.hadoop.fs.Path,boolean,org.apache.hadoop.conf.Configuration)>($r5, 1, r1);
+
+        r23 = virtualinvoke $r7.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r23.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r13 = interfaceinvoke r23.<java.util.Iterator: java.lang.Object next()>();
+
+        r24 = (org.apache.mahout.common.Pair) $r13;
+
+        $r15 = new org.apache.mahout.common.Pair;
+
+        $r14 = virtualinvoke r24.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r16 = (org.apache.hadoop.io.IntWritable) $r14;
+
+        $i2 = virtualinvoke $r16.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $r18 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        $r17 = virtualinvoke r24.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r20 = (org.apache.hadoop.io.Writable) $r17;
+
+        $r19 = virtualinvoke $r20.<java.lang.Object: java.lang.String toString()>();
+
+        specialinvoke $r15.<org.apache.mahout.common.Pair: void <init>(java.lang.Object,java.lang.Object)>($r18, $r19);
+
+        interfaceinvoke $r6.<java.util.List: boolean add(java.lang.Object)>($r15);
+
+        $r22 = virtualinvoke r24.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r21 = (org.apache.hadoop.io.IntWritable) $r22;
+
+        $i3 = virtualinvoke $r21.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        i4 = staticinvoke <java.lang.Math: int max(int,int)>(i4, $i3);
+
+        goto label2;
+
+     label3:
+        $i0 = i4 + 1;
+
+        r25 = newarray (java.lang.String)[$i0];
+
+        r26 = interfaceinvoke $r6.<java.util.List: java.util.Iterator iterator()>();
+
+     label4:
+        $z1 = interfaceinvoke r26.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label5;
+
+        $r9 = interfaceinvoke r26.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.common.Pair) $r9;
+
+        $r8 = virtualinvoke r4.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r10 = (java.lang.Integer) $r8;
+
+        $i1 = virtualinvoke $r10.<java.lang.Integer: int intValue()>();
+
+        $r12 = virtualinvoke r4.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r11 = (java.lang.String) $r12;
+
+        r25[$i1] = $r11;
+
+        goto label4;
+
+     label5:
+        return r25;
+    }
+
+    public org.apache.hadoop.conf.Configuration getConf()
+    {
+        org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0 r0;
+        org.apache.hadoop.conf.Configuration $r1;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0;
+
+        $r1 = specialinvoke r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        return $r1;
+    }
+
+    private static org.apache.mahout.math.Matrix loadVectors(java.lang.String, org.apache.hadoop.conf.Configuration) throws java.io.IOException
+    {
+        java.lang.String r0;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.hadoop.fs.FileSystem r3;
+        org.apache.mahout.common.Pair r5, $r24, r37;
+        int i0, $i2, $i3, i4, i5, i6, i7, i8;
+        org.apache.hadoop.fs.Path $r6, $r27, r32;
+        java.util.ArrayList $r7, $r9;
+        org.apache.hadoop.fs.PathFilter $r8;
+        boolean $z0, $z1, $z3, $z4, z8, $z9, $z10;
+        org.apache.mahout.math.SparseRowMatrix $r10;
+        java.lang.Integer $r12, $r25;
+        java.lang.Object $r13, $r14, $r15, $r16, $r20, $r21, $r23;
+        org.apache.mahout.math.Vector $r17, r34;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable $r18;
+        org.apache.hadoop.io.IntWritable $r19;
+        org.apache.mahout.math.VectorWritable $r22;
+        org.apache.mahout.math.NamedVector $r26;
+        org.apache.hadoop.fs.FileStatus[] r28;
+        org.apache.hadoop.fs.FileStatus r29;
+        java.util.Iterator r31, r33, r36;
+        org.apache.mahout.math.Vector[] r35;
+
+        r0 := @parameter0: java.lang.String;
+
+        r1 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        $r6 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r6.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r0);
+
+        r3 = virtualinvoke $r6.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r1);
+
+        $r7 = new java.util.ArrayList;
+
+        specialinvoke $r7.<java.util.ArrayList: void <init>()>();
+
+        $z0 = virtualinvoke r3.<org.apache.hadoop.fs.FileSystem: boolean isFile(org.apache.hadoop.fs.Path)>($r6);
+
+        if $z0 == 0 goto label01;
+
+        interfaceinvoke $r7.<java.util.List: boolean add(java.lang.Object)>($r6);
+
+        goto label03;
+
+     label01:
+        $r8 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter logsCRCFilter()>();
+
+        r28 = virtualinvoke r3.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus[] listStatus(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.PathFilter)>($r6, $r8);
+
+        i4 = lengthof r28;
+
+        i5 = 0;
+
+     label02:
+        if i5 >= i4 goto label03;
+
+        r29 = r28[i5];
+
+        $r27 = virtualinvoke r29.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        interfaceinvoke $r7.<java.util.List: boolean add(java.lang.Object)>($r27);
+
+        i5 = i5 + 1;
+
+        goto label02;
+
+     label03:
+        $r9 = new java.util.ArrayList;
+
+        specialinvoke $r9.<java.util.ArrayList: void <init>()>();
+
+        i6 = -2147483648;
+
+        i7 = -1;
+
+        z8 = 0;
+
+        r31 = interfaceinvoke $r7.<java.util.List: java.util.Iterator iterator()>();
+
+     label04:
+        $z9 = interfaceinvoke r31.<java.util.Iterator: boolean hasNext()>();
+
+        if $z9 == 0 goto label08;
+
+        $r15 = interfaceinvoke r31.<java.util.Iterator: java.lang.Object next()>();
+
+        r32 = (org.apache.hadoop.fs.Path) $r15;
+
+        $r18 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable;
+
+        specialinvoke $r18.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable: void <init>(org.apache.hadoop.fs.Path,boolean,org.apache.hadoop.conf.Configuration)>(r32, 1, r1);
+
+        r33 = virtualinvoke $r18.<org.apache.mahout.common.iterator.sequencefile.SequenceFileIterable: java.util.Iterator iterator()>();
+
+     label05:
+        $z3 = interfaceinvoke r33.<java.util.Iterator: boolean hasNext()>();
+
+        if $z3 == 0 goto label04;
+
+        $r20 = interfaceinvoke r33.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.common.Pair) $r20;
+
+        $r21 = virtualinvoke r5.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r19 = (org.apache.hadoop.io.IntWritable) $r21;
+
+        i0 = virtualinvoke $r19.<org.apache.hadoop.io.IntWritable: int get()>();
+
+        $r23 = virtualinvoke r5.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r22 = (org.apache.mahout.math.VectorWritable) $r23;
+
+        r34 = virtualinvoke $r22.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $z4 = r34 instanceof org.apache.mahout.math.NamedVector;
+
+        if $z4 == 0 goto label06;
+
+        $r26 = (org.apache.mahout.math.NamedVector) r34;
+
+        r34 = virtualinvoke $r26.<org.apache.mahout.math.NamedVector: org.apache.mahout.math.Vector getDelegate()>();
+
+     label06:
+        if i7 >= 0 goto label07;
+
+        i7 = interfaceinvoke r34.<org.apache.mahout.math.Vector: int size()>();
+
+        z8 = interfaceinvoke r34.<org.apache.mahout.math.Vector: boolean isSequentialAccess()>();
+
+     label07:
+        $r25 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r24 = staticinvoke <org.apache.mahout.common.Pair: org.apache.mahout.common.Pair of(java.lang.Object,java.lang.Object)>($r25, r34);
+
+        interfaceinvoke $r9.<java.util.List: boolean add(java.lang.Object)>($r24);
+
+        i6 = staticinvoke <java.lang.Math: int max(int,int)>(i6, i0);
+
+        goto label05;
+
+     label08:
+        i8 = i6 + 1;
+
+        r35 = newarray (org.apache.mahout.math.Vector)[i8];
+
+        r36 = interfaceinvoke $r9.<java.util.List: java.util.Iterator iterator()>();
+
+     label09:
+        $z1 = interfaceinvoke r36.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label10;
+
+        $r13 = interfaceinvoke r36.<java.util.Iterator: java.lang.Object next()>();
+
+        r37 = (org.apache.mahout.common.Pair) $r13;
+
+        $r14 = virtualinvoke r37.<org.apache.mahout.common.Pair: java.lang.Object getFirst()>();
+
+        $r12 = (java.lang.Integer) $r14;
+
+        $i3 = virtualinvoke $r12.<java.lang.Integer: int intValue()>();
+
+        $r16 = virtualinvoke r37.<org.apache.mahout.common.Pair: java.lang.Object getSecond()>();
+
+        $r17 = (org.apache.mahout.math.Vector) $r16;
+
+        r35[$i3] = $r17;
+
+        goto label09;
+
+     label10:
+        $r10 = new org.apache.mahout.math.SparseRowMatrix;
+
+        $i2 = i7;
+
+        if z8 != 0 goto label11;
+
+        $z10 = 1;
+
+        goto label12;
+
+     label11:
+        $z10 = 0;
+
+     label12:
+        specialinvoke $r10.<org.apache.mahout.math.SparseRowMatrix: void <init>(int,int,org.apache.mahout.math.Vector[],boolean,boolean)>(i8, $i2, r35, 1, $z10);
+
+        return $r10;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0 r0;
+        java.lang.String[] r1;
+        org.apache.hadoop.conf.Configuration $r2;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0;
+
+        r1 := @parameter0: java.lang.String[];
+
+        $r2 = virtualinvoke r0.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $i0 = staticinvoke <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: int main2(java.lang.String[],org.apache.hadoop.conf.Configuration)>(r1, $r2);
+
+        return $i0;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0 $r1;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0;
+
+        specialinvoke $r1.<org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.util.Tool,java.lang.String[])>($r1, r0);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/clustering/lda/cvb/InMemoryCollapsedVariationalBayes0");
+
+        <org.apache.mahout.clustering.lda.cvb.InMemoryCollapsedVariationalBayes0: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

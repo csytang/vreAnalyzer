@@ -1,0 +1,413 @@
+public class org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter extends org.apache.mahout.common.AbstractJob
+{
+    private static final java.lang.String TRAINING_PERCENTAGE;
+    private static final java.lang.String PROBE_PERCENTAGE;
+    private static final java.lang.String PART_TO_USE;
+    private static final org.apache.hadoop.io.Text INTO_TRAINING_SET;
+    private static final org.apache.hadoop.io.Text INTO_PROBE_SET;
+    private static final double DEFAULT_TRAINING_PERCENTAGE;
+    private static final double DEFAULT_PROBE_PERCENTAGE;
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        return;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter $r1;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter;
+
+        specialinvoke $r1.<org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.util.Tool,java.lang.String[])>($r1, r0);
+
+        return;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter r0;
+        java.lang.String[] r1;
+        java.util.Map r2, $r56, $r63, $r70;
+        double d0, d1;
+        org.apache.hadoop.mapreduce.Job r6, r7, r8;
+        org.apache.hadoop.fs.Path $r9, $r10, $r11, $r12, $r13, r78;
+        java.lang.String $r14, $r17, $r18, $r19, $r20, $r21, $r26, $r27, r41, r48, $r57, $r64, $r71, $r101, $r102, r103;
+        org.apache.hadoop.conf.Configuration $r15, $r16, $r22, $r25;
+        org.apache.hadoop.io.Text $r23, $r24;
+        boolean z0, z1, z2, $z3, $z4, $z5;
+        java.lang.NullPointerException r28;
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r30, $r34;
+        org.apache.commons.cli2.option.DefaultOption $r31, $r35;
+        org.apache.commons.cli2.Option $r32, $r36, $r43, $r50;
+        java.util.List $r42, $r49, r55, r62, r69;
+        java.lang.Object $r58, $r59, $r65, $r66, $r72, $r73;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter;
+
+        r1 := @parameter0: java.lang.String[];
+
+        if r0 == null goto label11;
+
+        $r30 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder inputOption()>();
+
+        $r31 = virtualinvoke $r30.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r32 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r31);
+
+        r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option inputOption> = $r32;
+
+        if r0 == null goto label11;
+
+        $r34 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder outputOption()>();
+
+        $r35 = virtualinvoke $r34.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        $r36 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r35);
+
+        r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option outputOption> = $r36;
+
+        if r0 == null goto label11;
+
+        r41 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(0.9);
+
+        $r42 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        $r43 = staticinvoke <org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option buildOption(java.lang.String,java.lang.String,java.lang.String,boolean,boolean,java.lang.String)>("trainingPercentage", "t", "percentage of the data to use as training set (default: 0.9)", 1, 0, r41);
+
+        interfaceinvoke $r42.<java.util.List: boolean add(java.lang.Object)>($r43);
+
+        if r0 == null goto label11;
+
+        r48 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(0.1);
+
+        $r49 = r0.<org.apache.mahout.common.AbstractJob: java.util.List options>;
+
+        $r50 = staticinvoke <org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Option buildOption(java.lang.String,java.lang.String,java.lang.String,boolean,boolean,java.lang.String)>("probePercentage", "p", "percentage of the data to use as probe set (default: 0.1)", 1, 0, r48);
+
+        interfaceinvoke $r49.<java.util.List: boolean add(java.lang.Object)>($r50);
+
+        if r0 == null goto label11;
+
+        r2 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: java.util.Map parseArguments(java.lang.String[],boolean,boolean)>(r1, 0, 0);
+
+        if r2 != null goto label01;
+
+        return -1;
+
+     label01:
+        if r0 == null goto label11;
+
+        $r56 = r0.<org.apache.mahout.common.AbstractJob: java.util.Map argMap>;
+
+        $r57 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String keyFor(java.lang.String)>("trainingPercentage");
+
+        $r58 = interfaceinvoke $r56.<java.util.Map: java.lang.Object get(java.lang.Object)>($r57);
+
+        r55 = (java.util.List) $r58;
+
+        if r55 == null goto label02;
+
+        $z3 = interfaceinvoke r55.<java.util.List: boolean isEmpty()>();
+
+        if $z3 != 0 goto label02;
+
+        $r59 = interfaceinvoke r55.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r101 = (java.lang.String) $r59;
+
+        goto label03;
+
+     label02:
+        $r101 = null;
+
+     label03:
+        d0 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r101);
+
+        if r0 == null goto label11;
+
+        $r63 = r0.<org.apache.mahout.common.AbstractJob: java.util.Map argMap>;
+
+        $r64 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String keyFor(java.lang.String)>("probePercentage");
+
+        $r65 = interfaceinvoke $r63.<java.util.Map: java.lang.Object get(java.lang.Object)>($r64);
+
+        r62 = (java.util.List) $r65;
+
+        if r62 == null goto label04;
+
+        $z4 = interfaceinvoke r62.<java.util.List: boolean isEmpty()>();
+
+        if $z4 != 0 goto label04;
+
+        $r66 = interfaceinvoke r62.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r102 = (java.lang.String) $r66;
+
+        goto label05;
+
+     label04:
+        $r102 = null;
+
+     label05:
+        d1 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r102);
+
+        if r0 == null goto label11;
+
+        $r70 = r0.<org.apache.mahout.common.AbstractJob: java.util.Map argMap>;
+
+        $r71 = staticinvoke <org.apache.mahout.common.AbstractJob: java.lang.String keyFor(java.lang.String)>("tempDir");
+
+        $r72 = interfaceinvoke $r70.<java.util.Map: java.lang.Object get(java.lang.Object)>($r71);
+
+        r69 = (java.util.List) $r72;
+
+        if r69 == null goto label06;
+
+        $z5 = interfaceinvoke r69.<java.util.List: boolean isEmpty()>();
+
+        if $z5 != 0 goto label06;
+
+        $r73 = interfaceinvoke r69.<java.util.List: java.lang.Object get(int)>(0);
+
+        r103 = (java.lang.String) $r73;
+
+        goto label07;
+
+     label06:
+        r103 = null;
+
+     label07:
+        $r9 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r9.<org.apache.hadoop.fs.Path: void <init>(java.lang.String,java.lang.String)>(r103, "markedPreferences");
+
+        $r11 = new org.apache.hadoop.fs.Path;
+
+        if r0 == null goto label11;
+
+        $r10 = r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path outputPath>;
+
+        specialinvoke $r11.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r10, "trainingSet");
+
+        $r12 = new org.apache.hadoop.fs.Path;
+
+        if r0 == null goto label11;
+
+        $r13 = r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path outputPath>;
+
+        specialinvoke $r12.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>($r13, "probeSet");
+
+        if r0 == null goto label11;
+
+        if r0 == null goto label11;
+
+        r78 = r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.fs.Path inputPath>;
+
+        r6 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.String)>(r78, $r9, class "org/apache/hadoop/mapreduce/lib/input/TextInputFormat", class "org/apache/mahout/cf/taste/hadoop/als/DatasetSplitter$MarkPreferencesMapper", class "org/apache/hadoop/io/Text", class "org/apache/hadoop/io/Text", class "org/apache/hadoop/mapreduce/lib/output/SequenceFileOutputFormat", null);
+
+        $r16 = virtualinvoke r6.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r17 = <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: java.lang.String TRAINING_PERCENTAGE>;
+
+        $r14 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(d0);
+
+        virtualinvoke $r16.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r17, $r14);
+
+        $r15 = virtualinvoke r6.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r18 = <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: java.lang.String PROBE_PERCENTAGE>;
+
+        $r19 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>(d1);
+
+        virtualinvoke $r15.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r18, $r19);
+
+        z0 = virtualinvoke r6.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z0 != 0 goto label08;
+
+        return -1;
+
+     label08:
+        if r0 == null goto label11;
+
+        r7 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.String)>($r9, $r11, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", class "org/apache/mahout/cf/taste/hadoop/als/DatasetSplitter$WritePrefsMapper", class "org/apache/hadoop/io/NullWritable", class "org/apache/hadoop/io/Text", class "org/apache/hadoop/mapreduce/lib/output/TextOutputFormat", null);
+
+        $r22 = virtualinvoke r7.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r20 = <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: java.lang.String PART_TO_USE>;
+
+        $r23 = <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: org.apache.hadoop.io.Text INTO_TRAINING_SET>;
+
+        $r21 = virtualinvoke $r23.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        virtualinvoke $r22.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r20, $r21);
+
+        z1 = virtualinvoke r7.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z1 != 0 goto label09;
+
+        return -1;
+
+     label09:
+        if r0 == null goto label11;
+
+        r8 = virtualinvoke r0.<org.apache.mahout.common.AbstractJob: org.apache.hadoop.mapreduce.Job prepareJob(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.Class,java.lang.String)>($r9, $r12, class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat", class "org/apache/mahout/cf/taste/hadoop/als/DatasetSplitter$WritePrefsMapper", class "org/apache/hadoop/io/NullWritable", class "org/apache/hadoop/io/Text", class "org/apache/hadoop/mapreduce/lib/output/TextOutputFormat", null);
+
+        $r25 = virtualinvoke r8.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r27 = <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: java.lang.String PART_TO_USE>;
+
+        $r24 = <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: org.apache.hadoop.io.Text INTO_PROBE_SET>;
+
+        $r26 = virtualinvoke $r24.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        virtualinvoke $r25.<org.apache.hadoop.conf.Configuration: void set(java.lang.String,java.lang.String)>($r27, $r26);
+
+        z2 = virtualinvoke r8.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if z2 != 0 goto label10;
+
+        return -1;
+
+     label10:
+        return 0;
+
+     label11:
+        r28 = new java.lang.NullPointerException;
+
+        specialinvoke r28.<java.lang.NullPointerException: void <init>()>();
+
+        throw r28;
+    }
+
+    static java.lang.String access$000()
+    {
+        java.lang.String $r0;
+
+        $r0 = <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: java.lang.String TRAINING_PERCENTAGE>;
+
+        return $r0;
+    }
+
+    static java.lang.String access$100()
+    {
+        java.lang.String $r0;
+
+        $r0 = <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: java.lang.String PROBE_PERCENTAGE>;
+
+        return $r0;
+    }
+
+    static org.apache.hadoop.io.Text access$200()
+    {
+        org.apache.hadoop.io.Text $r0;
+
+        $r0 = <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: org.apache.hadoop.io.Text INTO_TRAINING_SET>;
+
+        return $r0;
+    }
+
+    static org.apache.hadoop.io.Text access$300()
+    {
+        org.apache.hadoop.io.Text $r0;
+
+        $r0 = <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: org.apache.hadoop.io.Text INTO_PROBE_SET>;
+
+        return $r0;
+    }
+
+    static java.lang.String access$400()
+    {
+        java.lang.String $r0;
+
+        $r0 = <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: java.lang.String PART_TO_USE>;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.StringBuilder $r0, $r3, $r4, $r6, $r9, $r10, $r12, $r15, $r17;
+        java.lang.Class $r1, $r7, $r13;
+        java.lang.String $r2, $r5, $r8, $r11, $r14, $r16;
+        org.apache.hadoop.io.Text $r18, $r19;
+
+        <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: double DEFAULT_PROBE_PERCENTAGE> = 0.1;
+
+        <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: double DEFAULT_TRAINING_PERCENTAGE> = 0.9;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = class "org/apache/mahout/cf/taste/hadoop/als/DatasetSplitter";
+
+        $r2 = virtualinvoke $r1.<java.lang.Class: java.lang.String getName()>();
+
+        $r3 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r2);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".trainingPercentage");
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: java.lang.String TRAINING_PERCENTAGE> = $r5;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = class "org/apache/mahout/cf/taste/hadoop/als/DatasetSplitter";
+
+        $r8 = virtualinvoke $r7.<java.lang.Class: java.lang.String getName()>();
+
+        $r9 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r8);
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".probePercentage");
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: java.lang.String PROBE_PERCENTAGE> = $r11;
+
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>()>();
+
+        $r13 = class "org/apache/mahout/cf/taste/hadoop/als/DatasetSplitter";
+
+        $r14 = virtualinvoke $r13.<java.lang.Class: java.lang.String getName()>();
+
+        $r15 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r14);
+
+        $r17 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(".partToUse");
+
+        $r16 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: java.lang.String PART_TO_USE> = $r16;
+
+        $r19 = new org.apache.hadoop.io.Text;
+
+        specialinvoke $r19.<org.apache.hadoop.io.Text: void <init>(java.lang.String)>("T");
+
+        <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: org.apache.hadoop.io.Text INTO_TRAINING_SET> = $r19;
+
+        $r18 = new org.apache.hadoop.io.Text;
+
+        specialinvoke $r18.<org.apache.hadoop.io.Text: void <init>(java.lang.String)>("P");
+
+        <org.apache.mahout.cf.taste.hadoop.als.DatasetSplitter: org.apache.hadoop.io.Text INTO_PROBE_SET> = $r18;
+
+        return;
+    }
+}

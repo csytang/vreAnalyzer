@@ -1,0 +1,495 @@
+public class org.apache.mahout.clustering.kmeans.KMeansDriver extends org.apache.mahout.common.AbstractJob
+{
+    private static final org.slf4j.Logger log;
+
+    public void <init>()
+    {
+        org.apache.mahout.clustering.kmeans.KMeansDriver r0;
+
+        r0 := @this: org.apache.mahout.clustering.kmeans.KMeansDriver;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        return;
+    }
+
+    public static void main(java.lang.String[]) throws java.lang.Exception
+    {
+        java.lang.String[] r0;
+        org.apache.hadoop.conf.Configuration $r1;
+        org.apache.mahout.clustering.kmeans.KMeansDriver $r2;
+
+        r0 := @parameter0: java.lang.String[];
+
+        $r1 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r1.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        $r2 = new org.apache.mahout.clustering.kmeans.KMeansDriver;
+
+        specialinvoke $r2.<org.apache.mahout.clustering.kmeans.KMeansDriver: void <init>()>();
+
+        staticinvoke <org.apache.hadoop.util.ToolRunner: int run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.util.Tool,java.lang.String[])>($r1, $r2, r0);
+
+        return;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.clustering.kmeans.KMeansDriver r0;
+        java.lang.String[] r1;
+        org.apache.hadoop.fs.Path r2, r3, $r39, r51;
+        double d0, d1;
+        int i0, i2;
+        org.apache.mahout.common.distance.DistanceMeasure r4;
+        org.apache.commons.cli2.builder.DefaultOptionBuilder $r5, $r7, $r10, $r11, $r14, $r15, $r20, $r21, $r23, $r30, $r32, $r33;
+        org.apache.commons.cli2.option.DefaultOption $r6, $r9, $r13, $r18, $r19, $r24, $r25, $r27, $r34, $r36;
+        java.util.Map $r35;
+        java.lang.String $r38, $r40, $r41, $r44, $r45, $r47, r52, $r54;
+        boolean $z0, $z1, $z2, z3, z4, $z5;
+        java.lang.Object $r42;
+        org.apache.hadoop.conf.Configuration $r43, $r46, $r48;
+        long $l1;
+        org.apache.hadoop.fs.Path[] $r49;
+        java.lang.Class $r50;
+        java.lang.Long r53;
+
+        r0 := @this: org.apache.mahout.clustering.kmeans.KMeansDriver;
+
+        r1 := @parameter0: java.lang.String[];
+
+        virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: void addInputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: void addOutputOption()>();
+
+        $r5 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder distanceMeasureOption()>();
+
+        $r6 = virtualinvoke $r5.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r6);
+
+        $r7 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder clustersInOption()>();
+
+        $r10 = virtualinvoke $r7.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The input centroids, as Vectors.  Must be a SequenceFile of Writable, Cluster/Canopy.  If k is also specified, then a random set of vectors will be selected and written out to this path first");
+
+        $r9 = virtualinvoke $r10.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r9);
+
+        $r11 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder numClustersOption()>();
+
+        $r14 = virtualinvoke $r11.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.builder.DefaultOptionBuilder withDescription(java.lang.String)>("The k in k-Means.  If specified, then a random selection of k Vectors will be chosen as the Centroid and written to the clusters input path.");
+
+        $r13 = virtualinvoke $r14.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r13);
+
+        $r15 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder useSetRandomSeedOption()>();
+
+        $r18 = virtualinvoke $r15.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r18);
+
+        $r20 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder convergenceOption()>();
+
+        $r19 = virtualinvoke $r20.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r19);
+
+        $r21 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder maxIterationsOption()>();
+
+        $r25 = virtualinvoke $r21.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r25);
+
+        $r23 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder overwriteOption()>();
+
+        $r24 = virtualinvoke $r23.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r24);
+
+        $r30 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder clusteringOption()>();
+
+        $r27 = virtualinvoke $r30.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r27);
+
+        $r33 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder methodOption()>();
+
+        $r34 = virtualinvoke $r33.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r34);
+
+        $r32 = staticinvoke <org.apache.mahout.common.commandline.DefaultOptionCreator: org.apache.commons.cli2.builder.DefaultOptionBuilder outlierThresholdOption()>();
+
+        $r36 = virtualinvoke $r32.<org.apache.commons.cli2.builder.DefaultOptionBuilder: org.apache.commons.cli2.option.DefaultOption create()>();
+
+        virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: org.apache.commons.cli2.Option addOption(org.apache.commons.cli2.Option)>($r36);
+
+        $r35 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: java.util.Map parseArguments(java.lang.String[])>(r1);
+
+        if $r35 != null goto label1;
+
+        return -1;
+
+     label1:
+        r2 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: org.apache.hadoop.fs.Path getInputPath()>();
+
+        $r39 = new org.apache.hadoop.fs.Path;
+
+        $r38 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: java.lang.String getOption(java.lang.String)>("clusters");
+
+        specialinvoke $r39.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r38);
+
+        r51 = $r39;
+
+        r3 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: org.apache.hadoop.fs.Path getOutputPath()>();
+
+        r52 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: java.lang.String getOption(java.lang.String)>("distanceMeasure");
+
+        if r52 != null goto label2;
+
+        $r50 = class "org/apache/mahout/common/distance/SquaredEuclideanDistanceMeasure";
+
+        r52 = virtualinvoke $r50.<java.lang.Class: java.lang.String getName()>();
+
+     label2:
+        $r41 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: java.lang.String getOption(java.lang.String)>("convergenceDelta");
+
+        d0 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r41);
+
+        $r40 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: java.lang.String getOption(java.lang.String)>("maxIter");
+
+        i0 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r40);
+
+        $z1 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: boolean hasOption(java.lang.String)>("overwrite");
+
+        if $z1 == 0 goto label3;
+
+        $r48 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $r49 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r49[0] = r3;
+
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r48, $r49);
+
+     label3:
+        $r42 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.String,java.lang.Class)>(r52, class "org/apache/mahout/common/distance/DistanceMeasure");
+
+        r4 = (org.apache.mahout.common.distance.DistanceMeasure) $r42;
+
+        $z0 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: boolean hasOption(java.lang.String)>("numClusters");
+
+        if $z0 == 0 goto label5;
+
+        $r45 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: java.lang.String getOption(java.lang.String)>("numClusters");
+
+        i2 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r45);
+
+        r53 = null;
+
+        $z2 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: boolean hasOption(java.lang.String)>("randomSeed");
+
+        if $z2 == 0 goto label4;
+
+        $r47 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: java.lang.String getOption(java.lang.String)>("randomSeed");
+
+        $l1 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r47);
+
+        r53 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l1);
+
+     label4:
+        $r46 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: org.apache.hadoop.conf.Configuration getConf()>();
+
+        r51 = staticinvoke <org.apache.mahout.clustering.kmeans.RandomSeedGenerator: org.apache.hadoop.fs.Path buildRandom(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,org.apache.mahout.common.distance.DistanceMeasure,java.lang.Long)>($r46, r2, $r39, i2, r4, r53);
+
+     label5:
+        z3 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: boolean hasOption(java.lang.String)>("clustering");
+
+        $r54 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: java.lang.String getOption(java.lang.String)>("method");
+
+        z4 = virtualinvoke $r54.<java.lang.String: boolean equalsIgnoreCase(java.lang.String)>("sequential");
+
+        d1 = 0.0;
+
+        $z5 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: boolean hasOption(java.lang.String)>("outlierThreshold");
+
+        if $z5 == 0 goto label6;
+
+        $r44 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: java.lang.String getOption(java.lang.String)>("outlierThreshold");
+
+        d1 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r44);
+
+     label6:
+        $r43 = virtualinvoke r0.<org.apache.mahout.clustering.kmeans.KMeansDriver: org.apache.hadoop.conf.Configuration getConf()>();
+
+        staticinvoke <org.apache.mahout.clustering.kmeans.KMeansDriver: void run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,double,int,boolean,double,boolean)>($r43, r2, r51, r3, d0, i0, z3, d1, z4);
+
+        return 0;
+    }
+
+    public static void run(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, double, int, boolean, double, boolean) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r2, r3, r5;
+        double d0, d1;
+        int i0;
+        boolean z0, z1, $z2;
+        java.lang.String r4;
+        org.slf4j.Logger $r6, $r7, $r8, $r10;
+        java.lang.Object[] $r9;
+        java.lang.Integer $r11;
+        java.lang.Double $r12;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter3: org.apache.hadoop.fs.Path;
+
+        d0 := @parameter4: double;
+
+        i0 := @parameter5: int;
+
+        z0 := @parameter6: boolean;
+
+        d1 := @parameter7: double;
+
+        z1 := @parameter8: boolean;
+
+        r4 = staticinvoke <java.lang.Double: java.lang.String toString(double)>(d0);
+
+        $r6 = <org.apache.mahout.clustering.kmeans.KMeansDriver: org.slf4j.Logger log>;
+
+        $z2 = interfaceinvoke $r6.<org.slf4j.Logger: boolean isInfoEnabled()>();
+
+        if $z2 == 0 goto label1;
+
+        $r8 = <org.apache.mahout.clustering.kmeans.KMeansDriver: org.slf4j.Logger log>;
+
+        $r9 = newarray (java.lang.Object)[3];
+
+        $r9[0] = r1;
+
+        $r9[1] = r2;
+
+        $r9[2] = r3;
+
+        interfaceinvoke $r8.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object[])>("Input: {} Clusters In: {} Out: {}", $r9);
+
+        $r10 = <org.apache.mahout.clustering.kmeans.KMeansDriver: org.slf4j.Logger log>;
+
+        $r12 = staticinvoke <java.lang.Double: java.lang.Double valueOf(double)>(d0);
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        interfaceinvoke $r10.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object,java.lang.Object)>("convergence: {} max Iterations: {}", $r12, $r11);
+
+     label1:
+        r5 = staticinvoke <org.apache.mahout.clustering.kmeans.KMeansDriver: org.apache.hadoop.fs.Path buildClusters(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int,java.lang.String,boolean)>(r0, r1, r2, r3, i0, r4, z1);
+
+        if z0 == 0 goto label2;
+
+        $r7 = <org.apache.mahout.clustering.kmeans.KMeansDriver: org.slf4j.Logger log>;
+
+        interfaceinvoke $r7.<org.slf4j.Logger: void info(java.lang.String)>("Clustering data");
+
+        staticinvoke <org.apache.mahout.clustering.kmeans.KMeansDriver: void clusterData(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,double,boolean)>(r0, r1, r5, r3, d1, z1);
+
+     label2:
+        return;
+    }
+
+    public static void run(org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, double, int, boolean, double, boolean) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.fs.Path r0, r1, r2;
+        double d0, d1;
+        int i0;
+        boolean z0, z1;
+        org.apache.hadoop.conf.Configuration $r3;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        d0 := @parameter3: double;
+
+        i0 := @parameter4: int;
+
+        z0 := @parameter5: boolean;
+
+        d1 := @parameter6: double;
+
+        z1 := @parameter7: boolean;
+
+        $r3 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r3.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        staticinvoke <org.apache.mahout.clustering.kmeans.KMeansDriver: void run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,double,int,boolean,double,boolean)>($r3, r0, r1, r2, d0, i0, z0, d1, z1);
+
+        return;
+    }
+
+    public static org.apache.hadoop.fs.Path buildClusters(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, int, java.lang.String, boolean) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r2, r3, $r11;
+        int i0;
+        java.lang.String r4, $r17;
+        boolean z0, $z1;
+        double d0;
+        java.util.ArrayList $r9;
+        org.apache.mahout.clustering.iterator.KMeansClusteringPolicy $r10;
+        org.apache.mahout.clustering.classify.ClusterClassifier $r12;
+        java.lang.StringBuilder $r13, $r15, $r16, $r18;
+        java.lang.IllegalStateException $r14;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter3: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter4: int;
+
+        r4 := @parameter5: java.lang.String;
+
+        z0 := @parameter6: boolean;
+
+        d0 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>(r4);
+
+        $r9 = new java.util.ArrayList;
+
+        specialinvoke $r9.<java.util.ArrayList: void <init>()>();
+
+        staticinvoke <org.apache.mahout.clustering.kmeans.KMeansUtil: void configureWithClusterInfo(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,java.util.Collection)>(r0, r2, $r9);
+
+        $z1 = interfaceinvoke $r9.<java.util.List: boolean isEmpty()>();
+
+        if $z1 == 0 goto label1;
+
+        $r14 = new java.lang.IllegalStateException;
+
+        $r13 = new java.lang.StringBuilder;
+
+        specialinvoke $r13.<java.lang.StringBuilder: void <init>()>();
+
+        $r16 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("No input clusters found in ");
+
+        $r15 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r2);
+
+        $r18 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(". Check your -c argument.");
+
+        $r17 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r14.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r17);
+
+        throw $r14;
+
+     label1:
+        $r11 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r11.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r3, "clusters-0");
+
+        $r10 = new org.apache.mahout.clustering.iterator.KMeansClusteringPolicy;
+
+        specialinvoke $r10.<org.apache.mahout.clustering.iterator.KMeansClusteringPolicy: void <init>(double)>(d0);
+
+        $r12 = new org.apache.mahout.clustering.classify.ClusterClassifier;
+
+        specialinvoke $r12.<org.apache.mahout.clustering.classify.ClusterClassifier: void <init>(java.util.List,org.apache.mahout.clustering.iterator.ClusteringPolicy)>($r9, $r10);
+
+        virtualinvoke $r12.<org.apache.mahout.clustering.classify.ClusterClassifier: void writeToSeqFiles(org.apache.hadoop.fs.Path)>($r11);
+
+        if z0 == 0 goto label2;
+
+        staticinvoke <org.apache.mahout.clustering.iterator.ClusterIterator: void iterateSeq(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int)>(r0, r1, $r11, r3, i0);
+
+        goto label3;
+
+     label2:
+        staticinvoke <org.apache.mahout.clustering.iterator.ClusterIterator: void iterateMR(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,int)>(r0, r1, $r11, r3, i0);
+
+     label3:
+        return r3;
+    }
+
+    public static void clusterData(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, org.apache.hadoop.fs.Path, double, boolean) throws java.io.IOException, java.lang.InterruptedException, java.lang.ClassNotFoundException
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        org.apache.hadoop.fs.Path r1, r2, r3, $r6;
+        double d0;
+        boolean z0, $z1;
+        org.slf4j.Logger $r4, $r7, $r9;
+        org.apache.mahout.clustering.iterator.KMeansClusteringPolicy $r5;
+        java.lang.Object[] $r8;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        r3 := @parameter3: org.apache.hadoop.fs.Path;
+
+        d0 := @parameter4: double;
+
+        z0 := @parameter5: boolean;
+
+        $r4 = <org.apache.mahout.clustering.kmeans.KMeansDriver: org.slf4j.Logger log>;
+
+        $z1 = interfaceinvoke $r4.<org.slf4j.Logger: boolean isInfoEnabled()>();
+
+        if $z1 == 0 goto label1;
+
+        $r7 = <org.apache.mahout.clustering.kmeans.KMeansDriver: org.slf4j.Logger log>;
+
+        interfaceinvoke $r7.<org.slf4j.Logger: void info(java.lang.String)>("Running Clustering");
+
+        $r9 = <org.apache.mahout.clustering.kmeans.KMeansDriver: org.slf4j.Logger log>;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r8[0] = r1;
+
+        $r8[1] = r2;
+
+        $r8[2] = r3;
+
+        interfaceinvoke $r9.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object[])>("Input: {} Clusters In: {} Out: {}", $r8);
+
+     label1:
+        $r5 = new org.apache.mahout.clustering.iterator.KMeansClusteringPolicy;
+
+        specialinvoke $r5.<org.apache.mahout.clustering.iterator.KMeansClusteringPolicy: void <init>()>();
+
+        staticinvoke <org.apache.mahout.clustering.classify.ClusterClassifier: void writePolicy(org.apache.mahout.clustering.iterator.ClusteringPolicy,org.apache.hadoop.fs.Path)>($r5, r2);
+
+        $r6 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r6.<org.apache.hadoop.fs.Path: void <init>(org.apache.hadoop.fs.Path,java.lang.String)>(r3, "clusteredPoints");
+
+        staticinvoke <org.apache.mahout.clustering.classify.ClusterClassificationDriver: void run(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,org.apache.hadoop.fs.Path,double,boolean,boolean)>(r0, r1, r3, $r6, d0, 1, z0);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/clustering/kmeans/KMeansDriver");
+
+        <org.apache.mahout.clustering.kmeans.KMeansDriver: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

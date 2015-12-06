@@ -1,0 +1,5 @@
+public interface  org.apache.mahout.cf.taste.eval.DataModelBuilder extends java.lang.Object
+{
+
+    public abstract org.apache.mahout.cf.taste.model.DataModel buildDataModel(org.apache.mahout.cf.taste.impl.common.FastByIDMap);
+}

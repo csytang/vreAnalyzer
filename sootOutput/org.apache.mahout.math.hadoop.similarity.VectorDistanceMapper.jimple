@@ -1,0 +1,187 @@
+public final class org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private org.apache.mahout.common.distance.DistanceMeasure measure;
+    private java.util.List seedVectors;
+    private boolean usesThreshold;
+    private double maxDistance;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper: boolean usesThreshold> = 0;
+
+        return;
+    }
+
+    protected void map(org.apache.hadoop.io.WritableComparable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper r0;
+        org.apache.hadoop.io.WritableComparable r1;
+        org.apache.mahout.math.VectorWritable r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.Vector r4;
+        java.util.Iterator r5;
+        org.apache.mahout.math.NamedVector r6, $r14;
+        double d0, $d1;
+        boolean $z0, $z1, $z4;
+        java.util.List $r8;
+        java.lang.Object $r9;
+        org.apache.mahout.common.distance.DistanceMeasure $r10;
+        org.apache.mahout.common.StringTuple $r11;
+        java.lang.String $r12, r15;
+        org.apache.hadoop.io.DoubleWritable $r13;
+        byte $b0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.WritableComparable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        r4 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $z0 = r4 instanceof org.apache.mahout.math.NamedVector;
+
+        if $z0 == 0 goto label1;
+
+        $r14 = (org.apache.mahout.math.NamedVector) r4;
+
+        r15 = virtualinvoke $r14.<org.apache.mahout.math.NamedVector: java.lang.String getName()>();
+
+        goto label2;
+
+     label1:
+        r15 = virtualinvoke r1.<java.lang.Object: java.lang.String toString()>();
+
+     label2:
+        $r8 = r0.<org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper: java.util.List seedVectors>;
+
+        r5 = interfaceinvoke $r8.<java.util.List: java.util.Iterator iterator()>();
+
+     label3:
+        $z4 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z4 == 0 goto label5;
+
+        $r9 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.math.NamedVector) $r9;
+
+        $r10 = r0.<org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper: org.apache.mahout.common.distance.DistanceMeasure measure>;
+
+        d0 = interfaceinvoke $r10.<org.apache.mahout.common.distance.DistanceMeasure: double distance(org.apache.mahout.math.Vector,org.apache.mahout.math.Vector)>(r6, r4);
+
+        $z1 = r0.<org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper: boolean usesThreshold>;
+
+        if $z1 == 0 goto label4;
+
+        $d1 = r0.<org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper: double maxDistance>;
+
+        $b0 = d0 cmpg $d1;
+
+        if $b0 > 0 goto label3;
+
+     label4:
+        $r11 = new org.apache.mahout.common.StringTuple;
+
+        specialinvoke $r11.<org.apache.mahout.common.StringTuple: void <init>()>();
+
+        $r12 = virtualinvoke r6.<org.apache.mahout.math.NamedVector: java.lang.String getName()>();
+
+        virtualinvoke $r11.<org.apache.mahout.common.StringTuple: boolean add(java.lang.String)>($r12);
+
+        virtualinvoke $r11.<org.apache.mahout.common.StringTuple: boolean add(java.lang.String)>(r15);
+
+        $r13 = new org.apache.hadoop.io.DoubleWritable;
+
+        specialinvoke $r13.<org.apache.hadoop.io.DoubleWritable: void <init>(double)>(d0);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r11, $r13);
+
+        goto label3;
+
+     label5:
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        java.lang.String r3, $r4;
+        java.lang.Object $r5;
+        org.apache.mahout.common.distance.DistanceMeasure $r6, $r7;
+        java.util.List $r8;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void setup(org.apache.hadoop.mapreduce.Mapper$Context)>(r1);
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        r3 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("maxDistance");
+
+        if r3 == null goto label1;
+
+        r0.<org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper: boolean usesThreshold> = 1;
+
+        $d0 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>(r3);
+
+        r0.<org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper: double maxDistance> = $d0;
+
+     label1:
+        $r4 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("vectorDistSim.measure");
+
+        $r5 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.String,java.lang.Class)>($r4, class "org/apache/mahout/common/distance/DistanceMeasure");
+
+        $r6 = (org.apache.mahout.common.distance.DistanceMeasure) $r5;
+
+        r0.<org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper: org.apache.mahout.common.distance.DistanceMeasure measure> = $r6;
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper: org.apache.mahout.common.distance.DistanceMeasure measure>;
+
+        interfaceinvoke $r7.<org.apache.mahout.common.distance.DistanceMeasure: void configure(org.apache.hadoop.conf.Configuration)>(r2);
+
+        $r8 = staticinvoke <org.apache.mahout.math.hadoop.similarity.SeedVectorUtil: java.util.List loadSeedVectors(org.apache.hadoop.conf.Configuration)>(r2);
+
+        r0.<org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper: java.util.List seedVectors> = $r8;
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.WritableComparable $r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.WritableComparable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.VectorDistanceMapper: void map(org.apache.hadoop.io.WritableComparable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+}

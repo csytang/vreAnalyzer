@@ -1,0 +1,250 @@
+public abstract class org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender extends java.lang.Object implements org.apache.mahout.cf.taste.recommender.Recommender
+{
+    private static final org.slf4j.Logger log;
+    private final org.apache.mahout.cf.taste.model.DataModel dataModel;
+    private final org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy candidateItemsStrategy;
+
+    protected void <init>(org.apache.mahout.cf.taste.model.DataModel, org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender r0;
+        org.apache.mahout.cf.taste.model.DataModel r1, $r4;
+        org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy r2, $r6;
+        java.lang.Object $r3, $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r3 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r4 = (org.apache.mahout.cf.taste.model.DataModel) $r3;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: org.apache.mahout.cf.taste.model.DataModel dataModel> = $r4;
+
+        $r5 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r2);
+
+        $r6 = (org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy) $r5;
+
+        r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy candidateItemsStrategy> = $r6;
+
+        return;
+    }
+
+    protected void <init>(org.apache.mahout.cf.taste.model.DataModel)
+    {
+        org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        $r2 = staticinvoke <org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy getDefaultCandidateItemsStrategy()>();
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: void <init>(org.apache.mahout.cf.taste.model.DataModel,org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy)>(r1, $r2);
+
+        return;
+    }
+
+    protected static org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy getDefaultCandidateItemsStrategy()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.PreferredItemsNeighborhoodCandidateItemsStrategy $r0;
+
+        $r0 = new org.apache.mahout.cf.taste.impl.recommender.PreferredItemsNeighborhoodCandidateItemsStrategy;
+
+        specialinvoke $r0.<org.apache.mahout.cf.taste.impl.recommender.PreferredItemsNeighborhoodCandidateItemsStrategy: void <init>()>();
+
+        return $r0;
+    }
+
+    public java.util.List recommend(long, int) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender r0;
+        long l0;
+        int i1;
+        java.util.List $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: java.util.List recommend(long,int,org.apache.mahout.cf.taste.recommender.IDRescorer,boolean)>(l0, i1, null, 0);
+
+        return $r1;
+    }
+
+    public java.util.List recommend(long, int, boolean) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender r0;
+        long l0;
+        int i1;
+        boolean z0;
+        java.util.List $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        z0 := @parameter2: boolean;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: java.util.List recommend(long,int,org.apache.mahout.cf.taste.recommender.IDRescorer,boolean)>(l0, i1, null, z0);
+
+        return $r1;
+    }
+
+    public java.util.List recommend(long, int, org.apache.mahout.cf.taste.recommender.IDRescorer) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender r0;
+        long l0;
+        int i1;
+        org.apache.mahout.cf.taste.recommender.IDRescorer r1;
+        java.util.List $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        r1 := @parameter2: org.apache.mahout.cf.taste.recommender.IDRescorer;
+
+        $r2 = virtualinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: java.util.List recommend(long,int,org.apache.mahout.cf.taste.recommender.IDRescorer,boolean)>(l0, i1, r1, 0);
+
+        return $r2;
+    }
+
+    public void setPreference(long, long, float) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender r0;
+        long l0, l1;
+        float f0;
+        boolean $z0, $z1;
+        org.slf4j.Logger $r1;
+        java.lang.Long $r2, $r3;
+        org.apache.mahout.cf.taste.model.DataModel $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        f0 := @parameter2: float;
+
+        $z0 = staticinvoke <java.lang.Float: boolean isNaN(float)>(f0);
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, "NaN value");
+
+        $r1 = <org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: org.slf4j.Logger log>;
+
+        $r2 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l0);
+
+        $r3 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l1);
+
+        interfaceinvoke $r1.<org.slf4j.Logger: void debug(java.lang.String,java.lang.Object,java.lang.Object)>("Setting preference for user {}, item {}", $r2, $r3);
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        interfaceinvoke $r4.<org.apache.mahout.cf.taste.model.DataModel: void setPreference(long,long,float)>(l0, l1, f0);
+
+        return;
+    }
+
+    public void removePreference(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender r0;
+        long l0, l1;
+        org.slf4j.Logger $r1;
+        java.lang.Long $r2, $r3;
+        org.apache.mahout.cf.taste.model.DataModel $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $r1 = <org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: org.slf4j.Logger log>;
+
+        $r2 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l0);
+
+        $r3 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l1);
+
+        interfaceinvoke $r1.<org.slf4j.Logger: void debug(java.lang.String,java.lang.Object,java.lang.Object)>("Remove preference for user \'{}\', item \'{}\'", $r2, $r3);
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        interfaceinvoke $r4.<org.apache.mahout.cf.taste.model.DataModel: void removePreference(long,long)>(l0, l1);
+
+        return;
+    }
+
+    public org.apache.mahout.cf.taste.model.DataModel getDataModel()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender r0;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        return $r1;
+    }
+
+    protected org.apache.mahout.cf.taste.impl.common.FastIDSet getAllOtherItems(long, org.apache.mahout.cf.taste.model.PreferenceArray, boolean) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender r0;
+        long l0;
+        org.apache.mahout.cf.taste.model.PreferenceArray r1;
+        boolean z0;
+        org.apache.mahout.cf.taste.model.DataModel $r2;
+        org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy $r3;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender;
+
+        l0 := @parameter0: long;
+
+        r1 := @parameter1: org.apache.mahout.cf.taste.model.PreferenceArray;
+
+        z0 := @parameter2: boolean;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy candidateItemsStrategy>;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        $r4 = interfaceinvoke $r3.<org.apache.mahout.cf.taste.recommender.CandidateItemsStrategy: org.apache.mahout.cf.taste.impl.common.FastIDSet getCandidateItems(long,org.apache.mahout.cf.taste.model.PreferenceArray,org.apache.mahout.cf.taste.model.DataModel,boolean)>(l0, r1, $r2, z0);
+
+        return $r4;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/cf/taste/impl/recommender/AbstractRecommender");
+
+        <org.apache.mahout.cf.taste.impl.recommender.AbstractRecommender: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

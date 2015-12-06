@@ -1,0 +1,106 @@
+final class org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader extends java.io.Reader
+{
+    private final java.nio.CharBuffer buf;
+
+    private void <init>(java.lang.CharSequence)
+    {
+        org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader r0;
+        java.lang.CharSequence r1;
+        int i0, i2;
+        java.nio.CharBuffer $r2, $r3, $r5;
+        char $c1;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader;
+
+        r1 := @parameter0: java.lang.CharSequence;
+
+        specialinvoke r0.<java.io.Reader: void <init>()>();
+
+        i0 = interfaceinvoke r1.<java.lang.CharSequence: int length()>();
+
+        $r2 = staticinvoke <java.nio.CharBuffer: java.nio.CharBuffer allocate(int)>(i0);
+
+        r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader: java.nio.CharBuffer buf> = $r2;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label2;
+
+        $r5 = r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader: java.nio.CharBuffer buf>;
+
+        $c1 = interfaceinvoke r1.<java.lang.CharSequence: char charAt(int)>(i2);
+
+        virtualinvoke $r5.<java.nio.CharBuffer: java.nio.CharBuffer put(char)>($c1);
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        $r3 = r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader: java.nio.CharBuffer buf>;
+
+        virtualinvoke $r3.<java.nio.CharBuffer: java.nio.Buffer rewind()>();
+
+        return;
+    }
+
+    public int read(char[], int, int)
+    {
+        org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader r0;
+        char[] r1;
+        int i0, i1, i2, $i3;
+        java.nio.CharBuffer $r2, $r3;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader;
+
+        r1 := @parameter0: char[];
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        $r2 = r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader: java.nio.CharBuffer buf>;
+
+        $i3 = virtualinvoke $r2.<java.nio.CharBuffer: int remaining()>();
+
+        i2 = staticinvoke <java.lang.Math: int min(int,int)>(i1, $i3);
+
+        if i2 <= 0 goto label1;
+
+        $r3 = r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader: java.nio.CharBuffer buf>;
+
+        virtualinvoke $r3.<java.nio.CharBuffer: java.nio.CharBuffer get(char[],int,int)>(r1, i0, i2);
+
+        return i2;
+
+     label1:
+        return -1;
+    }
+
+    public void close()
+    {
+        org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader r0;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader;
+
+        return;
+    }
+
+    void <init>(java.lang.CharSequence, org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$1)
+    {
+        org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader r0;
+        java.lang.CharSequence r1;
+        org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$1 r2;
+
+        r0 := @this: org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader;
+
+        r1 := @parameter0: java.lang.CharSequence;
+
+        r2 := @parameter1: org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$1;
+
+        specialinvoke r0.<org.apache.mahout.vectorizer.encoders.LuceneTextValueEncoder$CharSequenceReader: void <init>(java.lang.CharSequence)>(r1);
+
+        return;
+    }
+}

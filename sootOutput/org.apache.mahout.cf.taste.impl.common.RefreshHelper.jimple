@@ -1,0 +1,236 @@
+public final class org.apache.mahout.cf.taste.impl.common.RefreshHelper extends java.lang.Object implements org.apache.mahout.cf.taste.common.Refreshable
+{
+    private static final org.slf4j.Logger log;
+    private final java.util.List dependencies;
+    private final java.util.concurrent.locks.ReentrantLock refreshLock;
+    private final java.util.concurrent.Callable refreshRunnable;
+
+    public void <init>(java.util.concurrent.Callable)
+    {
+        org.apache.mahout.cf.taste.impl.common.RefreshHelper r0;
+        java.util.concurrent.Callable r1;
+        java.util.ArrayList $r2;
+        java.util.concurrent.locks.ReentrantLock $r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.RefreshHelper;
+
+        r1 := @parameter0: java.util.concurrent.Callable;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.util.ArrayList;
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>(int)>(3);
+
+        r0.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: java.util.List dependencies> = $r2;
+
+        $r3 = new java.util.concurrent.locks.ReentrantLock;
+
+        specialinvoke $r3.<java.util.concurrent.locks.ReentrantLock: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: java.util.concurrent.locks.ReentrantLock refreshLock> = $r3;
+
+        r0.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: java.util.concurrent.Callable refreshRunnable> = r1;
+
+        return;
+    }
+
+    public void addDependency(org.apache.mahout.cf.taste.common.Refreshable)
+    {
+        org.apache.mahout.cf.taste.impl.common.RefreshHelper r0;
+        org.apache.mahout.cf.taste.common.Refreshable r1;
+        java.util.List $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.RefreshHelper;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.common.Refreshable;
+
+        if r1 == null goto label1;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: java.util.List dependencies>;
+
+        interfaceinvoke $r2.<java.util.List: boolean add(java.lang.Object)>(r1);
+
+     label1:
+        return;
+    }
+
+    public void removeDependency(org.apache.mahout.cf.taste.common.Refreshable)
+    {
+        org.apache.mahout.cf.taste.impl.common.RefreshHelper r0;
+        org.apache.mahout.cf.taste.common.Refreshable r1;
+        java.util.List $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.RefreshHelper;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.common.Refreshable;
+
+        if r1 == null goto label1;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: java.util.List dependencies>;
+
+        interfaceinvoke $r2.<java.util.List: boolean remove(java.lang.Object)>(r1);
+
+     label1:
+        return;
+    }
+
+    public void refresh(java.util.Collection)
+    {
+        org.apache.mahout.cf.taste.impl.common.RefreshHelper r0;
+        org.apache.mahout.cf.taste.common.Refreshable r1;
+        java.util.concurrent.locks.ReentrantLock $r3, $r11, $r17;
+        boolean $z0, $z1;
+        java.util.List $r4;
+        java.util.concurrent.Callable $r5, $r6;
+        java.lang.Object $r8;
+        org.slf4j.Logger $r9;
+        java.lang.Exception $r10;
+        java.lang.Throwable $r12;
+        java.util.Collection r13, r14;
+        java.util.Iterator r15;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.common.RefreshHelper;
+
+        r13 := @parameter0: java.util.Collection;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: java.util.concurrent.locks.ReentrantLock refreshLock>;
+
+        $z0 = virtualinvoke $r3.<java.util.concurrent.locks.ReentrantLock: boolean tryLock()>();
+
+        if $z0 == 0 goto label10;
+
+     label01:
+        r14 = staticinvoke <org.apache.mahout.cf.taste.impl.common.RefreshHelper: java.util.Collection buildRefreshed(java.util.Collection)>(r13);
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: java.util.List dependencies>;
+
+        r15 = interfaceinvoke $r4.<java.util.List: java.util.Iterator iterator()>();
+
+     label02:
+        $z1 = interfaceinvoke r15.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label03;
+
+        $r8 = interfaceinvoke r15.<java.util.Iterator: java.lang.Object next()>();
+
+        r1 = (org.apache.mahout.cf.taste.common.Refreshable) $r8;
+
+        staticinvoke <org.apache.mahout.cf.taste.impl.common.RefreshHelper: void maybeRefresh(java.util.Collection,org.apache.mahout.cf.taste.common.Refreshable)>(r14, r1);
+
+        goto label02;
+
+     label03:
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: java.util.concurrent.Callable refreshRunnable>;
+
+        if $r5 == null goto label07;
+
+     label04:
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: java.util.concurrent.Callable refreshRunnable>;
+
+        interfaceinvoke $r6.<java.util.concurrent.Callable: java.lang.Object call()>();
+
+     label05:
+        goto label07;
+
+     label06:
+        $r10 := @caughtexception;
+
+        $r9 = <org.apache.mahout.cf.taste.impl.common.RefreshHelper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r9.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Unexpected exception while refreshing", $r10);
+
+     label07:
+        $r17 = r0.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: java.util.concurrent.locks.ReentrantLock refreshLock>;
+
+        virtualinvoke $r17.<java.util.concurrent.locks.ReentrantLock: void unlock()>();
+
+        goto label10;
+
+     label08:
+        $r12 := @caughtexception;
+
+     label09:
+        $r11 = r0.<org.apache.mahout.cf.taste.impl.common.RefreshHelper: java.util.concurrent.locks.ReentrantLock refreshLock>;
+
+        virtualinvoke $r11.<java.util.concurrent.locks.ReentrantLock: void unlock()>();
+
+        throw $r12;
+
+     label10:
+        return;
+
+        catch java.lang.Exception from label04 to label05 with label06;
+        catch java.lang.Throwable from label01 to label07 with label08;
+        catch java.lang.Throwable from label08 to label09 with label08;
+    }
+
+    public static java.util.Collection buildRefreshed(java.util.Collection)
+    {
+        java.util.Collection r0, r3;
+        java.lang.Object $r1;
+        java.util.HashSet r2;
+
+        r0 := @parameter0: java.util.Collection;
+
+        if r0 != null goto label1;
+
+        r2 = new java.util.HashSet;
+
+        $r1 = r2;
+
+        specialinvoke r2.<java.util.HashSet: void <init>(int)>(3);
+
+        goto label2;
+
+     label1:
+        $r1 = r0;
+
+     label2:
+        r3 = (java.util.Collection) $r1;
+
+        return r3;
+    }
+
+    public static void maybeRefresh(java.util.Collection, org.apache.mahout.cf.taste.common.Refreshable)
+    {
+        java.util.Collection r0;
+        org.apache.mahout.cf.taste.common.Refreshable r1;
+        boolean $z0;
+        org.slf4j.Logger $r2, $r3;
+
+        r0 := @parameter0: java.util.Collection;
+
+        r1 := @parameter1: org.apache.mahout.cf.taste.common.Refreshable;
+
+        $z0 = interfaceinvoke r0.<java.util.Collection: boolean contains(java.lang.Object)>(r1);
+
+        if $z0 != 0 goto label1;
+
+        interfaceinvoke r0.<java.util.Collection: boolean add(java.lang.Object)>(r1);
+
+        $r2 = <org.apache.mahout.cf.taste.impl.common.RefreshHelper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r2.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Added refreshable: {}", r1);
+
+        interfaceinvoke r1.<org.apache.mahout.cf.taste.common.Refreshable: void refresh(java.util.Collection)>(r0);
+
+        $r3 = <org.apache.mahout.cf.taste.impl.common.RefreshHelper: org.slf4j.Logger log>;
+
+        interfaceinvoke $r3.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Refreshed: {}", r0);
+
+     label1:
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/cf/taste/impl/common/RefreshHelper");
+
+        <org.apache.mahout.cf.taste.impl.common.RefreshHelper: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

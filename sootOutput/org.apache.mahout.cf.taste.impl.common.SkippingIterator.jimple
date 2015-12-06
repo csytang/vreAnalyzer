@@ -1,0 +1,5 @@
+public interface  org.apache.mahout.cf.taste.impl.common.SkippingIterator extends java.lang.Object implements java.util.Iterator
+{
+
+    public abstract void skip(int);
+}

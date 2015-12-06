@@ -1,0 +1,312 @@
+public class org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    private org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasure similarity;
+    private org.apache.mahout.math.map.OpenIntIntHashMap numNonZeroEntries;
+    private org.apache.mahout.math.Vector maxValues;
+    private double threshold;
+    private static final java.util.Comparator BY_INDEX;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration $r2, $r8, $r11, $r14, $r16, $r18;
+        java.lang.String $r3, $r4, $r9, $r10, $r15, $r17, $r20, $r21;
+        java.lang.Object $r5;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasure $r6;
+        org.apache.hadoop.fs.Path $r7, $r13;
+        org.apache.mahout.math.map.OpenIntIntHashMap $r12;
+        org.apache.mahout.math.Vector $r19;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r3 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String access$100()>();
+
+        $r4 = virtualinvoke $r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>($r3);
+
+        $r5 = staticinvoke <org.apache.mahout.common.ClassUtils: java.lang.Object instantiateAs(java.lang.String,java.lang.Class)>($r4, class "org/apache/mahout/math/hadoop/similarity/cooccurrence/measures/VectorSimilarityMeasure");
+
+        $r6 = (org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasure) $r5;
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasure similarity> = $r6;
+
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        $r8 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r9 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String access$700()>();
+
+        $r10 = virtualinvoke $r8.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>($r9);
+
+        specialinvoke $r7.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r10);
+
+        $r11 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r12 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors: org.apache.mahout.math.map.OpenIntIntHashMap readAsIntMap(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r7, $r11);
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper: org.apache.mahout.math.map.OpenIntIntHashMap numNonZeroEntries> = $r12;
+
+        $r13 = new org.apache.hadoop.fs.Path;
+
+        $r14 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r15 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String access$800()>();
+
+        $r17 = virtualinvoke $r14.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>($r15);
+
+        specialinvoke $r13.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>($r17);
+
+        $r16 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r19 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors: org.apache.mahout.math.Vector read(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>($r13, $r16);
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper: org.apache.mahout.math.Vector maxValues> = $r19;
+
+        $r18 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r21 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob: java.lang.String access$200()>();
+
+        $r20 = virtualinvoke $r18.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>($r21);
+
+        $d0 = staticinvoke <java.lang.Double: double parseDouble(java.lang.String)>($r20);
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper: double threshold> = $d0;
+
+        return;
+    }
+
+    private boolean consider(org.apache.mahout.math.Vector$Element, org.apache.mahout.math.Vector$Element)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper r0;
+        org.apache.mahout.math.Vector$Element r1, r2;
+        int i0, i1, $i2, $i3, $i4, $i5;
+        double d0, d1, $d2;
+        org.apache.mahout.math.map.OpenIntIntHashMap $r3, $r4;
+        org.apache.mahout.math.Vector $r5, $r6;
+        boolean $z0;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasure $r7;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector$Element;
+
+        r2 := @parameter1: org.apache.mahout.math.Vector$Element;
+
+        $r3 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper: org.apache.mahout.math.map.OpenIntIntHashMap numNonZeroEntries>;
+
+        $i2 = interfaceinvoke r1.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        i0 = virtualinvoke $r3.<org.apache.mahout.math.map.OpenIntIntHashMap: int get(int)>($i2);
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper: org.apache.mahout.math.map.OpenIntIntHashMap numNonZeroEntries>;
+
+        $i3 = interfaceinvoke r2.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        i1 = virtualinvoke $r4.<org.apache.mahout.math.map.OpenIntIntHashMap: int get(int)>($i3);
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper: org.apache.mahout.math.Vector maxValues>;
+
+        $i4 = interfaceinvoke r1.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        d0 = interfaceinvoke $r5.<org.apache.mahout.math.Vector: double get(int)>($i4);
+
+        $r6 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper: org.apache.mahout.math.Vector maxValues>;
+
+        $i5 = interfaceinvoke r2.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        d1 = interfaceinvoke $r6.<org.apache.mahout.math.Vector: double get(int)>($i5);
+
+        $r7 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasure similarity>;
+
+        $d2 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper: double threshold>;
+
+        $z0 = interfaceinvoke $r7.<org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasure: boolean consider(int,int,double,double,double)>(i0, i1, d0, d1, $d2);
+
+        return $z0;
+    }
+
+    protected void map(org.apache.hadoop.io.IntWritable, org.apache.mahout.math.VectorWritable, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper r0;
+        org.apache.hadoop.io.IntWritable r1, $r14;
+        org.apache.mahout.math.VectorWritable r2, $r15;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.Vector$Element[] r4;
+        org.apache.mahout.math.Vector$Element r5, r7;
+        java.util.Comparator $r8;
+        int $i0, $i3, $i4, $i6, i7, i8, i9, i10;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters $r9, $r12;
+        long $l1, $l2;
+        org.apache.hadoop.mapreduce.Counter $r10, $r11;
+        org.apache.mahout.math.RandomAccessSparseVector $r13;
+        byte $b5;
+        double $d0, $d1, $d2, $d3;
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasure $r16;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: org.apache.mahout.math.VectorWritable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        r4 = staticinvoke <org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors: org.apache.mahout.math.Vector$Element[] toArray(org.apache.mahout.math.VectorWritable)>(r2);
+
+        $r8 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper: java.util.Comparator BY_INDEX>;
+
+        staticinvoke <java.util.Arrays: void sort(java.lang.Object[],java.util.Comparator)>(r4, $r8);
+
+        i7 = 0;
+
+        i8 = 0;
+
+        i9 = 0;
+
+     label1:
+        $i0 = lengthof r4;
+
+        if i9 >= $i0 goto label7;
+
+        r5 = r4[i9];
+
+        $r13 = new org.apache.mahout.math.RandomAccessSparseVector;
+
+        specialinvoke $r13.<org.apache.mahout.math.RandomAccessSparseVector: void <init>(int)>(2147483647);
+
+        i10 = i9;
+
+     label2:
+        $i3 = lengthof r4;
+
+        if i10 >= $i3 goto label6;
+
+        r7 = r4[i10];
+
+        $d0 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper: double threshold>;
+
+        $b5 = $d0 cmpl 4.9E-324;
+
+        if $b5 == 0 goto label3;
+
+        $z0 = specialinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper: boolean consider(org.apache.mahout.math.Vector$Element,org.apache.mahout.math.Vector$Element)>(r5, r7);
+
+        if $z0 == 0 goto label4;
+
+     label3:
+        $i6 = interfaceinvoke r7.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $r16 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper: org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasure similarity>;
+
+        $d2 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        $d3 = interfaceinvoke r7.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        $d1 = interfaceinvoke $r16.<org.apache.mahout.math.hadoop.similarity.cooccurrence.measures.VectorSimilarityMeasure: double aggregate(double,double)>($d2, $d3);
+
+        interfaceinvoke $r13.<org.apache.mahout.math.Vector: void setQuick(int,double)>($i6, $d1);
+
+        i7 = i7 + 1;
+
+        goto label5;
+
+     label4:
+        i8 = i8 + 1;
+
+     label5:
+        i10 = i10 + 1;
+
+        goto label2;
+
+     label6:
+        $r14 = new org.apache.hadoop.io.IntWritable;
+
+        $i4 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        specialinvoke $r14.<org.apache.hadoop.io.IntWritable: void <init>(int)>($i4);
+
+        $r15 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r15.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r13);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r14, $r15);
+
+        i9 = i9 + 1;
+
+        goto label1;
+
+     label7:
+        $r9 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters COOCCURRENCES>;
+
+        $r10 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.mapreduce.Counter getCounter(java.lang.Enum)>($r9);
+
+        $l1 = (long) i7;
+
+        interfaceinvoke $r10.<org.apache.hadoop.mapreduce.Counter: void increment(long)>($l1);
+
+        $r12 = <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$Counters PRUNED_COOCCURRENCES>;
+
+        $r11 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.mapreduce.Counter getCounter(java.lang.Enum)>($r12);
+
+        $l2 = (long) i8;
+
+        interfaceinvoke $r11.<org.apache.hadoop.mapreduce.Counter: void increment(long)>($l2);
+
+        return;
+    }
+
+    protected volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.mahout.math.VectorWritable $r4;
+        org.apache.hadoop.io.IntWritable $r5;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.IntWritable) r1;
+
+        $r4 = (org.apache.mahout.math.VectorWritable) r2;
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper: void map(org.apache.hadoop.io.IntWritable,org.apache.mahout.math.VectorWritable,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper$1 $r0;
+
+        $r0 = new org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper$1;
+
+        specialinvoke $r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper$1: void <init>()>();
+
+        <org.apache.mahout.math.hadoop.similarity.cooccurrence.RowSimilarityJob$CooccurrencesMapper: java.util.Comparator BY_INDEX> = $r0;
+
+        return;
+    }
+}

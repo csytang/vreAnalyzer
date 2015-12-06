@@ -1,0 +1,37 @@
+public interface  org.apache.mahout.cf.taste.model.PreferenceArray extends java.lang.Object implements java.lang.Cloneable, java.io.Serializable, java.lang.Iterable
+{
+
+    public abstract int length();
+
+    public abstract org.apache.mahout.cf.taste.model.Preference get(int);
+
+    public abstract void set(int, org.apache.mahout.cf.taste.model.Preference);
+
+    public abstract long getUserID(int);
+
+    public abstract void setUserID(int, long);
+
+    public abstract long getItemID(int);
+
+    public abstract void setItemID(int, long);
+
+    public abstract long[] getIDs();
+
+    public abstract float getValue(int);
+
+    public abstract void setValue(int, float);
+
+    public abstract org.apache.mahout.cf.taste.model.PreferenceArray clone();
+
+    public abstract void sortByUser();
+
+    public abstract void sortByItem();
+
+    public abstract void sortByValue();
+
+    public abstract void sortByValueReversed();
+
+    public abstract boolean hasPrefWithUserID(long);
+
+    public abstract boolean hasPrefWithItemID(long);
+}

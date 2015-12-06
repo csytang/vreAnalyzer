@@ -1,0 +1,586 @@
+public class org.apache.mahout.math.hadoop.stochasticsvd.Omega extends java.lang.Object
+{
+    private static final double UNIFORM_DIVISOR;
+    private final long seed;
+    private final int kp;
+
+    public void <init>(long, int)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.Omega r0;
+        long l0;
+        int i1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.Omega;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: long seed> = l0;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: int kp> = i1;
+
+        return;
+    }
+
+    public double getQuick(int, int)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.Omega r0;
+        int i0, i1;
+        long l2, $l3, $l4, $l5, $l6, $l7;
+        double $d0, $d1, $d2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.Omega;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $l3 = (long) i0;
+
+        $l5 = $l3 << 32;
+
+        $l4 = (long) i1;
+
+        $l7 = $l5 | $l4;
+
+        $l6 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: long seed>;
+
+        l2 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.Omega: long murmur64(long,int,long)>($l7, 8, $l6);
+
+        $d1 = (double) l2;
+
+        $d0 = <org.apache.mahout.math.hadoop.stochasticsvd.Omega: double UNIFORM_DIVISOR>;
+
+        $d2 = $d1 / $d0;
+
+        return $d2;
+    }
+
+    public void computeYRow(org.apache.mahout.math.Vector, double[])
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.Omega r0;
+        org.apache.mahout.math.Vector r1;
+        double[] r2;
+        boolean $z0, $z1;
+        java.lang.Iterable $r3;
+        java.lang.Object $r4;
+        int $i0, i1, i2;
+        double $d0, $d1;
+        java.util.Iterator r5;
+        org.apache.mahout.math.Vector$Element r6;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.Omega;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 := @parameter1: double[];
+
+        staticinvoke <java.util.Arrays: void fill(double[],double)>(r2, 0.0);
+
+        $z0 = interfaceinvoke r1.<org.apache.mahout.math.Vector: boolean isDense()>();
+
+        if $z0 == 0 goto label2;
+
+        i1 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int size()>();
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i1 goto label4;
+
+        $d1 = interfaceinvoke r1.<org.apache.mahout.math.Vector: double getQuick(int)>(i2);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: void accumDots(int,double,double[])>(i2, $d1, r2);
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        $r3 = interfaceinvoke r1.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r5 = interfaceinvoke $r3.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label3:
+        $z1 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label4;
+
+        $r4 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.apache.mahout.math.Vector$Element) $r4;
+
+        $i0 = interfaceinvoke r6.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $d0 = interfaceinvoke r6.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: void accumDots(int,double,double[])>($i0, $d0, r2);
+
+        goto label3;
+
+     label4:
+        return;
+    }
+
+    public void computeYRow(org.apache.mahout.math.Vector, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.Omega r0;
+        org.apache.mahout.math.Vector r1, r2;
+        boolean $z0, $z1;
+        java.lang.Iterable $r4;
+        java.lang.Object $r5;
+        int $i0, i1, i2;
+        double $d0, $d1;
+        java.util.Iterator r6;
+        org.apache.mahout.math.Vector$Element r7;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.Omega;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        r2 := @parameter1: org.apache.mahout.math.Vector;
+
+        interfaceinvoke r2.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(double)>(0.0);
+
+        $z0 = interfaceinvoke r1.<org.apache.mahout.math.Vector: boolean isDense()>();
+
+        if $z0 == 0 goto label2;
+
+        i1 = interfaceinvoke r1.<org.apache.mahout.math.Vector: int size()>();
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i1 goto label4;
+
+        $d1 = interfaceinvoke r1.<org.apache.mahout.math.Vector: double getQuick(int)>(i2);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: void accumDots(int,double,org.apache.mahout.math.Vector)>(i2, $d1, r2);
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        $r4 = interfaceinvoke r1.<org.apache.mahout.math.Vector: java.lang.Iterable nonZeroes()>();
+
+        r6 = interfaceinvoke $r4.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label3:
+        $z1 = interfaceinvoke r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label4;
+
+        $r5 = interfaceinvoke r6.<java.util.Iterator: java.lang.Object next()>();
+
+        r7 = (org.apache.mahout.math.Vector$Element) $r5;
+
+        $i0 = interfaceinvoke r7.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $d0 = interfaceinvoke r7.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: void accumDots(int,double,org.apache.mahout.math.Vector)>($i0, $d0, r2);
+
+        goto label3;
+
+     label4:
+        return;
+    }
+
+    public org.apache.mahout.math.Vector mutlithreadedTRightMultiply(org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.Omega r0;
+        org.apache.mahout.math.Vector r1;
+        int i0, $i1, $i2, $i3, $i4, $i5, i6, i8;
+        java.util.ArrayList r3;
+        java.util.concurrent.Future r4, $r11;
+        java.lang.Runtime $r6;
+        java.util.concurrent.ThreadPoolExecutor $r7;
+        java.util.concurrent.ArrayBlockingQueue $r8;
+        java.util.concurrent.TimeUnit $r9;
+        org.apache.mahout.math.DenseVector $r10;
+        java.lang.Object $r12, $r14;
+        java.lang.Double $r13;
+        double $d0;
+        org.apache.mahout.math.hadoop.stochasticsvd.Omega$1 $r15;
+        java.util.concurrent.ExecutionException $r16;
+        java.lang.Throwable $r17, $r18, $r19, $r24;
+        boolean $z1;
+        java.lang.IllegalStateException $r20, $r22;
+        java.lang.InterruptedException $r21;
+        java.lang.RuntimeException $r23;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.Omega;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector;
+
+        $r6 = staticinvoke <java.lang.Runtime: java.lang.Runtime getRuntime()>();
+
+        i0 = virtualinvoke $r6.<java.lang.Runtime: int availableProcessors()>();
+
+        $r7 = new java.util.concurrent.ThreadPoolExecutor;
+
+        $r9 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit SECONDS>;
+
+        $r8 = new java.util.concurrent.ArrayBlockingQueue;
+
+        $i1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: int kp>;
+
+        specialinvoke $r8.<java.util.concurrent.ArrayBlockingQueue: void <init>(int)>($i1);
+
+        specialinvoke $r7.<java.util.concurrent.ThreadPoolExecutor: void <init>(int,int,long,java.util.concurrent.TimeUnit,java.util.concurrent.BlockingQueue)>(i0, i0, 1L, $r9, $r8);
+
+     label01:
+        $i2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: int kp>;
+
+        r3 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayListWithCapacity(int)>($i2);
+
+        i6 = 0;
+
+     label02:
+        $i3 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: int kp>;
+
+        if i6 >= $i3 goto label03;
+
+        $r15 = new org.apache.mahout.math.hadoop.stochasticsvd.Omega$1;
+
+        specialinvoke $r15.<org.apache.mahout.math.hadoop.stochasticsvd.Omega$1: void <init>(org.apache.mahout.math.hadoop.stochasticsvd.Omega,org.apache.mahout.math.Vector,int)>(r0, r1, i6);
+
+        r4 = interfaceinvoke $r7.<java.util.concurrent.ExecutorService: java.util.concurrent.Future submit(java.util.concurrent.Callable)>($r15);
+
+        interfaceinvoke r3.<java.util.List: boolean add(java.lang.Object)>(r4);
+
+        i6 = i6 + 1;
+
+        goto label02;
+
+     label03:
+        $r10 = new org.apache.mahout.math.DenseVector;
+
+        $i5 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: int kp>;
+
+        specialinvoke $r10.<org.apache.mahout.math.DenseVector: void <init>(int)>($i5);
+
+        i8 = 0;
+
+     label04:
+        $i4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: int kp>;
+
+        if i8 >= $i4 goto label05;
+
+        $r12 = interfaceinvoke r3.<java.util.List: java.lang.Object get(int)>(i8);
+
+        $r11 = (java.util.concurrent.Future) $r12;
+
+        $r14 = interfaceinvoke $r11.<java.util.concurrent.Future: java.lang.Object get()>();
+
+        $r13 = (java.lang.Double) $r14;
+
+        $d0 = virtualinvoke $r13.<java.lang.Double: double doubleValue()>();
+
+        interfaceinvoke $r10.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i8, $d0);
+
+        i8 = i8 + 1;
+
+        goto label04;
+
+     label05:
+        interfaceinvoke $r7.<java.util.concurrent.ExecutorService: void shutdown()>();
+
+        return $r10;
+
+     label06:
+        $r21 := @caughtexception;
+
+        $r22 = new java.lang.IllegalStateException;
+
+        specialinvoke $r22.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("Interrupted", $r21);
+
+        throw $r22;
+
+     label07:
+        $r16 := @caughtexception;
+
+        $r17 = virtualinvoke $r16.<java.util.concurrent.ExecutionException: java.lang.Throwable getCause()>();
+
+        $z1 = $r17 instanceof java.lang.RuntimeException;
+
+        if $z1 == 0 goto label08;
+
+        $r19 = virtualinvoke $r16.<java.util.concurrent.ExecutionException: java.lang.Throwable getCause()>();
+
+        $r23 = (java.lang.RuntimeException) $r19;
+
+        throw $r23;
+
+     label08:
+        $r20 = new java.lang.IllegalStateException;
+
+        $r18 = virtualinvoke $r16.<java.util.concurrent.ExecutionException: java.lang.Throwable getCause()>();
+
+        specialinvoke $r20.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r18);
+
+        throw $r20;
+
+     label09:
+        $r24 := @caughtexception;
+
+     label10:
+        interfaceinvoke $r7.<java.util.concurrent.ExecutorService: void shutdown()>();
+
+        throw $r24;
+
+        catch java.lang.InterruptedException from label03 to label05 with label06;
+        catch java.util.concurrent.ExecutionException from label03 to label05 with label07;
+        catch java.lang.Throwable from label01 to label05 with label09;
+        catch java.lang.Throwable from label06 to label10 with label09;
+    }
+
+    protected void accumDots(int, double, double[])
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.Omega r0;
+        int i0, $i1, i2;
+        double d0, $d1, $d2, $d3, $d4;
+        double[] r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.Omega;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        r1 := @parameter2: double[];
+
+        i2 = 0;
+
+     label1:
+        $i1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: int kp>;
+
+        if i2 >= $i1 goto label2;
+
+        $d1 = r1[i2];
+
+        $d2 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: double getQuick(int,int)>(i0, i2);
+
+        $d3 = $d2 * d0;
+
+        $d4 = $d1 + $d3;
+
+        r1[i2] = $d4;
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    protected void accumDots(int, double, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.Omega r0;
+        int i0, $i1, i2;
+        double d0, $d1, $d2, $d3, $d4;
+        org.apache.mahout.math.Vector r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.Omega;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        r1 := @parameter2: org.apache.mahout.math.Vector;
+
+        i2 = 0;
+
+     label1:
+        $i1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: int kp>;
+
+        if i2 >= $i1 goto label2;
+
+        $d1 = interfaceinvoke r1.<org.apache.mahout.math.Vector: double getQuick(int)>(i2);
+
+        $d2 = virtualinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.Omega: double getQuick(int,int)>(i0, i2);
+
+        $d3 = $d2 * d0;
+
+        $d4 = $d1 + $d3;
+
+        interfaceinvoke r1.<org.apache.mahout.math.Vector: void setQuick(int,double)>(i2, $d4);
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public static long murmur64(long, int, long)
+    {
+        long l0, l2, $l5, $l6, $l7, $l8, $l9, l10, l12, l13, l14, l15, l16, l17, l18, l19;
+        int i1;
+
+        l0 := @parameter0: long;
+
+        i1 := @parameter1: int;
+
+        l2 := @parameter2: long;
+
+        $l5 = (long) i1;
+
+        $l6 = $l5 * -4132994306676758123L;
+
+        l10 = l2 ^ $l6;
+
+        l12 = l0 * -4132994306676758123L;
+
+        $l7 = l12 >>> 47;
+
+        l13 = l12 ^ $l7;
+
+        l14 = l13 * -4132994306676758123L;
+
+        l15 = l10 ^ l14;
+
+        l16 = l15 * -4132994306676758123L;
+
+        $l8 = l16 >>> 47;
+
+        l17 = l16 ^ $l8;
+
+        l18 = l17 * -4132994306676758123L;
+
+        $l9 = l18 >>> 47;
+
+        l19 = l18 ^ $l9;
+
+        return l19;
+    }
+
+    public static long murmur64(byte[], int, int, long)
+    {
+        byte[] r0;
+        int i0, i4, $i12, i17, i19, i21;
+        long l1, $l5, $l6, $l7, $l8, $l11, $l13, $l14, l18, l20, l22, l23, l24, l25, l26, l27, l28, l29, l30, l31, l32;
+        byte $b9, $b15;
+        short $s10, $s16;
+
+        r0 := @parameter0: byte[];
+
+        i17 := @parameter1: int;
+
+        i0 := @parameter2: int;
+
+        l1 := @parameter3: long;
+
+        $l5 = (long) i0;
+
+        $l7 = $l5 * -4132994306676758123L;
+
+        l18 = l1 ^ $l7;
+
+        i4 = i0 >>> 3;
+
+        i19 = 0;
+
+     label1:
+        if i19 >= i4 goto label4;
+
+        l20 = 0L;
+
+        i21 = 0;
+
+     label2:
+        if i21 >= 8 goto label3;
+
+        l22 = l20 << 8;
+
+        $i12 = i17 + i21;
+
+        $b15 = r0[$i12];
+
+        $s16 = $b15 & 255;
+
+        $l14 = (long) $s16;
+
+        l20 = l22 | $l14;
+
+        i21 = i21 + 1;
+
+        goto label2;
+
+     label3:
+        l23 = l20 * -4132994306676758123L;
+
+        $l13 = l23 >>> 47;
+
+        l24 = l23 ^ $l13;
+
+        l25 = l24 * -4132994306676758123L;
+
+        l26 = l18 ^ l25;
+
+        l18 = l26 * -4132994306676758123L;
+
+        i19 = i19 + 1;
+
+        i17 = i17 + 8;
+
+        goto label1;
+
+     label4:
+        if i17 >= i0 goto label7;
+
+        l27 = 0L;
+
+     label5:
+        if i17 >= i0 goto label6;
+
+        l28 = l27 << 8;
+
+        $b9 = r0[i17];
+
+        $s10 = $b9 & 255;
+
+        $l11 = (long) $s10;
+
+        l27 = l28 | $l11;
+
+        i17 = i17 + 1;
+
+        goto label5;
+
+     label6:
+        l29 = l18 ^ l27;
+
+        l18 = l29 * -4132994306676758123L;
+
+     label7:
+        $l6 = l18 >>> 47;
+
+        l30 = l18 ^ $l6;
+
+        l31 = l30 * -4132994306676758123L;
+
+        $l8 = l31 >>> 47;
+
+        l32 = l31 ^ $l8;
+
+        return l32;
+    }
+
+    static void <clinit>()
+    {
+        double $d0;
+
+        $d0 = staticinvoke <java.lang.Math: double pow(double,double)>(2.0, 64.0);
+
+        <org.apache.mahout.math.hadoop.stochasticsvd.Omega: double UNIFORM_DIVISOR> = $d0;
+
+        return;
+    }
+}

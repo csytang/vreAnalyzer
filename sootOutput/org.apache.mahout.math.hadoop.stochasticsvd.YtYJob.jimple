@@ -1,0 +1,115 @@
+public final class org.apache.mahout.math.hadoop.stochasticsvd.YtYJob extends java.lang.Object
+{
+    public static final java.lang.String PROP_OMEGA_SEED;
+    public static final java.lang.String PROP_K;
+    public static final java.lang.String PROP_P;
+    public static final java.lang.String OUTPUT_YT_Y;
+
+    private void <init>()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.YtYJob r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.YtYJob;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static void run(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path[], org.apache.hadoop.fs.Path, int, int, long) throws java.lang.ClassNotFoundException, java.lang.InterruptedException, java.io.IOException
+    {
+        org.apache.hadoop.conf.Configuration r0, $r6, $r7, $r8;
+        org.apache.hadoop.fs.Path[] r1;
+        org.apache.hadoop.fs.Path r2;
+        int i0, i1;
+        long l2;
+        org.apache.hadoop.mapreduce.Job $r4;
+        org.apache.hadoop.io.SequenceFile$CompressionType $r5;
+        boolean $z1;
+        java.io.IOException $r9;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 := @parameter1: org.apache.hadoop.fs.Path[];
+
+        r2 := @parameter2: org.apache.hadoop.fs.Path;
+
+        i0 := @parameter3: int;
+
+        i1 := @parameter4: int;
+
+        l2 := @parameter5: long;
+
+        $r4 = new org.apache.hadoop.mapreduce.Job;
+
+        specialinvoke $r4.<org.apache.hadoop.mapreduce.Job: void <init>(org.apache.hadoop.conf.Configuration)>(r0);
+
+        virtualinvoke $r4.<org.apache.hadoop.mapreduce.Job: void setJobName(java.lang.String)>("YtY-job");
+
+        virtualinvoke $r4.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(class "org/apache/mahout/math/hadoop/stochasticsvd/YtYJob");
+
+        virtualinvoke $r4.<org.apache.hadoop.mapreduce.Job: void setInputFormatClass(java.lang.Class)>(class "org/apache/hadoop/mapreduce/lib/input/SequenceFileInputFormat");
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void setInputPaths(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path[])>($r4, r1);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>($r4, r2);
+
+        $r5 = <org.apache.hadoop.io.SequenceFile$CompressionType: org.apache.hadoop.io.SequenceFile$CompressionType BLOCK>;
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat: void setOutputCompressionType(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.io.SequenceFile$CompressionType)>($r4, $r5);
+
+        virtualinvoke $r4.<org.apache.hadoop.mapreduce.Job: void setMapOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/IntWritable");
+
+        virtualinvoke $r4.<org.apache.hadoop.mapreduce.Job: void setMapOutputValueClass(java.lang.Class)>(class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke $r4.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/IntWritable");
+
+        virtualinvoke $r4.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(class "org/apache/mahout/math/VectorWritable");
+
+        virtualinvoke $r4.<org.apache.hadoop.mapreduce.Job: void setMapperClass(java.lang.Class)>(class "org/apache/mahout/math/hadoop/stochasticsvd/YtYJob$YtYMapper");
+
+        $r6 = virtualinvoke $r4.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        virtualinvoke $r6.<org.apache.hadoop.conf.Configuration: void setLong(java.lang.String,long)>("ssvd.omegaseed", l2);
+
+        $r7 = virtualinvoke $r4.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        virtualinvoke $r7.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>("ssvd.k", i0);
+
+        $r8 = virtualinvoke $r4.<org.apache.hadoop.mapreduce.Job: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        virtualinvoke $r8.<org.apache.hadoop.conf.Configuration: void setInt(java.lang.String,int)>("ssvd.p", i1);
+
+        virtualinvoke $r4.<org.apache.hadoop.mapreduce.Job: void setNumReduceTasks(int)>(1);
+
+        virtualinvoke $r4.<org.apache.hadoop.mapreduce.Job: void submit()>();
+
+        virtualinvoke $r4.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(0);
+
+        $z1 = virtualinvoke $r4.<org.apache.hadoop.mapreduce.Job: boolean isSuccessful()>();
+
+        if $z1 != 0 goto label1;
+
+        $r9 = new java.io.IOException;
+
+        specialinvoke $r9.<java.io.IOException: void <init>(java.lang.String)>("YtY job unsuccessful.");
+
+        throw $r9;
+
+     label1:
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.math.hadoop.stochasticsvd.YtYJob: java.lang.String OUTPUT_YT_Y> = "part-";
+
+        <org.apache.mahout.math.hadoop.stochasticsvd.YtYJob: java.lang.String PROP_P> = "ssvd.p";
+
+        <org.apache.mahout.math.hadoop.stochasticsvd.YtYJob: java.lang.String PROP_K> = "ssvd.k";
+
+        <org.apache.mahout.math.hadoop.stochasticsvd.YtYJob: java.lang.String PROP_OMEGA_SEED> = "ssvd.omegaseed";
+
+        return;
+    }
+}

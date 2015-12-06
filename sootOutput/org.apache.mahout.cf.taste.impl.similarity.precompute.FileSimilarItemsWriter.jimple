@@ -1,0 +1,140 @@
+public class org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter extends java.lang.Object implements org.apache.mahout.cf.taste.similarity.precompute.SimilarItemsWriter
+{
+    private final java.io.File file;
+    private java.io.BufferedWriter writer;
+
+    public void <init>(java.io.File)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter r0;
+        java.io.File r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter;
+
+        r1 := @parameter0: java.io.File;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter: java.io.File file> = r1;
+
+        return;
+    }
+
+    public void open() throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter r0;
+        java.io.BufferedWriter $r1;
+        java.io.OutputStreamWriter $r2;
+        java.io.FileOutputStream $r3;
+        java.io.File $r4;
+        java.nio.charset.Charset $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter;
+
+        $r1 = new java.io.BufferedWriter;
+
+        $r2 = new java.io.OutputStreamWriter;
+
+        $r3 = new java.io.FileOutputStream;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter: java.io.File file>;
+
+        specialinvoke $r3.<java.io.FileOutputStream: void <init>(java.io.File)>($r4);
+
+        $r5 = <org.apache.commons.io.Charsets: java.nio.charset.Charset UTF_8>;
+
+        specialinvoke $r2.<java.io.OutputStreamWriter: void <init>(java.io.OutputStream,java.nio.charset.Charset)>($r3, $r5);
+
+        specialinvoke $r1.<java.io.BufferedWriter: void <init>(java.io.Writer)>($r2);
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter: java.io.BufferedWriter writer> = $r1;
+
+        return;
+    }
+
+    public void add(org.apache.mahout.cf.taste.similarity.precompute.SimilarItems) throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter r0;
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItems r1;
+        java.lang.String r2, $r10, $r13;
+        java.util.Iterator r3;
+        org.apache.mahout.cf.taste.similarity.precompute.SimilarItem r4;
+        long $l0, $l1;
+        java.lang.Iterable $r5;
+        boolean $z0;
+        java.lang.Object $r6;
+        java.io.BufferedWriter $r7, $r8, $r9, $r11, $r12, $r14;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.precompute.SimilarItems;
+
+        $l0 = virtualinvoke r1.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItems: long getItemID()>();
+
+        r2 = staticinvoke <java.lang.String: java.lang.String valueOf(long)>($l0);
+
+        $r5 = virtualinvoke r1.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItems: java.lang.Iterable getSimilarItems()>();
+
+        r3 = interfaceinvoke $r5.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r6 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.mahout.cf.taste.similarity.precompute.SimilarItem) $r6;
+
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter: java.io.BufferedWriter writer>;
+
+        virtualinvoke $r7.<java.io.BufferedWriter: void write(java.lang.String)>(r2);
+
+        $r8 = r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter: java.io.BufferedWriter writer>;
+
+        virtualinvoke $r8.<java.io.BufferedWriter: void write(int)>(44);
+
+        $r9 = r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter: java.io.BufferedWriter writer>;
+
+        $l1 = virtualinvoke r4.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItem: long getItemID()>();
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String valueOf(long)>($l1);
+
+        virtualinvoke $r9.<java.io.BufferedWriter: void write(java.lang.String)>($r10);
+
+        $r12 = r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter: java.io.BufferedWriter writer>;
+
+        virtualinvoke $r12.<java.io.BufferedWriter: void write(int)>(44);
+
+        $r11 = r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter: java.io.BufferedWriter writer>;
+
+        $d0 = virtualinvoke r4.<org.apache.mahout.cf.taste.similarity.precompute.SimilarItem: double getSimilarity()>();
+
+        $r13 = staticinvoke <java.lang.String: java.lang.String valueOf(double)>($d0);
+
+        virtualinvoke $r11.<java.io.BufferedWriter: void write(java.lang.String)>($r13);
+
+        $r14 = r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter: java.io.BufferedWriter writer>;
+
+        virtualinvoke $r14.<java.io.BufferedWriter: void newLine()>();
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter r0;
+        java.io.BufferedWriter $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.similarity.precompute.FileSimilarItemsWriter: java.io.BufferedWriter writer>;
+
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r1, 0);
+
+        return;
+    }
+}

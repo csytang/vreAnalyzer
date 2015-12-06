@@ -1,0 +1,368 @@
+public class org.apache.mahout.classifier.sgd.ModelDissector$Weight extends java.lang.Object implements java.lang.Comparable
+{
+    private final java.lang.String feature;
+    private final double value;
+    private final int maxIndex;
+    private final java.util.List categories;
+
+    public void <init>(java.lang.String, org.apache.mahout.math.Vector)
+    {
+        org.apache.mahout.classifier.sgd.ModelDissector$Weight r0;
+        java.lang.String r1;
+        org.apache.mahout.math.Vector r2;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.ModelDissector$Weight;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: org.apache.mahout.math.Vector;
+
+        specialinvoke r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: void <init>(java.lang.String,org.apache.mahout.math.Vector,int)>(r1, r2, 3);
+
+        return;
+    }
+
+    public void <init>(java.lang.String, org.apache.mahout.math.Vector, int)
+    {
+        org.apache.mahout.classifier.sgd.ModelDissector$Weight r0;
+        java.lang.String r1;
+        org.apache.mahout.math.Vector r2;
+        int i0, $i1, $i2, $i3, $i4;
+        java.util.Iterator r4;
+        org.apache.mahout.math.Vector$Element r5;
+        java.util.PriorityQueue $r6;
+        com.google.common.collect.Ordering $r7, $r11, $r13;
+        java.lang.Iterable $r8;
+        boolean $z0;
+        java.util.ArrayList $r9;
+        java.util.List $r10, $r12, $r16;
+        org.apache.mahout.classifier.sgd.ModelDissector$Category $r14, $r17, $r20;
+        java.lang.Object $r15, $r18, $r19;
+        double $d0, $d1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.ModelDissector$Weight;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: org.apache.mahout.math.Vector;
+
+        i0 := @parameter2: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: java.lang.String feature> = r1;
+
+        $r6 = new java.util.PriorityQueue;
+
+        $i1 = i0 + 1;
+
+        $r7 = staticinvoke <com.google.common.collect.Ordering: com.google.common.collect.Ordering natural()>();
+
+        specialinvoke $r6.<java.util.PriorityQueue: void <init>(int,java.util.Comparator)>($i1, $r7);
+
+        $r8 = interfaceinvoke r2.<org.apache.mahout.math.Vector: java.lang.Iterable all()>();
+
+        r4 = interfaceinvoke $r8.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label3;
+
+        $r19 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.mahout.math.Vector$Element) $r19;
+
+        $r20 = new org.apache.mahout.classifier.sgd.ModelDissector$Category;
+
+        $i3 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $d1 = interfaceinvoke r5.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        specialinvoke $r20.<org.apache.mahout.classifier.sgd.ModelDissector$Category: void <init>(int,double,org.apache.mahout.classifier.sgd.ModelDissector$1)>($i3, $d1, null);
+
+        interfaceinvoke $r6.<java.util.Queue: boolean add(java.lang.Object)>($r20);
+
+     label2:
+        $i4 = interfaceinvoke $r6.<java.util.Queue: int size()>();
+
+        if $i4 <= i0 goto label1;
+
+        interfaceinvoke $r6.<java.util.Queue: java.lang.Object poll()>();
+
+        goto label2;
+
+     label3:
+        $r9 = new java.util.ArrayList;
+
+        specialinvoke $r9.<java.util.ArrayList: void <init>(java.util.Collection)>($r6);
+
+        r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: java.util.List categories> = $r9;
+
+        $r10 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: java.util.List categories>;
+
+        $r11 = staticinvoke <com.google.common.collect.Ordering: com.google.common.collect.Ordering natural()>();
+
+        $r13 = virtualinvoke $r11.<com.google.common.collect.Ordering: com.google.common.collect.Ordering reverse()>();
+
+        staticinvoke <java.util.Collections: void sort(java.util.List,java.util.Comparator)>($r10, $r13);
+
+        $r12 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: java.util.List categories>;
+
+        $r15 = interfaceinvoke $r12.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r14 = (org.apache.mahout.classifier.sgd.ModelDissector$Category) $r15;
+
+        $d0 = staticinvoke <org.apache.mahout.classifier.sgd.ModelDissector$Category: double access$100(org.apache.mahout.classifier.sgd.ModelDissector$Category)>($r14);
+
+        r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: double value> = $d0;
+
+        $r16 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: java.util.List categories>;
+
+        $r18 = interfaceinvoke $r16.<java.util.List: java.lang.Object get(int)>(0);
+
+        $r17 = (org.apache.mahout.classifier.sgd.ModelDissector$Category) $r18;
+
+        $i2 = staticinvoke <org.apache.mahout.classifier.sgd.ModelDissector$Category: int access$200(org.apache.mahout.classifier.sgd.ModelDissector$Category)>($r17);
+
+        r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: int maxIndex> = $i2;
+
+        return;
+    }
+
+    public int compareTo(org.apache.mahout.classifier.sgd.ModelDissector$Weight)
+    {
+        org.apache.mahout.classifier.sgd.ModelDissector$Weight r0, r1;
+        int i0, $i1;
+        double $d0, $d1, $d2, $d3;
+        java.lang.String $r2, $r3;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.ModelDissector$Weight;
+
+        r1 := @parameter0: org.apache.mahout.classifier.sgd.ModelDissector$Weight;
+
+        $d0 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: double value>;
+
+        $d1 = staticinvoke <java.lang.Math: double abs(double)>($d0);
+
+        $d2 = r1.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: double value>;
+
+        $d3 = staticinvoke <java.lang.Math: double abs(double)>($d2);
+
+        i0 = staticinvoke <java.lang.Double: int compare(double,double)>($d1, $d3);
+
+        if i0 != 0 goto label1;
+
+        $r3 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: java.lang.String feature>;
+
+        $r2 = r1.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: java.lang.String feature>;
+
+        $i1 = virtualinvoke $r3.<java.lang.String: int compareTo(java.lang.String)>($r2);
+
+        return $i1;
+
+     label1:
+        return i0;
+    }
+
+    public boolean equals(java.lang.Object)
+    {
+        org.apache.mahout.classifier.sgd.ModelDissector$Weight r0, r2;
+        java.lang.Object r1;
+        boolean $z0, $z1, $z2, $z3;
+        java.lang.String $r3, $r4;
+        double $d0, $d1;
+        byte $b0;
+        int $i1, $i2;
+        java.util.List $r5, $r6;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.ModelDissector$Weight;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $z0 = r1 instanceof org.apache.mahout.classifier.sgd.ModelDissector$Weight;
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        r2 = (org.apache.mahout.classifier.sgd.ModelDissector$Weight) r1;
+
+        $r4 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: java.lang.String feature>;
+
+        $r3 = r2.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: java.lang.String feature>;
+
+        $z1 = virtualinvoke $r4.<java.lang.String: boolean equals(java.lang.Object)>($r3);
+
+        if $z1 == 0 goto label2;
+
+        $d1 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: double value>;
+
+        $d0 = r2.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: double value>;
+
+        $b0 = $d1 cmpl $d0;
+
+        if $b0 != 0 goto label2;
+
+        $i2 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: int maxIndex>;
+
+        $i1 = r2.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: int maxIndex>;
+
+        if $i2 != $i1 goto label2;
+
+        $r6 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: java.util.List categories>;
+
+        $r5 = r2.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: java.util.List categories>;
+
+        $z2 = interfaceinvoke $r6.<java.util.List: boolean equals(java.lang.Object)>($r5);
+
+        if $z2 == 0 goto label2;
+
+        $z3 = 1;
+
+        goto label3;
+
+     label2:
+        $z3 = 0;
+
+     label3:
+        return $z3;
+    }
+
+    public int hashCode()
+    {
+        org.apache.mahout.classifier.sgd.ModelDissector$Weight r0;
+        java.lang.String $r1;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6;
+        double $d0;
+        java.util.List $r2;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.ModelDissector$Weight;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: java.lang.String feature>;
+
+        $i0 = virtualinvoke $r1.<java.lang.String: int hashCode()>();
+
+        $d0 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: double value>;
+
+        $i1 = staticinvoke <org.apache.mahout.common.RandomUtils: int hashDouble(double)>($d0);
+
+        $i3 = $i0 ^ $i1;
+
+        $i2 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: int maxIndex>;
+
+        $i4 = $i3 ^ $i2;
+
+        $r2 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: java.util.List categories>;
+
+        $i5 = interfaceinvoke $r2.<java.util.List: int hashCode()>();
+
+        $i6 = $i4 ^ $i5;
+
+        return $i6;
+    }
+
+    public java.lang.String getFeature()
+    {
+        org.apache.mahout.classifier.sgd.ModelDissector$Weight r0;
+        java.lang.String $r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.ModelDissector$Weight;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: java.lang.String feature>;
+
+        return $r1;
+    }
+
+    public double getWeight()
+    {
+        org.apache.mahout.classifier.sgd.ModelDissector$Weight r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.ModelDissector$Weight;
+
+        $d0 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: double value>;
+
+        return $d0;
+    }
+
+    public double getWeight(int)
+    {
+        org.apache.mahout.classifier.sgd.ModelDissector$Weight r0;
+        int i0;
+        java.util.List $r1;
+        java.lang.Object $r2;
+        org.apache.mahout.classifier.sgd.ModelDissector$Category $r3;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.ModelDissector$Weight;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: java.util.List categories>;
+
+        $r2 = interfaceinvoke $r1.<java.util.List: java.lang.Object get(int)>(i0);
+
+        $r3 = (org.apache.mahout.classifier.sgd.ModelDissector$Category) $r2;
+
+        $d0 = staticinvoke <org.apache.mahout.classifier.sgd.ModelDissector$Category: double access$100(org.apache.mahout.classifier.sgd.ModelDissector$Category)>($r3);
+
+        return $d0;
+    }
+
+    public double getCategory(int)
+    {
+        org.apache.mahout.classifier.sgd.ModelDissector$Weight r0;
+        int i0, $i1;
+        java.util.List $r1;
+        java.lang.Object $r2;
+        org.apache.mahout.classifier.sgd.ModelDissector$Category $r3;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.ModelDissector$Weight;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: java.util.List categories>;
+
+        $r2 = interfaceinvoke $r1.<java.util.List: java.lang.Object get(int)>(i0);
+
+        $r3 = (org.apache.mahout.classifier.sgd.ModelDissector$Category) $r2;
+
+        $i1 = staticinvoke <org.apache.mahout.classifier.sgd.ModelDissector$Category: int access$200(org.apache.mahout.classifier.sgd.ModelDissector$Category)>($r3);
+
+        $d0 = (double) $i1;
+
+        return $d0;
+    }
+
+    public int getMaxImpact()
+    {
+        org.apache.mahout.classifier.sgd.ModelDissector$Weight r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.ModelDissector$Weight;
+
+        $i0 = r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: int maxIndex>;
+
+        return $i0;
+    }
+
+    public volatile int compareTo(java.lang.Object)
+    {
+        org.apache.mahout.classifier.sgd.ModelDissector$Weight r0, $r2;
+        java.lang.Object r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.ModelDissector$Weight;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (org.apache.mahout.classifier.sgd.ModelDissector$Weight) r1;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.classifier.sgd.ModelDissector$Weight: int compareTo(org.apache.mahout.classifier.sgd.ModelDissector$Weight)>($r2);
+
+        return $i0;
+    }
+}

@@ -1,0 +1,84 @@
+class org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement extends java.lang.Object implements org.apache.mahout.math.Vector$Element
+{
+    private final int index;
+    private double value;
+
+    void <init>(int, double)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement r0;
+        int i0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement: int index> = i0;
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement: double value> = d0;
+
+        return;
+    }
+
+    void <init>(org.apache.mahout.math.Vector$Element)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement r0;
+        org.apache.mahout.math.Vector$Element r1;
+        int $i0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement;
+
+        r1 := @parameter0: org.apache.mahout.math.Vector$Element;
+
+        $i0 = interfaceinvoke r1.<org.apache.mahout.math.Vector$Element: int index()>();
+
+        $d0 = interfaceinvoke r1.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement: void <init>(int,double)>($i0, $d0);
+
+        return;
+    }
+
+    public double get()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement;
+
+        $d0 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement: double value>;
+
+        return $d0;
+    }
+
+    public int index()
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement;
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement: int index>;
+
+        return $i0;
+    }
+
+    public void set(double)
+    {
+        org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.math.hadoop.similarity.cooccurrence.Vectors$TemporaryElement: double value> = d0;
+
+        return;
+    }
+}

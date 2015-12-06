@@ -1,0 +1,15 @@
+public interface  org.apache.mahout.cf.taste.impl.common.RunningAverage extends java.lang.Object
+{
+
+    public abstract void addDatum(double);
+
+    public abstract void removeDatum(double);
+
+    public abstract void changeDatum(double);
+
+    public abstract int getCount();
+
+    public abstract double getAverage();
+
+    public abstract org.apache.mahout.cf.taste.impl.common.RunningAverage inverse();
+}

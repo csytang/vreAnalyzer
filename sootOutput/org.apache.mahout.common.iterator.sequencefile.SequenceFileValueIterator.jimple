@@ -1,0 +1,207 @@
+public final class org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator extends com.google.common.collect.AbstractIterator implements java.io.Closeable
+{
+    private final org.apache.hadoop.io.SequenceFile$Reader reader;
+    private final org.apache.hadoop.conf.Configuration conf;
+    private final java.lang.Class valueClass;
+    private final org.apache.hadoop.io.Writable key;
+    private org.apache.hadoop.io.Writable value;
+    private final boolean reuseKeyValueInstances;
+    private static final org.slf4j.Logger log;
+
+    public void <init>(org.apache.hadoop.fs.Path, boolean, org.apache.hadoop.conf.Configuration) throws java.io.IOException
+    {
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator r0;
+        boolean z0;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.hadoop.fs.FileSystem r2;
+        java.lang.Class r3, $r9;
+        org.apache.hadoop.io.SequenceFile$Reader $r4, $r5, $r8;
+        java.lang.Object $r6;
+        org.apache.hadoop.io.Writable $r7;
+        org.apache.hadoop.fs.Path r10, r11;
+
+        r0 := @this: org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator;
+
+        r10 := @parameter0: org.apache.hadoop.fs.Path;
+
+        z0 := @parameter1: boolean;
+
+        r1 := @parameter2: org.apache.hadoop.conf.Configuration;
+
+        specialinvoke r0.<com.google.common.collect.AbstractIterator: void <init>()>();
+
+        r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.apache.hadoop.io.Writable value> = null;
+
+        r2 = virtualinvoke r10.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r1);
+
+        r11 = virtualinvoke r2.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.Path makeQualified(org.apache.hadoop.fs.Path)>(r10);
+
+        $r4 = new org.apache.hadoop.io.SequenceFile$Reader;
+
+        specialinvoke $r4.<org.apache.hadoop.io.SequenceFile$Reader: void <init>(org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r2, r11, r1);
+
+        r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.apache.hadoop.io.SequenceFile$Reader reader> = $r4;
+
+        r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.apache.hadoop.conf.Configuration conf> = r1;
+
+        $r5 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.apache.hadoop.io.SequenceFile$Reader reader>;
+
+        r3 = virtualinvoke $r5.<org.apache.hadoop.io.SequenceFile$Reader: java.lang.Class getKeyClass()>();
+
+        $r6 = staticinvoke <org.apache.hadoop.util.ReflectionUtils: java.lang.Object newInstance(java.lang.Class,org.apache.hadoop.conf.Configuration)>(r3, r1);
+
+        $r7 = (org.apache.hadoop.io.Writable) $r6;
+
+        r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.apache.hadoop.io.Writable key> = $r7;
+
+        $r8 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.apache.hadoop.io.SequenceFile$Reader reader>;
+
+        $r9 = virtualinvoke $r8.<org.apache.hadoop.io.SequenceFile$Reader: java.lang.Class getValueClass()>();
+
+        r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: java.lang.Class valueClass> = $r9;
+
+        r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: boolean reuseKeyValueInstances> = z0;
+
+        return;
+    }
+
+    public java.lang.Class getValueClass()
+    {
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator r0;
+        java.lang.Class $r1;
+
+        r0 := @this: org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator;
+
+        $r1 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: java.lang.Class valueClass>;
+
+        return $r1;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator r0;
+        org.apache.hadoop.io.SequenceFile$Reader $r1;
+
+        r0 := @this: org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator;
+
+        r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.apache.hadoop.io.Writable value> = null;
+
+        $r1 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.apache.hadoop.io.SequenceFile$Reader reader>;
+
+        staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>($r1, 1);
+
+        virtualinvoke r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: java.lang.Object endOfData()>();
+
+        return;
+    }
+
+    protected org.apache.hadoop.io.Writable computeNext()
+    {
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator r0;
+        boolean $z0, z1;
+        org.apache.hadoop.conf.Configuration $r2;
+        java.lang.Class $r3;
+        java.lang.Object $r4;
+        org.apache.hadoop.io.Writable $r5, $r6, $r7, $r14, $r15;
+        java.io.IOException $r8, $r9;
+        java.lang.IllegalStateException $r10;
+        java.lang.String $r11;
+        org.slf4j.Logger $r12;
+        org.apache.hadoop.io.SequenceFile$Reader $r13;
+
+        r0 := @this: org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator;
+
+        $z0 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: boolean reuseKeyValueInstances>;
+
+        if $z0 == 0 goto label01;
+
+        $r7 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.apache.hadoop.io.Writable value>;
+
+        if $r7 != null goto label02;
+
+     label01:
+        $r3 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: java.lang.Class valueClass>;
+
+        $r2 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.apache.hadoop.conf.Configuration conf>;
+
+        $r4 = staticinvoke <org.apache.hadoop.util.ReflectionUtils: java.lang.Object newInstance(java.lang.Class,org.apache.hadoop.conf.Configuration)>($r3, $r2);
+
+        $r5 = (org.apache.hadoop.io.Writable) $r4;
+
+        r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.apache.hadoop.io.Writable value> = $r5;
+
+     label02:
+        $r13 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.apache.hadoop.io.SequenceFile$Reader reader>;
+
+        $r14 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.apache.hadoop.io.Writable key>;
+
+        $r15 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.apache.hadoop.io.Writable value>;
+
+        z1 = virtualinvoke $r13.<org.apache.hadoop.io.SequenceFile$Reader: boolean next(org.apache.hadoop.io.Writable,org.apache.hadoop.io.Writable)>($r14, $r15);
+
+        if z1 != 0 goto label04;
+
+        virtualinvoke r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: void close()>();
+
+     label03:
+        return null;
+
+     label04:
+        $r6 = r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.apache.hadoop.io.Writable value>;
+
+     label05:
+        return $r6;
+
+     label06:
+        $r8 := @caughtexception;
+
+     label07:
+        virtualinvoke r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: void close()>();
+
+     label08:
+        goto label10;
+
+     label09:
+        $r9 := @caughtexception;
+
+        $r12 = <org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.slf4j.Logger log>;
+
+        $r11 = virtualinvoke $r9.<java.io.IOException: java.lang.String getMessage()>();
+
+        interfaceinvoke $r12.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>($r11, $r9);
+
+     label10:
+        $r10 = new java.lang.IllegalStateException;
+
+        specialinvoke $r10.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r8);
+
+        throw $r10;
+
+        catch java.io.IOException from label02 to label03 with label06;
+        catch java.io.IOException from label04 to label05 with label06;
+        catch java.io.IOException from label07 to label08 with label09;
+    }
+
+    protected volatile java.lang.Object computeNext()
+    {
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator r0;
+        org.apache.hadoop.io.Writable $r1;
+
+        r0 := @this: org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator;
+
+        $r1 = virtualinvoke r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.apache.hadoop.io.Writable computeNext()>();
+
+        return $r1;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/common/iterator/sequencefile/SequenceFileValueIterator");
+
+        <org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

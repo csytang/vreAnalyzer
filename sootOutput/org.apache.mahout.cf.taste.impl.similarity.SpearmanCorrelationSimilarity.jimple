@@ -1,0 +1,258 @@
+public final class org.apache.mahout.cf.taste.impl.similarity.SpearmanCorrelationSimilarity extends java.lang.Object implements org.apache.mahout.cf.taste.similarity.UserSimilarity
+{
+    private final org.apache.mahout.cf.taste.model.DataModel dataModel;
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.SpearmanCorrelationSimilarity r0;
+        org.apache.mahout.cf.taste.model.DataModel r1, $r3;
+        java.lang.Object $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.SpearmanCorrelationSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = staticinvoke <com.google.common.base.Preconditions: java.lang.Object checkNotNull(java.lang.Object)>(r1);
+
+        $r3 = (org.apache.mahout.cf.taste.model.DataModel) $r2;
+
+        r0.<org.apache.mahout.cf.taste.impl.similarity.SpearmanCorrelationSimilarity: org.apache.mahout.cf.taste.model.DataModel dataModel> = $r3;
+
+        return;
+    }
+
+    public double userSimilarity(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.similarity.SpearmanCorrelationSimilarity r0;
+        long l0, l1, $l10, $l11, l14, l15;
+        int i2, i3, $i7, $i8, $i9, i12, i13, i16, i17, i18;
+        byte b4, $b5, $b6, $b19;
+        double d0, $d1, $d2, $d3, $d4, $d5, d6;
+        org.apache.mahout.cf.taste.model.DataModel $r1, $r2;
+        float $f0, $f1, $f2, f3, f4;
+        boolean $z0, $z1;
+        org.apache.mahout.cf.taste.model.PreferenceArray r3, r4, r5, r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.SpearmanCorrelationSimilarity;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.similarity.SpearmanCorrelationSimilarity: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        r3 = interfaceinvoke $r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>(l0);
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.similarity.SpearmanCorrelationSimilarity: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        r4 = interfaceinvoke $r2.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>(l1);
+
+        i2 = interfaceinvoke r3.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        i3 = interfaceinvoke r4.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        if i2 <= 1 goto label01;
+
+        if i3 > 1 goto label02;
+
+     label01:
+        return #NaN;
+
+     label02:
+        r5 = interfaceinvoke r3.<org.apache.mahout.cf.taste.model.PreferenceArray: org.apache.mahout.cf.taste.model.PreferenceArray clone()>();
+
+        r6 = interfaceinvoke r4.<org.apache.mahout.cf.taste.model.PreferenceArray: org.apache.mahout.cf.taste.model.PreferenceArray clone()>();
+
+        interfaceinvoke r5.<org.apache.mahout.cf.taste.model.PreferenceArray: void sortByValue()>();
+
+        interfaceinvoke r6.<org.apache.mahout.cf.taste.model.PreferenceArray: void sortByValue()>();
+
+        f3 = 1.0F;
+
+        i12 = 0;
+
+     label03:
+        if i12 >= i2 goto label05;
+
+        $l11 = interfaceinvoke r5.<org.apache.mahout.cf.taste.model.PreferenceArray: long getItemID(int)>(i12);
+
+        $z1 = interfaceinvoke r6.<org.apache.mahout.cf.taste.model.PreferenceArray: boolean hasPrefWithItemID(long)>($l11);
+
+        if $z1 == 0 goto label04;
+
+        interfaceinvoke r5.<org.apache.mahout.cf.taste.model.PreferenceArray: void setValue(int,float)>(i12, f3);
+
+        f3 = f3 + 1.0F;
+
+     label04:
+        i12 = i12 + 1;
+
+        goto label03;
+
+     label05:
+        f4 = 1.0F;
+
+        i13 = 0;
+
+     label06:
+        if i13 >= i3 goto label08;
+
+        $l10 = interfaceinvoke r6.<org.apache.mahout.cf.taste.model.PreferenceArray: long getItemID(int)>(i13);
+
+        $z0 = interfaceinvoke r5.<org.apache.mahout.cf.taste.model.PreferenceArray: boolean hasPrefWithItemID(long)>($l10);
+
+        if $z0 == 0 goto label07;
+
+        interfaceinvoke r6.<org.apache.mahout.cf.taste.model.PreferenceArray: void setValue(int,float)>(i13, f4);
+
+        f4 = f4 + 1.0F;
+
+     label07:
+        i13 = i13 + 1;
+
+        goto label06;
+
+     label08:
+        interfaceinvoke r5.<org.apache.mahout.cf.taste.model.PreferenceArray: void sortByItem()>();
+
+        interfaceinvoke r6.<org.apache.mahout.cf.taste.model.PreferenceArray: void sortByItem()>();
+
+        l14 = interfaceinvoke r5.<org.apache.mahout.cf.taste.model.PreferenceArray: long getItemID(int)>(0);
+
+        l15 = interfaceinvoke r6.<org.apache.mahout.cf.taste.model.PreferenceArray: long getItemID(int)>(0);
+
+        i16 = 0;
+
+        i17 = 0;
+
+        d6 = 0.0;
+
+        i18 = 0;
+
+     label09:
+        $b5 = l14 cmp l15;
+
+        if $b5 >= 0 goto label10;
+
+        $b19 = -1;
+
+        goto label12;
+
+     label10:
+        $b6 = l14 cmp l15;
+
+        if $b6 <= 0 goto label11;
+
+        $b19 = 1;
+
+        goto label12;
+
+     label11:
+        $b19 = 0;
+
+     label12:
+        b4 = $b19;
+
+        if $b19 != 0 goto label13;
+
+        $f2 = interfaceinvoke r5.<org.apache.mahout.cf.taste.model.PreferenceArray: float getValue(int)>(i16);
+
+        $f1 = interfaceinvoke r6.<org.apache.mahout.cf.taste.model.PreferenceArray: float getValue(int)>(i17);
+
+        $f0 = $f2 - $f1;
+
+        d0 = (double) $f0;
+
+        $d5 = d0 * d0;
+
+        d6 = d6 + $d5;
+
+        i18 = i18 + 1;
+
+     label13:
+        if b4 > 0 goto label15;
+
+        i16 = i16 + 1;
+
+        if i16 < i2 goto label14;
+
+        goto label17;
+
+     label14:
+        l14 = interfaceinvoke r5.<org.apache.mahout.cf.taste.model.PreferenceArray: long getItemID(int)>(i16);
+
+     label15:
+        if b4 < 0 goto label09;
+
+        i17 = i17 + 1;
+
+        if i17 < i3 goto label16;
+
+        goto label17;
+
+     label16:
+        l15 = interfaceinvoke r6.<org.apache.mahout.cf.taste.model.PreferenceArray: long getItemID(int)>(i17);
+
+        goto label09;
+
+     label17:
+        if i18 > 1 goto label18;
+
+        return #NaN;
+
+     label18:
+        $d4 = 6.0 * d6;
+
+        $i9 = i18 * i18;
+
+        $i7 = $i9 - 1;
+
+        $i8 = i18 * $i7;
+
+        $d3 = (double) $i8;
+
+        $d1 = $d4 / $d3;
+
+        $d2 = 1.0 - $d1;
+
+        return $d2;
+    }
+
+    public void setPreferenceInferrer(org.apache.mahout.cf.taste.similarity.PreferenceInferrer)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.SpearmanCorrelationSimilarity r0;
+        org.apache.mahout.cf.taste.similarity.PreferenceInferrer r1;
+        java.lang.UnsupportedOperationException $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.SpearmanCorrelationSimilarity;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.similarity.PreferenceInferrer;
+
+        $r2 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r2.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r2;
+    }
+
+    public void refresh(java.util.Collection)
+    {
+        org.apache.mahout.cf.taste.impl.similarity.SpearmanCorrelationSimilarity r0;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+        java.util.Collection r2, r3;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.similarity.SpearmanCorrelationSimilarity;
+
+        r2 := @parameter0: java.util.Collection;
+
+        r3 = staticinvoke <org.apache.mahout.cf.taste.impl.common.RefreshHelper: java.util.Collection buildRefreshed(java.util.Collection)>(r2);
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.similarity.SpearmanCorrelationSimilarity: org.apache.mahout.cf.taste.model.DataModel dataModel>;
+
+        staticinvoke <org.apache.mahout.cf.taste.impl.common.RefreshHelper: void maybeRefresh(java.util.Collection,org.apache.mahout.cf.taste.common.Refreshable)>(r3, $r1);
+
+        return;
+    }
+}

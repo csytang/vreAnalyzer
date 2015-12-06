@@ -1,0 +1,88 @@
+public class org.apache.mahout.classifier.sgd.L1 extends java.lang.Object implements org.apache.mahout.classifier.sgd.PriorFunction
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.classifier.sgd.L1 r0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.L1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public double age(double, double, double)
+    {
+        org.apache.mahout.classifier.sgd.L1 r0;
+        double d0, d1, d2, d3, $d4, $d5, $d6, $d7;
+        byte $b0;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.L1;
+
+        d0 := @parameter0: double;
+
+        d1 := @parameter1: double;
+
+        d2 := @parameter2: double;
+
+        $d4 = staticinvoke <java.lang.Math: double signum(double)>(d0);
+
+        $d5 = $d4 * d2;
+
+        $d6 = $d5 * d1;
+
+        d3 = d0 - $d6;
+
+        $d7 = d3 * d0;
+
+        $b0 = $d7 cmpg 0.0;
+
+        if $b0 >= 0 goto label1;
+
+        return 0.0;
+
+     label1:
+        return d3;
+    }
+
+    public double logP(double)
+    {
+        org.apache.mahout.classifier.sgd.L1 r0;
+        double d0, $d1, $d2;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.L1;
+
+        d0 := @parameter0: double;
+
+        $d1 = staticinvoke <java.lang.Math: double abs(double)>(d0);
+
+        $d2 = neg $d1;
+
+        return $d2;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.sgd.L1 r0;
+        java.io.DataOutput r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.L1;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.sgd.L1 r0;
+        java.io.DataInput r1;
+
+        r0 := @this: org.apache.mahout.classifier.sgd.L1;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        return;
+    }
+}

@@ -1,0 +1,85 @@
+public final class org.apache.mahout.vectorizer.collocations.llr.GramKeyPartitioner extends org.apache.hadoop.mapreduce.Partitioner
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.vectorizer.collocations.llr.GramKeyPartitioner r0;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.GramKeyPartitioner;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Partitioner: void <init>()>();
+
+        return;
+    }
+
+    public int getPartition(org.apache.mahout.vectorizer.collocations.llr.GramKey, org.apache.mahout.vectorizer.collocations.llr.Gram, int)
+    {
+        org.apache.mahout.vectorizer.collocations.llr.GramKeyPartitioner r0;
+        org.apache.mahout.vectorizer.collocations.llr.GramKey r1;
+        org.apache.mahout.vectorizer.collocations.llr.Gram r2;
+        int i0, i1, $i2, $i3, $i5, i6, i7;
+        byte[] r3;
+        byte $b4;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.GramKeyPartitioner;
+
+        r1 := @parameter0: org.apache.mahout.vectorizer.collocations.llr.GramKey;
+
+        r2 := @parameter1: org.apache.mahout.vectorizer.collocations.llr.Gram;
+
+        i0 := @parameter2: int;
+
+        i6 = 1;
+
+        r3 = virtualinvoke r1.<org.apache.mahout.vectorizer.collocations.llr.GramKey: byte[] getBytes()>();
+
+        i1 = virtualinvoke r1.<org.apache.mahout.vectorizer.collocations.llr.GramKey: int getPrimaryLength()>();
+
+        i7 = 1;
+
+     label1:
+        if i7 >= i1 goto label2;
+
+        $i5 = 31 * i6;
+
+        $b4 = r3[i7];
+
+        i6 = $i5 + $b4;
+
+        i7 = i7 + 1;
+
+        goto label1;
+
+     label2:
+        $i2 = i6 & 2147483647;
+
+        $i3 = $i2 % i0;
+
+        return $i3;
+    }
+
+    public volatile int getPartition(java.lang.Object, java.lang.Object, int)
+    {
+        org.apache.mahout.vectorizer.collocations.llr.GramKeyPartitioner r0;
+        java.lang.Object r1, r2;
+        int i0, $i1;
+        org.apache.mahout.vectorizer.collocations.llr.Gram $r3;
+        org.apache.mahout.vectorizer.collocations.llr.GramKey $r4;
+
+        r0 := @this: org.apache.mahout.vectorizer.collocations.llr.GramKeyPartitioner;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        i0 := @parameter2: int;
+
+        $r4 = (org.apache.mahout.vectorizer.collocations.llr.GramKey) r1;
+
+        $r3 = (org.apache.mahout.vectorizer.collocations.llr.Gram) r2;
+
+        $i1 = virtualinvoke r0.<org.apache.mahout.vectorizer.collocations.llr.GramKeyPartitioner: int getPartition(org.apache.mahout.vectorizer.collocations.llr.GramKey,org.apache.mahout.vectorizer.collocations.llr.Gram,int)>($r4, $r3, i0);
+
+        return $i1;
+    }
+}

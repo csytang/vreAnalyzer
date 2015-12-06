@@ -1,0 +1,226 @@
+public abstract class org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper extends org.apache.hadoop.mapreduce.Mapper
+{
+    public static final java.lang.String TRANSPOSE_USER_ITEM;
+    public static final java.lang.String RATING_SHIFT;
+    private static final java.util.regex.Pattern DELIMITER;
+    private boolean booleanData;
+    private boolean transpose;
+    private final boolean itemKey;
+    private float ratingShift;
+
+    void <init>(boolean)
+    {
+        org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper r0;
+        boolean z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper;
+
+        z0 := @parameter0: boolean;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Mapper: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: boolean itemKey> = z0;
+
+        return;
+    }
+
+    protected void setup(org.apache.hadoop.mapreduce.Mapper$Context)
+    {
+        org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper r0;
+        org.apache.hadoop.mapreduce.Mapper$Context r1;
+        org.apache.hadoop.conf.Configuration r2;
+        boolean $z0, $z1;
+        java.lang.String $r3, $r4, $r5;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        r2 = virtualinvoke r1.<org.apache.hadoop.mapreduce.Mapper$Context: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $z0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>("booleanData", 0);
+
+        r0.<org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: boolean booleanData> = $z0;
+
+        $r3 = <org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: java.lang.String TRANSPOSE_USER_ITEM>;
+
+        $z1 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: boolean getBoolean(java.lang.String,boolean)>($r3, 0);
+
+        r0.<org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: boolean transpose> = $z1;
+
+        $r4 = <org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: java.lang.String RATING_SHIFT>;
+
+        $r5 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String,java.lang.String)>($r4, "0.0");
+
+        $f0 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>($r5);
+
+        r0.<org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: float ratingShift> = $f0;
+
+        return;
+    }
+
+    public void map(org.apache.hadoop.io.LongWritable, org.apache.hadoop.io.Text, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper r0;
+        org.apache.hadoop.io.LongWritable r1;
+        org.apache.hadoop.io.Text r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        java.lang.String[] r4;
+        java.util.regex.Pattern $r5;
+        java.lang.String $r6, $r7, $r8, $r10;
+        boolean $z0, $z1, $z2, $z3;
+        org.apache.mahout.math.VarLongWritable $r9, $r12, $r13;
+        int $i0;
+        org.apache.mahout.cf.taste.hadoop.EntityPrefWritable $r11;
+        float $f0, $f1, $f2;
+        long l1, l2, l3;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper;
+
+        r1 := @parameter0: org.apache.hadoop.io.LongWritable;
+
+        r2 := @parameter1: org.apache.hadoop.io.Text;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = <org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: java.util.regex.Pattern DELIMITER>;
+
+        $r6 = virtualinvoke r2.<org.apache.hadoop.io.Text: java.lang.String toString()>();
+
+        r4 = virtualinvoke $r5.<java.util.regex.Pattern: java.lang.String[] split(java.lang.CharSequence)>($r6);
+
+        $r7 = r4[0];
+
+        l1 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r7);
+
+        $r8 = r4[1];
+
+        l2 = staticinvoke <java.lang.Long: long parseLong(java.lang.String)>($r8);
+
+        $z0 = r0.<org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: boolean itemKey>;
+
+        $z1 = r0.<org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: boolean transpose>;
+
+        $z3 = $z0 ^ $z1;
+
+        if $z3 == 0 goto label1;
+
+        l3 = l1;
+
+        l1 = l2;
+
+        l2 = l3;
+
+     label1:
+        $z2 = r0.<org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: boolean booleanData>;
+
+        if $z2 == 0 goto label2;
+
+        $r13 = new org.apache.mahout.math.VarLongWritable;
+
+        specialinvoke $r13.<org.apache.mahout.math.VarLongWritable: void <init>(long)>(l1);
+
+        $r12 = new org.apache.mahout.math.VarLongWritable;
+
+        specialinvoke $r12.<org.apache.mahout.math.VarLongWritable: void <init>(long)>(l2);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r13, $r12);
+
+        goto label5;
+
+     label2:
+        $i0 = lengthof r4;
+
+        if $i0 <= 2 goto label3;
+
+        $r10 = r4[2];
+
+        $f1 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>($r10);
+
+        $f0 = r0.<org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: float ratingShift>;
+
+        $f2 = $f1 + $f0;
+
+        goto label4;
+
+     label3:
+        $f2 = 1.0F;
+
+     label4:
+        $r9 = new org.apache.mahout.math.VarLongWritable;
+
+        specialinvoke $r9.<org.apache.mahout.math.VarLongWritable: void <init>(long)>(l1);
+
+        $r11 = new org.apache.mahout.cf.taste.hadoop.EntityPrefWritable;
+
+        specialinvoke $r11.<org.apache.mahout.cf.taste.hadoop.EntityPrefWritable: void <init>(long,float)>(l2, $f2);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Mapper$Context: void write(java.lang.Object,java.lang.Object)>($r9, $r11);
+
+     label5:
+        return;
+    }
+
+    public volatile void map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper r0;
+        java.lang.Object r1, r2;
+        org.apache.hadoop.mapreduce.Mapper$Context r3;
+        org.apache.hadoop.io.Text $r4;
+        org.apache.hadoop.io.LongWritable $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Mapper$Context;
+
+        $r5 = (org.apache.hadoop.io.LongWritable) r1;
+
+        $r4 = (org.apache.hadoop.io.Text) r2;
+
+        virtualinvoke r0.<org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: void map(org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapreduce.Mapper$Context)>($r5, $r4, r3);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.StringBuilder $r0, $r1, $r2, $r4, $r5, $r6;
+        java.lang.String $r3, $r7;
+        java.util.regex.Pattern $r8;
+
+        $r0 = new java.lang.StringBuilder;
+
+        specialinvoke $r0.<java.lang.StringBuilder: void <init>()>();
+
+        $r1 = virtualinvoke $r0.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(class "org/apache/mahout/cf/taste/hadoop/ToEntityPrefsMapper");
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("transposeUserItem");
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: java.lang.String TRANSPOSE_USER_ITEM> = $r3;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(class "org/apache/mahout/cf/taste/hadoop/ToEntityPrefsMapper");
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("shiftRatings");
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        <org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: java.lang.String RATING_SHIFT> = $r7;
+
+        $r8 = staticinvoke <java.util.regex.Pattern: java.util.regex.Pattern compile(java.lang.String)>("[\t,]");
+
+        <org.apache.mahout.cf.taste.hadoop.ToEntityPrefsMapper: java.util.regex.Pattern DELIMITER> = $r8;
+
+        return;
+    }
+}

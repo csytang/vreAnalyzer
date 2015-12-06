@@ -1,0 +1,7 @@
+public interface  org.apache.mahout.common.distance.DistanceMeasure extends java.lang.Object implements org.apache.mahout.common.parameters.Parametered
+{
+
+    public abstract double distance(org.apache.mahout.math.Vector, org.apache.mahout.math.Vector);
+
+    public abstract double distance(double, org.apache.mahout.math.Vector, org.apache.mahout.math.Vector);
+}

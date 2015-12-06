@@ -1,0 +1,7 @@
+public interface  org.apache.mahout.cf.taste.recommender.UserBasedRecommender extends java.lang.Object implements org.apache.mahout.cf.taste.recommender.Recommender
+{
+
+    public abstract long[] mostSimilarUserIDs(long, int) throws org.apache.mahout.cf.taste.common.TasteException;
+
+    public abstract long[] mostSimilarUserIDs(long, int, org.apache.mahout.cf.taste.recommender.Rescorer) throws org.apache.mahout.cf.taste.common.TasteException;
+}

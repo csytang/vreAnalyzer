@@ -1,0 +1,450 @@
+public class org.apache.mahout.math.stats.GlobalOnlineAuc extends java.lang.Object implements org.apache.mahout.math.stats.OnlineAuc
+{
+    public static final int HISTORY;
+    private int windowSize;
+    private org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy policy;
+    private final java.util.Random random;
+    private org.apache.mahout.math.Matrix scores;
+    private org.apache.mahout.math.Vector averages;
+    private org.apache.mahout.math.Vector samples;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.stats.GlobalOnlineAuc r0;
+        org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy $r1;
+        org.apache.mahout.common.RandomWrapper $r2;
+        org.apache.mahout.math.DenseMatrix $r3;
+        org.apache.mahout.math.Matrix $r4;
+        org.apache.mahout.math.DenseVector $r6, $r9;
+        org.apache.mahout.math.Vector $r7;
+
+        r0 := @this: org.apache.mahout.math.stats.GlobalOnlineAuc;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: int windowSize> = 2147483647;
+
+        $r1 = <org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy: org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy FIFO>;
+
+        r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy policy> = $r1;
+
+        $r2 = staticinvoke <org.apache.mahout.common.RandomUtils: org.apache.mahout.common.RandomWrapper getRandom()>();
+
+        r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: java.util.Random random> = $r2;
+
+        $r3 = new org.apache.mahout.math.DenseMatrix;
+
+        specialinvoke $r3.<org.apache.mahout.math.DenseMatrix: void <init>(int,int)>(2, 10);
+
+        r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Matrix scores> = $r3;
+
+        $r4 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Matrix scores>;
+
+        interfaceinvoke $r4.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Matrix assign(double)>(#NaN);
+
+        $r6 = new org.apache.mahout.math.DenseVector;
+
+        specialinvoke $r6.<org.apache.mahout.math.DenseVector: void <init>(int)>(2);
+
+        r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Vector averages> = $r6;
+
+        $r7 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Vector averages>;
+
+        interfaceinvoke $r7.<org.apache.mahout.math.Vector: org.apache.mahout.math.Vector assign(double)>(0.5);
+
+        $r9 = new org.apache.mahout.math.DenseVector;
+
+        specialinvoke $r9.<org.apache.mahout.math.DenseVector: void <init>(int)>(2);
+
+        r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Vector samples> = $r9;
+
+        return;
+    }
+
+    public double addSample(int, java.lang.String, double)
+    {
+        org.apache.mahout.math.stats.GlobalOnlineAuc r0;
+        int i0;
+        java.lang.String r1;
+        double d0, $d1;
+
+        r0 := @this: org.apache.mahout.math.stats.GlobalOnlineAuc;
+
+        i0 := @parameter0: int;
+
+        r1 := @parameter1: java.lang.String;
+
+        d0 := @parameter2: double;
+
+        $d1 = virtualinvoke r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: double addSample(int,double)>(i0, d0);
+
+        return $d1;
+    }
+
+    public double addSample(int, double)
+    {
+        org.apache.mahout.math.stats.GlobalOnlineAuc r0;
+        int i0, i1, $i2, $i3, $i4, $i5, $i6, $i9, i10, i11, $i12;
+        double d0, d1, $d2, $d3, $d4, $d5, $d6, $d7, $d8, $d9, $d10, $d11, $d12, $d13, $d14, d15, d16;
+        java.util.Iterator r1;
+        org.apache.mahout.math.Vector$Element r2;
+        org.apache.mahout.math.Vector $r3, $r8, $r10, $r11, $r12, $r25, $r26, r27;
+        int[] $r4;
+        org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy $r5, $r19;
+        org.apache.mahout.math.Matrix $r6, $r7, $r14, $r16, $r24;
+        java.lang.Iterable $r9;
+        java.lang.Object $r13;
+        byte $b7, $b8, $b13;
+        boolean $z0, $z1;
+        java.util.Random $r15, $r17;
+        java.lang.StringBuilder $r18, $r20, $r23;
+        java.lang.String $r21;
+        java.lang.IllegalStateException $r22;
+
+        r0 := @this: org.apache.mahout.math.stats.GlobalOnlineAuc;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        $r3 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Vector samples>;
+
+        $d2 = interfaceinvoke $r3.<org.apache.mahout.math.Vector: double get(int)>(i0);
+
+        i1 = (int) $d2;
+
+        if i1 >= 10 goto label01;
+
+        $r24 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Matrix scores>;
+
+        interfaceinvoke $r24.<org.apache.mahout.math.Matrix: void set(int,int,double)>(i0, i1, d0);
+
+        goto label06;
+
+     label01:
+        $r4 = <org.apache.mahout.math.stats.GlobalOnlineAuc$1: int[] $SwitchMap$org$apache$mahout$math$stats$GlobalOnlineAuc$ReplacementPolicy>;
+
+        $r5 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy policy>;
+
+        $i3 = virtualinvoke $r5.<org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy: int ordinal()>();
+
+        $i2 = $r4[$i3];
+
+        tableswitch($i2)
+        {
+            case 1: goto label02;
+            case 2: goto label03;
+            case 3: goto label04;
+            default: goto label05;
+        };
+
+     label02:
+        $r6 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Matrix scores>;
+
+        $i4 = i1 % 10;
+
+        interfaceinvoke $r6.<org.apache.mahout.math.Matrix: void set(int,int,double)>(i0, $i4, d0);
+
+        goto label06;
+
+     label03:
+        $r17 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: java.util.Random random>;
+
+        $i9 = i1 + 1;
+
+        i10 = virtualinvoke $r17.<java.util.Random: int nextInt(int)>($i9);
+
+        if i10 >= 10 goto label06;
+
+        $r16 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Matrix scores>;
+
+        interfaceinvoke $r16.<org.apache.mahout.math.Matrix: void set(int,int,double)>(i0, i10, d0);
+
+        goto label06;
+
+     label04:
+        $r15 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: java.util.Random random>;
+
+        i11 = virtualinvoke $r15.<java.util.Random: int nextInt(int)>(10);
+
+        $r14 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Matrix scores>;
+
+        interfaceinvoke $r14.<org.apache.mahout.math.Matrix: void set(int,int,double)>(i0, i11, d0);
+
+        goto label06;
+
+     label05:
+        $r22 = new java.lang.IllegalStateException;
+
+        $r23 = new java.lang.StringBuilder;
+
+        specialinvoke $r23.<java.lang.StringBuilder: void <init>()>();
+
+        $r18 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unknown policy: ");
+
+        $r19 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy policy>;
+
+        $r20 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r19);
+
+        $r21 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r22.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r21);
+
+        throw $r22;
+
+     label06:
+        $r25 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Vector samples>;
+
+        $i12 = i1 + 1;
+
+        $d13 = (double) $i12;
+
+        interfaceinvoke $r25.<org.apache.mahout.math.Vector: void set(int,double)>(i0, $d13);
+
+        $r26 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Vector samples>;
+
+        $d14 = interfaceinvoke $r26.<org.apache.mahout.math.Vector: double minValue()>();
+
+        $b13 = $d14 cmpl 1.0;
+
+        if $b13 < 0 goto label11;
+
+        $r7 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Matrix scores>;
+
+        $i5 = 1 - i0;
+
+        r27 = interfaceinvoke $r7.<org.apache.mahout.math.Matrix: org.apache.mahout.math.Vector viewRow(int)>($i5);
+
+        d15 = 0.0;
+
+        d16 = 0.0;
+
+        $r9 = interfaceinvoke r27.<org.apache.mahout.math.Vector: java.lang.Iterable all()>();
+
+        r1 = interfaceinvoke $r9.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label07:
+        $z1 = interfaceinvoke r1.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label10;
+
+        $r13 = interfaceinvoke r1.<java.util.Iterator: java.lang.Object next()>();
+
+        r2 = (org.apache.mahout.math.Vector$Element) $r13;
+
+        d1 = interfaceinvoke r2.<org.apache.mahout.math.Vector$Element: double get()>();
+
+        $z0 = staticinvoke <java.lang.Double: boolean isNaN(double)>(d1);
+
+        if $z0 == 0 goto label08;
+
+        goto label07;
+
+     label08:
+        d16 = d16 + 1.0;
+
+        $b8 = d0 cmpl d1;
+
+        if $b8 <= 0 goto label09;
+
+        d15 = d15 + 1.0;
+
+        goto label07;
+
+     label09:
+        $b7 = d0 cmpl d1;
+
+        if $b7 != 0 goto label07;
+
+        d15 = d15 + 0.5;
+
+        goto label07;
+
+     label10:
+        $r11 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Vector averages>;
+
+        $r8 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Vector averages>;
+
+        $d5 = interfaceinvoke $r8.<org.apache.mahout.math.Vector: double get(int)>(i0);
+
+        $d4 = d15 / d16;
+
+        $r10 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Vector averages>;
+
+        $d7 = interfaceinvoke $r10.<org.apache.mahout.math.Vector: double get(int)>(i0);
+
+        $d6 = $d4 - $d7;
+
+        $i6 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: int windowSize>;
+
+        $d10 = (double) $i6;
+
+        $r12 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Vector samples>;
+
+        $d11 = interfaceinvoke $r12.<org.apache.mahout.math.Vector: double get(int)>(i0);
+
+        $d8 = staticinvoke <java.lang.Math: double min(double,double)>($d10, $d11);
+
+        $d9 = $d6 / $d8;
+
+        $d12 = $d5 + $d9;
+
+        interfaceinvoke $r11.<org.apache.mahout.math.Vector: void set(int,double)>(i0, $d12);
+
+     label11:
+        $d3 = virtualinvoke r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: double auc()>();
+
+        return $d3;
+    }
+
+    public double auc()
+    {
+        org.apache.mahout.math.stats.GlobalOnlineAuc r0;
+        org.apache.mahout.math.Vector $r1, $r2;
+        double $d0, $d1, $d2, $d3, $d4;
+
+        r0 := @this: org.apache.mahout.math.stats.GlobalOnlineAuc;
+
+        $r1 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Vector averages>;
+
+        $d0 = interfaceinvoke $r1.<org.apache.mahout.math.Vector: double get(int)>(0);
+
+        $d1 = 1.0 - $d0;
+
+        $r2 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Vector averages>;
+
+        $d2 = interfaceinvoke $r2.<org.apache.mahout.math.Vector: double get(int)>(1);
+
+        $d3 = $d1 + $d2;
+
+        $d4 = $d3 / 2.0;
+
+        return $d4;
+    }
+
+    public double value()
+    {
+        org.apache.mahout.math.stats.GlobalOnlineAuc r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.stats.GlobalOnlineAuc;
+
+        $d0 = virtualinvoke r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: double auc()>();
+
+        return $d0;
+    }
+
+    public void setPolicy(org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy)
+    {
+        org.apache.mahout.math.stats.GlobalOnlineAuc r0;
+        org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy r1;
+
+        r0 := @this: org.apache.mahout.math.stats.GlobalOnlineAuc;
+
+        r1 := @parameter0: org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy;
+
+        r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy policy> = r1;
+
+        return;
+    }
+
+    public void setWindowSize(int)
+    {
+        org.apache.mahout.math.stats.GlobalOnlineAuc r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.math.stats.GlobalOnlineAuc;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: int windowSize> = i0;
+
+        return;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.math.stats.GlobalOnlineAuc r0;
+        java.io.DataOutput r1;
+        int $i0, $i1;
+        org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy $r2;
+        org.apache.mahout.math.Matrix $r3;
+        org.apache.mahout.math.Vector $r4, $r5;
+
+        r0 := @this: org.apache.mahout.math.stats.GlobalOnlineAuc;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $i0 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: int windowSize>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i0);
+
+        $r2 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy policy>;
+
+        $i1 = virtualinvoke $r2.<org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy: int ordinal()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i1);
+
+        $r3 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Matrix scores>;
+
+        staticinvoke <org.apache.mahout.math.MatrixWritable: void writeMatrix(java.io.DataOutput,org.apache.mahout.math.Matrix)>(r1, $r3);
+
+        $r4 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Vector averages>;
+
+        staticinvoke <org.apache.mahout.math.VectorWritable: void writeVector(java.io.DataOutput,org.apache.mahout.math.Vector)>(r1, $r4);
+
+        $r5 = r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Vector samples>;
+
+        staticinvoke <org.apache.mahout.math.VectorWritable: void writeVector(java.io.DataOutput,org.apache.mahout.math.Vector)>(r1, $r5);
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.math.stats.GlobalOnlineAuc r0;
+        java.io.DataInput r1;
+        int $i0, $i1;
+        org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy[] $r2;
+        org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy $r3;
+        org.apache.mahout.math.Matrix $r4;
+        org.apache.mahout.math.Vector $r5, $r6;
+
+        r0 := @this: org.apache.mahout.math.stats.GlobalOnlineAuc;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $i0 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: int windowSize> = $i0;
+
+        $r2 = staticinvoke <org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy: org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy[] values()>();
+
+        $i1 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        $r3 = $r2[$i1];
+
+        r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.stats.GlobalOnlineAuc$ReplacementPolicy policy> = $r3;
+
+        $r4 = staticinvoke <org.apache.mahout.math.MatrixWritable: org.apache.mahout.math.Matrix readMatrix(java.io.DataInput)>(r1);
+
+        r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Matrix scores> = $r4;
+
+        $r5 = staticinvoke <org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector readVector(java.io.DataInput)>(r1);
+
+        r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Vector averages> = $r5;
+
+        $r6 = staticinvoke <org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector readVector(java.io.DataInput)>(r1);
+
+        r0.<org.apache.mahout.math.stats.GlobalOnlineAuc: org.apache.mahout.math.Vector samples> = $r6;
+
+        return;
+    }
+
+    public static void <clinit>()
+    {
+        <org.apache.mahout.math.stats.GlobalOnlineAuc: int HISTORY> = 10;
+
+        return;
+    }
+}

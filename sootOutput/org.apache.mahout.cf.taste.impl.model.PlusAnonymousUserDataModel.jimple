@@ -1,0 +1,938 @@
+public class org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel extends java.lang.Object implements org.apache.mahout.cf.taste.model.DataModel
+{
+    public static final long TEMP_USER_ID;
+    private final org.apache.mahout.cf.taste.model.DataModel delegate;
+    private org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs;
+    private final org.apache.mahout.cf.taste.impl.common.FastIDSet prefItemIDs;
+    private static final org.slf4j.Logger log;
+
+    public void <init>(org.apache.mahout.cf.taste.model.DataModel)
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        org.apache.mahout.cf.taste.model.DataModel r1;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.DataModel;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate> = r1;
+
+        $r2 = new org.apache.mahout.cf.taste.impl.common.FastIDSet;
+
+        specialinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastIDSet: void <init>()>();
+
+        r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.impl.common.FastIDSet prefItemIDs> = $r2;
+
+        return;
+    }
+
+    protected org.apache.mahout.cf.taste.model.DataModel getDelegate()
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        return $r1;
+    }
+
+    public void setTempPrefs(org.apache.mahout.cf.taste.model.PreferenceArray)
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        org.apache.mahout.cf.taste.model.PreferenceArray r1;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r2, $r3;
+        long $l0;
+        int $i1, i2, $i3;
+        boolean $z1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        r1 := @parameter0: org.apache.mahout.cf.taste.model.PreferenceArray;
+
+        if r1 == null goto label1;
+
+        $i1 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        if $i1 <= 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        staticinvoke <com.google.common.base.Preconditions: void checkArgument(boolean,java.lang.Object)>($z1, "prefs is null or empty");
+
+        r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs> = r1;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.impl.common.FastIDSet prefItemIDs>;
+
+        virtualinvoke $r3.<org.apache.mahout.cf.taste.impl.common.FastIDSet: void clear()>();
+
+        i2 = 0;
+
+     label3:
+        $i3 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        if i2 >= $i3 goto label4;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.impl.common.FastIDSet prefItemIDs>;
+
+        $l0 = interfaceinvoke r1.<org.apache.mahout.cf.taste.model.PreferenceArray: long getItemID(int)>(i2);
+
+        virtualinvoke $r2.<org.apache.mahout.cf.taste.impl.common.FastIDSet: boolean add(long)>($l0);
+
+        i2 = i2 + 1;
+
+        goto label3;
+
+     label4:
+        return;
+    }
+
+    public void clearTempPrefs()
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs> = null;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.impl.common.FastIDSet prefItemIDs>;
+
+        virtualinvoke $r1.<org.apache.mahout.cf.taste.impl.common.FastIDSet: void clear()>();
+
+        return;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs() throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        org.apache.mahout.cf.taste.model.PreferenceArray $r1;
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserLongPrimitiveIterator $r2;
+        org.apache.mahout.cf.taste.model.DataModel $r3, $r5;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator $r4, $r6;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        if $r1 != null goto label1;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $r6 = interfaceinvoke $r5.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs()>();
+
+        return $r6;
+
+     label1:
+        $r2 = new org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserLongPrimitiveIterator;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $r4 = interfaceinvoke $r3.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getUserIDs()>();
+
+        specialinvoke $r2.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserLongPrimitiveIterator: void <init>(org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator,long)>($r4, -9223372036854775808L);
+
+        return $r2;
+    }
+
+    public org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        long l0;
+        byte $b1;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+        org.apache.mahout.cf.taste.model.PreferenceArray $r2, $r3, $r4;
+        org.apache.mahout.cf.taste.common.NoSuchUserException $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        l0 := @parameter0: long;
+
+        $b1 = l0 cmp -9223372036854775808L;
+
+        if $b1 != 0 goto label2;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        if $r3 != null goto label1;
+
+        $r5 = new org.apache.mahout.cf.taste.common.NoSuchUserException;
+
+        specialinvoke $r5.<org.apache.mahout.cf.taste.common.NoSuchUserException: void <init>(long)>(-9223372036854775808L);
+
+        throw $r5;
+
+     label1:
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        return $r4;
+
+     label2:
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $r2 = interfaceinvoke $r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesFromUser(long)>(l0);
+
+        return $r2;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.FastIDSet getItemIDsFromUser(long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        long l0;
+        byte $b1;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r2, $r4;
+        org.apache.mahout.cf.taste.model.PreferenceArray $r3;
+        org.apache.mahout.cf.taste.common.NoSuchUserException $r5;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        l0 := @parameter0: long;
+
+        $b1 = l0 cmp -9223372036854775808L;
+
+        if $b1 != 0 goto label2;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        if $r3 != null goto label1;
+
+        $r5 = new org.apache.mahout.cf.taste.common.NoSuchUserException;
+
+        specialinvoke $r5.<org.apache.mahout.cf.taste.common.NoSuchUserException: void <init>(long)>(-9223372036854775808L);
+
+        throw $r5;
+
+     label1:
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.impl.common.FastIDSet prefItemIDs>;
+
+        return $r4;
+
+     label2:
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $r2 = interfaceinvoke $r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.FastIDSet getItemIDsFromUser(long)>(l0);
+
+        return $r2;
+    }
+
+    public org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getItemIDs() throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+        org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $r2 = interfaceinvoke $r1.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator getItemIDs()>();
+
+        return $r2;
+    }
+
+    public org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesForItem(long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        long l0, $l1, $l3;
+        org.apache.mahout.cf.taste.model.PreferenceArray $r1, $r4, $r5, $r6, $r8, $r10, r14, $r16;
+        org.apache.mahout.cf.taste.model.DataModel $r2, $r7;
+        org.apache.mahout.cf.taste.common.NoSuchItemException $r3, $r9;
+        byte $b2;
+        float $f0;
+        boolean $z0;
+        org.slf4j.Logger $r11, $r12;
+        java.lang.Long $r13;
+        int i4, $i5;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        l0 := @parameter0: long;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        if $r1 != null goto label1;
+
+        $r7 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $r10 = interfaceinvoke $r7.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesForItem(long)>(l0);
+
+        return $r10;
+
+     label1:
+        r14 = null;
+
+     label2:
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        r14 = interfaceinvoke $r2.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesForItem(long)>(l0);
+
+     label3:
+        goto label5;
+
+     label4:
+        $r9 := @caughtexception;
+
+        $r11 = <org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.slf4j.Logger log>;
+
+        $z0 = interfaceinvoke $r11.<org.slf4j.Logger: boolean isDebugEnabled()>();
+
+        if $z0 == 0 goto label5;
+
+        $r12 = <org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.slf4j.Logger log>;
+
+        $r13 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>(l0);
+
+        interfaceinvoke $r12.<org.slf4j.Logger: void debug(java.lang.String,java.lang.Object)>("Item {} unknown", $r13);
+
+     label5:
+        i4 = 0;
+
+     label6:
+        $r16 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        $i5 = interfaceinvoke $r16.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        if i4 >= $i5 goto label8;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        $l1 = interfaceinvoke $r4.<org.apache.mahout.cf.taste.model.PreferenceArray: long getItemID(int)>(i4);
+
+        $b2 = $l1 cmp l0;
+
+        if $b2 != 0 goto label7;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        $l3 = interfaceinvoke $r5.<org.apache.mahout.cf.taste.model.PreferenceArray: long getUserID(int)>(i4);
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        $f0 = interfaceinvoke $r6.<org.apache.mahout.cf.taste.model.PreferenceArray: float getValue(int)>(i4);
+
+        $r8 = staticinvoke <org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray cloneAndMergeInto(org.apache.mahout.cf.taste.model.PreferenceArray,long,long,float)>(r14, l0, $l3, $f0);
+
+        return $r8;
+
+     label7:
+        i4 = i4 + 1;
+
+        goto label6;
+
+     label8:
+        if r14 != null goto label9;
+
+        $r3 = new org.apache.mahout.cf.taste.common.NoSuchItemException;
+
+        specialinvoke $r3.<org.apache.mahout.cf.taste.common.NoSuchItemException: void <init>(long)>(l0);
+
+        throw $r3;
+
+     label9:
+        return r14;
+
+        catch org.apache.mahout.cf.taste.common.NoSuchItemException from label2 to label3 with label4;
+    }
+
+    private static org.apache.mahout.cf.taste.model.PreferenceArray cloneAndMergeInto(org.apache.mahout.cf.taste.model.PreferenceArray, long, long, float)
+    {
+        org.apache.mahout.cf.taste.model.PreferenceArray r0;
+        long l0, l1, $l5, $l7, $l8;
+        float f0, $f1, $f2;
+        int i2, i3, $i4, $i6, $i10, i11, i12, i13;
+        org.apache.mahout.cf.taste.impl.model.GenericItemPreferenceArray $r2;
+        byte $b9;
+
+        r0 := @parameter0: org.apache.mahout.cf.taste.model.PreferenceArray;
+
+        l0 := @parameter1: long;
+
+        l1 := @parameter2: long;
+
+        f0 := @parameter3: float;
+
+        if r0 != null goto label1;
+
+        $i10 = 0;
+
+        goto label2;
+
+     label1:
+        $i10 = interfaceinvoke r0.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+     label2:
+        i2 = $i10;
+
+        i3 = $i10 + 1;
+
+        $r2 = new org.apache.mahout.cf.taste.impl.model.GenericItemPreferenceArray;
+
+        specialinvoke $r2.<org.apache.mahout.cf.taste.impl.model.GenericItemPreferenceArray: void <init>(int)>(i3);
+
+        interfaceinvoke $r2.<org.apache.mahout.cf.taste.model.PreferenceArray: void setItemID(int,long)>(0, l0);
+
+        i11 = 0;
+
+     label3:
+        if i11 >= i2 goto label4;
+
+        $l8 = interfaceinvoke r0.<org.apache.mahout.cf.taste.model.PreferenceArray: long getUserID(int)>(i11);
+
+        $b9 = l1 cmp $l8;
+
+        if $b9 <= 0 goto label4;
+
+        i11 = i11 + 1;
+
+        goto label3;
+
+     label4:
+        i12 = 0;
+
+     label5:
+        if i12 >= i11 goto label6;
+
+        $l7 = interfaceinvoke r0.<org.apache.mahout.cf.taste.model.PreferenceArray: long getUserID(int)>(i12);
+
+        interfaceinvoke $r2.<org.apache.mahout.cf.taste.model.PreferenceArray: void setUserID(int,long)>(i12, $l7);
+
+        $f2 = interfaceinvoke r0.<org.apache.mahout.cf.taste.model.PreferenceArray: float getValue(int)>(i12);
+
+        interfaceinvoke $r2.<org.apache.mahout.cf.taste.model.PreferenceArray: void setValue(int,float)>(i12, $f2);
+
+        i12 = i12 + 1;
+
+        goto label5;
+
+     label6:
+        interfaceinvoke $r2.<org.apache.mahout.cf.taste.model.PreferenceArray: void setUserID(int,long)>(i11, l1);
+
+        interfaceinvoke $r2.<org.apache.mahout.cf.taste.model.PreferenceArray: void setValue(int,float)>(i11, f0);
+
+        i13 = i11 + 1;
+
+     label7:
+        if i13 >= i3 goto label8;
+
+        $i4 = i13 - 1;
+
+        $l5 = interfaceinvoke r0.<org.apache.mahout.cf.taste.model.PreferenceArray: long getUserID(int)>($i4);
+
+        interfaceinvoke $r2.<org.apache.mahout.cf.taste.model.PreferenceArray: void setUserID(int,long)>(i13, $l5);
+
+        $i6 = i13 - 1;
+
+        $f1 = interfaceinvoke r0.<org.apache.mahout.cf.taste.model.PreferenceArray: float getValue(int)>($i6);
+
+        interfaceinvoke $r2.<org.apache.mahout.cf.taste.model.PreferenceArray: void setValue(int,float)>(i13, $f1);
+
+        i13 = i13 + 1;
+
+        goto label7;
+
+     label8:
+        return $r2;
+    }
+
+    public java.lang.Float getPreferenceValue(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        long l0, l1, $l4;
+        byte $b2, $b5;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+        java.lang.Float $r2, $r7;
+        org.apache.mahout.cf.taste.model.PreferenceArray $r3, $r4, $r5, $r6;
+        int $i3, i6;
+        float $f0;
+        org.apache.mahout.cf.taste.common.NoSuchUserException $r8;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $b2 = l0 cmp -9223372036854775808L;
+
+        if $b2 != 0 goto label5;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        if $r3 != null goto label1;
+
+        $r8 = new org.apache.mahout.cf.taste.common.NoSuchUserException;
+
+        specialinvoke $r8.<org.apache.mahout.cf.taste.common.NoSuchUserException: void <init>(long)>(-9223372036854775808L);
+
+        throw $r8;
+
+     label1:
+        i6 = 0;
+
+     label2:
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        $i3 = interfaceinvoke $r4.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        if i6 >= $i3 goto label4;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        $l4 = interfaceinvoke $r5.<org.apache.mahout.cf.taste.model.PreferenceArray: long getItemID(int)>(i6);
+
+        $b5 = $l4 cmp l1;
+
+        if $b5 != 0 goto label3;
+
+        $r6 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        $f0 = interfaceinvoke $r6.<org.apache.mahout.cf.taste.model.PreferenceArray: float getValue(int)>(i6);
+
+        $r7 = staticinvoke <java.lang.Float: java.lang.Float valueOf(float)>($f0);
+
+        return $r7;
+
+     label3:
+        i6 = i6 + 1;
+
+        goto label2;
+
+     label4:
+        return null;
+
+     label5:
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $r2 = interfaceinvoke $r1.<org.apache.mahout.cf.taste.model.DataModel: java.lang.Float getPreferenceValue(long,long)>(l0, l1);
+
+        return $r2;
+    }
+
+    public java.lang.Long getPreferenceTime(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        long l0, l1;
+        byte $b2;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+        java.lang.Long $r2;
+        org.apache.mahout.cf.taste.model.PreferenceArray $r3;
+        org.apache.mahout.cf.taste.common.NoSuchUserException $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $b2 = l0 cmp -9223372036854775808L;
+
+        if $b2 != 0 goto label2;
+
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        if $r3 != null goto label1;
+
+        $r4 = new org.apache.mahout.cf.taste.common.NoSuchUserException;
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.common.NoSuchUserException: void <init>(long)>(-9223372036854775808L);
+
+        throw $r4;
+
+     label1:
+        return null;
+
+     label2:
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $r2 = interfaceinvoke $r1.<org.apache.mahout.cf.taste.model.DataModel: java.lang.Long getPreferenceTime(long,long)>(l0, l1);
+
+        return $r2;
+    }
+
+    public int getNumItems() throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $i0 = interfaceinvoke $r1.<org.apache.mahout.cf.taste.model.DataModel: int getNumItems()>();
+
+        return $i0;
+    }
+
+    public int getNumUsers() throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+        int $i0, $i1;
+        org.apache.mahout.cf.taste.model.PreferenceArray $r2;
+        byte $b2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $i0 = interfaceinvoke $r1.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsers()>();
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        if $r2 != null goto label1;
+
+        $b2 = 0;
+
+        goto label2;
+
+     label1:
+        $b2 = 1;
+
+     label2:
+        $i1 = $i0 + $b2;
+
+        return $i1;
+    }
+
+    public int getNumUsersWithPreferenceFor(long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        long l0, $l4;
+        org.apache.mahout.cf.taste.model.PreferenceArray $r1, $r2, $r4;
+        int $i1, $i2, $i3, $i6, i7;
+        org.apache.mahout.cf.taste.model.DataModel $r3, $r5;
+        byte $b5, $b8;
+        boolean z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        l0 := @parameter0: long;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        if $r1 != null goto label1;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $i6 = interfaceinvoke $r5.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long)>(l0);
+
+        return $i6;
+
+     label1:
+        z0 = 0;
+
+        i7 = 0;
+
+     label2:
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        $i1 = interfaceinvoke $r2.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        if i7 >= $i1 goto label4;
+
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        $l4 = interfaceinvoke $r4.<org.apache.mahout.cf.taste.model.PreferenceArray: long getItemID(int)>(i7);
+
+        $b5 = $l4 cmp l0;
+
+        if $b5 != 0 goto label3;
+
+        z0 = 1;
+
+        goto label4;
+
+     label3:
+        i7 = i7 + 1;
+
+        goto label2;
+
+     label4:
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $i2 = interfaceinvoke $r3.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long)>(l0);
+
+        if z0 == 0 goto label5;
+
+        $b8 = 1;
+
+        goto label6;
+
+     label5:
+        $b8 = 0;
+
+     label6:
+        $i3 = $i2 + $b8;
+
+        return $i3;
+    }
+
+    public int getNumUsersWithPreferenceFor(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        long l0, l1, l2;
+        org.apache.mahout.cf.taste.model.PreferenceArray $r1, $r2, $r4;
+        int $i3, $i6, i7, $i8, $i10;
+        org.apache.mahout.cf.taste.model.DataModel $r3, $r5;
+        byte $b4, $b5, $b9;
+        boolean z0, z1;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        if $r1 != null goto label1;
+
+        $r5 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $i6 = interfaceinvoke $r5.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long,long)>(l0, l1);
+
+        return $i6;
+
+     label1:
+        z0 = 0;
+
+        z1 = 0;
+
+        i7 = 0;
+
+     label2:
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        $i3 = interfaceinvoke $r2.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        if i7 >= $i3 goto label6;
+
+        if z0 == 0 goto label3;
+
+        if z1 != 0 goto label6;
+
+     label3:
+        $r4 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        l2 = interfaceinvoke $r4.<org.apache.mahout.cf.taste.model.PreferenceArray: long getItemID(int)>(i7);
+
+        $b4 = l2 cmp l0;
+
+        if $b4 != 0 goto label4;
+
+        z0 = 1;
+
+     label4:
+        $b5 = l2 cmp l1;
+
+        if $b5 != 0 goto label5;
+
+        z1 = 1;
+
+     label5:
+        i7 = i7 + 1;
+
+        goto label2;
+
+     label6:
+        $r3 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $i8 = interfaceinvoke $r3.<org.apache.mahout.cf.taste.model.DataModel: int getNumUsersWithPreferenceFor(long,long)>(l0, l1);
+
+        if z0 == 0 goto label7;
+
+        if z1 == 0 goto label7;
+
+        $b9 = 1;
+
+        goto label8;
+
+     label7:
+        $b9 = 0;
+
+     label8:
+        $i10 = $i8 + $b9;
+
+        return $i10;
+    }
+
+    public void setPreference(long, long, float) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        long l0, l1;
+        float f0;
+        byte $b2;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+        org.apache.mahout.cf.taste.model.PreferenceArray $r2;
+        java.lang.UnsupportedOperationException $r3;
+        org.apache.mahout.cf.taste.common.NoSuchUserException $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        f0 := @parameter2: float;
+
+        $b2 = l0 cmp -9223372036854775808L;
+
+        if $b2 != 0 goto label2;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        if $r2 != null goto label1;
+
+        $r4 = new org.apache.mahout.cf.taste.common.NoSuchUserException;
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.common.NoSuchUserException: void <init>(long)>(-9223372036854775808L);
+
+        throw $r4;
+
+     label1:
+        $r3 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r3.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r3;
+
+     label2:
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        interfaceinvoke $r1.<org.apache.mahout.cf.taste.model.DataModel: void setPreference(long,long,float)>(l0, l1, f0);
+
+        return;
+    }
+
+    public void removePreference(long, long) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        long l0, l1;
+        byte $b2;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+        org.apache.mahout.cf.taste.model.PreferenceArray $r2;
+        java.lang.UnsupportedOperationException $r3;
+        org.apache.mahout.cf.taste.common.NoSuchUserException $r4;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        l0 := @parameter0: long;
+
+        l1 := @parameter1: long;
+
+        $b2 = l0 cmp -9223372036854775808L;
+
+        if $b2 != 0 goto label2;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.PreferenceArray tempPrefs>;
+
+        if $r2 != null goto label1;
+
+        $r4 = new org.apache.mahout.cf.taste.common.NoSuchUserException;
+
+        specialinvoke $r4.<org.apache.mahout.cf.taste.common.NoSuchUserException: void <init>(long)>(-9223372036854775808L);
+
+        throw $r4;
+
+     label1:
+        $r3 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r3.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r3;
+
+     label2:
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        interfaceinvoke $r1.<org.apache.mahout.cf.taste.model.DataModel: void removePreference(long,long)>(l0, l1);
+
+        return;
+    }
+
+    public void refresh(java.util.Collection)
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        java.util.Collection r1;
+        org.apache.mahout.cf.taste.model.DataModel $r2;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        r1 := @parameter0: java.util.Collection;
+
+        $r2 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        interfaceinvoke $r2.<org.apache.mahout.cf.taste.model.DataModel: void refresh(java.util.Collection)>(r1);
+
+        return;
+    }
+
+    public boolean hasPreferenceValues()
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+        boolean $z0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $z0 = interfaceinvoke $r1.<org.apache.mahout.cf.taste.model.DataModel: boolean hasPreferenceValues()>();
+
+        return $z0;
+    }
+
+    public float getMaxPreference()
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $f0 = interfaceinvoke $r1.<org.apache.mahout.cf.taste.model.DataModel: float getMaxPreference()>();
+
+        return $f0;
+    }
+
+    public float getMinPreference()
+    {
+        org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel r0;
+        org.apache.mahout.cf.taste.model.DataModel $r1;
+        float $f0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel;
+
+        $r1 = r0.<org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.apache.mahout.cf.taste.model.DataModel delegate>;
+
+        $f0 = interfaceinvoke $r1.<org.apache.mahout.cf.taste.model.DataModel: float getMinPreference()>();
+
+        return $f0;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        <org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: long TEMP_USER_ID> = -9223372036854775808L;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/cf/taste/impl/model/PlusAnonymousUserDataModel");
+
+        <org.apache.mahout.cf.taste.impl.model.PlusAnonymousUserDataModel: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

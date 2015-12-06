@@ -1,0 +1,90 @@
+final class org.apache.mahout.classifier.sequencelearning.hmm.LossyHmmSerializer extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.LossyHmmSerializer r0;
+
+        r0 := @this: org.apache.mahout.classifier.sequencelearning.hmm.LossyHmmSerializer;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    static void serialize(org.apache.mahout.classifier.sequencelearning.hmm.HmmModel, java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel r0;
+        java.io.DataOutput r1;
+        org.apache.mahout.math.MatrixWritable $r4;
+        org.apache.mahout.math.Matrix $r5, $r6;
+        org.apache.mahout.math.VectorWritable $r7;
+        org.apache.mahout.math.Vector $r8;
+
+        r0 := @parameter0: org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        r1 := @parameter1: java.io.DataOutput;
+
+        $r4 = new org.apache.mahout.math.MatrixWritable;
+
+        $r5 = virtualinvoke r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Matrix getEmissionMatrix()>();
+
+        specialinvoke $r4.<org.apache.mahout.math.MatrixWritable: void <init>(org.apache.mahout.math.Matrix)>($r5);
+
+        virtualinvoke $r4.<org.apache.mahout.math.MatrixWritable: void write(java.io.DataOutput)>(r1);
+
+        $r6 = virtualinvoke r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Matrix getTransitionMatrix()>();
+
+        virtualinvoke $r4.<org.apache.mahout.math.MatrixWritable: void set(org.apache.mahout.math.Matrix)>($r6);
+
+        virtualinvoke $r4.<org.apache.mahout.math.MatrixWritable: void write(java.io.DataOutput)>(r1);
+
+        $r7 = new org.apache.mahout.math.VectorWritable;
+
+        $r8 = virtualinvoke r0.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: org.apache.mahout.math.Vector getInitialProbabilities()>();
+
+        specialinvoke $r7.<org.apache.mahout.math.VectorWritable: void <init>(org.apache.mahout.math.Vector)>($r8);
+
+        virtualinvoke $r7.<org.apache.mahout.math.VectorWritable: void write(java.io.DataOutput)>(r1);
+
+        return;
+    }
+
+    static org.apache.mahout.classifier.sequencelearning.hmm.HmmModel deserialize(java.io.DataInput) throws java.io.IOException
+    {
+        java.io.DataInput r0;
+        org.apache.mahout.math.Matrix r2, r3;
+        org.apache.mahout.math.Vector r5;
+        org.apache.mahout.math.MatrixWritable $r6;
+        org.apache.mahout.math.VectorWritable $r7;
+        org.apache.mahout.classifier.sequencelearning.hmm.HmmModel $r8;
+
+        r0 := @parameter0: java.io.DataInput;
+
+        $r6 = new org.apache.mahout.math.MatrixWritable;
+
+        specialinvoke $r6.<org.apache.mahout.math.MatrixWritable: void <init>()>();
+
+        virtualinvoke $r6.<org.apache.mahout.math.MatrixWritable: void readFields(java.io.DataInput)>(r0);
+
+        r2 = virtualinvoke $r6.<org.apache.mahout.math.MatrixWritable: org.apache.mahout.math.Matrix get()>();
+
+        virtualinvoke $r6.<org.apache.mahout.math.MatrixWritable: void readFields(java.io.DataInput)>(r0);
+
+        r3 = virtualinvoke $r6.<org.apache.mahout.math.MatrixWritable: org.apache.mahout.math.Matrix get()>();
+
+        $r7 = new org.apache.mahout.math.VectorWritable;
+
+        specialinvoke $r7.<org.apache.mahout.math.VectorWritable: void <init>()>();
+
+        virtualinvoke $r7.<org.apache.mahout.math.VectorWritable: void readFields(java.io.DataInput)>(r0);
+
+        r5 = virtualinvoke $r7.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $r8 = new org.apache.mahout.classifier.sequencelearning.hmm.HmmModel;
+
+        specialinvoke $r8.<org.apache.mahout.classifier.sequencelearning.hmm.HmmModel: void <init>(org.apache.mahout.math.Matrix,org.apache.mahout.math.Matrix,org.apache.mahout.math.Vector)>(r3, r2, r5);
+
+        return $r8;
+    }
+}

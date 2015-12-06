@@ -1,0 +1,277 @@
+final class org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView extends org.apache.mahout.math.AbstractVector
+{
+    private final org.apache.mahout.math.UpperTriangular viewed;
+    private int rowNum;
+
+    private void <init>(org.apache.mahout.math.UpperTriangular)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+        org.apache.mahout.math.UpperTriangular r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        r1 := @parameter0: org.apache.mahout.math.UpperTriangular;
+
+        $i0 = virtualinvoke r1.<org.apache.mahout.math.UpperTriangular: int columnSize()>();
+
+        specialinvoke r0.<org.apache.mahout.math.AbstractVector: void <init>(int)>($i0);
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView: org.apache.mahout.math.UpperTriangular viewed> = r1;
+
+        return;
+    }
+
+    org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView setViewedRow(int)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView: int rowNum> = i0;
+
+        return r0;
+    }
+
+    public boolean isDense()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        return 1;
+    }
+
+    public boolean isSequentialAccess()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        return 0;
+    }
+
+    public java.util.Iterator iterator()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+        java.lang.UnsupportedOperationException $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r1;
+    }
+
+    public java.util.Iterator iterateNonZero()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+        java.lang.UnsupportedOperationException $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r1;
+    }
+
+    public double getQuick(int)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+        int i0, $i1;
+        org.apache.mahout.math.UpperTriangular $r1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView: org.apache.mahout.math.UpperTriangular viewed>;
+
+        $i1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView: int rowNum>;
+
+        $d0 = virtualinvoke $r1.<org.apache.mahout.math.UpperTriangular: double getQuick(int,int)>($i1, i0);
+
+        return $d0;
+    }
+
+    public org.apache.mahout.math.Vector like()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+        java.lang.UnsupportedOperationException $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r1;
+    }
+
+    public org.apache.mahout.math.Vector like(int)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+        int i0;
+        java.lang.UnsupportedOperationException $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        i0 := @parameter0: int;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r1;
+    }
+
+    public void setQuick(int, double)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+        int i0, $i1;
+        double d0;
+        org.apache.mahout.math.UpperTriangular $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView: org.apache.mahout.math.UpperTriangular viewed>;
+
+        $i1 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView: int rowNum>;
+
+        virtualinvoke $r1.<org.apache.mahout.math.UpperTriangular: void setQuick(int,int,double)>($i1, i0, d0);
+
+        return;
+    }
+
+    public int getNumNondefaultElements()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+        java.lang.UnsupportedOperationException $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r1;
+    }
+
+    public double getLookupCost()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        return 1.0;
+    }
+
+    public double getIteratorAdvanceCost()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        return 1.0;
+    }
+
+    public boolean isAddConstantTime()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        return 1;
+    }
+
+    public org.apache.mahout.math.Matrix matrixLike(int, int)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+        int i0, i1;
+        java.lang.UnsupportedOperationException $r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $r1 = new java.lang.UnsupportedOperationException;
+
+        specialinvoke $r1.<java.lang.UnsupportedOperationException: void <init>()>();
+
+        throw $r1;
+    }
+
+    public void mergeUpdates(org.apache.mahout.math.OrderedIntDoubleMapping)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+        org.apache.mahout.math.OrderedIntDoubleMapping r1;
+        int[] r2;
+        double[] r3;
+        int $i0, $i1, $i2, i3;
+        double $d0;
+        org.apache.mahout.math.UpperTriangular $r4;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        r1 := @parameter0: org.apache.mahout.math.OrderedIntDoubleMapping;
+
+        r2 = virtualinvoke r1.<org.apache.mahout.math.OrderedIntDoubleMapping: int[] getIndices()>();
+
+        r3 = virtualinvoke r1.<org.apache.mahout.math.OrderedIntDoubleMapping: double[] getValues()>();
+
+        i3 = 0;
+
+     label1:
+        $i0 = virtualinvoke r1.<org.apache.mahout.math.OrderedIntDoubleMapping: int getNumMappings()>();
+
+        if i3 >= $i0 goto label2;
+
+        $r4 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView: org.apache.mahout.math.UpperTriangular viewed>;
+
+        $i2 = r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView: int rowNum>;
+
+        $i1 = r2[i3];
+
+        $d0 = r3[i3];
+
+        virtualinvoke $r4.<org.apache.mahout.math.UpperTriangular: void setQuick(int,int,double)>($i2, $i1, $d0);
+
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label2:
+        return;
+    }
+
+    void <init>(org.apache.mahout.math.UpperTriangular, org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$1)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView r0;
+        org.apache.mahout.math.UpperTriangular r1;
+        org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$1 r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView;
+
+        r1 := @parameter0: org.apache.mahout.math.UpperTriangular;
+
+        r2 := @parameter1: org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$1;
+
+        specialinvoke r0.<org.apache.mahout.math.hadoop.stochasticsvd.qr.GivensThinSolver$TriangularRowView: void <init>(org.apache.mahout.math.UpperTriangular)>(r1);
+
+        return;
+    }
+}

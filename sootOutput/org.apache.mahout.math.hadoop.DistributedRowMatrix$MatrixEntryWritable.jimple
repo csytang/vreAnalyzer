@@ -1,0 +1,310 @@
+public class org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable extends java.lang.Object implements org.apache.hadoop.io.WritableComparable
+{
+    private int row;
+    private int col;
+    private double val;
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public int getRow()
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int row>;
+
+        return $i0;
+    }
+
+    public void setRow(int)
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int row> = i0;
+
+        return;
+    }
+
+    public int getCol()
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable r0;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int col>;
+
+        return $i0;
+    }
+
+    public void setCol(int)
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable r0;
+        int i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        i0 := @parameter0: int;
+
+        r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int col> = i0;
+
+        return;
+    }
+
+    public double getVal()
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable r0;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        $d0 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: double val>;
+
+        return $d0;
+    }
+
+    public void setVal(double)
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable r0;
+        double d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        d0 := @parameter0: double;
+
+        r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: double val> = d0;
+
+        return;
+    }
+
+    public int compareTo(org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable)
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable r0, r1;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        r1 := @parameter0: org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        $i1 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int row>;
+
+        $i0 = r1.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int row>;
+
+        if $i1 <= $i0 goto label1;
+
+        return 1;
+
+     label1:
+        $i3 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int row>;
+
+        $i2 = r1.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int row>;
+
+        if $i3 >= $i2 goto label2;
+
+        return -1;
+
+     label2:
+        $i5 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int col>;
+
+        $i4 = r1.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int col>;
+
+        if $i5 <= $i4 goto label3;
+
+        return 1;
+
+     label3:
+        $i7 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int col>;
+
+        $i6 = r1.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int col>;
+
+        if $i7 >= $i6 goto label4;
+
+        return -1;
+
+     label4:
+        return 0;
+    }
+
+    public boolean equals(java.lang.Object)
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable r0, r2;
+        java.lang.Object r1;
+        boolean $z0, $z1;
+        int $i0, $i1, $i2, $i3;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $z0 = r1 instanceof org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        if $z0 != 0 goto label1;
+
+        return 0;
+
+     label1:
+        r2 = (org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable) r1;
+
+        $i1 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int row>;
+
+        $i0 = r2.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int row>;
+
+        if $i1 != $i0 goto label2;
+
+        $i3 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int col>;
+
+        $i2 = r2.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int col>;
+
+        if $i3 != $i2 goto label2;
+
+        $z1 = 1;
+
+        goto label3;
+
+     label2:
+        $z1 = 0;
+
+     label3:
+        return $z1;
+    }
+
+    public int hashCode()
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable r0;
+        int $i0, $i1, $i2, $i3;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        $i2 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int row>;
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int col>;
+
+        $i1 = 31 * $i0;
+
+        $i3 = $i2 + $i1;
+
+        return $i3;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable r0;
+        java.io.DataOutput r1;
+        int $i0, $i1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int row>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i0);
+
+        $i1 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int col>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i1);
+
+        $d0 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: double val>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeDouble(double)>($d0);
+
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable r0;
+        java.io.DataInput r1;
+        int $i0, $i1;
+        double $d0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $i0 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int row> = $i0;
+
+        $i1 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int col> = $i1;
+
+        $d0 = interfaceinvoke r1.<java.io.DataInput: double readDouble()>();
+
+        r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: double val> = $d0;
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable r0;
+        java.lang.StringBuilder $r1, $r2, $r3, $r4, $r5, $r6, $r7;
+        int $i0, $i1;
+        double $d0;
+        java.lang.String $r8;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("(");
+
+        $i0 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int row>;
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(44);
+
+        $i1 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int col>;
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i1);
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("):");
+
+        $d0 = r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: double val>;
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(double)>($d0);
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        return $r8;
+    }
+
+    public volatile int compareTo(java.lang.Object)
+    {
+        org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable r0, $r2;
+        java.lang.Object r1;
+        int $i0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable) r1;
+
+        $i0 = virtualinvoke r0.<org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable: int compareTo(org.apache.mahout.math.hadoop.DistributedRowMatrix$MatrixEntryWritable)>($r2);
+
+        return $i0;
+    }
+}

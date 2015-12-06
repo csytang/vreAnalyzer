@@ -1,0 +1,40 @@
+final class org.apache.mahout.common.MemoryUtil$1 extends java.lang.Object implements java.util.concurrent.ThreadFactory
+{
+    private final java.util.concurrent.ThreadFactory delegate;
+
+    void <init>()
+    {
+        org.apache.mahout.common.MemoryUtil$1 r0;
+        java.util.concurrent.ThreadFactory $r1;
+
+        r0 := @this: org.apache.mahout.common.MemoryUtil$1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r1 = staticinvoke <java.util.concurrent.Executors: java.util.concurrent.ThreadFactory defaultThreadFactory()>();
+
+        r0.<org.apache.mahout.common.MemoryUtil$1: java.util.concurrent.ThreadFactory delegate> = $r1;
+
+        return;
+    }
+
+    public java.lang.Thread newThread(java.lang.Runnable)
+    {
+        org.apache.mahout.common.MemoryUtil$1 r0;
+        java.lang.Runnable r1;
+        java.lang.Thread r2;
+        java.util.concurrent.ThreadFactory $r3;
+
+        r0 := @this: org.apache.mahout.common.MemoryUtil$1;
+
+        r1 := @parameter0: java.lang.Runnable;
+
+        $r3 = r0.<org.apache.mahout.common.MemoryUtil$1: java.util.concurrent.ThreadFactory delegate>;
+
+        r2 = interfaceinvoke $r3.<java.util.concurrent.ThreadFactory: java.lang.Thread newThread(java.lang.Runnable)>(r1);
+
+        virtualinvoke r2.<java.lang.Thread: void setDaemon(boolean)>(1);
+
+        return r2;
+    }
+}

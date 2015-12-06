@@ -1,0 +1,298 @@
+final class org.apache.mahout.math.hadoop.similarity.SeedVectorUtil extends java.lang.Object
+{
+    private static final org.slf4j.Logger log;
+
+    private void <init>()
+    {
+        org.apache.mahout.math.hadoop.similarity.SeedVectorUtil r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.similarity.SeedVectorUtil;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static java.util.List loadSeedVectors(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.hadoop.conf.Configuration r0;
+        java.lang.String r1, $r16, $r25, $r28, $r37, $r40, $r42;
+        java.util.ArrayList r2;
+        java.util.Iterator r3;
+        org.apache.hadoop.io.Writable r4;
+        java.lang.Class r5;
+        java.util.List $r6;
+        boolean $z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z9, $z11, $z13, $z16;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterable $r7;
+        org.apache.hadoop.fs.Path $r8;
+        org.apache.hadoop.fs.PathFilter $r9;
+        org.apache.mahout.common.iterator.sequencefile.PathType $r10;
+        org.slf4j.Logger $r11;
+        int $i0;
+        java.lang.IllegalStateException $r12, $r27;
+        java.lang.Integer $r13;
+        java.lang.StringBuilder $r14, $r15, $r17, $r20, $r21, $r22, $r23, $r26, $r29, $r30, $r31, $r32, $r33, $r36;
+        java.lang.Object $r18;
+        org.apache.mahout.math.NamedVector $r19, $r24, $r34, $r35, $r38, $r39, $r41, $r43;
+        long $l1, $l2, l3;
+        org.apache.mahout.clustering.kmeans.Kluster r44;
+        org.apache.mahout.math.Vector r45, r47, r48, r50;
+        org.apache.mahout.clustering.canopy.Canopy r46;
+        org.apache.mahout.math.VectorWritable r49;
+
+        r0 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        r1 = virtualinvoke r0.<org.apache.hadoop.conf.Configuration: java.lang.String get(java.lang.String)>("seedsPath");
+
+        if r1 == null goto label01;
+
+        $z0 = virtualinvoke r1.<java.lang.String: boolean isEmpty()>();
+
+        if $z0 == 0 goto label02;
+
+     label01:
+        $r6 = staticinvoke <java.util.Collections: java.util.List emptyList()>();
+
+        return $r6;
+
+     label02:
+        r2 = staticinvoke <com.google.common.collect.Lists: java.util.ArrayList newArrayList()>();
+
+        l3 = 0L;
+
+        $r7 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterable;
+
+        $r8 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r8.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r1);
+
+        $r10 = <org.apache.mahout.common.iterator.sequencefile.PathType: org.apache.mahout.common.iterator.sequencefile.PathType LIST>;
+
+        $r9 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter partFilter()>();
+
+        specialinvoke $r7.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterable: void <init>(org.apache.hadoop.fs.Path,org.apache.mahout.common.iterator.sequencefile.PathType,org.apache.hadoop.fs.PathFilter,org.apache.hadoop.conf.Configuration)>($r8, $r10, $r9, r0);
+
+        r3 = virtualinvoke $r7.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterable: java.util.Iterator iterator()>();
+
+     label03:
+        $z1 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label13;
+
+        $r18 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (org.apache.hadoop.io.Writable) $r18;
+
+        r5 = virtualinvoke r4.<java.lang.Object: java.lang.Class getClass()>();
+
+        $z5 = virtualinvoke r5.<java.lang.Object: boolean equals(java.lang.Object)>(class "org/apache/mahout/clustering/kmeans/Kluster");
+
+        if $z5 == 0 goto label05;
+
+        r44 = (org.apache.mahout.clustering.kmeans.Kluster) r4;
+
+        r45 = virtualinvoke r44.<org.apache.mahout.clustering.kmeans.Kluster: org.apache.mahout.math.Vector getCenter()>();
+
+        $z16 = r45 instanceof org.apache.mahout.math.NamedVector;
+
+        if $z16 == 0 goto label04;
+
+        $r43 = (org.apache.mahout.math.NamedVector) r45;
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r43);
+
+        goto label03;
+
+     label04:
+        $r38 = new org.apache.mahout.math.NamedVector;
+
+        $r42 = virtualinvoke r44.<org.apache.mahout.clustering.kmeans.Kluster: java.lang.String getIdentifier()>();
+
+        specialinvoke $r38.<org.apache.mahout.math.NamedVector: void <init>(org.apache.mahout.math.Vector,java.lang.String)>(r45, $r42);
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r38);
+
+        goto label03;
+
+     label05:
+        $z6 = virtualinvoke r5.<java.lang.Object: boolean equals(java.lang.Object)>(class "org/apache/mahout/clustering/canopy/Canopy");
+
+        if $z6 == 0 goto label07;
+
+        r46 = (org.apache.mahout.clustering.canopy.Canopy) r4;
+
+        r47 = virtualinvoke r46.<org.apache.mahout.clustering.canopy.Canopy: org.apache.mahout.math.Vector getCenter()>();
+
+        $z13 = r47 instanceof org.apache.mahout.math.NamedVector;
+
+        if $z13 == 0 goto label06;
+
+        $r41 = (org.apache.mahout.math.NamedVector) r47;
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r41);
+
+        goto label03;
+
+     label06:
+        $r39 = new org.apache.mahout.math.NamedVector;
+
+        $r40 = virtualinvoke r46.<org.apache.mahout.clustering.canopy.Canopy: java.lang.String getIdentifier()>();
+
+        specialinvoke $r39.<org.apache.mahout.math.NamedVector: void <init>(org.apache.mahout.math.Vector,java.lang.String)>(r47, $r40);
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r39);
+
+        goto label03;
+
+     label07:
+        $z3 = virtualinvoke r5.<java.lang.Object: boolean equals(java.lang.Object)>(class "org/apache/mahout/math/Vector");
+
+        if $z3 == 0 goto label09;
+
+        r48 = (org.apache.mahout.math.Vector) r4;
+
+        $z11 = r48 instanceof org.apache.mahout.math.NamedVector;
+
+        if $z11 == 0 goto label08;
+
+        $r35 = (org.apache.mahout.math.NamedVector) r48;
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r35);
+
+        goto label03;
+
+     label08:
+        $r34 = new org.apache.mahout.math.NamedVector;
+
+        $r33 = new java.lang.StringBuilder;
+
+        specialinvoke $r33.<java.lang.StringBuilder: void <init>()>();
+
+        $r32 = virtualinvoke $r33.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r31 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(46);
+
+        $l2 = l3;
+
+        l3 = l3 + 1L;
+
+        $r36 = virtualinvoke $r31.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l2);
+
+        $r37 = virtualinvoke $r36.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r34.<org.apache.mahout.math.NamedVector: void <init>(org.apache.mahout.math.Vector,java.lang.String)>(r48, $r37);
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r34);
+
+        goto label03;
+
+     label09:
+        $z4 = virtualinvoke r5.<java.lang.Object: boolean equals(java.lang.Object)>(class "org/apache/mahout/math/VectorWritable");
+
+        if $z4 != 0 goto label10;
+
+        $z9 = virtualinvoke r5.<java.lang.Class: boolean isInstance(java.lang.Object)>(class "org/apache/mahout/math/VectorWritable");
+
+        if $z9 == 0 goto label12;
+
+     label10:
+        r49 = (org.apache.mahout.math.VectorWritable) r4;
+
+        r50 = virtualinvoke r49.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
+
+        $z7 = r50 instanceof org.apache.mahout.math.NamedVector;
+
+        if $z7 == 0 goto label11;
+
+        $r24 = (org.apache.mahout.math.NamedVector) r50;
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r24);
+
+        goto label03;
+
+     label11:
+        $r19 = new org.apache.mahout.math.NamedVector;
+
+        $r20 = new java.lang.StringBuilder;
+
+        specialinvoke $r20.<java.lang.StringBuilder: void <init>()>();
+
+        $r22 = virtualinvoke $r20.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(char)>(46);
+
+        $l1 = l3;
+
+        l3 = l3 + 1L;
+
+        $r21 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>($l1);
+
+        $r25 = virtualinvoke $r21.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r19.<org.apache.mahout.math.NamedVector: void <init>(org.apache.mahout.math.Vector,java.lang.String)>(r50, $r25);
+
+        interfaceinvoke r2.<java.util.List: boolean add(java.lang.Object)>($r19);
+
+        goto label03;
+
+     label12:
+        $r27 = new java.lang.IllegalStateException;
+
+        $r26 = new java.lang.StringBuilder;
+
+        specialinvoke $r26.<java.lang.StringBuilder: void <init>()>();
+
+        $r30 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Bad value class: ");
+
+        $r29 = virtualinvoke $r30.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r5);
+
+        $r28 = virtualinvoke $r29.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r27.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r28);
+
+        throw $r27;
+
+     label13:
+        $z2 = interfaceinvoke r2.<java.util.List: boolean isEmpty()>();
+
+        if $z2 == 0 goto label14;
+
+        $r12 = new java.lang.IllegalStateException;
+
+        $r15 = new java.lang.StringBuilder;
+
+        specialinvoke $r15.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("No seeds found. Check your path: ");
+
+        $r17 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r1);
+
+        $r16 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r12.<java.lang.IllegalStateException: void <init>(java.lang.String)>($r16);
+
+        throw $r12;
+
+     label14:
+        $r11 = <org.apache.mahout.math.hadoop.similarity.SeedVectorUtil: org.slf4j.Logger log>;
+
+        $i0 = interfaceinvoke r2.<java.util.List: int size()>();
+
+        $r13 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        interfaceinvoke $r11.<org.slf4j.Logger: void info(java.lang.String,java.lang.Object)>("Seed Vectors size: {}", $r13);
+
+        return r2;
+    }
+
+    static void <clinit>()
+    {
+        org.slf4j.Logger $r0;
+
+        $r0 = staticinvoke <org.slf4j.LoggerFactory: org.slf4j.Logger getLogger(java.lang.Class)>(class "org/apache/mahout/math/hadoop/similarity/SeedVectorUtil");
+
+        <org.apache.mahout.math.hadoop.similarity.SeedVectorUtil: org.slf4j.Logger log> = $r0;
+
+        return;
+    }
+}

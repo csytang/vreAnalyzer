@@ -1,0 +1,120 @@
+public class org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob extends org.apache.mahout.common.AbstractJob
+{
+    final org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver this$0;
+
+    public void <init>(org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver)
+    {
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob r0;
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver r1;
+
+        r0 := @this: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob;
+
+        r1 := @parameter0: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver;
+
+        r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver this$0> = r1;
+
+        specialinvoke r0.<org.apache.mahout.common.AbstractJob: void <init>()>();
+
+        return;
+    }
+
+    public void setConf(org.apache.hadoop.conf.Configuration)
+    {
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob r0;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver $r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob;
+
+        r1 := @parameter0: org.apache.hadoop.conf.Configuration;
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver this$0>;
+
+        virtualinvoke $r2.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: void setConf(org.apache.hadoop.conf.Configuration)>(r1);
+
+        return;
+    }
+
+    public org.apache.hadoop.conf.Configuration getConf()
+    {
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob r0;
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver $r1;
+        org.apache.hadoop.conf.Configuration $r2;
+
+        r0 := @this: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob;
+
+        $r1 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver this$0>;
+
+        $r2 = virtualinvoke $r1.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: org.apache.hadoop.conf.Configuration getConf()>();
+
+        return $r2;
+    }
+
+    public int run(java.lang.String[]) throws java.lang.Exception
+    {
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob r0;
+        java.lang.String[] r1;
+        org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver $r2, $r5, $r7, $r8;
+        java.util.Map $r3, $r6;
+        int $i0;
+        org.apache.hadoop.conf.Configuration $r9, r10;
+
+        r0 := @this: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob;
+
+        r1 := @parameter0: java.lang.String[];
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: void addInputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: void addOutputOption()>();
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("numRows", "nr", "Number of rows in the input matrix", 1);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("numCols", "nc", "Number of columns in the input matrix", 1);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: void addOption(java.lang.String,java.lang.String,java.lang.String,boolean)>("vector", "b", "Vector to solve against", 1);
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("lambda", "l", "Scalar in A + lambda * I [default = 0]", "0.0");
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: void addOption(java.lang.String,java.lang.String,java.lang.String,java.lang.String)>("symmetric", "sym", "Is the input matrix square and symmetric?", "true");
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: void addOption(java.lang.String,java.lang.String,java.lang.String)>("maxIter", "x", "Maximum number of iterations to run");
+
+        virtualinvoke r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: void addOption(java.lang.String,java.lang.String,java.lang.String)>("maxError", "err", "Maximum residual error to allow before stopping");
+
+        $r2 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver this$0>;
+
+        $r3 = virtualinvoke r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: java.util.Map parseArguments(java.lang.String[])>(r1);
+
+        staticinvoke <org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: java.util.Map access$002(org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver,java.util.Map)>($r2, $r3);
+
+        $r5 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver this$0>;
+
+        $r6 = staticinvoke <org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: java.util.Map access$000(org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver)>($r5);
+
+        if $r6 != null goto label1;
+
+        return -1;
+
+     label1:
+        r10 = virtualinvoke r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: org.apache.hadoop.conf.Configuration getConf()>();
+
+        if r10 != null goto label2;
+
+        $r9 = new org.apache.hadoop.conf.Configuration;
+
+        specialinvoke $r9.<org.apache.hadoop.conf.Configuration: void <init>()>();
+
+        r10 = $r9;
+
+     label2:
+        $r7 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver this$0>;
+
+        virtualinvoke $r7.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: void setConf(org.apache.hadoop.conf.Configuration)>(r10);
+
+        $r8 = r0.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver$DistributedConjugateGradientSolverJob: org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver this$0>;
+
+        $i0 = virtualinvoke $r8.<org.apache.mahout.math.hadoop.solver.DistributedConjugateGradientSolver: int run(java.lang.String[])>(r1);
+
+        return $i0;
+    }
+}

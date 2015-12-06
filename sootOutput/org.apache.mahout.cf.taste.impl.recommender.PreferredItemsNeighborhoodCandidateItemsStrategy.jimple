@@ -1,0 +1,79 @@
+public final class org.apache.mahout.cf.taste.impl.recommender.PreferredItemsNeighborhoodCandidateItemsStrategy extends org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.cf.taste.impl.recommender.PreferredItemsNeighborhoodCandidateItemsStrategy r0;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.PreferredItemsNeighborhoodCandidateItemsStrategy;
+
+        specialinvoke r0.<org.apache.mahout.cf.taste.impl.recommender.AbstractCandidateItemsStrategy: void <init>()>();
+
+        return;
+    }
+
+    protected org.apache.mahout.cf.taste.impl.common.FastIDSet doGetCandidateItems(long[], org.apache.mahout.cf.taste.model.DataModel, boolean) throws org.apache.mahout.cf.taste.common.TasteException
+    {
+        org.apache.mahout.cf.taste.impl.recommender.PreferredItemsNeighborhoodCandidateItemsStrategy r0;
+        long[] r1;
+        org.apache.mahout.cf.taste.model.DataModel r2;
+        boolean z0;
+        int i0, i2, i4, i5;
+        long l1, $l3;
+        org.apache.mahout.cf.taste.model.PreferenceArray r5;
+        org.apache.mahout.cf.taste.impl.common.FastIDSet $r6, $r7;
+
+        r0 := @this: org.apache.mahout.cf.taste.impl.recommender.PreferredItemsNeighborhoodCandidateItemsStrategy;
+
+        r1 := @parameter0: long[];
+
+        r2 := @parameter1: org.apache.mahout.cf.taste.model.DataModel;
+
+        z0 := @parameter2: boolean;
+
+        $r6 = new org.apache.mahout.cf.taste.impl.common.FastIDSet;
+
+        specialinvoke $r6.<org.apache.mahout.cf.taste.impl.common.FastIDSet: void <init>()>();
+
+        i0 = lengthof r1;
+
+        i4 = 0;
+
+     label1:
+        if i4 >= i0 goto label4;
+
+        l1 = r1[i4];
+
+        r5 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.model.PreferenceArray getPreferencesForItem(long)>(l1);
+
+        i2 = interfaceinvoke r5.<org.apache.mahout.cf.taste.model.PreferenceArray: int length()>();
+
+        i5 = 0;
+
+     label2:
+        if i5 >= i2 goto label3;
+
+        $l3 = interfaceinvoke r5.<org.apache.mahout.cf.taste.model.PreferenceArray: long getUserID(int)>(i5);
+
+        $r7 = interfaceinvoke r2.<org.apache.mahout.cf.taste.model.DataModel: org.apache.mahout.cf.taste.impl.common.FastIDSet getItemIDsFromUser(long)>($l3);
+
+        virtualinvoke $r6.<org.apache.mahout.cf.taste.impl.common.FastIDSet: boolean addAll(org.apache.mahout.cf.taste.impl.common.FastIDSet)>($r7);
+
+        i5 = i5 + 1;
+
+        goto label2;
+
+     label3:
+        i4 = i4 + 1;
+
+        goto label1;
+
+     label4:
+        if z0 != 0 goto label5;
+
+        virtualinvoke $r6.<org.apache.mahout.cf.taste.impl.common.FastIDSet: boolean removeAll(long[])>(r1);
+
+     label5:
+        return $r6;
+    }
+}

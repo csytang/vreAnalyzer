@@ -1,0 +1,52 @@
+public final class org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable$SplitGroupingComparator extends org.apache.hadoop.io.WritableComparator implements java.io.Serializable
+{
+
+    public void <init>()
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable$SplitGroupingComparator r0;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable$SplitGroupingComparator;
+
+        specialinvoke r0.<org.apache.hadoop.io.WritableComparator: void <init>(java.lang.Class,boolean)>(class "org/apache/mahout/math/hadoop/stochasticsvd/SplitPartitionedWritable", 1);
+
+        return;
+    }
+
+    public int compare(java.lang.Object, java.lang.Object)
+    {
+        org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable$SplitGroupingComparator r0;
+        java.lang.Object r1, r2;
+        org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable r3, r4;
+        int $i0, $i1, $i2, $i3;
+
+        r0 := @this: org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable$SplitGroupingComparator;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        r3 = (org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable) r1;
+
+        r4 = (org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable) r2;
+
+        $i0 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable: int access$000(org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable)>(r3);
+
+        $i1 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable: int access$000(org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable)>(r4);
+
+        if $i0 >= $i1 goto label1;
+
+        return -1;
+
+     label1:
+        $i2 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable: int access$000(org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable)>(r3);
+
+        $i3 = staticinvoke <org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable: int access$000(org.apache.mahout.math.hadoop.stochasticsvd.SplitPartitionedWritable)>(r4);
+
+        if $i2 <= $i3 goto label2;
+
+        return 1;
+
+     label2:
+        return 0;
+    }
+}

@@ -1,0 +1,159 @@
+public final class org.apache.mahout.clustering.topdown.postprocessor.ClusterCountReader extends java.lang.Object
+{
+
+    private void <init>()
+    {
+        org.apache.mahout.clustering.topdown.postprocessor.ClusterCountReader r0;
+
+        r0 := @this: org.apache.mahout.clustering.topdown.postprocessor.ClusterCountReader;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static int getNumberOfClusters(org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration) throws java.io.IOException
+    {
+        org.apache.hadoop.fs.Path r0, $r8;
+        org.apache.hadoop.conf.Configuration r1;
+        org.apache.hadoop.fs.FileSystem r2;
+        org.apache.hadoop.fs.FileStatus[] r3;
+        org.apache.hadoop.fs.PathFilter $r5, $r10;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator $r6;
+        org.apache.hadoop.fs.FileStatus $r7;
+        org.apache.mahout.common.iterator.sequencefile.PathType $r9;
+        boolean $z0;
+        int i0;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        r2 = virtualinvoke r0.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r1);
+
+        $r5 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter finalPartFilter()>();
+
+        r3 = virtualinvoke r2.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus[] listStatus(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.PathFilter)>(r0, $r5);
+
+        i0 = 0;
+
+        $r6 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator;
+
+        $r7 = r3[0];
+
+        $r8 = virtualinvoke $r7.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        $r9 = <org.apache.mahout.common.iterator.sequencefile.PathType: org.apache.mahout.common.iterator.sequencefile.PathType LIST>;
+
+        $r10 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter partFilter()>();
+
+        specialinvoke $r6.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator: void <init>(org.apache.hadoop.fs.Path,org.apache.mahout.common.iterator.sequencefile.PathType,org.apache.hadoop.fs.PathFilter,java.util.Comparator,boolean,org.apache.hadoop.conf.Configuration)>($r8, $r9, $r10, null, 1, r1);
+
+     label1:
+        $z0 = interfaceinvoke $r6.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        interfaceinvoke $r6.<java.util.Iterator: java.lang.Object next()>();
+
+        i0 = i0 + 1;
+
+        goto label1;
+
+     label2:
+        return i0;
+    }
+
+    public static java.util.Map getClusterIDs(org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration, boolean) throws java.io.IOException
+    {
+        org.apache.hadoop.fs.Path r0, $r11;
+        org.apache.hadoop.conf.Configuration r1;
+        boolean z0, $z1;
+        org.apache.hadoop.fs.FileSystem r3;
+        org.apache.hadoop.fs.FileStatus[] r4;
+        java.util.HashMap $r6;
+        org.apache.hadoop.fs.PathFilter $r7, $r12;
+        org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator $r8;
+        org.apache.hadoop.fs.FileStatus $r9;
+        org.apache.mahout.common.iterator.sequencefile.PathType $r10;
+        java.lang.Object $r13, $r18;
+        org.apache.mahout.clustering.Cluster $r14, $r19;
+        org.apache.mahout.clustering.iterator.ClusterWritable $r15, $r17;
+        int $i0, $i1, i2;
+        java.lang.Integer r20, r21;
+
+        r0 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r1 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        z0 := @parameter2: boolean;
+
+        $r6 = new java.util.HashMap;
+
+        specialinvoke $r6.<java.util.HashMap: void <init>()>();
+
+        r3 = virtualinvoke r0.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r1);
+
+        $r7 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter finalPartFilter()>();
+
+        r4 = virtualinvoke r3.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus[] listStatus(org.apache.hadoop.fs.Path,org.apache.hadoop.fs.PathFilter)>(r0, $r7);
+
+        $r8 = new org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator;
+
+        $r9 = r4[0];
+
+        $r11 = virtualinvoke $r9.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        $r10 = <org.apache.mahout.common.iterator.sequencefile.PathType: org.apache.mahout.common.iterator.sequencefile.PathType LIST>;
+
+        $r12 = staticinvoke <org.apache.mahout.common.iterator.sequencefile.PathFilters: org.apache.hadoop.fs.PathFilter partFilter()>();
+
+        specialinvoke $r8.<org.apache.mahout.common.iterator.sequencefile.SequenceFileDirValueIterator: void <init>(org.apache.hadoop.fs.Path,org.apache.mahout.common.iterator.sequencefile.PathType,org.apache.hadoop.fs.PathFilter,java.util.Comparator,boolean,org.apache.hadoop.conf.Configuration)>($r11, $r10, $r12, null, 1, r1);
+
+        i2 = 0;
+
+     label1:
+        $z1 = interfaceinvoke $r8.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label4;
+
+        if z0 == 0 goto label2;
+
+        $r18 = interfaceinvoke $r8.<java.util.Iterator: java.lang.Object next()>();
+
+        $r17 = (org.apache.mahout.clustering.iterator.ClusterWritable) $r18;
+
+        $r19 = virtualinvoke $r17.<org.apache.mahout.clustering.iterator.ClusterWritable: org.apache.mahout.clustering.Cluster getValue()>();
+
+        $i1 = interfaceinvoke $r19.<org.apache.mahout.clustering.Cluster: int getId()>();
+
+        r20 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        r21 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i2);
+
+        goto label3;
+
+     label2:
+        r20 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i2);
+
+        $r13 = interfaceinvoke $r8.<java.util.Iterator: java.lang.Object next()>();
+
+        $r15 = (org.apache.mahout.clustering.iterator.ClusterWritable) $r13;
+
+        $r14 = virtualinvoke $r15.<org.apache.mahout.clustering.iterator.ClusterWritable: org.apache.mahout.clustering.Cluster getValue()>();
+
+        $i0 = interfaceinvoke $r14.<org.apache.mahout.clustering.Cluster: int getId()>();
+
+        r21 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+     label3:
+        interfaceinvoke $r6.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r20, r21);
+
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label4:
+        return $r6;
+    }
+}
