@@ -1,6 +1,1 @@
-VariantPath Id,Variants List,Classes,Methods
-1,"[3,2,1]","[WordCount2$IntSumReducer]","[reduce->reduce]",N,"-"
-2,"[5,4,6]","[WordCount2$TokenizerMapper]","[map->map]",N,"-"
-3,"[7]","[WordCount2$TokenizerMapper]","[setup->]",N,"-"
-2,"[5,4,6]","[WordCount2$TokenizerMapper]","[map->map]",N,"-"
-1,"[3,2,1]","[WordCount2$IntSumReducer]","[reduce->reduce]",N,"-"
+VariantPath Id,CallSite,Variants List,Classes,Methods

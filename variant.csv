@@ -1,2 +1,1 @@
 Variant ID,Block_Id,Code Range(jimple),SootMethod,SootClass
-"7","[15]","caller@setup[1:3]","[caller@setup;]","WordCount2$TokenizerMapper"

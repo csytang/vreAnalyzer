@@ -558,14 +558,14 @@ public class org.apache.mahout.clustering.classify.ClusterClassifier extends org
         goto label12;
 
      label04:
-        $r29 := @caughtexception;
+        $r27 := @caughtexception;
 
-        r31 = $r29;
+        r31 = $r27;
 
-        throw $r29;
+        throw $r27;
 
      label05:
-        $r27 := @caughtexception;
+        $r29 := @caughtexception;
 
      label06:
         if $r14 == null goto label11;
@@ -589,7 +589,7 @@ public class org.apache.mahout.clustering.classify.ClusterClassifier extends org
         virtualinvoke $r14.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
 
      label11:
-        throw $r27;
+        throw $r29;
 
      label12:
         i1 = i1 + 1;

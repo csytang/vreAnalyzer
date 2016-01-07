@@ -25,17 +25,17 @@ public class org.apache.mahout.common.distance.MahalanobisDistanceMeasure extend
         org.apache.hadoop.conf.Configuration r1;
         java.util.List $r6;
         org.apache.mahout.common.parameters.Parameter $r7, $r10, $r16, $r20, $r26, $r30, $r35, $r39, $r43, $r65;
-        java.lang.Object $r8, $r9, $r15, $r17, $r19, $r22, $r23, $r27, $r31, $r34, $r36, $r38, $r47, $r66;
+        java.lang.Object $r8, $r9, $r15, $r17, $r19, $r22, $r23, $r27, $r31, $r34, $r36, $r38, $r48, $r66;
         java.net.URI $r11, $r33;
-        org.apache.hadoop.fs.Path $r12, $r18, $r21, $r24, $r28, $r40, $r41, $r48;
+        org.apache.hadoop.fs.Path $r12, $r18, $r21, $r24, $r28, $r40, $r41, $r49;
         org.apache.mahout.common.parameters.ClassParameter $r13, $r32;
         java.lang.Class $r14, $r37;
         boolean $z0, $z1, $z2, $z3;
         java.io.FileNotFoundException $r25, $r42;
-        java.lang.String $r29, $r49;
-        java.lang.Throwable $r45, $r46, $r50, $r51, $r52, $r53, r60, r70;
-        java.lang.IllegalStateException $r55;
-        java.io.IOException $r56;
+        java.lang.String $r29, $r50;
+        java.lang.Throwable $r44, $r46, $r52, $r54, $r55, $r56, r60, r70;
+        java.io.IOException $r51;
+        java.lang.IllegalStateException $r53;
         org.apache.hadoop.fs.FileSystem r57, r67;
         org.apache.mahout.math.MatrixWritable r58;
         org.apache.hadoop.fs.FSDataInputStream r59, r69;
@@ -94,13 +94,13 @@ public class org.apache.mahout.common.distance.MahalanobisDistanceMeasure extend
 
         $r43 = r0.<org.apache.mahout.common.distance.MahalanobisDistanceMeasure: org.apache.mahout.common.parameters.Parameter inverseCovarianceFile>;
 
-        $r47 = interfaceinvoke $r43.<org.apache.mahout.common.parameters.Parameter: java.lang.Object get()>();
+        $r48 = interfaceinvoke $r43.<org.apache.mahout.common.parameters.Parameter: java.lang.Object get()>();
 
-        $r48 = (org.apache.hadoop.fs.Path) $r47;
+        $r49 = (org.apache.hadoop.fs.Path) $r48;
 
-        $r49 = virtualinvoke $r48.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+        $r50 = virtualinvoke $r49.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
 
-        specialinvoke $r42.<java.io.FileNotFoundException: void <init>(java.lang.String)>($r49);
+        specialinvoke $r42.<java.io.FileNotFoundException: void <init>(java.lang.String)>($r50);
 
         throw $r42;
 
@@ -126,14 +126,14 @@ public class org.apache.mahout.common.distance.MahalanobisDistanceMeasure extend
         goto label13;
 
      label05:
-        $r52 := @caughtexception;
+        $r44 := @caughtexception;
 
-        r60 = $r52;
+        r60 = $r44;
 
-        throw $r52;
+        throw $r44;
 
      label06:
-        $r45 := @caughtexception;
+        $r54 := @caughtexception;
 
      label07:
         if r59 == null goto label12;
@@ -147,9 +147,9 @@ public class org.apache.mahout.common.distance.MahalanobisDistanceMeasure extend
         goto label12;
 
      label10:
-        $r46 := @caughtexception;
+        $r56 := @caughtexception;
 
-        virtualinvoke r60.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r46);
+        virtualinvoke r60.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r56);
 
         goto label12;
 
@@ -157,7 +157,7 @@ public class org.apache.mahout.common.distance.MahalanobisDistanceMeasure extend
         virtualinvoke r59.<java.io.DataInputStream: void close()>();
 
      label12:
-        throw $r45;
+        throw $r54;
 
      label13:
         $r63 = virtualinvoke r58.<org.apache.mahout.math.MatrixWritable: org.apache.mahout.math.Matrix get()>();
@@ -251,14 +251,14 @@ public class org.apache.mahout.common.distance.MahalanobisDistanceMeasure extend
         goto label28;
 
      label20:
-        $r51 := @caughtexception;
+        $r46 := @caughtexception;
 
-        r70 = $r51;
+        r70 = $r46;
 
-        throw $r51;
+        throw $r46;
 
      label21:
-        $r50 := @caughtexception;
+        $r55 := @caughtexception;
 
      label22:
         if r69 == null goto label27;
@@ -272,9 +272,9 @@ public class org.apache.mahout.common.distance.MahalanobisDistanceMeasure extend
         goto label27;
 
      label25:
-        $r53 := @caughtexception;
+        $r52 := @caughtexception;
 
-        virtualinvoke r70.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r53);
+        virtualinvoke r70.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r52);
 
         goto label27;
 
@@ -282,7 +282,7 @@ public class org.apache.mahout.common.distance.MahalanobisDistanceMeasure extend
         virtualinvoke r69.<java.io.DataInputStream: void close()>();
 
      label27:
-        throw $r50;
+        throw $r55;
 
      label28:
         $r73 = virtualinvoke r68.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
@@ -307,13 +307,13 @@ public class org.apache.mahout.common.distance.MahalanobisDistanceMeasure extend
         goto label33;
 
      label32:
-        $r56 := @caughtexception;
+        $r51 := @caughtexception;
 
-        $r55 = new java.lang.IllegalStateException;
+        $r53 = new java.lang.IllegalStateException;
 
-        specialinvoke $r55.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r56);
+        specialinvoke $r53.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r51);
 
-        throw $r55;
+        throw $r53;
 
      label33:
         return;

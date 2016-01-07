@@ -36,8 +36,8 @@ public final class org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles e
         org.apache.commons.cli2.option.DefaultOption r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16, r17, r18, r19, r20, r21, r23;
         org.apache.commons.cli2.Group r22;
         org.apache.commons.cli2.CommandLine r24;
-        org.apache.hadoop.conf.Configuration r28, $r196, $r228;
-        java.lang.String r29, $r168, $r171, $r199, $r201, $r203, $r209, $r213, $r215, $r216, $r223, $r225, $r226, r230, r235, r236, r237, $r238;
+        org.apache.hadoop.conf.Configuration r28, $r196, $r227;
+        java.lang.String r29, $r168, $r171, $r199, $r201, $r203, $r209, $r213, $r215, $r216, $r222, $r224, $r225, r230, r235, r236, r237, $r238;
         boolean z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7, $z8, $z9, $z10, $z11, $z12, $z13, $z14, $z15, $z16, $z17, $z18, z19, z20, $z21, z22, z23, $z24;
         long l0, $l2, $l5, l13, l14;
         org.apache.commons.cli2.builder.GroupBuilder $r32, $r151, $r152, $r153, $r154, $r155, $r156, $r157, $r158, $r159, $r160, $r161, $r162, $r164, $r165, $r172, $r174, $r175, $r176, $r177;
@@ -45,10 +45,10 @@ public final class org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles e
         org.apache.commons.cli2.builder.DefaultOptionBuilder $r34, $r36, $r37, $r39, $r40, $r41, $r42, $r48, $r49, $r50, $r55, $r57, $r59, $r61, $r64, $r65, $r66, $r67, $r69, $r70, $r71, $r73, $r74, $r75, $r76, $r78, $r81, $r82, $r83, $r88, $r89, $r94, $r95, $r96, $r98, $r99, $r100, $r103, $r104, $r105, $r107, $r114, $r115, $r116, $r119, $r120, $r121, $r122, $r123, $r124, $r128, $r129, $r130, $r131, $r132, $r133, $r134, $r136, $r137, $r138, $r139, $r140, $r141, $r142, $r143, $r144, $r145, $r146, $r147, $r148, $r149, $r150, $r163;
         org.apache.commons.cli2.Argument $r38, $r47, $r56, $r72, $r77, $r84, $r90, $r97, $r113, $r118, $r125;
         org.apache.hadoop.fs.Path $r166, $r169, $r182, $r184, $r186, $r188, $r189, $r193, $r194, $r195;
-        java.lang.Object $r167, $r170, $r191, $r200, $r202, $r204, $r206, $r208, $r210, $r211, $r212, $r221, $r222, $r224;
+        java.lang.Object $r167, $r170, $r191, $r200, $r202, $r204, $r206, $r208, $r210, $r211, $r212, $r220, $r221, $r223;
         org.apache.commons.cli2.commandline.Parser $r173;
         java.lang.Integer $r178, $r233;
-        org.slf4j.Logger $r179, $r181, $r183, $r185, $r187, $r198, $r218, $r220, $r232;
+        org.slf4j.Logger $r179, $r181, $r183, $r185, $r187, $r198, $r219, $r228, $r232;
         java.lang.Float $r180;
         byte $b1, $b4, $b6;
         double $d0, $d1, $d2, $d3, $d4, d5, d6;
@@ -56,10 +56,10 @@ public final class org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles e
         java.lang.Long $r190;
         java.lang.Long[] $r192;
         float $f0, $f1, $f2, $f3, f4, f5;
-        org.apache.hadoop.fs.Path[] $r197, $r227;
+        org.apache.hadoop.fs.Path[] $r197, $r226;
         java.lang.Class $r207, r234;
-        org.apache.commons.cli2.OptionException $r214, $r217;
-        java.lang.NumberFormatException $r219;
+        org.apache.commons.cli2.OptionException $r214, $r218;
+        java.lang.NumberFormatException $r217;
         org.apache.mahout.common.Pair r239;
 
         r0 := @this: org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles;
@@ -429,11 +429,11 @@ public final class org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles e
 
         if $z1 == 0 goto label04;
 
-        $r222 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r9);
+        $r221 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r9);
 
-        $r223 = (java.lang.String) $r222;
+        $r222 = (java.lang.String) $r221;
 
-        i7 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r223);
+        i7 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r222);
 
      label04:
         i8 = 2;
@@ -442,9 +442,9 @@ public final class org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles e
 
         if $z8 == 0 goto label05;
 
-        $r221 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r7);
+        $r220 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r7);
 
-        r230 = (java.lang.String) $r221;
+        r230 = (java.lang.String) $r220;
 
         i8 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>(r230);
 
@@ -456,21 +456,21 @@ public final class org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles e
         if $z7 == 0 goto label09;
 
      label06:
-        $r224 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r19);
+        $r223 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r19);
 
-        $r225 = virtualinvoke $r224.<java.lang.Object: java.lang.String toString()>();
+        $r224 = virtualinvoke $r223.<java.lang.Object: java.lang.String toString()>();
 
-        i9 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r225);
+        i9 = staticinvoke <java.lang.Integer: int parseInt(java.lang.String)>($r224);
 
      label07:
         goto label09;
 
      label08:
-        $r219 := @caughtexception;
+        $r217 := @caughtexception;
 
-        $r220 = <org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.slf4j.Logger log>;
+        $r228 = <org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.slf4j.Logger log>;
 
-        interfaceinvoke $r220.<org.slf4j.Logger: void warn(java.lang.String)>("Could not parse ngram size option");
+        interfaceinvoke $r228.<org.slf4j.Logger: void warn(java.lang.String)>("Could not parse ngram size option");
 
      label09:
         $r232 = <org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.slf4j.Logger log>;
@@ -483,13 +483,13 @@ public final class org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles e
 
         if $z18 == 0 goto label10;
 
-        $r228 = virtualinvoke r0.<org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.apache.hadoop.conf.Configuration getConf()>();
+        $r227 = virtualinvoke r0.<org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.apache.hadoop.conf.Configuration getConf()>();
 
-        $r227 = newarray (org.apache.hadoop.fs.Path)[1];
+        $r226 = newarray (org.apache.hadoop.fs.Path)[1];
 
-        $r227[0] = $r166;
+        $r226[0] = $r166;
 
-        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r228, $r227);
+        staticinvoke <org.apache.mahout.common.HadoopUtil: void delete(org.apache.hadoop.conf.Configuration,org.apache.hadoop.fs.Path[])>($r227, $r226);
 
      label10:
         f4 = 1.0F;
@@ -500,9 +500,9 @@ public final class org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles e
 
         $r208 = interfaceinvoke r24.<org.apache.commons.cli2.CommandLine: java.lang.Object getValue(org.apache.commons.cli2.Option)>(r14);
 
-        $r226 = virtualinvoke $r208.<java.lang.Object: java.lang.String toString()>();
+        $r225 = virtualinvoke $r208.<java.lang.Object: java.lang.String toString()>();
 
-        f4 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>($r226);
+        f4 = staticinvoke <java.lang.Float: float parseFloat(java.lang.String)>($r225);
 
      label11:
         $r181 = <org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.slf4j.Logger log>;
@@ -856,11 +856,11 @@ public final class org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles e
         goto label41;
 
      label40:
-        $r217 := @caughtexception;
+        $r218 := @caughtexception;
 
-        $r218 = <org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.slf4j.Logger log>;
+        $r219 = <org.apache.mahout.vectorizer.SparseVectorsFromSequenceFiles: org.slf4j.Logger log>;
 
-        interfaceinvoke $r218.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>("Exception", $r217);
+        interfaceinvoke $r219.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>("Exception", $r218);
 
         staticinvoke <org.apache.mahout.common.CommandLineUtil: void printHelp(org.apache.commons.cli2.Group)>(r22);
 

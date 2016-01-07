@@ -47,7 +47,7 @@ public final class org.apache.mahout.clustering.spectral.kmeans.EigenSeedGenerat
         org.apache.hadoop.io.Text $r54;
         org.apache.mahout.clustering.iterator.ClusterWritable $r58;
         byte $b3;
-        java.lang.Throwable $r63, $r64, $r65, r71;
+        java.lang.Throwable $r63, $r65, $r66, r71;
         org.apache.hadoop.io.SequenceFile$Writer r70;
 
         r0 := @parameter0: org.apache.hadoop.conf.Configuration;
@@ -281,14 +281,14 @@ public final class org.apache.mahout.clustering.spectral.kmeans.EigenSeedGenerat
         goto label21;
 
      label13:
-        $r63 := @caughtexception;
+        $r66 := @caughtexception;
 
-        r71 = $r63;
+        r71 = $r66;
 
-        throw $r63;
+        throw $r66;
 
      label14:
-        $r65 := @caughtexception;
+        $r63 := @caughtexception;
 
      label15:
         if r70 == null goto label20;
@@ -302,9 +302,9 @@ public final class org.apache.mahout.clustering.spectral.kmeans.EigenSeedGenerat
         goto label20;
 
      label18:
-        $r64 := @caughtexception;
+        $r65 := @caughtexception;
 
-        virtualinvoke r71.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r64);
+        virtualinvoke r71.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r65);
 
         goto label20;
 
@@ -312,7 +312,7 @@ public final class org.apache.mahout.clustering.spectral.kmeans.EigenSeedGenerat
         virtualinvoke r70.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
 
      label20:
-        throw $r65;
+        throw $r63;
 
      label21:
         return $r22;

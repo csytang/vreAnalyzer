@@ -497,6 +497,8 @@ public class HTMLAnnotation {
 			for(int lineNumber:lines){
 				if(lineNumber<=1)
 					continue;
+				if(lineNumber>htmlbyline.length)
+					continue;
 				String linecontent = htmlbyline[lineNumber-1];
 				
 				String spanStart = "<span title = \""+hovertext+"\""+" style=\"background-color:"+hex+"\">";

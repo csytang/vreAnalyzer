@@ -29,8 +29,8 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.RandomSeque
         org.apache.commons.cli2.commandline.Parser $r49;
         java.io.FileInputStream $r50;
         java.io.DataInputStream $r53;
-        java.lang.Throwable $r54, $r58, $r59, $r60, $r61, $r62, r65, r76;
-        org.apache.commons.cli2.OptionException $r57;
+        org.apache.commons.cli2.OptionException $r54;
+        java.lang.Throwable $r55, $r58, $r59, $r60, $r61, $r62, r65, r76;
         long $l2;
         int[] r70;
         java.io.PrintWriter $r71;
@@ -166,14 +166,14 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.RandomSeque
         goto label12;
 
      label04:
-        $r61 := @caughtexception;
+        $r58 := @caughtexception;
 
-        r65 = $r61;
+        r65 = $r58;
 
-        throw $r61;
+        throw $r58;
 
      label05:
-        $r54 := @caughtexception;
+        $r62 := @caughtexception;
 
      label06:
         if $r53 == null goto label11;
@@ -187,9 +187,9 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.RandomSeque
         goto label11;
 
      label09:
-        $r59 := @caughtexception;
+        $r60 := @caughtexception;
 
-        virtualinvoke r65.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r59);
+        virtualinvoke r65.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r60);
 
         goto label11;
 
@@ -197,7 +197,7 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.RandomSeque
         virtualinvoke $r53.<java.io.DataInputStream: void close()>();
 
      label11:
-        throw $r54;
+        throw $r62;
 
      label12:
         $l2 = staticinvoke <java.lang.System: long currentTimeMillis()>();
@@ -246,14 +246,14 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.RandomSeque
         goto label25;
 
      label16:
-        $r62 := @caughtexception;
+        $r61 := @caughtexception;
 
-        r76 = $r62;
+        r76 = $r61;
 
-        throw $r62;
+        throw $r61;
 
      label17:
-        $r60 := @caughtexception;
+        $r55 := @caughtexception;
 
      label18:
         if $r71 == null goto label23;
@@ -267,9 +267,9 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.RandomSeque
         goto label23;
 
      label21:
-        $r58 := @caughtexception;
+        $r59 := @caughtexception;
 
-        virtualinvoke r76.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r58);
+        virtualinvoke r76.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r59);
 
         goto label23;
 
@@ -277,10 +277,10 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.RandomSeque
         virtualinvoke $r71.<java.io.PrintWriter: void close()>();
 
      label23:
-        throw $r60;
+        throw $r55;
 
      label24:
-        $r57 := @caughtexception;
+        $r54 := @caughtexception;
 
         staticinvoke <org.apache.mahout.common.CommandLineUtil: void printHelp(org.apache.commons.cli2.Group)>(r6);
 

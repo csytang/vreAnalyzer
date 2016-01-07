@@ -1,0 +1,506 @@
+public class org.hipi.imagebundle.mapreduce.HibInputFormat extends org.apache.hadoop.mapreduce.lib.input.FileInputFormat
+{
+
+    public void <init>()
+    {
+        org.hipi.imagebundle.mapreduce.HibInputFormat r0;
+
+        r0 := @this: org.hipi.imagebundle.mapreduce.HibInputFormat;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.hadoop.mapreduce.RecordReader createRecordReader(org.apache.hadoop.mapreduce.InputSplit, org.apache.hadoop.mapreduce.TaskAttemptContext) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.hipi.imagebundle.mapreduce.HibInputFormat r0;
+        org.apache.hadoop.mapreduce.InputSplit r1;
+        org.apache.hadoop.mapreduce.TaskAttemptContext r2;
+        org.hipi.imagebundle.mapreduce.HibRecordReader $r3;
+
+        r0 := @this: org.hipi.imagebundle.mapreduce.HibInputFormat;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.InputSplit;
+
+        r2 := @parameter1: org.apache.hadoop.mapreduce.TaskAttemptContext;
+
+        $r3 = new org.hipi.imagebundle.mapreduce.HibRecordReader;
+
+        specialinvoke $r3.<org.hipi.imagebundle.mapreduce.HibRecordReader: void <init>()>();
+
+        return $r3;
+    }
+
+    protected static int staticGetBlockIndex(org.apache.hadoop.fs.BlockLocation[], long)
+    {
+        org.apache.hadoop.fs.BlockLocation[] r0;
+        long l0, l1, $l5, $l6, $l7, $l8, $l10, $l11, $l12;
+        int $i2, $i3, $i4, i14;
+        java.lang.IllegalArgumentException $r1;
+        java.lang.StringBuilder $r2, $r3, $r4, $r5, $r6, $r8;
+        java.lang.String $r7;
+        org.apache.hadoop.fs.BlockLocation $r9, $r10, $r11, r12;
+        byte $b9, $b13;
+
+        r0 := @parameter0: org.apache.hadoop.fs.BlockLocation[];
+
+        l0 := @parameter1: long;
+
+        i14 = 0;
+
+     label1:
+        $i2 = lengthof r0;
+
+        if i14 >= $i2 goto label3;
+
+        $r9 = r0[i14];
+
+        $l8 = virtualinvoke $r9.<org.apache.hadoop.fs.BlockLocation: long getOffset()>();
+
+        $b9 = $l8 cmp l0;
+
+        if $b9 > 0 goto label2;
+
+        $r10 = r0[i14];
+
+        $l10 = virtualinvoke $r10.<org.apache.hadoop.fs.BlockLocation: long getOffset()>();
+
+        $r11 = r0[i14];
+
+        $l12 = virtualinvoke $r11.<org.apache.hadoop.fs.BlockLocation: long getLength()>();
+
+        $l11 = $l10 + $l12;
+
+        $b13 = l0 cmp $l11;
+
+        if $b13 >= 0 goto label2;
+
+        return i14;
+
+     label2:
+        i14 = i14 + 1;
+
+        goto label1;
+
+     label3:
+        $i3 = lengthof r0;
+
+        $i4 = $i3 - 1;
+
+        r12 = r0[$i4];
+
+        $l5 = virtualinvoke r12.<org.apache.hadoop.fs.BlockLocation: long getOffset()>();
+
+        $l6 = virtualinvoke r12.<org.apache.hadoop.fs.BlockLocation: long getLength()>();
+
+        $l7 = $l5 + $l6;
+
+        l1 = $l7 - 1L;
+
+        $r1 = new java.lang.IllegalArgumentException;
+
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Offset ");
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l0);
+
+        $r6 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" is outside of file (0..");
+
+        $r5 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l1);
+
+        $r8 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(")");
+
+        $r7 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r1.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r7);
+
+        throw $r1;
+    }
+
+    public static java.util.List computeSplits(org.apache.hadoop.mapreduce.JobContext, java.util.List) throws java.io.IOException
+    {
+        org.apache.hadoop.mapreduce.JobContext r0;
+        java.util.List r1, r9;
+        org.apache.hadoop.conf.Configuration r2;
+        int i0, $i3, $i5, $i6, $i7, $i8, $i9, $i10, $i12, $i14, $i15, $i16, $i19, $i24, $i25, $i26, i27, i28, i31, i32, i33, i34, i35, i36, i38, i39, i40, i41, i42, i43;
+        java.util.Iterator r4;
+        org.apache.hadoop.fs.FileStatus r5, $r14, $r22, $r48;
+        org.apache.hadoop.fs.Path r6, $r21, $r47;
+        org.apache.hadoop.fs.FileSystem r7;
+        org.apache.hadoop.fs.BlockLocation[] r10;
+        long l1, l2, $l4, $l11, $l13, $l17, $l18, $l20, $l23, l29, l30, l37;
+        java.util.ArrayList $r11, $r20;
+        boolean $z0;
+        org.hipi.imagebundle.HipiImageBundle $r12;
+        java.lang.Object $r13, $r16, $r18, $r55;
+        java.lang.Long $r15, $r17, $r56;
+        org.apache.hadoop.mapreduce.lib.input.FileSplit $r19, $r49;
+        java.lang.StringBuilder $r23, $r25, $r29, $r30, $r31, $r33, $r34, $r35, $r36, $r40, $r41, $r43, $r44;
+        java.io.PrintStream $r24, $r42;
+        java.lang.String[] $r26, $r28, $r51, $r54, r60, r61, r63;
+        java.lang.Object[] $r27, $r52;
+        java.lang.String $r32, $r37, $r39, $r58;
+        org.apache.hadoop.fs.BlockLocation $r38, $r45, $r46, $r50, $r57;
+        byte $b21, $b22;
+        java.util.HashSet $r53;
+
+        r0 := @parameter0: org.apache.hadoop.mapreduce.JobContext;
+
+        r1 := @parameter1: java.util.List;
+
+        r2 = interfaceinvoke r0.<org.apache.hadoop.mapreduce.JobContext: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        i0 = virtualinvoke r2.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("hipi.map.tasks", 0);
+
+        $r11 = new java.util.ArrayList;
+
+        specialinvoke $r11.<java.util.ArrayList: void <init>()>();
+
+        r4 = interfaceinvoke r1.<java.util.List: java.util.Iterator iterator()>();
+
+     label01:
+        $z0 = interfaceinvoke r4.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label20;
+
+        $r13 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (org.apache.hadoop.fs.FileStatus) $r13;
+
+        r6 = virtualinvoke r5.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        r7 = virtualinvoke r6.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>(r2);
+
+        $r12 = new org.hipi.imagebundle.HipiImageBundle;
+
+        specialinvoke $r12.<org.hipi.imagebundle.HipiImageBundle: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration)>(r6, r2);
+
+        virtualinvoke $r12.<org.hipi.imagebundle.HipiImageBundle: void openForRead()>();
+
+        r9 = virtualinvoke $r12.<org.hipi.imagebundle.HipiImageBundle: java.util.List readAllOffsets()>();
+
+        $r14 = virtualinvoke $r12.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.FileStatus getDataFileStatus()>();
+
+        $i3 = interfaceinvoke r9.<java.util.List: int size()>();
+
+        $i5 = $i3 - 1;
+
+        $r16 = interfaceinvoke r9.<java.util.List: java.lang.Object get(int)>($i5);
+
+        $r15 = (java.lang.Long) $r16;
+
+        $l4 = virtualinvoke $r15.<java.lang.Long: long longValue()>();
+
+        r10 = virtualinvoke r7.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.BlockLocation[] getFileBlockLocations(org.apache.hadoop.fs.FileStatus,long,long)>($r14, 0L, $l4);
+
+        if i0 != 0 goto label12;
+
+        i27 = 0;
+
+        i28 = 0;
+
+        l29 = 0L;
+
+        l30 = 0L;
+
+     label02:
+        $i16 = lengthof r10;
+
+        if i28 >= $i16 goto label11;
+
+        $i19 = interfaceinvoke r9.<java.util.List: int size()>();
+
+        if i27 >= $i19 goto label11;
+
+        $r46 = r10[i28];
+
+        $l18 = virtualinvoke $r46.<org.apache.hadoop.fs.BlockLocation: long getOffset()>();
+
+        $r45 = r10[i28];
+
+        $l17 = virtualinvoke $r45.<org.apache.hadoop.fs.BlockLocation: long getLength()>();
+
+        l2 = $l18 + $l17;
+
+     label03:
+        $b22 = l30 cmp l2;
+
+        if $b22 >= 0 goto label04;
+
+        $i25 = interfaceinvoke r9.<java.util.List: int size()>();
+
+        if i27 >= $i25 goto label04;
+
+        $r55 = interfaceinvoke r9.<java.util.List: java.lang.Object get(int)>(i27);
+
+        $r56 = (java.lang.Long) $r55;
+
+        l30 = virtualinvoke $r56.<java.lang.Long: long longValue()>();
+
+        i27 = i27 + 1;
+
+        goto label03;
+
+     label04:
+        $b21 = l30 cmp l2;
+
+        if $b21 <= 0 goto label09;
+
+        $r53 = new java.util.HashSet;
+
+        specialinvoke $r53.<java.util.HashSet: void <init>()>();
+
+        $l23 = l30 - 1L;
+
+        i31 = staticinvoke <org.hipi.imagebundle.mapreduce.HibInputFormat: int staticGetBlockIndex(org.apache.hadoop.fs.BlockLocation[],long)>(r10, $l23);
+
+        i32 = i28;
+
+     label05:
+        if i32 >= i31 goto label08;
+
+        $r57 = r10[i32];
+
+        r60 = virtualinvoke $r57.<org.apache.hadoop.fs.BlockLocation: java.lang.String[] getHosts()>();
+
+        i33 = 0;
+
+     label06:
+        $i26 = lengthof r60;
+
+        if i33 >= $i26 goto label07;
+
+        $r58 = r60[i33];
+
+        interfaceinvoke $r53.<java.util.Set: boolean add(java.lang.Object)>($r58);
+
+        i33 = i33 + 1;
+
+        goto label06;
+
+     label07:
+        i32 = i32 + 1;
+
+        goto label05;
+
+     label08:
+        $i24 = interfaceinvoke $r53.<java.util.Set: int size()>();
+
+        $r54 = newarray (java.lang.String)[$i24];
+
+        $r52 = interfaceinvoke $r53.<java.util.Set: java.lang.Object[] toArray(java.lang.Object[])>($r54);
+
+        $r51 = (java.lang.String[]) $r52;
+
+        r61 = (java.lang.String[]) $r51;
+
+        goto label10;
+
+     label09:
+        $r50 = r10[i28];
+
+        r61 = virtualinvoke $r50.<org.apache.hadoop.fs.BlockLocation: java.lang.String[] getHosts()>();
+
+     label10:
+        $r49 = new org.apache.hadoop.mapreduce.lib.input.FileSplit;
+
+        $r48 = virtualinvoke $r12.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.FileStatus getDataFileStatus()>();
+
+        $r47 = virtualinvoke $r48.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        $l20 = l30 - l29;
+
+        specialinvoke $r49.<org.apache.hadoop.mapreduce.lib.input.FileSplit: void <init>(org.apache.hadoop.fs.Path,long,long,java.lang.String[])>($r47, l29, $l20, r61);
+
+        interfaceinvoke $r11.<java.util.List: boolean add(java.lang.Object)>($r49);
+
+        l29 = l30;
+
+        i28 = i28 + 1;
+
+        goto label02;
+
+     label11:
+        $r42 = <java.lang.System: java.io.PrintStream out>;
+
+        $r44 = new java.lang.StringBuilder;
+
+        specialinvoke $r44.<java.lang.StringBuilder: void <init>()>();
+
+        $r43 = virtualinvoke $r44.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Spawned ");
+
+        $r40 = virtualinvoke $r43.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i28);
+
+        $r41 = virtualinvoke $r40.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("map tasks");
+
+        $r39 = virtualinvoke $r41.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r42.<java.io.PrintStream: void println(java.lang.String)>($r39);
+
+        goto label19;
+
+     label12:
+        i34 = interfaceinvoke r9.<java.util.List: int size()>();
+
+        i35 = 0;
+
+        i36 = i0;
+
+        l37 = 0L;
+
+     label13:
+        if i34 <= 0 goto label19;
+
+        i38 = i34 / i36;
+
+        $i6 = i34 % i36;
+
+        if $i6 <= 0 goto label14;
+
+        i38 = i38 + 1;
+
+     label14:
+        $i9 = interfaceinvoke r9.<java.util.List: int size()>();
+
+        $i8 = $i9 - i35;
+
+        $i7 = staticinvoke <java.lang.Math: int min(int,int)>($i8, i38);
+
+        i39 = $i7 - 1;
+
+        i40 = staticinvoke <org.hipi.imagebundle.mapreduce.HibInputFormat: int staticGetBlockIndex(org.apache.hadoop.fs.BlockLocation[],long)>(r10, l37);
+
+        $i10 = i35 + i39;
+
+        $r18 = interfaceinvoke r9.<java.util.List: java.lang.Object get(int)>($i10);
+
+        $r17 = (java.lang.Long) $r18;
+
+        l1 = virtualinvoke $r17.<java.lang.Long: long longValue()>();
+
+        $l11 = l1 - 1L;
+
+        i41 = staticinvoke <org.hipi.imagebundle.mapreduce.HibInputFormat: int staticGetBlockIndex(org.apache.hadoop.fs.BlockLocation[],long)>(r10, $l11);
+
+        $r20 = new java.util.ArrayList;
+
+        specialinvoke $r20.<java.util.ArrayList: void <init>()>();
+
+        i42 = i40;
+
+     label15:
+        if i42 > i41 goto label18;
+
+        $r38 = r10[i42];
+
+        r63 = virtualinvoke $r38.<org.apache.hadoop.fs.BlockLocation: java.lang.String[] getHosts()>();
+
+        i43 = 0;
+
+     label16:
+        $i15 = lengthof r63;
+
+        if i43 >= $i15 goto label17;
+
+        $r37 = r63[i43];
+
+        virtualinvoke $r20.<java.util.ArrayList: boolean add(java.lang.Object)>($r37);
+
+        i43 = i43 + 1;
+
+        goto label16;
+
+     label17:
+        i42 = i42 + 1;
+
+        goto label15;
+
+     label18:
+        $r19 = new org.apache.hadoop.mapreduce.lib.input.FileSplit;
+
+        $r22 = virtualinvoke $r12.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.FileStatus getDataFileStatus()>();
+
+        $r21 = virtualinvoke $r22.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        $l13 = l1 - l37;
+
+        $i12 = virtualinvoke $r20.<java.util.ArrayList: int size()>();
+
+        $r26 = newarray (java.lang.String)[$i12];
+
+        $r27 = virtualinvoke $r20.<java.util.ArrayList: java.lang.Object[] toArray(java.lang.Object[])>($r26);
+
+        $r28 = (java.lang.String[]) $r27;
+
+        specialinvoke $r19.<org.apache.hadoop.mapreduce.lib.input.FileSplit: void <init>(org.apache.hadoop.fs.Path,long,long,java.lang.String[])>($r21, l37, $l13, $r28);
+
+        interfaceinvoke $r11.<java.util.List: boolean add(java.lang.Object)>($r19);
+
+        l37 = l1;
+
+        $i14 = i39 + 1;
+
+        i35 = i35 + $i14;
+
+        i36 = i36 + -1;
+
+        i34 = i34 - i38;
+
+        $r24 = <java.lang.System: java.io.PrintStream out>;
+
+        $r23 = new java.lang.StringBuilder;
+
+        specialinvoke $r23.<java.lang.StringBuilder: void <init>()>();
+
+        $r25 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("imageRemaining: ");
+
+        $r33 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i34);
+
+        $r34 = virtualinvoke $r33.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\ttaskRemaining: ");
+
+        $r35 = virtualinvoke $r34.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i36);
+
+        $r36 = virtualinvoke $r35.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\tlastOffset: ");
+
+        $r29 = virtualinvoke $r36.<java.lang.StringBuilder: java.lang.StringBuilder append(long)>(l1);
+
+        $r30 = virtualinvoke $r29.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\ti: ");
+
+        $r31 = virtualinvoke $r30.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i35);
+
+        $r32 = virtualinvoke $r31.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r24.<java.io.PrintStream: void println(java.lang.String)>($r32);
+
+        goto label13;
+
+     label19:
+        virtualinvoke $r12.<org.hipi.imagebundle.HipiImageBundle: void close()>();
+
+        goto label01;
+
+     label20:
+        return $r11;
+    }
+
+    public java.util.List getSplits(org.apache.hadoop.mapreduce.JobContext) throws java.io.IOException
+    {
+        org.hipi.imagebundle.mapreduce.HibInputFormat r0;
+        org.apache.hadoop.mapreduce.JobContext r1;
+        java.util.List $r2, $r3;
+
+        r0 := @this: org.hipi.imagebundle.mapreduce.HibInputFormat;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.JobContext;
+
+        $r2 = virtualinvoke r0.<org.hipi.imagebundle.mapreduce.HibInputFormat: java.util.List listStatus(org.apache.hadoop.mapreduce.JobContext)>(r1);
+
+        $r3 = staticinvoke <org.hipi.imagebundle.mapreduce.HibInputFormat: java.util.List computeSplits(org.apache.hadoop.mapreduce.JobContext,java.util.List)>(r1, $r2);
+
+        return $r3;
+    }
+}

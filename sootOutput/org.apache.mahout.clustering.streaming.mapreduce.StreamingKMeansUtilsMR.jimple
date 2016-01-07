@@ -223,7 +223,7 @@ public final class org.apache.mahout.clustering.streaming.mapreduce.StreamingKMe
         org.apache.hadoop.io.IntWritable $r10;
         org.apache.mahout.clustering.streaming.mapreduce.CentroidWritable $r11;
         int $i0, i1;
-        java.lang.Throwable $r12, $r13, $r14, r16;
+        java.lang.Throwable $r13, $r14, $r15, r16;
 
         r0 := @parameter0: java.lang.Iterable;
 
@@ -275,11 +275,11 @@ public final class org.apache.mahout.clustering.streaming.mapreduce.StreamingKMe
         goto label12;
 
      label04:
-        $r12 := @caughtexception;
+        $r14 := @caughtexception;
 
-        r16 = $r12;
+        r16 = $r14;
 
-        throw $r12;
+        throw $r14;
 
      label05:
         $r13 := @caughtexception;
@@ -296,9 +296,9 @@ public final class org.apache.mahout.clustering.streaming.mapreduce.StreamingKMe
         goto label11;
 
      label09:
-        $r14 := @caughtexception;
+        $r15 := @caughtexception;
 
-        virtualinvoke r16.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r14);
+        virtualinvoke r16.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r15);
 
         goto label11;
 
@@ -331,7 +331,7 @@ public final class org.apache.mahout.clustering.streaming.mapreduce.StreamingKMe
         org.apache.hadoop.io.IntWritable $r10;
         org.apache.mahout.math.VectorWritable $r11;
         int $i0, i1;
-        java.lang.Throwable $r12, $r14, $r15, r16;
+        java.lang.Throwable $r12, $r13, $r14, r16;
 
         r0 := @parameter0: java.lang.Iterable;
 
@@ -390,7 +390,7 @@ public final class org.apache.mahout.clustering.streaming.mapreduce.StreamingKMe
         throw $r14;
 
      label05:
-        $r15 := @caughtexception;
+        $r12 := @caughtexception;
 
      label06:
         if r3 == null goto label11;
@@ -404,9 +404,9 @@ public final class org.apache.mahout.clustering.streaming.mapreduce.StreamingKMe
         goto label11;
 
      label09:
-        $r12 := @caughtexception;
+        $r13 := @caughtexception;
 
-        virtualinvoke r16.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r12);
+        virtualinvoke r16.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r13);
 
         goto label11;
 
@@ -414,7 +414,7 @@ public final class org.apache.mahout.clustering.streaming.mapreduce.StreamingKMe
         virtualinvoke r3.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
 
      label11:
-        throw $r15;
+        throw $r12;
 
      label12:
         return;

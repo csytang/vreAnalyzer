@@ -309,6 +309,8 @@ public class VariantPath {
 		}
 	}
 		
+	
+	
 	public void layertraverse(SootMethod caller,CallSite callsite){
 		// 创建GraphvizController
 		graphvizController = new GraphvizController();
@@ -338,7 +340,7 @@ public class VariantPath {
 			while(!queue.isEmpty()){
 				// 2. 当队列不为空, 
 				queuetemp.clear();
-				System.out.println("\n@VariantPath 345-In layer:"+layer);
+				System.out.println("\nIn layer:"+layer);
 				lastLayer.clear();
 				
 				while(!queue.isEmpty()){
@@ -384,7 +386,7 @@ public class VariantPath {
 				queuetemp.clear();
 				lastLayer.clear();
 				
-				System.out.println("\n@387- In layer:"+layer);
+				System.out.println("\n In layer:"+layer);
 				while(!queue.isEmpty()){
 					Variant varNode = queue.poll();
 					if(layer==1){
@@ -421,9 +423,13 @@ public class VariantPath {
 		imageFile = graphvizController.getOutputFile();
 	}
 	
-	public void addToTable(CSVWriter writer){
+	
+	
+	
+	public void addToTable(CSVWriter writer,CallSite site){
+		//VariantPath Id,CallSite,Variants List,Classes,Methods" 
 		VariantPathToTable vtTable = new VariantPathToTable();
-		vtTable.addARowToTable(pathId, this,fullVariantSet,getAssociatedFiles(),writer);
+		vtTable.addARowToTable(pathId,site,this,fullVariantSet,getAssociatedFiles(),writer);
 	}
 	
 	// 本路径涉及到的文件

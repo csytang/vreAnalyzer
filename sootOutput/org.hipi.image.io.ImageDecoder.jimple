@@ -1,0 +1,11 @@
+public interface  org.hipi.image.io.ImageDecoder extends java.lang.Object
+{
+
+    public abstract org.hipi.image.HipiImageHeader decodeHeader(java.io.InputStream, boolean) throws java.io.IOException;
+
+    public abstract org.hipi.image.HipiImageHeader decodeHeader(java.io.InputStream) throws java.io.IOException;
+
+    public abstract org.hipi.image.HipiImage decodeImage(java.io.InputStream, org.hipi.image.HipiImageHeader, org.hipi.image.HipiImageFactory, boolean) throws java.lang.IllegalArgumentException, java.io.IOException;
+
+    public abstract org.hipi.image.HipiImage decodeHeaderAndImage(java.io.InputStream, org.hipi.image.HipiImageFactory, boolean) throws java.io.IOException, java.lang.IllegalArgumentException;
+}

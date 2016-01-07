@@ -1,0 +1,351 @@
+public class org.hipi.image.io.JpegCodec extends org.hipi.image.io.ImageCodec
+{
+    private static final org.hipi.image.io.JpegCodec staticObject;
+
+    public void <init>()
+    {
+        org.hipi.image.io.JpegCodec r0;
+
+        r0 := @this: org.hipi.image.io.JpegCodec;
+
+        specialinvoke r0.<org.hipi.image.io.ImageCodec: void <init>()>();
+
+        return;
+    }
+
+    public static org.hipi.image.io.JpegCodec getInstance()
+    {
+        org.hipi.image.io.JpegCodec $r0;
+
+        $r0 = <org.hipi.image.io.JpegCodec: org.hipi.image.io.JpegCodec staticObject>;
+
+        return $r0;
+    }
+
+    public org.hipi.image.HipiImageHeader decodeHeader(java.io.InputStream, boolean) throws java.io.IOException, java.lang.IllegalArgumentException
+    {
+        org.hipi.image.io.JpegCodec r0;
+        java.io.InputStream r1;
+        boolean z0;
+        short s0, $s4, $s7, $s8, $s10, $s13, $s16, $s21, $s22, $s26, $s28, $s33, $s35, s39;
+        byte[] r3;
+        long l1, l36;
+        java.io.DataInputStream $r4;
+        java.io.BufferedInputStream $r5;
+        byte $b3, $b5, $b6, $b11, $b12, $b17, $b19, $b20, $b24, $b27, $b29, $b30, $b31, $b32, $b34;
+        int $i9, $i14, $i15, $i23, $i25, i37, i38;
+        org.hipi.image.HipiImageHeader$HipiImageFormat $r6;
+        org.hipi.image.HipiImageHeader$HipiColorSpace $r7;
+        org.hipi.image.HipiImageHeader $r8;
+        java.lang.Object[] $r9;
+        java.lang.IllegalArgumentException $r10;
+        java.lang.Integer $r11;
+        java.lang.String $r12;
+        java.util.HashMap r13;
+
+        r0 := @this: org.hipi.image.io.JpegCodec;
+
+        r1 := @parameter0: java.io.InputStream;
+
+        z0 := @parameter1: boolean;
+
+        $r4 = new java.io.DataInputStream;
+
+        $r5 = new java.io.BufferedInputStream;
+
+        specialinvoke $r5.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>(r1);
+
+        specialinvoke $r4.<java.io.DataInputStream: void <init>(java.io.InputStream)>($r5);
+
+        virtualinvoke $r4.<java.io.DataInputStream: void mark(int)>(2147483647);
+
+        s0 = virtualinvoke $r4.<java.io.DataInputStream: short readShort()>();
+
+        if s0 == -40 goto label01;
+
+        return null;
+
+     label01:
+        r3 = newarray (byte)[6];
+
+     label02:
+        virtualinvoke $r4.<java.io.DataInputStream: int read(byte[],int,int)>(r3, 0, 4);
+
+        $b34 = r3[0];
+
+        $s35 = $b34 & 255;
+
+        if $s35 == 255 goto label03;
+
+        return null;
+
+     label03:
+        $b3 = r3[1];
+
+        $s4 = $b3 & 255;
+
+        if $s4 == 1 goto label02;
+
+        $b5 = r3[1];
+
+        $s7 = $b5 & 255;
+
+        if $s7 < 208 goto label04;
+
+        $b32 = r3[1];
+
+        $s33 = $b32 & 255;
+
+        if $s33 > 215 goto label04;
+
+        goto label02;
+
+     label04:
+        $b6 = r3[2];
+
+        $s10 = $b6 & 255;
+
+        $i9 = $s10 << 8;
+
+        $b11 = r3[3];
+
+        $s8 = $b11 & 255;
+
+        $i14 = $i9 | $s8;
+
+        $i15 = $i14 - 2;
+
+        l36 = (long) $i15;
+
+        $b12 = r3[1];
+
+        $s13 = $b12 & 255;
+
+        if $s13 == 192 goto label05;
+
+        $b31 = r3[1];
+
+        $s28 = $b31 & 255;
+
+        if $s28 != 194 goto label06;
+
+     label05:
+        virtualinvoke $r4.<java.io.DataInputStream: int read(byte[])>(r3);
+
+        $b19 = r3[1];
+
+        $s16 = $b19 & 255;
+
+        $i23 = $s16 << 8;
+
+        $b17 = r3[2];
+
+        $s22 = $b17 & 255;
+
+        i37 = $i23 | $s22;
+
+        $b20 = r3[3];
+
+        $s21 = $b20 & 255;
+
+        $i25 = $s21 << 8;
+
+        $b27 = r3[4];
+
+        $s26 = $b27 & 255;
+
+        i38 = $i25 | $s26;
+
+        $b24 = r3[0];
+
+        s39 = $b24 & 255;
+
+        goto label08;
+
+     label06:
+        $b29 = l36 cmp 0L;
+
+        if $b29 <= 0 goto label02;
+
+        l1 = virtualinvoke $r4.<java.io.DataInputStream: long skip(long)>(l36);
+
+        $b30 = l1 cmp 0L;
+
+        if $b30 != 0 goto label07;
+
+        goto label02;
+
+     label07:
+        l36 = l36 - l1;
+
+        goto label06;
+
+     label08:
+        if s39 == 8 goto label09;
+
+        $r10 = new java.lang.IllegalArgumentException;
+
+        $r9 = newarray (java.lang.Object)[1];
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(s39);
+
+        $r9[0] = $r11;
+
+        $r12 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Image has unsupported bit depth [%d].", $r9);
+
+        specialinvoke $r10.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r12);
+
+        throw $r10;
+
+     label09:
+        r13 = null;
+
+        if z0 == 0 goto label10;
+
+        virtualinvoke $r4.<java.io.DataInputStream: void reset()>();
+
+        r13 = staticinvoke <org.hipi.image.io.ExifDataReader: java.util.HashMap extractAndFlatten(java.io.InputStream)>($r4);
+
+     label10:
+        $r8 = new org.hipi.image.HipiImageHeader;
+
+        $r6 = <org.hipi.image.HipiImageHeader$HipiImageFormat: org.hipi.image.HipiImageHeader$HipiImageFormat JPEG>;
+
+        $r7 = <org.hipi.image.HipiImageHeader$HipiColorSpace: org.hipi.image.HipiImageHeader$HipiColorSpace RGB>;
+
+        specialinvoke $r8.<org.hipi.image.HipiImageHeader: void <init>(org.hipi.image.HipiImageHeader$HipiImageFormat,org.hipi.image.HipiImageHeader$HipiColorSpace,int,int,int,byte[],java.util.Map)>($r6, $r7, i38, i37, 3, null, r13);
+
+        return $r8;
+    }
+
+    public void encodeImage(org.hipi.image.HipiImage, java.io.OutputStream) throws java.lang.IllegalArgumentException, java.io.IOException
+    {
+        org.hipi.image.io.JpegCodec r0;
+        org.hipi.image.HipiImage r1;
+        java.io.OutputStream r2;
+        javax.imageio.stream.ImageOutputStream r3;
+        java.util.Iterator r4;
+        javax.imageio.ImageWriter r5;
+        javax.imageio.ImageWriteParam r6;
+        java.lang.Class $r7, $r8;
+        boolean $z0;
+        int $i0, $i1, $i2;
+        java.lang.IllegalArgumentException $r9, $r19, $r20, $r21;
+        org.hipi.image.HipiImageHeader$HipiColorSpace $r10, $r11;
+        java.lang.StringBuilder $r12, $r14, $r17;
+        java.lang.Object $r13;
+        java.io.PrintStream $r15;
+        java.lang.String $r16;
+        org.hipi.image.RasterImage $r18;
+
+        r0 := @this: org.hipi.image.io.JpegCodec;
+
+        r1 := @parameter0: org.hipi.image.HipiImage;
+
+        r2 := @parameter1: java.io.OutputStream;
+
+        $r7 = class "org/hipi/image/RasterImage";
+
+        $r8 = virtualinvoke r1.<java.lang.Object: java.lang.Class getClass()>();
+
+        $z0 = virtualinvoke $r7.<java.lang.Class: boolean isAssignableFrom(java.lang.Class)>($r8);
+
+        if $z0 != 0 goto label1;
+
+        $r21 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r21.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("JPEG encoder supports only RasterImage input types.");
+
+        throw $r21;
+
+     label1:
+        $i0 = virtualinvoke r1.<org.hipi.image.HipiImage: int getWidth()>();
+
+        if $i0 <= 0 goto label2;
+
+        $i1 = virtualinvoke r1.<org.hipi.image.HipiImage: int getHeight()>();
+
+        if $i1 > 0 goto label3;
+
+     label2:
+        $r9 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r9.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Invalid image resolution.");
+
+        throw $r9;
+
+     label3:
+        $r10 = virtualinvoke r1.<org.hipi.image.HipiImage: org.hipi.image.HipiImageHeader$HipiColorSpace getColorSpace()>();
+
+        $r11 = <org.hipi.image.HipiImageHeader$HipiColorSpace: org.hipi.image.HipiImageHeader$HipiColorSpace RGB>;
+
+        if $r10 == $r11 goto label4;
+
+        $r19 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r19.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("JPEG encoder supports only RGB color space.");
+
+        throw $r19;
+
+     label4:
+        $i2 = virtualinvoke r1.<org.hipi.image.HipiImage: int getNumBands()>();
+
+        if $i2 == 3 goto label5;
+
+        $r20 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r20.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("JPEG encoder supports only three band images.");
+
+        throw $r20;
+
+     label5:
+        r3 = staticinvoke <javax.imageio.ImageIO: javax.imageio.stream.ImageOutputStream createImageOutputStream(java.lang.Object)>(r2);
+
+        r4 = staticinvoke <javax.imageio.ImageIO: java.util.Iterator getImageWritersByFormatName(java.lang.String)>("jpeg");
+
+        $r13 = interfaceinvoke r4.<java.util.Iterator: java.lang.Object next()>();
+
+        r5 = (javax.imageio.ImageWriter) $r13;
+
+        $r15 = <java.lang.System: java.io.PrintStream out>;
+
+        $r12 = new java.lang.StringBuilder;
+
+        specialinvoke $r12.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Using JPEG encoder: ");
+
+        $r17 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>(r5);
+
+        $r16 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r15.<java.io.PrintStream: void println(java.lang.String)>($r16);
+
+        virtualinvoke r5.<javax.imageio.ImageWriter: void setOutput(java.lang.Object)>(r3);
+
+        r6 = virtualinvoke r5.<javax.imageio.ImageWriter: javax.imageio.ImageWriteParam getDefaultWriteParam()>();
+
+        virtualinvoke r6.<javax.imageio.ImageWriteParam: void setCompressionMode(int)>(2);
+
+        virtualinvoke r6.<javax.imageio.ImageWriteParam: void setCompressionQuality(float)>(0.95F);
+
+        $r18 = (org.hipi.image.RasterImage) r1;
+
+        virtualinvoke r0.<org.hipi.image.io.JpegCodec: void encodeRasterImage(org.hipi.image.RasterImage,javax.imageio.ImageWriter,javax.imageio.ImageWriteParam)>($r18, r5, r6);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.hipi.image.io.JpegCodec $r0;
+
+        $r0 = new org.hipi.image.io.JpegCodec;
+
+        specialinvoke $r0.<org.hipi.image.io.JpegCodec: void <init>()>();
+
+        <org.hipi.image.io.JpegCodec: org.hipi.image.io.JpegCodec staticObject> = $r0;
+
+        return;
+    }
+}

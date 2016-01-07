@@ -18,7 +18,7 @@ public final class org.apache.mahout.classifier.sgd.ModelSerializer extends java
         org.apache.mahout.classifier.sgd.CrossFoldLearner r1;
         java.io.DataOutputStream $r5;
         java.io.FileOutputStream $r6;
-        java.lang.Throwable $r8, $r9, $r10, r11;
+        java.lang.Throwable $r7, $r8, $r9, r11;
 
         r0 := @parameter0: java.lang.String;
 
@@ -45,11 +45,11 @@ public final class org.apache.mahout.classifier.sgd.ModelSerializer extends java
         goto label11;
 
      label03:
-        $r9 := @caughtexception;
+        $r7 := @caughtexception;
 
-        r11 = $r9;
+        r11 = $r7;
 
-        throw $r9;
+        throw $r7;
 
      label04:
         $r8 := @caughtexception;
@@ -66,9 +66,9 @@ public final class org.apache.mahout.classifier.sgd.ModelSerializer extends java
         goto label10;
 
      label08:
-        $r10 := @caughtexception;
+        $r9 := @caughtexception;
 
-        virtualinvoke r11.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r10);
+        virtualinvoke r11.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r9);
 
         goto label10;
 
@@ -127,7 +127,7 @@ public final class org.apache.mahout.classifier.sgd.ModelSerializer extends java
         throw $r9;
 
      label04:
-        $r7 := @caughtexception;
+        $r10 := @caughtexception;
 
      label05:
         if $r5 == null goto label10;
@@ -141,9 +141,9 @@ public final class org.apache.mahout.classifier.sgd.ModelSerializer extends java
         goto label10;
 
      label08:
-        $r10 := @caughtexception;
+        $r7 := @caughtexception;
 
-        virtualinvoke r11.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r10);
+        virtualinvoke r11.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r7);
 
         goto label10;
 
@@ -151,7 +151,7 @@ public final class org.apache.mahout.classifier.sgd.ModelSerializer extends java
         virtualinvoke $r5.<java.io.DataOutputStream: void close()>();
 
      label10:
-        throw $r7;
+        throw $r10;
 
      label11:
         return;
@@ -168,7 +168,7 @@ public final class org.apache.mahout.classifier.sgd.ModelSerializer extends java
         org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r1;
         java.io.DataOutputStream $r5;
         java.io.FileOutputStream $r6;
-        java.lang.Throwable $r7, $r8, $r10, r11;
+        java.lang.Throwable $r8, $r9, $r10, r11;
 
         r0 := @parameter0: java.lang.String;
 
@@ -195,11 +195,11 @@ public final class org.apache.mahout.classifier.sgd.ModelSerializer extends java
         goto label11;
 
      label03:
-        $r8 := @caughtexception;
+        $r9 := @caughtexception;
 
-        r11 = $r8;
+        r11 = $r9;
 
-        throw $r8;
+        throw $r9;
 
      label04:
         $r10 := @caughtexception;
@@ -216,9 +216,9 @@ public final class org.apache.mahout.classifier.sgd.ModelSerializer extends java
         goto label10;
 
      label08:
-        $r7 := @caughtexception;
+        $r8 := @caughtexception;
 
-        virtualinvoke r11.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r7);
+        virtualinvoke r11.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r8);
 
         goto label10;
 

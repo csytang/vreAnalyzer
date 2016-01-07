@@ -1,0 +1,133 @@
+public class org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter extends org.apache.hadoop.mapreduce.RecordWriter
+{
+    protected java.io.DataOutputStream out;
+
+    public void <init>(java.io.DataOutputStream)
+    {
+        org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter r0;
+        java.io.DataOutputStream r1;
+
+        r0 := @this: org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter;
+
+        r1 := @parameter0: java.io.DataOutputStream;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.RecordWriter: void <init>()>();
+
+        r0.<org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter: java.io.DataOutputStream out> = r1;
+
+        return;
+    }
+
+    public void close(org.apache.hadoop.mapreduce.TaskAttemptContext) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter r0;
+        org.apache.hadoop.mapreduce.TaskAttemptContext r1;
+        java.io.DataOutputStream $r2;
+
+        r0 := @this: org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.TaskAttemptContext;
+
+        $r2 = r0.<org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter: java.io.DataOutputStream out>;
+
+        virtualinvoke $r2.<java.io.DataOutputStream: void close()>();
+
+        return;
+    }
+
+    private void writeObject(org.apache.hadoop.io.Writable) throws java.io.IOException
+    {
+        org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter r0;
+        org.apache.hadoop.io.Writable r1;
+        java.io.DataOutputStream $r2;
+
+        r0 := @this: org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter;
+
+        r1 := @parameter0: org.apache.hadoop.io.Writable;
+
+        $r2 = r0.<org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter: java.io.DataOutputStream out>;
+
+        interfaceinvoke r1.<org.apache.hadoop.io.Writable: void write(java.io.DataOutput)>($r2);
+
+        return;
+    }
+
+    public void write(java.lang.Object, java.lang.Object) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter r0;
+        java.lang.Object r1, r2;
+        boolean z0, z1, z2, z3, $z4, $z5, $z6, $z7;
+        org.apache.hadoop.io.Writable $r3, $r4;
+
+        r0 := @this: org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Object;
+
+        if r1 == null goto label1;
+
+        $z5 = r1 instanceof org.apache.hadoop.io.NullWritable;
+
+        if $z5 == 0 goto label2;
+
+     label1:
+        $z6 = 1;
+
+        goto label3;
+
+     label2:
+        $z6 = 0;
+
+     label3:
+        z0 = $z6;
+
+        if r2 == null goto label4;
+
+        $z4 = r2 instanceof org.apache.hadoop.io.NullWritable;
+
+        if $z4 == 0 goto label5;
+
+     label4:
+        $z7 = 1;
+
+        goto label6;
+
+     label5:
+        $z7 = 0;
+
+     label6:
+        z1 = $z7;
+
+        z2 = r1 instanceof org.apache.hadoop.io.Writable;
+
+        z3 = r2 instanceof org.apache.hadoop.io.Writable;
+
+        if z0 == 0 goto label7;
+
+        if $z7 == 0 goto label7;
+
+        return;
+
+     label7:
+        if z0 != 0 goto label8;
+
+        if z2 == 0 goto label8;
+
+        $r4 = (org.apache.hadoop.io.Writable) r1;
+
+        specialinvoke r0.<org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter: void writeObject(org.apache.hadoop.io.Writable)>($r4);
+
+     label8:
+        if z1 != 0 goto label9;
+
+        if z3 == 0 goto label9;
+
+        $r3 = (org.apache.hadoop.io.Writable) r2;
+
+        specialinvoke r0.<org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter: void writeObject(org.apache.hadoop.io.Writable)>($r3);
+
+     label9:
+        return;
+    }
+}

@@ -1,0 +1,56 @@
+class org.hipi.image.io.PpmCodec$PpmHeader extends java.lang.Object
+{
+    public int width;
+    public int height;
+    public int numBands;
+    public int maxValue;
+    public java.util.ArrayList comments;
+    public int streamOffset;
+    public byte[] headerBytes;
+    final org.hipi.image.io.PpmCodec this$0;
+
+    private void <init>(org.hipi.image.io.PpmCodec)
+    {
+        org.hipi.image.io.PpmCodec$PpmHeader r0;
+        org.hipi.image.io.PpmCodec r1;
+        java.util.ArrayList $r2;
+        byte[] $r3;
+
+        r0 := @this: org.hipi.image.io.PpmCodec$PpmHeader;
+
+        r1 := @parameter0: org.hipi.image.io.PpmCodec;
+
+        r0.<org.hipi.image.io.PpmCodec$PpmHeader: org.hipi.image.io.PpmCodec this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.util.ArrayList;
+
+        specialinvoke $r2.<java.util.ArrayList: void <init>()>();
+
+        r0.<org.hipi.image.io.PpmCodec$PpmHeader: java.util.ArrayList comments> = $r2;
+
+        $r3 = newarray (byte)[255];
+
+        r0.<org.hipi.image.io.PpmCodec$PpmHeader: byte[] headerBytes> = $r3;
+
+        return;
+    }
+
+    void <init>(org.hipi.image.io.PpmCodec, org.hipi.image.io.PpmCodec$1)
+    {
+        org.hipi.image.io.PpmCodec$PpmHeader r0;
+        org.hipi.image.io.PpmCodec r1;
+        org.hipi.image.io.PpmCodec$1 r2;
+
+        r0 := @this: org.hipi.image.io.PpmCodec$PpmHeader;
+
+        r1 := @parameter0: org.hipi.image.io.PpmCodec;
+
+        r2 := @parameter1: org.hipi.image.io.PpmCodec$1;
+
+        specialinvoke r0.<org.hipi.image.io.PpmCodec$PpmHeader: void <init>(org.hipi.image.io.PpmCodec)>(r1);
+
+        return;
+    }
+}

@@ -198,7 +198,7 @@ public class org.apache.mahout.classifier.naivebayes.test.TestNaiveBayesDriver e
         java.lang.String[] $r29;
         org.apache.mahout.math.Vector $r30, $r31;
         org.apache.mahout.classifier.naivebayes.ComplementaryNaiveBayesClassifier $r34;
-        java.lang.Throwable $r35, $r37, $r38, r40;
+        java.lang.Throwable $r36, $r37, $r38, r40;
         org.apache.mahout.classifier.naivebayes.AbstractNaiveBayesClassifier r39;
 
         r0 := @this: org.apache.mahout.classifier.naivebayes.test.TestNaiveBayesDriver;
@@ -320,14 +320,14 @@ public class org.apache.mahout.classifier.naivebayes.test.TestNaiveBayesDriver e
         goto label15;
 
      label07:
-        $r37 := @caughtexception;
+        $r36 := @caughtexception;
 
-        r40 = $r37;
+        r40 = $r36;
 
-        throw $r37;
+        throw $r36;
 
      label08:
-        $r35 := @caughtexception;
+        $r38 := @caughtexception;
 
      label09:
         if r3 == null goto label14;
@@ -341,9 +341,9 @@ public class org.apache.mahout.classifier.naivebayes.test.TestNaiveBayesDriver e
         goto label14;
 
      label12:
-        $r38 := @caughtexception;
+        $r37 := @caughtexception;
 
-        virtualinvoke r40.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r38);
+        virtualinvoke r40.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r37);
 
         goto label14;
 
@@ -351,7 +351,7 @@ public class org.apache.mahout.classifier.naivebayes.test.TestNaiveBayesDriver e
         virtualinvoke r3.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
 
      label14:
-        throw $r35;
+        throw $r38;
 
      label15:
         return;

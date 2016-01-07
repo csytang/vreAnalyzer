@@ -57,7 +57,7 @@ public class VariantPathAnalysis {
 	
 	public void parse(Map<SootMethod,List<Variant>> methodToVariants){
 		// 1. 获得所有的Caller函数
-		csvwriter.println("VariantPath Id,Variants List,Classes,Methods");
+		csvwriter.println("VariantPath Id,CallSite,Variants List,Classes,Methods");
 		
 		List<SootMethod> callerMethods = BindingResolver.inst().getCallerMethods();
 		List<Variant> nodebindingVariants = new LinkedList<Variant>();
@@ -224,11 +224,18 @@ public class VariantPathAnalysis {
 				if(curr!=null){
 					curr.layertraverse(caller,null);
 					variantToGraphvizCont.put(curr, curr.getgraphvizController());
-					curr.addToTable(csvwriter);
+					curr.addToTable(csvwriter,null);
 					pathIdToFile.put(curr.getPathId(), curr.getImageFile());
 				}
 			}
 		}
+		
+		
+		//## add to callees
+		
+		/**
+		
+		
 		
 		// 2. 获得所有的callsite
 		List<SootMethod> calleeMethods = BindingResolver.inst().getCalleeMethods();
@@ -254,8 +261,8 @@ public class VariantPathAnalysis {
 				if(shouldbeRemoved!=null){
 					callees.removeAll(shouldbeRemoved);
 				}
-				// 遍历所有的函数
-				for(SootMethod callee:callees){
+			// 遍历所有的函数
+			for(SootMethod callee:callees){
 					// 1. 获得callee的cfg 
 					CFG cfg = ProgramFlowBuilder.inst().getCFG(callee);
 					if(cfg==null)
@@ -317,10 +324,10 @@ public class VariantPathAnalysis {
 									}
 								}else{// 如果当前的Variant正在分析 未结束 并且获得了新的Variant
 									// 1. 遍历所有在paddingVariants中的Variant
-									/*
-									 * 2. 如果有一个Variant的stmt已经全部经过 那么移除这个Variant
-									 *    将这个Variant建立到下一个Variant的链接 使用前后链接link
-									 */
+									//
+									 // 2. 如果有一个Variant的stmt已经全部经过 那么移除这个Variant
+									//    将这个Variant建立到下一个Variant的链接 使用前后链接link
+									 
 									List<Variant>needToRemoveList = new LinkedList<Variant>();
 									needToRemoveList.clear();
 									for(Map.Entry<Variant, List<Stmt>>unprocessedentry:panddingVariantToUnProcessedStmt.entrySet()){
@@ -370,14 +377,14 @@ public class VariantPathAnalysis {
 						if(curr!=null){
 							curr.layertraverse(callermethod,callsite);
 							variantToGraphvizCont.put(curr, curr.getgraphvizController());
-							curr.addToTable(csvwriter);
+							curr.addToTable(csvwriter,callsite);
 							pathIdToFile.put(curr.getPathId(), curr.getImageFile());
 						}
 					}
-					
-				}
+			}
 			}			
 		}
+		*/
 		
 		csvwriter.close();
 		// 将路径加入listener

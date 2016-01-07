@@ -1,0 +1,473 @@
+public class org.hipi.opencv.OpenCVUtils extends java.lang.Object
+{
+    private static int[][] openCVTypeLUT;
+
+    public void <init>()
+    {
+        org.hipi.opencv.OpenCVUtils r0;
+
+        r0 := @this: org.hipi.opencv.OpenCVUtils;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static int generateOpenCVType(int, int)
+    {
+        int i0, i1, i2, $i3, $i4, $i5;
+        int[][] $r0, $r1, $r3;
+        int[] $r2, $r4;
+        byte b6;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        b6 = -1;
+
+        tableswitch(i0)
+        {
+            case 0: goto label01;
+            case 1: goto label02;
+            case 2: goto label03;
+            case 3: goto label04;
+            case 4: goto label05;
+            case 5: goto label06;
+            default: goto label07;
+        };
+
+     label01:
+        b6 = 0;
+
+        goto label07;
+
+     label02:
+        b6 = 1;
+
+        goto label07;
+
+     label03:
+        b6 = 2;
+
+        goto label07;
+
+     label04:
+        b6 = 3;
+
+        goto label07;
+
+     label05:
+        b6 = 4;
+
+        goto label07;
+
+     label06:
+        b6 = 5;
+
+     label07:
+        i2 = i1 - 1;
+
+        if b6 < 0 goto label08;
+
+        $r0 = <org.hipi.opencv.OpenCVUtils: int[][] openCVTypeLUT>;
+
+        $i3 = lengthof $r0;
+
+        if b6 < $i3 goto label09;
+
+     label08:
+        return -1;
+
+     label09:
+        if i2 < 0 goto label10;
+
+        $r1 = <org.hipi.opencv.OpenCVUtils: int[][] openCVTypeLUT>;
+
+        $r2 = $r1[0];
+
+        $i4 = lengthof $r2;
+
+        if i2 < $i4 goto label11;
+
+     label10:
+        return -1;
+
+     label11:
+        $r3 = <org.hipi.opencv.OpenCVUtils: int[][] openCVTypeLUT>;
+
+        $r4 = $r3[b6];
+
+        $i5 = $r4[i2];
+
+        return $i5;
+    }
+
+    public static org.bytedeco.javacpp.opencv_core$Mat convertRasterImageToMat(org.hipi.image.RasterImage) throws java.lang.IllegalArgumentException
+    {
+        org.hipi.image.RasterImage r0;
+        int i0, i1, i2, i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13;
+        byte[] r2;
+        java.lang.IllegalArgumentException $r3, $r12, $r41, $r49, $r53;
+        java.lang.StringBuilder $r4, $r5, $r6, $r7, $r8, $r10, $r11, $r13, $r14, $r15, $r39, $r40, $r42, $r43, $r44, $r45, $r46, $r47, $r50, $r51;
+        java.lang.String $r9, $r16, $r48, $r52;
+        org.hipi.image.PixelArray $r17, $r18;
+        org.bytedeco.javacpp.opencv_core$Mat $r19;
+        java.nio.Buffer $r20, $r21, $r25, $r28, $r32;
+        java.nio.DoubleBuffer $r22;
+        java.nio.ByteBuffer $r23;
+        double[] $r26;
+        float[] $r30;
+        java.nio.FloatBuffer $r31;
+        int[] $r34;
+        java.nio.IntBuffer $r35;
+        short[] $r37;
+        java.nio.ShortBuffer $r38;
+
+        r0 := @parameter0: org.hipi.image.RasterImage;
+
+        if r0 != null goto label01;
+
+        $r53 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r53.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Input RasterImage is null.");
+
+        throw $r53;
+
+     label01:
+        $i4 = virtualinvoke r0.<org.hipi.image.RasterImage: int getWidth()>();
+
+        if $i4 <= 0 goto label02;
+
+        $i8 = virtualinvoke r0.<org.hipi.image.RasterImage: int getHeight()>();
+
+        if $i8 > 0 goto label03;
+
+     label02:
+        $r3 = new java.lang.IllegalArgumentException;
+
+        $r4 = new java.lang.StringBuilder;
+
+        specialinvoke $r4.<java.lang.StringBuilder: void <init>()>();
+
+        $r5 = virtualinvoke $r4.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Input RasterImage has invalid dimensions: [");
+
+        $i5 = virtualinvoke r0.<org.hipi.image.RasterImage: int getWidth()>();
+
+        $r6 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i5);
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(",");
+
+        $i6 = virtualinvoke r0.<org.hipi.image.RasterImage: int getHeight()>();
+
+        $r8 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i6);
+
+        $r10 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r9 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r3.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r9);
+
+        throw $r3;
+
+     label03:
+        $i7 = virtualinvoke r0.<org.hipi.image.RasterImage: int getNumBands()>();
+
+        if $i7 <= 0 goto label04;
+
+        $i10 = virtualinvoke r0.<org.hipi.image.RasterImage: int getNumBands()>();
+
+        if $i10 <= 4 goto label05;
+
+     label04:
+        $r12 = new java.lang.IllegalArgumentException;
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r13 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Input RasterImage has invalid number of bandsY: [");
+
+        $i9 = virtualinvoke r0.<org.hipi.image.RasterImage: int getNumBands()>();
+
+        $r15 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>($i9);
+
+        $r14 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r16 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r12.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r16);
+
+        throw $r12;
+
+     label05:
+        $r17 = virtualinvoke r0.<org.hipi.image.RasterImage: org.hipi.image.PixelArray getPixelArray()>();
+
+        i0 = virtualinvoke $r17.<org.hipi.image.PixelArray: int getDataType()>();
+
+        i1 = virtualinvoke r0.<org.hipi.image.RasterImage: int getNumBands()>();
+
+        i2 = staticinvoke <org.hipi.opencv.OpenCVUtils: int generateOpenCVType(int,int)>(i0, i1);
+
+        if i2 != -1 goto label06;
+
+        $r49 = new java.lang.IllegalArgumentException;
+
+        $r42 = new java.lang.StringBuilder;
+
+        specialinvoke $r42.<java.lang.StringBuilder: void <init>()>();
+
+        $r43 = virtualinvoke $r42.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Invalid PixelArray data type: [");
+
+        $r44 = virtualinvoke $r43.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r45 = virtualinvoke $r44.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("] and / or RasterImage numBands: [");
+
+        $r50 = virtualinvoke $r45.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i1);
+
+        $r51 = virtualinvoke $r50.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]");
+
+        $r52 = virtualinvoke $r51.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r49.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r52);
+
+        throw $r49;
+
+     label06:
+        $r19 = new org.bytedeco.javacpp.opencv_core$Mat;
+
+        $i12 = virtualinvoke r0.<org.hipi.image.RasterImage: int getHeight()>();
+
+        $i11 = virtualinvoke r0.<org.hipi.image.RasterImage: int getWidth()>();
+
+        specialinvoke $r19.<org.bytedeco.javacpp.opencv_core$Mat: void <init>(int,int,int)>($i12, $i11, i2);
+
+        $r18 = virtualinvoke r0.<org.hipi.image.RasterImage: org.hipi.image.PixelArray getPixelArray()>();
+
+        r2 = virtualinvoke $r18.<org.hipi.image.PixelArray: byte[] getByteArray()>();
+
+        $i13 = virtualinvoke $r19.<org.bytedeco.javacpp.opencv_core$Mat: int type()>();
+
+        i3 = staticinvoke <org.bytedeco.javacpp.opencv_core: int CV_MAT_DEPTH(int)>($i13);
+
+        tableswitch(i3)
+        {
+            case 0: goto label07;
+            case 1: goto label07;
+            case 2: goto label08;
+            case 3: goto label08;
+            case 4: goto label09;
+            case 5: goto label10;
+            case 6: goto label11;
+            default: goto label12;
+        };
+
+     label07:
+        $r20 = virtualinvoke $r19.<org.bytedeco.javacpp.opencv_core$Mat: java.nio.Buffer createBuffer()>();
+
+        $r23 = (java.nio.ByteBuffer) $r20;
+
+        virtualinvoke $r23.<java.nio.ByteBuffer: java.nio.ByteBuffer put(byte[])>(r2);
+
+        goto label13;
+
+     label08:
+        $r32 = virtualinvoke $r19.<org.bytedeco.javacpp.opencv_core$Mat: java.nio.Buffer createBuffer()>();
+
+        $r38 = (java.nio.ShortBuffer) $r32;
+
+        $r37 = staticinvoke <org.hipi.util.ByteUtils: short[] byteArrayToShortArray(byte[])>(r2);
+
+        virtualinvoke $r38.<java.nio.ShortBuffer: java.nio.ShortBuffer put(short[])>($r37);
+
+        goto label13;
+
+     label09:
+        $r28 = virtualinvoke $r19.<org.bytedeco.javacpp.opencv_core$Mat: java.nio.Buffer createBuffer()>();
+
+        $r35 = (java.nio.IntBuffer) $r28;
+
+        $r34 = staticinvoke <org.hipi.util.ByteUtils: int[] byteArrayToIntArray(byte[])>(r2);
+
+        virtualinvoke $r35.<java.nio.IntBuffer: java.nio.IntBuffer put(int[])>($r34);
+
+        goto label13;
+
+     label10:
+        $r25 = virtualinvoke $r19.<org.bytedeco.javacpp.opencv_core$Mat: java.nio.Buffer createBuffer()>();
+
+        $r31 = (java.nio.FloatBuffer) $r25;
+
+        $r30 = staticinvoke <org.hipi.util.ByteUtils: float[] byteArrayToFloatArray(byte[])>(r2);
+
+        virtualinvoke $r31.<java.nio.FloatBuffer: java.nio.FloatBuffer put(float[])>($r30);
+
+        goto label13;
+
+     label11:
+        $r21 = virtualinvoke $r19.<org.bytedeco.javacpp.opencv_core$Mat: java.nio.Buffer createBuffer()>();
+
+        $r22 = (java.nio.DoubleBuffer) $r21;
+
+        $r26 = staticinvoke <org.hipi.util.ByteUtils: double[] byteArrayToDoubleArray(byte[])>(r2);
+
+        virtualinvoke $r22.<java.nio.DoubleBuffer: java.nio.DoubleBuffer put(double[])>($r26);
+
+        goto label13;
+
+     label12:
+        $r41 = new java.lang.IllegalArgumentException;
+
+        $r40 = new java.lang.StringBuilder;
+
+        specialinvoke $r40.<java.lang.StringBuilder: void <init>()>();
+
+        $r39 = virtualinvoke $r40.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unsupported matrix depth [");
+
+        $r46 = virtualinvoke $r39.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i3);
+
+        $r47 = virtualinvoke $r46.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("].");
+
+        $r48 = virtualinvoke $r47.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r41.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r48);
+
+        throw $r41;
+
+     label13:
+        return $r19;
+    }
+
+    static void <clinit>()
+    {
+        int[][] $r0;
+        int[] $r1, $r2, $r3, $r4, $r5, $r6;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16, $i17, $i18, $i19, $i20, $i21, $i22, $i23;
+
+        $r0 = newarray (int[])[6];
+
+        $r1 = newarray (int)[4];
+
+        $i0 = <org.bytedeco.javacpp.opencv_core: int CV_8UC1>;
+
+        $r1[0] = $i0;
+
+        $i1 = <org.bytedeco.javacpp.opencv_core: int CV_8UC2>;
+
+        $r1[1] = $i1;
+
+        $i2 = <org.bytedeco.javacpp.opencv_core: int CV_8UC3>;
+
+        $r1[2] = $i2;
+
+        $i3 = <org.bytedeco.javacpp.opencv_core: int CV_8UC4>;
+
+        $r1[3] = $i3;
+
+        $r0[0] = $r1;
+
+        $r2 = newarray (int)[4];
+
+        $i4 = <org.bytedeco.javacpp.opencv_core: int CV_16UC1>;
+
+        $r2[0] = $i4;
+
+        $i5 = <org.bytedeco.javacpp.opencv_core: int CV_16UC2>;
+
+        $r2[1] = $i5;
+
+        $i6 = <org.bytedeco.javacpp.opencv_core: int CV_16UC3>;
+
+        $r2[2] = $i6;
+
+        $i7 = <org.bytedeco.javacpp.opencv_core: int CV_16UC4>;
+
+        $r2[3] = $i7;
+
+        $r0[1] = $r2;
+
+        $r3 = newarray (int)[4];
+
+        $i8 = <org.bytedeco.javacpp.opencv_core: int CV_16SC1>;
+
+        $r3[0] = $i8;
+
+        $i9 = <org.bytedeco.javacpp.opencv_core: int CV_16SC2>;
+
+        $r3[1] = $i9;
+
+        $i10 = <org.bytedeco.javacpp.opencv_core: int CV_16SC3>;
+
+        $r3[2] = $i10;
+
+        $i11 = <org.bytedeco.javacpp.opencv_core: int CV_16SC4>;
+
+        $r3[3] = $i11;
+
+        $r0[2] = $r3;
+
+        $r4 = newarray (int)[4];
+
+        $i12 = <org.bytedeco.javacpp.opencv_core: int CV_32SC1>;
+
+        $r4[0] = $i12;
+
+        $i14 = <org.bytedeco.javacpp.opencv_core: int CV_32SC2>;
+
+        $r4[1] = $i14;
+
+        $i13 = <org.bytedeco.javacpp.opencv_core: int CV_32SC3>;
+
+        $r4[2] = $i13;
+
+        $i15 = <org.bytedeco.javacpp.opencv_core: int CV_32SC4>;
+
+        $r4[3] = $i15;
+
+        $r0[3] = $r4;
+
+        $r5 = newarray (int)[4];
+
+        $i17 = <org.bytedeco.javacpp.opencv_core: int CV_32FC1>;
+
+        $r5[0] = $i17;
+
+        $i16 = <org.bytedeco.javacpp.opencv_core: int CV_32FC2>;
+
+        $r5[1] = $i16;
+
+        $i19 = <org.bytedeco.javacpp.opencv_core: int CV_32FC3>;
+
+        $r5[2] = $i19;
+
+        $i18 = <org.bytedeco.javacpp.opencv_core: int CV_32FC4>;
+
+        $r5[3] = $i18;
+
+        $r0[4] = $r5;
+
+        $r6 = newarray (int)[4];
+
+        $i20 = <org.bytedeco.javacpp.opencv_core: int CV_64FC1>;
+
+        $r6[0] = $i20;
+
+        $i22 = <org.bytedeco.javacpp.opencv_core: int CV_64FC2>;
+
+        $r6[1] = $i22;
+
+        $i21 = <org.bytedeco.javacpp.opencv_core: int CV_64FC3>;
+
+        $r6[2] = $i21;
+
+        $i23 = <org.bytedeco.javacpp.opencv_core: int CV_64FC4>;
+
+        $r6[3] = $i23;
+
+        $r0[5] = $r6;
+
+        <org.hipi.opencv.OpenCVUtils: int[][] openCVTypeLUT> = $r0;
+
+        return;
+    }
+}

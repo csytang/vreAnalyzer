@@ -67,7 +67,7 @@ public final class org.apache.mahout.clustering.kmeans.RandomSeedGenerator exten
         org.apache.hadoop.io.Text $r47;
         long $l4;
         org.apache.mahout.clustering.iterator.ClusterWritable $r50, $r51;
-        java.lang.Throwable $r53, $r54, $r56, r62;
+        java.lang.Throwable $r53, $r55, $r56, r62;
         org.apache.hadoop.io.SequenceFile$Writer r61;
 
         r0 := @parameter0: org.apache.hadoop.conf.Configuration;
@@ -311,14 +311,14 @@ public final class org.apache.mahout.clustering.kmeans.RandomSeedGenerator exten
         goto label25;
 
      label17:
-        $r53 := @caughtexception;
+        $r56 := @caughtexception;
 
-        r62 = $r53;
+        r62 = $r56;
 
-        throw $r53;
+        throw $r56;
 
      label18:
-        $r56 := @caughtexception;
+        $r53 := @caughtexception;
 
      label19:
         if r61 == null goto label24;
@@ -332,9 +332,9 @@ public final class org.apache.mahout.clustering.kmeans.RandomSeedGenerator exten
         goto label24;
 
      label22:
-        $r54 := @caughtexception;
+        $r55 := @caughtexception;
 
-        virtualinvoke r62.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r54);
+        virtualinvoke r62.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r55);
 
         goto label24;
 
@@ -342,7 +342,7 @@ public final class org.apache.mahout.clustering.kmeans.RandomSeedGenerator exten
         virtualinvoke r61.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
 
      label24:
-        throw $r56;
+        throw $r53;
 
      label25:
         return $r26;

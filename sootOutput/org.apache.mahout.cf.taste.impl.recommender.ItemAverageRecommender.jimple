@@ -325,13 +325,13 @@ public final class org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecomm
         long l0, l1;
         float f0, $f1, $f2;
         org.apache.mahout.cf.taste.model.DataModel r1;
-        java.util.concurrent.locks.Lock $r4, $r8, $r15;
-        java.util.concurrent.locks.ReadWriteLock $r5, $r9, $r14;
+        java.util.concurrent.locks.Lock $r4, $r8, $r14;
+        java.util.concurrent.locks.ReadWriteLock $r5, $r9, $r15;
         java.lang.Object $r6;
         org.apache.mahout.cf.taste.impl.common.FastByIDMap $r7, $r10;
         org.apache.mahout.cf.taste.impl.common.FullRunningAverage $r11;
-        org.apache.mahout.cf.taste.common.NoSuchUserException $r13;
-        java.lang.Throwable $r16;
+        java.lang.Throwable $r13;
+        org.apache.mahout.cf.taste.common.NoSuchUserException $r16;
         java.lang.Float r17;
         double $d0, d1;
         org.apache.mahout.cf.taste.impl.common.RunningAverage r19;
@@ -369,7 +369,7 @@ public final class org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecomm
         goto label06;
 
      label05:
-        $r13 := @caughtexception;
+        $r16 := @caughtexception;
 
         d1 = (double) f0;
 
@@ -416,16 +416,16 @@ public final class org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecomm
         goto label12;
 
      label10:
-        $r16 := @caughtexception;
+        $r13 := @caughtexception;
 
      label11:
-        $r14 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock>;
+        $r15 = r0.<org.apache.mahout.cf.taste.impl.recommender.ItemAverageRecommender: java.util.concurrent.locks.ReadWriteLock buildAveragesLock>;
 
-        $r15 = interfaceinvoke $r14.<java.util.concurrent.locks.ReadWriteLock: java.util.concurrent.locks.Lock writeLock()>();
+        $r14 = interfaceinvoke $r15.<java.util.concurrent.locks.ReadWriteLock: java.util.concurrent.locks.Lock writeLock()>();
 
-        interfaceinvoke $r15.<java.util.concurrent.locks.Lock: void unlock()>();
+        interfaceinvoke $r14.<java.util.concurrent.locks.Lock: void unlock()>();
 
-        throw $r16;
+        throw $r13;
 
      label12:
         return;

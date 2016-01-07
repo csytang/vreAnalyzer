@@ -1,0 +1,288 @@
+public class org.hipi.image.HipiImageFactory extends java.lang.Object
+{
+    private static final org.hipi.image.HipiImageFactory staticFloatImageFactory;
+    private static final org.hipi.image.HipiImageFactory staticByteImageFactory;
+    private java.lang.Class imageClass;
+    private org.hipi.image.HipiImage$HipiImageType imageType;
+
+    public static org.hipi.image.HipiImageFactory getFloatImageFactory()
+    {
+        org.hipi.image.HipiImageFactory $r0;
+
+        $r0 = <org.hipi.image.HipiImageFactory: org.hipi.image.HipiImageFactory staticFloatImageFactory>;
+
+        return $r0;
+    }
+
+    public static org.hipi.image.HipiImageFactory getByteImageFactory()
+    {
+        org.hipi.image.HipiImageFactory $r0;
+
+        $r0 = <org.hipi.image.HipiImageFactory: org.hipi.image.HipiImageFactory staticByteImageFactory>;
+
+        return $r0;
+    }
+
+    public void <init>(java.lang.Class) throws java.lang.InstantiationException, java.lang.IllegalAccessException, java.lang.ExceptionInInitializerError, java.lang.SecurityException, java.lang.RuntimeException
+    {
+        org.hipi.image.HipiImageFactory r0;
+        java.lang.Class r1, $r4;
+        org.hipi.image.HipiImage r2;
+        org.hipi.image.HipiImage$HipiImageType $r3, $r6;
+        java.lang.Object $r5;
+
+        r0 := @this: org.hipi.image.HipiImageFactory;
+
+        r1 := @parameter0: java.lang.Class;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.hipi.image.HipiImageFactory: java.lang.Class imageClass> = null;
+
+        $r3 = <org.hipi.image.HipiImage$HipiImageType: org.hipi.image.HipiImage$HipiImageType UNDEFINED>;
+
+        r0.<org.hipi.image.HipiImageFactory: org.hipi.image.HipiImage$HipiImageType imageType> = $r3;
+
+        specialinvoke r0.<org.hipi.image.HipiImageFactory: void findImageClass(java.lang.Class)>(r1);
+
+        $r4 = r0.<org.hipi.image.HipiImageFactory: java.lang.Class imageClass>;
+
+        $r5 = virtualinvoke $r4.<java.lang.Class: java.lang.Object newInstance()>();
+
+        r2 = (org.hipi.image.HipiImage) $r5;
+
+        $r6 = virtualinvoke r2.<org.hipi.image.HipiImage: org.hipi.image.HipiImage$HipiImageType getType()>();
+
+        r0.<org.hipi.image.HipiImageFactory: org.hipi.image.HipiImage$HipiImageType imageType> = $r6;
+
+        return;
+    }
+
+    public void <init>(org.hipi.image.HipiImage$HipiImageType) throws java.lang.IllegalArgumentException
+    {
+        org.hipi.image.HipiImageFactory r0;
+        org.hipi.image.HipiImage$HipiImageType r1, $r2;
+        int[] $r3;
+        int $i0, $i1;
+        java.lang.IllegalArgumentException $r4;
+
+        r0 := @this: org.hipi.image.HipiImageFactory;
+
+        r1 := @parameter0: org.hipi.image.HipiImage$HipiImageType;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.hipi.image.HipiImageFactory: java.lang.Class imageClass> = null;
+
+        $r2 = <org.hipi.image.HipiImage$HipiImageType: org.hipi.image.HipiImage$HipiImageType UNDEFINED>;
+
+        r0.<org.hipi.image.HipiImageFactory: org.hipi.image.HipiImage$HipiImageType imageType> = $r2;
+
+        $r3 = <org.hipi.image.HipiImageFactory$1: int[] $SwitchMap$org$hipi$image$HipiImage$HipiImageType>;
+
+        $i0 = virtualinvoke r1.<org.hipi.image.HipiImage$HipiImageType: int ordinal()>();
+
+        $i1 = $r3[$i0];
+
+        tableswitch($i1)
+        {
+            case 1: goto label1;
+            case 2: goto label2;
+            case 3: goto label3;
+            case 4: goto label4;
+            default: goto label4;
+        };
+
+     label1:
+        r0.<org.hipi.image.HipiImageFactory: java.lang.Class imageClass> = class "org/hipi/image/FloatImage";
+
+        goto label5;
+
+     label2:
+        r0.<org.hipi.image.HipiImageFactory: java.lang.Class imageClass> = class "org/hipi/image/ByteImage";
+
+        goto label5;
+
+     label3:
+        r0.<org.hipi.image.HipiImageFactory: java.lang.Class imageClass> = class "org/hipi/image/RawImage";
+
+     label4:
+        $r4 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r4.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Unexpected image type. Cannot proceed.");
+
+        throw $r4;
+
+     label5:
+        r0.<org.hipi.image.HipiImageFactory: org.hipi.image.HipiImage$HipiImageType imageType> = r1;
+
+        return;
+    }
+
+    private void findImageClass(java.lang.Class) throws java.lang.SecurityException, java.lang.RuntimeException
+    {
+        org.hipi.image.HipiImageFactory r0;
+        java.lang.Class r1, $r5, $r6, $r7, $r11, $r18, $r19;
+        java.lang.reflect.Method[] r2;
+        int i0, $i1, i2;
+        java.lang.reflect.Method r3;
+        java.lang.Class[] r4;
+        boolean $z0, $z1;
+        java.lang.RuntimeException $r8, $r17;
+        java.lang.StringBuilder $r9, $r10, $r12, $r13, $r15;
+        java.lang.String $r14, $r16;
+
+        r0 := @this: org.hipi.image.HipiImageFactory;
+
+        r1 := @parameter0: java.lang.Class;
+
+        r2 = virtualinvoke r1.<java.lang.Class: java.lang.reflect.Method[] getMethods()>();
+
+        i0 = lengthof r2;
+
+        i2 = 0;
+
+     label1:
+        if i2 >= i0 goto label6;
+
+        r3 = r2[i2];
+
+        $r16 = virtualinvoke r3.<java.lang.reflect.Method: java.lang.String getName()>();
+
+        $z1 = virtualinvoke $r16.<java.lang.String: boolean equals(java.lang.Object)>("map");
+
+        if $z1 != 0 goto label2;
+
+        goto label5;
+
+     label2:
+        r4 = virtualinvoke r3.<java.lang.reflect.Method: java.lang.Class[] getParameterTypes()>();
+
+        $i1 = lengthof r4;
+
+        if $i1 == 3 goto label3;
+
+        goto label5;
+
+     label3:
+        $r18 = r4[0];
+
+        if $r18 == class "org/hipi/image/HipiImageHeader" goto label4;
+
+        goto label5;
+
+     label4:
+        $r19 = r4[1];
+
+        r0.<org.hipi.image.HipiImageFactory: java.lang.Class imageClass> = $r19;
+
+     label5:
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label6:
+        $r5 = r0.<org.hipi.image.HipiImageFactory: java.lang.Class imageClass>;
+
+        if $r5 != null goto label7;
+
+        $r17 = new java.lang.RuntimeException;
+
+        specialinvoke $r17.<java.lang.RuntimeException: void <init>(java.lang.String)>("Failed to determine image class used in mapper (second argument in map method).");
+
+        throw $r17;
+
+     label7:
+        $r7 = class "org/hipi/image/HipiImage";
+
+        $r6 = r0.<org.hipi.image.HipiImageFactory: java.lang.Class imageClass>;
+
+        $z0 = virtualinvoke $r7.<java.lang.Class: boolean isAssignableFrom(java.lang.Class)>($r6);
+
+        if $z0 != 0 goto label8;
+
+        $r8 = new java.lang.RuntimeException;
+
+        $r9 = new java.lang.StringBuilder;
+
+        specialinvoke $r9.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Found image class [");
+
+        $r11 = r0.<org.hipi.image.HipiImageFactory: java.lang.Class imageClass>;
+
+        $r13 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.Object)>($r11);
+
+        $r12 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("], but it\'s not ");
+
+        $r15 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("derived from HipiImage as required.");
+
+        $r14 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r8.<java.lang.RuntimeException: void <init>(java.lang.String)>($r14);
+
+        throw $r8;
+
+     label8:
+        return;
+    }
+
+    public org.hipi.image.HipiImage$HipiImageType getType()
+    {
+        org.hipi.image.HipiImageFactory r0;
+        org.hipi.image.HipiImage$HipiImageType $r1;
+
+        r0 := @this: org.hipi.image.HipiImageFactory;
+
+        $r1 = r0.<org.hipi.image.HipiImageFactory: org.hipi.image.HipiImage$HipiImageType imageType>;
+
+        return $r1;
+    }
+
+    public org.hipi.image.HipiImage createImage(org.hipi.image.HipiImageHeader) throws java.lang.InstantiationException, java.lang.IllegalAccessException, java.lang.ExceptionInInitializerError, java.lang.SecurityException, java.lang.IllegalArgumentException
+    {
+        java.lang.Object $r0;
+        org.hipi.image.HipiImageFactory r1;
+        org.hipi.image.HipiImageHeader r2;
+        org.hipi.image.HipiImage r3;
+        java.lang.Class $r4;
+
+        r1 := @this: org.hipi.image.HipiImageFactory;
+
+        r2 := @parameter0: org.hipi.image.HipiImageHeader;
+
+        $r4 = r1.<org.hipi.image.HipiImageFactory: java.lang.Class imageClass>;
+
+        $r0 = virtualinvoke $r4.<java.lang.Class: java.lang.Object newInstance()>();
+
+        r3 = (org.hipi.image.HipiImage) $r0;
+
+        virtualinvoke r3.<org.hipi.image.HipiImage: void setHeader(org.hipi.image.HipiImageHeader)>(r2);
+
+        return r3;
+    }
+
+    static void <clinit>()
+    {
+        org.hipi.image.HipiImageFactory $r0, $r2;
+        org.hipi.image.HipiImage$HipiImageType $r1, $r3;
+
+        $r0 = new org.hipi.image.HipiImageFactory;
+
+        $r1 = <org.hipi.image.HipiImage$HipiImageType: org.hipi.image.HipiImage$HipiImageType FLOAT>;
+
+        specialinvoke $r0.<org.hipi.image.HipiImageFactory: void <init>(org.hipi.image.HipiImage$HipiImageType)>($r1);
+
+        <org.hipi.image.HipiImageFactory: org.hipi.image.HipiImageFactory staticFloatImageFactory> = $r0;
+
+        $r2 = new org.hipi.image.HipiImageFactory;
+
+        $r3 = <org.hipi.image.HipiImage$HipiImageType: org.hipi.image.HipiImage$HipiImageType BYTE>;
+
+        specialinvoke $r2.<org.hipi.image.HipiImageFactory: void <init>(org.hipi.image.HipiImage$HipiImageType)>($r3);
+
+        <org.hipi.image.HipiImageFactory: org.hipi.image.HipiImageFactory staticByteImageFactory> = $r2;
+
+        return;
+    }
+}

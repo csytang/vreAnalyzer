@@ -1,0 +1,1767 @@
+public class org.hipi.imagebundle.HipiImageBundle extends java.lang.Object
+{
+    public static final int FILE_MODE_UNDEFINED;
+    public static final int FILE_MODE_READ;
+    public static final int FILE_MODE_WRITE;
+    private int fileMode;
+    private org.apache.hadoop.fs.Path indexFilePath;
+    private org.apache.hadoop.fs.Path dataFilePath;
+    protected org.apache.hadoop.conf.Configuration conf;
+    protected org.hipi.image.HipiImageFactory imageFactory;
+    private java.io.DataInputStream indexInputStream;
+    private java.io.DataOutputStream indexOutputStream;
+    private java.io.DataOutputStream dataOutputStream;
+    private org.hipi.imagebundle.HipiImageBundle$HibReader hibReader;
+    private byte[] sig;
+    private long currentOffset;
+    private long blockSize;
+    private short replication;
+    static final boolean $assertionsDisabled;
+
+    public void <init>(org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration, org.hipi.image.HipiImageFactory)
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        org.apache.hadoop.fs.Path r1, $r5;
+        org.apache.hadoop.conf.Configuration r2;
+        org.hipi.image.HipiImageFactory r3;
+        byte[] $r4;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        r3 := @parameter2: org.hipi.image.HipiImageFactory;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: int fileMode> = 0;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath> = null;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path dataFilePath> = null;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.conf.Configuration conf> = null;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.image.HipiImageFactory imageFactory> = null;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream> = null;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream> = null;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream dataOutputStream> = null;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.imagebundle.HipiImageBundle$HibReader hibReader> = null;
+
+        $r4 = newarray (byte)[12];
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: byte[] sig> = $r4;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: long currentOffset> = 0L;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: long blockSize> = 0L;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: short replication> = 0;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath> = r1;
+
+        $r5 = virtualinvoke r1.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.Path suffix(java.lang.String)>(".dat");
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path dataFilePath> = $r5;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.conf.Configuration conf> = r2;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.image.HipiImageFactory imageFactory> = r3;
+
+        return;
+    }
+
+    public void <init>(org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration)
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        org.apache.hadoop.fs.Path r1;
+        org.apache.hadoop.conf.Configuration r2;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        specialinvoke r0.<org.hipi.imagebundle.HipiImageBundle: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration,org.hipi.image.HipiImageFactory)>(r1, r2, null);
+
+        return;
+    }
+
+    public void <init>(org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration, org.hipi.image.HipiImageFactory, short)
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        org.apache.hadoop.fs.Path r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.hipi.image.HipiImageFactory r3;
+        short s0;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        r3 := @parameter2: org.hipi.image.HipiImageFactory;
+
+        s0 := @parameter3: short;
+
+        specialinvoke r0.<org.hipi.imagebundle.HipiImageBundle: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration,org.hipi.image.HipiImageFactory)>(r1, r2, r3);
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: short replication> = s0;
+
+        return;
+    }
+
+    public void <init>(org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration, org.hipi.image.HipiImageFactory, long)
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        org.apache.hadoop.fs.Path r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.hipi.image.HipiImageFactory r3;
+        long l0;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        r3 := @parameter2: org.hipi.image.HipiImageFactory;
+
+        l0 := @parameter3: long;
+
+        specialinvoke r0.<org.hipi.imagebundle.HipiImageBundle: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration,org.hipi.image.HipiImageFactory)>(r1, r2, r3);
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: long blockSize> = l0;
+
+        return;
+    }
+
+    public void <init>(org.apache.hadoop.fs.Path, org.apache.hadoop.conf.Configuration, org.hipi.image.HipiImageFactory, short, long)
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        org.apache.hadoop.fs.Path r1;
+        org.apache.hadoop.conf.Configuration r2;
+        org.hipi.image.HipiImageFactory r3;
+        short s0;
+        long l1;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        r1 := @parameter0: org.apache.hadoop.fs.Path;
+
+        r2 := @parameter1: org.apache.hadoop.conf.Configuration;
+
+        r3 := @parameter2: org.hipi.image.HipiImageFactory;
+
+        s0 := @parameter3: short;
+
+        l1 := @parameter4: long;
+
+        specialinvoke r0.<org.hipi.imagebundle.HipiImageBundle: void <init>(org.apache.hadoop.fs.Path,org.apache.hadoop.conf.Configuration,org.hipi.image.HipiImageFactory)>(r1, r2, r3);
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: short replication> = s0;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: long blockSize> = l1;
+
+        return;
+    }
+
+    public org.apache.hadoop.fs.Path getPath()
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        org.apache.hadoop.fs.Path $r1;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        $r1 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        return $r1;
+    }
+
+    public final void openForWrite(boolean) throws java.io.IOException
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        boolean z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7;
+        org.apache.hadoop.fs.FileSystem r1;
+        int $i0, $i6;
+        org.apache.hadoop.conf.Configuration $r3, $r59;
+        org.apache.hadoop.fs.Path $r4, $r5, $r6, $r8, $r9, $r10, $r22, $r32, $r41, $r48, $r55, $r58;
+        long $l1, $l4, $l8;
+        byte $b2;
+        short $s3, $s5, $s7;
+        java.io.IOException $r7, $r18, $r21, $r29, $r36;
+        java.io.DataInputStream $r11;
+        java.io.DataOutputStream $r12, $r14, $r54, $r57;
+        java.lang.AssertionError $r13, $r15, $r19;
+        java.lang.StringBuilder $r16, $r17, $r24, $r25, $r26, $r27, $r30, $r31, $r34, $r35, $r38, $r39, $r42, $r44, $r45, $r47, $r49, $r52;
+        java.lang.String $r20, $r23, $r28, $r33, $r37, $r40, $r43, $r51, $r53;
+        java.io.PrintStream $r46, $r50;
+        org.apache.hadoop.fs.FSDataOutputStream $r56, $r60;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        z0 := @parameter0: boolean;
+
+        $i0 = r0.<org.hipi.imagebundle.HipiImageBundle: int fileMode>;
+
+        if $i0 == 0 goto label01;
+
+        $r29 = new java.io.IOException;
+
+        $r39 = new java.lang.StringBuilder;
+
+        specialinvoke $r39.<java.lang.StringBuilder: void <init>()>();
+
+        $r38 = virtualinvoke $r39.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("HIB [");
+
+        $r41 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $r40 = virtualinvoke $r41.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        $r35 = virtualinvoke $r38.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r40);
+
+        $r34 = virtualinvoke $r35.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("] is already open. Must close before calling this method.");
+
+        $r37 = virtualinvoke $r34.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r29.<java.io.IOException: void <init>(java.lang.String)>($r37);
+
+        throw $r29;
+
+     label01:
+        $r3 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.conf.Configuration conf>;
+
+        r1 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(org.apache.hadoop.conf.Configuration)>($r3);
+
+        $r4 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $z1 = virtualinvoke r1.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>($r4);
+
+        if $z1 == 0 goto label02;
+
+        if z0 != 0 goto label02;
+
+        $r21 = new java.io.IOException;
+
+        $r30 = new java.lang.StringBuilder;
+
+        specialinvoke $r30.<java.lang.StringBuilder: void <init>()>();
+
+        $r31 = virtualinvoke $r30.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("HIB [");
+
+        $r32 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $r33 = virtualinvoke $r32.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        $r26 = virtualinvoke $r31.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r33);
+
+        $r27 = virtualinvoke $r26.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("] already exists. Cannot open HIB for writing unless overwrite is specified.");
+
+        $r28 = virtualinvoke $r27.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r21.<java.io.IOException: void <init>(java.lang.String)>($r28);
+
+        throw $r21;
+
+     label02:
+        $r5 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path dataFilePath>;
+
+        $z2 = virtualinvoke r1.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>($r5);
+
+        if $z2 == 0 goto label03;
+
+        if z0 != 0 goto label03;
+
+        $r18 = new java.io.IOException;
+
+        $r17 = new java.lang.StringBuilder;
+
+        specialinvoke $r17.<java.lang.StringBuilder: void <init>()>();
+
+        $r16 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("HIB [");
+
+        $r22 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path dataFilePath>;
+
+        $r23 = virtualinvoke $r22.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        $r24 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r23);
+
+        $r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("] already exists. Cannot open HIB for writing unless overwrite is specified.");
+
+        $r20 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r18.<java.io.IOException: void <init>(java.lang.String)>($r20);
+
+        throw $r18;
+
+     label03:
+        $z3 = <org.hipi.imagebundle.HipiImageBundle: boolean $assertionsDisabled>;
+
+        if $z3 != 0 goto label04;
+
+        $r12 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream>;
+
+        if $r12 == null goto label04;
+
+        $r19 = new java.lang.AssertionError;
+
+        specialinvoke $r19.<java.lang.AssertionError: void <init>()>();
+
+        throw $r19;
+
+     label04:
+        $z4 = <org.hipi.imagebundle.HipiImageBundle: boolean $assertionsDisabled>;
+
+        if $z4 != 0 goto label05;
+
+        $r14 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream dataOutputStream>;
+
+        if $r14 == null goto label05;
+
+        $r13 = new java.lang.AssertionError;
+
+        specialinvoke $r13.<java.lang.AssertionError: void <init>()>();
+
+        throw $r13;
+
+     label05:
+        $z5 = <org.hipi.imagebundle.HipiImageBundle: boolean $assertionsDisabled>;
+
+        if $z5 != 0 goto label06;
+
+        $r11 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream>;
+
+        if $r11 == null goto label06;
+
+        $r15 = new java.lang.AssertionError;
+
+        specialinvoke $r15.<java.lang.AssertionError: void <init>()>();
+
+        throw $r15;
+
+     label06:
+        $l1 = r0.<org.hipi.imagebundle.HipiImageBundle: long blockSize>;
+
+        $b2 = $l1 cmp 0L;
+
+        if $b2 > 0 goto label07;
+
+        $r10 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path dataFilePath>;
+
+        $l4 = virtualinvoke r1.<org.apache.hadoop.fs.FileSystem: long getDefaultBlockSize(org.apache.hadoop.fs.Path)>($r10);
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: long blockSize> = $l4;
+
+     label07:
+        $s3 = r0.<org.hipi.imagebundle.HipiImageBundle: short replication>;
+
+        if $s3 > 0 goto label08;
+
+        $r8 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path dataFilePath>;
+
+        $s5 = virtualinvoke r1.<org.apache.hadoop.fs.FileSystem: short getDefaultReplication(org.apache.hadoop.fs.Path)>($r8);
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: short replication> = $s5;
+
+     label08:
+        if z0 != 0 goto label09;
+
+        $r6 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $z6 = virtualinvoke r1.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>($r6);
+
+        if $z6 == 0 goto label09;
+
+        $r9 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path dataFilePath>;
+
+        $z7 = virtualinvoke r1.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>($r9);
+
+        if $z7 == 0 goto label09;
+
+        $r7 = new java.io.IOException;
+
+        specialinvoke $r7.<java.io.IOException: void <init>(java.lang.String)>("Not implemented.");
+
+        throw $r7;
+
+     label09:
+        $r54 = new java.io.DataOutputStream;
+
+        $r55 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $r56 = virtualinvoke r1.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataOutputStream create(org.apache.hadoop.fs.Path)>($r55);
+
+        specialinvoke $r54.<java.io.DataOutputStream: void <init>(java.io.OutputStream)>($r56);
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream> = $r54;
+
+        $r57 = new java.io.DataOutputStream;
+
+        $r58 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path dataFilePath>;
+
+        $r59 = virtualinvoke r1.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.conf.Configuration getConf()>();
+
+        $i6 = virtualinvoke $r59.<org.apache.hadoop.conf.Configuration: int getInt(java.lang.String,int)>("io.file.buffer.size", 4096);
+
+        $s7 = r0.<org.hipi.imagebundle.HipiImageBundle: short replication>;
+
+        $l8 = r0.<org.hipi.imagebundle.HipiImageBundle: long blockSize>;
+
+        $r60 = virtualinvoke r1.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataOutputStream create(org.apache.hadoop.fs.Path,boolean,int,short,long)>($r58, 1, $i6, $s7, $l8);
+
+        specialinvoke $r57.<java.io.DataOutputStream: void <init>(java.io.OutputStream)>($r60);
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream dataOutputStream> = $r57;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: long currentOffset> = 0L;
+
+        specialinvoke r0.<org.hipi.imagebundle.HipiImageBundle: void writeBundleHeader()>();
+
+     label10:
+        goto label12;
+
+     label11:
+        $r36 := @caughtexception;
+
+        $r46 = <java.lang.System: java.io.PrintStream err>;
+
+        $r47 = new java.lang.StringBuilder;
+
+        specialinvoke $r47.<java.lang.StringBuilder: void <init>()>();
+
+        $r49 = virtualinvoke $r47.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("I/O exception while attempting to open HIB [");
+
+        $r48 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $r43 = virtualinvoke $r48.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        $r42 = virtualinvoke $r49.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r43);
+
+        $r45 = virtualinvoke $r42.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("] for writing with overwrite [");
+
+        $r44 = virtualinvoke $r45.<java.lang.StringBuilder: java.lang.StringBuilder append(boolean)>(z0);
+
+        $r52 = virtualinvoke $r44.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("].");
+
+        $r53 = virtualinvoke $r52.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r46.<java.io.PrintStream: void println(java.lang.String)>($r53);
+
+        $r50 = <java.lang.System: java.io.PrintStream err>;
+
+        $r51 = virtualinvoke $r36.<java.io.IOException: java.lang.String getMessage()>();
+
+        virtualinvoke $r50.<java.io.PrintStream: void println(java.lang.String)>($r51);
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream> = null;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream dataOutputStream> = null;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream> = null;
+
+        return;
+
+     label12:
+        r0.<org.hipi.imagebundle.HipiImageBundle: int fileMode> = 2;
+
+        return;
+
+        catch java.io.IOException from label08 to label10 with label11;
+    }
+
+    private void writeBundleHeader() throws java.io.IOException
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        boolean $z0;
+        java.io.DataOutputStream $r1, $r2, $r3, $r4, $r5;
+        java.lang.AssertionError $r6;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        $z0 = <org.hipi.imagebundle.HipiImageBundle: boolean $assertionsDisabled>;
+
+        if $z0 != 0 goto label1;
+
+        $r5 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream>;
+
+        if $r5 != null goto label1;
+
+        $r6 = new java.lang.AssertionError;
+
+        specialinvoke $r6.<java.lang.AssertionError: void <init>()>();
+
+        throw $r6;
+
+     label1:
+        $r1 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream>;
+
+        virtualinvoke $r1.<java.io.DataOutputStream: void writeInt(int)>(-2121196776);
+
+        $r2 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream>;
+
+        virtualinvoke $r2.<java.io.DataOutputStream: void writeLong(long)>(0L);
+
+        $r3 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream>;
+
+        virtualinvoke $r3.<java.io.DataOutputStream: void writeLong(long)>(0L);
+
+        $r4 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream>;
+
+        virtualinvoke $r4.<java.io.DataOutputStream: void writeInt(int)>(0);
+
+        return;
+    }
+
+    public void addImage(org.hipi.image.HipiImageHeader, java.io.InputStream) throws java.io.IOException
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        org.hipi.image.HipiImageHeader r1;
+        java.io.InputStream r2;
+        byte[] r4, r5, $r9, $r10, $r11, $r12, $r13, $r14, $r15, $r16, $r17, $r18, $r19, $r21, $r22;
+        int i0, i1, i2, $i3, $i5, $i6, $i8, $i9, $i11, $i12, $i15, $i16, $i18, $i19, $i21, $i23, $i24, $i25, $i27, $i29, $i30, $i32, $i34, $i35;
+        java.io.ByteArrayOutputStream $r6;
+        java.io.DataOutputStream $r7, $r20, $r23, $r24, $r25;
+        org.hipi.image.HipiImageHeader$HipiImageFormat $r8;
+        byte $b4, $b7, $b10, $b13, $b14, $b17, $b20, $b22, $b26, $b28, $b31, $b33;
+        java.io.IOException $r26;
+        java.lang.StringBuilder $r27, $r28, $r32, $r33;
+        long $l36, $l37, $l38, $l39;
+        java.lang.String $r29, $r31;
+        org.apache.hadoop.fs.Path $r30;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        r1 := @parameter0: org.hipi.image.HipiImageHeader;
+
+        r2 := @parameter1: java.io.InputStream;
+
+        $i3 = r0.<org.hipi.imagebundle.HipiImageBundle: int fileMode>;
+
+        if $i3 == 2 goto label1;
+
+        $r26 = new java.io.IOException;
+
+        $r27 = new java.lang.StringBuilder;
+
+        specialinvoke $r27.<java.lang.StringBuilder: void <init>()>();
+
+        $r28 = virtualinvoke $r27.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("HIB [");
+
+        $r30 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $r31 = virtualinvoke $r30.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        $r32 = virtualinvoke $r28.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r31);
+
+        $r33 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("] is not opened for writing. Must successfully open HIB for writing before calling this method.");
+
+        $r29 = virtualinvoke $r33.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r26.<java.io.IOException: void <init>(java.lang.String)>($r29);
+
+        throw $r26;
+
+     label1:
+        $r6 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r6.<java.io.ByteArrayOutputStream: void <init>(int)>(1024);
+
+        $r7 = new java.io.DataOutputStream;
+
+        specialinvoke $r7.<java.io.DataOutputStream: void <init>(java.io.OutputStream)>($r6);
+
+        virtualinvoke r1.<org.hipi.image.HipiImageHeader: void write(java.io.DataOutput)>($r7);
+
+        r4 = virtualinvoke $r6.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        i0 = lengthof r4;
+
+        r5 = staticinvoke <org.hipi.util.ByteUtils: byte[] inputStreamToByteArray(java.io.InputStream)>(r2);
+
+        i1 = lengthof r5;
+
+        $r8 = virtualinvoke r1.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiImageFormat getStorageFormat()>();
+
+        i2 = virtualinvoke $r8.<org.hipi.image.HipiImageHeader$HipiImageFormat: int toInteger()>();
+
+        $r9 = r0.<org.hipi.imagebundle.HipiImageBundle: byte[] sig>;
+
+        $i5 = i0 >> 24;
+
+        $b4 = (byte) $i5;
+
+        $r9[0] = $b4;
+
+        $r10 = r0.<org.hipi.imagebundle.HipiImageBundle: byte[] sig>;
+
+        $i6 = i0 >> 16;
+
+        $i8 = $i6 & 255;
+
+        $b7 = (byte) $i8;
+
+        $r10[1] = $b7;
+
+        $r11 = r0.<org.hipi.imagebundle.HipiImageBundle: byte[] sig>;
+
+        $i9 = i0 >> 8;
+
+        $i11 = $i9 & 255;
+
+        $b10 = (byte) $i11;
+
+        $r11[2] = $b10;
+
+        $r12 = r0.<org.hipi.imagebundle.HipiImageBundle: byte[] sig>;
+
+        $i12 = i0 & 255;
+
+        $b13 = (byte) $i12;
+
+        $r12[3] = $b13;
+
+        $r13 = r0.<org.hipi.imagebundle.HipiImageBundle: byte[] sig>;
+
+        $i15 = i1 >> 24;
+
+        $b14 = (byte) $i15;
+
+        $r13[4] = $b14;
+
+        $r14 = r0.<org.hipi.imagebundle.HipiImageBundle: byte[] sig>;
+
+        $i18 = i1 >> 16;
+
+        $i16 = $i18 & 255;
+
+        $b17 = (byte) $i16;
+
+        $r14[5] = $b17;
+
+        $r16 = r0.<org.hipi.imagebundle.HipiImageBundle: byte[] sig>;
+
+        $i21 = i1 >> 8;
+
+        $i19 = $i21 & 255;
+
+        $b20 = (byte) $i19;
+
+        $r16[6] = $b20;
+
+        $r15 = r0.<org.hipi.imagebundle.HipiImageBundle: byte[] sig>;
+
+        $i23 = i1 & 255;
+
+        $b22 = (byte) $i23;
+
+        $r15[7] = $b22;
+
+        $r17 = r0.<org.hipi.imagebundle.HipiImageBundle: byte[] sig>;
+
+        $i25 = i2 >> 24;
+
+        $b26 = (byte) $i25;
+
+        $r17[8] = $b26;
+
+        $r18 = r0.<org.hipi.imagebundle.HipiImageBundle: byte[] sig>;
+
+        $i24 = i2 >> 16;
+
+        $i29 = $i24 & 255;
+
+        $b28 = (byte) $i29;
+
+        $r18[9] = $b28;
+
+        $r19 = r0.<org.hipi.imagebundle.HipiImageBundle: byte[] sig>;
+
+        $i27 = i2 >> 8;
+
+        $i32 = $i27 & 255;
+
+        $b31 = (byte) $i32;
+
+        $r19[10] = $b31;
+
+        $r22 = r0.<org.hipi.imagebundle.HipiImageBundle: byte[] sig>;
+
+        $i30 = i2 & 255;
+
+        $b33 = (byte) $i30;
+
+        $r22[11] = $b33;
+
+        $r20 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream dataOutputStream>;
+
+        $r21 = r0.<org.hipi.imagebundle.HipiImageBundle: byte[] sig>;
+
+        virtualinvoke $r20.<java.io.DataOutputStream: void write(byte[])>($r21);
+
+        $r24 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream dataOutputStream>;
+
+        virtualinvoke $r24.<java.io.DataOutputStream: void write(byte[])>(r4);
+
+        $r23 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream dataOutputStream>;
+
+        virtualinvoke $r23.<java.io.DataOutputStream: void write(byte[])>(r5);
+
+        $l37 = r0.<org.hipi.imagebundle.HipiImageBundle: long currentOffset>;
+
+        $i35 = 12 + i0;
+
+        $i34 = $i35 + i1;
+
+        $l36 = (long) $i34;
+
+        $l38 = $l37 + $l36;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: long currentOffset> = $l38;
+
+        $r25 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream>;
+
+        $l39 = r0.<org.hipi.imagebundle.HipiImageBundle: long currentOffset>;
+
+        virtualinvoke $r25.<java.io.DataOutputStream: void writeLong(long)>($l39);
+
+        return;
+    }
+
+    public void addImage(java.io.InputStream, org.hipi.image.HipiImageHeader$HipiImageFormat, java.util.HashMap) throws java.lang.IllegalArgumentException, java.io.IOException
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        java.io.InputStream r1;
+        org.hipi.image.HipiImageHeader$HipiImageFormat r2;
+        java.util.HashMap r3;
+        org.hipi.image.HipiImageHeader r5;
+        int[] $r6;
+        int $i0, $i1;
+        java.lang.IllegalArgumentException $r7, $r8;
+        org.hipi.image.io.ImageCodec r9;
+        java.io.BufferedInputStream $r10;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        r1 := @parameter0: java.io.InputStream;
+
+        r2 := @parameter1: org.hipi.image.HipiImageHeader$HipiImageFormat;
+
+        r3 := @parameter2: java.util.HashMap;
+
+        r9 = null;
+
+        $r6 = <org.hipi.imagebundle.HipiImageBundle$1: int[] $SwitchMap$org$hipi$image$HipiImageHeader$HipiImageFormat>;
+
+        $i0 = virtualinvoke r2.<org.hipi.image.HipiImageHeader$HipiImageFormat: int ordinal()>();
+
+        $i1 = $r6[$i0];
+
+        tableswitch($i1)
+        {
+            case 1: goto label1;
+            case 2: goto label2;
+            case 3: goto label3;
+            case 4: goto label4;
+            default: goto label5;
+        };
+
+     label1:
+        r9 = staticinvoke <org.hipi.image.io.JpegCodec: org.hipi.image.io.JpegCodec getInstance()>();
+
+        goto label5;
+
+     label2:
+        r9 = staticinvoke <org.hipi.image.io.PngCodec: org.hipi.image.io.PngCodec getInstance()>();
+
+        goto label5;
+
+     label3:
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Not implemented.");
+
+        throw $r8;
+
+     label4:
+        $r7 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r7.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Unrecognized or unsupported image format.");
+
+        throw $r7;
+
+     label5:
+        $r10 = new java.io.BufferedInputStream;
+
+        specialinvoke $r10.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>(r1);
+
+        virtualinvoke $r10.<java.io.BufferedInputStream: void mark(int)>(2147483647);
+
+        r5 = interfaceinvoke r9.<org.hipi.image.io.ImageDecoder: org.hipi.image.HipiImageHeader decodeHeader(java.io.InputStream)>($r10);
+
+        if r3 == null goto label6;
+
+        virtualinvoke r5.<org.hipi.image.HipiImageHeader: void setMetaData(java.util.HashMap)>(r3);
+
+     label6:
+        virtualinvoke $r10.<java.io.BufferedInputStream: void reset()>();
+
+        virtualinvoke r0.<org.hipi.imagebundle.HipiImageBundle: void addImage(org.hipi.image.HipiImageHeader,java.io.InputStream)>(r5, $r10);
+
+        return;
+    }
+
+    public void addImage(java.io.InputStream, org.hipi.image.HipiImageHeader$HipiImageFormat) throws java.lang.IllegalArgumentException, java.io.IOException
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        java.io.InputStream r1;
+        org.hipi.image.HipiImageHeader$HipiImageFormat r2;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        r1 := @parameter0: java.io.InputStream;
+
+        r2 := @parameter1: org.hipi.image.HipiImageHeader$HipiImageFormat;
+
+        virtualinvoke r0.<org.hipi.imagebundle.HipiImageBundle: void addImage(java.io.InputStream,org.hipi.image.HipiImageHeader$HipiImageFormat,java.util.HashMap)>(r1, r2, null);
+
+        return;
+    }
+
+    public void openForRead(int) throws java.io.IOException, java.lang.IllegalArgumentException
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        int i0, $i1, $i2, $i3, $i4, $i5;
+        org.apache.hadoop.fs.FileSystem r1;
+        org.apache.hadoop.conf.Configuration $r3;
+        org.apache.hadoop.fs.Path $r4, $r5, $r8, $r20, $r26, $r28, $r31, $r40, $r47, $r55, $r71;
+        boolean $z0, $z1, $z2, $z3, $z4;
+        java.io.DataInputStream $r6, $r27, $r35;
+        org.apache.hadoop.fs.FSDataInputStream $r7, $r33;
+        java.io.IOException $r9, $r14, $r43, $r44, $r52, $r75;
+        java.lang.StringBuilder $r10, $r11, $r12, $r13, $r16, $r17, $r18, $r19, $r41, $r42, $r45, $r46, $r49, $r50, $r53, $r54, $r57, $r58, $r60, $r62, $r63, $r64, $r67, $r68, $r73, $r74, $r79, $r80;
+        java.lang.String $r15, $r21, $r23, $r48, $r51, $r56, $r59, $r65, $r66, $r70, $r72, $r76, $r77;
+        org.hipi.image.HipiImageFactory $r22, $r30;
+        org.hipi.imagebundle.HipiImageBundle$HibReader $r24, $r32;
+        java.lang.Object $r25;
+        java.lang.Long $r29;
+        long $l6;
+        java.lang.AssertionError $r34, $r36, $r38;
+        java.io.DataOutputStream $r37, $r39;
+        java.lang.IllegalArgumentException $r61;
+        java.io.PrintStream $r69, $r78;
+        java.util.List r81;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        i0 := @parameter0: int;
+
+        if i0 >= 0 goto label01;
+
+        $r61 = new java.lang.IllegalArgumentException;
+
+        $r60 = new java.lang.StringBuilder;
+
+        specialinvoke $r60.<java.lang.StringBuilder: void <init>()>();
+
+        $r63 = virtualinvoke $r60.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Image index must be non-negative [");
+
+        $r62 = virtualinvoke $r63.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r73 = virtualinvoke $r62.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("].");
+
+        $r72 = virtualinvoke $r73.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r61.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r72);
+
+        throw $r61;
+
+     label01:
+        $i1 = r0.<org.hipi.imagebundle.HipiImageBundle: int fileMode>;
+
+        if $i1 == 0 goto label02;
+
+        $r52 = new java.io.IOException;
+
+        $r53 = new java.lang.StringBuilder;
+
+        specialinvoke $r53.<java.lang.StringBuilder: void <init>()>();
+
+        $r54 = virtualinvoke $r53.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("HIB [");
+
+        $r55 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $r65 = virtualinvoke $r55.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        $r64 = virtualinvoke $r54.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r65);
+
+        $r67 = virtualinvoke $r64.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("] is already open. Must close before calling this method.");
+
+        $r66 = virtualinvoke $r67.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r52.<java.io.IOException: void <init>(java.lang.String)>($r66);
+
+        throw $r52;
+
+     label02:
+        $r3 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.conf.Configuration conf>;
+
+        r1 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(org.apache.hadoop.conf.Configuration)>($r3);
+
+        $r4 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $z0 = virtualinvoke r1.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>($r4);
+
+        if $z0 != 0 goto label03;
+
+        $r44 = new java.io.IOException;
+
+        $r45 = new java.lang.StringBuilder;
+
+        specialinvoke $r45.<java.lang.StringBuilder: void <init>()>();
+
+        $r46 = virtualinvoke $r45.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("HIB index file not found while attempting open for read [");
+
+        $r47 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $r56 = virtualinvoke $r47.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        $r57 = virtualinvoke $r46.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r56);
+
+        $r58 = virtualinvoke $r57.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("].");
+
+        $r59 = virtualinvoke $r58.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r44.<java.io.IOException: void <init>(java.lang.String)>($r59);
+
+        throw $r44;
+
+     label03:
+        $r5 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path dataFilePath>;
+
+        $z1 = virtualinvoke r1.<org.apache.hadoop.fs.FileSystem: boolean exists(org.apache.hadoop.fs.Path)>($r5);
+
+        if $z1 != 0 goto label04;
+
+        $r43 = new java.io.IOException;
+
+        $r42 = new java.lang.StringBuilder;
+
+        specialinvoke $r42.<java.lang.StringBuilder: void <init>()>();
+
+        $r41 = virtualinvoke $r42.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("HIB data file not found while attempting open for read [");
+
+        $r40 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path dataFilePath>;
+
+        $r48 = virtualinvoke $r40.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        $r49 = virtualinvoke $r41.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r48);
+
+        $r50 = virtualinvoke $r49.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("].");
+
+        $r51 = virtualinvoke $r50.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r43.<java.io.IOException: void <init>(java.lang.String)>($r51);
+
+        throw $r43;
+
+     label04:
+        $z2 = <org.hipi.imagebundle.HipiImageBundle: boolean $assertionsDisabled>;
+
+        if $z2 != 0 goto label05;
+
+        $r37 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream>;
+
+        if $r37 == null goto label05;
+
+        $r36 = new java.lang.AssertionError;
+
+        specialinvoke $r36.<java.lang.AssertionError: void <init>()>();
+
+        throw $r36;
+
+     label05:
+        $z3 = <org.hipi.imagebundle.HipiImageBundle: boolean $assertionsDisabled>;
+
+        if $z3 != 0 goto label06;
+
+        $r39 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream dataOutputStream>;
+
+        if $r39 == null goto label06;
+
+        $r38 = new java.lang.AssertionError;
+
+        specialinvoke $r38.<java.lang.AssertionError: void <init>()>();
+
+        throw $r38;
+
+     label06:
+        $z4 = <org.hipi.imagebundle.HipiImageBundle: boolean $assertionsDisabled>;
+
+        if $z4 != 0 goto label07;
+
+        $r35 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream>;
+
+        if $r35 == null goto label07;
+
+        $r34 = new java.lang.AssertionError;
+
+        specialinvoke $r34.<java.lang.AssertionError: void <init>()>();
+
+        throw $r34;
+
+     label07:
+        r81 = null;
+
+     label08:
+        if i0 != 0 goto label09;
+
+        $r27 = new java.io.DataInputStream;
+
+        $r28 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $r33 = virtualinvoke r1.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataInputStream open(org.apache.hadoop.fs.Path)>($r28);
+
+        specialinvoke $r27.<java.io.DataInputStream: void <init>(java.io.InputStream)>($r33);
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream> = $r27;
+
+        specialinvoke r0.<org.hipi.imagebundle.HipiImageBundle: void readBundleHeader()>();
+
+        $r32 = new org.hipi.imagebundle.HipiImageBundle$HibReader;
+
+        $r30 = r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.image.HipiImageFactory imageFactory>;
+
+        $r31 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path dataFilePath>;
+
+        specialinvoke $r32.<org.hipi.imagebundle.HipiImageBundle$HibReader: void <init>(org.hipi.image.HipiImageFactory,java.lang.Class,org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path)>($r30, null, r1, $r31);
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.imagebundle.HipiImageBundle$HibReader hibReader> = $r32;
+
+        goto label12;
+
+     label09:
+        $r6 = new java.io.DataInputStream;
+
+        $r8 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $r7 = virtualinvoke r1.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataInputStream open(org.apache.hadoop.fs.Path)>($r8);
+
+        specialinvoke $r6.<java.io.DataInputStream: void <init>(java.io.InputStream)>($r7);
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream> = $r6;
+
+        specialinvoke r0.<org.hipi.imagebundle.HipiImageBundle: void readBundleHeader()>();
+
+        r81 = virtualinvoke r0.<org.hipi.imagebundle.HipiImageBundle: java.util.List readOffsets(int)>(i0);
+
+        $i2 = interfaceinvoke r81.<java.util.List: int size()>();
+
+        if $i2 != i0 goto label12;
+
+        $r24 = new org.hipi.imagebundle.HipiImageBundle$HibReader;
+
+        $r22 = r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.image.HipiImageFactory imageFactory>;
+
+        $r26 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path dataFilePath>;
+
+        $i5 = interfaceinvoke r81.<java.util.List: int size()>();
+
+        $i4 = $i5 - 1;
+
+        $r25 = interfaceinvoke r81.<java.util.List: java.lang.Object get(int)>($i4);
+
+        $r29 = (java.lang.Long) $r25;
+
+        $l6 = virtualinvoke $r29.<java.lang.Long: long longValue()>();
+
+        specialinvoke $r24.<org.hipi.imagebundle.HipiImageBundle$HibReader: void <init>(org.hipi.image.HipiImageFactory,java.lang.Class,org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path,long,long)>($r22, null, r1, $r26, $l6, 0L);
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.imagebundle.HipiImageBundle$HibReader hibReader> = $r24;
+
+     label10:
+        goto label12;
+
+     label11:
+        $r75 := @caughtexception;
+
+        $r69 = <java.lang.System: java.io.PrintStream err>;
+
+        $r74 = new java.lang.StringBuilder;
+
+        specialinvoke $r74.<java.lang.StringBuilder: void <init>()>();
+
+        $r68 = virtualinvoke $r74.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("I/O exception while attempting to open HIB [");
+
+        $r71 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $r70 = virtualinvoke $r71.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        $r79 = virtualinvoke $r68.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r70);
+
+        $r80 = virtualinvoke $r79.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("] for reading.");
+
+        $r77 = virtualinvoke $r80.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r69.<java.io.PrintStream: void println(java.lang.String)>($r77);
+
+        $r78 = <java.lang.System: java.io.PrintStream err>;
+
+        $r76 = virtualinvoke $r75.<java.io.IOException: java.lang.String getMessage()>();
+
+        virtualinvoke $r78.<java.io.PrintStream: void println(java.lang.String)>($r76);
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream> = null;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream dataOutputStream> = null;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream> = null;
+
+        return;
+
+     label12:
+        if i0 == 0 goto label14;
+
+        if r81 != null goto label13;
+
+        $r14 = new java.io.IOException;
+
+        $r17 = new java.lang.StringBuilder;
+
+        specialinvoke $r17.<java.lang.StringBuilder: void <init>()>();
+
+        $r16 = virtualinvoke $r17.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to read file offsets for HIB [");
+
+        $r20 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $r21 = virtualinvoke $r20.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        $r18 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r21);
+
+        $r19 = virtualinvoke $r18.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("].");
+
+        $r23 = virtualinvoke $r19.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r14.<java.io.IOException: void <init>(java.lang.String)>($r23);
+
+        throw $r14;
+
+     label13:
+        $i3 = interfaceinvoke r81.<java.util.List: int size()>();
+
+        if $i3 == i0 goto label14;
+
+        $r9 = new java.io.IOException;
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r10 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Failed to seek to image index [");
+
+        $r13 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r12 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("]. Check that it is not past end of file.");
+
+        $r15 = virtualinvoke $r12.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r9.<java.io.IOException: void <init>(java.lang.String)>($r15);
+
+        throw $r9;
+
+     label14:
+        r0.<org.hipi.imagebundle.HipiImageBundle: int fileMode> = 1;
+
+        return;
+
+        catch java.io.IOException from label08 to label10 with label11;
+    }
+
+    public void openForRead() throws java.io.IOException
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        virtualinvoke r0.<org.hipi.imagebundle.HipiImageBundle: void openForRead(int)>(0);
+
+        return;
+    }
+
+    private void readBundleHeader() throws java.io.IOException
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        int i0, i8;
+        long l1, $l4, $l6, $l7;
+        boolean $z0;
+        java.io.DataInputStream $r1, $r2, $r3, $r4, $r5, $r7;
+        byte $b5;
+        java.io.IOException $r6;
+        java.lang.AssertionError $r8;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        $z0 = <org.hipi.imagebundle.HipiImageBundle: boolean $assertionsDisabled>;
+
+        if $z0 != 0 goto label1;
+
+        $r7 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream>;
+
+        if $r7 != null goto label1;
+
+        $r8 = new java.lang.AssertionError;
+
+        specialinvoke $r8.<java.lang.AssertionError: void <init>()>();
+
+        throw $r8;
+
+     label1:
+        $r1 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream>;
+
+        i0 = virtualinvoke $r1.<java.io.DataInputStream: int readInt()>();
+
+        if i0 == -2121196776 goto label2;
+
+        $r6 = new java.io.IOException;
+
+        specialinvoke $r6.<java.io.IOException: void <init>(java.lang.String)>("Corrupted HIB header: signature mismatch.");
+
+        throw $r6;
+
+     label2:
+        $r2 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream>;
+
+        virtualinvoke $r2.<java.io.DataInputStream: long readLong()>();
+
+        $r3 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream>;
+
+        virtualinvoke $r3.<java.io.DataInputStream: long readLong()>();
+
+        $r4 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream>;
+
+        i8 = virtualinvoke $r4.<java.io.DataInputStream: int readInt()>();
+
+     label3:
+        if i8 <= 0 goto label5;
+
+        $r5 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream>;
+
+        $l4 = (long) i8;
+
+        l1 = virtualinvoke $r5.<java.io.DataInputStream: long skip(long)>($l4);
+
+        $b5 = l1 cmp 0L;
+
+        if $b5 > 0 goto label4;
+
+        goto label5;
+
+     label4:
+        $l7 = (long) i8;
+
+        $l6 = $l7 - l1;
+
+        i8 = (int) $l6;
+
+        goto label3;
+
+     label5:
+        return;
+    }
+
+    public java.util.List readAllOffsets()
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        java.util.List $r1;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        $r1 = virtualinvoke r0.<org.hipi.imagebundle.HipiImageBundle: java.util.List readOffsets(int)>(0);
+
+        return $r1;
+    }
+
+    public org.apache.hadoop.fs.FileStatus getDataFileStatus() throws java.io.IOException
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        org.apache.hadoop.conf.Configuration $r1;
+        org.apache.hadoop.fs.FileSystem $r2;
+        org.apache.hadoop.fs.Path $r3;
+        org.apache.hadoop.fs.FileStatus $r4;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        $r1 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.conf.Configuration conf>;
+
+        $r2 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(org.apache.hadoop.conf.Configuration)>($r1);
+
+        $r3 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path dataFilePath>;
+
+        $r4 = virtualinvoke $r2.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileStatus getFileStatus(org.apache.hadoop.fs.Path)>($r3);
+
+        return $r4;
+    }
+
+    public java.util.List readOffsets(int)
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        int i0, i2;
+        java.util.ArrayList $r3;
+        java.io.DataInputStream $r4;
+        long $l1;
+        java.lang.Long $r5;
+        java.io.IOException $r6;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        i0 := @parameter0: int;
+
+        $r3 = new java.util.ArrayList;
+
+        specialinvoke $r3.<java.util.ArrayList: void <init>(int)>(i0);
+
+        i2 = 0;
+
+     label1:
+        if i2 < i0 goto label2;
+
+        if i0 != 0 goto label6;
+
+     label2:
+        $r4 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream>;
+
+        $l1 = virtualinvoke $r4.<java.io.DataInputStream: long readLong()>();
+
+        $r5 = staticinvoke <java.lang.Long: java.lang.Long valueOf(long)>($l1);
+
+        virtualinvoke $r3.<java.util.ArrayList: boolean add(java.lang.Object)>($r5);
+
+     label3:
+        goto label5;
+
+     label4:
+        $r6 := @caughtexception;
+
+        goto label6;
+
+     label5:
+        i2 = i2 + 1;
+
+        goto label1;
+
+     label6:
+        return $r3;
+
+        catch java.io.IOException from label2 to label3 with label4;
+    }
+
+    public boolean next() throws java.io.IOException
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        org.hipi.image.HipiImageFactory $r1;
+        int $i0;
+        boolean $z0, $z1;
+        org.hipi.imagebundle.HipiImageBundle$HibReader $r2, $r3;
+        java.lang.AssertionError $r4;
+        java.io.IOException $r5;
+        java.lang.StringBuilder $r6, $r7, $r10, $r11;
+        org.apache.hadoop.fs.Path $r8;
+        java.lang.String $r9, $r13;
+        java.lang.RuntimeException $r12;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        $r1 = r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.image.HipiImageFactory imageFactory>;
+
+        if $r1 != null goto label1;
+
+        $r12 = new java.lang.RuntimeException;
+
+        specialinvoke $r12.<java.lang.RuntimeException: void <init>(java.lang.String)>("Must provide a valid image factory to the HipiImageBundle constructor in order to call this method.");
+
+        throw $r12;
+
+     label1:
+        $i0 = r0.<org.hipi.imagebundle.HipiImageBundle: int fileMode>;
+
+        if $i0 == 1 goto label2;
+
+        $r5 = new java.io.IOException;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("HIB [");
+
+        $r8 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $r9 = virtualinvoke $r8.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        $r10 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("] is not opened for reading. Must successfully open HIB for reading before calling this method.");
+
+        $r13 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.io.IOException: void <init>(java.lang.String)>($r13);
+
+        throw $r5;
+
+     label2:
+        $z0 = <org.hipi.imagebundle.HipiImageBundle: boolean $assertionsDisabled>;
+
+        if $z0 != 0 goto label3;
+
+        $r3 = r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.imagebundle.HipiImageBundle$HibReader hibReader>;
+
+        if $r3 != null goto label3;
+
+        $r4 = new java.lang.AssertionError;
+
+        specialinvoke $r4.<java.lang.AssertionError: void <init>()>();
+
+        throw $r4;
+
+     label3:
+        $r2 = r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.imagebundle.HipiImageBundle$HibReader hibReader>;
+
+        $z1 = virtualinvoke $r2.<org.hipi.imagebundle.HipiImageBundle$HibReader: boolean nextKeyValue()>();
+
+        return $z1;
+    }
+
+    public org.hipi.image.HipiImageHeader currentHeader() throws java.io.IOException
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        int $i0;
+        boolean $z0;
+        org.hipi.imagebundle.HipiImageBundle$HibReader $r1, $r3;
+        org.hipi.image.HipiImageHeader $r2;
+        java.lang.AssertionError $r4;
+        java.io.IOException $r5;
+        java.lang.StringBuilder $r6, $r7, $r10, $r11;
+        org.apache.hadoop.fs.Path $r8;
+        java.lang.String $r9, $r12;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        $i0 = r0.<org.hipi.imagebundle.HipiImageBundle: int fileMode>;
+
+        if $i0 == 1 goto label1;
+
+        $r5 = new java.io.IOException;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("HIB [");
+
+        $r8 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $r9 = virtualinvoke $r8.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        $r10 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("] is not opened for reading. Must successfully open HIB for reading before calling this method.");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.io.IOException: void <init>(java.lang.String)>($r12);
+
+        throw $r5;
+
+     label1:
+        $z0 = <org.hipi.imagebundle.HipiImageBundle: boolean $assertionsDisabled>;
+
+        if $z0 != 0 goto label2;
+
+        $r3 = r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.imagebundle.HipiImageBundle$HibReader hibReader>;
+
+        if $r3 != null goto label2;
+
+        $r4 = new java.lang.AssertionError;
+
+        specialinvoke $r4.<java.lang.AssertionError: void <init>()>();
+
+        throw $r4;
+
+     label2:
+        $r1 = r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.imagebundle.HipiImageBundle$HibReader hibReader>;
+
+        $r2 = virtualinvoke $r1.<org.hipi.imagebundle.HipiImageBundle$HibReader: org.hipi.image.HipiImageHeader getCurrentKey()>();
+
+        return $r2;
+    }
+
+    public org.hipi.image.HipiImage currentImage() throws java.io.IOException
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        int $i0;
+        boolean $z0;
+        org.hipi.imagebundle.HipiImageBundle$HibReader $r1, $r3;
+        org.hipi.image.HipiImage $r2;
+        java.lang.AssertionError $r4;
+        java.io.IOException $r5;
+        java.lang.StringBuilder $r6, $r7, $r10, $r11;
+        org.apache.hadoop.fs.Path $r8;
+        java.lang.String $r9, $r12;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        $i0 = r0.<org.hipi.imagebundle.HipiImageBundle: int fileMode>;
+
+        if $i0 == 1 goto label1;
+
+        $r5 = new java.io.IOException;
+
+        $r6 = new java.lang.StringBuilder;
+
+        specialinvoke $r6.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("HIB [");
+
+        $r8 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.Path indexFilePath>;
+
+        $r9 = virtualinvoke $r8.<org.apache.hadoop.fs.Path: java.lang.String getName()>();
+
+        $r10 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r9);
+
+        $r11 = virtualinvoke $r10.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("] is not opened for reading. Must successfully open HIB for reading before calling this method.");
+
+        $r12 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r5.<java.io.IOException: void <init>(java.lang.String)>($r12);
+
+        throw $r5;
+
+     label1:
+        $z0 = <org.hipi.imagebundle.HipiImageBundle: boolean $assertionsDisabled>;
+
+        if $z0 != 0 goto label2;
+
+        $r3 = r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.imagebundle.HipiImageBundle$HibReader hibReader>;
+
+        if $r3 != null goto label2;
+
+        $r4 = new java.lang.AssertionError;
+
+        specialinvoke $r4.<java.lang.AssertionError: void <init>()>();
+
+        throw $r4;
+
+     label2:
+        $r1 = r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.imagebundle.HipiImageBundle$HibReader hibReader>;
+
+        $r2 = virtualinvoke $r1.<org.hipi.imagebundle.HipiImageBundle$HibReader: org.hipi.image.HipiImage getCurrentValue()>();
+
+        return $r2;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        org.hipi.imagebundle.HipiImageBundle r0;
+        org.hipi.imagebundle.HipiImageBundle$HibReader $r1, $r8;
+        java.io.DataInputStream $r2, $r7;
+        java.io.DataOutputStream $r3, $r4, $r5, $r6;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        $r1 = r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.imagebundle.HipiImageBundle$HibReader hibReader>;
+
+        if $r1 == null goto label1;
+
+        $r8 = r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.imagebundle.HipiImageBundle$HibReader hibReader>;
+
+        virtualinvoke $r8.<org.hipi.imagebundle.HipiImageBundle$HibReader: void close()>();
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: org.hipi.imagebundle.HipiImageBundle$HibReader hibReader> = null;
+
+     label1:
+        $r2 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream>;
+
+        if $r2 == null goto label2;
+
+        $r7 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream>;
+
+        virtualinvoke $r7.<java.io.DataInputStream: void close()>();
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataInputStream indexInputStream> = null;
+
+     label2:
+        $r3 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream dataOutputStream>;
+
+        if $r3 == null goto label3;
+
+        $r6 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream dataOutputStream>;
+
+        virtualinvoke $r6.<java.io.DataOutputStream: void close()>();
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream dataOutputStream> = null;
+
+     label3:
+        $r4 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream>;
+
+        if $r4 == null goto label4;
+
+        $r5 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream>;
+
+        virtualinvoke $r5.<java.io.DataOutputStream: void close()>();
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream> = null;
+
+     label4:
+        r0.<org.hipi.imagebundle.HipiImageBundle: int fileMode> = 0;
+
+        return;
+    }
+
+    public void append(org.hipi.imagebundle.HipiImageBundle)
+    {
+        org.hipi.imagebundle.HipiImageBundle r0, r1;
+        java.util.List r2;
+        org.apache.hadoop.fs.FileSystem r3;
+        byte[] r5;
+        long l0, $l3, $l4, $l5;
+        org.apache.hadoop.conf.Configuration $r6;
+        java.io.DataInputStream $r7;
+        org.apache.hadoop.fs.FSDataInputStream $r8;
+        org.apache.hadoop.fs.Path $r9;
+        int $i1, $i2, i7;
+        java.io.DataOutputStream $r10, $r11, $r14, $r15;
+        java.lang.Long $r12;
+        java.lang.Object $r13;
+        java.io.IOException $r16;
+        org.apache.hadoop.fs.FileStatus r17;
+
+        r0 := @this: org.hipi.imagebundle.HipiImageBundle;
+
+        r1 := @parameter0: org.hipi.imagebundle.HipiImageBundle;
+
+     label1:
+        virtualinvoke r1.<org.hipi.imagebundle.HipiImageBundle: void openForRead()>();
+
+        r17 = virtualinvoke r1.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.fs.FileStatus getDataFileStatus()>();
+
+        r2 = virtualinvoke r1.<org.hipi.imagebundle.HipiImageBundle: java.util.List readAllOffsets()>();
+
+        $r6 = r0.<org.hipi.imagebundle.HipiImageBundle: org.apache.hadoop.conf.Configuration conf>;
+
+        r3 = staticinvoke <org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FileSystem get(org.apache.hadoop.conf.Configuration)>($r6);
+
+        $r7 = new java.io.DataInputStream;
+
+        $r9 = virtualinvoke r17.<org.apache.hadoop.fs.FileStatus: org.apache.hadoop.fs.Path getPath()>();
+
+        $r8 = virtualinvoke r3.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataInputStream open(org.apache.hadoop.fs.Path)>($r9);
+
+        specialinvoke $r7.<java.io.DataInputStream: void <init>(java.io.InputStream)>($r8);
+
+        r5 = newarray (byte)[1048576];
+
+     label2:
+        $i2 = virtualinvoke $r7.<java.io.DataInputStream: int read(byte[])>(r5);
+
+        if $i2 <= -1 goto label3;
+
+        $r15 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream dataOutputStream>;
+
+        virtualinvoke $r15.<java.io.DataOutputStream: void write(byte[],int,int)>(r5, 0, $i2);
+
+        goto label2;
+
+     label3:
+        virtualinvoke $r7.<java.io.DataInputStream: void close()>();
+
+        l0 = r0.<org.hipi.imagebundle.HipiImageBundle: long currentOffset>;
+
+        i7 = 0;
+
+     label4:
+        $i1 = interfaceinvoke r2.<java.util.List: int size()>();
+
+        if i7 >= $i1 goto label5;
+
+        $r13 = interfaceinvoke r2.<java.util.List: java.lang.Object get(int)>(i7);
+
+        $r12 = (java.lang.Long) $r13;
+
+        $l4 = virtualinvoke $r12.<java.lang.Long: long longValue()>();
+
+        $l3 = $l4 + l0;
+
+        r0.<org.hipi.imagebundle.HipiImageBundle: long currentOffset> = $l3;
+
+        $r14 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream>;
+
+        $l5 = r0.<org.hipi.imagebundle.HipiImageBundle: long currentOffset>;
+
+        virtualinvoke $r14.<java.io.DataOutputStream: void writeLong(long)>($l5);
+
+        i7 = i7 + 1;
+
+        goto label4;
+
+     label5:
+        $r11 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream dataOutputStream>;
+
+        virtualinvoke $r11.<java.io.DataOutputStream: void flush()>();
+
+        $r10 = r0.<org.hipi.imagebundle.HipiImageBundle: java.io.DataOutputStream indexOutputStream>;
+
+        virtualinvoke $r10.<java.io.DataOutputStream: void flush()>();
+
+        virtualinvoke r1.<org.hipi.imagebundle.HipiImageBundle: void close()>();
+
+     label6:
+        goto label8;
+
+     label7:
+        $r16 := @caughtexception;
+
+        virtualinvoke $r16.<java.io.IOException: void printStackTrace()>();
+
+     label8:
+        return;
+
+        catch java.io.IOException from label1 to label6 with label7;
+    }
+
+    static void <clinit>()
+    {
+        java.lang.Class $r0;
+        boolean $z0, $z1;
+
+        <org.hipi.imagebundle.HipiImageBundle: int FILE_MODE_WRITE> = 2;
+
+        <org.hipi.imagebundle.HipiImageBundle: int FILE_MODE_READ> = 1;
+
+        <org.hipi.imagebundle.HipiImageBundle: int FILE_MODE_UNDEFINED> = 0;
+
+        $r0 = class "org/hipi/imagebundle/HipiImageBundle";
+
+        $z0 = virtualinvoke $r0.<java.lang.Class: boolean desiredAssertionStatus()>();
+
+        if $z0 != 0 goto label1;
+
+        $z1 = 1;
+
+        goto label2;
+
+     label1:
+        $z1 = 0;
+
+     label2:
+        <org.hipi.imagebundle.HipiImageBundle: boolean $assertionsDisabled> = $z1;
+
+        return;
+    }
+}

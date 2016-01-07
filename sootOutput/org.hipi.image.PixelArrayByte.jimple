@@ -1,0 +1,331 @@
+public class org.hipi.image.PixelArrayByte extends org.hipi.image.PixelArray
+{
+    byte[] data;
+
+    public void <init>(int)
+    {
+        org.hipi.image.PixelArrayByte r0;
+        int i0;
+        byte[] $r1;
+
+        r0 := @this: org.hipi.image.PixelArrayByte;
+
+        i0 := @parameter0: int;
+
+        specialinvoke r0.<org.hipi.image.PixelArray: void <init>(int,int)>(0, i0);
+
+        $r1 = newarray (byte)[i0];
+
+        r0.<org.hipi.image.PixelArrayByte: byte[] data> = $r1;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        org.hipi.image.PixelArrayByte r0;
+
+        r0 := @this: org.hipi.image.PixelArrayByte;
+
+        specialinvoke r0.<org.hipi.image.PixelArray: void <init>(int,int)>(0, 0);
+
+        r0.<org.hipi.image.PixelArrayByte: byte[] data> = null;
+
+        return;
+    }
+
+    public byte[] getData()
+    {
+        org.hipi.image.PixelArrayByte r0;
+        byte[] $r1;
+
+        r0 := @this: org.hipi.image.PixelArrayByte;
+
+        $r1 = r0.<org.hipi.image.PixelArrayByte: byte[] data>;
+
+        return $r1;
+    }
+
+    public void setSize(int) throws java.lang.IllegalArgumentException
+    {
+        org.hipi.image.PixelArrayByte r0;
+        int i0;
+        byte[] $r1;
+        java.lang.IllegalArgumentException $r2;
+
+        r0 := @this: org.hipi.image.PixelArrayByte;
+
+        i0 := @parameter0: int;
+
+        if i0 >= 0 goto label1;
+
+        $r2 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Invalid size of pixel array.");
+
+        throw $r2;
+
+     label1:
+        r0.<org.hipi.image.PixelArrayByte: int size> = i0;
+
+        if i0 != 0 goto label2;
+
+        r0.<org.hipi.image.PixelArrayByte: byte[] data> = null;
+
+        goto label3;
+
+     label2:
+        $r1 = newarray (byte)[i0];
+
+        r0.<org.hipi.image.PixelArrayByte: byte[] data> = $r1;
+
+     label3:
+        return;
+    }
+
+    public byte[] getByteArray()
+    {
+        org.hipi.image.PixelArrayByte r0;
+        byte[] $r1;
+
+        r0 := @this: org.hipi.image.PixelArrayByte;
+
+        $r1 = r0.<org.hipi.image.PixelArrayByte: byte[] data>;
+
+        return $r1;
+    }
+
+    public void setFromByteArray(byte[]) throws java.lang.IllegalArgumentException
+    {
+        org.hipi.image.PixelArrayByte r0;
+        byte[] r1, $r2;
+        int $i0, $i1;
+
+        r0 := @this: org.hipi.image.PixelArrayByte;
+
+        r1 := @parameter0: byte[];
+
+        if r1 == null goto label1;
+
+        $i0 = lengthof r1;
+
+        if $i0 != 0 goto label2;
+
+     label1:
+        r0.<org.hipi.image.PixelArrayByte: byte[] data> = null;
+
+        r0.<org.hipi.image.PixelArrayByte: int size> = 0;
+
+        goto label3;
+
+     label2:
+        r0.<org.hipi.image.PixelArrayByte: byte[] data> = r1;
+
+        $r2 = r0.<org.hipi.image.PixelArrayByte: byte[] data>;
+
+        $i1 = lengthof $r2;
+
+        r0.<org.hipi.image.PixelArrayByte: int size> = $i1;
+
+     label3:
+        return;
+    }
+
+    public int getElem(int)
+    {
+        org.hipi.image.PixelArrayByte r0;
+        int i0;
+        byte[] $r1;
+        byte $b1;
+        short $s2;
+
+        r0 := @this: org.hipi.image.PixelArrayByte;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.hipi.image.PixelArrayByte: byte[] data>;
+
+        $b1 = $r1[i0];
+
+        $s2 = $b1 & 255;
+
+        return $s2;
+    }
+
+    public int getElemNonLinSRGB(int)
+    {
+        org.hipi.image.PixelArrayByte r0;
+        int i0, $i1;
+
+        r0 := @this: org.hipi.image.PixelArrayByte;
+
+        i0 := @parameter0: int;
+
+        $i1 = virtualinvoke r0.<org.hipi.image.PixelArrayByte: int getElem(int)>(i0);
+
+        return $i1;
+    }
+
+    public void setElem(int, int)
+    {
+        org.hipi.image.PixelArrayByte r0;
+        int i0, i1, $i2, $i3;
+        byte[] $r1;
+        byte $b4;
+
+        r0 := @this: org.hipi.image.PixelArrayByte;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        $r1 = r0.<org.hipi.image.PixelArrayByte: byte[] data>;
+
+        $i2 = staticinvoke <java.lang.Math: int min(int,int)>(255, i1);
+
+        $i3 = staticinvoke <java.lang.Math: int max(int,int)>(0, $i2);
+
+        $b4 = (byte) $i3;
+
+        $r1[i0] = $b4;
+
+        return;
+    }
+
+    public void setElemNonLinSRGB(int, int)
+    {
+        org.hipi.image.PixelArrayByte r0;
+        int i0, i1;
+
+        r0 := @this: org.hipi.image.PixelArrayByte;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        virtualinvoke r0.<org.hipi.image.PixelArrayByte: void setElem(int,int)>(i0, i1);
+
+        return;
+    }
+
+    public float getElemFloat(int)
+    {
+        org.hipi.image.PixelArrayByte r0;
+        int i0;
+        byte[] $r1;
+        byte $b1;
+        short $s2;
+        float $f0, $f1;
+
+        r0 := @this: org.hipi.image.PixelArrayByte;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.hipi.image.PixelArrayByte: byte[] data>;
+
+        $b1 = $r1[i0];
+
+        $s2 = $b1 & 255;
+
+        $f0 = (float) $s2;
+
+        $f1 = $f0 / 255.0F;
+
+        return $f1;
+    }
+
+    public void setElemFloat(int, float)
+    {
+        org.hipi.image.PixelArrayByte r0;
+        int i0, $i1, $i2;
+        float f0;
+        double $d0, $d1, $d2, $d3;
+        byte[] $r1;
+        byte $b3;
+
+        r0 := @this: org.hipi.image.PixelArrayByte;
+
+        i0 := @parameter0: int;
+
+        f0 := @parameter1: float;
+
+        $r1 = r0.<org.hipi.image.PixelArrayByte: byte[] data>;
+
+        $d0 = (double) f0;
+
+        $d1 = $d0 * 255.0;
+
+        $d2 = staticinvoke <java.lang.Math: double min(double,double)>(255.0, $d1);
+
+        $d3 = staticinvoke <java.lang.Math: double max(double,double)>(0.0, $d2);
+
+        $i1 = (int) $d3;
+
+        $i2 = $i1 & 255;
+
+        $b3 = (byte) $i2;
+
+        $r1[i0] = $b3;
+
+        return;
+    }
+
+    public double getElemDouble(int)
+    {
+        org.hipi.image.PixelArrayByte r0;
+        int i0;
+        byte[] $r1;
+        byte $b1;
+        short $s2;
+        double $d0, $d1;
+
+        r0 := @this: org.hipi.image.PixelArrayByte;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.hipi.image.PixelArrayByte: byte[] data>;
+
+        $b1 = $r1[i0];
+
+        $s2 = $b1 & 255;
+
+        $d0 = (double) $s2;
+
+        $d1 = $d0 / 255.0;
+
+        return $d1;
+    }
+
+    public void setElemDouble(int, double)
+    {
+        org.hipi.image.PixelArrayByte r0;
+        int i0, $i1, $i2;
+        double d0, $d1, $d2, $d3;
+        byte[] $r1;
+        byte $b3;
+
+        r0 := @this: org.hipi.image.PixelArrayByte;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        $r1 = r0.<org.hipi.image.PixelArrayByte: byte[] data>;
+
+        $d1 = d0 * 255.0;
+
+        $d2 = staticinvoke <java.lang.Math: double min(double,double)>(255.0, $d1);
+
+        $d3 = staticinvoke <java.lang.Math: double max(double,double)>(0.0, $d2);
+
+        $i1 = (int) $d3;
+
+        $i2 = $i1 & 255;
+
+        $b3 = (byte) $i2;
+
+        $r1[i0] = $b3;
+
+        return;
+    }
+}

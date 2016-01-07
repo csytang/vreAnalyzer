@@ -150,9 +150,9 @@ final class org.apache.mahout.clustering.lda.cvb.TopicModel$Updater extends java
         int $i0, $i1;
         org.apache.mahout.math.Vector $r10, $r17;
         java.util.concurrent.TimeUnit $r12;
-        java.lang.Throwable $r19;
-        org.slf4j.Logger $r20;
-        java.lang.InterruptedException $r21;
+        org.slf4j.Logger $r19;
+        java.lang.InterruptedException $r20;
+        java.lang.Throwable $r21;
         java.util.Iterator r24;
 
         r0 := @this: org.apache.mahout.clustering.lda.cvb.TopicModel$Updater;
@@ -191,11 +191,11 @@ final class org.apache.mahout.clustering.lda.cvb.TopicModel$Updater extends java
         goto label01;
 
      label04:
-        $r21 := @caughtexception;
+        $r20 := @caughtexception;
 
-        $r20 = staticinvoke <org.apache.mahout.clustering.lda.cvb.TopicModel: org.slf4j.Logger access$100()>();
+        $r19 = staticinvoke <org.apache.mahout.clustering.lda.cvb.TopicModel: org.slf4j.Logger access$100()>();
 
-        interfaceinvoke $r20.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Interrupted waiting to poll for update", $r21);
+        interfaceinvoke $r19.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Interrupted waiting to poll for update", $r20);
 
         goto label01;
 
@@ -243,12 +243,12 @@ final class org.apache.mahout.clustering.lda.cvb.TopicModel$Updater extends java
         goto label12;
 
      label10:
-        $r19 := @caughtexception;
+        $r21 := @caughtexception;
 
         exitmonitor r0;
 
      label11:
-        throw $r19;
+        throw $r21;
 
      label12:
         return;

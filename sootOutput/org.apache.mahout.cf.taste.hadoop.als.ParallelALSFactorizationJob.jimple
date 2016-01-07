@@ -327,7 +327,7 @@ public class org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob e
         java.lang.Object $r22;
         int $i0, $i1, $i2, i3;
         double $d0, $d1;
-        java.lang.Throwable $r24, $r25, $r26, r27;
+        java.lang.Throwable $r23, $r25, $r26, r27;
 
         r0 := @this: org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob;
 
@@ -423,11 +423,11 @@ public class org.apache.mahout.cf.taste.hadoop.als.ParallelALSFactorizationJob e
         goto label14;
 
      label06:
-        $r24 := @caughtexception;
+        $r23 := @caughtexception;
 
-        r27 = $r24;
+        r27 = $r23;
 
-        throw $r24;
+        throw $r23;
 
      label07:
         $r26 := @caughtexception;

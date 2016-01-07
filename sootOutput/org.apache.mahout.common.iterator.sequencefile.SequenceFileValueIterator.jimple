@@ -103,10 +103,10 @@ public final class org.apache.mahout.common.iterator.sequencefile.SequenceFileVa
         java.lang.Class $r3;
         java.lang.Object $r4;
         org.apache.hadoop.io.Writable $r5, $r6, $r7, $r14, $r15;
-        java.io.IOException $r8, $r9;
-        java.lang.IllegalStateException $r10;
-        java.lang.String $r11;
-        org.slf4j.Logger $r12;
+        java.io.IOException $r8, $r11;
+        java.lang.String $r9;
+        org.slf4j.Logger $r10;
+        java.lang.IllegalStateException $r12;
         org.apache.hadoop.io.SequenceFile$Reader $r13;
 
         r0 := @this: org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator;
@@ -153,7 +153,7 @@ public final class org.apache.mahout.common.iterator.sequencefile.SequenceFileVa
         return $r6;
 
      label06:
-        $r8 := @caughtexception;
+        $r11 := @caughtexception;
 
      label07:
         virtualinvoke r0.<org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: void close()>();
@@ -162,20 +162,20 @@ public final class org.apache.mahout.common.iterator.sequencefile.SequenceFileVa
         goto label10;
 
      label09:
-        $r9 := @caughtexception;
+        $r8 := @caughtexception;
 
-        $r12 = <org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.slf4j.Logger log>;
+        $r10 = <org.apache.mahout.common.iterator.sequencefile.SequenceFileValueIterator: org.slf4j.Logger log>;
 
-        $r11 = virtualinvoke $r9.<java.io.IOException: java.lang.String getMessage()>();
+        $r9 = virtualinvoke $r8.<java.io.IOException: java.lang.String getMessage()>();
 
-        interfaceinvoke $r12.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>($r11, $r9);
+        interfaceinvoke $r10.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>($r9, $r8);
 
      label10:
-        $r10 = new java.lang.IllegalStateException;
+        $r12 = new java.lang.IllegalStateException;
 
-        specialinvoke $r10.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r8);
+        specialinvoke $r12.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r11);
 
-        throw $r10;
+        throw $r12;
 
         catch java.io.IOException from label02 to label03 with label06;
         catch java.io.IOException from label04 to label05 with label06;

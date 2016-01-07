@@ -5,13 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import soot.Hierarchy;
-import soot.Modifier;
 import soot.Scene;
 import soot.SootClass;
 import soot.SootMethod;
 import soot.Value;
+import soot.jimple.InvokeExpr;
+import soot.jimple.Stmt;
 import vreAnalyzer.Blocks.BlockGenerator;
 import vreAnalyzer.Blocks.ClassBlock;
 import vreAnalyzer.Blocks.CodeBlock;
@@ -26,12 +26,18 @@ import vreAnalyzer.Variants.ConditionCheck;
 
 public class FullBasicInfoToCSV {
 	/*
-	 * Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,Variant Belongs,ContainVariantBrach,VariantBrachStart,VaraintBranchOrder" 
+	 * Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,Variant Belongs,ContainVariantBrach,VariantBrachStart[@Position],ConditionalVariable,IsVaraintCodeSegment" 
 	 */
 	public static FullBasicInfoToCSV instance;
 	// package 对应所有的 app 类
 	private Map<String,Set<SootClass>> packageWithClasses = new HashMap<String,Set<SootClass>>();
-	
+	// method 到 callsite
+	private Map<SootMethod,List<CallSite>> callerMethodToCallSites = BindingResolver.inst().getCallerMethodToCallSites();
+	private Map<SootMethod,Set<CallSite>> calleeMethodToCallSites = BindingResolver.inst().getCalleeMethodToCallSites();
+	/*
+	 *  SootMethod 到 ConditionalCheck
+	 */
+	private Map<SootMethod,ConditionCheck> methodToConditionCheck = BindingResolver.inst().getmethodToConditionCheck();
 	public static FullBasicInfoToCSV inst(){
 		if(instance==null)
 			instance = new FullBasicInfoToCSV();
@@ -41,6 +47,11 @@ public class FullBasicInfoToCSV {
 	private String outputDirectory = ".";
 	private CSVWriter fullInfoWriter = null;
 	private int index = 1;
+	
+	
+	private Set<SootMethod> callers = new HashSet<SootMethod>();
+	private Set<SootMethod> callees = new HashSet<SootMethod>();
+	
 	
 	public FullBasicInfoToCSV(){
 		fullInfoWriter = new CSVWriter(outputDirectory+"/full.csv");
@@ -65,10 +76,6 @@ public class FullBasicInfoToCSV {
 		// 转化为 block to Variant ids
 		Map<Integer,Set<Integer>> blockIdToVariantId = convertVaraintwithBlock(variantIdToblockIds);
 		
-		/*
-		 *  SootMethod 到 ConditionalCheck
-		 */
-		Map<SootMethod,ConditionCheck> methodToConditionCheck = BindingResolver.inst().getmethodToConditionCheck();
 		
 		/**
 		 * Id,
@@ -86,11 +93,12 @@ public class FullBasicInfoToCSV {
 		 * OverloadMethod,
 		 * Variant Belongs/Contains,
 		 * ContainVariantBrach,
-		 * VariantBrachStart
+		 * VariantBrachStart[@position]
+		 * IsVaraintCodeSegment
 		 */
 		
 		// 写入标题
-		fullInfoWriter.println("Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,CallerMethod/CalleeMethod,Associated caller/callees,OverrideMethod,OverloadMethod,Variant Belongs/Contains,ContainVariantBrach,VariantBrachStart");
+		fullInfoWriter.println("Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,CallerMethod/CalleeMethod,Associated caller/callees,Strict OverrideMethod,Strict OverloadMethod,Variant Belongs/Contains,ContainVariantBrach,VariantBrachStart[@Position],IsVaraintCodeSegment");
 		// 写入正文内容
 		List<SootClass>appclasses = ProgramFlowBuilder.inst().getAppClasses();
 		for(SootClass cls:appclasses){
@@ -110,7 +118,7 @@ public class FullBasicInfoToCSV {
 		for(String packageName:packageWithClasses.keySet()){
 			String packInfoTxt = new String();
 			/*
-			 *Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,CallerMethod/CalleeMethod,Variant Belongs,ContainVariantBrach,VariantBrachStart"
+			 *Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,CallerMethod/CalleeMethod,Variant Belongs,ContainVariantBrach,VariantBrachStart[@Position],IsVaraintCodeSegment"
 			 *
 			 */
 			packInfoTxt += index+",";// Id
@@ -128,7 +136,9 @@ public class FullBasicInfoToCSV {
 			
 			packInfoTxt += "-,";// Variant
 			packInfoTxt += "?,";// ContainVariantBrach
-			packInfoTxt += "-";// VariantBrachStart
+			packInfoTxt += "-,";// VariantBrachStart[@Position]
+			
+			packInfoTxt += "-";//IsVaraintCodeSegment
 			
 			fullInfoWriter.println(packInfoTxt);
 			int packageId = index;
@@ -138,7 +148,7 @@ public class FullBasicInfoToCSV {
 			Set<SootClass> packclassset = packageWithClasses.get(packageName);
 			for(SootClass cls:packclassset){
 				/*
-				 * Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,CallerMethod/CalleeMethod,OverrideMethod,OverloadMethod,Variant Belongs,ContainVariantBrach,VariantBrachStart"
+				 * Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,CallerMethod/CalleeMethod,OverrideMethod,OverloadMethod,Variant Belongs,ContainVariantBrach,VariantBrachStart[@Position],IsVaraintCodeSegment"
 				 */
 				String clsInfoTxt = new String();
 				clsInfoTxt += index+",";// Id
@@ -156,7 +166,9 @@ public class FullBasicInfoToCSV {
 				
 				clsInfoTxt += "-,";// variant belongings
 				clsInfoTxt += "?,";// ContainVariantBrach
-				clsInfoTxt += "-";// VariantBrachStart
+				clsInfoTxt += "-,";// VariantBrachStart[@Position],IsVaraintCodeSegment
+				clsInfoTxt += "-";// IsVaraintCodeSegment
+				
 				
 				fullInfoWriter.println(clsInfoTxt);
 				int classId = index;
@@ -170,14 +182,20 @@ public class FullBasicInfoToCSV {
 					// 判断是不是app method
 					if(ProgramFlowBuilder.inst().getAppConcreteMethods().contains(method)){
 						/*
-						 * Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,CallerMethod/CalleeMethod, OverrideMethod, OverloadMethod, Variant Belongs,ContainVariantBrach,VariantBrachStart"
+						 * Id,Name,\"Type(P,C,M,CB)\",Parent Id,Parent Name,Parent Type,Code Range,CallerMethod/CalleeMethod, OverrideMethod, OverloadMethod, Variant Belongs,ContainVariantBrach,VariantBrachStart[@Position],IsVaraintCodeSegment"
 						 */
 						MethodBlock methodblock = methodCodeBlockpool.get(method);
-						
+						boolean isCaller = false;
+						boolean isCallee = false;
+						boolean isNon = false;
 						
 						String methodInfoTxt = new String();
 						methodInfoTxt += index+",";// id
-						methodInfoTxt += method.getName()+",";// name
+						if(method.getName()=="<init>"){
+							methodInfoTxt += cls.getName()+",";// name
+						}else{
+							methodInfoTxt += method.getName()+",";// name
+						}
 						methodInfoTxt += "Method,";// type
 						methodInfoTxt += classId+",";// parentId
 						methodInfoTxt += cls.getName()+",";//parent name
@@ -190,24 +208,36 @@ public class FullBasicInfoToCSV {
 						}
 						// CallerMethod/CalleeMethod
 						// Associated caller/callees
+						
 						if(BindingResolver.inst().getCallerMethods().contains(method)){
 							methodInfoTxt += "caller,";
 							// get associated callees
-							Set<SootMethod> callees = BindingResolver.inst().getCalleesForCaller(method);
+							callees = BindingResolver.inst().getCalleesForCaller(method);
 							// convert method set into String
 							String calleeString = convertMethodSetToString(callees);
-							methodInfoTxt += calleeString;
+							
+							methodInfoTxt += "\""+calleeString+"\"";
 							methodInfoTxt += ",";
+							
+							isCaller = true;
+							isCallee = false;
 						}else if(BindingResolver.inst().getCalleeMethods().contains(method)){
 							methodInfoTxt += "callee,";
 							// get associated caller
-							Set<SootMethod> callers = BindingResolver.inst().getCallerForCallee(method);
+							callers = BindingResolver.inst().getCallerForCallee(method);
 							String callerString = convertMethodSetToString(callers);
-							methodInfoTxt += callerString;
+							methodInfoTxt += "\""+callerString+"\"";
 							methodInfoTxt += ",";
+							
+							isCaller = false;
+							isCallee = true;
 						}else{
 							methodInfoTxt += "-,";
 							methodInfoTxt += "-,";
+							
+							isCaller = false;
+							isCallee = false;
+							isNon = true;
 						}						
 						
 						
@@ -252,10 +282,38 @@ public class FullBasicInfoToCSV {
 						}else{
 							methodInfoTxt += "N,";
 						}
+						//VariantBrachStart[@Position],IsVaraintCodeSegment
 						
+						variantBrachStart = "\""+variantBrachStart+"@["+method.getName()+"]"+"\"";
+						Set<SootMethod> variantCodeSegmentSet;
 						
-						variantBrachStart = "\""+variantBrachStart+"\"";
-						methodInfoTxt += variantBrachStart;
+						String segmentList = "";
+						if(isCaller){
+							variantCodeSegmentSet = variantCodeSegmentCheck(method,callees,isCaller,isCallee);
+							if(variantCodeSegmentSet!=null){
+								if(variantCodeSegmentSet.size()==0){
+									segmentList = "[]";
+								}else{
+									segmentList = convertMethodSetToString(variantCodeSegmentSet);
+								}
+							}else{
+								segmentList = "[]";
+							}
+						}else if(isCallee){
+							variantCodeSegmentSet = variantCodeSegmentCheck(method,callers,isCaller,isCallee);
+							if(variantCodeSegmentSet!=null){
+								if(variantCodeSegmentSet.size()==0){
+									segmentList = "[]";
+								}else{
+									segmentList = convertMethodSetToString(variantCodeSegmentSet);
+								}
+							}else{
+								segmentList = "[]";
+							}
+						}
+
+						methodInfoTxt += variantBrachStart+",";
+						methodInfoTxt += "\""+segmentList+"\"";
 						
 						fullInfoWriter.println(methodInfoTxt);
 						methodId = index;
@@ -338,9 +396,11 @@ public class FullBasicInfoToCSV {
 								simpleInfoTxt += "N,";
 							}
 							
-							variantBrachStart = "\""+variantBrachStart+"\"";
-							simpleInfoTxt += variantBrachStart;
+							variantBrachStart = "\""+variantBrachStart+"@["+method.getName()+"]"+"\"";
+							simpleInfoTxt += variantBrachStart + ",";
 							
+							//is segment
+							simpleInfoTxt += "[]";
 							fullInfoWriter.println(simpleInfoTxt);
 							index++;
 						}
@@ -350,7 +410,109 @@ public class FullBasicInfoToCSV {
 		}
 		fullInfoWriter.close();	
 	}
-	
+	/**
+	 * 
+	 * @param method
+	 * @param associatedcallercallees
+	 * @param isCaller
+	 * @param isCallee
+	 * @return
+	 */
+	private Set<SootMethod> variantCodeSegmentCheck(SootMethod method,Set<SootMethod>associatedcallercallees,boolean isCaller,boolean isCallee) {
+		// TODO Auto-generated method stub
+		// 1. Caller函数 
+		
+		
+		if(isCaller){
+			Set<SootMethod> possiblecalleeVariants = new HashSet<SootMethod>();
+			
+			List<CallSite> allcallsites = callerMethodToCallSites.get(method);
+			Map<SootMethod,Set<CallSite>> calleeToCallSites = new HashMap<SootMethod,Set<CallSite>>();
+			for(CallSite callsite:allcallsites){
+				for(SootMethod smethod:callsite.getAppCallees()){
+					if(calleeToCallSites.containsKey(smethod)){
+						calleeToCallSites.get(smethod).add(callsite);
+					}else{
+						Set<CallSite> callsites = new HashSet<CallSite>();
+						callsites.add(callsite);
+						calleeToCallSites.put(smethod, callsites);
+					}
+				}
+			}
+			ConditionCheck callercheck = methodToConditionCheck.get(method);
+			if(callercheck==null)
+				return null;
+			Set<Value> conditionalValues = callercheck.getallConditionalValues(null);
+			for(SootMethod calleemethod:associatedcallercallees){
+				// 1.1 获得Callsite site
+				Set<CallSite>callsites = calleeToCallSites.get(calleemethod);
+				// 1.2 获得这个site的在callermethod的位置 
+				for(CallSite site:callsites){
+					CFGNode callCFGNode = site.getCallCFGNode();
+					// 判断这个location在一个分支之中 
+					// 1.3 如果conditioncheck中的check value是传入的参数则 返回真 否则 返回假
+					Stmt srcStmt = callCFGNode.getStmt();
+					InvokeExpr invokeExpr = srcStmt.getInvokeExpr();
+					List<Value>args = invokeExpr.getArgs();
+					for(Value arg:args){
+						if(conditionalValues.contains(arg)){
+							possiblecalleeVariants.add(calleemethod);
+							break;
+						}
+					}
+				}
+				
+			}
+			return possiblecalleeVariants;
+			
+		}
+		
+		// 2. Callee函数
+		else if(isCallee){
+			Set<SootMethod> possiblecallerVariants = new HashSet<SootMethod>();
+			Set<CallSite> sinkCallsites = calleeMethodToCallSites.get(method);
+			
+			for(SootMethod callermethod:associatedcallercallees){
+				// 2.1 获得Callsite site
+				ConditionCheck callercheck = methodToConditionCheck.get(callermethod);
+				if(callercheck==null)
+					continue;
+				// 2.2 获得这个site的在callermethod的位置 
+				List<CallSite> callsiteList = callerMethodToCallSites.get(callermethod);
+				// 2.3 如果condition check中的check value是传入的参数则 返回真 否则 返回假
+				if(callsiteList==null){
+					continue;
+				}
+				for(CallSite site:callsiteList){
+					if(sinkCallsites.contains(site)){
+						Set<Value> values = callercheck.getallConditionalValues(site);
+						if(values==null){
+							continue;
+						}
+						CFGNode callCFGNode = site.getCallCFGNode();
+						// 判断这个location在一个分支之中 
+						// 1.3 如果conditioncheck中的check value是传入的参数则 返回真 否则 返回假
+						Stmt srcStmt = callCFGNode.getStmt();
+						InvokeExpr invokeExpr = srcStmt.getInvokeExpr();
+						List<Value> args = invokeExpr.getArgs();
+						for(Value arg:args){
+							if(values.contains(arg)){
+								possiblecallerVariants.add(callermethod);
+								break;
+							}
+						}
+					}
+				}
+				
+				
+			}
+			
+			return possiblecallerVariants;
+		}
+		return null;
+		
+	}
+
 	/**
 	 * 
 	 * @param methodAssociatedVariants
@@ -476,7 +638,12 @@ public class FullBasicInfoToCSV {
 	public String convertMethodSetToString(Set<SootMethod>methods){
 		String methodString = "[";
 		for(SootMethod sm:methods){
-			methodString += sm.getName();
+			if(sm.getName().equals("<init>")){
+				methodString += sm.getDeclaringClass().getName();
+				methodString += "@[init]";
+			}else{
+				methodString += sm.getName();
+			}
 			methodString += ",";
 		}
 		if(methods.size()>=1){
@@ -492,6 +659,9 @@ public class FullBasicInfoToCSV {
 	 * @return
 	 */
 	private boolean isoverload(SootMethod method, SootClass declaringClass) {
+		if(!method.isConcrete()){
+			return false;
+		}
 		List<SootMethod>allmethods = declaringClass.getMethods();
 		if(!allmethods.contains(method))
 			return false;
@@ -499,12 +669,13 @@ public class FullBasicInfoToCSV {
 		String methodName = method.getName();
 		for(SootMethod smethod:allmethods){
 			if(smethod.getName().equals(methodName) &&
-					smethod.getModifiers()!=Modifier.VOLATILE)
+					smethod.isConcrete())
 				return true;
 		}
 		return false;
 	}
 	
+	// 复写父类函数
 	private boolean isoverride(SootMethod smethod, SootClass declaringClass) {
 		Hierarchy hierarchy = Scene.v().getActiveHierarchy();
 		

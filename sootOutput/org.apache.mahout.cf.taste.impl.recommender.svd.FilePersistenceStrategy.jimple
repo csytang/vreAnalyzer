@@ -99,7 +99,7 @@ public class org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStra
         throw $r18;
 
      label06:
-        $r17 := @caughtexception;
+        $r19 := @caughtexception;
 
      label07:
         if $r6 == null goto label12;
@@ -113,9 +113,9 @@ public class org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStra
         goto label12;
 
      label10:
-        $r19 := @caughtexception;
+        $r17 := @caughtexception;
 
-        virtualinvoke r20.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r19);
+        virtualinvoke r20.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r17);
 
         goto label12;
 
@@ -123,7 +123,7 @@ public class org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStra
         virtualinvoke $r6.<java.io.DataInputStream: void close()>();
 
      label12:
-        throw $r17;
+        throw $r19;
 
         catch java.lang.Throwable from label02 to label03 with label05;
         catch java.lang.Throwable from label02 to label03 with label06;
@@ -141,7 +141,7 @@ public class org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStra
         java.io.File $r8, $r9;
         org.slf4j.Logger $r10;
         java.lang.String $r11;
-        java.lang.Throwable $r12, $r13, $r14, r16;
+        java.lang.Throwable $r13, $r14, $r15, r16;
 
         r0 := @this: org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStrategy;
 
@@ -182,11 +182,11 @@ public class org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStra
         goto label11;
 
      label03:
-        $r14 := @caughtexception;
+        $r15 := @caughtexception;
 
-        r16 = $r14;
+        r16 = $r15;
 
-        throw $r14;
+        throw $r15;
 
      label04:
         $r13 := @caughtexception;
@@ -203,9 +203,9 @@ public class org.apache.mahout.cf.taste.impl.recommender.svd.FilePersistenceStra
         goto label10;
 
      label08:
-        $r12 := @caughtexception;
+        $r14 := @caughtexception;
 
-        virtualinvoke r16.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r12);
+        virtualinvoke r16.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r14);
 
         goto label10;
 

@@ -1,0 +1,5 @@
+public interface  org.hipi.image.io.ImageEncoder extends java.lang.Object
+{
+
+    public abstract void encodeImage(org.hipi.image.HipiImage, java.io.OutputStream) throws java.lang.IllegalArgumentException, java.io.IOException;
+}

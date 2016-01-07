@@ -41,7 +41,7 @@ public class org.apache.mahout.vectorizer.collocations.llr.CollocMapper extends 
         org.apache.mahout.vectorizer.collocations.llr.CollocMapper$2 $r26;
         long $l6;
         org.apache.hadoop.mapreduce.Counter $r27;
-        java.lang.Throwable $r28, $r29, $r30, r32;
+        java.lang.Throwable $r28, $r30, $r31, r32;
 
         r0 := @this: org.apache.mahout.vectorizer.collocations.llr.CollocMapper;
 
@@ -169,14 +169,14 @@ public class org.apache.mahout.vectorizer.collocations.llr.CollocMapper extends 
         goto label14;
 
      label06:
-        $r29 := @caughtexception;
+        $r31 := @caughtexception;
 
-        r32 = $r29;
+        r32 = $r31;
 
-        throw $r29;
+        throw $r31;
 
      label07:
-        $r30 := @caughtexception;
+        $r28 := @caughtexception;
 
      label08:
         if $r10 == null goto label13;
@@ -190,9 +190,9 @@ public class org.apache.mahout.vectorizer.collocations.llr.CollocMapper extends 
         goto label13;
 
      label11:
-        $r28 := @caughtexception;
+        $r30 := @caughtexception;
 
-        virtualinvoke r32.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r28);
+        virtualinvoke r32.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r30);
 
         goto label13;
 
@@ -200,7 +200,7 @@ public class org.apache.mahout.vectorizer.collocations.llr.CollocMapper extends 
         virtualinvoke $r10.<org.apache.lucene.analysis.shingle.ShingleFilter: void close()>();
 
      label13:
-        throw $r30;
+        throw $r28;
 
      label14:
         return;

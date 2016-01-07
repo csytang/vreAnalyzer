@@ -46,7 +46,7 @@ public class org.apache.mahout.cf.taste.hadoop.als.FactorizationEvaluator extend
         java.io.BufferedWriter $r20;
         java.io.OutputStreamWriter $r21;
         java.nio.charset.Charset $r24;
-        java.lang.Throwable $r27, $r28, $r30, r31;
+        java.lang.Throwable $r28, $r29, $r30, r31;
         double d0;
 
         r0 := @this: org.apache.mahout.cf.taste.hadoop.als.FactorizationEvaluator;
@@ -149,14 +149,14 @@ public class org.apache.mahout.cf.taste.hadoop.als.FactorizationEvaluator extend
         goto label14;
 
      label06:
-        $r30 := @caughtexception;
+        $r29 := @caughtexception;
 
-        r31 = $r30;
+        r31 = $r29;
 
-        throw $r30;
+        throw $r29;
 
      label07:
-        $r28 := @caughtexception;
+        $r30 := @caughtexception;
 
      label08:
         if $r20 == null goto label13;
@@ -170,9 +170,9 @@ public class org.apache.mahout.cf.taste.hadoop.als.FactorizationEvaluator extend
         goto label13;
 
      label11:
-        $r27 := @caughtexception;
+        $r28 := @caughtexception;
 
-        virtualinvoke r31.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r27);
+        virtualinvoke r31.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r28);
 
         goto label13;
 
@@ -180,7 +180,7 @@ public class org.apache.mahout.cf.taste.hadoop.als.FactorizationEvaluator extend
         virtualinvoke $r20.<java.io.BufferedWriter: void close()>();
 
      label13:
-        throw $r28;
+        throw $r30;
 
      label14:
         return 0;

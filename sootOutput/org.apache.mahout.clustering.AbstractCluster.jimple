@@ -843,11 +843,11 @@ public abstract class org.apache.mahout.clustering.AbstractCluster extends java.
         goto label4;
 
      label3:
-        $r16 := @caughtexception;
+        $r18 := @caughtexception;
 
-        $r15 = <org.apache.mahout.clustering.AbstractCluster: org.slf4j.Logger log>;
+        $r17 = <org.apache.mahout.clustering.AbstractCluster: org.slf4j.Logger log>;
 
-        interfaceinvoke $r15.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>("IOException:  ", $r16);
+        interfaceinvoke $r17.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>("IOException:  ", $r18);
 
      label4:
         $r20 = virtualinvoke r0.<org.apache.mahout.clustering.AbstractCluster: org.apache.mahout.math.Vector getRadius()>();
@@ -865,11 +865,11 @@ public abstract class org.apache.mahout.clustering.AbstractCluster extends java.
         goto label8;
 
      label7:
-        $r18 := @caughtexception;
+        $r16 := @caughtexception;
 
-        $r17 = <org.apache.mahout.clustering.AbstractCluster: org.slf4j.Logger log>;
+        $r15 = <org.apache.mahout.clustering.AbstractCluster: org.slf4j.Logger log>;
 
-        interfaceinvoke $r17.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>("IOException:  ", $r18);
+        interfaceinvoke $r15.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>("IOException:  ", $r16);
 
      label8:
         return $r3;

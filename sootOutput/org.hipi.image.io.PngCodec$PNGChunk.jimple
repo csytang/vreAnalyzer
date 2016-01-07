@@ -1,0 +1,166 @@
+class org.hipi.image.io.PngCodec$PNGChunk extends java.lang.Object
+{
+    private byte[] mType;
+    private byte[] mData;
+    final org.hipi.image.io.PngCodec this$0;
+
+    public void <init>(org.hipi.image.io.PngCodec, byte[], byte[])
+    {
+        org.hipi.image.io.PngCodec$PNGChunk r0;
+        org.hipi.image.io.PngCodec r1;
+        byte[] r2, r3;
+
+        r0 := @this: org.hipi.image.io.PngCodec$PNGChunk;
+
+        r1 := @parameter0: org.hipi.image.io.PngCodec;
+
+        r2 := @parameter1: byte[];
+
+        r3 := @parameter2: byte[];
+
+        r0.<org.hipi.image.io.PngCodec$PNGChunk: org.hipi.image.io.PngCodec this$0> = r1;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.hipi.image.io.PngCodec$PNGChunk: byte[] mType> = r2;
+
+        r0.<org.hipi.image.io.PngCodec$PNGChunk: byte[] mData> = r3;
+
+        return;
+    }
+
+    public java.lang.String getTypeString()
+    {
+        org.hipi.image.io.PngCodec$PNGChunk r0;
+        java.lang.String $r2;
+        byte[] $r3;
+        java.io.UnsupportedEncodingException $r4;
+
+        r0 := @this: org.hipi.image.io.PngCodec$PNGChunk;
+
+     label1:
+        $r2 = new java.lang.String;
+
+        $r3 = r0.<org.hipi.image.io.PngCodec$PNGChunk: byte[] mType>;
+
+        specialinvoke $r2.<java.lang.String: void <init>(byte[],java.lang.String)>($r3, "UTF8");
+
+     label2:
+        return $r2;
+
+     label3:
+        $r4 := @caughtexception;
+
+        return "";
+
+        catch java.io.UnsupportedEncodingException from label1 to label2 with label3;
+    }
+
+    public java.lang.String getDataString()
+    {
+        org.hipi.image.io.PngCodec$PNGChunk r0;
+        java.lang.String $r2;
+        byte[] $r3;
+        java.io.UnsupportedEncodingException $r4;
+
+        r0 := @this: org.hipi.image.io.PngCodec$PNGChunk;
+
+     label1:
+        $r2 = new java.lang.String;
+
+        $r3 = r0.<org.hipi.image.io.PngCodec$PNGChunk: byte[] mData>;
+
+        specialinvoke $r2.<java.lang.String: void <init>(byte[],java.lang.String)>($r3, "UTF8");
+
+     label2:
+        return $r2;
+
+     label3:
+        $r4 := @caughtexception;
+
+        return "";
+
+        catch java.io.UnsupportedEncodingException from label1 to label2 with label3;
+    }
+
+    public byte[] getData()
+    {
+        org.hipi.image.io.PngCodec$PNGChunk r0;
+        byte[] $r1;
+
+        r0 := @this: org.hipi.image.io.PngCodec$PNGChunk;
+
+        $r1 = r0.<org.hipi.image.io.PngCodec$PNGChunk: byte[] mData>;
+
+        return $r1;
+    }
+
+    public long getUnsignedInt(int)
+    {
+        org.hipi.image.io.PngCodec$PNGChunk r0;
+        int i0, $i1, $i3, $i4, $i6, i9;
+        byte[] $r1;
+        byte $b2;
+        short $s5;
+        long $l7, l8;
+
+        r0 := @this: org.hipi.image.io.PngCodec$PNGChunk;
+
+        i0 := @parameter0: int;
+
+        l8 = 0L;
+
+        i9 = 0;
+
+     label1:
+        if i9 >= 4 goto label2;
+
+        $r1 = r0.<org.hipi.image.io.PngCodec$PNGChunk: byte[] mData>;
+
+        $i1 = i0 + i9;
+
+        $b2 = $r1[$i1];
+
+        $s5 = $b2 & 255;
+
+        $i3 = 3 - i9;
+
+        $i4 = $i3 * 8;
+
+        $i6 = $s5 << $i4;
+
+        $l7 = (long) $i6;
+
+        l8 = l8 + $l7;
+
+        i9 = i9 + 1;
+
+        goto label1;
+
+     label2:
+        return l8;
+    }
+
+    public short getUnsignedByte(int)
+    {
+        org.hipi.image.io.PngCodec$PNGChunk r0;
+        int i0;
+        byte[] $r1;
+        byte $b1;
+        short $s2, $s3;
+
+        r0 := @this: org.hipi.image.io.PngCodec$PNGChunk;
+
+        i0 := @parameter0: int;
+
+        $r1 = r0.<org.hipi.image.io.PngCodec$PNGChunk: byte[] mData>;
+
+        $b1 = $r1[i0];
+
+        $s2 = $b1 & 255;
+
+        $s3 = (short) $s2;
+
+        return $s3;
+    }
+}

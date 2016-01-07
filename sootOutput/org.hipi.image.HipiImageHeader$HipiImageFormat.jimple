@@ -1,0 +1,182 @@
+public final enum class org.hipi.image.HipiImageHeader$HipiImageFormat extends java.lang.Enum
+{
+    public static final enum org.hipi.image.HipiImageHeader$HipiImageFormat UNDEFINED;
+    public static final enum org.hipi.image.HipiImageHeader$HipiImageFormat JPEG;
+    public static final enum org.hipi.image.HipiImageHeader$HipiImageFormat PNG;
+    public static final enum org.hipi.image.HipiImageHeader$HipiImageFormat PPM;
+    private int format;
+    private static final org.hipi.image.HipiImageHeader$HipiImageFormat[] $VALUES;
+
+    public static org.hipi.image.HipiImageHeader$HipiImageFormat[] values()
+    {
+        org.hipi.image.HipiImageHeader$HipiImageFormat[] $r0, $r2;
+        java.lang.Object $r1;
+
+        $r0 = <org.hipi.image.HipiImageHeader$HipiImageFormat: org.hipi.image.HipiImageHeader$HipiImageFormat[] $VALUES>;
+
+        $r1 = virtualinvoke $r0.<java.lang.Object: java.lang.Object clone()>();
+
+        $r2 = (org.hipi.image.HipiImageHeader$HipiImageFormat[]) $r1;
+
+        return $r2;
+    }
+
+    public static org.hipi.image.HipiImageHeader$HipiImageFormat valueOf(java.lang.String)
+    {
+        java.lang.String r0;
+        java.lang.Enum $r1;
+        org.hipi.image.HipiImageHeader$HipiImageFormat $r2;
+
+        r0 := @parameter0: java.lang.String;
+
+        $r1 = staticinvoke <java.lang.Enum: java.lang.Enum valueOf(java.lang.Class,java.lang.String)>(class "org/hipi/image/HipiImageHeader$HipiImageFormat", r0);
+
+        $r2 = (org.hipi.image.HipiImageHeader$HipiImageFormat) $r1;
+
+        return $r2;
+    }
+
+    private void <init>(java.lang.String, int, int)
+    {
+        org.hipi.image.HipiImageHeader$HipiImageFormat r0;
+        java.lang.String r1;
+        int i0, i1;
+
+        r0 := @this: org.hipi.image.HipiImageHeader$HipiImageFormat;
+
+        r1 := @parameter0: java.lang.String;
+
+        i0 := @parameter1: int;
+
+        i1 := @parameter2: int;
+
+        specialinvoke r0.<java.lang.Enum: void <init>(java.lang.String,int)>(r1, i0);
+
+        r0.<org.hipi.image.HipiImageHeader$HipiImageFormat: int format> = i1;
+
+        return;
+    }
+
+    public static org.hipi.image.HipiImageHeader$HipiImageFormat fromInteger(int) throws java.lang.IllegalArgumentException
+    {
+        int i0, i1, $i2, i3;
+        org.hipi.image.HipiImageHeader$HipiImageFormat[] r0;
+        org.hipi.image.HipiImageHeader$HipiImageFormat r1;
+        java.lang.IllegalArgumentException $r2;
+        java.lang.Object[] $r3;
+        java.lang.Integer $r4;
+        java.lang.String $r5;
+
+        i0 := @parameter0: int;
+
+        r0 = staticinvoke <org.hipi.image.HipiImageHeader$HipiImageFormat: org.hipi.image.HipiImageHeader$HipiImageFormat[] values()>();
+
+        i1 = lengthof r0;
+
+        i3 = 0;
+
+     label1:
+        if i3 >= i1 goto label3;
+
+        r1 = r0[i3];
+
+        $i2 = r1.<org.hipi.image.HipiImageHeader$HipiImageFormat: int format>;
+
+        if $i2 != i0 goto label2;
+
+        return r1;
+
+     label2:
+        i3 = i3 + 1;
+
+        goto label1;
+
+     label3:
+        $r2 = new java.lang.IllegalArgumentException;
+
+        $r3 = newarray (java.lang.Object)[1];
+
+        $r4 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r3[0] = $r4;
+
+        $r5 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("There is no HipiImageFormat enum value associated with integer [%d]", $r3);
+
+        specialinvoke $r2.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r5);
+
+        throw $r2;
+    }
+
+    public int toInteger()
+    {
+        org.hipi.image.HipiImageHeader$HipiImageFormat r0;
+        int $i0;
+
+        r0 := @this: org.hipi.image.HipiImageHeader$HipiImageFormat;
+
+        $i0 = r0.<org.hipi.image.HipiImageHeader$HipiImageFormat: int format>;
+
+        return $i0;
+    }
+
+    public static org.hipi.image.HipiImageHeader$HipiImageFormat getDefault()
+    {
+        org.hipi.image.HipiImageHeader$HipiImageFormat $r0;
+
+        $r0 = <org.hipi.image.HipiImageHeader$HipiImageFormat: org.hipi.image.HipiImageHeader$HipiImageFormat UNDEFINED>;
+
+        return $r0;
+    }
+
+    static void <clinit>()
+    {
+        org.hipi.image.HipiImageHeader$HipiImageFormat $r0, $r1, $r2, $r3, $r5, $r6, $r7, $r8;
+        org.hipi.image.HipiImageHeader$HipiImageFormat[] $r4;
+
+        $r0 = new org.hipi.image.HipiImageHeader$HipiImageFormat;
+
+        specialinvoke $r0.<org.hipi.image.HipiImageHeader$HipiImageFormat: void <init>(java.lang.String,int,int)>("UNDEFINED", 0, 0);
+
+        <org.hipi.image.HipiImageHeader$HipiImageFormat: org.hipi.image.HipiImageHeader$HipiImageFormat UNDEFINED> = $r0;
+
+        $r1 = new org.hipi.image.HipiImageHeader$HipiImageFormat;
+
+        specialinvoke $r1.<org.hipi.image.HipiImageHeader$HipiImageFormat: void <init>(java.lang.String,int,int)>("JPEG", 1, 1);
+
+        <org.hipi.image.HipiImageHeader$HipiImageFormat: org.hipi.image.HipiImageHeader$HipiImageFormat JPEG> = $r1;
+
+        $r2 = new org.hipi.image.HipiImageHeader$HipiImageFormat;
+
+        specialinvoke $r2.<org.hipi.image.HipiImageHeader$HipiImageFormat: void <init>(java.lang.String,int,int)>("PNG", 2, 2);
+
+        <org.hipi.image.HipiImageHeader$HipiImageFormat: org.hipi.image.HipiImageHeader$HipiImageFormat PNG> = $r2;
+
+        $r3 = new org.hipi.image.HipiImageHeader$HipiImageFormat;
+
+        specialinvoke $r3.<org.hipi.image.HipiImageHeader$HipiImageFormat: void <init>(java.lang.String,int,int)>("PPM", 3, 3);
+
+        <org.hipi.image.HipiImageHeader$HipiImageFormat: org.hipi.image.HipiImageHeader$HipiImageFormat PPM> = $r3;
+
+        $r4 = newarray (org.hipi.image.HipiImageHeader$HipiImageFormat)[4];
+
+        $r5 = <org.hipi.image.HipiImageHeader$HipiImageFormat: org.hipi.image.HipiImageHeader$HipiImageFormat UNDEFINED>;
+
+        $r4[0] = $r5;
+
+        $r6 = <org.hipi.image.HipiImageHeader$HipiImageFormat: org.hipi.image.HipiImageHeader$HipiImageFormat JPEG>;
+
+        $r4[1] = $r6;
+
+        $r7 = <org.hipi.image.HipiImageHeader$HipiImageFormat: org.hipi.image.HipiImageHeader$HipiImageFormat PNG>;
+
+        $r4[2] = $r7;
+
+        $r8 = <org.hipi.image.HipiImageHeader$HipiImageFormat: org.hipi.image.HipiImageHeader$HipiImageFormat PPM>;
+
+        $r4[3] = $r8;
+
+        <org.hipi.image.HipiImageHeader$HipiImageFormat: org.hipi.image.HipiImageHeader$HipiImageFormat[] $VALUES> = $r4;
+
+        return;
+    }
+}

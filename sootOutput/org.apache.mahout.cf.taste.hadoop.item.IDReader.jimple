@@ -303,7 +303,7 @@ public class org.apache.mahout.cf.taste.hadoop.item.IDReader extends java.lang.O
         long $l0, $l1;
         org.slf4j.Logger $r15;
         java.lang.NumberFormatException $r16;
-        java.lang.Throwable $r17, $r18, $r20, r21;
+        java.lang.Throwable $r17, $r19, $r20, r21;
         java.util.Iterator r22;
         java.lang.String[] r23;
 
@@ -374,11 +374,11 @@ public class org.apache.mahout.cf.taste.hadoop.item.IDReader extends java.lang.O
         goto label15;
 
      label07:
-        $r20 := @caughtexception;
+        $r19 := @caughtexception;
 
-        r21 = $r20;
+        r21 = $r19;
 
-        throw $r20;
+        throw $r19;
 
      label08:
         $r17 := @caughtexception;
@@ -395,9 +395,9 @@ public class org.apache.mahout.cf.taste.hadoop.item.IDReader extends java.lang.O
         goto label14;
 
      label12:
-        $r18 := @caughtexception;
+        $r20 := @caughtexception;
 
-        virtualinvoke r21.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r18);
+        virtualinvoke r21.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r20);
 
         goto label14;
 
@@ -551,9 +551,9 @@ public class org.apache.mahout.cf.taste.hadoop.item.IDReader extends java.lang.O
         boolean $z0;
         long $l0;
         java.lang.Object $r9;
-        java.lang.Throwable $r10, $r11, $r15, r17;
-        org.slf4j.Logger $r13;
-        java.lang.NumberFormatException $r14;
+        java.lang.Throwable $r11, $r13, $r14, r17;
+        java.lang.NumberFormatException $r12;
+        org.slf4j.Logger $r15;
         java.util.Iterator r18;
 
         r0 := @this: org.apache.mahout.cf.taste.hadoop.item.IDReader;
@@ -599,11 +599,11 @@ public class org.apache.mahout.cf.taste.hadoop.item.IDReader extends java.lang.O
         goto label02;
 
      label05:
-        $r14 := @caughtexception;
+        $r12 := @caughtexception;
 
-        $r13 = <org.apache.mahout.cf.taste.hadoop.item.IDReader: org.slf4j.Logger log>;
+        $r15 = <org.apache.mahout.cf.taste.hadoop.item.IDReader: org.slf4j.Logger log>;
 
-        interfaceinvoke $r13.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Object)>("line ignored: {}", r3);
+        interfaceinvoke $r15.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Object)>("line ignored: {}", r3);
 
         goto label02;
 
@@ -615,14 +615,14 @@ public class org.apache.mahout.cf.taste.hadoop.item.IDReader extends java.lang.O
         goto label15;
 
      label07:
-        $r15 := @caughtexception;
+        $r11 := @caughtexception;
 
-        r17 = $r15;
+        r17 = $r11;
 
-        throw $r15;
+        throw $r11;
 
      label08:
-        $r10 := @caughtexception;
+        $r14 := @caughtexception;
 
      label09:
         if r2 == null goto label14;
@@ -636,9 +636,9 @@ public class org.apache.mahout.cf.taste.hadoop.item.IDReader extends java.lang.O
         goto label14;
 
      label12:
-        $r11 := @caughtexception;
+        $r13 := @caughtexception;
 
-        virtualinvoke r17.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r11);
+        virtualinvoke r17.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r13);
 
         goto label14;
 
@@ -646,7 +646,7 @@ public class org.apache.mahout.cf.taste.hadoop.item.IDReader extends java.lang.O
         virtualinvoke r2.<java.io.InputStream: void close()>();
 
      label14:
-        throw $r10;
+        throw $r14;
 
      label15:
         return r16;

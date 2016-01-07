@@ -31,7 +31,7 @@ class org.apache.mahout.vectorizer.collocations.llr.Gram$1 extends java.lang.Obj
         goto label04;
 
      label03:
-        $r10 := @caughtexception;
+        $r11 := @caughtexception;
 
      label04:
         $r5 = <org.apache.mahout.vectorizer.collocations.llr.Gram$1: int[] $SwitchMap$org$apache$mahout$vectorizer$collocations$llr$Gram$Type>;
@@ -46,7 +46,7 @@ class org.apache.mahout.vectorizer.collocations.llr.Gram$1 extends java.lang.Obj
         goto label07;
 
      label06:
-        $r12 := @caughtexception;
+        $r13 := @caughtexception;
 
      label07:
         $r7 = <org.apache.mahout.vectorizer.collocations.llr.Gram$1: int[] $SwitchMap$org$apache$mahout$vectorizer$collocations$llr$Gram$Type>;
@@ -61,7 +61,7 @@ class org.apache.mahout.vectorizer.collocations.llr.Gram$1 extends java.lang.Obj
         goto label10;
 
      label09:
-        $r11 := @caughtexception;
+        $r10 := @caughtexception;
 
      label10:
         $r9 = <org.apache.mahout.vectorizer.collocations.llr.Gram$1: int[] $SwitchMap$org$apache$mahout$vectorizer$collocations$llr$Gram$Type>;
@@ -76,7 +76,7 @@ class org.apache.mahout.vectorizer.collocations.llr.Gram$1 extends java.lang.Obj
         goto label13;
 
      label12:
-        $r13 := @caughtexception;
+        $r12 := @caughtexception;
 
      label13:
         return;

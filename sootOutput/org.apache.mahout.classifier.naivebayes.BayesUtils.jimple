@@ -223,7 +223,7 @@ public final class org.apache.mahout.classifier.naivebayes.BayesUtils extends ja
         org.apache.hadoop.io.IntWritable $r11;
         org.apache.hadoop.io.Text $r12;
         int $i0, i1;
-        java.lang.Throwable $r13, $r14, $r16, r17;
+        java.lang.Throwable $r14, $r15, $r16, r17;
         java.util.Iterator r18;
 
         r0 := @parameter0: org.apache.hadoop.conf.Configuration;
@@ -280,14 +280,14 @@ public final class org.apache.mahout.classifier.naivebayes.BayesUtils extends ja
         goto label12;
 
      label04:
-        $r14 := @caughtexception;
+        $r16 := @caughtexception;
 
-        r17 = $r14;
+        r17 = $r16;
 
-        throw $r14;
+        throw $r16;
 
      label05:
-        $r13 := @caughtexception;
+        $r15 := @caughtexception;
 
      label06:
         if $r9 == null goto label11;
@@ -301,9 +301,9 @@ public final class org.apache.mahout.classifier.naivebayes.BayesUtils extends ja
         goto label11;
 
      label09:
-        $r16 := @caughtexception;
+        $r14 := @caughtexception;
 
-        virtualinvoke r17.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r16);
+        virtualinvoke r17.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r14);
 
         goto label11;
 
@@ -311,7 +311,7 @@ public final class org.apache.mahout.classifier.naivebayes.BayesUtils extends ja
         virtualinvoke $r9.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
 
      label11:
-        throw $r13;
+        throw $r15;
 
      label12:
         return i1;
@@ -340,7 +340,7 @@ public final class org.apache.mahout.classifier.naivebayes.BayesUtils extends ja
         org.apache.hadoop.io.IntWritable $r18;
         org.apache.hadoop.io.Text $r19;
         int $i0, i1;
-        java.lang.Throwable $r20, $r22, $r23, r24;
+        java.lang.Throwable $r20, $r21, $r23, r24;
         java.util.Iterator r25;
 
         r0 := @parameter0: org.apache.hadoop.conf.Configuration;
@@ -424,7 +424,7 @@ public final class org.apache.mahout.classifier.naivebayes.BayesUtils extends ja
         throw $r23;
 
      label05:
-        $r22 := @caughtexception;
+        $r20 := @caughtexception;
 
      label06:
         if $r12 == null goto label11;
@@ -438,9 +438,9 @@ public final class org.apache.mahout.classifier.naivebayes.BayesUtils extends ja
         goto label11;
 
      label09:
-        $r20 := @caughtexception;
+        $r21 := @caughtexception;
 
-        virtualinvoke r24.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r20);
+        virtualinvoke r24.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r21);
 
         goto label11;
 
@@ -448,7 +448,7 @@ public final class org.apache.mahout.classifier.naivebayes.BayesUtils extends ja
         virtualinvoke $r12.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
 
      label11:
-        throw $r22;
+        throw $r20;
 
      label12:
         return i1;

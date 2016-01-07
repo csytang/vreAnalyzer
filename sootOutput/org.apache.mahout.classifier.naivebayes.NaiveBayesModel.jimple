@@ -223,7 +223,7 @@ public class org.apache.mahout.classifier.naivebayes.NaiveBayesModel extends jav
         org.apache.mahout.math.DenseVector $r10, $r13, r20;
         int $i0, $i1, i2, $i3;
         org.apache.mahout.math.SparseRowMatrix $r11;
-        java.lang.Throwable $r16, $r17, $r18, r22;
+        java.lang.Throwable $r16, $r17, $r19, r22;
         org.apache.hadoop.fs.FSDataInputStream r21;
         org.apache.mahout.classifier.naivebayes.NaiveBayesModel $r25;
 
@@ -298,11 +298,11 @@ public class org.apache.mahout.classifier.naivebayes.NaiveBayesModel extends jav
         goto label13;
 
      label05:
-        $r18 := @caughtexception;
+        $r19 := @caughtexception;
 
-        r22 = $r18;
+        r22 = $r19;
 
-        throw $r18;
+        throw $r19;
 
      label06:
         $r17 := @caughtexception;
@@ -357,7 +357,7 @@ public class org.apache.mahout.classifier.naivebayes.NaiveBayesModel extends jav
         boolean $z0, $z1;
         org.apache.mahout.math.Vector $r8, $r9, $r11, $r12;
         org.apache.mahout.math.Matrix $r10, $r18;
-        java.lang.Throwable $r14, $r15, $r16, r17;
+        java.lang.Throwable $r13, $r14, $r16, r17;
         int i0, $i1;
 
         r0 := @this: org.apache.mahout.classifier.naivebayes.NaiveBayesModel;
@@ -429,14 +429,14 @@ public class org.apache.mahout.classifier.naivebayes.NaiveBayesModel extends jav
         goto label13;
 
      label05:
-        $r15 := @caughtexception;
+        $r14 := @caughtexception;
 
-        r17 = $r15;
+        r17 = $r14;
 
-        throw $r15;
+        throw $r14;
 
      label06:
-        $r14 := @caughtexception;
+        $r16 := @caughtexception;
 
      label07:
         if r4 == null goto label12;
@@ -450,9 +450,9 @@ public class org.apache.mahout.classifier.naivebayes.NaiveBayesModel extends jav
         goto label12;
 
      label10:
-        $r16 := @caughtexception;
+        $r13 := @caughtexception;
 
-        virtualinvoke r17.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r16);
+        virtualinvoke r17.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r13);
 
         goto label12;
 
@@ -460,7 +460,7 @@ public class org.apache.mahout.classifier.naivebayes.NaiveBayesModel extends jav
         virtualinvoke r4.<org.apache.hadoop.fs.FSDataOutputStream: void close()>();
 
      label12:
-        throw $r14;
+        throw $r16;
 
      label13:
         return;

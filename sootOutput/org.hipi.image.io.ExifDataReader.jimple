@@ -1,0 +1,128 @@
+public class org.hipi.image.io.ExifDataReader extends java.lang.Object
+{
+    private org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream ubis;
+
+    public void <init>(java.io.InputStream)
+    {
+        org.hipi.image.io.ExifDataReader r0;
+        java.io.InputStream r1;
+        org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream $r2;
+
+        r0 := @this: org.hipi.image.io.ExifDataReader;
+
+        r1 := @parameter0: java.io.InputStream;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream;
+
+        specialinvoke $r2.<org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream: void <init>(org.hipi.image.io.ExifDataReader,java.io.InputStream)>(r0, r1);
+
+        r0.<org.hipi.image.io.ExifDataReader: org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream ubis> = $r2;
+
+        return;
+    }
+
+    public com.drew.metadata.Metadata extract() throws com.drew.imaging.ImageProcessingException, java.io.IOException
+    {
+        org.hipi.image.io.ExifDataReader r0;
+        org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream $r1;
+        com.drew.metadata.Metadata $r2;
+
+        r0 := @this: org.hipi.image.io.ExifDataReader;
+
+        $r1 = r0.<org.hipi.image.io.ExifDataReader: org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream ubis>;
+
+        $r2 = staticinvoke <com.drew.imaging.ImageMetadataReader: com.drew.metadata.Metadata readMetadata(java.io.InputStream)>($r1);
+
+        return $r2;
+    }
+
+    public static java.util.HashMap extractAndFlatten(java.io.InputStream) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        com.drew.metadata.Metadata r2;
+        java.util.Iterator r3, r5;
+        com.drew.metadata.Directory r4;
+        com.drew.metadata.Tag r6;
+        java.util.HashMap $r7;
+        org.hipi.image.io.ExifDataReader $r8;
+        java.lang.Iterable $r9;
+        boolean $z0, $z1;
+        java.lang.Object $r10, $r12;
+        java.util.Collection $r11;
+        java.lang.String $r13, $r14, $r19, $r20;
+        java.io.IOException $r16;
+        com.drew.imaging.ImageProcessingException $r17;
+        java.lang.Object[] $r18;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        $r7 = new java.util.HashMap;
+
+        specialinvoke $r7.<java.util.HashMap: void <init>()>();
+
+     label1:
+        $r8 = new org.hipi.image.io.ExifDataReader;
+
+        specialinvoke $r8.<org.hipi.image.io.ExifDataReader: void <init>(java.io.InputStream)>(r0);
+
+        r2 = virtualinvoke $r8.<org.hipi.image.io.ExifDataReader: com.drew.metadata.Metadata extract()>();
+
+        $r9 = virtualinvoke r2.<com.drew.metadata.Metadata: java.lang.Iterable getDirectories()>();
+
+        r3 = interfaceinvoke $r9.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label2:
+        $z0 = interfaceinvoke r3.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label5;
+
+        $r10 = interfaceinvoke r3.<java.util.Iterator: java.lang.Object next()>();
+
+        r4 = (com.drew.metadata.Directory) $r10;
+
+        $r11 = virtualinvoke r4.<com.drew.metadata.Directory: java.util.Collection getTags()>();
+
+        r5 = interfaceinvoke $r11.<java.util.Collection: java.util.Iterator iterator()>();
+
+     label3:
+        $z1 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z1 == 0 goto label2;
+
+        $r12 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (com.drew.metadata.Tag) $r12;
+
+        $r14 = virtualinvoke r6.<com.drew.metadata.Tag: java.lang.String getTagName()>();
+
+        $r13 = virtualinvoke r6.<com.drew.metadata.Tag: java.lang.String getDescription()>();
+
+        virtualinvoke $r7.<java.util.HashMap: java.lang.Object put(java.lang.Object,java.lang.Object)>($r14, $r13);
+
+        goto label3;
+
+     label4:
+        $r17 := @caughtexception;
+
+        $r16 = new java.io.IOException;
+
+        $r18 = newarray (java.lang.Object)[1];
+
+        $r19 = virtualinvoke $r17.<com.drew.imaging.ImageProcessingException: java.lang.String getMessage()>();
+
+        $r18[0] = $r19;
+
+        $r20 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Encountered error while attempting to extract image EXIF data [%s]", $r18);
+
+        specialinvoke $r16.<java.io.IOException: void <init>(java.lang.String)>($r20);
+
+        throw $r16;
+
+     label5:
+        return $r7;
+
+        catch com.drew.imaging.ImageProcessingException from label1 to label4 with label4;
+    }
+}

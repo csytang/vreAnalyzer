@@ -1,0 +1,112 @@
+public final class org.hipi.image.io.CodecManager extends java.lang.Object
+{
+
+    public void <init>()
+    {
+        org.hipi.image.io.CodecManager r0;
+
+        r0 := @this: org.hipi.image.io.CodecManager;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static org.hipi.image.io.ImageDecoder getDecoder(org.hipi.image.HipiImageHeader$HipiImageFormat) throws java.lang.IllegalArgumentException
+    {
+        org.hipi.image.HipiImageHeader$HipiImageFormat r0;
+        int[] $r1;
+        int $i0, $i1;
+        org.hipi.image.io.JpegCodec $r2;
+        org.hipi.image.io.PpmCodec $r3;
+        org.hipi.image.io.PngCodec $r4;
+        java.lang.IllegalArgumentException $r5;
+
+        r0 := @parameter0: org.hipi.image.HipiImageHeader$HipiImageFormat;
+
+        $r1 = <org.hipi.image.io.CodecManager$1: int[] $SwitchMap$org$hipi$image$HipiImageHeader$HipiImageFormat>;
+
+        $i0 = virtualinvoke r0.<org.hipi.image.HipiImageHeader$HipiImageFormat: int ordinal()>();
+
+        $i1 = $r1[$i0];
+
+        tableswitch($i1)
+        {
+            case 1: goto label1;
+            case 2: goto label2;
+            case 3: goto label3;
+            default: goto label4;
+        };
+
+     label1:
+        $r2 = staticinvoke <org.hipi.image.io.JpegCodec: org.hipi.image.io.JpegCodec getInstance()>();
+
+        return $r2;
+
+     label2:
+        $r4 = staticinvoke <org.hipi.image.io.PngCodec: org.hipi.image.io.PngCodec getInstance()>();
+
+        return $r4;
+
+     label3:
+        $r3 = staticinvoke <org.hipi.image.io.PpmCodec: org.hipi.image.io.PpmCodec getInstance()>();
+
+        return $r3;
+
+     label4:
+        $r5 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Image format currently unsupported.");
+
+        throw $r5;
+    }
+
+    public static org.hipi.image.io.ImageEncoder getEncoder(org.hipi.image.HipiImageHeader$HipiImageFormat) throws java.lang.IllegalArgumentException
+    {
+        org.hipi.image.HipiImageHeader$HipiImageFormat r0;
+        int[] $r1;
+        int $i0, $i1;
+        org.hipi.image.io.JpegCodec $r2;
+        org.hipi.image.io.PpmCodec $r3;
+        org.hipi.image.io.PngCodec $r4;
+        java.lang.IllegalArgumentException $r5;
+
+        r0 := @parameter0: org.hipi.image.HipiImageHeader$HipiImageFormat;
+
+        $r1 = <org.hipi.image.io.CodecManager$1: int[] $SwitchMap$org$hipi$image$HipiImageHeader$HipiImageFormat>;
+
+        $i0 = virtualinvoke r0.<org.hipi.image.HipiImageHeader$HipiImageFormat: int ordinal()>();
+
+        $i1 = $r1[$i0];
+
+        tableswitch($i1)
+        {
+            case 1: goto label1;
+            case 2: goto label2;
+            case 3: goto label3;
+            default: goto label4;
+        };
+
+     label1:
+        $r2 = staticinvoke <org.hipi.image.io.JpegCodec: org.hipi.image.io.JpegCodec getInstance()>();
+
+        return $r2;
+
+     label2:
+        $r4 = staticinvoke <org.hipi.image.io.PngCodec: org.hipi.image.io.PngCodec getInstance()>();
+
+        return $r4;
+
+     label3:
+        $r3 = staticinvoke <org.hipi.image.io.PpmCodec: org.hipi.image.io.PpmCodec getInstance()>();
+
+        return $r3;
+
+     label4:
+        $r5 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Image format currently unsupported.");
+
+        throw $r5;
+    }
+}

@@ -1,0 +1,180 @@
+public class org.hipi.image.ByteImage extends org.hipi.image.RasterImage
+{
+
+    public void <init>()
+    {
+        org.hipi.image.ByteImage r0;
+        org.hipi.image.PixelArrayByte $r1;
+
+        r0 := @this: org.hipi.image.ByteImage;
+
+        $r1 = new org.hipi.image.PixelArrayByte;
+
+        specialinvoke $r1.<org.hipi.image.PixelArrayByte: void <init>()>();
+
+        specialinvoke r0.<org.hipi.image.RasterImage: void <init>(org.hipi.image.PixelArray)>($r1);
+
+        return;
+    }
+
+    public org.hipi.image.HipiImage$HipiImageType getType()
+    {
+        org.hipi.image.ByteImage r0;
+        org.hipi.image.HipiImage$HipiImageType $r1;
+
+        r0 := @this: org.hipi.image.ByteImage;
+
+        $r1 = <org.hipi.image.HipiImage$HipiImageType: org.hipi.image.HipiImage$HipiImageType BYTE>;
+
+        return $r1;
+    }
+
+    public byte[] getData()
+    {
+        org.hipi.image.ByteImage r0;
+        org.hipi.image.PixelArray $r1;
+        org.hipi.image.PixelArrayByte $r2;
+        byte[] $r3;
+
+        r0 := @this: org.hipi.image.ByteImage;
+
+        $r1 = r0.<org.hipi.image.ByteImage: org.hipi.image.PixelArray pixelArray>;
+
+        $r2 = (org.hipi.image.PixelArrayByte) $r1;
+
+        $r3 = virtualinvoke $r2.<org.hipi.image.PixelArrayByte: byte[] getData()>();
+
+        return $r3;
+    }
+
+    public boolean equalsWithTolerance(org.hipi.image.RasterImage, float)
+    {
+        org.hipi.image.ByteImage r0;
+        org.hipi.image.RasterImage r1;
+        float f0, $f1;
+        int i0, i1, i2, $i3, $i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, i13;
+        org.hipi.image.PixelArray r2, r3;
+        org.hipi.image.HipiImageHeader$HipiColorSpace $r4, $r5;
+        byte $b12;
+
+        r0 := @this: org.hipi.image.ByteImage;
+
+        r1 := @parameter0: org.hipi.image.RasterImage;
+
+        f0 := @parameter1: float;
+
+        if r1 != null goto label1;
+
+        return 0;
+
+     label1:
+        i0 = virtualinvoke r0.<org.hipi.image.ByteImage: int getWidth()>();
+
+        i1 = virtualinvoke r0.<org.hipi.image.ByteImage: int getHeight()>();
+
+        i2 = virtualinvoke r0.<org.hipi.image.ByteImage: int getNumBands()>();
+
+        $r4 = virtualinvoke r0.<org.hipi.image.ByteImage: org.hipi.image.HipiImageHeader$HipiColorSpace getColorSpace()>();
+
+        $r5 = virtualinvoke r1.<org.hipi.image.RasterImage: org.hipi.image.HipiImageHeader$HipiColorSpace getColorSpace()>();
+
+        if $r4 != $r5 goto label2;
+
+        $i3 = virtualinvoke r1.<org.hipi.image.RasterImage: int getWidth()>();
+
+        if $i3 != i0 goto label2;
+
+        $i5 = virtualinvoke r1.<org.hipi.image.RasterImage: int getHeight()>();
+
+        if $i5 != i1 goto label2;
+
+        $i4 = virtualinvoke r1.<org.hipi.image.RasterImage: int getNumBands()>();
+
+        if $i4 == i2 goto label3;
+
+     label2:
+        return 0;
+
+     label3:
+        r2 = virtualinvoke r0.<org.hipi.image.ByteImage: org.hipi.image.PixelArray getPixelArray()>();
+
+        r3 = virtualinvoke r1.<org.hipi.image.RasterImage: org.hipi.image.PixelArray getPixelArray()>();
+
+        i13 = 0;
+
+     label4:
+        $i7 = i0 * i1;
+
+        $i6 = $i7 * i2;
+
+        if i13 >= $i6 goto label6;
+
+        $i9 = virtualinvoke r2.<org.hipi.image.PixelArray: int getElem(int)>(i13);
+
+        $i8 = virtualinvoke r3.<org.hipi.image.PixelArray: int getElem(int)>(i13);
+
+        $i11 = $i9 - $i8;
+
+        $i10 = staticinvoke <java.lang.Math: int abs(int)>($i11);
+
+        $f1 = (float) $i10;
+
+        $b12 = $f1 cmpl f0;
+
+        if $b12 <= 0 goto label5;
+
+        return 0;
+
+     label5:
+        i13 = i13 + 1;
+
+        goto label4;
+
+     label6:
+        return 1;
+    }
+
+    public boolean equals(java.lang.Object)
+    {
+        org.hipi.image.ByteImage r0, $r2;
+        java.lang.Object r1;
+        boolean $z0, $z1;
+
+        r0 := @this: org.hipi.image.ByteImage;
+
+        r1 := @parameter0: java.lang.Object;
+
+        if r0 != r1 goto label1;
+
+        return 1;
+
+     label1:
+        $z0 = r1 instanceof org.hipi.image.ByteImage;
+
+        if $z0 != 0 goto label2;
+
+        return 0;
+
+     label2:
+        $r2 = (org.hipi.image.ByteImage) r1;
+
+        $z1 = virtualinvoke r0.<org.hipi.image.ByteImage: boolean equalsWithTolerance(org.hipi.image.RasterImage,float)>($r2, 0.0F);
+
+        return $z1;
+    }
+
+    public java.lang.String hex()
+    {
+        org.hipi.image.ByteImage r0;
+        byte[] $r1;
+        java.lang.String $r2;
+
+        r0 := @this: org.hipi.image.ByteImage;
+
+        $r1 = virtualinvoke r0.<org.hipi.image.ByteImage: byte[] getData()>();
+
+        $r2 = staticinvoke <org.hipi.util.ByteUtils: java.lang.String asHex(byte[])>($r1);
+
+        return $r2;
+    }
+}

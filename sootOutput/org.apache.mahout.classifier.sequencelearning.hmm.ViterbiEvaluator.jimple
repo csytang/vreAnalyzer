@@ -38,8 +38,8 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.ViterbiEval
         java.nio.charset.Charset $r50;
         java.io.PrintStream $r52;
         java.lang.Integer $r53, $r55;
-        java.lang.Throwable $r56, $r57, $r58, $r61, $r63, $r64, $r65, $r66, $r68, r71, r81, r89;
-        org.apache.commons.cli2.OptionException $r67;
+        java.lang.Throwable $r56, $r58, $r59, $r60, $r61, $r62, $r66, $r67, $r68, r71, r81, r89;
+        org.apache.commons.cli2.OptionException $r63;
         java.util.ArrayList $r76;
         java.util.Scanner $r78;
         int[] r86, r87;
@@ -152,14 +152,14 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.ViterbiEval
         goto label12;
 
      label04:
-        $r57 := @caughtexception;
+        $r66 := @caughtexception;
 
-        r71 = $r57;
+        r71 = $r66;
 
-        throw $r57;
+        throw $r66;
 
      label05:
-        $r63 := @caughtexception;
+        $r58 := @caughtexception;
 
      label06:
         if $r43 == null goto label11;
@@ -173,9 +173,9 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.ViterbiEval
         goto label11;
 
      label09:
-        $r66 := @caughtexception;
+        $r59 := @caughtexception;
 
-        virtualinvoke r71.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r66);
+        virtualinvoke r71.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r59);
 
         goto label11;
 
@@ -183,7 +183,7 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.ViterbiEval
         virtualinvoke $r43.<java.io.DataInputStream: void close()>();
 
      label11:
-        throw $r63;
+        throw $r58;
 
      label12:
         $r76 = new java.util.ArrayList;
@@ -221,14 +221,14 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.ViterbiEval
         goto label23;
 
      label15:
-        $r61 := @caughtexception;
+        $r67 := @caughtexception;
 
-        r81 = $r61;
+        r81 = $r67;
 
-        throw $r61;
+        throw $r67;
 
      label16:
-        $r58 := @caughtexception;
+        $r68 := @caughtexception;
 
      label17:
         if $r78 == null goto label22;
@@ -242,9 +242,9 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.ViterbiEval
         goto label22;
 
      label20:
-        $r65 := @caughtexception;
+        $r62 := @caughtexception;
 
-        virtualinvoke r81.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r65);
+        virtualinvoke r81.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r62);
 
         goto label22;
 
@@ -252,7 +252,7 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.ViterbiEval
         virtualinvoke $r78.<java.util.Scanner: void close()>();
 
      label22:
-        throw $r58;
+        throw $r68;
 
      label23:
         $i3 = interfaceinvoke $r76.<java.util.List: int size()>();
@@ -323,14 +323,14 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.ViterbiEval
         goto label37;
 
      label29:
-        $r68 := @caughtexception;
+        $r60 := @caughtexception;
 
-        r89 = $r68;
+        r89 = $r60;
 
-        throw $r68;
+        throw $r60;
 
      label30:
-        $r56 := @caughtexception;
+        $r61 := @caughtexception;
 
      label31:
         if $r44 == null goto label36;
@@ -344,9 +344,9 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.ViterbiEval
         goto label36;
 
      label34:
-        $r64 := @caughtexception;
+        $r56 := @caughtexception;
 
-        virtualinvoke r89.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r64);
+        virtualinvoke r89.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r56);
 
         goto label36;
 
@@ -354,7 +354,7 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.ViterbiEval
         virtualinvoke $r44.<java.io.PrintWriter: void close()>();
 
      label36:
-        throw $r56;
+        throw $r61;
 
      label37:
         if z0 == 0 goto label40;
@@ -379,7 +379,7 @@ public final class org.apache.mahout.classifier.sequencelearning.hmm.ViterbiEval
         goto label40;
 
      label39:
-        $r67 := @caughtexception;
+        $r63 := @caughtexception;
 
         staticinvoke <org.apache.mahout.common.CommandLineUtil: void printHelp(org.apache.commons.cli2.Group)>(r7);
 

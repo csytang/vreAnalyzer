@@ -1,0 +1,43 @@
+public class org.hipi.mapreduce.Culler extends java.lang.Object
+{
+    public static final java.lang.String HIPI_CULLER_CLASS_ATTR;
+
+    public void <init>()
+    {
+        org.hipi.mapreduce.Culler r0;
+
+        r0 := @this: org.hipi.mapreduce.Culler;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public boolean includeExifDataInHeader()
+    {
+        org.hipi.mapreduce.Culler r0;
+
+        r0 := @this: org.hipi.mapreduce.Culler;
+
+        return 0;
+    }
+
+    public boolean cull(org.hipi.image.HipiImageHeader)
+    {
+        org.hipi.mapreduce.Culler r0;
+        org.hipi.image.HipiImageHeader r1;
+
+        r0 := @this: org.hipi.mapreduce.Culler;
+
+        r1 := @parameter0: org.hipi.image.HipiImageHeader;
+
+        return 0;
+    }
+
+    public static void <clinit>()
+    {
+        <org.hipi.mapreduce.Culler: java.lang.String HIPI_CULLER_CLASS_ATTR> = "hipi.culler.class";
+
+        return;
+    }
+}

@@ -1,0 +1,32 @@
+class org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream extends java.io.BufferedInputStream
+{
+    final org.hipi.image.io.ExifDataReader this$0;
+
+    public void <init>(org.hipi.image.io.ExifDataReader, java.io.InputStream)
+    {
+        org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream r0;
+        org.hipi.image.io.ExifDataReader r1;
+        java.io.InputStream r2;
+
+        r0 := @this: org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream;
+
+        r1 := @parameter0: org.hipi.image.io.ExifDataReader;
+
+        r2 := @parameter1: java.io.InputStream;
+
+        r0.<org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream: org.hipi.image.io.ExifDataReader this$0> = r1;
+
+        specialinvoke r0.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>(r2);
+
+        return;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream r0;
+
+        r0 := @this: org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream;
+
+        return;
+    }
+}

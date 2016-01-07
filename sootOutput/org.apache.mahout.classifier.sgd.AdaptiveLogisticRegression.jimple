@@ -255,11 +255,11 @@ public class org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression extends
         int $i0, $i1, $i2, $i3;
         boolean $z0, $z1;
         java.lang.Object $r10;
-        org.slf4j.Logger $r11;
-        java.lang.InterruptedException $r12;
-        java.util.concurrent.ExecutionException $r13;
+        java.lang.IllegalStateException $r11;
+        java.util.concurrent.ExecutionException $r12;
+        java.lang.InterruptedException $r13;
         java.lang.Throwable $r14;
-        java.lang.IllegalStateException $r15;
+        org.slf4j.Logger $r15;
         java.util.Iterator r18;
 
         r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
@@ -279,24 +279,24 @@ public class org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression extends
         goto label5;
 
      label3:
-        $r12 := @caughtexception;
+        $r13 := @caughtexception;
 
-        $r11 = <org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.slf4j.Logger log>;
+        $r15 = <org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.slf4j.Logger log>;
 
-        interfaceinvoke $r11.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Ignoring exception", $r12);
+        interfaceinvoke $r15.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Ignoring exception", $r13);
 
         goto label5;
 
      label4:
-        $r13 := @caughtexception;
+        $r12 := @caughtexception;
 
-        $r15 = new java.lang.IllegalStateException;
+        $r11 = new java.lang.IllegalStateException;
 
-        $r14 = virtualinvoke $r13.<java.util.concurrent.ExecutionException: java.lang.Throwable getCause()>();
+        $r14 = virtualinvoke $r12.<java.util.concurrent.ExecutionException: java.lang.Throwable getCause()>();
 
-        specialinvoke $r15.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r14);
+        specialinvoke $r11.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r14);
 
-        throw $r15;
+        throw $r11;
 
      label5:
         $r5 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: java.util.List buffer>;
@@ -460,12 +460,12 @@ public class org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression extends
     {
         org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression r0;
         org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression$2 $r2;
-        org.apache.mahout.ep.EvolutionaryProcess $r3, $r5, $r9, $r12;
-        java.util.concurrent.ExecutionException $r6;
-        java.lang.IllegalStateException $r7;
-        java.lang.Throwable $r8;
-        java.lang.InterruptedException $r10;
-        org.slf4j.Logger $r11;
+        org.apache.mahout.ep.EvolutionaryProcess $r3, $r5, $r7, $r10;
+        java.lang.Throwable $r6;
+        java.lang.InterruptedException $r8;
+        org.slf4j.Logger $r9;
+        java.util.concurrent.ExecutionException $r11;
+        java.lang.IllegalStateException $r12;
 
         r0 := @this: org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression;
 
@@ -488,37 +488,37 @@ public class org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression extends
         goto label8;
 
      label3:
-        $r10 := @caughtexception;
+        $r8 := @caughtexception;
 
-        $r11 = <org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.slf4j.Logger log>;
+        $r9 = <org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.slf4j.Logger log>;
 
-        interfaceinvoke $r11.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Ignoring exception", $r10);
+        interfaceinvoke $r9.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Ignoring exception", $r8);
 
      label4:
-        $r12 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep>;
+        $r10 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep>;
 
-        virtualinvoke $r12.<org.apache.mahout.ep.EvolutionaryProcess: void close()>();
+        virtualinvoke $r10.<org.apache.mahout.ep.EvolutionaryProcess: void close()>();
 
         goto label8;
 
      label5:
-        $r6 := @caughtexception;
+        $r11 := @caughtexception;
 
-        $r7 = new java.lang.IllegalStateException;
+        $r12 = new java.lang.IllegalStateException;
 
-        specialinvoke $r7.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r6);
+        specialinvoke $r12.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r11);
 
-        throw $r7;
+        throw $r12;
 
      label6:
-        $r8 := @caughtexception;
+        $r6 := @caughtexception;
 
      label7:
-        $r9 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep>;
+        $r7 = r0.<org.apache.mahout.classifier.sgd.AdaptiveLogisticRegression: org.apache.mahout.ep.EvolutionaryProcess ep>;
 
-        virtualinvoke $r9.<org.apache.mahout.ep.EvolutionaryProcess: void close()>();
+        virtualinvoke $r7.<org.apache.mahout.ep.EvolutionaryProcess: void close()>();
 
-        throw $r8;
+        throw $r6;
 
      label8:
         return;

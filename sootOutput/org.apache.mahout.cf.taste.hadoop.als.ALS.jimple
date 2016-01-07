@@ -68,7 +68,7 @@ final class org.apache.mahout.cf.taste.hadoop.als.ALS extends java.lang.Object
         boolean $z0, $z1, $z3;
         org.apache.hadoop.io.SequenceFile$Reader $r13;
         org.apache.mahout.math.Vector $r14;
-        java.lang.Throwable $r15, $r17, $r18, r20;
+        java.lang.Throwable $r15, $r16, $r18, r20;
 
         i0 := @parameter0: int;
 
@@ -138,14 +138,14 @@ final class org.apache.mahout.cf.taste.hadoop.als.ALS extends java.lang.Object
         goto label14;
 
      label06:
-        $r18 := @caughtexception;
+        $r15 := @caughtexception;
 
-        r20 = $r18;
+        r20 = $r15;
 
-        throw $r18;
+        throw $r15;
 
      label07:
-        $r15 := @caughtexception;
+        $r18 := @caughtexception;
 
      label08:
         if $r13 == null goto label13;
@@ -159,9 +159,9 @@ final class org.apache.mahout.cf.taste.hadoop.als.ALS extends java.lang.Object
         goto label13;
 
      label11:
-        $r17 := @caughtexception;
+        $r16 := @caughtexception;
 
-        virtualinvoke r20.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r17);
+        virtualinvoke r20.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r16);
 
         goto label13;
 
@@ -169,7 +169,7 @@ final class org.apache.mahout.cf.taste.hadoop.als.ALS extends java.lang.Object
         virtualinvoke $r13.<org.apache.hadoop.io.SequenceFile$Reader: void close()>();
 
      label13:
-        throw $r15;
+        throw $r18;
 
      label14:
         i3 = i3 + 1;

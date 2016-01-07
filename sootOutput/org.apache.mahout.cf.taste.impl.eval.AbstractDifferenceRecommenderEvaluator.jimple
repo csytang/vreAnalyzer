@@ -502,10 +502,10 @@ public abstract class org.apache.mahout.cf.taste.impl.eval.AbstractDifferenceRec
         java.util.concurrent.TimeUnit $r11;
         boolean $z0;
         java.lang.Object $r12;
-        org.apache.mahout.cf.taste.common.TasteException $r14, $r16, $r20;
-        java.lang.InterruptedException $r15, $r18;
-        java.util.concurrent.ExecutionException $r17;
-        java.lang.Throwable $r19, $r21;
+        org.apache.mahout.cf.taste.common.TasteException $r14, $r19, $r20;
+        java.lang.InterruptedException $r15, $r16;
+        java.lang.Throwable $r17, $r21;
+        java.util.concurrent.ExecutionException $r18;
         java.util.List r22;
 
         r0 := @parameter0: java.util.Collection;
@@ -551,24 +551,24 @@ public abstract class org.apache.mahout.cf.taste.impl.eval.AbstractDifferenceRec
         goto label2;
 
      label3:
-        $r15 := @caughtexception;
+        $r16 := @caughtexception;
 
-        $r14 = new org.apache.mahout.cf.taste.common.TasteException;
+        $r19 = new org.apache.mahout.cf.taste.common.TasteException;
 
-        specialinvoke $r14.<org.apache.mahout.cf.taste.common.TasteException: void <init>(java.lang.Throwable)>($r15);
+        specialinvoke $r19.<org.apache.mahout.cf.taste.common.TasteException: void <init>(java.lang.Throwable)>($r16);
 
-        throw $r14;
+        throw $r19;
 
      label4:
-        $r17 := @caughtexception;
+        $r18 := @caughtexception;
 
-        $r16 = new org.apache.mahout.cf.taste.common.TasteException;
+        $r20 = new org.apache.mahout.cf.taste.common.TasteException;
 
-        $r19 = virtualinvoke $r17.<java.util.concurrent.ExecutionException: java.lang.Throwable getCause()>();
+        $r21 = virtualinvoke $r18.<java.util.concurrent.ExecutionException: java.lang.Throwable getCause()>();
 
-        specialinvoke $r16.<org.apache.mahout.cf.taste.common.TasteException: void <init>(java.lang.Throwable)>($r19);
+        specialinvoke $r20.<org.apache.mahout.cf.taste.common.TasteException: void <init>(java.lang.Throwable)>($r21);
 
-        throw $r16;
+        throw $r20;
 
      label5:
         interfaceinvoke r4.<java.util.concurrent.ExecutorService: void shutdown()>();
@@ -582,15 +582,15 @@ public abstract class org.apache.mahout.cf.taste.impl.eval.AbstractDifferenceRec
         goto label9;
 
      label8:
-        $r18 := @caughtexception;
+        $r15 := @caughtexception;
 
-        $r20 = new org.apache.mahout.cf.taste.common.TasteException;
+        $r14 = new org.apache.mahout.cf.taste.common.TasteException;
 
-        $r21 = virtualinvoke $r18.<java.lang.InterruptedException: java.lang.Throwable getCause()>();
+        $r17 = virtualinvoke $r15.<java.lang.InterruptedException: java.lang.Throwable getCause()>();
 
-        specialinvoke $r20.<org.apache.mahout.cf.taste.common.TasteException: void <init>(java.lang.Throwable)>($r21);
+        specialinvoke $r14.<org.apache.mahout.cf.taste.common.TasteException: void <init>(java.lang.Throwable)>($r17);
 
-        throw $r20;
+        throw $r14;
 
      label9:
         return;

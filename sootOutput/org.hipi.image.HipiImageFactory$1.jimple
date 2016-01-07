@@ -1,0 +1,89 @@
+class org.hipi.image.HipiImageFactory$1 extends java.lang.Object
+{
+    static final int[] $SwitchMap$org$hipi$image$HipiImage$HipiImageType;
+
+    static void <clinit>()
+    {
+        org.hipi.image.HipiImage$HipiImageType[] $r0;
+        int $i0, $i1, $i2, $i3, $i4;
+        int[] $r1, $r3, $r5, $r7, $r9;
+        org.hipi.image.HipiImage$HipiImageType $r2, $r4, $r6, $r8;
+        java.lang.NoSuchFieldError $r10, $r11, $r12, $r13;
+
+        $r0 = staticinvoke <org.hipi.image.HipiImage$HipiImageType: org.hipi.image.HipiImage$HipiImageType[] values()>();
+
+        $i0 = lengthof $r0;
+
+        $r1 = newarray (int)[$i0];
+
+        <org.hipi.image.HipiImageFactory$1: int[] $SwitchMap$org$hipi$image$HipiImage$HipiImageType> = $r1;
+
+     label01:
+        $r3 = <org.hipi.image.HipiImageFactory$1: int[] $SwitchMap$org$hipi$image$HipiImage$HipiImageType>;
+
+        $r2 = <org.hipi.image.HipiImage$HipiImageType: org.hipi.image.HipiImage$HipiImageType FLOAT>;
+
+        $i1 = virtualinvoke $r2.<org.hipi.image.HipiImage$HipiImageType: int ordinal()>();
+
+        $r3[$i1] = 1;
+
+     label02:
+        goto label04;
+
+     label03:
+        $r11 := @caughtexception;
+
+     label04:
+        $r5 = <org.hipi.image.HipiImageFactory$1: int[] $SwitchMap$org$hipi$image$HipiImage$HipiImageType>;
+
+        $r4 = <org.hipi.image.HipiImage$HipiImageType: org.hipi.image.HipiImage$HipiImageType BYTE>;
+
+        $i2 = virtualinvoke $r4.<org.hipi.image.HipiImage$HipiImageType: int ordinal()>();
+
+        $r5[$i2] = 2;
+
+     label05:
+        goto label07;
+
+     label06:
+        $r10 := @caughtexception;
+
+     label07:
+        $r7 = <org.hipi.image.HipiImageFactory$1: int[] $SwitchMap$org$hipi$image$HipiImage$HipiImageType>;
+
+        $r6 = <org.hipi.image.HipiImage$HipiImageType: org.hipi.image.HipiImage$HipiImageType RAW>;
+
+        $i3 = virtualinvoke $r6.<org.hipi.image.HipiImage$HipiImageType: int ordinal()>();
+
+        $r7[$i3] = 3;
+
+     label08:
+        goto label10;
+
+     label09:
+        $r12 := @caughtexception;
+
+     label10:
+        $r9 = <org.hipi.image.HipiImageFactory$1: int[] $SwitchMap$org$hipi$image$HipiImage$HipiImageType>;
+
+        $r8 = <org.hipi.image.HipiImage$HipiImageType: org.hipi.image.HipiImage$HipiImageType UNDEFINED>;
+
+        $i4 = virtualinvoke $r8.<org.hipi.image.HipiImage$HipiImageType: int ordinal()>();
+
+        $r9[$i4] = 4;
+
+     label11:
+        goto label13;
+
+     label12:
+        $r13 := @caughtexception;
+
+     label13:
+        return;
+
+        catch java.lang.NoSuchFieldError from label01 to label02 with label03;
+        catch java.lang.NoSuchFieldError from label04 to label05 with label06;
+        catch java.lang.NoSuchFieldError from label07 to label08 with label09;
+        catch java.lang.NoSuchFieldError from label10 to label11 with label12;
+    }
+}

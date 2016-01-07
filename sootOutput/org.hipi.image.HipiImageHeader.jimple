@@ -1,0 +1,685 @@
+public class org.hipi.image.HipiImageHeader extends java.lang.Object implements org.apache.hadoop.io.WritableComparable
+{
+    private org.hipi.image.HipiImageHeader$HipiImageFormat storageFormat;
+    private org.hipi.image.HipiImageHeader$HipiColorSpace colorSpace;
+    private int width;
+    private int height;
+    private int bands;
+    private java.util.Map metaData;
+    private java.util.Map exifData;
+
+    public void <init>(org.hipi.image.HipiImageHeader$HipiImageFormat, org.hipi.image.HipiImageHeader$HipiColorSpace, int, int, int, byte[], java.util.Map) throws java.lang.IllegalArgumentException
+    {
+        org.hipi.image.HipiImageHeader r0;
+        org.hipi.image.HipiImageHeader$HipiImageFormat r1;
+        org.hipi.image.HipiImageHeader$HipiColorSpace r2;
+        int i0, i1, i2;
+        byte[] r3;
+        java.util.Map r4;
+        java.util.HashMap $r5, $r6;
+        java.lang.IllegalArgumentException $r7;
+        java.lang.Object[] $r8;
+        java.lang.Integer $r9, $r10, $r11;
+        java.lang.String $r12;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        r1 := @parameter0: org.hipi.image.HipiImageHeader$HipiImageFormat;
+
+        r2 := @parameter1: org.hipi.image.HipiImageHeader$HipiColorSpace;
+
+        i0 := @parameter2: int;
+
+        i1 := @parameter3: int;
+
+        i2 := @parameter4: int;
+
+        r3 := @parameter5: byte[];
+
+        r4 := @parameter6: java.util.Map;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r5 = new java.util.HashMap;
+
+        specialinvoke $r5.<java.util.HashMap: void <init>()>();
+
+        r0.<org.hipi.image.HipiImageHeader: java.util.Map metaData> = $r5;
+
+        $r6 = new java.util.HashMap;
+
+        specialinvoke $r6.<java.util.HashMap: void <init>()>();
+
+        r0.<org.hipi.image.HipiImageHeader: java.util.Map exifData> = $r6;
+
+        if i0 < 1 goto label1;
+
+        if i1 < 1 goto label1;
+
+        if i2 >= 1 goto label2;
+
+     label1:
+        $r7 = new java.lang.IllegalArgumentException;
+
+        $r8 = newarray (java.lang.Object)[3];
+
+        $r9 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r8[0] = $r9;
+
+        $r10 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        $r8[1] = $r10;
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i2);
+
+        $r8[2] = $r11;
+
+        $r12 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Invalid spatial dimensions or number of bands: (%d,%d,%d)", $r8);
+
+        specialinvoke $r7.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r12);
+
+        throw $r7;
+
+     label2:
+        r0.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiImageFormat storageFormat> = r1;
+
+        r0.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiColorSpace colorSpace> = r2;
+
+        r0.<org.hipi.image.HipiImageHeader: int width> = i0;
+
+        r0.<org.hipi.image.HipiImageHeader: int height> = i1;
+
+        r0.<org.hipi.image.HipiImageHeader: int bands> = i2;
+
+        if r3 == null goto label3;
+
+        virtualinvoke r0.<org.hipi.image.HipiImageHeader: void setMetaDataFromBytes(byte[])>(r3);
+
+     label3:
+        r0.<org.hipi.image.HipiImageHeader: java.util.Map exifData> = r4;
+
+        return;
+    }
+
+    public void <init>(java.io.DataInput) throws java.io.IOException
+    {
+        org.hipi.image.HipiImageHeader r0;
+        java.io.DataInput r1;
+        java.util.HashMap $r2, $r3;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        $r2 = new java.util.HashMap;
+
+        specialinvoke $r2.<java.util.HashMap: void <init>()>();
+
+        r0.<org.hipi.image.HipiImageHeader: java.util.Map metaData> = $r2;
+
+        $r3 = new java.util.HashMap;
+
+        specialinvoke $r3.<java.util.HashMap: void <init>()>();
+
+        r0.<org.hipi.image.HipiImageHeader: java.util.Map exifData> = $r3;
+
+        virtualinvoke r0.<org.hipi.image.HipiImageHeader: void readFields(java.io.DataInput)>(r1);
+
+        return;
+    }
+
+    public org.hipi.image.HipiImageHeader$HipiImageFormat getStorageFormat()
+    {
+        org.hipi.image.HipiImageHeader r0;
+        org.hipi.image.HipiImageHeader$HipiImageFormat $r1;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        $r1 = r0.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiImageFormat storageFormat>;
+
+        return $r1;
+    }
+
+    public org.hipi.image.HipiImageHeader$HipiColorSpace getColorSpace()
+    {
+        org.hipi.image.HipiImageHeader r0;
+        org.hipi.image.HipiImageHeader$HipiColorSpace $r1;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        $r1 = r0.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiColorSpace colorSpace>;
+
+        return $r1;
+    }
+
+    public int getWidth()
+    {
+        org.hipi.image.HipiImageHeader r0;
+        int $i0;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        $i0 = r0.<org.hipi.image.HipiImageHeader: int width>;
+
+        return $i0;
+    }
+
+    public int getHeight()
+    {
+        org.hipi.image.HipiImageHeader r0;
+        int $i0;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        $i0 = r0.<org.hipi.image.HipiImageHeader: int height>;
+
+        return $i0;
+    }
+
+    public int getNumBands()
+    {
+        org.hipi.image.HipiImageHeader r0;
+        int $i0;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        $i0 = r0.<org.hipi.image.HipiImageHeader: int bands>;
+
+        return $i0;
+    }
+
+    public void addMetaData(java.lang.String, java.lang.String)
+    {
+        org.hipi.image.HipiImageHeader r0;
+        java.lang.String r1, r2;
+        java.util.Map $r3;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        r1 := @parameter0: java.lang.String;
+
+        r2 := @parameter1: java.lang.String;
+
+        $r3 = r0.<org.hipi.image.HipiImageHeader: java.util.Map metaData>;
+
+        interfaceinvoke $r3.<java.util.Map: java.lang.Object put(java.lang.Object,java.lang.Object)>(r1, r2);
+
+        return;
+    }
+
+    public void setMetaData(java.util.HashMap)
+    {
+        org.hipi.image.HipiImageHeader r0;
+        java.util.HashMap r1, $r2;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        r1 := @parameter0: java.util.HashMap;
+
+        $r2 = new java.util.HashMap;
+
+        specialinvoke $r2.<java.util.HashMap: void <init>(java.util.Map)>(r1);
+
+        r0.<org.hipi.image.HipiImageHeader: java.util.Map metaData> = $r2;
+
+        return;
+    }
+
+    public java.lang.String getMetaData(java.lang.String)
+    {
+        org.hipi.image.HipiImageHeader r0;
+        java.lang.String r1, $r4;
+        java.util.Map $r2;
+        java.lang.Object $r3;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = r0.<org.hipi.image.HipiImageHeader: java.util.Map metaData>;
+
+        $r3 = interfaceinvoke $r2.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        $r4 = (java.lang.String) $r3;
+
+        return $r4;
+    }
+
+    public java.util.HashMap getAllMetaData()
+    {
+        org.hipi.image.HipiImageHeader r0;
+        java.util.HashMap $r1;
+        java.util.Map $r2;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        $r1 = new java.util.HashMap;
+
+        $r2 = r0.<org.hipi.image.HipiImageHeader: java.util.Map metaData>;
+
+        specialinvoke $r1.<java.util.HashMap: void <init>(java.util.Map)>($r2);
+
+        return $r1;
+    }
+
+    public byte[] getMetaDataAsBytes()
+    {
+        org.hipi.image.HipiImageHeader r0;
+        byte[] r1;
+        java.util.Map $r2;
+        java.io.UnsupportedEncodingException $r3;
+        java.io.PrintStream $r4;
+        java.lang.String r5;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+     label1:
+        $r2 = r0.<org.hipi.image.HipiImageHeader: java.util.Map metaData>;
+
+        r5 = staticinvoke <org.json.simple.JSONValue: java.lang.String toJSONString(java.lang.Object)>($r2);
+
+        r1 = virtualinvoke r5.<java.lang.String: byte[] getBytes(java.lang.String)>("UTF-8");
+
+     label2:
+        return r1;
+
+     label3:
+        $r3 := @caughtexception;
+
+        $r4 = <java.lang.System: java.io.PrintStream err>;
+
+        virtualinvoke $r4.<java.io.PrintStream: void println(java.lang.String)>("UTF-8 encoding exception in getMetaDataAsBytes()");
+
+        return null;
+
+        catch java.io.UnsupportedEncodingException from label1 to label2 with label3;
+    }
+
+    public void setMetaDataFromBytes(byte[])
+    {
+        org.hipi.image.HipiImageHeader r0;
+        byte[] r1;
+        org.json.simple.JSONObject r2;
+        java.lang.Object $r4;
+        java.io.UnsupportedEncodingException $r5;
+        java.io.PrintStream $r6;
+        java.lang.String r9;
+        java.util.Map r10;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        r1 := @parameter0: byte[];
+
+     label1:
+        r9 = new java.lang.String;
+
+        specialinvoke r9.<java.lang.String: void <init>(byte[],java.lang.String)>(r1, "UTF-8");
+
+        $r4 = staticinvoke <org.json.simple.JSONValue: java.lang.Object parse(java.lang.String)>(r9);
+
+        r2 = (org.json.simple.JSONObject) $r4;
+
+        r10 = (java.util.Map) r2;
+
+        r0.<org.hipi.image.HipiImageHeader: java.util.Map metaData> = r10;
+
+     label2:
+        goto label4;
+
+     label3:
+        $r5 := @caughtexception;
+
+        $r6 = <java.lang.System: java.io.PrintStream err>;
+
+        virtualinvoke $r6.<java.io.PrintStream: void println(java.lang.String)>("UTF-8 encoding exception in setMetaDataAsBytes()");
+
+     label4:
+        return;
+
+        catch java.io.UnsupportedEncodingException from label1 to label2 with label3;
+    }
+
+    public java.lang.String getExifData(java.lang.String)
+    {
+        org.hipi.image.HipiImageHeader r0;
+        java.lang.String r1, $r4;
+        java.util.Map $r2;
+        java.lang.Object $r3;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        r1 := @parameter0: java.lang.String;
+
+        $r2 = r0.<org.hipi.image.HipiImageHeader: java.util.Map exifData>;
+
+        $r3 = interfaceinvoke $r2.<java.util.Map: java.lang.Object get(java.lang.Object)>(r1);
+
+        $r4 = (java.lang.String) $r3;
+
+        return $r4;
+    }
+
+    public java.util.HashMap getAllExifData()
+    {
+        org.hipi.image.HipiImageHeader r0;
+        java.util.HashMap $r1;
+        java.util.Map $r2;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        $r1 = new java.util.HashMap;
+
+        $r2 = r0.<org.hipi.image.HipiImageHeader: java.util.Map exifData>;
+
+        specialinvoke $r1.<java.util.HashMap: void <init>(java.util.Map)>($r2);
+
+        return $r1;
+    }
+
+    public void setExifData(java.util.HashMap)
+    {
+        org.hipi.image.HipiImageHeader r0;
+        java.util.HashMap r1, $r2;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        r1 := @parameter0: java.util.HashMap;
+
+        $r2 = new java.util.HashMap;
+
+        specialinvoke $r2.<java.util.HashMap: void <init>(java.util.Map)>(r1);
+
+        r0.<org.hipi.image.HipiImageHeader: java.util.Map exifData> = $r2;
+
+        return;
+    }
+
+    public void set(org.hipi.image.HipiImageHeader)
+    {
+        org.hipi.image.HipiImageHeader r0, r1;
+        org.hipi.image.HipiImageHeader$HipiImageFormat $r2;
+        org.hipi.image.HipiImageHeader$HipiColorSpace $r3;
+        int $i0, $i1, $i2;
+        java.util.HashMap $r4, $r5;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        r1 := @parameter0: org.hipi.image.HipiImageHeader;
+
+        $r2 = virtualinvoke r1.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiImageFormat getStorageFormat()>();
+
+        r0.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiImageFormat storageFormat> = $r2;
+
+        $r3 = virtualinvoke r1.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiColorSpace getColorSpace()>();
+
+        r0.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiColorSpace colorSpace> = $r3;
+
+        $i0 = virtualinvoke r1.<org.hipi.image.HipiImageHeader: int getWidth()>();
+
+        r0.<org.hipi.image.HipiImageHeader: int width> = $i0;
+
+        $i1 = virtualinvoke r1.<org.hipi.image.HipiImageHeader: int getHeight()>();
+
+        r0.<org.hipi.image.HipiImageHeader: int height> = $i1;
+
+        $i2 = virtualinvoke r1.<org.hipi.image.HipiImageHeader: int getNumBands()>();
+
+        r0.<org.hipi.image.HipiImageHeader: int bands> = $i2;
+
+        $r4 = virtualinvoke r1.<org.hipi.image.HipiImageHeader: java.util.HashMap getAllMetaData()>();
+
+        r0.<org.hipi.image.HipiImageHeader: java.util.Map metaData> = $r4;
+
+        $r5 = virtualinvoke r1.<org.hipi.image.HipiImageHeader: java.util.HashMap getAllExifData()>();
+
+        r0.<org.hipi.image.HipiImageHeader: java.util.Map exifData> = $r5;
+
+        return;
+    }
+
+    public java.lang.String toString()
+    {
+        org.hipi.image.HipiImageHeader r0;
+        java.lang.String r1, $r10;
+        java.util.Map $r2;
+        java.lang.Object[] $r3;
+        org.hipi.image.HipiImageHeader$HipiImageFormat $r4;
+        int $i0, $i1, $i2, $i3, $i4;
+        java.lang.Integer $r5, $r7, $r8, $r9, $r11;
+        org.hipi.image.HipiImageHeader$HipiColorSpace $r6;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        $r2 = r0.<org.hipi.image.HipiImageHeader: java.util.Map metaData>;
+
+        r1 = staticinvoke <org.json.simple.JSONValue: java.lang.String toJSONString(java.lang.Object)>($r2);
+
+        $r3 = newarray (java.lang.Object)[6];
+
+        $r4 = r0.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiImageFormat storageFormat>;
+
+        $i0 = virtualinvoke $r4.<org.hipi.image.HipiImageHeader$HipiImageFormat: int toInteger()>();
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i0);
+
+        $r3[0] = $r5;
+
+        $r6 = r0.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiColorSpace colorSpace>;
+
+        $i1 = virtualinvoke $r6.<org.hipi.image.HipiImageHeader$HipiColorSpace: int toInteger()>();
+
+        $r7 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i1);
+
+        $r3[1] = $r7;
+
+        $i2 = r0.<org.hipi.image.HipiImageHeader: int width>;
+
+        $r8 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i2);
+
+        $r3[2] = $r8;
+
+        $i3 = r0.<org.hipi.image.HipiImageHeader: int height>;
+
+        $r9 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i3);
+
+        $r3[3] = $r9;
+
+        $i4 = r0.<org.hipi.image.HipiImageHeader: int bands>;
+
+        $r11 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i4);
+
+        $r3[4] = $r11;
+
+        $r3[5] = r1;
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("ImageHeader: (%d %d) %d x %d x %d meta: %s", $r3);
+
+        return $r10;
+    }
+
+    public void write(java.io.DataOutput) throws java.io.IOException
+    {
+        org.hipi.image.HipiImageHeader r0;
+        java.io.DataOutput r1;
+        byte[] r2;
+        org.hipi.image.HipiImageHeader$HipiImageFormat $r3;
+        int $i0, $i1, $i2, $i3, $i4, $i5, $i6;
+        org.hipi.image.HipiImageHeader$HipiColorSpace $r4;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        r1 := @parameter0: java.io.DataOutput;
+
+        $r3 = r0.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiImageFormat storageFormat>;
+
+        $i0 = virtualinvoke $r3.<org.hipi.image.HipiImageHeader$HipiImageFormat: int toInteger()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i0);
+
+        $r4 = r0.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiColorSpace colorSpace>;
+
+        $i1 = virtualinvoke $r4.<org.hipi.image.HipiImageHeader$HipiColorSpace: int toInteger()>();
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i1);
+
+        $i2 = r0.<org.hipi.image.HipiImageHeader: int width>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i2);
+
+        $i3 = r0.<org.hipi.image.HipiImageHeader: int height>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i3);
+
+        $i4 = r0.<org.hipi.image.HipiImageHeader: int bands>;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i4);
+
+        r2 = virtualinvoke r0.<org.hipi.image.HipiImageHeader: byte[] getMetaDataAsBytes()>();
+
+        if r2 == null goto label1;
+
+        $i5 = lengthof r2;
+
+        if $i5 != 0 goto label2;
+
+     label1:
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>(0);
+
+        goto label3;
+
+     label2:
+        $i6 = lengthof r2;
+
+        interfaceinvoke r1.<java.io.DataOutput: void writeInt(int)>($i6);
+
+        interfaceinvoke r1.<java.io.DataOutput: void write(byte[])>(r2);
+
+     label3:
+        return;
+    }
+
+    public void readFields(java.io.DataInput) throws java.io.IOException
+    {
+        org.hipi.image.HipiImageHeader r0;
+        java.io.DataInput r1;
+        int i0, $i1, $i2, $i3, $i4, $i5;
+        byte[] r2;
+        org.hipi.image.HipiImageHeader$HipiImageFormat $r3;
+        org.hipi.image.HipiImageHeader$HipiColorSpace $r4;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        r1 := @parameter0: java.io.DataInput;
+
+        $i1 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        $r3 = staticinvoke <org.hipi.image.HipiImageHeader$HipiImageFormat: org.hipi.image.HipiImageHeader$HipiImageFormat fromInteger(int)>($i1);
+
+        r0.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiImageFormat storageFormat> = $r3;
+
+        $i2 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        $r4 = staticinvoke <org.hipi.image.HipiImageHeader$HipiColorSpace: org.hipi.image.HipiImageHeader$HipiColorSpace fromInteger(int)>($i2);
+
+        r0.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiColorSpace colorSpace> = $r4;
+
+        $i3 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.hipi.image.HipiImageHeader: int width> = $i3;
+
+        $i4 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.hipi.image.HipiImageHeader: int height> = $i4;
+
+        $i5 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        r0.<org.hipi.image.HipiImageHeader: int bands> = $i5;
+
+        i0 = interfaceinvoke r1.<java.io.DataInput: int readInt()>();
+
+        if i0 <= 0 goto label1;
+
+        r2 = newarray (byte)[i0];
+
+        interfaceinvoke r1.<java.io.DataInput: void readFully(byte[],int,int)>(r2, 0, i0);
+
+        virtualinvoke r0.<org.hipi.image.HipiImageHeader: void setMetaDataFromBytes(byte[])>(r2);
+
+     label1:
+        return;
+    }
+
+    public int compareTo(org.hipi.image.HipiImageHeader)
+    {
+        org.hipi.image.HipiImageHeader r0, r1;
+        int i0, i1;
+        org.hipi.image.HipiImageHeader$HipiImageFormat $r2, $r3;
+        byte $b2;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        r1 := @parameter0: org.hipi.image.HipiImageHeader;
+
+        $r2 = r0.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiImageFormat storageFormat>;
+
+        i0 = virtualinvoke $r2.<org.hipi.image.HipiImageHeader$HipiImageFormat: int toInteger()>();
+
+        $r3 = r1.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiImageFormat storageFormat>;
+
+        i1 = virtualinvoke $r3.<org.hipi.image.HipiImageHeader$HipiImageFormat: int toInteger()>();
+
+        if i0 >= i1 goto label1;
+
+        $b2 = -1;
+
+        goto label3;
+
+     label1:
+        if i0 != i1 goto label2;
+
+        $b2 = 0;
+
+        goto label3;
+
+     label2:
+        $b2 = 1;
+
+     label3:
+        return $b2;
+    }
+
+    public int hashCode()
+    {
+        org.hipi.image.HipiImageHeader r0;
+        org.hipi.image.HipiImageHeader$HipiImageFormat $r1;
+        int $i0;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        $r1 = r0.<org.hipi.image.HipiImageHeader: org.hipi.image.HipiImageHeader$HipiImageFormat storageFormat>;
+
+        $i0 = virtualinvoke $r1.<org.hipi.image.HipiImageHeader$HipiImageFormat: int toInteger()>();
+
+        return $i0;
+    }
+
+    public volatile int compareTo(java.lang.Object)
+    {
+        org.hipi.image.HipiImageHeader r0, $r2;
+        java.lang.Object r1;
+        int $i0;
+
+        r0 := @this: org.hipi.image.HipiImageHeader;
+
+        r1 := @parameter0: java.lang.Object;
+
+        $r2 = (org.hipi.image.HipiImageHeader) r1;
+
+        $i0 = virtualinvoke r0.<org.hipi.image.HipiImageHeader: int compareTo(org.hipi.image.HipiImageHeader)>($r2);
+
+        return $i0;
+    }
+}

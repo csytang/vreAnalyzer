@@ -504,9 +504,9 @@ public abstract class org.apache.mahout.common.AbstractJob extends org.apache.ha
         java.lang.Object[] $r14;
         org.apache.hadoop.fs.Path $r16;
         org.slf4j.Logger $r19, $r24, $r28;
-        org.apache.commons.cli2.OptionException $r20;
+        java.lang.IllegalArgumentException $r20;
         java.lang.Object $r21, $r58, $r59;
-        java.lang.IllegalArgumentException $r23;
+        org.apache.commons.cli2.OptionException $r23;
         java.lang.String $r25, $r27, r50, $r57, $r63, $r65;
         java.util.Iterator r29;
         org.apache.commons.cli2.Option r30, $r45, $r48, $r52;
@@ -612,17 +612,17 @@ public abstract class org.apache.mahout.common.AbstractJob extends org.apache.ha
         goto label06;
 
      label05:
-        $r20 := @caughtexception;
+        $r23 := @caughtexception;
 
-        $r24 = <org.apache.mahout.common.AbstractJob: org.slf4j.Logger log>;
+        $r28 = <org.apache.mahout.common.AbstractJob: org.slf4j.Logger log>;
 
-        $r25 = virtualinvoke $r20.<org.apache.commons.cli2.OptionException: java.lang.String getMessage()>();
+        $r27 = virtualinvoke $r23.<org.apache.commons.cli2.OptionException: java.lang.String getMessage()>();
 
-        interfaceinvoke $r24.<org.slf4j.Logger: void error(java.lang.String)>($r25);
+        interfaceinvoke $r28.<org.slf4j.Logger: void error(java.lang.String)>($r27);
 
-        $r22 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Group group>;
+        $r26 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Group group>;
 
-        staticinvoke <org.apache.mahout.common.CommandLineUtil: void printHelpWithGenericOptions(org.apache.commons.cli2.Group,org.apache.commons.cli2.OptionException)>($r22, $r20);
+        staticinvoke <org.apache.mahout.common.CommandLineUtil: void printHelpWithGenericOptions(org.apache.commons.cli2.Group,org.apache.commons.cli2.OptionException)>($r26, $r23);
 
         return null;
 
@@ -644,17 +644,17 @@ public abstract class org.apache.mahout.common.AbstractJob extends org.apache.ha
         goto label10;
 
      label09:
-        $r23 := @caughtexception;
+        $r20 := @caughtexception;
 
-        $r28 = <org.apache.mahout.common.AbstractJob: org.slf4j.Logger log>;
+        $r24 = <org.apache.mahout.common.AbstractJob: org.slf4j.Logger log>;
 
-        $r27 = virtualinvoke $r23.<java.lang.IllegalArgumentException: java.lang.String getMessage()>();
+        $r25 = virtualinvoke $r20.<java.lang.IllegalArgumentException: java.lang.String getMessage()>();
 
-        interfaceinvoke $r28.<org.slf4j.Logger: void error(java.lang.String)>($r27);
+        interfaceinvoke $r24.<org.slf4j.Logger: void error(java.lang.String)>($r25);
 
-        $r26 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Group group>;
+        $r22 = r0.<org.apache.mahout.common.AbstractJob: org.apache.commons.cli2.Group group>;
 
-        staticinvoke <org.apache.mahout.common.CommandLineUtil: void printHelpWithGenericOptions(org.apache.commons.cli2.Group)>($r26);
+        staticinvoke <org.apache.mahout.common.CommandLineUtil: void printHelpWithGenericOptions(org.apache.commons.cli2.Group)>($r22);
 
         return null;
 
@@ -973,7 +973,7 @@ public abstract class org.apache.mahout.common.AbstractJob extends org.apache.ha
         java.lang.Object $r12;
         org.apache.mahout.math.VectorWritable $r15;
         org.apache.mahout.math.Vector $r16;
-        java.lang.Throwable $r17, $r18, $r19, r21;
+        java.lang.Throwable $r18, $r19, $r20, r21;
         org.apache.hadoop.io.Writable r22;
 
         r0 := @this: org.apache.mahout.common.AbstractJob;
@@ -1049,9 +1049,9 @@ public abstract class org.apache.mahout.common.AbstractJob extends org.apache.ha
         goto label11;
 
      label09:
-        $r17 := @caughtexception;
+        $r20 := @caughtexception;
 
-        virtualinvoke r21.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r17);
+        virtualinvoke r21.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r20);
 
         goto label11;
 

@@ -23,7 +23,7 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         java.io.DataInputStream $r15, $r18, $r26;
         java.lang.Object $r20, $r28;
         org.apache.mahout.math.function.DoubleDoubleFunction $r29, $r85;
-        java.lang.Throwable $r34, $r36, $r37, $r38, $r39, $r40, $r42, $r44, $r45, r51, r64, r78;
+        java.lang.Throwable $r35, $r36, $r37, $r38, $r39, $r40, $r42, $r44, $r45, r51, r64, r78;
         java.util.Iterator r47, r60;
         org.apache.mahout.math.RandomTrinaryMatrix $r57, $r70;
 
@@ -83,14 +83,14 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         goto label12;
 
      label04:
-        $r42 := @caughtexception;
+        $r45 := @caughtexception;
 
-        r51 = $r42;
+        r51 = $r45;
 
-        throw $r42;
+        throw $r45;
 
      label05:
-        $r36 := @caughtexception;
+        $r39 := @caughtexception;
 
      label06:
         if $r26 == null goto label11;
@@ -104,9 +104,9 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         goto label11;
 
      label09:
-        $r34 := @caughtexception;
+        $r40 := @caughtexception;
 
-        virtualinvoke r51.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r34);
+        virtualinvoke r51.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r40);
 
         goto label11;
 
@@ -114,7 +114,7 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         virtualinvoke $r26.<java.io.DataInputStream: void close()>();
 
      label11:
-        throw $r36;
+        throw $r39;
 
      label12:
         r56 = virtualinvoke $r27.<org.apache.mahout.math.MatrixWritable: org.apache.mahout.math.Matrix get()>();
@@ -193,14 +193,14 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         goto label26;
 
      label18:
-        $r40 := @caughtexception;
+        $r35 := @caughtexception;
 
-        r64 = $r40;
+        r64 = $r35;
 
-        throw $r40;
+        throw $r35;
 
      label19:
-        $r45 := @caughtexception;
+        $r36 := @caughtexception;
 
      label20:
         if $r18 == null goto label25;
@@ -214,9 +214,9 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         goto label25;
 
      label23:
-        $r38 := @caughtexception;
+        $r44 := @caughtexception;
 
-        virtualinvoke r64.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r38);
+        virtualinvoke r64.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r44);
 
         goto label25;
 
@@ -224,7 +224,7 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         virtualinvoke $r18.<java.io.DataInputStream: void close()>();
 
      label25:
-        throw $r45;
+        throw $r36;
 
      label26:
         r69 = virtualinvoke $r19.<org.apache.mahout.math.MatrixWritable: org.apache.mahout.math.Matrix get()>();
@@ -319,14 +319,14 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         goto label40;
 
      label32:
-        $r37 := @caughtexception;
+        $r42 := @caughtexception;
 
-        r78 = $r37;
+        r78 = $r42;
 
-        throw $r37;
+        throw $r42;
 
      label33:
-        $r39 := @caughtexception;
+        $r37 := @caughtexception;
 
      label34:
         if $r15 == null goto label39;
@@ -340,9 +340,9 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         goto label39;
 
      label37:
-        $r44 := @caughtexception;
+        $r38 := @caughtexception;
 
-        virtualinvoke r78.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r44);
+        virtualinvoke r78.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r38);
 
         goto label39;
 
@@ -350,7 +350,7 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         virtualinvoke $r15.<java.io.DataInputStream: void close()>();
 
      label39:
-        throw $r39;
+        throw $r37;
 
      label40:
         $r81 = virtualinvoke $r8.<org.apache.mahout.math.MatrixWritable: org.apache.mahout.math.Matrix get()>();
@@ -412,7 +412,7 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         java.io.DataInputStream $r8;
         org.apache.mahout.math.MatrixWritable $r9;
         java.io.FileInputStream $r10;
-        java.lang.Throwable $r11, $r12, $r14, $r15, $r17, $r18, r20, r38;
+        java.lang.Throwable $r12, $r14, $r15, $r16, $r17, $r18, r20, r38;
         org.apache.mahout.math.CholeskyDecomposition $r23;
         org.apache.mahout.math.Matrix $r24, $r25, $r26, $r28, $r29;
         org.apache.mahout.math.SingularValueDecomposition $r27;
@@ -463,14 +463,14 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         goto label12;
 
      label04:
-        $r11 := @caughtexception;
+        $r12 := @caughtexception;
 
-        r20 = $r11;
+        r20 = $r12;
 
-        throw $r11;
+        throw $r12;
 
      label05:
-        $r14 := @caughtexception;
+        $r15 := @caughtexception;
 
      label06:
         if $r8 == null goto label11;
@@ -484,9 +484,9 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         goto label11;
 
      label09:
-        $r18 := @caughtexception;
+        $r17 := @caughtexception;
 
-        virtualinvoke r20.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r18);
+        virtualinvoke r20.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r17);
 
         goto label11;
 
@@ -494,7 +494,7 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         virtualinvoke $r8.<java.io.DataInputStream: void close()>();
 
      label11:
-        throw $r14;
+        throw $r15;
 
      label12:
         $r23 = r0.<org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd: org.apache.mahout.math.CholeskyDecomposition l2>;
@@ -548,14 +548,14 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         goto label23;
 
      label15:
-        $r17 := @caughtexception;
+        $r14 := @caughtexception;
 
-        r38 = $r17;
+        r38 = $r14;
 
-        throw $r17;
+        throw $r14;
 
      label16:
-        $r15 := @caughtexception;
+        $r18 := @caughtexception;
 
      label17:
         if $r30 == null goto label22;
@@ -569,9 +569,9 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         goto label22;
 
      label20:
-        $r12 := @caughtexception;
+        $r16 := @caughtexception;
 
-        virtualinvoke r38.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r12);
+        virtualinvoke r38.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r16);
 
         goto label22;
 
@@ -579,7 +579,7 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         virtualinvoke $r30.<java.io.DataOutputStream: void close()>();
 
      label22:
-        throw $r15;
+        throw $r18;
 
      label23:
         $i2 = r0.<org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd: int columnsPerSlice>;
@@ -621,7 +621,7 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         java.lang.Object[] $r22;
         java.io.FileOutputStream $r23;
         java.lang.String $r25, $r26, $r27;
-        java.lang.Throwable $r28, $r30, $r31, r32;
+        java.lang.Throwable $r28, $r29, $r30, r32;
 
         r0 := @this: org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd;
 
@@ -715,11 +715,11 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         goto label01;
 
      label04:
-        $r31 := @caughtexception;
+        $r29 := @caughtexception;
 
-        r32 = $r31;
+        r32 = $r29;
 
-        throw $r31;
+        throw $r29;
 
      label05:
         $r28 := @caughtexception;
@@ -767,7 +767,7 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         java.io.FileOutputStream $r9;
         java.io.DataInputStream $r10;
         java.io.FileInputStream $r11;
-        java.lang.Throwable $r13, $r15, $r17, $r18, $r19, $r20, r22, r28;
+        java.lang.Throwable $r13, $r16, $r17, $r18, $r19, $r20, r22, r28;
         org.apache.mahout.math.function.DoubleDoubleFunction $r26;
 
         r0 := @parameter0: java.io.File;
@@ -803,14 +803,14 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         goto label11;
 
      label03:
-        $r18 := @caughtexception;
+        $r17 := @caughtexception;
 
-        r22 = $r18;
+        r22 = $r17;
 
-        throw $r18;
+        throw $r17;
 
      label04:
-        $r20 := @caughtexception;
+        $r19 := @caughtexception;
 
      label05:
         if $r10 == null goto label10;
@@ -824,9 +824,9 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         goto label10;
 
      label08:
-        $r19 := @caughtexception;
+        $r13 := @caughtexception;
 
-        virtualinvoke r22.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r19);
+        virtualinvoke r22.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r13);
 
         goto label10;
 
@@ -834,7 +834,7 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         virtualinvoke $r10.<java.io.DataInputStream: void close()>();
 
      label10:
-        throw $r20;
+        throw $r19;
 
      label11:
         $r25 = virtualinvoke $r7.<org.apache.mahout.math.MatrixWritable: org.apache.mahout.math.Matrix get()>();
@@ -870,14 +870,14 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         goto label24;
 
      label16:
-        $r15 := @caughtexception;
+        $r18 := @caughtexception;
 
-        r28 = $r15;
+        r28 = $r18;
 
-        throw $r15;
+        throw $r18;
 
      label17:
-        $r17 := @caughtexception;
+        $r20 := @caughtexception;
 
      label18:
         if $r8 == null goto label23;
@@ -891,9 +891,9 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         goto label23;
 
      label21:
-        $r13 := @caughtexception;
+        $r16 := @caughtexception;
 
-        virtualinvoke r28.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r13);
+        virtualinvoke r28.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r16);
 
         goto label23;
 
@@ -901,7 +901,7 @@ public class org.apache.mahout.math.ssvd.SequentialOutOfCoreSvd extends java.lan
         virtualinvoke $r8.<java.io.DataOutputStream: void close()>();
 
      label23:
-        throw $r17;
+        throw $r20;
 
      label24:
         return;

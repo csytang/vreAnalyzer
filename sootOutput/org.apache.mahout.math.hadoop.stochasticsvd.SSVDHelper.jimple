@@ -134,7 +134,7 @@ public final class org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper extend
         throw $r14;
 
      label04:
-        $r13 := @caughtexception;
+        $r11 := @caughtexception;
 
      label05:
         if $r9 == null goto label10;
@@ -148,9 +148,9 @@ public final class org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper extend
         goto label10;
 
      label08:
-        $r11 := @caughtexception;
+        $r13 := @caughtexception;
 
-        virtualinvoke r15.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r11);
+        virtualinvoke r15.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r13);
 
         goto label10;
 
@@ -158,7 +158,7 @@ public final class org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper extend
         virtualinvoke $r9.<org.apache.hadoop.io.SequenceFile$Writer: void close()>();
 
      label10:
-        throw $r13;
+        throw $r11;
 
      label11:
         return;
@@ -582,7 +582,7 @@ public final class org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper extend
         org.apache.mahout.math.VectorWritable $r11;
         org.apache.mahout.math.UpperTriangular $r12;
         java.io.IOException $r13, $r15;
-        java.lang.Throwable $r16, $r17, $r18, r19;
+        java.lang.Throwable $r14, $r16, $r18, r19;
         org.apache.mahout.math.Vector r20;
 
         r0 := @parameter0: org.apache.hadoop.fs.Path;
@@ -638,11 +638,11 @@ public final class org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper extend
         return $r12;
 
      label05:
-        $r17 := @caughtexception;
+        $r18 := @caughtexception;
 
-        r19 = $r17;
+        r19 = $r18;
 
-        throw $r17;
+        throw $r18;
 
      label06:
         $r16 := @caughtexception;
@@ -659,9 +659,9 @@ public final class org.apache.mahout.math.hadoop.stochasticsvd.SSVDHelper extend
         goto label12;
 
      label10:
-        $r18 := @caughtexception;
+        $r14 := @caughtexception;
 
-        virtualinvoke r19.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r18);
+        virtualinvoke r19.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r14);
 
         goto label12;
 

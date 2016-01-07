@@ -93,10 +93,10 @@ public abstract class org.apache.mahout.common.distance.WeightedDistanceMeasure 
         java.lang.Class $r14;
         boolean $z0;
         java.io.FileNotFoundException $r25;
-        java.lang.Throwable $r28, $r31, $r32, r35;
-        java.lang.String $r29;
-        java.io.IOException $r30;
-        java.lang.IllegalStateException $r33;
+        java.lang.Throwable $r27, $r32, $r33, r35;
+        java.lang.String $r28;
+        java.io.IOException $r29;
+        java.lang.IllegalStateException $r30;
         org.apache.hadoop.fs.FileSystem r34;
         org.apache.mahout.math.Vector $r38;
 
@@ -155,9 +155,9 @@ public abstract class org.apache.mahout.common.distance.WeightedDistanceMeasure 
 
         $r24 = (org.apache.hadoop.fs.Path) $r23;
 
-        $r29 = virtualinvoke $r24.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
+        $r28 = virtualinvoke $r24.<org.apache.hadoop.fs.Path: java.lang.String toString()>();
 
-        specialinvoke $r25.<java.io.FileNotFoundException: void <init>(java.lang.String)>($r29);
+        specialinvoke $r25.<java.io.FileNotFoundException: void <init>(java.lang.String)>($r28);
 
         throw $r25;
 
@@ -183,14 +183,14 @@ public abstract class org.apache.mahout.common.distance.WeightedDistanceMeasure 
         goto label13;
 
      label05:
-        $r31 := @caughtexception;
+        $r32 := @caughtexception;
 
-        r35 = $r31;
+        r35 = $r32;
 
-        throw $r31;
+        throw $r32;
 
      label06:
-        $r32 := @caughtexception;
+        $r27 := @caughtexception;
 
      label07:
         if r3 == null goto label12;
@@ -204,9 +204,9 @@ public abstract class org.apache.mahout.common.distance.WeightedDistanceMeasure 
         goto label12;
 
      label10:
-        $r28 := @caughtexception;
+        $r33 := @caughtexception;
 
-        virtualinvoke r35.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r28);
+        virtualinvoke r35.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r33);
 
         goto label12;
 
@@ -214,7 +214,7 @@ public abstract class org.apache.mahout.common.distance.WeightedDistanceMeasure 
         virtualinvoke r3.<java.io.DataInputStream: void close()>();
 
      label12:
-        throw $r32;
+        throw $r27;
 
      label13:
         $r38 = virtualinvoke r2.<org.apache.mahout.math.VectorWritable: org.apache.mahout.math.Vector get()>();
@@ -225,13 +225,13 @@ public abstract class org.apache.mahout.common.distance.WeightedDistanceMeasure 
         goto label16;
 
      label15:
-        $r30 := @caughtexception;
+        $r29 := @caughtexception;
 
-        $r33 = new java.lang.IllegalStateException;
+        $r30 = new java.lang.IllegalStateException;
 
-        specialinvoke $r33.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r30);
+        specialinvoke $r30.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r29);
 
-        throw $r33;
+        throw $r30;
 
      label16:
         return;

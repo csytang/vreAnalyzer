@@ -284,12 +284,12 @@ public final class org.apache.mahout.common.iterator.FileLineIterator extends co
     protected java.lang.String computeNext()
     {
         org.apache.mahout.common.iterator.FileLineIterator r0;
-        java.lang.String r1, $r8, $r11;
+        java.lang.String r1, $r10, $r11;
         java.io.BufferedReader $r4;
         java.lang.Object $r5;
-        java.io.IOException $r6, $r10;
-        org.slf4j.Logger $r7;
-        java.lang.IllegalStateException $r9;
+        java.io.IOException $r6, $r8;
+        java.lang.IllegalStateException $r7;
+        org.slf4j.Logger $r9;
 
         r0 := @this: org.apache.mahout.common.iterator.FileLineIterator;
 
@@ -302,7 +302,7 @@ public final class org.apache.mahout.common.iterator.FileLineIterator extends co
         goto label08;
 
      label03:
-        $r10 := @caughtexception;
+        $r6 := @caughtexception;
 
      label04:
         virtualinvoke r0.<org.apache.mahout.common.iterator.FileLineIterator: void close()>();
@@ -311,20 +311,20 @@ public final class org.apache.mahout.common.iterator.FileLineIterator extends co
         goto label07;
 
      label06:
-        $r6 := @caughtexception;
+        $r8 := @caughtexception;
 
-        $r7 = <org.apache.mahout.common.iterator.FileLineIterator: org.slf4j.Logger log>;
+        $r9 = <org.apache.mahout.common.iterator.FileLineIterator: org.slf4j.Logger log>;
 
-        $r8 = virtualinvoke $r6.<java.io.IOException: java.lang.String getMessage()>();
+        $r10 = virtualinvoke $r8.<java.io.IOException: java.lang.String getMessage()>();
 
-        interfaceinvoke $r7.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>($r8, $r6);
+        interfaceinvoke $r9.<org.slf4j.Logger: void error(java.lang.String,java.lang.Throwable)>($r10, $r8);
 
      label07:
-        $r9 = new java.lang.IllegalStateException;
+        $r7 = new java.lang.IllegalStateException;
 
-        specialinvoke $r9.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r10);
+        specialinvoke $r7.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r6);
 
-        throw $r9;
+        throw $r7;
 
      label08:
         if r1 != null goto label09;
@@ -351,8 +351,8 @@ public final class org.apache.mahout.common.iterator.FileLineIterator extends co
         int i0, i1;
         java.io.BufferedReader $r2;
         java.lang.String $r3;
-        java.io.IOException $r4, $r6;
-        java.lang.IllegalStateException $r5;
+        java.io.IOException $r4, $r5;
+        java.lang.IllegalStateException $r6;
 
         r0 := @this: org.apache.mahout.common.iterator.FileLineIterator;
 
@@ -378,7 +378,7 @@ public final class org.apache.mahout.common.iterator.FileLineIterator extends co
         goto label2;
 
      label4:
-        $r6 := @caughtexception;
+        $r4 := @caughtexception;
 
      label5:
         virtualinvoke r0.<org.apache.mahout.common.iterator.FileLineIterator: void close()>();
@@ -387,13 +387,13 @@ public final class org.apache.mahout.common.iterator.FileLineIterator extends co
         goto label8;
 
      label7:
-        $r4 := @caughtexception;
+        $r5 := @caughtexception;
 
-        $r5 = new java.lang.IllegalStateException;
+        $r6 = new java.lang.IllegalStateException;
 
-        specialinvoke $r5.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r4);
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.Throwable)>($r5);
 
-        throw $r5;
+        throw $r6;
 
      label8:
         return;

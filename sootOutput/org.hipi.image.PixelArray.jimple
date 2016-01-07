@@ -1,0 +1,234 @@
+public abstract class org.hipi.image.PixelArray extends java.lang.Object
+{
+    public static final int TYPE_BYTE;
+    public static final int TYPE_USHORT;
+    public static final int TYPE_SHORT;
+    public static final int TYPE_INT;
+    public static final int TYPE_FLOAT;
+    public static final int TYPE_DOUBLE;
+    public static final int TYPE_UNDEFINED;
+    private static final int[] dataTypeSize;
+    protected int dataType;
+    protected int size;
+
+    public static int getDataTypeSize(int)
+    {
+        int i0, $i1;
+        java.lang.IllegalArgumentException $r0;
+        java.lang.StringBuilder $r1, $r2, $r3;
+        java.lang.String $r4;
+        int[] $r5;
+
+        i0 := @parameter0: int;
+
+        if i0 < 0 goto label1;
+
+        if i0 <= 5 goto label2;
+
+     label1:
+        $r0 = new java.lang.IllegalArgumentException;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unknown data type ");
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        specialinvoke $r0.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>($r4);
+
+        throw $r0;
+
+     label2:
+        $r5 = <org.hipi.image.PixelArray: int[] dataTypeSize>;
+
+        $i1 = $r5[i0];
+
+        return $i1;
+    }
+
+    public void <init>()
+    {
+        org.hipi.image.PixelArray r0;
+
+        r0 := @this: org.hipi.image.PixelArray;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.hipi.image.PixelArray: int dataType> = 32;
+
+        r0.<org.hipi.image.PixelArray: int size> = 0;
+
+        return;
+    }
+
+    protected void <init>(int, int)
+    {
+        org.hipi.image.PixelArray r0;
+        int i0, i1;
+
+        r0 := @this: org.hipi.image.PixelArray;
+
+        i0 := @parameter0: int;
+
+        i1 := @parameter1: int;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        r0.<org.hipi.image.PixelArray: int dataType> = i0;
+
+        r0.<org.hipi.image.PixelArray: int size> = i1;
+
+        return;
+    }
+
+    public int getDataType()
+    {
+        org.hipi.image.PixelArray r0;
+        int $i0;
+
+        r0 := @this: org.hipi.image.PixelArray;
+
+        $i0 = r0.<org.hipi.image.PixelArray: int dataType>;
+
+        return $i0;
+    }
+
+    public int getSize()
+    {
+        org.hipi.image.PixelArray r0;
+        int $i0;
+
+        r0 := @this: org.hipi.image.PixelArray;
+
+        $i0 = r0.<org.hipi.image.PixelArray: int size>;
+
+        return $i0;
+    }
+
+    public abstract void setSize(int) throws java.lang.IllegalArgumentException;
+
+    public abstract byte[] getByteArray();
+
+    public abstract void setFromByteArray(byte[]) throws java.lang.IllegalArgumentException;
+
+    public abstract int getElem(int);
+
+    public abstract int getElemNonLinSRGB(int);
+
+    public abstract void setElem(int, int);
+
+    public abstract void setElemNonLinSRGB(int, int);
+
+    public float getElemFloat(int)
+    {
+        org.hipi.image.PixelArray r0;
+        int i0, $i1;
+        float $f0;
+
+        r0 := @this: org.hipi.image.PixelArray;
+
+        i0 := @parameter0: int;
+
+        $i1 = virtualinvoke r0.<org.hipi.image.PixelArray: int getElem(int)>(i0);
+
+        $f0 = (float) $i1;
+
+        return $f0;
+    }
+
+    public void setElemFloat(int, float)
+    {
+        org.hipi.image.PixelArray r0;
+        int i0, $i1;
+        float f0;
+
+        r0 := @this: org.hipi.image.PixelArray;
+
+        i0 := @parameter0: int;
+
+        f0 := @parameter1: float;
+
+        $i1 = (int) f0;
+
+        virtualinvoke r0.<org.hipi.image.PixelArray: void setElem(int,int)>(i0, $i1);
+
+        return;
+    }
+
+    public double getElemDouble(int)
+    {
+        org.hipi.image.PixelArray r0;
+        int i0, $i1;
+        double $d0;
+
+        r0 := @this: org.hipi.image.PixelArray;
+
+        i0 := @parameter0: int;
+
+        $i1 = virtualinvoke r0.<org.hipi.image.PixelArray: int getElem(int)>(i0);
+
+        $d0 = (double) $i1;
+
+        return $d0;
+    }
+
+    public void setElemDouble(int, double)
+    {
+        org.hipi.image.PixelArray r0;
+        int i0, $i1;
+        double d0;
+
+        r0 := @this: org.hipi.image.PixelArray;
+
+        i0 := @parameter0: int;
+
+        d0 := @parameter1: double;
+
+        $i1 = (int) d0;
+
+        virtualinvoke r0.<org.hipi.image.PixelArray: void setElem(int,int)>(i0, $i1);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        int[] $r0;
+
+        <org.hipi.image.PixelArray: int TYPE_UNDEFINED> = 32;
+
+        <org.hipi.image.PixelArray: int TYPE_DOUBLE> = 5;
+
+        <org.hipi.image.PixelArray: int TYPE_FLOAT> = 4;
+
+        <org.hipi.image.PixelArray: int TYPE_INT> = 3;
+
+        <org.hipi.image.PixelArray: int TYPE_SHORT> = 2;
+
+        <org.hipi.image.PixelArray: int TYPE_USHORT> = 1;
+
+        <org.hipi.image.PixelArray: int TYPE_BYTE> = 0;
+
+        $r0 = newarray (int)[6];
+
+        $r0[0] = 1;
+
+        $r0[1] = 2;
+
+        $r0[2] = 2;
+
+        $r0[3] = 4;
+
+        $r0[4] = 4;
+
+        $r0[5] = 8;
+
+        <org.hipi.image.PixelArray: int[] dataTypeSize> = $r0;
+
+        return;
+    }
+}

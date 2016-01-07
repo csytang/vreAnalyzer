@@ -18,9 +18,9 @@ final class org.apache.mahout.classifier.df.mapreduce.Builder$1 extends java.lan
         org.apache.hadoop.mapreduce.InputSplit r1, r2;
         long l0, l3;
         byte $b1, $b2;
-        java.lang.InterruptedException $r3;
+        java.io.IOException $r3;
         java.lang.IllegalStateException $r4, $r6;
-        java.io.IOException $r5;
+        java.lang.InterruptedException $r5;
 
         r0 := @this: org.apache.mahout.classifier.df.mapreduce.Builder$1;
 
@@ -52,15 +52,6 @@ final class org.apache.mahout.classifier.df.mapreduce.Builder$1 extends java.lan
         return -1;
 
      label6:
-        $r5 := @caughtexception;
-
-        $r6 = new java.lang.IllegalStateException;
-
-        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("Problem getting input split size", $r5);
-
-        throw $r6;
-
-     label7:
         $r3 := @caughtexception;
 
         $r4 = new java.lang.IllegalStateException;
@@ -68,6 +59,15 @@ final class org.apache.mahout.classifier.df.mapreduce.Builder$1 extends java.lan
         specialinvoke $r4.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("Problem getting input split size", $r3);
 
         throw $r4;
+
+     label7:
+        $r5 := @caughtexception;
+
+        $r6 = new java.lang.IllegalStateException;
+
+        specialinvoke $r6.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("Problem getting input split size", $r5);
+
+        throw $r6;
 
         catch java.io.IOException from label1 to label2 with label6;
         catch java.io.IOException from label3 to label4 with label6;

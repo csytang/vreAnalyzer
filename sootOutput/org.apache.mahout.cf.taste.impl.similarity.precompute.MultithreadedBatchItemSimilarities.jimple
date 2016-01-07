@@ -54,15 +54,15 @@ public class org.apache.mahout.cf.taste.impl.similarity.precompute.Multithreaded
         org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output $r9;
         java.util.concurrent.atomic.AtomicInteger $r10;
         long $l4, $l6;
-        java.util.concurrent.TimeUnit $r11, $r21;
-        java.lang.StringBuilder $r12, $r14, $r15, $r17, $r22, $r23, $r24, $r25;
-        java.lang.RuntimeException $r13, $r20, $r26, $r30;
-        java.lang.String $r16, $r28;
-        java.lang.Throwable $r18;
+        java.util.concurrent.TimeUnit $r11, $r24;
+        java.lang.StringBuilder $r12, $r14, $r15, $r17, $r27, $r28, $r31, $r32;
+        java.lang.RuntimeException $r13, $r20, $r22, $r29;
+        java.lang.String $r16, $r30;
+        java.lang.InterruptedException $r18, $r23;
         org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$SimilarItemsWorker $r19;
-        java.lang.Exception $r27;
-        java.lang.InterruptedException $r29, $r31;
-        java.io.IOException $r32;
+        java.lang.Exception $r21;
+        java.io.IOException $r25;
+        java.lang.Throwable $r26;
         org.apache.mahout.cf.taste.model.DataModel r33;
         boolean z0, z1;
 
@@ -150,13 +150,13 @@ public class org.apache.mahout.cf.taste.impl.similarity.precompute.Multithreaded
         throw $r13;
 
      label06:
-        $r31 := @caughtexception;
+        $r18 := @caughtexception;
 
-        $r30 = new java.lang.RuntimeException;
+        $r22 = new java.lang.RuntimeException;
 
-        specialinvoke $r30.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r31);
+        specialinvoke $r22.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r18);
 
-        throw $r30;
+        throw $r22;
 
      label07:
         staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>(r1, 0);
@@ -164,16 +164,16 @@ public class org.apache.mahout.cf.taste.impl.similarity.precompute.Multithreaded
         goto label14;
 
      label08:
-        $r27 := @caughtexception;
+        $r21 := @caughtexception;
 
-        $r32 = new java.io.IOException;
+        $r25 = new java.io.IOException;
 
-        specialinvoke $r32.<java.io.IOException: void <init>(java.lang.Throwable)>($r27);
+        specialinvoke $r25.<java.io.IOException: void <init>(java.lang.Throwable)>($r21);
 
-        throw $r32;
+        throw $r25;
 
      label09:
-        $r18 := @caughtexception;
+        $r26 := @caughtexception;
 
      label10:
         interfaceinvoke r2.<java.util.concurrent.ExecutorService: void shutdown()>();
@@ -181,43 +181,43 @@ public class org.apache.mahout.cf.taste.impl.similarity.precompute.Multithreaded
      label11:
         $l6 = (long) i1;
 
-        $r21 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit HOURS>;
+        $r24 = <java.util.concurrent.TimeUnit: java.util.concurrent.TimeUnit HOURS>;
 
-        z1 = interfaceinvoke r2.<java.util.concurrent.ExecutorService: boolean awaitTermination(long,java.util.concurrent.TimeUnit)>($l6, $r21);
+        z1 = interfaceinvoke r2.<java.util.concurrent.ExecutorService: boolean awaitTermination(long,java.util.concurrent.TimeUnit)>($l6, $r24);
 
         if z1 != 0 goto label13;
 
-        $r20 = new java.lang.RuntimeException;
+        $r29 = new java.lang.RuntimeException;
 
-        $r24 = new java.lang.StringBuilder;
+        $r27 = new java.lang.StringBuilder;
 
-        specialinvoke $r24.<java.lang.StringBuilder: void <init>()>();
+        specialinvoke $r27.<java.lang.StringBuilder: void <init>()>();
 
-        $r25 = virtualinvoke $r24.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to complete the computation in ");
+        $r28 = virtualinvoke $r27.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("Unable to complete the computation in ");
 
-        $r22 = virtualinvoke $r25.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i1);
+        $r32 = virtualinvoke $r28.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i1);
 
-        $r23 = virtualinvoke $r22.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" hours!");
+        $r31 = virtualinvoke $r32.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" hours!");
 
-        $r28 = virtualinvoke $r23.<java.lang.StringBuilder: java.lang.String toString()>();
+        $r30 = virtualinvoke $r31.<java.lang.StringBuilder: java.lang.String toString()>();
 
-        specialinvoke $r20.<java.lang.RuntimeException: void <init>(java.lang.String)>($r28);
+        specialinvoke $r29.<java.lang.RuntimeException: void <init>(java.lang.String)>($r30);
 
-        throw $r20;
+        throw $r29;
 
      label12:
-        $r29 := @caughtexception;
+        $r23 := @caughtexception;
 
-        $r26 = new java.lang.RuntimeException;
+        $r20 = new java.lang.RuntimeException;
 
-        specialinvoke $r26.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r29);
+        specialinvoke $r20.<java.lang.RuntimeException: void <init>(java.lang.Throwable)>($r23);
 
-        throw $r26;
+        throw $r20;
 
      label13:
         staticinvoke <com.google.common.io.Closeables: void close(java.io.Closeable,boolean)>(r1, 0);
 
-        throw $r18;
+        throw $r26;
 
      label14:
         $i5 = staticinvoke <org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output: int access$000(org.apache.mahout.cf.taste.impl.similarity.precompute.MultithreadedBatchItemSimilarities$Output)>($r9);

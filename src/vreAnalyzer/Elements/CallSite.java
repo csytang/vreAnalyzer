@@ -16,6 +16,7 @@ public class CallSite implements Comparable<CallSite>{
 	private List<SootMethod> mAppCallees;
 	private Context callingContext;
 	private CFGNode srccfgNode;
+	private SootMethod caller;
 	// Mapping to MethodNode 
 	
 	
@@ -33,7 +34,7 @@ public class CallSite implements Comparable<CallSite>{
 		this.mAppCallees = sortedAppTgts;
 		this.mLibCallees = sortedLibTgts;
 		this.srccfgNode = cfgNode;
-
+		this.caller = mNode;
 		
 	}
 	
@@ -74,6 +75,7 @@ public class CallSite implements Comparable<CallSite>{
 		return "CS( " + loc + " , APP" + mAppCallees + " LIB" + mLibCallees + " )";
 	}
 	public CFGNode getCallCFGNode(){return srccfgNode;}
+	public SootMethod getCallerMethod(){return caller;}
 	/////////////////////////////////////////////////////
 
 

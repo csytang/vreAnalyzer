@@ -251,10 +251,10 @@ public class org.apache.mahout.classifier.sgd.CsvRecordFactory extends java.lang
         java.lang.Object[] $r26, $r30, $r36;
         java.lang.Class[] $r31;
         java.lang.IllegalStateException $r46, $r48, $r53, $r55;
-        java.lang.NoSuchMethodException $r47;
-        java.lang.IllegalAccessException $r49;
-        java.lang.reflect.InvocationTargetException $r50;
-        java.lang.InstantiationException $r54;
+        java.lang.reflect.InvocationTargetException $r47;
+        java.lang.InstantiationException $r49;
+        java.lang.IllegalAccessException $r50;
+        java.lang.NoSuchMethodException $r54;
         java.util.Iterator r56, r58;
         java.lang.Class r61;
         java.lang.reflect.Constructor r62;
@@ -474,15 +474,6 @@ public class org.apache.mahout.classifier.sgd.CsvRecordFactory extends java.lang
         goto label05;
 
      label13:
-        $r54 := @caughtexception;
-
-        $r53 = new java.lang.IllegalStateException;
-
-        specialinvoke $r53.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("Unable to construct type converter... shouldn\'t be possible", $r54);
-
-        throw $r53;
-
-     label14:
         $r49 := @caughtexception;
 
         $r46 = new java.lang.IllegalStateException;
@@ -491,7 +482,7 @@ public class org.apache.mahout.classifier.sgd.CsvRecordFactory extends java.lang
 
         throw $r46;
 
-     label15:
+     label14:
         $r50 := @caughtexception;
 
         $r48 = new java.lang.IllegalStateException;
@@ -500,7 +491,7 @@ public class org.apache.mahout.classifier.sgd.CsvRecordFactory extends java.lang
 
         throw $r48;
 
-     label16:
+     label15:
         $r47 := @caughtexception;
 
         $r55 = new java.lang.IllegalStateException;
@@ -508,6 +499,15 @@ public class org.apache.mahout.classifier.sgd.CsvRecordFactory extends java.lang
         specialinvoke $r55.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("Unable to construct type converter... shouldn\'t be possible", $r47);
 
         throw $r55;
+
+     label16:
+        $r54 := @caughtexception;
+
+        $r53 = new java.lang.IllegalStateException;
+
+        specialinvoke $r53.<java.lang.IllegalStateException: void <init>(java.lang.String,java.lang.Throwable)>("Unable to construct type converter... shouldn\'t be possible", $r54);
+
+        throw $r53;
 
      label17:
         return;

@@ -126,10 +126,10 @@ public abstract class org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCCo
         javax.naming.InitialContext $r4, r17;
         java.lang.StringBuilder $r5, $r6, $r7;
         java.lang.Object $r9;
-        javax.naming.NamingException $r10, $r12, $r13;
-        org.slf4j.Logger $r11, $r14;
-        java.lang.Throwable $r15;
-        org.apache.mahout.cf.taste.common.TasteException $r16;
+        javax.naming.NamingException $r10, $r13, $r14;
+        org.slf4j.Logger $r11, $r16;
+        java.lang.Throwable $r12;
+        org.apache.mahout.cf.taste.common.TasteException $r15;
         javax.sql.DataSource r18;
 
         r0 := @parameter0: java.lang.String;
@@ -179,14 +179,14 @@ public abstract class org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCCo
      label07:
         $r13 := @caughtexception;
 
-        $r16 = new org.apache.mahout.cf.taste.common.TasteException;
+        $r15 = new org.apache.mahout.cf.taste.common.TasteException;
 
-        specialinvoke $r16.<org.apache.mahout.cf.taste.common.TasteException: void <init>(java.lang.Throwable)>($r13);
+        specialinvoke $r15.<org.apache.mahout.cf.taste.common.TasteException: void <init>(java.lang.Throwable)>($r13);
 
-        throw $r16;
+        throw $r15;
 
      label08:
-        $r15 := @caughtexception;
+        $r12 := @caughtexception;
 
      label09:
         if r17 == null goto label13;
@@ -198,14 +198,14 @@ public abstract class org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCCo
         goto label13;
 
      label12:
-        $r12 := @caughtexception;
+        $r14 := @caughtexception;
 
-        $r14 = <org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCComponent: org.slf4j.Logger log>;
+        $r16 = <org.apache.mahout.cf.taste.impl.common.jdbc.AbstractJDBCComponent: org.slf4j.Logger log>;
 
-        interfaceinvoke $r14.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Error while closing Context; continuing...", $r12);
+        interfaceinvoke $r16.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Error while closing Context; continuing...", $r14);
 
      label13:
-        throw $r15;
+        throw $r12;
 
         catch javax.naming.NamingException from label03 to label04 with label05;
         catch javax.naming.NamingException from label01 to label02 with label07;

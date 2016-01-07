@@ -537,12 +537,14 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 
 		if(!entryMethod.getActiveBody().getParameterLocals().isEmpty()){
 			// if main method 
+			/*
 			if(entryMethod == Scene.v().getMainMethod()){
 				Local argsLocal = entryMethod.getActiveBody().getParameterLocal(0);
 				NewArrayExpr argsExpr = new JNewArrayExpr(Scene.v().getRefType("java.lang.String"), IntConstant.v(0));
 				entryValue.assignNew(argsLocal, argsExpr);
 				entryValue.setFieldConstant(argsLocal, PointsToGraph.ARRAY_FIELD, PointsToGraph.STRING_CONST);
 			}else{
+			*/
 				for(int i = 0;i < entryMethod.getActiveBody().getParameterLocals().size();i++){
 					Local argsLocal = entryMethod.getActiveBody().getParameterLocal(i);
 					Type parameterType = entryMethod.getActiveBody().getParameterLocal(i).getType();
@@ -557,7 +559,7 @@ public class PointsToAnalysis extends InterProceduralAnalysis<SootMethod,CFGNode
 						}
 					}
 				}
-			}
+			//}
 		}
 		
 		return entryValue;

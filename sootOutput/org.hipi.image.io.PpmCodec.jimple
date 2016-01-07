@@ -1,0 +1,441 @@
+public class org.hipi.image.io.PpmCodec extends org.hipi.image.io.ImageCodec
+{
+    private static final org.hipi.image.io.PpmCodec staticObject;
+
+    public void <init>()
+    {
+        org.hipi.image.io.PpmCodec r0;
+
+        r0 := @this: org.hipi.image.io.PpmCodec;
+
+        specialinvoke r0.<org.hipi.image.io.ImageCodec: void <init>()>();
+
+        return;
+    }
+
+    public static org.hipi.image.io.PpmCodec getInstance()
+    {
+        org.hipi.image.io.PpmCodec $r0;
+
+        $r0 = <org.hipi.image.io.PpmCodec: org.hipi.image.io.PpmCodec staticObject>;
+
+        return $r0;
+    }
+
+    private org.hipi.image.io.PpmCodec$PpmHeader internalDecodeHeader(java.io.InputStream) throws java.io.IOException
+    {
+        org.hipi.image.io.PpmCodec r0;
+        java.io.InputStream r1;
+        org.hipi.image.io.PpmCodec$PpmHeader $r3;
+        byte[] $r4, $r5, $r6, $r7, $r11, $r13, $r14, $r15, $r16, $r17, $r18, $r19, r20, $r21, $r22;
+        byte $b1, $b2, $b3, $b4, $b5, $b6, $b7, $b13, $b18, $b20, $b21, $b29, $b31;
+        java.io.IOException $r8;
+        java.lang.Object[] $r9;
+        java.lang.String $r10, $r12;
+        int $i8, $i9, $i10, $i11, $i12, $i14, $i15, $i16, $i17, $i19, $i22, $i23, $i24, $i25, $i26, i27, i28, i30, i32;
+
+        r0 := @this: org.hipi.image.io.PpmCodec;
+
+        r1 := @parameter0: java.io.InputStream;
+
+        $r3 = new org.hipi.image.io.PpmCodec$PpmHeader;
+
+        specialinvoke $r3.<org.hipi.image.io.PpmCodec$PpmHeader: void <init>(org.hipi.image.io.PpmCodec,org.hipi.image.io.PpmCodec$1)>(r0, null);
+
+        $r3.<org.hipi.image.io.PpmCodec$PpmHeader: int numBands> = 3;
+
+        $r4 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: byte[] headerBytes>;
+
+        virtualinvoke r1.<java.io.InputStream: int read(byte[])>($r4);
+
+        $r5 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: byte[] headerBytes>;
+
+        $b1 = $r5[0];
+
+        if $b1 != 80 goto label1;
+
+        $r11 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: byte[] headerBytes>;
+
+        $b4 = $r11[1];
+
+        if $b4 == 54 goto label2;
+
+     label1:
+        r20 = newarray (byte)[2];
+
+        $r6 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: byte[] headerBytes>;
+
+        $b2 = $r6[0];
+
+        r20[0] = $b2;
+
+        $r7 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: byte[] headerBytes>;
+
+        $b3 = $r7[1];
+
+        r20[1] = $b3;
+
+        $r8 = new java.io.IOException;
+
+        $r9 = newarray (java.lang.Object)[1];
+
+        $r10 = new java.lang.String;
+
+        specialinvoke $r10.<java.lang.String: void <init>(byte[],java.lang.String)>(r20, "UTF-8");
+
+        $r9[0] = $r10;
+
+        $r12 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("PPM file has invalid or unsupported format [%s]. Only P6 is currently supported.", $r9);
+
+        specialinvoke $r8.<java.io.IOException: void <init>(java.lang.String)>($r12);
+
+        throw $r8;
+
+     label2:
+        i27 = 3;
+
+        $r3.<org.hipi.image.io.PpmCodec$PpmHeader: int width> = 0;
+
+     label3:
+        $r13 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: byte[] headerBytes>;
+
+        $b5 = $r13[i27];
+
+        if $b5 < 48 goto label4;
+
+        $r18 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: byte[] headerBytes>;
+
+        $b20 = $r18[i27];
+
+        if $b20 > 57 goto label4;
+
+        $i23 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: int width>;
+
+        $i25 = $i23 * 10;
+
+        $r19 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: byte[] headerBytes>;
+
+        $i22 = i27;
+
+        i27 = i27 + 1;
+
+        $b21 = $r19[$i22];
+
+        $i24 = $b21 - 48;
+
+        $i26 = $i25 + $i24;
+
+        $r3.<org.hipi.image.io.PpmCodec$PpmHeader: int width> = $i26;
+
+        goto label3;
+
+     label4:
+        i28 = i27 + 1;
+
+        $r3.<org.hipi.image.io.PpmCodec$PpmHeader: int height> = 0;
+
+     label5:
+        $r21 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: byte[] headerBytes>;
+
+        $b29 = $r21[i28];
+
+        if $b29 < 48 goto label6;
+
+        $r16 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: byte[] headerBytes>;
+
+        $b13 = $r16[i28];
+
+        if $b13 > 57 goto label6;
+
+        $i14 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: int height>;
+
+        $i16 = $i14 * 10;
+
+        $r17 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: byte[] headerBytes>;
+
+        $i15 = i28;
+
+        i28 = i28 + 1;
+
+        $b18 = $r17[$i15];
+
+        $i17 = $b18 - 48;
+
+        $i19 = $i16 + $i17;
+
+        $r3.<org.hipi.image.io.PpmCodec$PpmHeader: int height> = $i19;
+
+        goto label5;
+
+     label6:
+        i30 = i28 + 1;
+
+        $r3.<org.hipi.image.io.PpmCodec$PpmHeader: int maxValue> = 0;
+
+     label7:
+        $r22 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: byte[] headerBytes>;
+
+        $b31 = $r22[i30];
+
+        if $b31 < 48 goto label8;
+
+        $r14 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: byte[] headerBytes>;
+
+        $b6 = $r14[i30];
+
+        if $b6 > 57 goto label8;
+
+        $i8 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: int maxValue>;
+
+        $i12 = $i8 * 10;
+
+        $r15 = $r3.<org.hipi.image.io.PpmCodec$PpmHeader: byte[] headerBytes>;
+
+        $i9 = i30;
+
+        i30 = i30 + 1;
+
+        $b7 = $r15[$i9];
+
+        $i11 = $b7 - 48;
+
+        $i10 = $i12 + $i11;
+
+        $r3.<org.hipi.image.io.PpmCodec$PpmHeader: int maxValue> = $i10;
+
+        goto label7;
+
+     label8:
+        i32 = i30 + 1;
+
+        $r3.<org.hipi.image.io.PpmCodec$PpmHeader: int streamOffset> = i32;
+
+        return $r3;
+    }
+
+    public org.hipi.image.HipiImageHeader decodeHeader(java.io.InputStream, boolean) throws java.io.IOException, java.lang.IllegalArgumentException
+    {
+        org.hipi.image.io.PpmCodec r0;
+        java.io.InputStream r1;
+        boolean z0;
+        org.hipi.image.io.PpmCodec$PpmHeader r2;
+        int $i0, $i1, $i2, $i3;
+        org.hipi.image.HipiImageHeader $r3;
+        org.hipi.image.HipiImageHeader$HipiColorSpace $r4;
+        org.hipi.image.HipiImageHeader$HipiImageFormat $r5;
+        java.lang.IllegalArgumentException $r6;
+        java.io.IOException $r7;
+        java.lang.Object[] $r8;
+        java.lang.Integer $r9;
+        java.lang.String $r10;
+
+        r0 := @this: org.hipi.image.io.PpmCodec;
+
+        r1 := @parameter0: java.io.InputStream;
+
+        z0 := @parameter1: boolean;
+
+        r2 = specialinvoke r0.<org.hipi.image.io.PpmCodec: org.hipi.image.io.PpmCodec$PpmHeader internalDecodeHeader(java.io.InputStream)>(r1);
+
+        $i0 = r2.<org.hipi.image.io.PpmCodec$PpmHeader: int maxValue>;
+
+        if $i0 == 255 goto label1;
+
+        $r7 = new java.io.IOException;
+
+        $r8 = newarray (java.lang.Object)[1];
+
+        $i3 = r2.<org.hipi.image.io.PpmCodec$PpmHeader: int maxValue>;
+
+        $r9 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>($i3);
+
+        $r8[0] = $r9;
+
+        $r10 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Only 8-bit PPMs are currently supported. Max value reported in PPM header is [%d].", $r8);
+
+        specialinvoke $r7.<java.io.IOException: void <init>(java.lang.String)>($r10);
+
+        throw $r7;
+
+     label1:
+        if z0 == 0 goto label2;
+
+        $r6 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r6.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Support for extracting EXIF data from PPM files not implemented.");
+
+        throw $r6;
+
+     label2:
+        $r3 = new org.hipi.image.HipiImageHeader;
+
+        $r5 = <org.hipi.image.HipiImageHeader$HipiImageFormat: org.hipi.image.HipiImageHeader$HipiImageFormat PPM>;
+
+        $r4 = <org.hipi.image.HipiImageHeader$HipiColorSpace: org.hipi.image.HipiImageHeader$HipiColorSpace RGB>;
+
+        $i2 = r2.<org.hipi.image.io.PpmCodec$PpmHeader: int width>;
+
+        $i1 = r2.<org.hipi.image.io.PpmCodec$PpmHeader: int height>;
+
+        specialinvoke $r3.<org.hipi.image.HipiImageHeader: void <init>(org.hipi.image.HipiImageHeader$HipiImageFormat,org.hipi.image.HipiImageHeader$HipiColorSpace,int,int,int,byte[],java.util.Map)>($r5, $r4, $i2, $i1, 3, null, null);
+
+        return $r3;
+    }
+
+    public void encodeImage(org.hipi.image.HipiImage, java.io.OutputStream) throws java.lang.IllegalArgumentException, java.io.IOException
+    {
+        org.hipi.image.io.PpmCodec r0;
+        org.hipi.image.HipiImage r1;
+        java.io.OutputStream r2;
+        int i0, i1, $i2, $i3, $i4, $i5, $i6, $i7, $i9, $i10, i11;
+        org.hipi.image.PixelArray r4;
+        byte[] r5;
+        java.lang.Class $r6, $r7;
+        boolean $z0;
+        java.lang.IllegalArgumentException $r8, $r19, $r20, $r21;
+        org.hipi.image.HipiImageHeader$HipiColorSpace $r9, $r10;
+        java.lang.StringBuilder $r11, $r13, $r14, $r15, $r16;
+        java.io.PrintWriter $r12;
+        org.hipi.image.RasterImage $r17;
+        java.lang.String $r18;
+        byte $b8;
+
+        r0 := @this: org.hipi.image.io.PpmCodec;
+
+        r1 := @parameter0: org.hipi.image.HipiImage;
+
+        r2 := @parameter1: java.io.OutputStream;
+
+        $r6 = class "org/hipi/image/RasterImage";
+
+        $r7 = virtualinvoke r1.<java.lang.Object: java.lang.Class getClass()>();
+
+        $z0 = virtualinvoke $r6.<java.lang.Class: boolean isAssignableFrom(java.lang.Class)>($r7);
+
+        if $z0 != 0 goto label1;
+
+        $r20 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r20.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("PPM encoder supports only RasterImage input types.");
+
+        throw $r20;
+
+     label1:
+        $i2 = virtualinvoke r1.<org.hipi.image.HipiImage: int getWidth()>();
+
+        if $i2 <= 0 goto label2;
+
+        $i3 = virtualinvoke r1.<org.hipi.image.HipiImage: int getHeight()>();
+
+        if $i3 > 0 goto label3;
+
+     label2:
+        $r8 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r8.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Invalid image resolution.");
+
+        throw $r8;
+
+     label3:
+        $r9 = virtualinvoke r1.<org.hipi.image.HipiImage: org.hipi.image.HipiImageHeader$HipiColorSpace getColorSpace()>();
+
+        $r10 = <org.hipi.image.HipiImageHeader$HipiColorSpace: org.hipi.image.HipiImageHeader$HipiColorSpace RGB>;
+
+        if $r9 == $r10 goto label4;
+
+        $r21 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r21.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("PPM encoder supports only linear RGB color space.");
+
+        throw $r21;
+
+     label4:
+        $i4 = virtualinvoke r1.<org.hipi.image.HipiImage: int getNumBands()>();
+
+        if $i4 == 3 goto label5;
+
+        $r19 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r19.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("PPM encoder supports only three band images.");
+
+        throw $r19;
+
+     label5:
+        i0 = virtualinvoke r1.<org.hipi.image.HipiImage: int getWidth()>();
+
+        i1 = virtualinvoke r1.<org.hipi.image.HipiImage: int getHeight()>();
+
+        $r12 = new java.io.PrintWriter;
+
+        specialinvoke $r12.<java.io.PrintWriter: void <init>(java.io.OutputStream)>(r2);
+
+        virtualinvoke $r12.<java.io.PrintWriter: void print(java.lang.String)>("P6\r");
+
+        $r11 = new java.lang.StringBuilder;
+
+        specialinvoke $r11.<java.lang.StringBuilder: void <init>()>();
+
+        $r14 = virtualinvoke $r11.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i0);
+
+        $r13 = virtualinvoke $r14.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ");
+
+        $r16 = virtualinvoke $r13.<java.lang.StringBuilder: java.lang.StringBuilder append(int)>(i1);
+
+        $r15 = virtualinvoke $r16.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\r");
+
+        $r18 = virtualinvoke $r15.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        virtualinvoke $r12.<java.io.PrintWriter: void print(java.lang.String)>($r18);
+
+        virtualinvoke $r12.<java.io.PrintWriter: void print(java.lang.String)>("255\r");
+
+        virtualinvoke $r12.<java.io.PrintWriter: void flush()>();
+
+        $r17 = (org.hipi.image.RasterImage) r1;
+
+        r4 = virtualinvoke $r17.<org.hipi.image.RasterImage: org.hipi.image.PixelArray getPixelArray()>();
+
+        $i5 = i0 * i1;
+
+        $i7 = $i5 * 3;
+
+        r5 = newarray (byte)[$i7];
+
+        i11 = 0;
+
+     label6:
+        $i6 = i0 * i1;
+
+        $i9 = $i6 * 3;
+
+        if i11 >= $i9 goto label7;
+
+        $i10 = virtualinvoke r4.<org.hipi.image.PixelArray: int getElemNonLinSRGB(int)>(i11);
+
+        $b8 = (byte) $i10;
+
+        r5[i11] = $b8;
+
+        i11 = i11 + 1;
+
+        goto label6;
+
+     label7:
+        virtualinvoke r2.<java.io.OutputStream: void write(byte[])>(r5);
+
+        return;
+    }
+
+    static void <clinit>()
+    {
+        org.hipi.image.io.PpmCodec $r0;
+
+        $r0 = new org.hipi.image.io.PpmCodec;
+
+        specialinvoke $r0.<org.hipi.image.io.PpmCodec: void <init>()>();
+
+        <org.hipi.image.io.PpmCodec: org.hipi.image.io.PpmCodec staticObject> = $r0;
+
+        return;
+    }
+}

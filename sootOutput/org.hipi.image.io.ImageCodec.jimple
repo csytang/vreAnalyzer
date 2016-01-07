@@ -1,0 +1,372 @@
+public abstract class org.hipi.image.io.ImageCodec extends java.lang.Object implements org.hipi.image.io.ImageDecoder, org.hipi.image.io.ImageEncoder
+{
+
+    public void <init>()
+    {
+        org.hipi.image.io.ImageCodec r0;
+
+        r0 := @this: org.hipi.image.io.ImageCodec;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public org.hipi.image.HipiImageHeader decodeHeader(java.io.InputStream) throws java.io.IOException
+    {
+        org.hipi.image.io.ImageCodec r0;
+        java.io.InputStream r1;
+        org.hipi.image.HipiImageHeader $r2;
+
+        r0 := @this: org.hipi.image.io.ImageCodec;
+
+        r1 := @parameter0: java.io.InputStream;
+
+        $r2 = virtualinvoke r0.<org.hipi.image.io.ImageCodec: org.hipi.image.HipiImageHeader decodeHeader(java.io.InputStream,boolean)>(r1, 0);
+
+        return $r2;
+    }
+
+    public org.hipi.image.HipiImage decodeHeaderAndImage(java.io.InputStream, org.hipi.image.HipiImageFactory, boolean) throws java.io.IOException, java.lang.IllegalArgumentException
+    {
+        org.hipi.image.io.ImageCodec r0;
+        java.io.InputStream r1;
+        org.hipi.image.HipiImageFactory r2;
+        boolean z0;
+        org.hipi.image.HipiImageHeader r4;
+        java.io.BufferedInputStream $r5;
+        org.hipi.image.HipiImage $r6;
+
+        r0 := @this: org.hipi.image.io.ImageCodec;
+
+        r1 := @parameter0: java.io.InputStream;
+
+        r2 := @parameter1: org.hipi.image.HipiImageFactory;
+
+        z0 := @parameter2: boolean;
+
+        $r5 = new java.io.BufferedInputStream;
+
+        specialinvoke $r5.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>(r1);
+
+        virtualinvoke $r5.<java.io.BufferedInputStream: void mark(int)>(2147483647);
+
+        r4 = virtualinvoke r0.<org.hipi.image.io.ImageCodec: org.hipi.image.HipiImageHeader decodeHeader(java.io.InputStream,boolean)>($r5, z0);
+
+        virtualinvoke $r5.<java.io.BufferedInputStream: void reset()>();
+
+        $r6 = virtualinvoke r0.<org.hipi.image.io.ImageCodec: org.hipi.image.HipiImage decodeImage(java.io.InputStream,org.hipi.image.HipiImageHeader,org.hipi.image.HipiImageFactory,boolean)>($r5, r4, r2, 0);
+
+        return $r6;
+    }
+
+    public org.hipi.image.HipiImage decodeImage(java.io.InputStream, org.hipi.image.HipiImageHeader, org.hipi.image.HipiImageFactory, boolean) throws java.lang.IllegalArgumentException, java.io.IOException
+    {
+        org.hipi.image.io.ImageCodec r0;
+        java.io.InputStream r1;
+        org.hipi.image.HipiImageHeader r2;
+        org.hipi.image.HipiImageFactory r3;
+        boolean z0;
+        java.awt.image.BufferedImage r5;
+        int i0, i1, i2, i3, i4, i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16, $i17, $i18, $i19, $i20, $i21, i22, i23;
+        org.hipi.image.HipiImage$HipiImageType $r6, $r8, $r19, $r20;
+        java.io.DataInputStream $r7;
+        java.io.BufferedInputStream $r9;
+        java.lang.Object[] $r10, $r21;
+        java.io.PrintStream $r11, $r16, $r22, $r25;
+        java.lang.Integer $r12, $r13;
+        java.lang.IllegalArgumentException $r14, $r23;
+        java.lang.String $r15, $r27, $r28;
+        java.util.HashMap $r17;
+        org.hipi.image.HipiImage $r18;
+        java.lang.Exception $r24;
+        java.io.IOException $r26;
+        org.hipi.image.RasterImage r29;
+        org.hipi.image.PixelArray r31;
+
+        r0 := @this: org.hipi.image.io.ImageCodec;
+
+        r1 := @parameter0: java.io.InputStream;
+
+        r2 := @parameter1: org.hipi.image.HipiImageHeader;
+
+        r3 := @parameter2: org.hipi.image.HipiImageFactory;
+
+        z0 := @parameter3: boolean;
+
+        $r6 = virtualinvoke r3.<org.hipi.image.HipiImageFactory: org.hipi.image.HipiImage$HipiImageType getType()>();
+
+        $r8 = <org.hipi.image.HipiImage$HipiImageType: org.hipi.image.HipiImage$HipiImageType FLOAT>;
+
+        if $r6 == $r8 goto label01;
+
+        $r19 = virtualinvoke r3.<org.hipi.image.HipiImageFactory: org.hipi.image.HipiImage$HipiImageType getType()>();
+
+        $r20 = <org.hipi.image.HipiImage$HipiImageType: org.hipi.image.HipiImage$HipiImageType BYTE>;
+
+        if $r19 == $r20 goto label01;
+
+        $r23 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r23.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Image decoder supports only FloatImage and ByteImage output types.");
+
+        throw $r23;
+
+     label01:
+        $r7 = new java.io.DataInputStream;
+
+        $r9 = new java.io.BufferedInputStream;
+
+        specialinvoke $r9.<java.io.BufferedInputStream: void <init>(java.io.InputStream)>(r1);
+
+        specialinvoke $r7.<java.io.DataInputStream: void <init>(java.io.InputStream)>($r9);
+
+        virtualinvoke $r7.<java.io.DataInputStream: void mark(int)>(2147483647);
+
+        r5 = staticinvoke <javax.imageio.ImageIO: java.awt.image.BufferedImage read(java.io.InputStream)>($r7);
+
+        i0 = virtualinvoke r5.<java.awt.image.BufferedImage: int getWidth()>();
+
+        i1 = virtualinvoke r5.<java.awt.image.BufferedImage: int getHeight()>();
+
+        $i6 = virtualinvoke r2.<org.hipi.image.HipiImageHeader: int getWidth()>();
+
+        if i0 != $i6 goto label02;
+
+        $i7 = virtualinvoke r2.<org.hipi.image.HipiImageHeader: int getHeight()>();
+
+        if i1 == $i7 goto label03;
+
+     label02:
+        $r11 = <java.lang.System: java.io.PrintStream out>;
+
+        $r10 = newarray (java.lang.Object)[2];
+
+        $r12 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i0);
+
+        $r10[0] = $r12;
+
+        $r13 = staticinvoke <java.lang.Integer: java.lang.Integer valueOf(int)>(i1);
+
+        $r10[1] = $r13;
+
+        $r15 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Dimensions read from JPEG: %d x %d", $r10);
+
+        virtualinvoke $r11.<java.io.PrintStream: void println(java.lang.String)>($r15);
+
+        $r16 = <java.lang.System: java.io.PrintStream out>;
+
+        virtualinvoke $r16.<java.io.PrintStream: void println(java.lang.Object)>(r2);
+
+        $r14 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r14.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Image dimensions in header do not match those in JPEG.");
+
+        throw $r14;
+
+     label03:
+        r29 = null;
+
+     label04:
+        $r18 = virtualinvoke r3.<org.hipi.image.HipiImageFactory: org.hipi.image.HipiImage createImage(org.hipi.image.HipiImageHeader)>(r2);
+
+        r29 = (org.hipi.image.RasterImage) $r18;
+
+     label05:
+        goto label07;
+
+     label06:
+        $r24 := @caughtexception;
+
+        $r22 = <java.lang.System: java.io.PrintStream err>;
+
+        $r21 = newarray (java.lang.Object)[1];
+
+        $r28 = virtualinvoke $r24.<java.lang.Exception: java.lang.String getMessage()>();
+
+        $r21[0] = $r28;
+
+        $r27 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("Fatal error while creating image object [%s]", $r21);
+
+        virtualinvoke $r22.<java.io.PrintStream: void println(java.lang.String)>($r27);
+
+        virtualinvoke $r24.<java.lang.Exception: void printStackTrace()>();
+
+        staticinvoke <java.lang.System: void exit(int)>(1);
+
+     label07:
+        r31 = virtualinvoke r29.<org.hipi.image.RasterImage: org.hipi.image.PixelArray getPixelArray()>();
+
+        i22 = 0;
+
+     label08:
+        if i22 >= i1 goto label11;
+
+        i23 = 0;
+
+     label09:
+        if i23 >= i0 goto label10;
+
+        i2 = virtualinvoke r5.<java.awt.image.BufferedImage: int getRGB(int,int)>(i23, i22);
+
+        $i8 = i2 >> 16;
+
+        i3 = $i8 & 255;
+
+        $i11 = i2 >> 8;
+
+        i4 = $i11 & 255;
+
+        i5 = i2 & 255;
+
+        $i12 = i22 * i0;
+
+        $i9 = $i12 + i23;
+
+        $i10 = $i9 * 3;
+
+        $i16 = $i10 + 0;
+
+        virtualinvoke r31.<org.hipi.image.PixelArray: void setElemNonLinSRGB(int,int)>($i16, i3);
+
+        $i15 = i22 * i0;
+
+        $i14 = $i15 + i23;
+
+        $i13 = $i14 * 3;
+
+        $i20 = $i13 + 1;
+
+        virtualinvoke r31.<org.hipi.image.PixelArray: void setElemNonLinSRGB(int,int)>($i20, i4);
+
+        $i19 = i22 * i0;
+
+        $i18 = $i19 + i23;
+
+        $i17 = $i18 * 3;
+
+        $i21 = $i17 + 2;
+
+        virtualinvoke r31.<org.hipi.image.PixelArray: void setElemNonLinSRGB(int,int)>($i21, i5);
+
+        i23 = i23 + 1;
+
+        goto label09;
+
+     label10:
+        i22 = i22 + 1;
+
+        goto label08;
+
+     label11:
+        if z0 == 0 goto label15;
+
+        virtualinvoke $r7.<java.io.DataInputStream: void reset()>();
+
+     label12:
+        $r17 = staticinvoke <org.hipi.image.io.ExifDataReader: java.util.HashMap extractAndFlatten(java.io.InputStream)>($r7);
+
+        virtualinvoke r2.<org.hipi.image.HipiImageHeader: void setExifData(java.util.HashMap)>($r17);
+
+     label13:
+        goto label15;
+
+     label14:
+        $r26 := @caughtexception;
+
+        $r25 = <java.lang.System: java.io.PrintStream err>;
+
+        virtualinvoke $r25.<java.io.PrintStream: void println(java.lang.String)>("Failed to extract EXIF data for image record.");
+
+     label15:
+        return r29;
+
+        catch java.lang.Exception from label04 to label05 with label06;
+        catch java.io.IOException from label12 to label13 with label14;
+    }
+
+    protected void encodeRasterImage(org.hipi.image.RasterImage, javax.imageio.ImageWriter, javax.imageio.ImageWriteParam) throws java.io.IOException
+    {
+        org.hipi.image.io.ImageCodec r0;
+        org.hipi.image.RasterImage r1;
+        javax.imageio.ImageWriter r2;
+        javax.imageio.ImageWriteParam r3;
+        int i0, i1, i2, i3, i4, $i5, $i6, $i7, $i8, $i9, $i10, $i11, $i12, $i13, $i14, $i15, $i16, i17;
+        org.hipi.image.PixelArray r5;
+        int[] r6;
+        java.awt.image.BufferedImage $r7;
+        javax.imageio.IIOImage $r8;
+
+        r0 := @this: org.hipi.image.io.ImageCodec;
+
+        r1 := @parameter0: org.hipi.image.RasterImage;
+
+        r2 := @parameter1: javax.imageio.ImageWriter;
+
+        r3 := @parameter2: javax.imageio.ImageWriteParam;
+
+        i0 = virtualinvoke r1.<org.hipi.image.RasterImage: int getWidth()>();
+
+        i1 = virtualinvoke r1.<org.hipi.image.RasterImage: int getHeight()>();
+
+        $r7 = new java.awt.image.BufferedImage;
+
+        specialinvoke $r7.<java.awt.image.BufferedImage: void <init>(int,int,int)>(i0, i1, 1);
+
+        r5 = virtualinvoke r1.<org.hipi.image.RasterImage: org.hipi.image.PixelArray getPixelArray()>();
+
+        $i5 = i0 * i1;
+
+        r6 = newarray (int)[$i5];
+
+        i17 = 0;
+
+     label1:
+        $i6 = i0 * i1;
+
+        if i17 >= $i6 goto label2;
+
+        $i8 = i17 * 3;
+
+        $i7 = $i8 + 0;
+
+        i2 = virtualinvoke r5.<org.hipi.image.PixelArray: int getElemNonLinSRGB(int)>($i7);
+
+        $i9 = i17 * 3;
+
+        $i10 = $i9 + 1;
+
+        i3 = virtualinvoke r5.<org.hipi.image.PixelArray: int getElemNonLinSRGB(int)>($i10);
+
+        $i12 = i17 * 3;
+
+        $i11 = $i12 + 2;
+
+        i4 = virtualinvoke r5.<org.hipi.image.PixelArray: int getElemNonLinSRGB(int)>($i11);
+
+        $i15 = i2 << 16;
+
+        $i13 = i3 << 8;
+
+        $i14 = $i15 | $i13;
+
+        $i16 = $i14 | i4;
+
+        r6[i17] = $i16;
+
+        i17 = i17 + 1;
+
+        goto label1;
+
+     label2:
+        virtualinvoke $r7.<java.awt.image.BufferedImage: void setRGB(int,int,int,int,int[],int,int)>(0, 0, i0, i1, r6, 0, i0);
+
+        $r8 = new javax.imageio.IIOImage;
+
+        specialinvoke $r8.<javax.imageio.IIOImage: void <init>(java.awt.image.RenderedImage,java.util.List,javax.imageio.metadata.IIOMetadata)>($r7, null, null);
+
+        virtualinvoke r2.<javax.imageio.ImageWriter: void write(javax.imageio.metadata.IIOMetadata,javax.imageio.IIOImage,javax.imageio.ImageWriteParam)>(null, $r8, r3);
+
+        return;
+    }
+}

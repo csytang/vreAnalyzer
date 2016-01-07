@@ -17,6 +17,11 @@ public class ConditionCheck {
 	private Map<CallSite,CFGNode> calleeinitConditionalCFGNode = new HashMap<CallSite,CFGNode>();
 	private Set<Value> callerinitConditionalValues = new HashSet<Value>();
 	private CFGNode callerinitConditionalCFGNode = null;
+	// 所有的判别和语句
+	private Set<Value> allcallerConditionalValues = new HashSet<Value>();
+	private Map<CallSite,Set<Value>> calleeConditionalvaluesMap = new HashMap<CallSite,Set<Value>>();
+	
+	
 	private SootMethod method = null;
 	private Set<CallSite> callsiteSet = new HashSet<CallSite>();
 	private boolean isCaller = false;
@@ -78,6 +83,41 @@ public class ConditionCheck {
 			}
 		}
 	}
+	
+	public void addConditionValue(Value value,CallSite callsite){
+		if(callsite==null){
+			// 对于callsite 无 Caller
+			if(allcallerConditionalValues.isEmpty()){
+				Set<Value>values = new HashSet<Value>();
+				values.add(value);
+				allcallerConditionalValues.addAll(values);
+			}else{
+				allcallerConditionalValues.add(value);
+			}
+		}else{
+			if(!calleeConditionalvaluesMap.containsKey(callsite)){
+				Set<Value>values = new HashSet<Value>();
+				values.add(value);
+				calleeConditionalvaluesMap.put(callsite, values);
+			}else{
+				calleeConditionalvaluesMap.get(callsite).add(value);
+			}
+		}
+	}
+	
+	public void addConditionValue(Set<Value> values, CallSite callsite){
+		if(callsite==null){
+			allcallerConditionalValues.addAll(values);
+		}else{
+			if(!calleeConditionalvaluesMap.containsKey(callsite)){
+				calleeConditionalvaluesMap.put(callsite, values);
+			}else{
+				calleeConditionalvaluesMap.get(callsite).addAll(values);
+			}
+		}
+	}
+	
+	
 		
 	// 初始化 条件 stmt 和 callsite
 	public void setInitialConditionCFGNode(CFGNode cfgNode,CallSite callsite){
@@ -100,6 +140,14 @@ public class ConditionCheck {
 			return calleeinitConditionalValues.get(callsite);
 		}
 	}
+	public Set<Value> getallConditionalValues(CallSite callsite){
+		if(callsite==null){
+			return allcallerConditionalValues;
+		}else{
+			return calleeConditionalvaluesMap.get(callsite);
+		}
+	}
+	
 	public CFGNode getinitConditionalCFGNode(CallSite callsite){
 		if(callsite==null){
 			return callerinitConditionalCFGNode;

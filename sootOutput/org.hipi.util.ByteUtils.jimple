@@ -1,0 +1,606 @@
+public class org.hipi.util.ByteUtils extends java.lang.Object
+{
+
+    public void <init>()
+    {
+        org.hipi.util.ByteUtils r0;
+
+        r0 := @this: org.hipi.util.ByteUtils;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static byte[] inputStreamToByteArray(java.io.InputStream) throws java.io.IOException
+    {
+        java.io.InputStream r0;
+        byte[] r1, $r6, $r7;
+        java.io.ByteArrayOutputStream $r5;
+        int $i0;
+        java.io.IOException $r8, $r10, $r12;
+        java.lang.RuntimeException $r9;
+        java.lang.Throwable $r11;
+        boolean z0;
+
+        r0 := @parameter0: java.io.InputStream;
+
+        if r0 != null goto label01;
+
+        $r7 = newarray (byte)[0];
+
+        return $r7;
+
+     label01:
+        r1 = newarray (byte)[1024];
+
+        $r5 = new java.io.ByteArrayOutputStream;
+
+        specialinvoke $r5.<java.io.ByteArrayOutputStream: void <init>()>();
+
+        z0 = 0;
+
+     label02:
+        $i0 = virtualinvoke r0.<java.io.InputStream: int read(byte[])>(r1);
+
+        if $i0 <= -1 goto label03;
+
+        virtualinvoke $r5.<java.io.ByteArrayOutputStream: void write(byte[],int,int)>(r1, 0, $i0);
+
+        goto label02;
+
+     label03:
+        virtualinvoke r0.<java.io.InputStream: void close()>();
+
+     label04:
+        goto label13;
+
+     label05:
+        $r8 := @caughtexception;
+
+        throw $r8;
+
+     label06:
+        $r10 := @caughtexception;
+
+        z0 = 1;
+
+        throw $r10;
+
+     label07:
+        $r9 := @caughtexception;
+
+        z0 = 1;
+
+        throw $r9;
+
+     label08:
+        $r11 := @caughtexception;
+
+     label09:
+        virtualinvoke r0.<java.io.InputStream: void close()>();
+
+     label10:
+        goto label12;
+
+     label11:
+        $r12 := @caughtexception;
+
+        if z0 != 0 goto label12;
+
+        throw $r12;
+
+     label12:
+        throw $r11;
+
+     label13:
+        virtualinvoke $r5.<java.io.ByteArrayOutputStream: void flush()>();
+
+        $r6 = virtualinvoke $r5.<java.io.ByteArrayOutputStream: byte[] toByteArray()>();
+
+        return $r6;
+
+        catch java.io.IOException from label03 to label04 with label05;
+        catch java.io.IOException from label02 to label03 with label06;
+        catch java.lang.RuntimeException from label02 to label03 with label07;
+        catch java.lang.Throwable from label02 to label03 with label08;
+        catch java.io.IOException from label09 to label10 with label11;
+        catch java.lang.Throwable from label06 to label09 with label08;
+    }
+
+    public static final int byteArrayToInt(byte[])
+    {
+        byte[] r0;
+        int $i0;
+
+        r0 := @parameter0: byte[];
+
+        $i0 = staticinvoke <org.hipi.util.ByteUtils: int byteArrayToInt(byte[],int)>(r0, 0);
+
+        return $i0;
+    }
+
+    public static final int byteArrayToInt(byte[], int)
+    {
+        byte[] r0;
+        int i0, $i1, $i3, $i6, $i7, $i8, $i11, $i12, $i13, $i15, $i17;
+        byte $b2, $b4, $b9, $b14;
+        short $s5, $s10, $s16;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        $i1 = 0 + i0;
+
+        $b2 = r0[$i1];
+
+        $i7 = $b2 << 24;
+
+        $i3 = 1 + i0;
+
+        $b4 = r0[$i3];
+
+        $s5 = $b4 & 255;
+
+        $i6 = $s5 << 16;
+
+        $i12 = $i7 | $i6;
+
+        $i8 = 2 + i0;
+
+        $b9 = r0[$i8];
+
+        $s10 = $b9 & 255;
+
+        $i11 = $s10 << 8;
+
+        $i15 = $i12 | $i11;
+
+        $i13 = 3 + i0;
+
+        $b14 = r0[$i13];
+
+        $s16 = $b14 & 255;
+
+        $i17 = $i15 | $s16;
+
+        return $i17;
+    }
+
+    public static final byte[] intToByteArray(int)
+    {
+        int i0, $i1, $i3, $i5;
+        byte[] $r0;
+        byte $b2, $b4, $b6, $b7;
+
+        i0 := @parameter0: int;
+
+        $r0 = newarray (byte)[4];
+
+        $i1 = i0 >> 24;
+
+        $b2 = (byte) $i1;
+
+        $r0[0] = $b2;
+
+        $i3 = i0 >> 16;
+
+        $b4 = (byte) $i3;
+
+        $r0[1] = $b4;
+
+        $i5 = i0 >> 8;
+
+        $b6 = (byte) $i5;
+
+        $r0[2] = $b6;
+
+        $b7 = (byte) i0;
+
+        $r0[3] = $b7;
+
+        return $r0;
+    }
+
+    public static java.lang.String asHex(byte[])
+    {
+        byte[] r0, r1;
+        java.lang.StringBuilder $r3;
+        int $i0, $i1, $i2, i5;
+        java.lang.String $r4, $r5;
+        byte $b3;
+        short $s4;
+        java.security.NoSuchAlgorithmException $r7;
+        java.security.MessageDigest r8;
+
+        r0 := @parameter0: byte[];
+
+        if r0 != null goto label1;
+
+        return null;
+
+     label1:
+        r8 = staticinvoke <java.security.MessageDigest: java.security.MessageDigest getInstance(java.lang.String)>("SHA-1");
+
+        r1 = virtualinvoke r8.<java.security.MessageDigest: byte[] digest(byte[])>(r0);
+
+        $r3 = new java.lang.StringBuilder;
+
+        $i0 = lengthof r1;
+
+        $i1 = $i0 * 2;
+
+        specialinvoke $r3.<java.lang.StringBuilder: void <init>(int)>($i1);
+
+        i5 = 0;
+
+     label2:
+        $i2 = lengthof r1;
+
+        if i5 >= $i2 goto label3;
+
+        $b3 = r1[i5];
+
+        $s4 = 255 & $b3;
+
+        $r5 = staticinvoke <java.lang.Integer: java.lang.String toHexString(int)>($s4);
+
+        virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r5);
+
+        i5 = i5 + 1;
+
+        goto label2;
+
+     label3:
+        $r4 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label4:
+        return $r4;
+
+     label5:
+        $r7 := @caughtexception;
+
+        virtualinvoke $r7.<java.security.NoSuchAlgorithmException: void printStackTrace()>();
+
+        return null;
+
+        catch java.security.NoSuchAlgorithmException from label1 to label4 with label5;
+    }
+
+    public static java.lang.String makeString(byte[], int)
+    {
+        byte[] r0;
+        int i0, i1, $i2, $i3, $i4, $i6, i7;
+        java.lang.StringBuilder $r1, $r2, $r5, $r7, $r8, $r9;
+        java.lang.Object[] $r3;
+        byte $b5;
+        java.lang.Byte $r4;
+        java.lang.String $r6, r10;
+
+        r0 := @parameter0: byte[];
+
+        i0 := @parameter1: int;
+
+        if r0 == null goto label1;
+
+        $i2 = lengthof r0;
+
+        $i3 = staticinvoke <java.lang.Math: int min(int,int)>($i2, i0);
+
+        if $i3 > 0 goto label2;
+
+     label1:
+        return "";
+
+     label2:
+        $i4 = lengthof r0;
+
+        i1 = staticinvoke <java.lang.Math: int min(int,int)>($i4, i0);
+
+        r10 = "";
+
+        i7 = 0;
+
+     label3:
+        if i7 >= i1 goto label5;
+
+        $r1 = new java.lang.StringBuilder;
+
+        specialinvoke $r1.<java.lang.StringBuilder: void <init>()>();
+
+        $r2 = virtualinvoke $r1.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r10);
+
+        $r3 = newarray (java.lang.Object)[1];
+
+        $b5 = r0[i7];
+
+        $r4 = staticinvoke <java.lang.Byte: java.lang.Byte valueOf(byte)>($b5);
+
+        $r3[0] = $r4;
+
+        $r6 = staticinvoke <java.lang.String: java.lang.String format(java.lang.String,java.lang.Object[])>("0x%02X", $r3);
+
+        $r5 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r6);
+
+        r10 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        $i6 = i1 - 1;
+
+        if i7 >= $i6 goto label4;
+
+        $r8 = new java.lang.StringBuilder;
+
+        specialinvoke $r8.<java.lang.StringBuilder: void <init>()>();
+
+        $r7 = virtualinvoke $r8.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r10);
+
+        $r9 = virtualinvoke $r7.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(" ");
+
+        r10 = virtualinvoke $r9.<java.lang.StringBuilder: java.lang.String toString()>();
+
+     label4:
+        i7 = i7 + 1;
+
+        goto label3;
+
+     label5:
+        return r10;
+    }
+
+    public static short[] byteArrayToShortArray(byte[])
+    {
+        byte[] r0;
+        short[] r1;
+        java.nio.ByteBuffer r2;
+        java.nio.ShortBuffer r3;
+        int $i0, $i1, $i2, $i3;
+        java.lang.IllegalArgumentException $r5;
+
+        r0 := @parameter0: byte[];
+
+        $i0 = lengthof r0;
+
+        $i1 = $i0 % 2;
+
+        if $i1 == 0 goto label1;
+
+        $r5 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Length of byteArray is not evenly divisible by 2, which is the number of bytes in one short.");
+
+        throw $r5;
+
+     label1:
+        $i2 = lengthof r0;
+
+        $i3 = $i2 / 2;
+
+        r1 = newarray (short)[$i3];
+
+        r2 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer wrap(byte[])>(r0);
+
+        r3 = virtualinvoke r2.<java.nio.ByteBuffer: java.nio.ShortBuffer asShortBuffer()>();
+
+        virtualinvoke r3.<java.nio.ShortBuffer: java.nio.ShortBuffer get(short[])>(r1);
+
+        return r1;
+    }
+
+    public static byte[] shortArrayToByteArray(short[])
+    {
+        short[] r0;
+        byte[] r1;
+        java.nio.ByteBuffer r2;
+        java.nio.ShortBuffer r3;
+        int $i0, $i1;
+
+        r0 := @parameter0: short[];
+
+        $i0 = lengthof r0;
+
+        $i1 = $i0 * 2;
+
+        r1 = newarray (byte)[$i1];
+
+        r2 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer wrap(byte[])>(r1);
+
+        r3 = virtualinvoke r2.<java.nio.ByteBuffer: java.nio.ShortBuffer asShortBuffer()>();
+
+        virtualinvoke r3.<java.nio.ShortBuffer: java.nio.ShortBuffer put(short[])>(r0);
+
+        return r1;
+    }
+
+    public static int[] byteArrayToIntArray(byte[])
+    {
+        byte[] r0;
+        int[] r1;
+        java.nio.ByteBuffer r2;
+        java.nio.IntBuffer r3;
+        int $i0, $i1, $i2, $i3;
+        java.lang.IllegalArgumentException $r5;
+
+        r0 := @parameter0: byte[];
+
+        $i0 = lengthof r0;
+
+        $i1 = $i0 % 4;
+
+        if $i1 == 0 goto label1;
+
+        $r5 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Length of byteArray is not evenly divisible by 4, which is the number of bytes in one int.");
+
+        throw $r5;
+
+     label1:
+        $i2 = lengthof r0;
+
+        $i3 = $i2 / 4;
+
+        r1 = newarray (int)[$i3];
+
+        r2 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer wrap(byte[])>(r0);
+
+        r3 = virtualinvoke r2.<java.nio.ByteBuffer: java.nio.IntBuffer asIntBuffer()>();
+
+        virtualinvoke r3.<java.nio.IntBuffer: java.nio.IntBuffer get(int[])>(r1);
+
+        return r1;
+    }
+
+    public static byte[] intArrayToByteArray(int[])
+    {
+        int[] r0;
+        byte[] r1;
+        java.nio.ByteBuffer r2;
+        java.nio.IntBuffer r3;
+        int $i0, $i1;
+
+        r0 := @parameter0: int[];
+
+        $i0 = lengthof r0;
+
+        $i1 = $i0 * 4;
+
+        r1 = newarray (byte)[$i1];
+
+        r2 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer wrap(byte[])>(r1);
+
+        r3 = virtualinvoke r2.<java.nio.ByteBuffer: java.nio.IntBuffer asIntBuffer()>();
+
+        virtualinvoke r3.<java.nio.IntBuffer: java.nio.IntBuffer put(int[])>(r0);
+
+        return r1;
+    }
+
+    public static float[] byteArrayToFloatArray(byte[]) throws java.lang.IllegalArgumentException
+    {
+        byte[] r0;
+        float[] r1;
+        java.nio.ByteBuffer r2;
+        java.nio.FloatBuffer r3;
+        int $i0, $i1, $i2, $i3;
+        java.lang.IllegalArgumentException $r5;
+
+        r0 := @parameter0: byte[];
+
+        $i0 = lengthof r0;
+
+        $i1 = $i0 % 4;
+
+        if $i1 == 0 goto label1;
+
+        $r5 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Length of byteArray is not evenly divisible by 4, which is the number of bytes in one float.");
+
+        throw $r5;
+
+     label1:
+        $i2 = lengthof r0;
+
+        $i3 = $i2 / 4;
+
+        r1 = newarray (float)[$i3];
+
+        r2 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer wrap(byte[])>(r0);
+
+        r3 = virtualinvoke r2.<java.nio.ByteBuffer: java.nio.FloatBuffer asFloatBuffer()>();
+
+        virtualinvoke r3.<java.nio.FloatBuffer: java.nio.FloatBuffer get(float[])>(r1);
+
+        return r1;
+    }
+
+    public static byte[] floatArrayToByteArray(float[])
+    {
+        float[] r0;
+        byte[] r1;
+        java.nio.ByteBuffer r2;
+        java.nio.FloatBuffer r3;
+        int $i0, $i1;
+
+        r0 := @parameter0: float[];
+
+        $i0 = lengthof r0;
+
+        $i1 = $i0 * 4;
+
+        r1 = newarray (byte)[$i1];
+
+        r2 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer wrap(byte[])>(r1);
+
+        r3 = virtualinvoke r2.<java.nio.ByteBuffer: java.nio.FloatBuffer asFloatBuffer()>();
+
+        virtualinvoke r3.<java.nio.FloatBuffer: java.nio.FloatBuffer put(float[])>(r0);
+
+        return r1;
+    }
+
+    public static double[] byteArrayToDoubleArray(byte[])
+    {
+        byte[] r0;
+        double[] r1;
+        java.nio.ByteBuffer r2;
+        java.nio.DoubleBuffer r3;
+        int $i0, $i1, $i2, $i3;
+        java.lang.IllegalArgumentException $r5;
+
+        r0 := @parameter0: byte[];
+
+        $i0 = lengthof r0;
+
+        $i1 = $i0 % 8;
+
+        if $i1 == 0 goto label1;
+
+        $r5 = new java.lang.IllegalArgumentException;
+
+        specialinvoke $r5.<java.lang.IllegalArgumentException: void <init>(java.lang.String)>("Length of byteArray is not evenly divisible by 8, which is the number of bytes in one double.");
+
+        throw $r5;
+
+     label1:
+        $i2 = lengthof r0;
+
+        $i3 = $i2 / 8;
+
+        r1 = newarray (double)[$i3];
+
+        r2 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer wrap(byte[])>(r0);
+
+        r3 = virtualinvoke r2.<java.nio.ByteBuffer: java.nio.DoubleBuffer asDoubleBuffer()>();
+
+        virtualinvoke r3.<java.nio.DoubleBuffer: java.nio.DoubleBuffer get(double[])>(r1);
+
+        return r1;
+    }
+
+    public static byte[] doubleArrayToByteArray(double[])
+    {
+        double[] r0;
+        byte[] r1;
+        java.nio.ByteBuffer r2;
+        java.nio.DoubleBuffer r3;
+        int $i0, $i1;
+
+        r0 := @parameter0: double[];
+
+        $i0 = lengthof r0;
+
+        $i1 = $i0 * 8;
+
+        r1 = newarray (byte)[$i1];
+
+        r2 = staticinvoke <java.nio.ByteBuffer: java.nio.ByteBuffer wrap(byte[])>(r1);
+
+        r3 = virtualinvoke r2.<java.nio.ByteBuffer: java.nio.DoubleBuffer asDoubleBuffer()>();
+
+        virtualinvoke r3.<java.nio.DoubleBuffer: java.nio.DoubleBuffer put(double[])>(r0);
+
+        return r1;
+    }
+}

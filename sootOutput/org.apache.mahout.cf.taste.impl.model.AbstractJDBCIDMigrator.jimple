@@ -106,9 +106,9 @@ public abstract class org.apache.mahout.cf.taste.impl.model.AbstractJDBCIDMigrat
         javax.sql.DataSource $r2;
         java.lang.String $r3, r10;
         boolean $z0;
-        java.sql.SQLException $r4;
-        java.lang.Throwable $r5;
-        org.apache.mahout.cf.taste.common.TasteException $r6;
+        java.lang.Throwable $r4;
+        org.apache.mahout.cf.taste.common.TasteException $r5;
+        java.sql.SQLException $r6;
         java.sql.Connection r7;
         java.sql.PreparedStatement r8;
         java.sql.ResultSet r9;
@@ -157,21 +157,21 @@ public abstract class org.apache.mahout.cf.taste.impl.model.AbstractJDBCIDMigrat
         return null;
 
      label4:
-        $r4 := @caughtexception;
+        $r6 := @caughtexception;
 
-        $r6 = new org.apache.mahout.cf.taste.common.TasteException;
+        $r5 = new org.apache.mahout.cf.taste.common.TasteException;
 
-        specialinvoke $r6.<org.apache.mahout.cf.taste.common.TasteException: void <init>(java.lang.Throwable)>($r4);
+        specialinvoke $r5.<org.apache.mahout.cf.taste.common.TasteException: void <init>(java.lang.Throwable)>($r6);
 
-        throw $r6;
+        throw $r5;
 
      label5:
-        $r5 := @caughtexception;
+        $r4 := @caughtexception;
 
      label6:
         staticinvoke <org.apache.mahout.common.IOUtils: void quietClose(java.sql.ResultSet,java.sql.Statement,java.sql.Connection)>(r9, r8, r7);
 
-        throw $r5;
+        throw $r4;
 
         catch java.sql.SQLException from label1 to label2 with label4;
         catch java.lang.Throwable from label1 to label2 with label5;

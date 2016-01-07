@@ -1,0 +1,84 @@
+public class org.hipi.mapreduce.BinaryOutputFormat extends org.apache.hadoop.mapreduce.lib.output.FileOutputFormat
+{
+
+    public void <init>()
+    {
+        org.hipi.mapreduce.BinaryOutputFormat r0;
+
+        r0 := @this: org.hipi.mapreduce.BinaryOutputFormat;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void <init>()>();
+
+        return;
+    }
+
+    public org.apache.hadoop.mapreduce.RecordWriter getRecordWriter(org.apache.hadoop.mapreduce.TaskAttemptContext) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.hipi.mapreduce.BinaryOutputFormat r0;
+        org.apache.hadoop.mapreduce.TaskAttemptContext r1;
+        boolean z0;
+        org.apache.hadoop.fs.FileSystem r2;
+        org.apache.hadoop.fs.FSDataOutputStream r3;
+        org.apache.hadoop.conf.Configuration $r4, $r10;
+        org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter $r5, $r8;
+        java.io.DataOutputStream $r6;
+        org.apache.hadoop.io.compress.CompressionOutputStream $r7;
+        java.lang.Object $r9;
+        org.apache.hadoop.io.compress.CompressionCodec r11;
+        java.lang.String r12;
+        java.lang.Class r13;
+        org.apache.hadoop.fs.Path r14;
+
+        r0 := @this: org.hipi.mapreduce.BinaryOutputFormat;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.TaskAttemptContext;
+
+        z0 = staticinvoke <org.hipi.mapreduce.BinaryOutputFormat: boolean getCompressOutput(org.apache.hadoop.mapreduce.JobContext)>(r1);
+
+        r11 = null;
+
+        r12 = "";
+
+        if z0 == 0 goto label1;
+
+        r13 = staticinvoke <org.hipi.mapreduce.BinaryOutputFormat: java.lang.Class getOutputCompressorClass(org.apache.hadoop.mapreduce.JobContext,java.lang.Class)>(r1, class "org/apache/hadoop/io/compress/GzipCodec");
+
+        $r10 = interfaceinvoke r1.<org.apache.hadoop.mapreduce.TaskAttemptContext: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        $r9 = staticinvoke <org.apache.hadoop.util.ReflectionUtils: java.lang.Object newInstance(java.lang.Class,org.apache.hadoop.conf.Configuration)>(r13, $r10);
+
+        r11 = (org.apache.hadoop.io.compress.CompressionCodec) $r9;
+
+        r12 = interfaceinvoke r11.<org.apache.hadoop.io.compress.CompressionCodec: java.lang.String getDefaultExtension()>();
+
+     label1:
+        r14 = virtualinvoke r0.<org.hipi.mapreduce.BinaryOutputFormat: org.apache.hadoop.fs.Path getDefaultWorkFile(org.apache.hadoop.mapreduce.TaskAttemptContext,java.lang.String)>(r1, r12);
+
+        $r4 = interfaceinvoke r1.<org.apache.hadoop.mapreduce.TaskAttemptContext: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        r2 = virtualinvoke r14.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>($r4);
+
+        r3 = virtualinvoke r2.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataOutputStream create(org.apache.hadoop.fs.Path,boolean)>(r14, 0);
+
+        if z0 != 0 goto label2;
+
+        $r8 = new org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter;
+
+        specialinvoke $r8.<org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter: void <init>(java.io.DataOutputStream)>(r3);
+
+        return $r8;
+
+     label2:
+        $r5 = new org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter;
+
+        $r6 = new java.io.DataOutputStream;
+
+        $r7 = interfaceinvoke r11.<org.apache.hadoop.io.compress.CompressionCodec: org.apache.hadoop.io.compress.CompressionOutputStream createOutputStream(java.io.OutputStream)>(r3);
+
+        specialinvoke $r6.<java.io.DataOutputStream: void <init>(java.io.OutputStream)>($r7);
+
+        specialinvoke $r5.<org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter: void <init>(java.io.DataOutputStream)>($r6);
+
+        return $r5;
+    }
+}

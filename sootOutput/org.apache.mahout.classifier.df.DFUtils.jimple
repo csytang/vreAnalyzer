@@ -364,7 +364,7 @@ public final class org.apache.mahout.classifier.df.DFUtils extends java.lang.Obj
         throw $r9;
 
      label04:
-        $r8 := @caughtexception;
+        $r10 := @caughtexception;
 
      label05:
         if r4 == null goto label10;
@@ -378,9 +378,9 @@ public final class org.apache.mahout.classifier.df.DFUtils extends java.lang.Obj
         goto label10;
 
      label08:
-        $r10 := @caughtexception;
+        $r8 := @caughtexception;
 
-        virtualinvoke r11.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r10);
+        virtualinvoke r11.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r8);
 
         goto label10;
 
@@ -388,7 +388,7 @@ public final class org.apache.mahout.classifier.df.DFUtils extends java.lang.Obj
         virtualinvoke r4.<org.apache.hadoop.fs.FSDataOutputStream: void close()>();
 
      label10:
-        throw $r8;
+        throw $r10;
 
      label11:
         return;
@@ -408,7 +408,7 @@ public final class org.apache.mahout.classifier.df.DFUtils extends java.lang.Obj
         org.apache.hadoop.fs.FileSystem $r6;
         java.nio.charset.Charset $r7;
         byte[] $r8;
-        java.lang.Throwable $r9, $r10, $r11, r13;
+        java.lang.Throwable $r9, $r11, $r12, r13;
 
         r0 := @parameter0: org.apache.hadoop.conf.Configuration;
 
@@ -437,14 +437,14 @@ public final class org.apache.mahout.classifier.df.DFUtils extends java.lang.Obj
         goto label11;
 
      label03:
-        $r9 := @caughtexception;
+        $r12 := @caughtexception;
 
-        r13 = $r9;
+        r13 = $r12;
 
-        throw $r9;
+        throw $r12;
 
      label04:
-        $r10 := @caughtexception;
+        $r11 := @caughtexception;
 
      label05:
         if r3 == null goto label10;
@@ -458,9 +458,9 @@ public final class org.apache.mahout.classifier.df.DFUtils extends java.lang.Obj
         goto label10;
 
      label08:
-        $r11 := @caughtexception;
+        $r9 := @caughtexception;
 
-        virtualinvoke r13.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r11);
+        virtualinvoke r13.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r9);
 
         goto label10;
 
@@ -468,7 +468,7 @@ public final class org.apache.mahout.classifier.df.DFUtils extends java.lang.Obj
         virtualinvoke r3.<java.io.DataOutputStream: void close()>();
 
      label10:
-        throw $r10;
+        throw $r11;
 
      label11:
         return;

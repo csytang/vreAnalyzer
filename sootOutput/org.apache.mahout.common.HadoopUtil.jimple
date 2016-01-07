@@ -703,7 +703,7 @@ public final class org.apache.mahout.common.HadoopUtil extends java.lang.Object
         org.apache.hadoop.fs.FileSystem r2;
         org.apache.hadoop.fs.FSDataOutputStream r3;
         java.net.URI $r6;
-        java.lang.Throwable $r8, $r9, $r10, r11;
+        java.lang.Throwable $r7, $r8, $r9, r11;
 
         i0 := @parameter0: int;
 
@@ -737,7 +737,7 @@ public final class org.apache.mahout.common.HadoopUtil extends java.lang.Object
         throw $r8;
 
      label04:
-        $r9 := @caughtexception;
+        $r7 := @caughtexception;
 
      label05:
         if r3 == null goto label10;
@@ -751,9 +751,9 @@ public final class org.apache.mahout.common.HadoopUtil extends java.lang.Object
         goto label10;
 
      label08:
-        $r10 := @caughtexception;
+        $r9 := @caughtexception;
 
-        virtualinvoke r11.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r10);
+        virtualinvoke r11.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r9);
 
         goto label10;
 
@@ -761,7 +761,7 @@ public final class org.apache.mahout.common.HadoopUtil extends java.lang.Object
         virtualinvoke r3.<org.apache.hadoop.fs.FSDataOutputStream: void close()>();
 
      label10:
-        throw $r9;
+        throw $r7;
 
      label11:
         return;
@@ -779,7 +779,7 @@ public final class org.apache.mahout.common.HadoopUtil extends java.lang.Object
         org.apache.hadoop.fs.FileSystem r2;
         org.apache.hadoop.fs.FSDataInputStream r3;
         java.net.URI $r7;
-        java.lang.Throwable $r9, $r10, $r11, r12;
+        java.lang.Throwable $r8, $r9, $r10, r12;
         int i0;
 
         r0 := @parameter0: org.apache.hadoop.fs.Path;
@@ -806,11 +806,11 @@ public final class org.apache.mahout.common.HadoopUtil extends java.lang.Object
         return i0;
 
      label04:
-        $r9 := @caughtexception;
+        $r8 := @caughtexception;
 
-        r12 = $r9;
+        r12 = $r8;
 
-        throw $r9;
+        throw $r8;
 
      label05:
         $r10 := @caughtexception;
@@ -827,9 +827,9 @@ public final class org.apache.mahout.common.HadoopUtil extends java.lang.Object
         goto label11;
 
      label09:
-        $r11 := @caughtexception;
+        $r9 := @caughtexception;
 
-        virtualinvoke r12.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r11);
+        virtualinvoke r12.<java.lang.Throwable: void addSuppressed(java.lang.Throwable)>($r9);
 
         goto label11;
 

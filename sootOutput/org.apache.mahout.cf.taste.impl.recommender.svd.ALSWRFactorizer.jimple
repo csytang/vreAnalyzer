@@ -113,7 +113,7 @@ public class org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer ext
         org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator r2, r3, $r30, $r32, r58;
         long l0, $l1, $l4, $l12, $l13, l17;
         org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$Features $r8;
-        org.slf4j.Logger $r9, $r11, $r14, $r38, $r42, $r47, $r48;
+        org.slf4j.Logger $r9, $r11, $r14, $r38, $r42, $r46, $r49;
         boolean $z0, $z1, $z3, $z7, $z8;
         double[][] $r10, $r13, $r28, $r37;
         org.apache.mahout.cf.taste.impl.recommender.svd.Factorization $r12;
@@ -126,7 +126,7 @@ public class org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer ext
         org.apache.mahout.cf.taste.impl.common.FastIDSet $r25;
         org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer$1 $r27;
         java.lang.Throwable $r34, $r44;
-        java.lang.InterruptedException $r40, $r41, $r46, $r49;
+        java.lang.InterruptedException $r40, $r41, $r47, $r48;
         org.apache.mahout.math.map.OpenIntObjectHashMap r50, r51;
         java.util.concurrent.ExecutorService r52, r57;
         org.apache.mahout.math.als.ImplicitFeedbackAlternatingLeastSquaresSolver $r53, r54, $r59, r60;
@@ -291,11 +291,11 @@ public class org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer ext
         goto label16;
 
      label15:
-        $r41 := @caughtexception;
+        $r48 := @caughtexception;
 
-        $r42 = <org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer: org.slf4j.Logger log>;
+        $r49 = <org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer: org.slf4j.Logger log>;
 
-        interfaceinvoke $r42.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Error when computing user features", $r41);
+        interfaceinvoke $r49.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Error when computing user features", $r48);
 
      label16:
         throw $r44;
@@ -369,11 +369,11 @@ public class org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer ext
         goto label32;
 
      label25:
-        $r46 := @caughtexception;
+        $r41 := @caughtexception;
 
-        $r47 = <org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer: org.slf4j.Logger log>;
+        $r42 = <org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer: org.slf4j.Logger log>;
 
-        interfaceinvoke $r47.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Error when computing item features", $r46);
+        interfaceinvoke $r42.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Error when computing item features", $r41);
 
         goto label32;
 
@@ -398,11 +398,11 @@ public class org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer ext
         goto label31;
 
      label30:
-        $r49 := @caughtexception;
+        $r47 := @caughtexception;
 
-        $r48 = <org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer: org.slf4j.Logger log>;
+        $r46 = <org.apache.mahout.cf.taste.impl.recommender.svd.ALSWRFactorizer: org.slf4j.Logger log>;
 
-        interfaceinvoke $r48.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Error when computing item features", $r49);
+        interfaceinvoke $r46.<org.slf4j.Logger: void warn(java.lang.String,java.lang.Throwable)>("Error when computing item features", $r47);
 
      label31:
         throw $r34;
