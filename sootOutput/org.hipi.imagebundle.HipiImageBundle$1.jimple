@@ -34,7 +34,7 @@ class org.hipi.imagebundle.HipiImageBundle$1 extends java.lang.Object
         goto label04;
 
      label03:
-        $r24 := @caughtexception;
+        $r27 := @caughtexception;
 
      label04:
         $r5 = <org.hipi.imagebundle.HipiImageBundle$1: int[] $SwitchMap$org$hipi$image$HipiImageHeader$HipiImageFormat>;
@@ -49,7 +49,7 @@ class org.hipi.imagebundle.HipiImageBundle$1 extends java.lang.Object
         goto label07;
 
      label06:
-        $r21 := @caughtexception;
+        $r26 := @caughtexception;
 
      label07:
         $r7 = <org.hipi.imagebundle.HipiImageBundle$1: int[] $SwitchMap$org$hipi$image$HipiImageHeader$HipiImageFormat>;
@@ -64,7 +64,7 @@ class org.hipi.imagebundle.HipiImageBundle$1 extends java.lang.Object
         goto label10;
 
      label09:
-        $r23 := @caughtexception;
+        $r21 := @caughtexception;
 
      label10:
         $r9 = <org.hipi.imagebundle.HipiImageBundle$1: int[] $SwitchMap$org$hipi$image$HipiImageHeader$HipiImageFormat>;
@@ -79,7 +79,7 @@ class org.hipi.imagebundle.HipiImageBundle$1 extends java.lang.Object
         goto label13;
 
      label12:
-        $r27 := @caughtexception;
+        $r23 := @caughtexception;
 
      label13:
         $r10 = staticinvoke <org.hipi.image.HipiImage$HipiImageType: org.hipi.image.HipiImage$HipiImageType[] values()>();
@@ -103,7 +103,7 @@ class org.hipi.imagebundle.HipiImageBundle$1 extends java.lang.Object
         goto label17;
 
      label16:
-        $r20 := @caughtexception;
+        $r22 := @caughtexception;
 
      label17:
         $r14 = <org.hipi.imagebundle.HipiImageBundle$1: int[] $SwitchMap$org$hipi$image$HipiImage$HipiImageType>;
@@ -118,7 +118,7 @@ class org.hipi.imagebundle.HipiImageBundle$1 extends java.lang.Object
         goto label20;
 
      label19:
-        $r22 := @caughtexception;
+        $r25 := @caughtexception;
 
      label20:
         $r17 = <org.hipi.imagebundle.HipiImageBundle$1: int[] $SwitchMap$org$hipi$image$HipiImage$HipiImageType>;
@@ -133,7 +133,7 @@ class org.hipi.imagebundle.HipiImageBundle$1 extends java.lang.Object
         goto label23;
 
      label22:
-        $r26 := @caughtexception;
+        $r20 := @caughtexception;
 
      label23:
         $r18 = <org.hipi.imagebundle.HipiImageBundle$1: int[] $SwitchMap$org$hipi$image$HipiImage$HipiImageType>;
@@ -148,7 +148,7 @@ class org.hipi.imagebundle.HipiImageBundle$1 extends java.lang.Object
         goto label26;
 
      label25:
-        $r25 := @caughtexception;
+        $r24 := @caughtexception;
 
      label26:
         return;

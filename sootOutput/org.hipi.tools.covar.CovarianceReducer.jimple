@@ -1,0 +1,99 @@
+public class org.hipi.tools.covar.CovarianceReducer extends org.apache.hadoop.mapreduce.Reducer
+{
+
+    public void <init>()
+    {
+        org.hipi.tools.covar.CovarianceReducer r0;
+
+        r0 := @this: org.hipi.tools.covar.CovarianceReducer;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.Reducer: void <init>()>();
+
+        return;
+    }
+
+    public void reduce(org.apache.hadoop.io.IntWritable, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.hipi.tools.covar.CovarianceReducer r0;
+        org.apache.hadoop.io.IntWritable r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        java.util.Iterator r5;
+        org.hipi.opencv.OpenCVMatWritable r6, $r11;
+        org.bytedeco.javacpp.opencv_core$Mat $r7, $r12;
+        org.bytedeco.javacpp.opencv_core$Scalar $r8;
+        int $i3;
+        boolean $z0;
+        org.apache.hadoop.io.NullWritable $r9;
+        java.lang.Object $r10;
+
+        r0 := @this: org.hipi.tools.covar.CovarianceReducer;
+
+        r1 := @parameter0: org.apache.hadoop.io.IntWritable;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r7 = new org.bytedeco.javacpp.opencv_core$Mat;
+
+        $i3 = <org.bytedeco.javacpp.opencv_core: int CV_32FC1>;
+
+        $r8 = new org.bytedeco.javacpp.opencv_core$Scalar;
+
+        specialinvoke $r8.<org.bytedeco.javacpp.opencv_core$Scalar: void <init>(double)>(0.0);
+
+        specialinvoke $r7.<org.bytedeco.javacpp.opencv_core$Mat: void <init>(int,int,int,org.bytedeco.javacpp.opencv_core$Scalar)>(4096, 4096, $i3, $r8);
+
+        r5 = interfaceinvoke r2.<java.lang.Iterable: java.util.Iterator iterator()>();
+
+     label1:
+        $z0 = interfaceinvoke r5.<java.util.Iterator: boolean hasNext()>();
+
+        if $z0 == 0 goto label2;
+
+        $r10 = interfaceinvoke r5.<java.util.Iterator: java.lang.Object next()>();
+
+        r6 = (org.hipi.opencv.OpenCVMatWritable) $r10;
+
+        $r12 = virtualinvoke r6.<org.hipi.opencv.OpenCVMatWritable: org.bytedeco.javacpp.opencv_core$Mat getMat()>();
+
+        staticinvoke <org.bytedeco.javacpp.opencv_core: void add(org.bytedeco.javacpp.opencv_core$Mat,org.bytedeco.javacpp.opencv_core$Mat,org.bytedeco.javacpp.opencv_core$Mat)>($r12, $r7, $r7);
+
+        goto label1;
+
+     label2:
+        $r9 = staticinvoke <org.apache.hadoop.io.NullWritable: org.apache.hadoop.io.NullWritable get()>();
+
+        $r11 = new org.hipi.opencv.OpenCVMatWritable;
+
+        specialinvoke $r11.<org.hipi.opencv.OpenCVMatWritable: void <init>(org.bytedeco.javacpp.opencv_core$Mat)>($r7);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Reducer$Context: void write(java.lang.Object,java.lang.Object)>($r9, $r11);
+
+        return;
+    }
+
+    public volatile void reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer$Context) throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.hipi.tools.covar.CovarianceReducer r0;
+        java.lang.Object r1;
+        java.lang.Iterable r2;
+        org.apache.hadoop.mapreduce.Reducer$Context r3;
+        org.apache.hadoop.io.IntWritable $r4;
+
+        r0 := @this: org.hipi.tools.covar.CovarianceReducer;
+
+        r1 := @parameter0: java.lang.Object;
+
+        r2 := @parameter1: java.lang.Iterable;
+
+        r3 := @parameter2: org.apache.hadoop.mapreduce.Reducer$Context;
+
+        $r4 = (org.apache.hadoop.io.IntWritable) r1;
+
+        virtualinvoke r0.<org.hipi.tools.covar.CovarianceReducer: void reduce(org.apache.hadoop.io.IntWritable,java.lang.Iterable,org.apache.hadoop.mapreduce.Reducer$Context)>($r4, r2, r3);
+
+        return;
+    }
+}

@@ -149,12 +149,14 @@ public class ProjectParser {
 			for(Map.Entry<SootClass, LinkedList<CodeBlock>>useentry:jobUsesBlocks.entrySet()){
 				SootClass cls = useentry.getKey();
 				File sourceFile = SourceClassBinding.getSourceFileFromClassName(cls.toString());
-				String htmlfileName = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
-				htmlfileName+=".html";
-				File htmlFile = new File(htmlfileName);
-				allannotatedFiles.add(htmlFile);
-				@SuppressWarnings("unused")
-				JobUseAnnotate jobuseannot = new JobUseAnnotate(job, useentry.getValue(), htmlFile);
+				if(sourceFile!=null){
+					String htmlfileName = sourceFile.getPath().substring(0, sourceFile.getPath().length()-".java".length());
+					htmlfileName+=".html";
+					File htmlFile = new File(htmlfileName);
+					allannotatedFiles.add(htmlFile);
+					@SuppressWarnings("unused")
+					JobUseAnnotate jobuseannot = new JobUseAnnotate(job, useentry.getValue(), htmlFile);
+				}
 			}
 		}
 	}

@@ -280,6 +280,8 @@ public class HTMLAnnotation {
 			for(int lineNumber:lines){
 				if(lineNumber<=1)
 					continue;
+				if(lineNumber>htmlbyline.length)
+					continue;
 				String linecontent = htmlbyline[lineNumber-1];
 				
 				String spanStart = "<span title = \""+hovertext+"\""+" style=\"background-color:"+hex+"\">";
@@ -507,6 +509,8 @@ public class HTMLAnnotation {
 				if(!((updateline = isColorTitleAssociatedSLResolver_Variant(linecontent, spanStart)).equals(""))){
 					htmlbyline[lineNumber-1] = updateline;
 				}else{
+					if(linecontent.equals(""))
+						continue;
 					StringBuffer buffStart = new StringBuffer(linecontent);
 					String startjavaString = htmlToJava.get(linecontent+"<br>");
 					String starthtmlreverse = Text2HTML.txtToHtml(startjavaString);

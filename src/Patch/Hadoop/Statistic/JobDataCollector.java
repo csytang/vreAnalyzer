@@ -55,6 +55,8 @@ public class JobDataCollector {
 				LinkedList<CodeBlock>blocks = blockentry.getValue();
 				for(CodeBlock block:blocks){
 					BlockJobTag bmTag = block.getTag(BlockJobTag.TAG_NAME);
+					if(bmTag==null)
+						continue;
 					Set<JobVariable> bindingjobs = bmTag.getJobs();
 					Set<Integer>lines = new HashSet<Integer>();
 					int line = 0;

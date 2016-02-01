@@ -31,7 +31,7 @@ class org.hipi.image.HipiImageFactory$1 extends java.lang.Object
         goto label04;
 
      label03:
-        $r11 := @caughtexception;
+        $r12 := @caughtexception;
 
      label04:
         $r5 = <org.hipi.image.HipiImageFactory$1: int[] $SwitchMap$org$hipi$image$HipiImage$HipiImageType>;
@@ -61,7 +61,7 @@ class org.hipi.image.HipiImageFactory$1 extends java.lang.Object
         goto label10;
 
      label09:
-        $r12 := @caughtexception;
+        $r11 := @caughtexception;
 
      label10:
         $r9 = <org.hipi.image.HipiImageFactory$1: int[] $SwitchMap$org$hipi$image$HipiImage$HipiImageType>;

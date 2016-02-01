@@ -1,0 +1,88 @@
+public class org.hipi.tools.covar.ComputeMean extends java.lang.Object
+{
+
+    public void <init>()
+    {
+        org.hipi.tools.covar.ComputeMean r0;
+
+        r0 := @this: org.hipi.tools.covar.ComputeMean;
+
+        specialinvoke r0.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+
+    public static int run(java.lang.String[], java.lang.String, java.lang.String) throws java.lang.ClassNotFoundException, java.lang.IllegalStateException, java.lang.InterruptedException, java.io.IOException
+    {
+        java.lang.String[] r0;
+        java.lang.String r1, r2;
+        org.apache.hadoop.mapreduce.Job r3;
+        java.io.PrintStream $r4;
+        org.apache.hadoop.fs.Path[] $r5;
+        org.apache.hadoop.fs.Path $r6, $r7;
+        boolean $z0;
+        byte $b0;
+
+        r0 := @parameter0: java.lang.String[];
+
+        r1 := @parameter1: java.lang.String;
+
+        r2 := @parameter2: java.lang.String;
+
+        $r4 = <java.lang.System: java.io.PrintStream out>;
+
+        virtualinvoke $r4.<java.io.PrintStream: void println(java.lang.String)>("Running compute mean.");
+
+        r3 = staticinvoke <org.apache.hadoop.mapreduce.Job: org.apache.hadoop.mapreduce.Job getInstance()>();
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: void setJarByClass(java.lang.Class)>(class "org/hipi/tools/covar/Covariance");
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: void setInputFormatClass(java.lang.Class)>(class "org/hipi/imagebundle/mapreduce/HibInputFormat");
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: void setMapOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/IntWritable");
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: void setMapOutputValueClass(java.lang.Class)>(class "org/hipi/opencv/OpenCVMatWritable");
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: void setOutputKeyClass(java.lang.Class)>(class "org/apache/hadoop/io/NullWritable");
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: void setOutputValueClass(java.lang.Class)>(class "org/hipi/opencv/OpenCVMatWritable");
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: void setMapperClass(java.lang.Class)>(class "org/hipi/tools/covar/MeanMapper");
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: void setReducerClass(java.lang.Class)>(class "org/hipi/tools/covar/MeanReducer");
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: void setNumReduceTasks(int)>(1);
+
+        virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: void setOutputFormatClass(java.lang.Class)>(class "org/hipi/mapreduce/BinaryOutputFormat");
+
+        $r5 = newarray (org.apache.hadoop.fs.Path)[1];
+
+        $r6 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r6.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r1);
+
+        $r5[0] = $r6;
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.input.FileInputFormat: void setInputPaths(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path[])>(r3, $r5);
+
+        $r7 = new org.apache.hadoop.fs.Path;
+
+        specialinvoke $r7.<org.apache.hadoop.fs.Path: void <init>(java.lang.String)>(r2);
+
+        staticinvoke <org.apache.hadoop.mapreduce.lib.output.FileOutputFormat: void setOutputPath(org.apache.hadoop.mapreduce.Job,org.apache.hadoop.fs.Path)>(r3, $r7);
+
+        $z0 = virtualinvoke r3.<org.apache.hadoop.mapreduce.Job: boolean waitForCompletion(boolean)>(1);
+
+        if $z0 == 0 goto label1;
+
+        $b0 = 0;
+
+        goto label2;
+
+     label1:
+        $b0 = 1;
+
+     label2:
+        return $b0;
+    }
+}

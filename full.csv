@@ -1,1 +1,869 @@
 Id,Name,"Type(P,C,M,CB)",Parent Id,Parent Name,Parent Type,Code Range,CallerMethod/CalleeMethod,Associated caller/callees,Strict OverrideMethod,Strict OverloadMethod,Variant Belongs/Contains,ContainVariantBrach,VariantBrachStart[@Position],IsVaraintCodeSegment
+1,org.hipi.image,Package,-,-,-,-,-,-,-,-,-,?,-,-
+2,org.hipi.image.HipiImage,Class,1,org.hipi.image,Package,[],-,-,-,-,-,?,-,-
+3,<init>,Method,2,org.hipi.image.HipiImage,Class,[0:3],-,-,Y,N,-,N,-@[<init>],
+4,setHeader,Method,2,org.hipi.image.HipiImage,Class,[0:27],callee,"[setHeader,nextKeyValue,createImage]",N,N,-,Y,[<org.hipi.image.HipiImageFactory: org.hipi.image.HipiImage createImage(org.hipi.image.HipiImageHeader)>@r1<org.hipi.imagebundle.HipiImageBundle$HibReader: boolean nextKeyValue()>@$i0<org.hipi.image.RasterImage: void setHeader(org.hipi.image.HipiImageHeader)>@r1]@[setHeader],[]
+5,block_87,Code Block,4,setHeader,Method,"[10,11]",-,-,-,-,[],Y,[setHeader->setHeader:r1]@[setHeader],[]
+6,block_89,Code Block,4,setHeader,Method,[3:5],-,-,-,-,[],Y,[setHeader->setHeader:r1]@[setHeader],[]
+7,block_84,Code Block,4,setHeader,Method,[0:2],-,-,-,-,[57],Y,[setHeader->setHeader:r1]@[setHeader],[]
+8,block_86,Code Block,4,setHeader,Method,"[8,9,12:25]",-,-,-,-,[23],Y,[setHeader->setHeader:r1]@[setHeader],[]
+9,block_85,Code Block,4,setHeader,Method,"[6,7]",-,-,-,-,[],Y,[setHeader->setHeader:r1]@[setHeader],[]
+10,block_88,Code Block,4,setHeader,Method,"[26,27]",-,-,-,-,[],Y,[setHeader->setHeader:r1]@[setHeader],[]
+11,getType,Method,2,org.hipi.image.HipiImage,Class,[0:2],-,-,N,N,-,N,-@[getType],
+12,getStorageFormat,Method,2,org.hipi.image.HipiImage,Class,[0:3],-,-,N,N,-,N,-@[getStorageFormat],
+13,getColorSpace,Method,2,org.hipi.image.HipiImage,Class,[0:3],-,-,N,N,-,N,-@[getColorSpace],
+14,getWidth,Method,2,org.hipi.image.HipiImage,Class,[0:3],-,-,N,N,-,N,-@[getWidth],
+15,getHeight,Method,2,org.hipi.image.HipiImage,Class,[0:3],-,-,N,N,-,N,-@[getHeight],
+16,getNumBands,Method,2,org.hipi.image.HipiImage,Class,[0:3],-,-,N,N,-,N,-@[getNumBands],
+17,getMetaData,Method,2,org.hipi.image.HipiImage,Class,[0:4],caller,[getMetaData],N,N,-,N,-@[getMetaData],[]
+18,getAllMetaData,Method,2,org.hipi.image.HipiImage,Class,[0:3],-,-,N,N,-,N,-@[getAllMetaData],
+19,getExifData,Method,2,org.hipi.image.HipiImage,Class,[0:4],caller,[getExifData],N,N,-,N,-@[getExifData],[]
+20,getAllExifData,Method,2,org.hipi.image.HipiImage,Class,[0:3],-,-,N,N,-,N,-@[getAllExifData],
+21,org.hipi.image.RawImage,Class,1,org.hipi.image,Package,[],-,-,-,-,-,?,-,-
+22,<init>,Method,21,org.hipi.image.RawImage,Class,[0:3],-,-,Y,N,-,N,-@[<init>],
+23,setRawBytes,Method,21,org.hipi.image.RawImage,Class,[0:3],callee,[nextKeyValue],N,N,-,N,-@[setRawBytes],[]
+24,getRawBytes,Method,21,org.hipi.image.RawImage,Class,[0:2],-,-,N,N,-,N,-@[getRawBytes],
+25,getType,Method,21,org.hipi.image.RawImage,Class,[0:2],-,-,Y,N,-,N,-@[getType],
+26,toString,Method,21,org.hipi.image.RawImage,Class,[0:39],-,-,Y,N,-,N,-@[toString],
+27,block_509,Code Block,26,toString,Method,[22:27],-,-,-,-,[],N,-@[toString],[]
+28,block_510,Code Block,26,toString,Method,[28:39],-,-,-,-,[],N,-@[toString],[]
+29,block_511,Code Block,26,toString,Method,"[20,21]",-,-,-,-,[],N,-@[toString],[]
+30,block_508,Code Block,26,toString,Method,[0:19],-,-,-,-,[],N,-@[toString],[]
+31,set,Method,21,org.hipi.image.RawImage,Class,[0:6],-,-,N,N,-,N,-@[set],
+32,write,Method,21,org.hipi.image.RawImage,Class,[0:20],caller,"[java.io.IOException@[init],write]",N,N,-,N,-@[write],[]
+33,block_517,Code Block,32,write,Method,[4:6],-,-,-,-,[],N,-@[write],[]
+34,block_514,Code Block,32,write,Method,[0:3],-,-,-,-,[60],N,-@[write],[]
+35,block_516,Code Block,32,write,Method,[11:20],-,-,-,-,[60],N,-@[write],[]
+36,block_515,Code Block,32,write,Method,[7:10],-,-,-,-,[60],N,-@[write],[]
+37,readFields,Method,21,org.hipi.image.RawImage,Class,[0:13],caller,[org.hipi.image.HipiImageHeader@[init]],N,N,-,Y,[i0]@[readFields],[]
+38,block_520,Code Block,37,readFields,Method,[7:13],-,-,-,-,[59],N,-@[readFields],[]
+39,block_519,Code Block,37,readFields,Method,[0:6],-,-,-,-,[59],Y,[i0]@[readFields],[]
+40,hex,Method,21,org.hipi.image.RawImage,Class,[0:3],caller,[asHex],Y,N,-,N,-@[hex],[]
+41,org.hipi.image.HipiImageHeader$HipiColorSpace,Class,1,org.hipi.image,Package,[],-,-,-,-,-,?,-,-
+42,values,Method,41,org.hipi.image.HipiImageHeader$HipiColorSpace,Class,[0:3],-,-,N,N,-,N,-@[values],
+43,valueOf,Method,41,org.hipi.image.HipiImageHeader$HipiColorSpace,Class,[0:3],-,-,Y,N,-,N,-@[valueOf],
+44,<init>,Method,41,org.hipi.image.HipiImageHeader$HipiColorSpace,Class,[0:6],callee,[<clinit>],Y,N,-,N,-@[<init>],[]
+45,fromInteger,Method,41,org.hipi.image.HipiImageHeader$HipiColorSpace,Class,[0:17],callee,[readFields],N,N,-,Y,[<org.hipi.image.HipiImageHeader: void readFields(java.io.DataInput)>@i0]@[fromInteger],[]
+46,block_130,Code Block,45,fromInteger,Method,"[5:7,11:17]",-,-,-,-,[34],Y,[readFields->fromInteger:i0]@[fromInteger],[]
+47,block_131,Code Block,45,fromInteger,Method,"[9,10]",-,-,-,-,[],Y,[readFields->fromInteger:i0]@[fromInteger],[]
+48,block_132,Code Block,45,fromInteger,Method,[8],-,-,-,-,[],Y,[readFields->fromInteger:i0]@[fromInteger],[]
+49,block_129,Code Block,45,fromInteger,Method,[0:4],-,-,-,-,[34],Y,[readFields->fromInteger:i0]@[fromInteger],[]
+50,toInteger,Method,41,org.hipi.image.HipiImageHeader$HipiColorSpace,Class,[0:2],-,-,N,N,-,N,-@[toInteger],
+51,getDefault,Method,41,org.hipi.image.HipiImageHeader$HipiColorSpace,Class,"[0,1]",-,-,N,N,-,N,-@[getDefault],
+52,<clinit>,Method,41,org.hipi.image.HipiImageHeader$HipiColorSpace,Class,[0:17],caller,[org.hipi.image.HipiImageHeader$HipiColorSpace@[init]],Y,N,-,N,-@[<clinit>],[]
+53,org.hipi.image.RasterImage,Class,1,org.hipi.image,Package,[],-,-,-,-,-,?,-,-
+54,<init>,Method,53,org.hipi.image.RasterImage,Class,[0:4],callee,"[org.hipi.image.FloatImage@[init],org.hipi.image.ByteImage@[init],org.hipi.image.FloatImage@[init],org.hipi.image.FloatImage@[init],org.hipi.image.FloatImage@[init]]",Y,N,-,N,-@[<init>],[]
+55,setHeader,Method,53,org.hipi.image.RasterImage,Class,[0:10],caller,"[setSize,getHeight,setHeader,getWidth,setSize,getNumBands]",Y,N,-,N,-@[setHeader],[]
+56,getPixelArray,Method,53,org.hipi.image.RasterImage,Class,[0:2],-,-,N,N,-,N,-@[getPixelArray],
+57,crop,Method,53,org.hipi.image.RasterImage,Class,[0:57],caller,"[setElem,getNumBands,getElem,getWidth,getElem,getHeight,getPixelArray,java.lang.IllegalArgumentException@[init],setElem]",N,N,-,Y,[i0]@[crop],[]
+58,block_457,Code Block,57,crop,Method,[14],-,-,-,-,[54],N,-@[crop],[]
+59,block_453,Code Block,57,crop,Method,[0:9],-,-,-,-,[52],Y,[i0]@[crop],[]
+60,block_465,Code Block,57,crop,Method,"[36,37]",-,-,-,-,[],N,-@[crop],[]
+61,block_455,Code Block,57,crop,Method,"[11,12]",-,-,-,-,[53],N,-@[crop],[]
+62,block_463,Code Block,57,crop,Method,"[33:35,57]",-,-,-,-,[53],N,-@[crop],[]
+63,block_464,Code Block,57,crop,Method,"[55,56]",-,-,-,-,[52],N,-@[crop],[]
+64,block_462,Code Block,57,crop,Method,[29:32],-,-,-,-,[52],N,-@[crop],[]
+65,block_456,Code Block,57,crop,Method,[13],-,-,-,-,[52],N,-@[crop],[]
+66,block_466,Code Block,57,crop,Method,"[53,54]",-,-,-,-,[51],N,-@[crop],[]
+67,block_467,Code Block,57,crop,Method,[38:52],-,-,-,-,[52],N,-@[crop],[]
+68,block_460,Code Block,57,crop,Method,"[22,23,26:28]",-,-,-,-,[54],N,-@[crop],[]
+69,block_458,Code Block,57,crop,Method,"[15,16]",-,-,-,-,[52],N,-@[crop],[]
+70,block_454,Code Block,57,crop,Method,"[10,17:19]",-,-,-,-,[53],N,-@[crop],[]
+71,block_461,Code Block,57,crop,Method,"[24,25]",-,-,-,-,[55],N,-@[crop],[]
+72,block_459,Code Block,57,crop,Method,"[20,21]",-,-,-,-,[53],N,-@[crop],[]
+73,convertToColorSpace,Method,53,org.hipi.image.RasterImage,Class,[0:74],caller,"[getColorSpace,getNumBands,getElem,java.lang.AssertionError@[init],getWidth,getElem,getHeight,setElemFloat,getPixelArray,java.lang.IllegalArgumentException@[init]]",N,N,-,Y,[r1]@[convertToColorSpace],[]
+74,block_480,Code Block,73,convertToColorSpace,Method,[19],-,-,-,-,[],N,-@[convertToColorSpace],[]
+75,block_469,Code Block,73,convertToColorSpace,Method,[0:4],-,-,-,-,[49],Y,[r1]@[convertToColorSpace],[]
+76,block_481,Code Block,73,convertToColorSpace,Method,"[5:7,20:22]",-,-,-,-,[],N,-@[convertToColorSpace],[]
+77,block_471,Code Block,73,convertToColorSpace,Method,"[11:13,71:73]",-,-,-,-,[50],N,-@[convertToColorSpace],[]
+78,block_477,Code Block,73,convertToColorSpace,Method,"[35,36,70,74]",-,-,-,-,[],N,-@[convertToColorSpace],[]
+79,block_479,Code Block,73,convertToColorSpace,Method,[37:67],-,-,-,-,[50],N,-@[convertToColorSpace],[]
+80,block_470,Code Block,73,convertToColorSpace,Method,[8:10],-,-,-,-,[],N,-@[convertToColorSpace],[]
+81,block_472,Code Block,73,convertToColorSpace,Method,[14:18],-,-,-,-,[],N,-@[convertToColorSpace],[]
+82,block_476,Code Block,73,convertToColorSpace,Method,[32:34],-,-,-,-,[50],N,-@[convertToColorSpace],[]
+83,block_478,Code Block,73,convertToColorSpace,Method,"[68,69]",-,-,-,-,[50],N,-@[convertToColorSpace],[]
+84,block_475,Code Block,73,convertToColorSpace,Method,"[27,28]",-,-,-,-,[50],N,-@[convertToColorSpace],[]
+85,block_473,Code Block,73,convertToColorSpace,Method,"[23,24]",-,-,-,-,[50],N,-@[convertToColorSpace],[]
+86,block_474,Code Block,73,convertToColorSpace,Method,"[25,26,29:31]",-,-,-,-,[50],N,-@[convertToColorSpace],[]
+87,toString,Method,53,org.hipi.image.RasterImage,Class,[0:66],caller,"[min,getElemFloat,getNumBands,getElem,format,java.lang.StringBuilder@[init],getWidth,valueOf,getElem,getHeight,getType,valueOf]",Y,N,-,N,-@[toString],[]
+88,block_486,Code Block,87,toString,Method,"[59,60]",-,-,-,-,[],N,-@[toString],[]
+89,block_488,Code Block,87,toString,Method,[61],-,-,-,-,[],N,-@[toString],[]
+90,block_483,Code Block,87,toString,Method,[0:6],-,-,-,-,[],N,-@[toString],[]
+91,block_489,Code Block,87,toString,Method,[34:36],-,-,-,-,[],N,-@[toString],[]
+92,block_490,Code Block,87,toString,Method,[47:53],-,-,-,-,[],N,-@[toString],[]
+93,block_487,Code Block,87,toString,Method,"[62,63]",-,-,-,-,[],N,-@[toString],[]
+94,block_484,Code Block,87,toString,Method,[11:30],-,-,-,-,[],N,-@[toString],[]
+95,block_491,Code Block,87,toString,Method,[56:58],-,-,-,-,[],N,-@[toString],[]
+96,block_494,Code Block,87,toString,Method,"[9,10]",-,-,-,-,[],N,-@[toString],[]
+97,block_495,Code Block,87,toString,Method,"[7,8]",-,-,-,-,[],N,-@[toString],[]
+98,block_493,Code Block,87,toString,Method,[37:46],-,-,-,-,[],N,-@[toString],[]
+99,block_492,Code Block,87,toString,Method,"[54,55]",-,-,-,-,[],N,-@[toString],[]
+100,block_485,Code Block,87,toString,Method,"[31:33,64:66]",-,-,-,-,[],N,-@[toString],[]
+101,set,Method,53,org.hipi.image.RasterImage,Class,[0:6],-,-,N,N,-,N,-@[set],
+102,write,Method,53,org.hipi.image.RasterImage,Class,[0:7],caller,"[write,getByteArray,getByteArray]",N,N,-,N,-@[write],[]
+103,readFields,Method,53,org.hipi.image.RasterImage,Class,[0:18],caller,"[getDataType,getDataTypeSize,getNumBands,org.hipi.image.HipiImageHeader@[init],setFromByteArray,getWidth,setFromByteArray,getHeight]",N,N,-,N,-@[readFields],[]
+104,<clinit>,Method,53,org.hipi.image.RasterImage,Class,[0:7],-,-,Y,N,-,N,-@[<clinit>],
+105,block_501,Code Block,104,<clinit>,Method,[3:7],-,-,-,-,[],N,-@[<clinit>],[]
+106,block_500,Code Block,104,<clinit>,Method,[0:2],-,-,-,-,[],N,-@[<clinit>],[]
+107,org.hipi.image.FloatImage,Class,1,org.hipi.image,Package,[],-,-,-,-,-,?,-,-
+108,<init>,Method,107,org.hipi.image.FloatImage,Class,[0:4],caller,"[org.hipi.image.RasterImage@[init],org.hipi.image.PixelArrayFloat@[init]]",Y,Y,-,N,-@[<init>],[]
+109,<init>,Method,107,org.hipi.image.FloatImage,Class,[0:13],caller,"[org.hipi.image.RasterImage@[init],org.hipi.image.PixelArrayFloat@[init],setHeader,org.hipi.image.HipiImageHeader@[init]]",Y,Y,-,N,-@[<init>],[]
+110,<init>,Method,107,org.hipi.image.FloatImage,Class,[0:13],caller,"[org.hipi.image.RasterImage@[init],org.hipi.image.PixelArrayFloat@[init],setHeader,org.hipi.image.HipiImageHeader@[init]]",Y,Y,-,N,-@[<init>],[]
+111,<init>,Method,107,org.hipi.image.FloatImage,Class,[0:31],caller,"[org.hipi.image.RasterImage@[init],org.hipi.image.PixelArrayFloat@[init],setHeader,org.hipi.image.HipiImageHeader@[init],setElemFloat,java.lang.IllegalArgumentException@[init]]",Y,Y,-,Y,[r1]@[<init>],[]
+112,block_28,Code Block,111,<init>,Method,[15:21],-,-,-,-,[13],N,-@[<init>],[]
+113,block_27,Code Block,111,<init>,Method,[0:14],-,-,-,-,[13],Y,[r1]@[<init>],[]
+114,block_29,Code Block,111,<init>,Method,[22:25],-,-,-,-,[12],N,-@[<init>],[]
+115,block_30,Code Block,111,<init>,Method,[26:31],-,-,-,-,[13],N,-@[<init>],[]
+116,getType,Method,107,org.hipi.image.FloatImage,Class,[0:2],-,-,Y,N,-,N,-@[getType],
+117,getData,Method,107,org.hipi.image.FloatImage,Class,[0:4],-,-,N,N,-,N,-@[getData],
+118,equalsWithTolerance,Method,107,org.hipi.image.FloatImage,Class,[0:35],caller,"[getColorSpace,abs,getElemFloat,getNumBands,getWidth,getHeight,getPixelArray]",Y,N,-,Y,[r1]@[equalsWithTolerance],[]
+119,block_41,Code Block,118,equalsWithTolerance,Method,[24:31],-,-,-,-,[6],N,-@[equalsWithTolerance],[]
+120,block_38,Code Block,118,equalsWithTolerance,Method,"[15,16]",-,-,-,-,[5],N,-@[equalsWithTolerance],[]
+121,block_34,Code Block,118,equalsWithTolerance,Method,[0:3],-,-,-,-,[6],Y,[r1]@[equalsWithTolerance],[]
+122,block_37,Code Block,118,equalsWithTolerance,Method,"[13,14]",-,-,-,-,[5],N,-@[equalsWithTolerance],[]
+123,block_44,Code Block,118,equalsWithTolerance,Method,[4],-,-,-,-,[],N,-@[equalsWithTolerance],[]
+124,block_36,Code Block,118,equalsWithTolerance,Method,"[11,12,17]",-,-,-,-,[5],N,-@[equalsWithTolerance],[]
+125,block_39,Code Block,118,equalsWithTolerance,Method,[18:23],-,-,-,-,[5],N,-@[equalsWithTolerance],[]
+126,block_43,Code Block,118,equalsWithTolerance,Method,[32],-,-,-,-,[],N,-@[equalsWithTolerance],[]
+127,block_40,Code Block,118,equalsWithTolerance,Method,[35],-,-,-,-,[],N,-@[equalsWithTolerance],[]
+128,block_35,Code Block,118,equalsWithTolerance,Method,[5:10],-,-,-,-,[5],N,-@[equalsWithTolerance],[]
+129,block_42,Code Block,118,equalsWithTolerance,Method,"[33,34]",-,-,-,-,[5],N,-@[equalsWithTolerance],[]
+130,equals,Method,107,org.hipi.image.FloatImage,Class,[0:9],caller,[equalsWithTolerance],Y,N,-,Y,[r1]@[equals],[]
+131,block_48,Code Block,130,equals,Method,[6:9],-,-,-,-,[4],N,-@[equals],[]
+132,block_47,Code Block,130,equals,Method,"[4,5]",-,-,-,-,[4],N,-@[equals],[]
+133,block_46,Code Block,130,equals,Method,[0:2],-,-,-,-,[4],Y,[r1]@[equals],[]
+134,block_49,Code Block,130,equals,Method,[3],-,-,-,-,[],N,-@[equals],[]
+135,add,Method,107,org.hipi.image.FloatImage,Class,[0:18],caller,"[getData,getNumBands,getWidth,getHeight,checkCompatibleInputImage]",N,Y,-,Y,[$i4]@[add],[]
+136,block_52,Code Block,135,add,Method,[12:18],-,-,-,-,[19],N,-@[add],[]
+137,block_51,Code Block,135,add,Method,[0:11],-,-,-,-,[19],Y,[$i4]@[add],[]
+138,add,Method,107,org.hipi.image.FloatImage,Class,[0:15],-,-,N,Y,-,N,-@[add],
+139,block_54,Code Block,138,add,Method,[0:9],-,-,-,-,[],N,-@[add],[]
+140,block_55,Code Block,138,add,Method,[10:15],-,-,-,-,[],N,-@[add],[]
+141,multiply,Method,107,org.hipi.image.FloatImage,Class,[0:18],caller,"[getData,getNumBands,getWidth,getHeight,checkCompatibleInputImage]",N,N,-,Y,[$i4]@[multiply],[]
+142,block_58,Code Block,141,multiply,Method,[12:18],-,-,-,-,[20],N,-@[multiply],[]
+143,block_57,Code Block,141,multiply,Method,[0:11],-,-,-,-,[20],Y,[$i4]@[multiply],[]
+144,scale,Method,107,org.hipi.image.FloatImage,Class,[0:15],-,-,N,N,-,N,-@[scale],
+145,block_60,Code Block,144,scale,Method,[0:9],-,-,-,-,[],N,-@[scale],[]
+146,block_61,Code Block,144,scale,Method,[10:15],-,-,-,-,[],N,-@[scale],[]
+147,hex,Method,107,org.hipi.image.FloatImage,Class,[0:4],caller,"[getData,floatArrayToByteArray,asHex]",Y,N,-,N,-@[hex],[]
+148,checkCompatibleInputImage,Method,107,org.hipi.image.FloatImage,Class,[0:17],callee,"[add,multiply]",N,N,-,Y,[<org.hipi.image.FloatImage: void add(org.hipi.image.FloatImage)>@$r2<org.hipi.image.FloatImage: void multiply(org.hipi.image.FloatImage)>@$r2]@[checkCompatibleInputImage],[]
+149,block_66,Code Block,148,checkCompatibleInputImage,Method,[8:10],-,-,-,-,[],Y,[multiply->checkCompatibleInputImage:$r2]@[checkCompatibleInputImage],[]
+150,block_64,Code Block,148,checkCompatibleInputImage,Method,[0:4],-,-,-,-,[20],Y,[multiply->checkCompatibleInputImage:$r2]@[checkCompatibleInputImage],[]
+151,block_65,Code Block,148,checkCompatibleInputImage,Method,"[5:7,14:16]",-,-,-,-,[],Y,[multiply->checkCompatibleInputImage:$r2]@[checkCompatibleInputImage],[]
+152,block_67,Code Block,148,checkCompatibleInputImage,Method,[11:13],-,-,-,-,[],Y,[multiply->checkCompatibleInputImage:$r2]@[checkCompatibleInputImage],[]
+153,block_68,Code Block,148,checkCompatibleInputImage,Method,[17],-,-,-,-,[],Y,[multiply->checkCompatibleInputImage:$r2]@[checkCompatibleInputImage],[]
+154,org.hipi.image.HipiImage$HipiImageType,Class,1,org.hipi.image,Package,[],-,-,-,-,-,?,-,-
+155,values,Method,154,org.hipi.image.HipiImage$HipiImageType,Class,[0:3],-,-,N,N,-,N,-@[values],
+156,valueOf,Method,154,org.hipi.image.HipiImage$HipiImageType,Class,[0:3],-,-,Y,N,-,N,-@[valueOf],
+157,<init>,Method,154,org.hipi.image.HipiImage$HipiImageType,Class,[0:6],callee,[<clinit>],Y,N,-,N,-@[<init>],[]
+158,fromInteger,Method,154,org.hipi.image.HipiImage$HipiImageType,Class,[0:17],-,-,N,N,-,N,-@[fromInteger],
+159,block_77,Code Block,158,fromInteger,Method,[8],-,-,-,-,[],N,-@[fromInteger],[]
+160,block_76,Code Block,158,fromInteger,Method,"[9,10]",-,-,-,-,[],N,-@[fromInteger],[]
+161,block_74,Code Block,158,fromInteger,Method,[0:4],-,-,-,-,[],N,-@[fromInteger],[]
+162,block_75,Code Block,158,fromInteger,Method,"[5:7,11:17]",-,-,-,-,[],N,-@[fromInteger],[]
+163,toInteger,Method,154,org.hipi.image.HipiImage$HipiImageType,Class,[0:2],-,-,N,N,-,N,-@[toInteger],
+164,getDefault,Method,154,org.hipi.image.HipiImage$HipiImageType,Class,"[0,1]",-,-,N,N,-,N,-@[getDefault],
+165,<clinit>,Method,154,org.hipi.image.HipiImage$HipiImageType,Class,[0:22],caller,[org.hipi.image.HipiImage$HipiImageType@[init]],Y,N,-,N,-@[<clinit>],[]
+166,org.hipi.image.PixelArrayByte,Class,1,org.hipi.image,Package,[],-,-,-,-,-,?,-,-
+167,<init>,Method,166,org.hipi.image.PixelArrayByte,Class,[0:5],caller,[org.hipi.image.PixelArray@[init]],Y,Y,-,N,-@[<init>],[]
+168,<init>,Method,166,org.hipi.image.PixelArrayByte,Class,[0:3],caller,[org.hipi.image.PixelArray@[init]],Y,Y,-,N,-@[<init>],[]
+169,getData,Method,166,org.hipi.image.PixelArrayByte,Class,[0:2],-,-,N,N,-,N,-@[getData],
+170,setSize,Method,166,org.hipi.image.PixelArrayByte,Class,[0:12],callee,[setHeader],Y,N,-,N,-@[setSize],[]
+171,block_402,Code Block,170,setSize,Method,[0:2],-,-,-,-,[],N,-@[setSize],[]
+172,block_403,Code Block,170,setSize,Method,"[6,7]",-,-,-,-,[],N,-@[setSize],[]
+173,block_405,Code Block,170,setSize,Method,[3:5],-,-,-,-,[],N,-@[setSize],[]
+174,block_404,Code Block,170,setSize,Method,[8:12],-,-,-,-,[],N,-@[setSize],[]
+175,getByteArray,Method,166,org.hipi.image.PixelArrayByte,Class,[0:2],-,-,Y,N,-,N,-@[getByteArray],
+176,setFromByteArray,Method,166,org.hipi.image.PixelArrayByte,Class,[0:12],callee,[readFields],Y,N,-,N,-@[setFromByteArray],[]
+177,block_409,Code Block,176,setFromByteArray,Method,"[3:7,12]",-,-,-,-,[],N,-@[setFromByteArray],[]
+178,block_410,Code Block,176,setFromByteArray,Method,[8:11],-,-,-,-,[],N,-@[setFromByteArray],[]
+179,block_408,Code Block,176,setFromByteArray,Method,[0:2],-,-,-,-,[],N,-@[setFromByteArray],[]
+180,getElem,Method,166,org.hipi.image.PixelArrayByte,Class,[0:5],callee,"[crop,equalsWithTolerance,getElemDouble,getElemFloat,getElemNonLinSRGB,encodeImage,toString,convertToColorSpace]",Y,N,-,N,-@[getElem],[]
+181,getElemNonLinSRGB,Method,166,org.hipi.image.PixelArrayByte,Class,[0:3],caller,[getElem],Y,N,-,N,-@[getElemNonLinSRGB],[]
+182,setElem,Method,166,org.hipi.image.PixelArrayByte,Class,[0:8],callee,"[crop,setElemDouble,setElemNonLinSRGB,setElemFloat]",Y,N,-,N,-@[setElem],[]
+183,setElemNonLinSRGB,Method,166,org.hipi.image.PixelArrayByte,Class,[0:4],caller,[setElem],Y,N,-,N,-@[setElemNonLinSRGB],[]
+184,getElemFloat,Method,166,org.hipi.image.PixelArrayByte,Class,[0:7],-,-,Y,N,-,N,-@[getElemFloat],
+185,setElemFloat,Method,166,org.hipi.image.PixelArrayByte,Class,[0:12],-,-,Y,N,-,N,-@[setElemFloat],
+186,getElemDouble,Method,166,org.hipi.image.PixelArrayByte,Class,[0:7],-,-,Y,N,-,N,-@[getElemDouble],
+187,setElemDouble,Method,166,org.hipi.image.PixelArrayByte,Class,[0:11],-,-,Y,N,-,N,-@[setElemDouble],
+188,org.hipi.image.HipiImageFactory,Class,1,org.hipi.image,Package,[],-,-,-,-,-,?,-,-
+189,getFloatImageFactory,Method,188,org.hipi.image.HipiImageFactory,Class,"[0,1]",-,-,N,N,-,N,-@[getFloatImageFactory],
+190,getByteImageFactory,Method,188,org.hipi.image.HipiImageFactory,Class,"[0,1]",-,-,N,N,-,N,-@[getByteImageFactory],
+191,<init>,Method,188,org.hipi.image.HipiImageFactory,Class,[0:12],caller,"[findImageClass,java.lang.Object@[init],getType]",Y,Y,-,N,-@[<init>],[]
+192,<init>,Method,188,org.hipi.image.HipiImageFactory,Class,[0:19],callee,[<clinit>],Y,Y,-,N,-@[<init>],[]
+193,block_108,Code Block,192,<init>,Method,[14:17],-,-,-,-,[],N,-@[<init>],[]
+194,block_109,Code Block,192,<init>,Method,"[10:13,18,19]",-,-,-,-,[],N,-@[<init>],[]
+195,block_107,Code Block,192,<init>,Method,[0:9],-,-,-,-,[],N,-@[<init>],[]
+196,findImageClass,Method,188,org.hipi.image.HipiImageFactory,Class,[0:42],callee,[org.hipi.image.HipiImageFactory@[init]],N,N,-,Y,[<org.hipi.image.HipiImageFactory: void <init>(java.lang.Class)>@i0]@[findImageClass],[]
+197,block_114,Code Block,196,findImageClass,Method,"[6:9,24:26,31:42]",-,-,-,-,[],Y,[<init>->findImageClass:i0]@[findImageClass],[]
+198,block_120,Code Block,196,findImageClass,Method,[10],-,-,-,-,[],Y,[<init>->findImageClass:i0]@[findImageClass],[]
+199,block_117,Code Block,196,findImageClass,Method,[18:21],-,-,-,-,[],Y,[<init>->findImageClass:i0]@[findImageClass],[]
+200,block_113,Code Block,196,findImageClass,Method,[27:30],-,-,-,-,[],Y,[<init>->findImageClass:i0]@[findImageClass],[]
+201,block_119,Code Block,196,findImageClass,Method,[14],-,-,-,-,[],Y,[<init>->findImageClass:i0]@[findImageClass],[]
+202,block_116,Code Block,196,findImageClass,Method,"[15,16]",-,-,-,-,[],Y,[<init>->findImageClass:i0]@[findImageClass],[]
+203,block_112,Code Block,196,findImageClass,Method,"[22,23]",-,-,-,-,[],Y,[<init>->findImageClass:i0]@[findImageClass],[]
+204,block_111,Code Block,196,findImageClass,Method,[0:5],-,-,-,-,[24],Y,[<init>->findImageClass:i0]@[findImageClass],[]
+205,block_118,Code Block,196,findImageClass,Method,[17],-,-,-,-,[],Y,[<init>->findImageClass:i0]@[findImageClass],[]
+206,block_115,Code Block,196,findImageClass,Method,[11:13],-,-,-,-,[],Y,[<init>->findImageClass:i0]@[findImageClass],[]
+207,getType,Method,188,org.hipi.image.HipiImageFactory,Class,[0:2],-,-,N,N,-,N,-@[getType],
+208,createImage,Method,188,org.hipi.image.HipiImageFactory,Class,[0:6],caller,[setHeader],N,N,-,N,-@[createImage],[]
+209,<clinit>,Method,188,org.hipi.image.HipiImageFactory,Class,[0:8],caller,[org.hipi.image.HipiImageFactory@[init]],Y,N,-,N,-@[<clinit>],[]
+210,org.hipi.image.RasterImage$1,Class,1,org.hipi.image,Package,[],-,-,-,-,-,?,-,-
+211,<clinit>,Method,210,org.hipi.image.RasterImage$1,Class,[0:18],-,-,Y,N,-,N,-@[<clinit>],
+212,org.hipi.image.ByteImage,Class,1,org.hipi.image,Package,[],-,-,-,-,-,?,-,-
+213,<init>,Method,212,org.hipi.image.ByteImage,Class,[0:4],caller,"[org.hipi.image.RasterImage@[init],org.hipi.image.PixelArrayByte@[init]]",Y,N,-,N,-@[<init>],[]
+214,getType,Method,212,org.hipi.image.ByteImage,Class,[0:2],-,-,Y,N,-,N,-@[getType],
+215,getData,Method,212,org.hipi.image.ByteImage,Class,[0:4],-,-,N,N,-,N,-@[getData],
+216,equalsWithTolerance,Method,212,org.hipi.image.ByteImage,Class,[0:34],caller,"[getColorSpace,getNumBands,getElem,getWidth,getElem,getHeight,getPixelArray,abs]",Y,N,-,Y,[r1]@[equalsWithTolerance],[]
+217,block_15,Code Block,216,equalsWithTolerance,Method,[4],-,-,-,-,[],N,-@[equalsWithTolerance],[]
+218,block_12,Code Block,216,equalsWithTolerance,Method,[24:30],-,-,-,-,[3],N,-@[equalsWithTolerance],[]
+219,block_10,Code Block,216,equalsWithTolerance,Method,[18:23],-,-,-,-,[2],N,-@[equalsWithTolerance],[]
+220,block_13,Code Block,216,equalsWithTolerance,Method,"[32,33]",-,-,-,-,[2],N,-@[equalsWithTolerance],[]
+221,block_9,Code Block,216,equalsWithTolerance,Method,"[15,16]",-,-,-,-,[2],N,-@[equalsWithTolerance],[]
+222,block_8,Code Block,216,equalsWithTolerance,Method,"[13,14]",-,-,-,-,[2],N,-@[equalsWithTolerance],[]
+223,block_5,Code Block,216,equalsWithTolerance,Method,[0:3],-,-,-,-,[3],Y,[r1]@[equalsWithTolerance],[]
+224,block_14,Code Block,216,equalsWithTolerance,Method,[31],-,-,-,-,[],N,-@[equalsWithTolerance],[]
+225,block_7,Code Block,216,equalsWithTolerance,Method,"[11,12,17]",-,-,-,-,[2],N,-@[equalsWithTolerance],[]
+226,block_11,Code Block,216,equalsWithTolerance,Method,[34],-,-,-,-,[],N,-@[equalsWithTolerance],[]
+227,block_6,Code Block,216,equalsWithTolerance,Method,[5:10],-,-,-,-,[2],N,-@[equalsWithTolerance],[]
+228,equals,Method,212,org.hipi.image.ByteImage,Class,[0:9],caller,[equalsWithTolerance],Y,N,-,Y,[r1]@[equals],[]
+229,block_19,Code Block,228,equals,Method,[6:9],-,-,-,-,[1],N,-@[equals],[]
+230,block_17,Code Block,228,equals,Method,[0:2],-,-,-,-,[1],Y,[r1]@[equals],[]
+231,block_20,Code Block,228,equals,Method,[3],-,-,-,-,[],N,-@[equals],[]
+232,block_18,Code Block,228,equals,Method,"[4,5]",-,-,-,-,[1],N,-@[equals],[]
+233,hex,Method,212,org.hipi.image.ByteImage,Class,[0:3],caller,"[getData,asHex]",Y,N,-,N,-@[hex],[]
+234,org.hipi.image.HipiImageHeader,Class,1,org.hipi.image,Package,[],-,-,-,-,-,?,-,-
+235,<init>,Method,234,org.hipi.image.HipiImageHeader,Class,[0:37],caller,"[setMetaDataFromBytes,format,java.lang.Object@[init],java.util.HashMap@[init],java.lang.IllegalArgumentException@[init],valueOf]",Y,Y,-,Y,[i0]@[<init>],"[setMetaDataFromBytes,valueOf]"
+236,block_151,Code Block,235,<init>,Method,"[16,18:28]",-,-,-,-,[30],N,-@[<init>],[]
+237,block_150,Code Block,235,<init>,Method,[0:15],-,-,-,-,[92],Y,[i0]@[<init>],[]
+238,block_153,Code Block,235,<init>,Method,[29:34],-,-,-,-,[32],N,-@[<init>],[]
+239,block_152,Code Block,235,<init>,Method,[17],-,-,-,-,[31],N,-@[<init>],[]
+240,block_154,Code Block,235,<init>,Method,[35:37],-,-,-,-,[33],N,-@[<init>],[]
+241,<init>,Method,234,org.hipi.image.HipiImageHeader,Class,[0:10],caller,"[java.lang.Object@[init],readFields,java.util.HashMap@[init]]",Y,Y,-,N,-@[<init>],[]
+242,getStorageFormat,Method,234,org.hipi.image.HipiImageHeader,Class,[0:2],-,-,N,N,-,N,-@[getStorageFormat],
+243,getColorSpace,Method,234,org.hipi.image.HipiImageHeader,Class,[0:2],-,-,N,N,-,N,-@[getColorSpace],
+244,getWidth,Method,234,org.hipi.image.HipiImageHeader,Class,[0:2],-,-,N,N,-,N,-@[getWidth],
+245,getHeight,Method,234,org.hipi.image.HipiImageHeader,Class,[0:2],-,-,N,N,-,N,-@[getHeight],
+246,getNumBands,Method,234,org.hipi.image.HipiImageHeader,Class,[0:2],-,-,N,N,-,N,-@[getNumBands],
+247,addMetaData,Method,234,org.hipi.image.HipiImageHeader,Class,[0:5],-,-,N,N,-,N,-@[addMetaData],
+248,setMetaData,Method,234,org.hipi.image.HipiImageHeader,Class,[0:5],callee,[addImage],N,N,-,N,-@[setMetaData],[]
+249,getMetaData,Method,234,org.hipi.image.HipiImageHeader,Class,[0:5],callee,[getMetaData],N,N,-,N,-@[getMetaData],[]
+250,getAllMetaData,Method,234,org.hipi.image.HipiImageHeader,Class,[0:4],-,-,N,N,-,N,-@[getAllMetaData],
+251,getMetaDataAsBytes,Method,234,org.hipi.image.HipiImageHeader,Class,[0:9],-,-,N,N,-,N,-@[getMetaDataAsBytes],
+252,setMetaDataFromBytes,Method,234,org.hipi.image.HipiImageHeader,Class,[0:14],callee,"[org.hipi.image.HipiImageHeader@[init],readFields]",N,N,-,N,-@[setMetaDataFromBytes],[]
+253,getExifData,Method,234,org.hipi.image.HipiImageHeader,Class,[0:5],callee,[getExifData],N,N,-,N,-@[getExifData],[]
+254,getAllExifData,Method,234,org.hipi.image.HipiImageHeader,Class,[0:4],-,-,N,N,-,N,-@[getAllExifData],
+255,setExifData,Method,234,org.hipi.image.HipiImageHeader,Class,[0:5],callee,"[decodeImage,nextKeyValue]",N,N,-,N,-@[setExifData],[]
+256,set,Method,234,org.hipi.image.HipiImageHeader,Class,[0:16],-,-,N,N,-,N,-@[set],
+257,toString,Method,234,org.hipi.image.HipiImageHeader,Class,[0:23],-,-,Y,N,-,N,-@[toString],
+258,write,Method,234,org.hipi.image.HipiImageHeader,Class,[0:23],callee,"[write,writeObject,write,addImage]",N,N,-,Y,"[<org.hipi.imagebundle.HipiImageBundle: void addImage(org.hipi.image.HipiImageHeader,java.io.InputStream)>@$i5<org.hipi.image.RawImage: void write(java.io.DataOutput)>@$i5<org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter: void writeObject(org.apache.hadoop.io.Writable)>@$i5]@[write]",[]
+259,block_175,Code Block,258,write,Method,[20:22],-,-,-,-,[],Y,[writeObject->write:$i5]@[write],[]
+260,block_174,Code Block,258,write,Method,"[16:19,23]",-,-,-,-,[60],Y,[writeObject->write:$i5]@[write],[]
+261,block_173,Code Block,258,write,Method,[0:15],-,-,-,-,[60],Y,[writeObject->write:$i5]@[write],[]
+262,readFields,Method,234,org.hipi.image.HipiImageHeader,Class,[0:19],caller,"[fromInteger,setMetaDataFromBytes,fromInteger]",N,N,-,Y,[i0]@[readFields],[]
+263,block_177,Code Block,262,readFields,Method,[0:15],-,-,-,-,[34],Y,[i0]@[readFields],[]
+264,block_178,Code Block,262,readFields,Method,[16:19],-,-,-,-,[34],N,-@[readFields],[]
+265,compareTo,Method,234,org.hipi.image.HipiImageHeader,Class,[0:13],callee,[compareTo],N,Y,-,Y,[<org.hipi.image.HipiImageHeader: int compareTo(java.lang.Object)>@i1]@[compareTo],[]
+266,block_180,Code Block,265,compareTo,Method,[0:6],-,-,-,-,[25],Y,[compareTo->compareTo:i1]@[compareTo],[]
+267,block_182,Code Block,265,compareTo,Method,[10:13],-,-,-,-,[],Y,[compareTo->compareTo:i1]@[compareTo],[]
+268,block_181,Code Block,265,compareTo,Method,[9],-,-,-,-,[],Y,[compareTo->compareTo:i1]@[compareTo],[]
+269,block_183,Code Block,265,compareTo,Method,"[7,8]",-,-,-,-,[],Y,[compareTo->compareTo:i1]@[compareTo],[]
+270,hashCode,Method,234,org.hipi.image.HipiImageHeader,Class,[0:3],-,-,Y,N,-,N,-@[hashCode],
+271,compareTo,Method,234,org.hipi.image.HipiImageHeader,Class,[],caller,[compareTo],N,Y,-,N,-@[compareTo],[]
+272,org.hipi.image.PixelArrayFloat,Class,1,org.hipi.image,Package,[],-,-,-,-,-,?,-,-
+273,<init>,Method,272,org.hipi.image.PixelArrayFloat,Class,[0:3],caller,[org.hipi.image.PixelArray@[init]],Y,Y,-,N,-@[<init>],[]
+274,<init>,Method,272,org.hipi.image.PixelArrayFloat,Class,[0:5],caller,[org.hipi.image.PixelArray@[init]],Y,Y,-,N,-@[<init>],[]
+275,getData,Method,272,org.hipi.image.PixelArrayFloat,Class,[0:2],-,-,N,N,-,N,-@[getData],
+276,setSize,Method,272,org.hipi.image.PixelArrayFloat,Class,[0:12],callee,[setHeader],Y,N,-,N,-@[setSize],[]
+277,block_425,Code Block,276,setSize,Method,"[6,7]",-,-,-,-,[],N,-@[setSize],[]
+278,block_424,Code Block,276,setSize,Method,[0:2],-,-,-,-,[],N,-@[setSize],[]
+279,block_427,Code Block,276,setSize,Method,[3:5],-,-,-,-,[],N,-@[setSize],[]
+280,block_426,Code Block,276,setSize,Method,[8:12],-,-,-,-,[],N,-@[setSize],[]
+281,getByteArray,Method,272,org.hipi.image.PixelArrayFloat,Class,[0:3],caller,[floatArrayToByteArray],Y,N,-,N,-@[getByteArray],[]
+282,setFromByteArray,Method,272,org.hipi.image.PixelArrayFloat,Class,[0:13],caller,[byteArrayToFloatArray],Y,N,-,Y,[r1]@[setFromByteArray],[byteArrayToFloatArray]
+283,block_430,Code Block,282,setFromByteArray,Method,[0:2],-,-,-,-,[48],Y,[r1]@[setFromByteArray],[]
+284,block_432,Code Block,282,setFromByteArray,Method,[8:12],-,-,-,-,[48],N,-@[setFromByteArray],[]
+285,block_431,Code Block,282,setFromByteArray,Method,"[3:7,13]",-,-,-,-,[48],N,-@[setFromByteArray],[]
+286,getElem,Method,272,org.hipi.image.PixelArrayFloat,Class,[0:8],callee,"[crop,equalsWithTolerance,getElemDouble,getElemFloat,encodeImage,toString,convertToColorSpace]",Y,N,-,N,-@[getElem],[]
+287,getElemNonLinSRGB,Method,272,org.hipi.image.PixelArrayFloat,Class,[0:12],callee,"[encodeRasterImage,encodeImage]",Y,N,-,N,-@[getElemNonLinSRGB],[]
+288,setElem,Method,272,org.hipi.image.PixelArrayFloat,Class,[0:7],callee,"[crop,setElemDouble,setElemFloat]",Y,N,-,N,-@[setElem],[]
+289,setElemNonLinSRGB,Method,272,org.hipi.image.PixelArrayFloat,Class,[0:13],caller,[setElemFloat],Y,N,-,Y,[i1]@[setElemNonLinSRGB],[]
+290,block_438,Code Block,289,setElemNonLinSRGB,Method,[7],-,-,-,-,[47],N,-@[setElemNonLinSRGB],[]
+291,block_439,Code Block,289,setElemNonLinSRGB,Method,[8:13],-,-,-,-,[47],N,-@[setElemNonLinSRGB],[]
+292,block_437,Code Block,289,setElemNonLinSRGB,Method,[0:4],-,-,-,-,[47],Y,[i1]@[setElemNonLinSRGB],[]
+293,block_440,Code Block,289,setElemNonLinSRGB,Method,"[5,6]",-,-,-,-,[],N,-@[setElemNonLinSRGB],[]
+294,getElemFloat,Method,272,org.hipi.image.PixelArrayFloat,Class,[0:4],-,-,Y,N,-,N,-@[getElemFloat],
+295,setElemFloat,Method,272,org.hipi.image.PixelArrayFloat,Class,[0:5],callee,[setElemNonLinSRGB],Y,N,-,N,-@[setElemFloat],[]
+296,getElemDouble,Method,272,org.hipi.image.PixelArrayFloat,Class,[0:5],-,-,Y,N,-,N,-@[getElemDouble],
+297,setElemDouble,Method,272,org.hipi.image.PixelArrayFloat,Class,[0:6],-,-,Y,N,-,N,-@[setElemDouble],
+298,<clinit>,Method,272,org.hipi.image.PixelArrayFloat,Class,[0:2308],-,-,Y,N,-,N,-@[<clinit>],
+299,org.hipi.image.HipiImageFactory$1,Class,1,org.hipi.image,Package,[],-,-,-,-,-,?,-,-
+300,<clinit>,Method,299,org.hipi.image.HipiImageFactory$1,Class,[0:32],-,-,Y,N,-,N,-@[<clinit>],
+301,org.hipi.image.PixelArray,Class,1,org.hipi.image,Package,[],-,-,-,-,-,?,-,-
+302,getDataTypeSize,Method,301,org.hipi.image.PixelArray,Class,[0:13],callee,[readFields],N,N,-,Y,[<org.hipi.image.RasterImage: void readFields(java.io.DataInput)>@i0]@[getDataTypeSize],[]
+303,block_387,Code Block,302,getDataTypeSize,Method,[11:13],-,-,-,-,[],Y,[readFields->getDataTypeSize:i0]@[getDataTypeSize],[]
+304,block_385,Code Block,302,getDataTypeSize,Method,"[0,1]",-,-,-,-,[56],Y,[readFields->getDataTypeSize:i0]@[getDataTypeSize],[]
+305,block_386,Code Block,302,getDataTypeSize,Method,[2:10],-,-,-,-,[],Y,[readFields->getDataTypeSize:i0]@[getDataTypeSize],[]
+306,<init>,Method,301,org.hipi.image.PixelArray,Class,[0:4],-,-,Y,Y,-,N,-@[<init>],
+307,<init>,Method,301,org.hipi.image.PixelArray,Class,[0:6],callee,"[org.hipi.image.PixelArrayFloat@[init],org.hipi.image.PixelArrayByte@[init],org.hipi.image.PixelArrayByte@[init],org.hipi.image.PixelArrayFloat@[init]]",Y,Y,-,N,-@[<init>],[]
+308,getDataType,Method,301,org.hipi.image.PixelArray,Class,[0:2],-,-,N,N,-,N,-@[getDataType],
+309,getSize,Method,301,org.hipi.image.PixelArray,Class,[0:2],-,-,N,N,-,N,-@[getSize],
+310,getElemFloat,Method,301,org.hipi.image.PixelArray,Class,[0:4],caller,"[getElem,getElem]",N,N,-,N,-@[getElemFloat],[]
+311,setElemFloat,Method,301,org.hipi.image.PixelArray,Class,[0:5],caller,"[setElem,setElem]",N,N,-,N,-@[setElemFloat],[]
+312,getElemDouble,Method,301,org.hipi.image.PixelArray,Class,[0:4],caller,"[getElem,getElem]",N,N,-,N,-@[getElemDouble],[]
+313,setElemDouble,Method,301,org.hipi.image.PixelArray,Class,[0:5],caller,"[setElem,setElem]",N,N,-,N,-@[setElemDouble],[]
+314,<clinit>,Method,301,org.hipi.image.PixelArray,Class,[0:8],-,-,Y,N,-,N,-@[<clinit>],
+315,org.hipi.image.HipiImageHeader$HipiImageFormat,Class,1,org.hipi.image,Package,[],-,-,-,-,-,?,-,-
+316,values,Method,315,org.hipi.image.HipiImageHeader$HipiImageFormat,Class,[0:3],-,-,N,N,-,N,-@[values],
+317,valueOf,Method,315,org.hipi.image.HipiImageHeader$HipiImageFormat,Class,[0:3],-,-,Y,N,-,N,-@[valueOf],
+318,<init>,Method,315,org.hipi.image.HipiImageHeader$HipiImageFormat,Class,[0:6],callee,[<clinit>],Y,N,-,N,-@[<init>],[]
+319,fromInteger,Method,315,org.hipi.image.HipiImageHeader$HipiImageFormat,Class,[0:17],callee,"[nextKeyValue,readFields]",N,N,-,Y,[<org.hipi.image.HipiImageHeader: void readFields(java.io.DataInput)>@i0]@[fromInteger],[]
+320,block_143,Code Block,319,fromInteger,Method,"[9,10]",-,-,-,-,[],Y,[readFields->fromInteger:i0]@[fromInteger],[]
+321,block_141,Code Block,319,fromInteger,Method,[0:4],-,-,-,-,[34],Y,[readFields->fromInteger:i0]@[fromInteger],[]
+322,block_142,Code Block,319,fromInteger,Method,"[5:7,11:17]",-,-,-,-,[34],Y,[readFields->fromInteger:i0]@[fromInteger],[]
+323,block_144,Code Block,319,fromInteger,Method,[8],-,-,-,-,[],Y,[readFields->fromInteger:i0]@[fromInteger],[]
+324,toInteger,Method,315,org.hipi.image.HipiImageHeader$HipiImageFormat,Class,[0:2],-,-,N,N,-,N,-@[toInteger],
+325,getDefault,Method,315,org.hipi.image.HipiImageHeader$HipiImageFormat,Class,"[0,1]",-,-,N,N,-,N,-@[getDefault],
+326,<clinit>,Method,315,org.hipi.image.HipiImageHeader$HipiImageFormat,Class,[0:22],caller,[org.hipi.image.HipiImageHeader$HipiImageFormat@[init]],Y,N,-,N,-@[<clinit>],[]
+327,org.hipi.opencv,Package,-,-,-,-,-,-,-,-,-,?,-,-
+328,org.hipi.opencv.OpenCVMatWritable,Class,327,org.hipi.opencv,Package,[],-,-,-,-,-,?,-,-
+329,<init>,Method,328,org.hipi.opencv.OpenCVMatWritable,Class,[0:23],-,-,Y,Y,-,N,-@[<init>],
+330,block_753,Code Block,329,<init>,Method,[0:7],-,-,-,-,[],N,-@[<init>],[]
+331,block_755,Code Block,329,<init>,Method,"[17:19,23]",-,-,-,-,[],N,-@[<init>],[]
+332,block_754,Code Block,329,<init>,Method,[13:16],-,-,-,-,[],N,-@[<init>],[]
+333,block_756,Code Block,329,<init>,Method,"[8,9,20:22]",-,-,-,-,[],N,-@[<init>],[]
+334,block_757,Code Block,329,<init>,Method,[10:12],-,-,-,-,[],N,-@[<init>],[]
+335,<init>,Method,328,org.hipi.opencv.OpenCVMatWritable,Class,[0:5],caller,"[java.lang.Object@[init],setMat]",Y,Y,-,N,-@[<init>],[]
+336,setMat,Method,328,org.hipi.opencv.OpenCVMatWritable,Class,[0:25],callee,[org.hipi.opencv.OpenCVMatWritable@[init]],N,N,-,Y,[<org.hipi.opencv.OpenCVMatWritable: void <init>(org.bytedeco.javacpp.opencv_core$Mat)>@r1]@[setMat],[]
+337,block_763,Code Block,336,setMat,Method,"[3:5,9:16]",-,-,-,-,[],Y,[<init>->setMat:r1]@[setMat],[]
+338,block_760,Code Block,336,setMat,Method,[0:2],-,-,-,-,[142],Y,[<init>->setMat:r1]@[setMat],[]
+339,block_761,Code Block,336,setMat,Method,"[6,7]",-,-,-,-,[],Y,[<init>->setMat:r1]@[setMat],[]
+340,block_762,Code Block,336,setMat,Method,"[8,17:25]",-,-,-,-,[142],Y,[<init>->setMat:r1]@[setMat],[]
+341,getMat,Method,328,org.hipi.opencv.OpenCVMatWritable,Class,[0:12],-,-,N,N,-,N,-@[getMat],
+342,write,Method,328,org.hipi.opencv.OpenCVMatWritable,Class,[0:85],caller,"[java.lang.StringBuilder@[init],java.lang.AssertionError@[init],java.io.IOException@[init],intArrayToByteArray,shortArrayToByteArray,floatArrayToByteArray,doubleArrayToByteArray,CV_MAT_DEPTH]",N,N,-,Y,[i3]@[write],[]
+343,block_769,Code Block,342,write,Method,"[35,36,85]",-,-,-,-,[144],Y,[i3]@[write],[]
+344,block_768,Code Block,342,write,Method,[18:34],-,-,-,-,[144],N,-@[write],[]
+345,block_778,Code Block,342,write,Method,[6:8],-,-,-,-,[],N,-@[write],[]
+346,block_775,Code Block,342,write,Method,[13],-,-,-,-,[],N,-@[write],[]
+347,block_773,Code Block,342,write,Method,[44:51],-,-,-,-,[144],N,-@[write],[]
+348,block_776,Code Block,342,write,Method,[14],-,-,-,-,[],N,-@[write],[]
+349,block_766,Code Block,342,write,Method,[0:3],-,-,-,-,[144],N,-@[write],[]
+350,block_770,Code Block,342,write,Method,[68:84],-,-,-,-,[144],N,-@[write],[]
+351,block_774,Code Block,342,write,Method,[37:43],-,-,-,-,[144],N,-@[write],[]
+352,block_767,Code Block,342,write,Method,[9:12],-,-,-,-,[],N,-@[write],[]
+353,block_772,Code Block,342,write,Method,[52:59],-,-,-,-,[144],N,-@[write],[]
+354,block_771,Code Block,342,write,Method,[60:67],-,-,-,-,[144],N,-@[write],[]
+355,block_777,Code Block,342,write,Method,"[4,5,15:17]",-,-,-,-,[],N,-@[write],[]
+356,readFields,Method,328,org.hipi.opencv.OpenCVMatWritable,Class,[0:69],caller,"[java.lang.StringBuilder@[init],byteArrayToIntArray,byteArrayToShortArray,org.bytedeco.javacpp.opencv_core$Mat@[init],byteArrayToDoubleArray,java.io.IOException@[init],byteArrayToFloatArray,CV_MAT_DEPTH]",N,N,-,Y,[i1]@[readFields],[]
+357,block_781,Code Block,356,readFields,Method,[42:69],-,-,-,-,[143],N,-@[readFields],[]
+358,block_784,Code Block,356,readFields,Method,[17:23],-,-,-,-,[143],N,-@[readFields],[]
+359,block_780,Code Block,356,readFields,Method,[0:16],-,-,-,-,[143],Y,[i1]@[readFields],[]
+360,block_783,Code Block,356,readFields,Method,[24:32],-,-,-,-,[143],N,-@[readFields],[]
+361,block_782,Code Block,356,readFields,Method,[33:41],-,-,-,-,[143],N,-@[readFields],[]
+362,<clinit>,Method,328,org.hipi.opencv.OpenCVMatWritable,Class,[0:7],-,-,Y,N,-,N,-@[<clinit>],
+363,block_787,Code Block,362,<clinit>,Method,[3:7],-,-,-,-,[],N,-@[<clinit>],[]
+364,block_786,Code Block,362,<clinit>,Method,[0:2],-,-,-,-,[],N,-@[<clinit>],[]
+365,org.hipi.opencv.OpenCVUtils,Class,327,org.hipi.opencv,Package,[],-,-,-,-,-,?,-,-
+366,<init>,Method,365,org.hipi.opencv.OpenCVUtils,Class,[0:2],-,-,Y,N,-,N,-@[<init>],
+367,generateOpenCVType,Method,365,org.hipi.opencv.OpenCVUtils,Class,[0:31],callee,[convertRasterImageToMat],N,N,-,Y,[<org.hipi.opencv.OpenCVUtils: org.bytedeco.javacpp.opencv_core$Mat convertRasterImageToMat(org.hipi.image.RasterImage)>@i0]@[generateOpenCVType],[]
+368,block_797,Code Block,367,generateOpenCVType,Method,[28:31],-,-,-,-,[],Y,[convertRasterImageToMat->generateOpenCVType:i0]@[generateOpenCVType],[]
+369,block_795,Code Block,367,generateOpenCVType,Method,[27],-,-,-,-,[],Y,[convertRasterImageToMat->generateOpenCVType:i0]@[generateOpenCVType],[]
+370,block_802,Code Block,367,generateOpenCVType,Method,"[6,7]",-,-,-,-,[],Y,[convertRasterImageToMat->generateOpenCVType:i0]@[generateOpenCVType],[]
+371,block_799,Code Block,367,generateOpenCVType,Method,"[12,13]",-,-,-,-,[],Y,[convertRasterImageToMat->generateOpenCVType:i0]@[generateOpenCVType],[]
+372,block_796,Code Block,367,generateOpenCVType,Method,[23:26],-,-,-,-,[],Y,[convertRasterImageToMat->generateOpenCVType:i0]@[generateOpenCVType],[]
+373,block_792,Code Block,367,generateOpenCVType,Method,"[16,17]",-,-,-,-,[],Y,[convertRasterImageToMat->generateOpenCVType:i0]@[generateOpenCVType],[]
+374,block_803,Code Block,367,generateOpenCVType,Method,"[4,5]",-,-,-,-,[],Y,[convertRasterImageToMat->generateOpenCVType:i0]@[generateOpenCVType],[]
+375,block_791,Code Block,367,generateOpenCVType,Method,[0:3],-,-,-,-,[145],Y,[convertRasterImageToMat->generateOpenCVType:i0]@[generateOpenCVType],[]
+376,block_798,Code Block,367,generateOpenCVType,Method,"[14,15]",-,-,-,-,[],Y,[convertRasterImageToMat->generateOpenCVType:i0]@[generateOpenCVType],[]
+377,block_794,Code Block,367,generateOpenCVType,Method,[22],-,-,-,-,[],Y,[convertRasterImageToMat->generateOpenCVType:i0]@[generateOpenCVType],[]
+378,block_801,Code Block,367,generateOpenCVType,Method,"[8,9]",-,-,-,-,[],Y,[convertRasterImageToMat->generateOpenCVType:i0]@[generateOpenCVType],[]
+379,block_800,Code Block,367,generateOpenCVType,Method,"[10,11]",-,-,-,-,[],Y,[convertRasterImageToMat->generateOpenCVType:i0]@[generateOpenCVType],[]
+380,block_793,Code Block,367,generateOpenCVType,Method,[18:21],-,-,-,-,[],Y,[convertRasterImageToMat->generateOpenCVType:i0]@[generateOpenCVType],[]
+381,convertRasterImageToMat,Method,365,org.hipi.opencv.OpenCVUtils,Class,[0:95],caller,"[generateOpenCVType,org.bytedeco.javacpp.opencv_core$Mat@[init],getPixelArray,getByteArray,CV_MAT_DEPTH,getDataType,getNumBands,byteArrayToIntArray,byteArrayToShortArray,getWidth,java.lang.StringBuilder@[init],byteArrayToDoubleArray,getHeight,byteArrayToFloatArray,getByteArray,java.lang.IllegalArgumentException@[init]]",N,N,-,Y,[r0]@[convertRasterImageToMat],[org.bytedeco.javacpp.opencv_core$Mat@[init]]
+382,block_816,Code Block,381,convertRasterImageToMat,Method,[41:51],-,-,-,-,[145],N,-@[convertRasterImageToMat],[]
+383,block_809,Code Block,381,convertRasterImageToMat,Method,[24:35],-,-,-,-,[145],N,-@[convertRasterImageToMat],[]
+384,block_807,Code Block,381,convertRasterImageToMat,Method,[7:21],-,-,-,-,[145],N,-@[convertRasterImageToMat],[]
+385,block_813,Code Block,381,convertRasterImageToMat,Method,[71:75],-,-,-,-,[145],N,-@[convertRasterImageToMat],[]
+386,block_814,Code Block,381,convertRasterImageToMat,Method,[66:70],-,-,-,-,[145],N,-@[convertRasterImageToMat],[]
+387,block_808,Code Block,381,convertRasterImageToMat,Method,"[22,23]",-,-,-,-,[145],N,-@[convertRasterImageToMat],[]
+388,block_815,Code Block,381,convertRasterImageToMat,Method,[62:65],-,-,-,-,[145],N,-@[convertRasterImageToMat],[]
+389,block_811,Code Block,381,convertRasterImageToMat,Method,[52:61],-,-,-,-,[145],N,-@[convertRasterImageToMat],[]
+390,block_810,Code Block,381,convertRasterImageToMat,Method,[36:40],-,-,-,-,[145],N,-@[convertRasterImageToMat],[]
+391,block_817,Code Block,381,convertRasterImageToMat,Method,[2:4],-,-,-,-,[],N,-@[convertRasterImageToMat],[]
+392,block_806,Code Block,381,convertRasterImageToMat,Method,"[5,6]",-,-,-,-,[145],N,-@[convertRasterImageToMat],[]
+393,block_805,Code Block,381,convertRasterImageToMat,Method,"[0,1]",-,-,-,-,[145],Y,[r0]@[convertRasterImageToMat],[]
+394,block_812,Code Block,381,convertRasterImageToMat,Method,[76:95],-,-,-,-,[145],N,-@[convertRasterImageToMat],[]
+395,<clinit>,Method,365,org.hipi.opencv.OpenCVUtils,Class,[0:62],-,-,Y,N,-,N,-@[<clinit>],
+396,org.hipi.util,Package,-,-,-,-,-,-,-,-,-,?,-,-
+397,org.hipi.util.ByteUtils,Class,396,org.hipi.util,Package,[],-,-,-,-,-,?,-,-
+398,<init>,Method,397,org.hipi.util.ByteUtils,Class,[0:2],-,-,Y,N,-,N,-@[<init>],
+399,inputStreamToByteArray,Method,397,org.hipi.util.ByteUtils,Class,[0:41],callee,[addImage],N,N,-,Y,"[<org.hipi.imagebundle.HipiImageBundle: void addImage(org.hipi.image.HipiImageHeader,java.io.InputStream)>@r0]@[inputStreamToByteArray]",[]
+400,block_822,Code Block,399,inputStreamToByteArray,Method,"[0,1]",-,-,-,-,[129],Y,[addImage->inputStreamToByteArray:r0]@[inputStreamToByteArray],[]
+401,block_824,Code Block,399,inputStreamToByteArray,Method,"[13:16,39:41]",-,-,-,-,[129],Y,[addImage->inputStreamToByteArray:r0]@[inputStreamToByteArray],[]
+402,block_823,Code Block,399,inputStreamToByteArray,Method,[4:12],-,-,-,-,[],Y,[addImage->inputStreamToByteArray:r0]@[inputStreamToByteArray],[]
+403,block_825,Code Block,399,inputStreamToByteArray,Method,"[2,3]",-,-,-,-,[],Y,[addImage->inputStreamToByteArray:r0]@[inputStreamToByteArray],[]
+404,byteArrayToInt,Method,397,org.hipi.util.ByteUtils,Class,[0:2],caller,[byteArrayToInt],N,Y,-,N,-@[byteArrayToInt],[]
+405,byteArrayToInt,Method,397,org.hipi.util.ByteUtils,Class,[0:19],callee,[byteArrayToInt],N,Y,-,N,-@[byteArrayToInt],[]
+406,intToByteArray,Method,397,org.hipi.util.ByteUtils,Class,[0:13],-,-,N,N,-,N,-@[intToByteArray],
+407,asHex,Method,397,org.hipi.util.ByteUtils,Class,[0:24],callee,"[hex,hex,hex]",N,N,-,N,-@[asHex],[]
+408,block_833,Code Block,407,asHex,Method,[2],-,-,-,-,[],N,-@[asHex],[]
+409,block_831,Code Block,407,asHex,Method,[3:12],-,-,-,-,[],N,-@[asHex],[]
+410,block_830,Code Block,407,asHex,Method,"[0,1]",-,-,-,-,[],N,-@[asHex],[]
+411,block_832,Code Block,407,asHex,Method,[13:20],-,-,-,-,[],N,-@[asHex],[]
+412,makeString,Method,397,org.hipi.util.ByteUtils,Class,[0:31],-,-,N,N,-,N,-@[makeString],
+413,block_841,Code Block,412,makeString,Method,[24:28],-,-,-,-,[],N,-@[makeString],[]
+414,block_840,Code Block,412,makeString,Method,"[29,30]",-,-,-,-,[],N,-@[makeString],[]
+415,block_836,Code Block,412,makeString,Method,[3:6],-,-,-,-,[],N,-@[makeString],[]
+416,block_839,Code Block,412,makeString,Method,[12:23],-,-,-,-,[],N,-@[makeString],[]
+417,block_838,Code Block,412,makeString,Method,[31],-,-,-,-,[],N,-@[makeString],[]
+418,block_835,Code Block,412,makeString,Method,[0:2],-,-,-,-,[],N,-@[makeString],[]
+419,block_837,Code Block,412,makeString,Method,[7:11],-,-,-,-,[],N,-@[makeString],[]
+420,byteArrayToShortArray,Method,397,org.hipi.util.ByteUtils,Class,[0:13],callee,"[readFields,convertRasterImageToMat]",N,N,-,Y,[<org.hipi.opencv.OpenCVUtils: org.bytedeco.javacpp.opencv_core$Mat convertRasterImageToMat(org.hipi.image.RasterImage)>@$i1<org.hipi.opencv.OpenCVMatWritable: void readFields(java.io.DataInput)>@$i1]@[byteArrayToShortArray],[]
+421,block_844,Code Block,420,byteArrayToShortArray,Method,[4:13],-,-,-,-,[],Y,[readFields->byteArrayToShortArray:$i1]@[byteArrayToShortArray],[]
+422,block_843,Code Block,420,byteArrayToShortArray,Method,[0:3],-,-,-,-,[145],Y,[readFields->byteArrayToShortArray:$i1]@[byteArrayToShortArray],[]
+423,shortArrayToByteArray,Method,397,org.hipi.util.ByteUtils,Class,[0:7],callee,[write],N,N,-,N,-@[shortArrayToByteArray],[]
+424,byteArrayToIntArray,Method,397,org.hipi.util.ByteUtils,Class,[0:13],callee,"[readFields,convertRasterImageToMat]",N,N,-,Y,[<org.hipi.opencv.OpenCVMatWritable: void readFields(java.io.DataInput)>@$i1<org.hipi.opencv.OpenCVUtils: org.bytedeco.javacpp.opencv_core$Mat convertRasterImageToMat(org.hipi.image.RasterImage)>@$i1]@[byteArrayToIntArray],[]
+425,block_848,Code Block,424,byteArrayToIntArray,Method,[4:13],-,-,-,-,[],Y,[convertRasterImageToMat->byteArrayToIntArray:$i1]@[byteArrayToIntArray],[]
+426,block_847,Code Block,424,byteArrayToIntArray,Method,[0:3],-,-,-,-,[145],Y,[convertRasterImageToMat->byteArrayToIntArray:$i1]@[byteArrayToIntArray],[]
+427,intArrayToByteArray,Method,397,org.hipi.util.ByteUtils,Class,[0:7],callee,[write],N,N,-,N,-@[intArrayToByteArray],[]
+428,byteArrayToFloatArray,Method,397,org.hipi.util.ByteUtils,Class,[0:13],callee,"[readFields,setFromByteArray,convertRasterImageToMat]",N,N,-,Y,[<org.hipi.image.PixelArrayFloat: void setFromByteArray(byte[])>@$i1<org.hipi.opencv.OpenCVMatWritable: void readFields(java.io.DataInput)>@$i1<org.hipi.opencv.OpenCVUtils: org.bytedeco.javacpp.opencv_core$Mat convertRasterImageToMat(org.hipi.image.RasterImage)>@$i1]@[byteArrayToFloatArray],[]
+429,block_851,Code Block,428,byteArrayToFloatArray,Method,[0:3],-,-,-,-,[145],Y,[convertRasterImageToMat->byteArrayToFloatArray:$i1]@[byteArrayToFloatArray],[]
+430,block_852,Code Block,428,byteArrayToFloatArray,Method,[4:13],-,-,-,-,[],Y,[convertRasterImageToMat->byteArrayToFloatArray:$i1]@[byteArrayToFloatArray],[]
+431,floatArrayToByteArray,Method,397,org.hipi.util.ByteUtils,Class,[0:7],callee,"[hex,getByteArray,write]",N,N,-,N,-@[floatArrayToByteArray],[]
+432,byteArrayToDoubleArray,Method,397,org.hipi.util.ByteUtils,Class,[0:13],callee,"[readFields,convertRasterImageToMat]",N,N,-,Y,[<org.hipi.opencv.OpenCVMatWritable: void readFields(java.io.DataInput)>@$i1<org.hipi.opencv.OpenCVUtils: org.bytedeco.javacpp.opencv_core$Mat convertRasterImageToMat(org.hipi.image.RasterImage)>@$i1]@[byteArrayToDoubleArray],[]
+433,block_856,Code Block,432,byteArrayToDoubleArray,Method,[4:13],-,-,-,-,[],Y,[convertRasterImageToMat->byteArrayToDoubleArray:$i1]@[byteArrayToDoubleArray],[]
+434,block_855,Code Block,432,byteArrayToDoubleArray,Method,[0:3],-,-,-,-,[145],Y,[convertRasterImageToMat->byteArrayToDoubleArray:$i1]@[byteArrayToDoubleArray],[]
+435,doubleArrayToByteArray,Method,397,org.hipi.util.ByteUtils,Class,[0:7],callee,[write],N,N,-,N,-@[doubleArrayToByteArray],[]
+436,org.hipi.image.io,Package,-,-,-,-,-,-,-,-,-,?,-,-
+437,org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream,Class,436,org.hipi.image.io,Package,[],-,-,-,-,-,?,-,-
+438,<init>,Method,437,org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream,Class,[0:5],callee,[org.hipi.image.io.ExifDataReader@[init]],Y,N,-,N,-@[<init>],[]
+439,close,Method,437,org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream,Class,"[0,1]",-,-,Y,N,-,N,-@[close],
+440,org.hipi.image.io.PngCodec$PNGChunk,Class,436,org.hipi.image.io,Package,[],-,-,-,-,-,?,-,-
+441,<init>,Method,440,org.hipi.image.io.PngCodec$PNGChunk,Class,[0:8],callee,"[decodeHeader,readChunks]",Y,N,-,N,-@[<init>],[]
+442,getTypeString,Method,440,org.hipi.image.io.PngCodec$PNGChunk,Class,[0:7],-,-,N,N,-,N,-@[getTypeString],
+443,getDataString,Method,440,org.hipi.image.io.PngCodec$PNGChunk,Class,[0:7],-,-,N,N,-,N,-@[getDataString],
+444,getData,Method,440,org.hipi.image.io.PngCodec$PNGChunk,Class,[0:2],-,-,N,N,-,N,-@[getData],
+445,getUnsignedInt,Method,440,org.hipi.image.io.PngCodec$PNGChunk,Class,[0:16],callee,"[getWidth,decodeHeader,getHeight]",N,N,-,N,-@[getUnsignedInt],[]
+446,block_267,Code Block,445,getUnsignedInt,Method,[5:16],-,-,-,-,[],N,-@[getUnsignedInt],[]
+447,block_266,Code Block,445,getUnsignedInt,Method,[0:4],-,-,-,-,[],N,-@[getUnsignedInt],[]
+448,getUnsignedByte,Method,440,org.hipi.image.io.PngCodec$PNGChunk,Class,[0:6],callee,"[getCompression,getBitsPerPixel,getInterlace,getFilter,getColorType]",N,N,-,N,-@[getUnsignedByte],[]
+449,org.hipi.image.io.ImageCodec,Class,436,org.hipi.image.io,Package,[],-,-,-,-,-,?,-,-
+450,<init>,Method,449,org.hipi.image.io.ImageCodec,Class,[0:2],-,-,Y,N,-,N,-@[<init>],
+451,decodeHeader,Method,449,org.hipi.image.io.ImageCodec,Class,[0:3],caller,"[decodeHeader,decodeHeader,decodeHeader]",N,N,-,N,-@[decodeHeader],[]
+452,decodeHeaderAndImage,Method,449,org.hipi.image.io.ImageCodec,Class,[0:11],caller,"[decodeHeader,decodeImage,decodeHeader,java.io.BufferedInputStream@[init],decodeHeader]",N,N,-,N,-@[decodeHeaderAndImage],[]
+453,decodeImage,Method,449,org.hipi.image.io.ImageCodec,Class,[0:93],caller,"[setElemNonLinSRGB,getType,java.io.BufferedInputStream@[init],read,getWidth,getPixelArray,valueOf,setElemNonLinSRGB,format,getHeight,java.io.DataInputStream@[init],setExifData,createImage,extractAndFlatten,java.lang.IllegalArgumentException@[init]]",N,N,-,Y,[$r6]@[decodeImage],[valueOf]
+454,block_214,Code Block,453,decodeImage,Method,[14:24],-,-,-,-,[67],N,-@[decodeImage],[]
+455,block_213,Code Block,453,decodeImage,Method,[0:7],-,-,-,-,[67],Y,[$r6]@[decodeImage],[]
+456,block_223,Code Block,453,decodeImage,Method,[11:13],-,-,-,-,[],N,-@[decodeImage],[]
+457,block_219,Code Block,453,decodeImage,Method,"[57,58]",-,-,-,-,[67],N,-@[decodeImage],[]
+458,block_222,Code Block,453,decodeImage,Method,[8:10],-,-,-,-,[69],N,-@[decodeImage],[]
+459,block_218,Code Block,453,decodeImage,Method,"[85:88,93]",-,-,-,-,[67],N,-@[decodeImage],[]
+460,block_216,Code Block,453,decodeImage,Method,"[40:43,54:56]",-,-,-,-,[67],N,-@[decodeImage],[]
+461,block_220,Code Block,453,decodeImage,Method,"[82,83]",-,-,-,-,[],N,-@[decodeImage],[]
+462,block_221,Code Block,453,decodeImage,Method,[59:81],-,-,-,-,[67],N,-@[decodeImage],[]
+463,block_217,Code Block,453,decodeImage,Method,[84],-,-,-,-,[70],N,-@[decodeImage],[]
+464,block_215,Code Block,453,decodeImage,Method,[25:39],-,-,-,-,[67],N,-@[decodeImage],[]
+465,encodeRasterImage,Method,449,org.hipi.image.io.ImageCodec,Class,[0:36],caller,"[getElemNonLinSRGB,java.awt.image.BufferedImage@[init],getWidth,getElemNonLinSRGB,getHeight,getPixelArray,javax.imageio.IIOImage@[init]]",N,N,-,Y,[$i6]@[encodeRasterImage],[]
+466,block_226,Code Block,465,encodeRasterImage,Method,[15:36],-,-,-,-,[75],N,-@[encodeRasterImage],[]
+467,block_225,Code Block,465,encodeRasterImage,Method,[0:14],-,-,-,-,[80],Y,[$i6]@[encodeRasterImage],[]
+468,org.hipi.image.io.PngCodec,Class,436,org.hipi.image.io,Package,[],-,-,-,-,-,?,-,-
+469,<init>,Method,468,org.hipi.image.io.PngCodec,Class,[0:2],-,-,Y,N,-,N,-@[<init>],
+470,getInstance,Method,468,org.hipi.image.io.PngCodec,Class,"[0,1]",-,-,N,N,-,N,-@[getInstance],
+471,decodeHeader,Method,468,org.hipi.image.io.PngCodec,Class,[0:66],caller,"[verifyCRC,java.lang.String@[init],org.hipi.image.io.PngCodec$PNGChunk@[init],java.io.IOException@[init],getUnsignedInt,java.io.DataInputStream@[init],readSignature,org.hipi.image.HipiImageHeader@[init],java.io.BufferedInputStream@[init],extractAndFlatten]",Y,N,-,Y,[i9]@[decodeHeader],[org.hipi.image.HipiImageHeader@[init]]
+472,block_312,Code Block,471,decodeHeader,Method,[19:25],-,-,-,-,[81],N,-@[decodeHeader],[]
+473,block_309,Code Block,471,decodeHeader,Method,"[58,59]",-,-,-,-,[82],N,-@[decodeHeader],[]
+474,block_310,Code Block,471,decodeHeader,Method,[60:66],-,-,-,-,[81],N,-@[decodeHeader],[]
+475,block_306,Code Block,471,decodeHeader,Method,[0:13],-,-,-,-,[82],N,-@[decodeHeader],[]
+476,block_316,Code Block,471,decodeHeader,Method,"[16:18,33:35]",-,-,-,-,[],N,-@[decodeHeader],[]
+477,block_307,Code Block,471,decodeHeader,Method,[53],-,-,-,-,[81],N,-@[decodeHeader],[]
+478,block_308,Code Block,471,decodeHeader,Method,[54:57],-,-,-,-,[81],N,-@[decodeHeader],[]
+479,block_313,Code Block,471,decodeHeader,Method,[46:48],-,-,-,-,[81],N,-@[decodeHeader],[]
+480,block_314,Code Block,471,decodeHeader,Method,[26:32],-,-,-,-,[81],N,-@[decodeHeader],[]
+481,block_311,Code Block,471,decodeHeader,Method,"[14,15]",-,-,-,-,[81],Y,[i9]@[decodeHeader],[]
+482,block_315,Code Block,471,decodeHeader,Method,[36:45],-,-,-,-,[81],N,-@[decodeHeader],[]
+483,readSignature,Method,468,org.hipi.image.io.PngCodec,Class,[0:7],callee,[decodeHeader],N,N,-,Y,"[<org.hipi.image.io.PngCodec: org.hipi.image.HipiImageHeader decodeHeader(java.io.InputStream,boolean)>@$b1]@[readSignature]",[]
+484,block_319,Code Block,483,readSignature,Method,[4:7],-,-,-,-,[],Y,[decodeHeader->readSignature:$b1]@[readSignature],[]
+485,block_318,Code Block,483,readSignature,Method,[0:3],-,-,-,-,[81],Y,[decodeHeader->readSignature:$b1]@[readSignature],[]
+486,readChunks,Method,468,org.hipi.image.io.PngCodec,Class,[0:36],caller,"[add,verifyCRC,org.hipi.image.io.PngCodec$PNGChunk@[init],java.io.IOException@[init],org.hipi.image.io.PngCodec$PNGData@[init]]",N,N,-,Y,[i3]@[readChunks],[]
+487,block_323,Code Block,486,readChunks,Method,[13:21],-,-,-,-,[84],N,-@[readChunks],[]
+488,block_325,Code Block,486,readChunks,Method,"[10:12,22:24]",-,-,-,-,[],N,-@[readChunks],[]
+489,block_322,Code Block,486,readChunks,Method,"[8,9,36]",-,-,-,-,[84],Y,[i3]@[readChunks],[]
+490,block_324,Code Block,486,readChunks,Method,[25:31],-,-,-,-,[84],N,-@[readChunks],[]
+491,block_321,Code Block,486,readChunks,Method,[0:7],-,-,-,-,[84],N,-@[readChunks],[]
+492,verifyCRC,Method,468,org.hipi.image.io.PngCodec,Class,[0:14],callee,"[decodeHeader,readChunks]",N,N,-,Y,"[<org.hipi.image.io.PngCodec: org.hipi.image.HipiImageHeader decodeHeader(java.io.InputStream,boolean)>@$b2<org.hipi.image.io.PngCodec: org.hipi.image.io.PngCodec$PNGData readChunks(java.io.DataInputStream)>@$b2]@[verifyCRC]",[]
+493,block_328,Code Block,492,verifyCRC,Method,[11:14],-,-,-,-,[],Y,[readChunks->verifyCRC:$b2]@[verifyCRC],[]
+494,block_327,Code Block,492,verifyCRC,Method,[0:10],-,-,-,-,[81],Y,[readChunks->verifyCRC:$b2]@[verifyCRC],[]
+495,encodeImage,Method,468,org.hipi.image.io.PngCodec,Class,[0:154],caller,"[getColorSpace,getNumBands,getElem,getWidth,java.util.zip.CRC32@[init],getElem,java.io.ByteArrayOutputStream@[init],getHeight,write,getPixelArray,java.util.zip.DeflaterOutputStream@[init],java.io.BufferedOutputStream@[init],write,java.lang.IllegalArgumentException@[init],java.util.zip.Deflater@[init]]",N,N,-,Y,[$z0]@[encodeImage],[write]
+496,block_330,Code Block,495,encodeImage,Method,[0:6],-,-,-,-,[86],Y,[$z0]@[encodeImage],[]
+497,block_332,Code Block,495,encodeImage,Method,[12:16],-,-,-,-,[86],N,-@[encodeImage],[]
+498,block_343,Code Block,495,encodeImage,Method,[58:65],-,-,-,-,[],N,-@[encodeImage],[]
+499,block_334,Code Block,495,encodeImage,Method,"[23,24]",-,-,-,-,[86],N,-@[encodeImage],[]
+500,block_345,Code Block,495,encodeImage,Method,[7:9],-,-,-,-,[],N,-@[encodeImage],[]
+501,block_331,Code Block,495,encodeImage,Method,"[10,11]",-,-,-,-,[86],N,-@[encodeImage],[]
+502,block_342,Code Block,495,encodeImage,Method,[66:73],-,-,-,-,[],N,-@[encodeImage],[]
+503,block_344,Code Block,495,encodeImage,Method,"[20:22,25:27]",-,-,-,-,[],N,-@[encodeImage],[]
+504,block_333,Code Block,495,encodeImage,Method,[17:19],-,-,-,-,[86],N,-@[encodeImage],[]
+505,block_338,Code Block,495,encodeImage,Method,[101:103],-,-,-,-,[86],N,-@[encodeImage],[]
+506,block_335,Code Block,495,encodeImage,Method,[28:57],-,-,-,-,[86],N,-@[encodeImage],[]
+507,block_340,Code Block,495,encodeImage,Method,[104:126],-,-,-,-,[86],N,-@[encodeImage],[]
+508,block_341,Code Block,495,encodeImage,Method,[74:80],-,-,-,-,[],N,-@[encodeImage],[]
+509,block_339,Code Block,495,encodeImage,Method,"[127,128]",-,-,-,-,[],N,-@[encodeImage],[]
+510,block_337,Code Block,495,encodeImage,Method,"[99,100,129:154]",-,-,-,-,[86],N,-@[encodeImage],[]
+511,block_336,Code Block,495,encodeImage,Method,[81:98],-,-,-,-,[86],N,-@[encodeImage],[]
+512,write,Method,468,org.hipi.image.io.PngCodec,Class,[0:21],caller,[write],N,Y,-,N,-@[write],[]
+513,write,Method,468,org.hipi.image.io.PngCodec,Class,[0:6],callee,"[encodeImage,write]",N,Y,-,N,-@[write],[]
+514,<clinit>,Method,468,org.hipi.image.io.PngCodec,Class,[0:3],-,-,Y,N,-,N,-@[<clinit>],
+515,org.hipi.image.io.PpmCodec$PpmHeader,Class,436,org.hipi.image.io,Package,[],-,-,-,-,-,?,-,-
+516,<init>,Method,515,org.hipi.image.io.PpmCodec$PpmHeader,Class,[0:9],callee,[org.hipi.image.io.PpmCodec$PpmHeader@[init]],Y,Y,-,N,-@[<init>],[]
+517,<init>,Method,515,org.hipi.image.io.PpmCodec$PpmHeader,Class,[0:4],caller,[org.hipi.image.io.PpmCodec$PpmHeader@[init]],Y,Y,-,N,-@[<init>],[]
+518,org.hipi.image.io.ImageEncoder,Class,436,org.hipi.image.io,Package,[],-,-,-,-,-,?,-,-
+519,org.hipi.image.io.CodecManager$1,Class,436,org.hipi.image.io,Package,[],-,-,-,-,-,?,-,-
+520,<clinit>,Method,519,org.hipi.image.io.CodecManager$1,Class,[0:25],-,-,Y,N,-,N,-@[<clinit>],
+521,org.hipi.image.io.PpmCodec,Class,436,org.hipi.image.io,Package,[],-,-,-,-,-,?,-,-
+522,<init>,Method,521,org.hipi.image.io.PpmCodec,Class,[0:2],-,-,Y,N,-,N,-@[<init>],
+523,getInstance,Method,521,org.hipi.image.io.PpmCodec,Class,"[0,1]",-,-,N,N,-,N,-@[getInstance],
+524,internalDecodeHeader,Method,521,org.hipi.image.io.PpmCodec,Class,[0:85],caller,"[format,java.lang.String@[init],java.io.IOException@[init],org.hipi.image.io.PpmCodec$PpmHeader@[init]]",N,N,-,N,-@[internalDecodeHeader],[]
+525,block_361,Code Block,524,internalDecodeHeader,Method,[65:69],-,-,-,-,[],N,-@[internalDecodeHeader],[]
+526,block_362,Code Block,524,internalDecodeHeader,Method,"[70:72,83:85]",-,-,-,-,[],N,-@[internalDecodeHeader],[]
+527,block_367,Code Block,524,internalDecodeHeader,Method,[37:46],-,-,-,-,[],N,-@[internalDecodeHeader],[]
+528,block_364,Code Block,524,internalDecodeHeader,Method,[52:54],-,-,-,-,[],N,-@[internalDecodeHeader],[]
+529,block_360,Code Block,524,internalDecodeHeader,Method,[47:51],-,-,-,-,[],N,-@[internalDecodeHeader],[]
+530,block_363,Code Block,524,internalDecodeHeader,Method,[73:82],-,-,-,-,[],N,-@[internalDecodeHeader],[]
+531,block_365,Code Block,524,internalDecodeHeader,Method,[55:64],-,-,-,-,[],N,-@[internalDecodeHeader],[]
+532,block_366,Code Block,524,internalDecodeHeader,Method,[34:36],-,-,-,-,[],N,-@[internalDecodeHeader],[]
+533,block_358,Code Block,524,internalDecodeHeader,Method,[11:28],-,-,-,-,[],N,-@[internalDecodeHeader],[]
+534,block_357,Code Block,524,internalDecodeHeader,Method,[0:10],-,-,-,-,[94],N,-@[internalDecodeHeader],[]
+535,block_359,Code Block,524,internalDecodeHeader,Method,[29:33],-,-,-,-,[],N,-@[internalDecodeHeader],[]
+536,decodeHeader,Method,521,org.hipi.image.io.PpmCodec,Class,[0:24],caller,"[format,java.io.IOException@[init],internalDecodeHeader,org.hipi.image.HipiImageHeader@[init],java.lang.IllegalArgumentException@[init],valueOf]",Y,N,-,Y,[$i0]@[decodeHeader],[]
+537,block_370,Code Block,536,decodeHeader,Method,[14],-,-,-,-,[93],N,-@[decodeHeader],[]
+538,block_371,Code Block,536,decodeHeader,Method,"[6:13,15:24]",-,-,-,-,[92],N,-@[decodeHeader],[]
+539,block_369,Code Block,536,decodeHeader,Method,[0:5],-,-,-,-,[92],Y,[$i0]@[decodeHeader],[]
+540,encodeImage,Method,521,org.hipi.image.io.PpmCodec,Class,[0:59],caller,"[java.io.PrintWriter@[init],getColorSpace,getElemNonLinSRGB,getNumBands,java.lang.StringBuilder@[init],getWidth,getElemNonLinSRGB,getHeight,getPixelArray,java.lang.IllegalArgumentException@[init]]",N,N,-,Y,[$z0]@[encodeImage],[]
+541,block_375,Code Block,540,encodeImage,Method,[12:16],-,-,-,-,[95],N,-@[encodeImage],[]
+542,block_379,Code Block,540,encodeImage,Method,[53:59],-,-,-,-,[96],N,-@[encodeImage],[]
+543,block_381,Code Block,540,encodeImage,Method,[7:9],-,-,-,-,[],N,-@[encodeImage],[]
+544,block_373,Code Block,540,encodeImage,Method,[0:6],-,-,-,-,[96],Y,[$z0]@[encodeImage],[]
+545,block_377,Code Block,540,encodeImage,Method,"[23,24]",-,-,-,-,[95],N,-@[encodeImage],[]
+546,block_378,Code Block,540,encodeImage,Method,[28:52],-,-,-,-,[96],N,-@[encodeImage],[]
+547,block_376,Code Block,540,encodeImage,Method,[17:19],-,-,-,-,[95],N,-@[encodeImage],[]
+548,block_380,Code Block,540,encodeImage,Method,"[20:22,25:27]",-,-,-,-,[],N,-@[encodeImage],[]
+549,block_374,Code Block,540,encodeImage,Method,"[10,11]",-,-,-,-,[95],N,-@[encodeImage],[]
+550,<clinit>,Method,521,org.hipi.image.io.PpmCodec,Class,[0:3],-,-,Y,N,-,N,-@[<clinit>],
+551,org.hipi.image.io.CodecManager,Class,436,org.hipi.image.io,Package,[],-,-,-,-,-,?,-,-
+552,<init>,Method,551,org.hipi.image.io.CodecManager,Class,[0:2],-,-,Y,N,-,N,-@[<init>],
+553,getDecoder,Method,551,org.hipi.image.io.CodecManager,Class,[0:13],callee,[nextKeyValue],N,N,-,N,-@[getDecoder],[]
+554,block_192,Code Block,553,getDecoder,Method,"[5,6]",-,-,-,-,[],N,-@[getDecoder],[]
+555,block_191,Code Block,553,getDecoder,Method,[7:13],-,-,-,-,[],N,-@[getDecoder],[]
+556,block_190,Code Block,553,getDecoder,Method,[0:4],-,-,-,-,[],N,-@[getDecoder],[]
+557,getEncoder,Method,551,org.hipi.image.io.CodecManager,Class,[0:13],-,-,N,N,-,N,-@[getEncoder],
+558,block_196,Code Block,557,getEncoder,Method,"[5,6]",-,-,-,-,[],N,-@[getEncoder],[]
+559,block_194,Code Block,557,getEncoder,Method,[0:4],-,-,-,-,[],N,-@[getEncoder],[]
+560,block_195,Code Block,557,getEncoder,Method,[7:13],-,-,-,-,[],N,-@[getEncoder],[]
+561,org.hipi.image.io.ExifDataReader,Class,436,org.hipi.image.io,Package,[],-,-,-,-,-,?,-,-
+562,<init>,Method,561,org.hipi.image.io.ExifDataReader,Class,[0:6],caller,"[org.hipi.image.io.ExifDataReader$UnclosableBufferedInputStream@[init],java.lang.Object@[init]]",Y,N,-,N,-@[<init>],[]
+563,extract,Method,561,org.hipi.image.io.ExifDataReader,Class,[0:3],-,-,N,N,-,N,-@[extract],
+564,extractAndFlatten,Method,561,org.hipi.image.io.ExifDataReader,Class,[0:35],caller,"[extract,org.hipi.image.io.ExifDataReader@[init],java.util.HashMap@[init]]",N,N,-,Y,[$z0]@[extractAndFlatten],[]
+565,block_204,Code Block,564,extractAndFlatten,Method,[0:11],-,-,-,-,[81],Y,[$z0]@[extractAndFlatten],[]
+566,block_206,Code Block,564,extractAndFlatten,Method,[24],-,-,-,-,[],N,-@[extractAndFlatten],[]
+567,block_207,Code Block,564,extractAndFlatten,Method,[18:23],-,-,-,-,[61],N,-@[extractAndFlatten],[]
+568,block_205,Code Block,564,extractAndFlatten,Method,"[12:17,25,35]",-,-,-,-,[61],N,-@[extractAndFlatten],[]
+569,org.hipi.image.io.PngCodec$PNGData,Class,436,org.hipi.image.io,Package,[],-,-,-,-,-,?,-,-
+570,<init>,Method,569,org.hipi.image.io.PngCodec$PNGData,Class,[0:7],callee,[readChunks],Y,N,-,N,-@[<init>],[]
+571,printAll,Method,569,org.hipi.image.io.PngCodec$PNGData,Class,[0:27],-,-,N,N,-,N,-@[printAll],
+572,block_272,Code Block,571,printAll,Method,[0:12],-,-,-,-,[],N,-@[printAll],[]
+573,block_273,Code Block,571,printAll,Method,[13:27],-,-,-,-,[],N,-@[printAll],[]
+574,add,Method,569,org.hipi.image.io.PngCodec$PNGData,Class,[0:20],callee,[readChunks],N,N,-,N,-@[add],[]
+575,block_275,Code Block,574,add,Method,[0:10],-,-,-,-,[84],N,-@[add],[]
+576,block_276,Code Block,574,add,Method,[11:20],-,-,-,-,[],N,-@[add],[]
+577,getWidth,Method,569,org.hipi.image.io.PngCodec$PNGData,Class,[0:3],caller,"[getUnsignedInt,getChunk]",N,N,-,N,-@[getWidth],[]
+578,getHeight,Method,569,org.hipi.image.io.PngCodec$PNGData,Class,[0:3],caller,"[getUnsignedInt,getChunk]",N,N,-,N,-@[getHeight],[]
+579,getBitsPerPixel,Method,569,org.hipi.image.io.PngCodec$PNGData,Class,[0:3],caller,"[getChunk,getUnsignedByte]",N,N,-,N,-@[getBitsPerPixel],[]
+580,getColorType,Method,569,org.hipi.image.io.PngCodec$PNGData,Class,[0:3],caller,"[getChunk,getUnsignedByte]",N,N,-,N,-@[getColorType],[]
+581,getCompression,Method,569,org.hipi.image.io.PngCodec$PNGData,Class,[0:3],caller,"[getChunk,getUnsignedByte]",N,N,-,N,-@[getCompression],[]
+582,getFilter,Method,569,org.hipi.image.io.PngCodec$PNGData,Class,[0:3],caller,"[getChunk,getUnsignedByte]",N,N,-,N,-@[getFilter],[]
+583,getInterlace,Method,569,org.hipi.image.io.PngCodec$PNGData,Class,[0:3],caller,"[getChunk,getUnsignedByte]",N,N,-,N,-@[getInterlace],[]
+584,getImageData,Method,569,org.hipi.image.io.PngCodec$PNGData,Class,[0:67],-,-,N,N,-,N,-@[getImageData],
+585,block_294,Code Block,584,getImageData,Method,[7:11],-,-,-,-,[],N,-@[getImageData],[]
+586,block_286,Code Block,584,getImageData,Method,[16:29],-,-,-,-,[],N,-@[getImageData],[]
+587,block_293,Code Block,584,getImageData,Method,"[30,31]",-,-,-,-,[],N,-@[getImageData],[]
+588,block_292,Code Block,584,getImageData,Method,[54],-,-,-,-,[],N,-@[getImageData],[]
+589,block_288,Code Block,584,getImageData,Method,"[46:48,62:64]",-,-,-,-,[],N,-@[getImageData],[]
+590,block_295,Code Block,584,getImageData,Method,"[14,15]",-,-,-,-,[],N,-@[getImageData],[]
+591,block_287,Code Block,584,getImageData,Method,[32:45],-,-,-,-,[],N,-@[getImageData],[]
+592,block_285,Code Block,584,getImageData,Method,[0:6],-,-,-,-,[],N,-@[getImageData],[]
+593,block_290,Code Block,584,getImageData,Method,[49:53],-,-,-,-,[],N,-@[getImageData],[]
+594,block_289,Code Block,584,getImageData,Method,[61],-,-,-,-,[],N,-@[getImageData],[]
+595,block_291,Code Block,584,getImageData,Method,[55:60],-,-,-,-,[],N,-@[getImageData],[]
+596,block_296,Code Block,584,getImageData,Method,"[12,13]",-,-,-,-,[],N,-@[getImageData],[]
+597,getChunk,Method,569,org.hipi.image.io.PngCodec$PNGData,Class,[0:15],callee,"[getWidth,getCompression,getHeight,getInterlace,getBitsPerPixel,getFilter,getColorType]",N,N,-,N,-@[getChunk],[]
+598,block_298,Code Block,597,getChunk,Method,[0:4],-,-,-,-,[],N,-@[getChunk],[]
+599,block_301,Code Block,597,getChunk,Method,[10:12],-,-,-,-,[],N,-@[getChunk],[]
+600,block_299,Code Block,597,getChunk,Method,"[5:9,15]",-,-,-,-,[],N,-@[getChunk],[]
+601,block_300,Code Block,597,getChunk,Method,"[13,14]",-,-,-,-,[],N,-@[getChunk],[]
+602,org.hipi.image.io.ImageDecoder,Class,436,org.hipi.image.io,Package,[],-,-,-,-,-,?,-,-
+603,org.hipi.image.io.JpegCodec,Class,436,org.hipi.image.io,Package,[],-,-,-,-,-,?,-,-
+604,<init>,Method,603,org.hipi.image.io.JpegCodec,Class,[0:2],-,-,Y,N,-,N,-@[<init>],
+605,getInstance,Method,603,org.hipi.image.io.JpegCodec,Class,"[0,1]",-,-,N,N,-,N,-@[getInstance],
+606,decodeHeader,Method,603,org.hipi.image.io.JpegCodec,Class,[0:86],caller,"[format,java.io.DataInputStream@[init],org.hipi.image.HipiImageHeader@[init],java.io.BufferedInputStream@[init],extractAndFlatten,java.lang.IllegalArgumentException@[init],valueOf]",Y,N,-,Y,[s0]@[decodeHeader],[valueOf]
+607,block_236,Code Block,606,decodeHeader,Method,[24:26],-,-,-,-,[77],N,-@[decodeHeader],[]
+608,block_250,Code Block,606,decodeHeader,Method,[11],-,-,-,-,[],N,-@[decodeHeader],[]
+609,block_247,Code Block,606,decodeHeader,Method,[27:29],-,-,-,-,[77],N,-@[decodeHeader],[]
+610,block_248,Code Block,606,decodeHeader,Method,[30],-,-,-,-,[],N,-@[decodeHeader],[]
+611,block_242,Code Block,606,decodeHeader,Method,"[61,62]",-,-,-,-,[77],N,-@[decodeHeader],[]
+612,block_249,Code Block,606,decodeHeader,Method,[20],-,-,-,-,[],N,-@[decodeHeader],[]
+613,block_237,Code Block,606,decodeHeader,Method,[31:41],-,-,-,-,[77],N,-@[decodeHeader],[]
+614,block_244,Code Block,606,decodeHeader,Method,[63:65],-,-,-,-,[77],N,-@[decodeHeader],[]
+615,block_239,Code Block,606,decodeHeader,Method,"[78,79]",-,-,-,-,[78],N,-@[decodeHeader],[]
+616,block_233,Code Block,606,decodeHeader,Method,[0:10],-,-,-,-,[78],Y,[s0]@[decodeHeader],[]
+617,block_241,Code Block,606,decodeHeader,Method,"[42:44,71:77]",-,-,-,-,[77],N,-@[decodeHeader],[]
+618,block_245,Code Block,606,decodeHeader,Method,"[67,68]",-,-,-,-,[77],N,-@[decodeHeader],[]
+619,block_238,Code Block,606,decodeHeader,Method,"[45:60,70]",-,-,-,-,[77],N,-@[decodeHeader],[]
+620,block_234,Code Block,606,decodeHeader,Method,[12:19],-,-,-,-,[77],N,-@[decodeHeader],[]
+621,block_240,Code Block,606,decodeHeader,Method,[80:86],-,-,-,-,[77],N,-@[decodeHeader],[]
+622,block_246,Code Block,606,decodeHeader,Method,[66],-,-,-,-,[],N,-@[decodeHeader],[]
+623,block_235,Code Block,606,decodeHeader,Method,[21:23],-,-,-,-,[77],N,-@[decodeHeader],[]
+624,block_243,Code Block,606,decodeHeader,Method,[69],-,-,-,-,[],N,-@[decodeHeader],[]
+625,encodeImage,Method,603,org.hipi.image.io.JpegCodec,Class,[0:45],caller,"[getColorSpace,encodeRasterImage,getNumBands,createImageOutputStream,java.lang.StringBuilder@[init],getWidth,getImageWritersByFormatName,getHeight,java.lang.IllegalArgumentException@[init]]",N,N,-,Y,[$z0]@[encodeImage],[]
+626,block_256,Code Block,625,encodeImage,Method,"[23,24]",-,-,-,-,[79],N,-@[encodeImage],[]
+627,block_253,Code Block,625,encodeImage,Method,"[10,11]",-,-,-,-,[79],N,-@[encodeImage],[]
+628,block_255,Code Block,625,encodeImage,Method,[17:19],-,-,-,-,[79],N,-@[encodeImage],[]
+629,block_258,Code Block,625,encodeImage,Method,[7:9],-,-,-,-,[],N,-@[encodeImage],[]
+630,block_252,Code Block,625,encodeImage,Method,[0:6],-,-,-,-,[80],Y,[$z0]@[encodeImage],[]
+631,block_257,Code Block,625,encodeImage,Method,"[20:22,25:45]",-,-,-,-,[80],N,-@[encodeImage],[]
+632,block_254,Code Block,625,encodeImage,Method,[12:16],-,-,-,-,[79],N,-@[encodeImage],[]
+633,<clinit>,Method,603,org.hipi.image.io.JpegCodec,Class,[0:3],-,-,Y,N,-,N,-@[<clinit>],
+634,org.hipi.image.io.PpmCodec$1,Class,436,org.hipi.image.io,Package,[],-,-,-,-,-,?,-,-
+635,org.hipi.mapreduce,Package,-,-,-,-,-,-,-,-,-,?,-,-
+636,org.hipi.mapreduce.BinaryOutputFormat,Class,635,org.hipi.mapreduce,Package,[],-,-,-,-,-,?,-,-
+637,<init>,Method,636,org.hipi.mapreduce.BinaryOutputFormat,Class,[0:2],-,-,Y,N,-,N,-@[<init>],
+638,getRecordWriter,Method,636,org.hipi.mapreduce.BinaryOutputFormat,Class,[0:24],caller,"[org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter@[init],java.io.DataOutputStream@[init],newInstance,getOutputCompressorClass,getCompressOutput]",Y,N,-,Y,[z0]@[getRecordWriter],[]
+639,block_744,Code Block,638,getRecordWriter,Method,[11:15],-,-,-,-,[141],N,-@[getRecordWriter],[]
+640,block_743,Code Block,638,getRecordWriter,Method,[0:5],-,-,-,-,[141],Y,[z0]@[getRecordWriter],[]
+641,block_745,Code Block,638,getRecordWriter,Method,[16:24],-,-,-,-,[141],N,-@[getRecordWriter],[]
+642,block_746,Code Block,638,getRecordWriter,Method,[6:10],-,-,-,-,[141],N,-@[getRecordWriter],[]
+643,org.hipi.mapreduce.Culler,Class,635,org.hipi.mapreduce,Package,[],-,-,-,-,-,?,-,-
+644,<init>,Method,643,org.hipi.mapreduce.Culler,Class,[0:2],-,-,Y,N,-,N,-@[<init>],
+645,includeExifDataInHeader,Method,643,org.hipi.mapreduce.Culler,Class,"[0,1]",-,-,N,N,-,N,-@[includeExifDataInHeader],
+646,cull,Method,643,org.hipi.mapreduce.Culler,Class,[0:2],callee,[nextKeyValue],N,N,-,N,-@[cull],[]
+647,org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter,Class,635,org.hipi.mapreduce,Package,[],-,-,-,-,-,?,-,-
+648,<init>,Method,647,org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter,Class,[0:4],callee,[getRecordWriter],Y,N,-,N,-@[<init>],[]
+649,close,Method,647,org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter,Class,[0:4],-,-,Y,N,-,N,-@[close],
+650,writeObject,Method,647,org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter,Class,[0:4],caller,"[write,write,write,write]",N,N,-,N,-@[writeObject],[]
+651,write,Method,647,org.hipi.mapreduce.BinaryOutputFormat$BinaryRecordWriter,Class,[0:30],caller,[writeObject],Y,N,-,Y,[r1]@[write],[]
+652,block_727,Code Block,651,write,Method,"[13,14,16:19]",-,-,-,-,[138],N,-@[write],[]
+653,block_733,Code Block,651,write,Method,"[24,25]",-,-,-,-,[138],N,-@[write],[]
+654,block_734,Code Block,651,write,Method,[20],-,-,-,-,[],N,-@[write],[]
+655,block_732,Code Block,651,write,Method,[23],-,-,-,-,[138],N,-@[write],[]
+656,block_728,Code Block,651,write,Method,[22],-,-,-,-,[],N,-@[write],[]
+657,block_730,Code Block,651,write,Method,"[27,30]",-,-,-,-,[139],N,-@[write],[]
+658,block_729,Code Block,651,write,Method,[26],-,-,-,-,[],N,-@[write],[]
+659,block_739,Code Block,651,write,Method,[8],-,-,-,-,[],N,-@[write],[]
+660,block_726,Code Block,651,write,Method,"[6,7,9,10]",-,-,-,-,[139],N,-@[write],[]
+661,block_731,Code Block,651,write,Method,"[28,29]",-,-,-,-,[139],N,-@[write],[]
+662,block_735,Code Block,651,write,Method,[21],-,-,-,-,[],N,-@[write],[]
+663,block_737,Code Block,651,write,Method,[15],-,-,-,-,[],N,-@[write],[]
+664,block_738,Code Block,651,write,Method,"[4,5]",-,-,-,-,[138],N,-@[write],[]
+665,block_736,Code Block,651,write,Method,"[11,12]",-,-,-,-,[139],N,-@[write],[]
+666,block_725,Code Block,651,write,Method,[0:3],-,-,-,-,[138],Y,[r1]@[write],[]
+667,org.hipi.imagebundle.mapreduce,Package,-,-,-,-,-,-,-,-,-,?,-,-
+668,org.hipi.imagebundle.mapreduce.HibInputFormat,Class,667,org.hipi.imagebundle.mapreduce,Package,[],-,-,-,-,-,?,-,-
+669,<init>,Method,668,org.hipi.imagebundle.mapreduce.HibInputFormat,Class,[0:2],-,-,Y,N,-,N,-@[<init>],
+670,createRecordReader,Method,668,org.hipi.imagebundle.mapreduce.HibInputFormat,Class,[0:5],-,-,Y,N,-,N,-@[createRecordReader],
+671,staticGetBlockIndex,Method,668,org.hipi.imagebundle.mapreduce.HibInputFormat,Class,[0:36],callee,[computeSplits],N,N,-,Y,"[<org.hipi.imagebundle.mapreduce.HibInputFormat: java.util.List computeSplits(org.apache.hadoop.mapreduce.JobContext,java.util.List)>@$i2<org.hipi.imagebundle.mapreduce.HibInputFormat: java.util.List computeSplits(org.apache.hadoop.mapreduce.JobContext,java.util.List)>@$i2<org.hipi.imagebundle.mapreduce.HibInputFormat: java.util.List computeSplits(org.apache.hadoop.mapreduce.JobContext,java.util.List)>@$i2]@[staticGetBlockIndex]",[]
+672,block_684,Code Block,671,staticGetBlockIndex,Method,[9:15],-,-,-,-,[],Y,[computeSplits->staticGetBlockIndex:$i2]@[staticGetBlockIndex],[]
+673,block_682,Code Block,671,staticGetBlockIndex,Method,"[5:8,19:36]",-,-,-,-,[],Y,[computeSplits->staticGetBlockIndex:$i2]@[staticGetBlockIndex],[]
+674,block_685,Code Block,671,staticGetBlockIndex,Method,[16],-,-,-,-,[],Y,[computeSplits->staticGetBlockIndex:$i2]@[staticGetBlockIndex],[]
+675,block_681,Code Block,671,staticGetBlockIndex,Method,[0:4],-,-,-,-,[132],Y,[computeSplits->staticGetBlockIndex:$i2]@[staticGetBlockIndex],[]
+676,block_683,Code Block,671,staticGetBlockIndex,Method,"[17,18]",-,-,-,-,[],Y,[computeSplits->staticGetBlockIndex:$i2]@[staticGetBlockIndex],[]
+677,computeSplits,Method,668,org.hipi.imagebundle.mapreduce.HibInputFormat,Class,[0:162],caller,"[close,min,org.hipi.imagebundle.HipiImageBundle@[init],org.apache.hadoop.mapreduce.lib.input.FileSplit@[init],staticGetBlockIndex,java.lang.StringBuilder@[init],readAllOffsets,java.util.HashSet@[init],getDataFileStatus,openForRead,java.util.ArrayList@[init]]",N,N,-,Y,[$z0]@[computeSplits],[]
+678,block_704,Code Block,677,computeSplits,Method,[51:57],-,-,-,-,[132],N,-@[computeSplits],[]
+679,block_687,Code Block,677,computeSplits,Method,[0:9],-,-,-,-,[134],Y,[$z0]@[computeSplits],[]
+680,block_693,Code Block,677,computeSplits,Method,[131:159],-,-,-,-,[132],N,-@[computeSplits],[]
+681,block_690,Code Block,677,computeSplits,Method,"[160,161]",-,-,-,-,[132],N,-@[computeSplits],[]
+682,block_708,Code Block,677,computeSplits,Method,[63:66],-,-,-,-,[132],N,-@[computeSplits],[]
+683,block_710,Code Block,677,computeSplits,Method,[44:48],-,-,-,-,[132],N,-@[computeSplits],[]
+684,block_691,Code Block,677,computeSplits,Method,[100:102],-,-,-,-,[132],N,-@[computeSplits],[]
+685,block_702,Code Block,677,computeSplits,Method,"[49,50]",-,-,-,-,[132],N,-@[computeSplits],[]
+686,block_703,Code Block,677,computeSplits,Method,[75:85],-,-,-,-,[132],N,-@[computeSplits],[]
+687,block_692,Code Block,677,computeSplits,Method,[104:119],-,-,-,-,[132],N,-@[computeSplits],[]
+688,block_698,Code Block,677,computeSplits,Method,[27:32],-,-,-,-,[132],N,-@[computeSplits],[]
+689,block_694,Code Block,677,computeSplits,Method,[120:124],-,-,-,-,[132],N,-@[computeSplits],[]
+690,block_701,Code Block,677,computeSplits,Method,[35:41],-,-,-,-,[132],N,-@[computeSplits],[]
+691,block_700,Code Block,677,computeSplits,Method,"[33,34]",-,-,-,-,[132],N,-@[computeSplits],[]
+692,block_706,Code Block,677,computeSplits,Method,[58:62],-,-,-,-,[132],N,-@[computeSplits],[]
+693,block_709,Code Block,677,computeSplits,Method,"[42,43]",-,-,-,-,[132],N,-@[computeSplits],[]
+694,block_699,Code Block,677,computeSplits,Method,[86:94],-,-,-,-,[],N,-@[computeSplits],[]
+695,block_695,Code Block,677,computeSplits,Method,"[129,130]",-,-,-,-,[132],N,-@[computeSplits],[]
+696,block_696,Code Block,677,computeSplits,Method,[125:128],-,-,-,-,[132],N,-@[computeSplits],[]
+697,block_705,Code Block,677,computeSplits,Method,[69:74],-,-,-,-,[132],N,-@[computeSplits],[]
+698,block_688,Code Block,677,computeSplits,Method,"[10:26,162]",-,-,-,-,[132],N,-@[computeSplits],[]
+699,block_707,Code Block,677,computeSplits,Method,"[67,68]",-,-,-,-,[],N,-@[computeSplits],[]
+700,block_689,Code Block,677,computeSplits,Method,[95:99],-,-,-,-,[132],N,-@[computeSplits],[]
+701,block_697,Code Block,677,computeSplits,Method,[103],-,-,-,-,[132],N,-@[computeSplits],[]
+702,getSplits,Method,668,org.hipi.imagebundle.mapreduce.HibInputFormat,Class,[0:4],caller,[computeSplits],Y,N,-,N,-@[getSplits],[]
+703,org.hipi.imagebundle.mapreduce.HibRecordReader,Class,667,org.hipi.imagebundle.mapreduce,Package,[],-,-,-,-,-,?,-,-
+704,<init>,Method,703,org.hipi.imagebundle.mapreduce.HibRecordReader,Class,[0:2],-,-,Y,N,-,N,-@[<init>],
+705,initialize,Method,703,org.hipi.imagebundle.mapreduce.HibRecordReader,Class,[0:46],caller,"[org.hipi.imagebundle.HipiImageBundle$HibReader@[init],java.lang.StringBuilder@[init],org.hipi.image.HipiImageFactory@[init]]",Y,N,-,N,-@[initialize],[]
+706,close,Method,703,org.hipi.imagebundle.mapreduce.HibRecordReader,Class,[0:3],-,-,Y,N,-,N,-@[close],
+707,getCurrentKey,Method,703,org.hipi.imagebundle.mapreduce.HibRecordReader,Class,[0:3],-,-,Y,Y,-,N,-@[getCurrentKey],
+708,getCurrentValue,Method,703,org.hipi.imagebundle.mapreduce.HibRecordReader,Class,[0:3],-,-,Y,Y,-,N,-@[getCurrentValue],
+709,getProgress,Method,703,org.hipi.imagebundle.mapreduce.HibRecordReader,Class,[0:3],-,-,Y,N,-,N,-@[getProgress],
+710,nextKeyValue,Method,703,org.hipi.imagebundle.mapreduce.HibRecordReader,Class,[0:3],-,-,Y,N,-,N,-@[nextKeyValue],
+711,getCurrentValue,Method,703,org.hipi.imagebundle.mapreduce.HibRecordReader,Class,[],-,-,Y,Y,-,N,-@[getCurrentValue],
+712,getCurrentKey,Method,703,org.hipi.imagebundle.mapreduce.HibRecordReader,Class,[],-,-,Y,Y,-,N,-@[getCurrentKey],
+713,org.hipi.imagebundle,Package,-,-,-,-,-,-,-,-,-,?,-,-
+714,org.hipi.imagebundle.HipiImageBundle$HibReader,Class,713,org.hipi.imagebundle,Package,[],-,-,-,-,-,?,-,-
+715,<init>,Method,714,org.hipi.imagebundle.HipiImageBundle$HibReader,Class,[0:57],callee,"[openForRead,org.hipi.imagebundle.HipiImageBundle$HibReader@[init],initialize]",Y,Y,-,Y,"[<org.hipi.imagebundle.mapreduce.HibRecordReader: void initialize(org.apache.hadoop.mapreduce.InputSplit,org.apache.hadoop.mapreduce.TaskAttemptContext)>@$b4<org.hipi.imagebundle.HipiImageBundle: void openForRead(int)>@$b4<org.hipi.imagebundle.HipiImageBundle$HibReader: void <init>(org.hipi.image.HipiImageFactory,java.lang.Class,org.apache.hadoop.fs.FileSystem,org.apache.hadoop.fs.Path)>@r2]@[<init>]",[]
+716,block_526,Code Block,715,<init>,Method,[0:21],-,-,-,-,[135],Y,[<init>-><init>:r2]@[<init>],[]
+717,block_530,Code Block,715,<init>,Method,[51],-,-,-,-,[],Y,[<init>-><init>:r2]@[<init>],[]
+718,block_528,Code Block,715,<init>,Method,"[47:50,54:57]",-,-,-,-,[],Y,[<init>-><init>:r2]@[<init>],[]
+719,block_531,Code Block,715,<init>,Method,[22:25],-,-,-,-,[],Y,[<init>-><init>:r2]@[<init>],[]
+720,block_529,Code Block,715,<init>,Method,"[52,53]",-,-,-,-,[],Y,[<init>-><init>:r2]@[<init>],[]
+721,block_527,Code Block,715,<init>,Method,[40:46],-,-,-,-,[107],Y,[<init>-><init>:r2]@[<init>],[]
+722,<init>,Method,714,org.hipi.imagebundle.HipiImageBundle$HibReader,Class,[0:6],caller,[org.hipi.imagebundle.HipiImageBundle$HibReader@[init]],Y,Y,-,N,-@[<init>],[]
+723,getProgress,Method,714,org.hipi.imagebundle.HipiImageBundle$HibReader,Class,[0:26],-,-,N,N,-,N,-@[getProgress],
+724,block_539,Code Block,723,getProgress,Method,[7:17],-,-,-,-,[],N,-@[getProgress],[]
+725,block_536,Code Block,723,getProgress,Method,"[23,24]",-,-,-,-,[],N,-@[getProgress],[]
+726,block_535,Code Block,723,getProgress,Method,[18:21],-,-,-,-,[],N,-@[getProgress],[]
+727,block_534,Code Block,723,getProgress,Method,[0:6],-,-,-,-,[],N,-@[getProgress],[]
+728,block_538,Code Block,723,getProgress,Method,[22],-,-,-,-,[],N,-@[getProgress],[]
+729,block_537,Code Block,723,getProgress,Method,"[25,26]",-,-,-,-,[],N,-@[getProgress],[]
+730,close,Method,714,org.hipi.imagebundle.HipiImageBundle$HibReader,Class,[0:5],-,-,N,N,-,N,-@[close],
+731,block_541,Code Block,730,close,Method,[0:2],-,-,-,-,[],N,-@[close],[]
+732,block_542,Code Block,730,close,Method,[3:5],-,-,-,-,[],N,-@[close],[]
+733,nextKeyValue,Method,714,org.hipi.imagebundle.HipiImageBundle$HibReader,Class,[0:327],caller,"[includeExifDataInHeader,org.hipi.image.HipiImageHeader@[init],java.lang.RuntimeException@[init],java.io.IOException@[init],getType,fromInteger,setRawBytes,getDecoder,decodeHeader,valueOf,decodeHeader,decodeImage,cull,java.io.ByteArrayInputStream@[init],decodeHeader,format,java.lang.StringBuilder@[init],java.io.DataInputStream@[init],setHeader,setExifData,org.hipi.image.RawImage@[init],nextKeyValue,getAllExifData]",N,N,-,N,-@[nextKeyValue],[]
+734,block_554,Code Block,733,nextKeyValue,Method,"[185:187,206:210,224:232,246:252]",-,-,-,-,[],N,-@[nextKeyValue],[]
+735,block_557,Code Block,733,nextKeyValue,Method,[188:193],-,-,-,-,[],N,-@[nextKeyValue],[]
+736,block_559,Code Block,733,nextKeyValue,Method,[22],-,-,-,-,[],N,-@[nextKeyValue],[]
+737,block_561,Code Block,733,nextKeyValue,Method,[9:12],-,-,-,-,[],N,-@[nextKeyValue],[]
+738,block_556,Code Block,733,nextKeyValue,Method,"[198,199]",-,-,-,-,[],N,-@[nextKeyValue],[]
+739,block_562,Code Block,733,nextKeyValue,Method,[13],-,-,-,-,[],N,-@[nextKeyValue],[]
+740,block_551,Code Block,733,nextKeyValue,Method,[145:173],-,-,-,-,[],N,-@[nextKeyValue],[]
+741,block_544,Code Block,733,nextKeyValue,Method,[0:8],-,-,-,-,[],N,-@[nextKeyValue],[]
+742,block_548,Code Block,733,nextKeyValue,Method,[45:63],-,-,-,-,[],N,-@[nextKeyValue],[]
+743,block_545,Code Block,733,nextKeyValue,Method,[14:21],-,-,-,-,[],N,-@[nextKeyValue],[]
+744,block_552,Code Block,733,nextKeyValue,Method,"[183,184]",-,-,-,-,[],N,-@[nextKeyValue],[]
+745,block_546,Code Block,733,nextKeyValue,Method,[31],-,-,-,-,[],N,-@[nextKeyValue],[]
+746,block_553,Code Block,733,nextKeyValue,Method,[200:205],-,-,-,-,[],N,-@[nextKeyValue],[]
+747,block_555,Code Block,733,nextKeyValue,Method,[194:197],-,-,-,-,[],N,-@[nextKeyValue],[]
+748,block_558,Code Block,733,nextKeyValue,Method,"[32,36:44,64:72,92:100,136:144,174:182]",-,-,-,-,[],N,-@[nextKeyValue],[]
+749,block_550,Code Block,733,nextKeyValue,Method,"[101:121,133:135]",-,-,-,-,[],N,-@[nextKeyValue],[]
+750,block_560,Code Block,733,nextKeyValue,Method,[23:30],-,-,-,-,[],N,-@[nextKeyValue],[]
+751,block_547,Code Block,733,nextKeyValue,Method,[33:35],-,-,-,-,[],N,-@[nextKeyValue],[]
+752,block_549,Code Block,733,nextKeyValue,Method,[73:91],-,-,-,-,[],N,-@[nextKeyValue],[]
+753,getImageBytes,Method,714,org.hipi.imagebundle.HipiImageBundle$HibReader,Class,[0:2],-,-,N,N,-,N,-@[getImageBytes],
+754,getImageStorageFormat,Method,714,org.hipi.imagebundle.HipiImageBundle$HibReader,Class,[0:2],-,-,N,N,-,N,-@[getImageStorageFormat],
+755,getCurrentKey,Method,714,org.hipi.imagebundle.HipiImageBundle$HibReader,Class,[0:2],-,-,N,N,-,N,-@[getCurrentKey],
+756,getCurrentValue,Method,714,org.hipi.imagebundle.HipiImageBundle$HibReader,Class,[0:2],-,-,N,N,-,N,-@[getCurrentValue],
+757,org.hipi.imagebundle.HipiImageBundle,Class,713,org.hipi.imagebundle,Package,[],-,-,-,-,-,?,-,-
+758,<init>,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:24],callee,"[org.hipi.imagebundle.HipiImageBundle@[init],org.hipi.imagebundle.HipiImageBundle@[init],org.hipi.imagebundle.HipiImageBundle@[init],org.hipi.imagebundle.HipiImageBundle@[init]]",Y,Y,-,N,-@[<init>],[]
+759,<init>,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:4],caller,[org.hipi.imagebundle.HipiImageBundle@[init]],Y,Y,-,N,-@[<init>],[]
+760,<init>,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:7],caller,[org.hipi.imagebundle.HipiImageBundle@[init]],Y,Y,-,N,-@[<init>],[]
+761,<init>,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:7],caller,[org.hipi.imagebundle.HipiImageBundle@[init]],Y,Y,-,N,-@[<init>],[]
+762,<init>,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:9],caller,[org.hipi.imagebundle.HipiImageBundle@[init]],Y,Y,-,N,-@[<init>],[]
+763,getPath,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:2],-,-,N,N,-,N,-@[getPath],
+764,openForWrite,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:128],-,-,N,N,-,N,-@[openForWrite],
+765,block_584,Code Block,764,openForWrite,Method,"[80:82,89:105,127,128]",-,-,-,-,[],N,-@[openForWrite],[]
+766,block_583,Code Block,764,openForWrite,Method,[79],-,-,-,-,[],N,-@[openForWrite],[]
+767,block_575,Code Block,764,openForWrite,Method,[0:3],-,-,-,-,[],N,-@[openForWrite],[]
+768,block_576,Code Block,764,openForWrite,Method,[15:19],-,-,-,-,[],N,-@[openForWrite],[]
+769,block_578,Code Block,764,openForWrite,Method,"[47,48]",-,-,-,-,[],N,-@[openForWrite],[]
+770,block_582,Code Block,764,openForWrite,Method,"[74,75]",-,-,-,-,[],N,-@[openForWrite],[]
+771,block_579,Code Block,764,openForWrite,Method,"[54,55]",-,-,-,-,[],N,-@[openForWrite],[]
+772,block_592,Code Block,764,openForWrite,Method,"[20,36:46]",-,-,-,-,[],N,-@[openForWrite],[]
+773,block_588,Code Block,764,openForWrite,Method,"[63,64]",-,-,-,-,[],N,-@[openForWrite],[]
+774,block_580,Code Block,764,openForWrite,Method,"[61,62]",-,-,-,-,[],N,-@[openForWrite],[]
+775,block_591,Code Block,764,openForWrite,Method,"[35,51:53]",-,-,-,-,[],N,-@[openForWrite],[]
+776,block_586,Code Block,764,openForWrite,Method,"[76:78,86:88]",-,-,-,-,[],N,-@[openForWrite],[]
+777,block_581,Code Block,764,openForWrite,Method,[68:70],-,-,-,-,[],N,-@[openForWrite],[]
+778,block_585,Code Block,764,openForWrite,Method,[83:85],-,-,-,-,[],N,-@[openForWrite],[]
+779,block_593,Code Block,764,openForWrite,Method,"[4:14,21:31]",-,-,-,-,[],N,-@[openForWrite],[]
+780,block_590,Code Block,764,openForWrite,Method,"[49,50,58:60]",-,-,-,-,[],N,-@[openForWrite],[]
+781,block_589,Code Block,764,openForWrite,Method,"[56,57,65:67]",-,-,-,-,[],N,-@[openForWrite],[]
+782,block_577,Code Block,764,openForWrite,Method,[32:34],-,-,-,-,[],N,-@[openForWrite],[]
+783,block_587,Code Block,764,openForWrite,Method,[71:73],-,-,-,-,[],N,-@[openForWrite],[]
+784,writeBundleHeader,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:16],-,-,N,N,-,N,-@[writeBundleHeader],
+785,block_595,Code Block,784,writeBundleHeader,Method,[0:2],-,-,-,-,[],N,-@[writeBundleHeader],[]
+786,block_597,Code Block,784,writeBundleHeader,Method,[5:7],-,-,-,-,[],N,-@[writeBundleHeader],[]
+787,block_596,Code Block,784,writeBundleHeader,Method,"[3,4,8:16]",-,-,-,-,[],N,-@[writeBundleHeader],[]
+788,addImage,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:98],caller,"[getStorageFormat,toInteger,java.lang.StringBuilder@[init],java.io.DataOutputStream@[init],java.io.IOException@[init],java.io.ByteArrayOutputStream@[init],write,inputStreamToByteArray]",N,Y,-,N,-@[addImage],[]
+789,block_599,Code Block,788,addImage,Method,[0:4],-,-,-,-,[128],N,-@[addImage],[]
+790,block_600,Code Block,788,addImage,Method,[5:98],-,-,-,-,[128],N,-@[addImage],[]
+791,addImage,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:28],caller,"[setMetaData,getInstance,decodeHeader,java.io.BufferedInputStream@[init],getInstance,addImage,java.lang.IllegalArgumentException@[init]]",N,Y,-,Y,[$i1]@[addImage],[setMetaData]
+792,block_606,Code Block,791,addImage,Method,"[9,10]",-,-,-,-,[],N,-@[addImage],[]
+793,block_602,Code Block,791,addImage,Method,[0:8],-,-,-,-,[123],Y,[$i1]@[addImage],[]
+794,block_603,Code Block,791,addImage,Method,[19:24],-,-,-,-,[125],N,-@[addImage],[]
+795,block_605,Code Block,791,addImage,Method,[11:18],-,-,-,-,[],N,-@[addImage],[]
+796,block_604,Code Block,791,addImage,Method,[25:28],-,-,-,-,[125],N,-@[addImage],[]
+797,addImage,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:4],caller,[addImage],N,Y,-,N,-@[addImage],[]
+798,openForRead,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:154],caller,"[get,org.hipi.imagebundle.HipiImageBundle$HibReader@[init],java.lang.AssertionError@[init],java.lang.StringBuilder@[init],org.hipi.imagebundle.HipiImageBundle$HibReader@[init],java.io.IOException@[init],java.io.DataInputStream@[init],readBundleHeader,java.lang.IllegalArgumentException@[init],readOffsets]",N,Y,-,Y,[i0]@[openForRead],[readOffsets]
+799,block_625,Code Block,798,openForRead,Method,"[57,58,66:68]",-,-,-,-,[],N,-@[openForRead],[]
+800,block_609,Code Block,798,openForRead,Method,[0:2],-,-,-,-,[130],Y,[i0]@[openForRead],[]
+801,block_610,Code Block,798,openForRead,Method,"[12,13]",-,-,-,-,[],N,-@[openForRead],[]
+802,block_611,Code Block,798,openForRead,Method,[25:29],-,-,-,-,[],N,-@[openForRead],[]
+803,block_616,Code Block,798,openForRead,Method,"[76,77]",-,-,-,-,[130],N,-@[openForRead],[]
+804,block_626,Code Block,798,openForRead,Method,"[3:11,14:24,30:40,44:54,59:61]",-,-,-,-,[130],N,-@[openForRead],[]
+805,block_623,Code Block,798,openForRead,Method,"[71,72]",-,-,-,-,[],N,-@[openForRead],[]
+806,block_621,Code Block,798,openForRead,Method,"[99:108,131:141,144:152]",-,-,-,-,[130],N,-@[openForRead],[]
+807,block_624,Code Block,798,openForRead,Method,"[64,65,73:75]",-,-,-,-,[],N,-@[openForRead],[]
+808,block_618,Code Block,798,openForRead,Method,"[109,129]",-,-,-,-,[130],N,-@[openForRead],[]
+809,block_613,Code Block,798,openForRead,Method,"[55,56]",-,-,-,-,[],N,-@[openForRead],[]
+810,block_614,Code Block,798,openForRead,Method,"[62,63]",-,-,-,-,[],N,-@[openForRead],[]
+811,block_617,Code Block,798,openForRead,Method,[90:98],-,-,-,-,[130],N,-@[openForRead],[]
+812,block_619,Code Block,798,openForRead,Method,"[130,153,154]",-,-,-,-,[130],N,-@[openForRead],[]
+813,block_615,Code Block,798,openForRead,Method,"[69,70]",-,-,-,-,[],N,-@[openForRead],[]
+814,block_620,Code Block,798,openForRead,Method,"[142,143]",-,-,-,-,[130],N,-@[openForRead],[]
+815,block_622,Code Block,798,openForRead,Method,[78:89],-,-,-,-,[],N,-@[openForRead],[]
+816,block_612,Code Block,798,openForRead,Method,[41:43],-,-,-,-,[],N,-@[openForRead],[]
+817,openForRead,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:2],caller,[openForRead],N,Y,-,N,-@[openForRead],[]
+818,readBundleHeader,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:31],-,-,N,N,-,N,-@[readBundleHeader],
+819,block_635,Code Block,818,readBundleHeader,Method,"[3,4,11:13]",-,-,-,-,[],N,-@[readBundleHeader],[]
+820,block_632,Code Block,818,readBundleHeader,Method,"[21:25,31]",-,-,-,-,[],N,-@[readBundleHeader],[]
+821,block_633,Code Block,818,readBundleHeader,Method,[27:30],-,-,-,-,[],N,-@[readBundleHeader],[]
+822,block_631,Code Block,818,readBundleHeader,Method,[14:20],-,-,-,-,[],N,-@[readBundleHeader],[]
+823,block_634,Code Block,818,readBundleHeader,Method,[26],-,-,-,-,[],N,-@[readBundleHeader],[]
+824,block_630,Code Block,818,readBundleHeader,Method,[8:10],-,-,-,-,[],N,-@[readBundleHeader],[]
+825,block_629,Code Block,818,readBundleHeader,Method,[0:2],-,-,-,-,[],N,-@[readBundleHeader],[]
+826,block_636,Code Block,818,readBundleHeader,Method,[5:7],-,-,-,-,[],N,-@[readBundleHeader],[]
+827,readAllOffsets,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:2],caller,[readOffsets],N,N,-,N,-@[readAllOffsets],[]
+828,getDataFileStatus,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:5],-,-,N,N,-,N,-@[getDataFileStatus],
+829,readOffsets,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:18],callee,"[openForRead,readAllOffsets]",N,N,-,Y,[<org.hipi.imagebundle.HipiImageBundle: void openForRead(int)>@i0]@[readOffsets],[]
+830,block_640,Code Block,829,readOffsets,Method,[0:6],-,-,-,-,[130],Y,[openForRead->readOffsets:i0]@[readOffsets],[]
+831,block_643,Code Block,829,readOffsets,Method,[18],-,-,-,-,[],Y,[openForRead->readOffsets:i0]@[readOffsets],[]
+832,block_641,Code Block,829,readOffsets,Method,"[8:12,16,17]",-,-,-,-,[130],Y,[openForRead->readOffsets:i0]@[readOffsets],[]
+833,block_642,Code Block,829,readOffsets,Method,[7],-,-,-,-,[],Y,[openForRead->readOffsets:i0]@[readOffsets],[]
+834,next,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:28],-,-,N,N,-,N,-@[next],
+835,block_649,Code Block,834,next,Method,"[3:5,8:18,23:25]",-,-,-,-,[],N,-@[next],[]
+836,block_645,Code Block,834,next,Method,[0:2],-,-,-,-,[],N,-@[next],[]
+837,block_647,Code Block,834,next,Method,"[19,20]",-,-,-,-,[],N,-@[next],[]
+838,block_646,Code Block,834,next,Method,"[6,7]",-,-,-,-,[],N,-@[next],[]
+839,block_648,Code Block,834,next,Method,"[21,22,26:28]",-,-,-,-,[],N,-@[next],[]
+840,currentHeader,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:23],-,-,N,N,-,N,-@[currentHeader],
+841,block_652,Code Block,840,currentHeader,Method,"[14,15]",-,-,-,-,[],N,-@[currentHeader],[]
+842,block_651,Code Block,840,currentHeader,Method,[0:2],-,-,-,-,[],N,-@[currentHeader],[]
+843,block_653,Code Block,840,currentHeader,Method,"[16,17,21:23]",-,-,-,-,[],N,-@[currentHeader],[]
+844,block_654,Code Block,840,currentHeader,Method,"[3:13,18:20]",-,-,-,-,[],N,-@[currentHeader],[]
+845,currentImage,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:23],-,-,N,N,-,N,-@[currentImage],
+846,block_657,Code Block,845,currentImage,Method,"[14,15]",-,-,-,-,[],N,-@[currentImage],[]
+847,block_658,Code Block,845,currentImage,Method,"[16,17,21:23]",-,-,-,-,[],N,-@[currentImage],[]
+848,block_656,Code Block,845,currentImage,Method,[0:2],-,-,-,-,[],N,-@[currentImage],[]
+849,block_659,Code Block,845,currentImage,Method,"[3:13,18:20]",-,-,-,-,[],N,-@[currentImage],[]
+850,close,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:22],-,-,N,N,-,N,-@[close],
+851,block_662,Code Block,850,close,Method,"[6,7]",-,-,-,-,[],N,-@[close],[]
+852,block_663,Code Block,850,close,Method,"[11,12]",-,-,-,-,[],N,-@[close],[]
+853,block_668,Code Block,850,close,Method,[3:5],-,-,-,-,[],N,-@[close],[]
+854,block_661,Code Block,850,close,Method,[0:2],-,-,-,-,[],N,-@[close],[]
+855,block_667,Code Block,850,close,Method,[8:10],-,-,-,-,[],N,-@[close],[]
+856,block_666,Code Block,850,close,Method,[13:15],-,-,-,-,[],N,-@[close],[]
+857,block_665,Code Block,850,close,Method,[18:22],-,-,-,-,[],N,-@[close],[]
+858,block_664,Code Block,850,close,Method,"[16,17]",-,-,-,-,[],N,-@[close],[]
+859,append,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:44],-,-,N,N,-,N,-@[append],
+860,block_673,Code Block,859,append,Method,[17:19],-,-,-,-,[],N,-@[append],[]
+861,block_672,Code Block,859,append,Method,"[25:40,44]",-,-,-,-,[],N,-@[append],[]
+862,block_670,Code Block,859,append,Method,[0:16],-,-,-,-,[],N,-@[append],[]
+863,block_671,Code Block,859,append,Method,[20:24],-,-,-,-,[],N,-@[append],[]
+864,<clinit>,Method,757,org.hipi.imagebundle.HipiImageBundle,Class,[0:7],-,-,Y,N,-,N,-@[<clinit>],
+865,block_675,Code Block,864,<clinit>,Method,[0:2],-,-,-,-,[],N,-@[<clinit>],[]
+866,block_676,Code Block,864,<clinit>,Method,[3:7],-,-,-,-,[],N,-@[<clinit>],[]
+867,org.hipi.imagebundle.HipiImageBundle$1,Class,713,org.hipi.imagebundle,Package,[],-,-,-,-,-,?,-,-
+868,<clinit>,Method,867,org.hipi.imagebundle.HipiImageBundle$1,Class,[0:64],-,-,Y,N,-,N,-@[<clinit>],

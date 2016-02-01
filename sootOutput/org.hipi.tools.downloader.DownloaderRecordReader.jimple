@@ -1,0 +1,317 @@
+public class org.hipi.tools.downloader.DownloaderRecordReader extends org.apache.hadoop.mapreduce.RecordReader
+{
+    private long startLine;
+    private long linesRead;
+    private long numLines;
+    private long linesPerRecord;
+    private java.lang.String urls;
+    private java.io.BufferedReader reader;
+
+    public void <init>()
+    {
+        org.hipi.tools.downloader.DownloaderRecordReader r0;
+
+        r0 := @this: org.hipi.tools.downloader.DownloaderRecordReader;
+
+        specialinvoke r0.<org.apache.hadoop.mapreduce.RecordReader: void <init>()>();
+
+        return;
+    }
+
+    public void initialize(org.apache.hadoop.mapreduce.InputSplit, org.apache.hadoop.mapreduce.TaskAttemptContext) throws java.io.IOException
+    {
+        org.hipi.tools.downloader.DownloaderRecordReader r0;
+        org.apache.hadoop.mapreduce.InputSplit r1;
+        org.apache.hadoop.mapreduce.TaskAttemptContext r2;
+        org.apache.hadoop.mapreduce.lib.input.FileSplit r3;
+        org.apache.hadoop.fs.Path r4;
+        org.apache.hadoop.fs.FileSystem r5;
+        org.apache.hadoop.fs.FSDataInputStream r6;
+        org.apache.hadoop.io.compress.CompressionCodec r8;
+        org.apache.hadoop.conf.Configuration $r9, $r11;
+        long $l0, $l1;
+        org.apache.hadoop.io.compress.CompressionCodecFactory $r10;
+        java.io.InputStreamReader $r12, $r14;
+        java.io.BufferedReader $r13, $r15;
+        org.apache.hadoop.io.compress.CompressionInputStream $r16;
+
+        r0 := @this: org.hipi.tools.downloader.DownloaderRecordReader;
+
+        r1 := @parameter0: org.apache.hadoop.mapreduce.InputSplit;
+
+        r2 := @parameter1: org.apache.hadoop.mapreduce.TaskAttemptContext;
+
+        r3 = (org.apache.hadoop.mapreduce.lib.input.FileSplit) r1;
+
+        r4 = virtualinvoke r3.<org.apache.hadoop.mapreduce.lib.input.FileSplit: org.apache.hadoop.fs.Path getPath()>();
+
+        $r9 = interfaceinvoke r2.<org.apache.hadoop.mapreduce.TaskAttemptContext: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        r5 = virtualinvoke r4.<org.apache.hadoop.fs.Path: org.apache.hadoop.fs.FileSystem getFileSystem(org.apache.hadoop.conf.Configuration)>($r9);
+
+        r6 = virtualinvoke r5.<org.apache.hadoop.fs.FileSystem: org.apache.hadoop.fs.FSDataInputStream open(org.apache.hadoop.fs.Path)>(r4);
+
+        $l0 = virtualinvoke r3.<org.apache.hadoop.mapreduce.lib.input.FileSplit: long getStart()>();
+
+        r0.<org.hipi.tools.downloader.DownloaderRecordReader: long startLine> = $l0;
+
+        $l1 = virtualinvoke r3.<org.apache.hadoop.mapreduce.lib.input.FileSplit: long getLength()>();
+
+        r0.<org.hipi.tools.downloader.DownloaderRecordReader: long numLines> = $l1;
+
+        r0.<org.hipi.tools.downloader.DownloaderRecordReader: long linesRead> = 0L;
+
+        r0.<org.hipi.tools.downloader.DownloaderRecordReader: long linesPerRecord> = 100L;
+
+        $r10 = new org.apache.hadoop.io.compress.CompressionCodecFactory;
+
+        $r11 = interfaceinvoke r2.<org.apache.hadoop.mapreduce.TaskAttemptContext: org.apache.hadoop.conf.Configuration getConfiguration()>();
+
+        specialinvoke $r10.<org.apache.hadoop.io.compress.CompressionCodecFactory: void <init>(org.apache.hadoop.conf.Configuration)>($r11);
+
+        r8 = virtualinvoke $r10.<org.apache.hadoop.io.compress.CompressionCodecFactory: org.apache.hadoop.io.compress.CompressionCodec getCodec(org.apache.hadoop.fs.Path)>(r4);
+
+        if r8 == null goto label1;
+
+        $r15 = new java.io.BufferedReader;
+
+        $r14 = new java.io.InputStreamReader;
+
+        $r16 = interfaceinvoke r8.<org.apache.hadoop.io.compress.CompressionCodec: org.apache.hadoop.io.compress.CompressionInputStream createInputStream(java.io.InputStream)>(r6);
+
+        specialinvoke $r14.<java.io.InputStreamReader: void <init>(java.io.InputStream)>($r16);
+
+        specialinvoke $r15.<java.io.BufferedReader: void <init>(java.io.Reader)>($r14);
+
+        r0.<org.hipi.tools.downloader.DownloaderRecordReader: java.io.BufferedReader reader> = $r15;
+
+        goto label2;
+
+     label1:
+        $r13 = new java.io.BufferedReader;
+
+        $r12 = new java.io.InputStreamReader;
+
+        specialinvoke $r12.<java.io.InputStreamReader: void <init>(java.io.InputStream)>(r6);
+
+        specialinvoke $r13.<java.io.BufferedReader: void <init>(java.io.Reader)>($r12);
+
+        r0.<org.hipi.tools.downloader.DownloaderRecordReader: java.io.BufferedReader reader> = $r13;
+
+     label2:
+        return;
+    }
+
+    public float getProgress()
+    {
+        org.hipi.tools.downloader.DownloaderRecordReader r0;
+        long $l0, $l2, $l3;
+        byte $b1;
+        float $f1, $f2, $f3;
+
+        r0 := @this: org.hipi.tools.downloader.DownloaderRecordReader;
+
+        $l0 = r0.<org.hipi.tools.downloader.DownloaderRecordReader: long numLines>;
+
+        $b1 = $l0 cmp 0L;
+
+        if $b1 != 0 goto label1;
+
+        $f3 = 0.0F;
+
+        goto label2;
+
+     label1:
+        $l2 = r0.<org.hipi.tools.downloader.DownloaderRecordReader: long linesRead>;
+
+        $f2 = (float) $l2;
+
+        $l3 = r0.<org.hipi.tools.downloader.DownloaderRecordReader: long numLines>;
+
+        $f1 = (float) $l3;
+
+        $f3 = $f2 / $f1;
+
+     label2:
+        return $f3;
+    }
+
+    public void close() throws java.io.IOException
+    {
+        org.hipi.tools.downloader.DownloaderRecordReader r0;
+        java.io.BufferedReader $r1;
+
+        r0 := @this: org.hipi.tools.downloader.DownloaderRecordReader;
+
+        $r1 = r0.<org.hipi.tools.downloader.DownloaderRecordReader: java.io.BufferedReader reader>;
+
+        virtualinvoke $r1.<java.io.BufferedReader: void close()>();
+
+        return;
+    }
+
+    public org.apache.hadoop.io.LongWritable getCurrentKey() throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.hipi.tools.downloader.DownloaderRecordReader r0;
+        org.apache.hadoop.io.LongWritable $r1;
+        long $l0, $l1, $l2;
+
+        r0 := @this: org.hipi.tools.downloader.DownloaderRecordReader;
+
+        $r1 = new org.apache.hadoop.io.LongWritable;
+
+        $l1 = r0.<org.hipi.tools.downloader.DownloaderRecordReader: long startLine>;
+
+        $l0 = r0.<org.hipi.tools.downloader.DownloaderRecordReader: long linesRead>;
+
+        $l2 = $l1 + $l0;
+
+        specialinvoke $r1.<org.apache.hadoop.io.LongWritable: void <init>(long)>($l2);
+
+        return $r1;
+    }
+
+    public org.apache.hadoop.io.Text getCurrentValue() throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.hipi.tools.downloader.DownloaderRecordReader r0;
+        org.apache.hadoop.io.Text $r1;
+        java.lang.String $r2;
+
+        r0 := @this: org.hipi.tools.downloader.DownloaderRecordReader;
+
+        $r1 = new org.apache.hadoop.io.Text;
+
+        $r2 = r0.<org.hipi.tools.downloader.DownloaderRecordReader: java.lang.String urls>;
+
+        specialinvoke $r1.<org.apache.hadoop.io.Text: void <init>(java.lang.String)>($r2);
+
+        return $r1;
+    }
+
+    public boolean nextKeyValue() throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.hipi.tools.downloader.DownloaderRecordReader r0;
+        long $l0, $l1, $l3, $l4, $l6, $l7, $l9, $l10;
+        byte $b2, $b5, $b8;
+        boolean $z0, $z1;
+        java.io.BufferedReader $r1;
+        java.lang.StringBuilder $r2, $r3, $r5, $r6;
+        java.lang.String $r4, $r7, r9;
+        java.io.IOException $r8;
+        int i11;
+
+        r0 := @this: org.hipi.tools.downloader.DownloaderRecordReader;
+
+        $l1 = r0.<org.hipi.tools.downloader.DownloaderRecordReader: long linesRead>;
+
+        $l0 = r0.<org.hipi.tools.downloader.DownloaderRecordReader: long numLines>;
+
+        $b2 = $l1 cmp $l0;
+
+        if $b2 < 0 goto label1;
+
+        return 0;
+
+     label1:
+        r0.<org.hipi.tools.downloader.DownloaderRecordReader: java.lang.String urls> = "";
+
+        r9 = "";
+
+        i11 = 0;
+
+     label2:
+        $l4 = (long) i11;
+
+        $l3 = r0.<org.hipi.tools.downloader.DownloaderRecordReader: long linesPerRecord>;
+
+        $b5 = $l4 cmp $l3;
+
+        if $b5 >= 0 goto label4;
+
+        $l7 = r0.<org.hipi.tools.downloader.DownloaderRecordReader: long linesRead>;
+
+        $l6 = r0.<org.hipi.tools.downloader.DownloaderRecordReader: long numLines>;
+
+        $b8 = $l7 cmp $l6;
+
+        if $b8 >= 0 goto label4;
+
+        $r1 = r0.<org.hipi.tools.downloader.DownloaderRecordReader: java.io.BufferedReader reader>;
+
+        r9 = virtualinvoke $r1.<java.io.BufferedReader: java.lang.String readLine()>();
+
+        if r9 != null goto label3;
+
+        $r8 = new java.io.IOException;
+
+        specialinvoke $r8.<java.io.IOException: void <init>(java.lang.String)>("Unexpected EOF while retrieving next line from input split.");
+
+        throw $r8;
+
+     label3:
+        $r2 = new java.lang.StringBuilder;
+
+        specialinvoke $r2.<java.lang.StringBuilder: void <init>()>();
+
+        $r4 = r0.<org.hipi.tools.downloader.DownloaderRecordReader: java.lang.String urls>;
+
+        $r3 = virtualinvoke $r2.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>($r4);
+
+        $r6 = virtualinvoke $r3.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>(r9);
+
+        $r5 = virtualinvoke $r6.<java.lang.StringBuilder: java.lang.StringBuilder append(java.lang.String)>("\n");
+
+        $r7 = virtualinvoke $r5.<java.lang.StringBuilder: java.lang.String toString()>();
+
+        r0.<org.hipi.tools.downloader.DownloaderRecordReader: java.lang.String urls> = $r7;
+
+        $l9 = r0.<org.hipi.tools.downloader.DownloaderRecordReader: long linesRead>;
+
+        $l10 = $l9 + 1L;
+
+        r0.<org.hipi.tools.downloader.DownloaderRecordReader: long linesRead> = $l10;
+
+        i11 = i11 + 1;
+
+        goto label2;
+
+     label4:
+        $z0 = virtualinvoke r9.<java.lang.String: boolean isEmpty()>();
+
+        if $z0 != 0 goto label5;
+
+        $z1 = 1;
+
+        goto label6;
+
+     label5:
+        $z1 = 0;
+
+     label6:
+        return $z1;
+    }
+
+    public volatile java.lang.Object getCurrentValue() throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.hipi.tools.downloader.DownloaderRecordReader r0;
+        org.apache.hadoop.io.Text $r1;
+
+        r0 := @this: org.hipi.tools.downloader.DownloaderRecordReader;
+
+        $r1 = virtualinvoke r0.<org.hipi.tools.downloader.DownloaderRecordReader: org.apache.hadoop.io.Text getCurrentValue()>();
+
+        return $r1;
+    }
+
+    public volatile java.lang.Object getCurrentKey() throws java.io.IOException, java.lang.InterruptedException
+    {
+        org.hipi.tools.downloader.DownloaderRecordReader r0;
+        org.apache.hadoop.io.LongWritable $r1;
+
+        r0 := @this: org.hipi.tools.downloader.DownloaderRecordReader;
+
+        $r1 = virtualinvoke r0.<org.hipi.tools.downloader.DownloaderRecordReader: org.apache.hadoop.io.LongWritable getCurrentKey()>();
+
+        return $r1;
+    }
+}
